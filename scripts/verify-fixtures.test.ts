@@ -87,6 +87,23 @@ describe("beat states (Neil)", () => {
   });
 });
 
+describe("beat chain through the LIVE action layer (regression guards)", () => {
+  it("beat 6 dip: switch alone reads 10 — carried ·✓ re-registers only at re-assessment", () => {
+    const { switchCareer, claimAll } = require("@/lib/actions") as typeof import("@/lib/actions");
+    const switched = switchCareer(NEIL_SEED, "da").state;
+    // canon: SP 0 (0 closed bars) + CC 10 → dip 10
+    expect(scoreFor(switched)).toEqual({ sp: 0, es: 0, tp: 0, cc: 10, total: 10 });
+    // re-assessment: 3 self-claims + SQL ·✓ re-registers → 33
+    const reassessed = claimAll(switched, [
+      { skill: "Spreadsheets", level: "confident" },
+      { skill: "Data cleaning", level: "confident" },
+      { skill: "Basic statistics", level: "confident" },
+    ]).state;
+    expect(scoreFor(reassessed)).toEqual({ sp: 23, es: 0, tp: 0, cc: 10, total: 33 });
+    expect(reassessed.bars.SQL.source).toBe("verified");
+  });
+});
+
 describe("pathway ranking (M7 locked formula)", () => {
   it("core ×3 outranks secondary; free-PH-first breaks ties; stable order persists", () => {
     const da = getCareer("da")!;

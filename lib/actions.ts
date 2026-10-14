@@ -40,19 +40,21 @@ export function switchCareer(state: StudentState, toId: string): ActionResult {
   const to = getCareer(toId);
   const from = getCareer(state.careerId);
   if (!to || !from || to.id === from.id) return { state, error: "invalid switch" };
-  // locked: verified skills + goals survive; bars/score reset downstream
-  const transferred = Object.fromEntries(
-    Object.entries(state.bars)
-      .filter(([, v]) => v.source === "verified")
-      .filter(([name]) => to.skills.some((s) => s.name === name))
-  );
+  // locked: verified skills + goals survive; bars/score reset downstream.
+  // CANON (_fixture-math.md beat 6): the dip state reads SP 0 — "0 closed bars".
+  // The carried ·✓ set re-registers at the quick re-assessment (claimAll),
+  // not at switch time; `decisions.verifiedTransferred` records what survives.
+  const transferred = Object.entries(state.bars)
+    .filter(([, v]) => v.source === "verified")
+    .map(([name]) => name)
+    .filter((name) => to.skills.some((s) => s.name === name));
   const next = requeueStageOne(
     {
       ...state,
       careerId: toId,
-      bars: transferred,
+      bars: {},
       stageOneDone: 0,
-      decisions: { verifiedTransferred: Object.keys(transferred) },
+      decisions: { verifiedTransferred: transferred },
       events: [
         ...state.events,
         { date: nowStamp(), kind: "career-switched", detail: `Switched ${from.name} → ${to.name} — verified skills and goals carried over; other bars reset.` },
@@ -74,9 +76,15 @@ export function claimSkill(state: StudentState, skill: string, level: "confident
   return { state: next };
 }
 
-/** Batch form for the onboarding self-report screen (one POST). */
+/** Batch form for the onboarding self-report screen (one POST). Also the
+ *  quick re-assessment after a career switch: the carried ·✓ set re-registers
+ *  here (canon beat-6→ re-assessment), before the batch claims land. */
 export function claimAll(state: StudentState, claims: { skill: string; level: "confident" | "kindof" | "notyet" }[]): ActionResult {
   let next = { ...state };
+  // re-register transferred verified skills on the new map (switch hand-off)
+  for (const skill of state.decisions.verifiedTransferred) {
+    next = { ...next, bars: { ...next.bars, [skill]: { source: "verified" as const } } };
+  }
   for (const c of claims) {
     const r = claimSkill(next, c.skill, c.level);
     if (r.error) return r;
