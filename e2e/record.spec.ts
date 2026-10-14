@@ -8,6 +8,9 @@ import fs from "node:fs";
  */
 test("record demo arc", async ({ page }) => {
   test.setTimeout(480_000); // the walk breathes with the app's measured motion
+  // recorder is opt-in: run explicitly with `npx playwright test e2e/record.spec.ts`
+  // (`PLAYWRIGHT_RECORD=1 npx playwright test` also activates it inside full runs)
+  test.skip(!process.env.PLAYWRIGHT_RECORD && process.env.RECORD !== "1", "recorder is opt-in");
   fs.rmSync("data/state.json", { force: true });
   await page.goto("/");
   await page.waitForTimeout(6000); // landing motion: count-ups, scanline

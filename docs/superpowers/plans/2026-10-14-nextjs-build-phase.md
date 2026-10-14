@@ -24,6 +24,16 @@
 
 ---
 
+## UPDATE 2026-10-14 late — BUILD PHASE EXECUTED (all surfaces landed)
+
+- P0 tracer slice + full canon, engines, action layer, JSON store: landed (commits 6086b70…8575fc0).
+- All 9 surfaces ported by parallel agents (landing/auth/onboarding/dashboard/career/pathway/progress/profile/admin) + integrated.
+- E2E: `e2e/canon-smoke.spec.ts` (4, canon seed) + `e2e/demo-arc.spec.ts` (**10/10 beats**: 40 → 10 → 33 → 51 via real UI) green; `e2e/record.spec.ts` = opt-in backup recorder (video walk, artifact in `handoff/demo-recording-oct14.webm`).
+- Canon conflicts fixed & regression-guarded (13 vitest tests): switch dip 10 (transfer re-registers at re-assessment), quiz "2 of 5", DA goal suggested at re-assessment (Q13), check-failed feed event, OB-4 goal pre-fill/idempotency, ProfileTabs keyed slots (hydration warning).
+- Remaining: P3 dry-run checklist (below) — production build verified; offline walk + width audit (390/768/1440/1920) to be re-confirmed by Neil personally + timing rehearsal.
+
+---
+
 ## UPDATE 2026-10-14 (execution order — anti-waterfall, user-directed)
 
 **Docker gate resolved:** Docker not available in this WSL distro → **JSON store fallback is the operative data layer** (same `db.ts` signatures; hosted-Supabase swap story preserved). No Supabase-local install work.
