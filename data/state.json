@@ -1,0 +1,94 @@
+{
+  "neil": {
+    "id": "neil",
+    "name": "Neil",
+    "grade": "G11",
+    "strand": "STEM",
+    "careerId": "da",
+    "bars": {
+      "Spreadsheets": {
+        "source": "claimed"
+      },
+      "Data cleaning": {
+        "source": "claimed"
+      },
+      "Basic statistics": {
+        "source": "claimed"
+      },
+      "SQL": {
+        "source": "verified"
+      },
+      "Dashboards (Power BI)": {
+        "source": "checked"
+      }
+    },
+    "goals": [
+      {
+        "id": "goal-python",
+        "title": "Finish the Python basics course",
+        "type": "training",
+        "status": "active",
+        "resourceId": "res-python-basics",
+        "skill": "Programming logic (Python/Java)"
+      },
+      {
+        "id": "goal-2-3177",
+        "title": "Build my first dashboard",
+        "type": "training",
+        "status": "completed",
+        "resourceId": "res-powerbi-dashboards",
+        "skill": "Dashboards (Power BI)",
+        "completedAt": "2026-10-17"
+      }
+    ],
+    "stageOneDone": 1,
+    "stageOneQueue": [
+      "Chart interpretation",
+      "Report writing"
+    ],
+    "softSkills": {
+      "Teamwork": "Okay",
+      "Communication": "Room to grow",
+      "Problem-solving": "Strong"
+    },
+    "decisions": {
+      "verifiedTransferred": [
+        "SQL"
+      ]
+    },
+    "events": [
+      {
+        "date": "2026-10-17 09:05",
+        "kind": "goal-set",
+        "detail": "Goal set — Finish the Python basics course"
+      },
+      {
+        "date": "2026-10-17",
+        "kind": "career-switched",
+        "detail": "Switched Software Developer → Data Analyst — verified skills and goals carried over; other bars reset."
+      },
+      {
+        "date": "2026-10-17",
+        "kind": "goal-set",
+        "detail": "Goal set — Build my first dashboard"
+      },
+      {
+        "date": "2026-10-17",
+        "kind": "check-passed",
+        "detail": "Check passed (5 of 5) — Build your first dashboard",
+        "source": "checked"
+      },
+      {
+        "date": "2026-10-17",
+        "kind": "bar-closed",
+        "detail": "Dashboards (Power BI) closed ·✓✓",
+        "source": "checked"
+      },
+      {
+        "date": "2026-10-17",
+        "kind": "goal-completed",
+        "detail": "Training goal auto-completed — Build my first dashboard"
+      }
+    ]
+  }
+}
