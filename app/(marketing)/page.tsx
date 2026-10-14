@@ -1,4 +1,5 @@
-import { CATALOG_TOTAL, getCareer, type Career } from "@/lib/fixtures/catalog";
+import { CATALOG_TOTAL, getCareer } from "@/lib/fixtures/catalog";
+import type { Career } from "@/lib/types";
 import { NEIL_SEED } from "@/lib/fixtures/neil";
 import { computeScore, WEIGHTS, type Score } from "@/lib/engines/score";
 import CountUp from "@/components/CountUp";
@@ -15,7 +16,7 @@ export const metadata = {
 
 /** Strand label rendered the way the index table says it: STEM/ABM → STEM · ABM. */
 function strandLabel(c: Career): string {
-  return c.strands.map((s) => s.replace(/\//g, " · ")).join(" · ");
+  return c.strands.map((s: string) => s.replace(/\//g, " · ")).join(" · ");
 }
 
 /** Organic sample-score derivation: the canon beat-5 seed, scored by the engine. */
@@ -41,7 +42,7 @@ function gaugeRows(): GaugeRow[] {
     const c = getCareer(id) as Career;
     return {
       name: c.name,
-      x: demonstrated.filter((n) => c.skills.some((s) => s.name === n)).length,
+      x: demonstrated.filter((n: string) => c.skills.some((s: { name: string }) => s.name === n)).length,
       y: c.skills.length,
     };
   });
