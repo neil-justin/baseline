@@ -1,0 +1,25 @@
+/* Landing page styles — ported VERBATIM from prototype/index.html <style> (2026-10-14). */
+
+/* The Index — final world (user-locked 2026-10-12): the earned-green system
+   laid over a drafting-sheet grid. The accent stays rare; the grid is the
+   only addition beyond the base tokens. */
+:root {
+  --ground: #F4F5F4;
+  --panel: #FFFFFF;
+  --ink: #16181A;
+  --ink-2: #515651;
+  --ink-3: #666C66;
+  --line: #DFE1DE;
+  --line-soft: #EAEBE9;
+  --accent: #0B5F45;
+  --accent-deep: #08492F;
+  --selection: #0B5F4522;
+}
+/* the drafting sheet — a faint 40px grid under the quiet-ground sections,
+   tinted from this world's ink (green-cast) */
+body {
+  background-image:
+    linear-gradient(rgba(22,24,26,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22,24,26,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
