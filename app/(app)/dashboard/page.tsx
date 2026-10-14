@@ -1,6 +1,6 @@
 import { getStudentView } from "@/lib/db";
 import { scoreView } from "@/lib/engines/rubric";
-import { getResourcesForCareer } from "@/lib/fixtures/catalog";
+import { getResourcesForCareer } from "@/lib/fixtures/resources";
 import CountUp from "@/components/CountUp";
 import Disclosure from "@/components/Disclosure";
 import ScoreSequence from "./ScoreSequence";

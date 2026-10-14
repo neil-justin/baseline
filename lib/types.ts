@@ -39,6 +39,8 @@ export interface StudentState {
   /** locked TP basis: snapshot of stage-① ranked queue at the last re-rank;
    *  a member closing increments stageOneDone (reset on switch/re-assessment) */
   stageOneDone: number;
+  /** ranked stage-① queue at the last re-rank (3 slots; refills from stage ②) */
+  stageOneQueue?: string[];
   /** M8-lite framing prompt (Teamwork/Communication/Problem-solving) — unscored */
   softSkills: Record<string, string>;
   decisions: {
@@ -56,7 +58,10 @@ export interface SkillSpec {
 export interface Career {
   id: string;
   name: string;
+  /** raw strand description from ticket 04 (e.g. "TVL-HE (Tourism)") */
   strands: string[];
+  /** normalized browse keys ⊂ STRANDS — "(any)" careers are open to all */
+  strandKeys: string[];
   /** RIASEC code — DEV-FACING ONLY, never rendered (conventions) */
   raCode: string;
   roleSummary: string;

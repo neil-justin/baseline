@@ -32,6 +32,13 @@ export default function CountUp({
     const reduced = prefersReducedMotion();
     let cancel: (() => void) | undefined;
 
+    if (reduced) {
+      el.textContent = to.toFixed(dec);
+      onDone?.();
+      return;
+    }
+    // start from 0 (post-hydration, matches the prototype's JS-gated reveal)
+    el.textContent = (0).toFixed(dec);
     const io = new IntersectionObserver(
       (entries) => {
         for (const en of entries) {
@@ -46,12 +53,7 @@ export default function CountUp({
       },
       { threshold: 0.18, rootMargin: "0px 0px -6% 0px" }
     );
-    if (reduced) {
-      el.textContent = to.toFixed(dec);
-      onDone?.();
-    } else {
-      io.observe(el);
-    }
+    io.observe(el);
     return () => {
       cancel?.();
       io.disconnect();
@@ -59,6 +61,8 @@ export default function CountUp({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [to, dec, dur]);
 
+  // initial paint = final value (server + first client render match: no
+  // hydration mismatch; no-JS users see the honest final number, JS animates)
   return (
     <span
       ref={ref}
@@ -67,7 +71,7 @@ export default function CountUp({
       data-count={to}
       data-dec={dec}
     >
-      {(prefersReducedMotion() ? to : 0).toFixed(dec)}
+      {to.toFixed(dec)}
     </span>
   );
 }

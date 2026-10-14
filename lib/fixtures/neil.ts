@@ -32,9 +32,11 @@ export const NEIL_SEED: StudentState = {
       skill: "Programming logic (Python/Java)",
     },
   ],
-  // Stage ① snapshot at onboarding re-rank: top-3 open = programming logic (core ×3
-  // first), API basics, unit testing — none closed → 0 of 3.
+  // Stage ① snapshot at onboarding re-rank: open = API basics, unit testing
+  // (core programming logic/SQL/debugging + Git, agile teamwork, documentation
+  // are closed) — ranked open queue; none closed → 0 of 3.
   stageOneDone: 0,
+  stageOneQueue: ["API basics", "Unit testing"],
   softSkills: {
     Teamwork: "Okay",
     Communication: "Room to grow",
@@ -61,6 +63,9 @@ export function applyReassessment(s: StudentState): StudentState {
       "Basic statistics": { source: "claimed" },
     },
     stageOneDone: 0,
+    // re-rank at re-assessment: open = dashboards (free, stable-first),
+    // chart interpretation, report writing (canon beat-7 stage-① queue)
+    stageOneQueue: ["Dashboards (Power BI)", "Chart interpretation", "Report writing"],
   };
 }
 
