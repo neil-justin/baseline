@@ -24,6 +24,16 @@
 
 ---
 
+## UPDATE 2026-10-14 (execution order — anti-waterfall, user-directed)
+
+**Docker gate resolved:** Docker not available in this WSL distro → **JSON store fallback is the operative data layer** (same `db.ts` signatures; hosted-Supabase swap story preserved). No Supabase-local install work.
+
+**Execution is a tracer bullet, not a waterfall.** Reordered: land one thin vertical slice end-to-end FIRST (scaffold → tokens/fonts/layout → JSON store + `db.ts` signatures + score engine → `/api/state` → dashboard surface wired → smoke E2E asserting "40"), so toolchain surprises (Next 16.3 × Tailwind v4 × ported CSS × fonts × Playwright) surface on hour one. Then the 9-surface agent wave; the E2E/testing agent runs **incrementally as surfaces land**, not as a big-bang P2. Full fixture canon (32 careers, banks, cohort) expands per-slice behind the frozen signatures instead of all-up-front.
+
+Order: Task 0 → 1 → 2 → (3-lite + 4-lite: Neil state machine + score engine only) → 9 (dashboard = the tracer) → 15-lite (smoke E2E) → **then** remaining fixtures/engines (Tasks 3–5 full) → Tasks 6–8, 10–14 parallel → Task 15 full → 16 → 17.
+
+---
+
 ## Phase 0 — skeleton (serial, me)
 
 ### Task 0: Repo bootstrap
