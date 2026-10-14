@@ -71,24 +71,25 @@ export function claimSkill(state: StudentState, skill: string, level: "confident
   if (!career.skills.some((s) => s.name === skill)) return { state, error: "skill not on map" };
   const bars = { ...state.bars };
   if (level === "confident") bars[skill] = { source: "claimed" };
-  else delete bars[skill]; // honest baseline: kind-of/not-yet never hold a bar
+  else if (bars[skill]?.source === "verified") {
+    // a verified bar is earned fact — an "not yet" rating can't un-earn it
+    // (the UI keeps proven skills locked out of the rating set)
+  } else delete bars[skill]; // honest baseline: kind-of/not-yet never hold a bar
   const next = requeueStageOne({ ...state, bars }, career);
   return { state: next };
 }
 
-/** Batch form for the onboarding self-report screen (one POST). Also the
- *  quick re-assessment after a career switch: the carried ·✓ set re-registers
- *  here (canon beat-6→ re-assessment), before the batch claims land. */
 export function claimAll(state: StudentState, claims: { skill: string; level: "confident" | "kindof" | "notyet" }[]): ActionResult {
   let next = { ...state };
-  // re-register transferred verified skills on the new map (switch hand-off)
-  for (const skill of state.decisions.verifiedTransferred) {
-    next = { ...next, bars: { ...next.bars, [skill]: { source: "verified" as const } } };
-  }
   for (const c of claims) {
     const r = claimSkill(next, c.skill, c.level);
     if (r.error) return r;
     next = r.state;
+  }
+  // re-register the carried ·✓ set AFTER claims: a stray "not yet" rating can
+  // never erase the switch hand-off (canon beat 6 → re-assessment → 33)
+  for (const skill of state.decisions.verifiedTransferred) {
+    next = { ...next, bars: { ...next.bars, [skill]: { source: "verified" as const } } };
   }
   const career = getCareer(next.careerId)!;
   // claims close the baseline — the last full re-rank point of onboarding
@@ -104,6 +105,16 @@ export function markVerified(state: StudentState, skill: string): ActionResult {
   // re-rank DOES NOT fire on verification at cold start (beat ordering locked)
   return { state: { ...state, bars }, note: `${skill} confirmed ·✓` };
 }
+
+/** Goal suggestion consumed by the switch's quick re-assessment (canon Q13:
+ *  a new Training goal is suggested in DA terms). Idempotent via setGoal. */
+export const SWITCH_GOAL_SUGGESTION: Record<string, { title: string; resourceId: string; skill: string }> = {
+  da: {
+    title: "Build my first dashboard",
+    resourceId: "res-powerbi-dashboards",
+    skill: "Dashboards (Power BI)",
+  },
+};
 
 export function setGoal(state: StudentState, goal: Partial<Goal>): ActionResult {
   // idempotency: replaying onboarding over a state that already carries this

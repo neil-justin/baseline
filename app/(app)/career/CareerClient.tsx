@@ -51,6 +51,8 @@ interface ResetData {
   dip: DipView;
   bars: Record<string, { source: string }>;
   closedNow: number;
+  /** persisted ·✓ hand-off from the switch (decisions.verifiedTransferred) */
+  carried: string[];
 }
 
 interface RecoveredData {
@@ -116,6 +118,31 @@ export default function CareerClient({
   } | null>(null);
   const [reset, setReset] = useState<ResetData | null>(null);
   const [recovered, setRecovered] = useState<RecoveredData | null>(null);
+  const [daGoalPosted, setDaGoalPosted] = useState(false);
+
+  async function postDaGoal() {
+    setBusy(true);
+    try {
+      const res = await fetch("/api/goal", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          student: "neil",
+          title: "Build my first dashboard",
+          type: "training",
+          resourceId: "res-powerbi-dashboards",
+          skill: "Dashboards (Power BI)",
+        }),
+      });
+      if (!res.ok) throw new Error("goal failed");
+      setDaGoalPosted(true);
+      router.refresh();
+    } catch {
+      /* honest failure: button stays enabled; the demo retries */
+    } finally {
+      setBusy(false);
+    }
+  }
   const [ratings, setRatings] = useState<Record<string, Rating>>(() =>
     Object.fromEntries(reassess.map((r) => [r.name, DEFAULT_RATINGS[r.name] ?? "no"]))
   );
@@ -206,6 +233,7 @@ export default function CareerClient({
         dip: { score: dipScore, parts: rubricParts(dipScore) },
         bars: v.state.bars,
         closedNow: Object.keys(v.state.bars).length,
+        carried: v.state.decisions?.verifiedTransferred ?? [],
       });
       setFlow("reset");
       window.scrollTo(0, 0);
@@ -217,6 +245,9 @@ export default function CareerClient({
   }
 
   const isLockedSkill = (name: string): "verified" | "checked" | null => {
+    // the carried ·✓ set is persisted at switch time (decisions) — reading bars
+    // here would always see {} (canon dip: SP 0 until re-assessment)
+    if ((reset?.carried ?? []).includes(name)) return "verified";
     const b = reset?.bars[name];
     if (!b) return null;
     if (b.source === "verified") return "verified";
@@ -786,6 +817,30 @@ export default function CareerClient({
                 Self-reported skills feed the baseline but never count toward Skills-match — only checks
                 you pass do.
               </p>
+              {/* canon Q13: a new Training goal is suggested in the new career's terms */}
+              <div className="panel nextcard" style={{ maxWidth: 640, marginTop: 16 }}>
+                <h3 style={{ fontSize: 15.5, fontWeight: 640 }}>Set your next goal</h3>
+                <p className="n-target num" style={{ marginTop: 8 }}>
+                  free · ~4 hours · Microsoft Learn — Power BI
+                </p>
+                <p className="n-why" style={{ marginTop: 6 }}>
+                  Closes your first open gap in Dashboards — one of the skills Data Analysts use every day.
+                </p>
+                <p className="n-why" style={{ marginTop: 10, color: "var(--ink-3)" }}>
+                  When you finish the resource and pass its 5-question check, this goal marks itself done —
+                  automatically, under Progress. You&apos;ll see it happen.
+                </p>
+                <div className="n-cta" style={{ marginTop: 12 }}>
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    disabled={daGoalPosted || busy}
+                    onClick={postDaGoal}
+                  >
+                    {daGoalPosted ? "Goal set — it's on your Progress page." : "Set this goal"}
+                  </button>
+                </div>
+              </div>
               <div className="sw-actions">
                 <a className="btn btn-primary" href="/pathway">
                   See your gaps <Arrow />
