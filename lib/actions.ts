@@ -98,6 +98,17 @@ export function markVerified(state: StudentState, skill: string): ActionResult {
 }
 
 export function setGoal(state: StudentState, goal: Partial<Goal>): ActionResult {
+  // idempotency: replaying onboarding over a state that already carries this
+  // resource's training goal must not double-append (demo-replay seam)
+  const existing = state.goals.find(
+    (g) => g.type === "training" && g.resourceId && g.resourceId === goal.resourceId
+  );
+  if (existing) {
+    return {
+      state,
+      note: "Goal set. It's now on your Progress page.",
+    };
+  }
   const id = goal.id ?? `goal-${state.goals.length + 1}-${Date.now() % 10000}`;
   const g: Goal = {
     id,

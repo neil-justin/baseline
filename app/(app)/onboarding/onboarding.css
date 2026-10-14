@@ -1,0 +1,34 @@
+/* ============================================================
+   Onboarding surface — ported VERBATIM from prototype/onboarding.html
+   <style> (2026-10-14), plus the OB-0 strip integration with the
+   app shell (the AppBar owns the brand; this file owns the progress line).
+   ============================================================ */
+
+.two-col { grid-template-columns: repeat(2, 1fr); max-width: 760px; }
+.two-col .card { text-align: left; transition: border-color 0.12s ease; }
+.two-col .card:hover { border-color: var(--ink-2); }
+.strand-card .t-name, .strand-card .t-tag, .strand-card .t-count { display: block; }
+/* armed sits on the bar itself here; app.css only fills from an ancestor */
+.segbar.armed .seg i { transform: scaleX(var(--earn, 1)); }
+/* disabled reads disabled */
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn:disabled:active { transform: none; }
+/* craft floor: measure ≤75ch, balanced headings */
+.screen-head p { max-width: 72ch; text-wrap: pretty; }
+.screen-head h1 { text-wrap: balance; }
+.ob-later { display: inline; }
+
+/* OB-0 progress line — non-sticky strip under the sticky AppBar */
+.ob-strip {
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+.ob-strip .brand-mark { width: 14px; height: 14px; }
+.ob-strip .brand-name { font-size: 12.5px; }
+
+@media (max-width: 720px) {
+  .two-col { grid-template-columns: 1fr; }
+  .ob-top { padding: 10px 20px; }
+  .ob-steps { letter-spacing: 0.04em; }
+  .ob-steps .ob-later { display: none; }
+}
