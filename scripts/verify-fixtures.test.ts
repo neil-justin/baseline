@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { CAREERS, CATALOG_TOTAL, getCareer } from "@/lib/fixtures/catalog";
 import { computeScore, roundHalfDown } from "@/lib/engines/score";
 import { rankOpenSkills, stageOne } from "@/lib/engines/gaps";
-import { switchCareer, claimAll } from "@/lib/actions";
+import { switchCareer, claimAll, submitCheck } from "@/lib/actions";
 import {
   NEIL_SEED,
   applyReassessment,
@@ -122,5 +122,14 @@ describe("pathway ranking (M7 locked formula)", () => {
     expect(queue).toHaveLength(3);
     // dashboards (free Power BI Microsoft Learn) leads the free tie-break group
     expect(queue[0]).toBe("Dashboards (Power BI)");
+  });
+});
+
+describe("check-failed event (honest feed row)", () => {
+  it("failed attempt records an event, not a bar", () => {
+    const withGoal = withDaGoal(applyReassessment({ ...NEIL_SEED, careerId: "da" }));
+    const failed = submitCheck(withGoal, "res-powerbi-dashboards", [1, 2, 3, 4, 1]).state;
+    expect(failed.events.at(-1)?.kind).toBe("check-failed");
+    expect(Object.keys(failed.bars).length).toBe(4); // no bar closed
   });
 });

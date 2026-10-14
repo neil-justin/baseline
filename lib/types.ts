@@ -19,9 +19,18 @@ export interface Goal {
   completedAt?: string;
 }
 
+export type DemoEventKind =
+  | "check-passed"
+  | "check-failed"
+  | "bar-closed"
+  | "goal-completed"
+  | "goal-set"
+  | "career-switched"
+  | "scored";
+
 export interface DemoEvent {
   date: string;
-  kind: "check-passed" | "bar-closed" | "goal-completed" | "goal-set" | "career-switched" | "scored";
+  kind: DemoEventKind;
   detail: string;
   source?: BarSource;
 }

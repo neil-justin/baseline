@@ -148,7 +148,21 @@ export function submitCheck(state: StudentState, resourceId: string, answers: nu
   const correct = questions.reduce((n, q, i) => n + (answers[i] === q.answer ? 1 : 0), 0);
   const passed = correct >= 4; // LOCKED pass mark
   if (!passed) {
-    return { state, note: `not passed — ${correct} of 5 (need 4)` };
+    // honest record: the attempt lands in the feed (m6-m9 plan fail row)
+    return {
+      state: {
+        ...state,
+        events: [
+          ...state.events,
+          {
+            date: nowStamp(),
+            kind: "check-failed" as const,
+            detail: `Check not passed — ${correct} of ${questions.length} (need 4). Same check ready when you are.`,
+          },
+        ],
+      },
+      note: `not passed — ${correct} of 5 (need 4)`,
+    };
   }
   const career = getCareer(state.careerId)!;
   const checkResource = RESOURCES.find((r: Resource) => r.id === resourceId);
