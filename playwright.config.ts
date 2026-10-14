@@ -10,7 +10,13 @@ export default defineConfig({
     baseURL: "http://localhost:3000",
     viewport: { width: 1440, height: 900 },
   },
-  projects: [{ name: "chromium", use: { browserName: "chromium" } }],
+  projects: [
+    {
+      name: "chromium",
+      use: { browserName: "chromium", video: { mode: "on", size: { width: 1440, height: 900 } } },
+    },
+  ],
+  outputDir: "test-results",
   webServer: {
     command: "npm run start",
     url: "http://localhost:3000/dashboard",
