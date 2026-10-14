@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { CAREERS, CATALOG_TOTAL, getCareer } from "@/lib/fixtures/catalog";
 import { computeScore, roundHalfDown } from "@/lib/engines/score";
 import { rankOpenSkills, stageOne } from "@/lib/engines/gaps";
+import { switchCareer, claimAll } from "@/lib/actions";
 import {
   NEIL_SEED,
   applyReassessment,
@@ -89,7 +90,6 @@ describe("beat states (Neil)", () => {
 
 describe("beat chain through the LIVE action layer (regression guards)", () => {
   it("beat 6 dip: switch alone reads 10 — carried ·✓ re-registers only at re-assessment", () => {
-    const { switchCareer, claimAll } = require("@/lib/actions") as typeof import("@/lib/actions");
     const switched = switchCareer(NEIL_SEED, "da").state;
     // canon: SP 0 (0 closed bars) + CC 10 → dip 10
     expect(scoreFor(switched)).toEqual({ sp: 0, es: 0, tp: 0, cc: 10, total: 10 });
