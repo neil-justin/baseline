@@ -1,6 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+
+/* useLayoutEffect runs before paint on the client (no shift on first
+   hydration) but React warns during SSR — pick per environment. */
+const useIsoLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 /**
  * Pathway tabs — ported markup + behaviors from prototype/pathway.html:
@@ -139,6 +144,51 @@ export default function PathwayTabs({
   const [seq, setSeq] = useState(0); // >0 only after a user-initiated switch
   const [s2open, setS2open] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const panelsRef = useRef<HTMLDivElement>(null);
+
+  /* CLS guard — panels differ in height, which used to push the footer on
+     every switch. Reserve the tallest panel's height on the wrapper so the
+     page height stays constant across tabs. Hidden panels are flashed
+     (visibility:hidden, pre-paint) to measure them. */
+  const equalizePanels = () => {
+    const wrap = panelsRef.current;
+    if (!wrap) return;
+    let max = 0;
+    for (const p of Array.from(
+      wrap.querySelectorAll<HTMLElement>(".tabpanel")
+    )) {
+      const wasHidden = p.hidden;
+      if (wasHidden) {
+        p.hidden = false;
+        p.style.visibility = "hidden";
+      }
+      max = Math.max(max, p.offsetHeight);
+      if (wasHidden) {
+        p.hidden = true;
+        p.style.visibility = "";
+      }
+    }
+    wrap.style.minHeight = max > 0 ? `${max}px` : "";
+  };
+
+  /* re-run on every render: covers tab switches, accordion toggles, and
+     fresh server data */
+  useIsoLayoutEffect(equalizePanels);
+
+  useEffect(() => {
+    let raf = 0;
+    const remeasure = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(equalizePanels);
+    };
+    window.addEventListener("resize", remeasure);
+    document.fonts?.ready.then(remeasure).catch(() => {});
+    return () => {
+      window.removeEventListener("resize", remeasure);
+      cancelAnimationFrame(raf);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /* open tab from hash (default: ranked steps — beat 8 opens here) */
   useEffect(() => {
@@ -219,6 +269,7 @@ export default function PathwayTabs({
         </div>
       </div>
 
+      <div className="tabpanels" ref={panelsRef}>
       {undecided ? (
         <section className="tabpanel" id="panel-steps" role="tabpanel" aria-labelledby="tab-steps" hidden={active !== "steps"}>
           {defaultElement()}
@@ -563,6 +614,7 @@ export default function PathwayTabs({
           </>
         )}
       </section>
+      </div>
     </div>
   );
 }

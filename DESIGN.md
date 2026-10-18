@@ -172,7 +172,7 @@ Spacing runs on a 4px base: 8–16px inside components (panel padding 16px, row 
 Flat by construction. Depth is tonal and linear: white panels on Quiet Ground, separated by 1px hairlines; nothing floats. There are no gradients anywhere, and no ambient or drop shadows — the single sanctioned shadow in the system is the 1px lift on a segmented control's selected thumb. Focus and selection use the accent's wash form (3px halo, 13% selection tint), which reads as calibration, not elevation.
 
 ### Shadow Vocabulary
-- **Thumb lift** (`box-shadow: 0 1px 3px rgba(22, 24, 26, 0.07)`): the selected thumb of a segmented control (e.g. the role toggle). The only resting shadow in the system; do not generalize it to panels or cards.
+- **Thumb lift** (`box-shadow: 0 1px 3px rgba(22, 24, 26, 0.07)`): the selected thumb of a segmented control (e.g. a `.choice` toggle or pathway tab). The only resting shadow in the system; do not generalize it to panels or cards.
 
 ### Named Rules
 **The Flat Instrument Rule.** Panels are flat white with 1px hairline borders at rest. Shadows are not depth — the only permissible one is the segmented-control thumb lift. Depth is conveyed by tonal layering (white on ground) and hairline rules.

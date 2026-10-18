@@ -26,6 +26,9 @@ body {
   font-size: clamp(3.3rem, 6.2vw, 4.6rem);
   line-height: 1; font-weight: 400; letter-spacing: -0.01em;
 }
+/* CountUp goes 0→86; without a reserved width the "of 100" tail nudges right
+   when the count crosses into a second digit (small on-load CLS). */
+.score-readout .score-big { display: inline-block; min-width: 2ch; }
 .score-readout small { font-size: 15px; color: var(--ink-3); margin-left: 8px; }
 .score-line {
   margin-top: 20px;

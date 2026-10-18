@@ -1,10 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SegRubricBar, VBadge } from "@/components/instrument";
 import { rubricParts } from "@/lib/engines/rubric";
 import { roundHalfDown, WEIGHTS, type Score } from "@/lib/engines/score";
+
+/* useLayoutEffect runs before paint on the client (no shift on first
+   hydration) but React warns during SSR — pick per environment. */
+const useIsoLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
 import type {
   CareerProps,
   ExploreRowData,
@@ -119,6 +124,51 @@ export default function CareerClient({
   const [reset, setReset] = useState<ResetData | null>(null);
   const [recovered, setRecovered] = useState<RecoveredData | null>(null);
   const [daGoalPosted, setDaGoalPosted] = useState(false);
+
+  /* CLS guard — the three tab panels differ in height, which pushes the page
+     end (and scroll position) on every switch. Reserve the tallest panel's
+     height on the wrapper so the page height stays constant across tabs.
+     Hidden panels are flashed (visibility:hidden, pre-paint) to measure. */
+  const panelsRef = useRef<HTMLDivElement>(null);
+
+  const equalizePanels = () => {
+    const wrap = panelsRef.current;
+    if (!wrap) return;
+    let max = 0;
+    for (const p of Array.from(
+      wrap.querySelectorAll<HTMLElement>('[role="tabpanel"]')
+    )) {
+      const wasHidden = p.hidden;
+      if (wasHidden) {
+        p.hidden = false;
+        p.style.visibility = "hidden";
+      }
+      max = Math.max(max, p.offsetHeight);
+      if (wasHidden) {
+        p.hidden = true;
+        p.style.visibility = "";
+      }
+    }
+    wrap.style.minHeight = max > 0 ? `${max}px` : "";
+  };
+
+  /* re-run on every render: covers tab switches, strand filters, and flow returns */
+  useIsoLayoutEffect(equalizePanels);
+
+  useEffect(() => {
+    let raf = 0;
+    const remeasure = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(equalizePanels);
+    };
+    window.addEventListener("resize", remeasure);
+    document.fonts?.ready.then(remeasure).catch(() => {});
+    return () => {
+      window.removeEventListener("resize", remeasure);
+      cancelAnimationFrame(raf);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function postDaGoal() {
     setBusy(true);
@@ -359,6 +409,7 @@ export default function CareerClient({
           {tabBtn("match", 2, "Skills-match")}
         </div>
 
+        <div className="tabpanels" ref={panelsRef}>
         {/* ---------- tab 1 · current career card ---------- */}
         <div id="tab-current" role="tabpanel" aria-labelledby="tb-current" hidden={tab !== "current"}>
           {card ? (
@@ -580,6 +631,7 @@ export default function CareerClient({
             widen this list. Skills you marked yourself during setup feed your baseline bars, but they
             never count toward matching.
           </p>
+        </div>
         </div>
         </div>
       </div>
