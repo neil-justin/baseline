@@ -17,8 +17,8 @@
   --color-earned: #0B5F45;
   --color-earned-deep: #08492F;
   --color-selection: rgba(11, 95, 69, 0.133);
-  --font-sans: "Archivo", system-ui, -apple-system, sans-serif;
-  --font-mono: "Fragment Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: "Archivo", "Archivo Fallback", system-ui, -apple-system, sans-serif;
+  --font-mono: "Fragment Mono", "Fragment Mono Fallback", ui-monospace, SFMono-Regular, Menlo, monospace;
   --radius-slot: 2px;
   --radius-badge: 3px;
   --radius-panel: 6px;
@@ -37,30 +37,34 @@
    Fonts are self-hosted (venue runs offline) — never a hosted sheet.
    ============================================================ */
 
+/* Fonts are served from /public/fonts (stable URLs) so the root layout can
+   preload them — without preload the 3s `block` window expires on slow
+   connections, fallback text paints, and the swap reflows every page. */
+
 @font-face {
   font-family: "Archivo";
-  src: url("./fonts/archivo-var-latin.woff2") format("woff2");
+  src: url("/fonts/archivo-var-latin.woff2") format("woff2");
   font-weight: 100 900;
   font-style: normal;
   font-display: block;
 }
 @font-face {
   font-family: "Archivo";
-  src: url("./fonts/archivo-var-italic-latin.woff2") format("woff2");
+  src: url("/fonts/archivo-var-italic-latin.woff2") format("woff2");
   font-weight: 100 900;
   font-style: italic;
   font-display: block;
 }
 @font-face {
   font-family: "Fragment Mono";
-  src: url("./fonts/fragment-mono-latin.woff2") format("woff2");
+  src: url("/fonts/fragment-mono-latin.woff2") format("woff2");
   font-weight: 400 500;
   font-style: normal;
   font-display: block;
 }
 @font-face {
   font-family: "Fragment Mono";
-  src: url("./fonts/fragment-mono-italic-latin.woff2") format("woff2");
+  src: url("/fonts/fragment-mono-italic-latin.woff2") format("woff2");
   font-weight: 400 500;
   font-style: italic;
   font-display: block;
@@ -79,8 +83,31 @@
   --selection: #0B5F4522;
   --radius: 6px;
 
-  --sans: "Archivo", system-ui, -apple-system, sans-serif;
-  --mono: "Fragment Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --sans: "Archivo", "Archivo Fallback", system-ui, -apple-system, sans-serif;
+  --mono: "Fragment Mono", "Fragment Mono Fallback", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+/* Metric-compatible fallback faces — the swap from fallback to webfont used
+   to reflow every page on slow connections (app bar + mono rewrap shifts).
+   Overrides measured against the real faces via canvas probe at 100px:
+   Archivo  {w 2809, a 0.88em, d 0.21em}  vs Arial/Liberation {w 2823.7}
+   Fragment {w 3596, a 0.95em, d 0.25em}  vs Courier-class    {w 3480.6}
+   size-adjust = primary/fallback width; ascent/descent = primary em / sizeAdjust. */
+@font-face {
+  font-family: "Archivo Fallback";
+  src: local("Arial"), local("Liberation Sans"), local("Roboto"), local("Helvetica");
+  size-adjust: 99.48%;
+  ascent-override: 88.46%;
+  descent-override: 21.11%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Fragment Mono Fallback";
+  src: local("Courier New"), local("Liberation Mono"), local("DejaVu Sans Mono"), local("Roboto Mono");
+  size-adjust: 103.32%;
+  ascent-override: 91.94%;
+  descent-override: 24.2%;
+  line-gap-override: 0%;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -793,6 +820,15 @@ input::placeholder { color: #6F746F; }
   .strand-grid { grid-template-columns: 1fr; }
   .skill-row { grid-template-columns: 1fr; }
   .skill-row .choice { grid-row: auto; grid-column: 1; }
+}
+/* On narrow screens the nav's natural flex-wrap sits exactly on a ~1px
+   metric knife-edge (the "Profile" link flips between rows when the webfont
+   swaps in — a full app-bar repricing of every page). Force the break so the
+   row layout is font-metric-independent. Hidden ≥561px, where one row fits
+   with big slack. */
+.nav-spacer { display: none; }
+@media (max-width: 560px) {
+  .nav-spacer { display: block; flex-basis: 100%; height: 0; }
 }
 
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,7 +9,7 @@ const NAV = [
   { href: "/career", label: "Career" },
   { href: "/pathway", label: "Pathway" },
   { href: "/progress", label: "Progress" },
-  { href: "/profile", label: "Profile" },
+  { href: "/profile", label: "Profile", ownRow: true },
 ];
 
 /** Sticky app bar — 5-item nav (locked), CSS-geometric brand mark. */
@@ -24,14 +25,17 @@ export default function AppBar({ meta = "NEIL · G11 · STEM" }: { meta?: string
         <nav className="app-nav" aria-label="Primary">
           {NAV.map((item) => {
             const current = pathname === item.href;
-            return current ? (
-              <a key={item.href} href={item.href} aria-current="page">
-                {item.label}
-              </a>
-            ) : (
-              <Link key={item.href} href={item.href}>
-                {item.label}
-              </Link>
+            return (
+              <Fragment key={item.href}>
+                {item.ownRow ? <span className="nav-spacer" aria-hidden="true" /> : null}
+                {current ? (
+                  <a href={item.href} aria-current="page">
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link href={item.href}>{item.label}</Link>
+                )}
+              </Fragment>
             );
           })}
         </nav>
