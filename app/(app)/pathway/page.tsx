@@ -104,13 +104,13 @@ function buildSteps(career: Career, bars: Record<string, { source: BarSource }>,
   const queueRows: QRow[] = queue.map((skill, i) => {
     const res = resourceFor(career, skill);
     return {
-      rank: i + 1,
+      rank: stageOneDone + i + 1,
       skill,
       res: res
         ? { title: res.title, cost: costText(res), hrs: timeText(res) }
         : null,
       noRes: res === null,
-      why: rationaleFor(career, skill, i + 1, res),
+      why: rationaleFor(career, skill, stageOneDone + i + 1, res),
       primary: i === 0,
     };
   });
