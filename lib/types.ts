@@ -89,6 +89,8 @@ export interface Resource {
   provider: string;
   type: ResourceType;
   cost: "free" | { peso: number };
+  /** verified live URL of the real (free) resource this row points to */
+  url?: string;
   durationHours: number;
   skillsAddressed: string[];
   creditingBody?: string;

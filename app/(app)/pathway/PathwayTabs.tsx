@@ -87,6 +87,7 @@ export interface FeedCell {
 export interface ResRow {
   title: string;
   provider: string;
+  url: string | null;
   type: string;
   cost: string;
   time: string;
@@ -525,7 +526,16 @@ export default function PathwayTabs({
                 <div key={r.title} className="res-row">
                   <span className="res-main">
                     <span className="r-title">
-                      {r.title}
+                      {r.url ? (
+                        <a href={r.url} target="_blank" rel="noopener noreferrer">
+                          {r.title}
+                          <span className="r-ext" aria-hidden="true">
+                            ↗
+                          </span>
+                        </a>
+                      ) : (
+                        r.title
+                      )}
                       {r.startHere ? <span className="r-start">Start here</span> : null}
                     </span>
                     <span className="r-prov">{r.provider}</span>
@@ -541,13 +551,6 @@ export default function PathwayTabs({
                 </div>
               ))}
             </div>
-
-            <p className="res-foot">
-              {resources.allClosed ? "Everything you needed is done or checked. " : ""}
-              Type in plain words: a course is taught, a doc is reference reading, a cert is credited by its
-              body and counts toward your entry route. Mark a resource as done, then take the quick check — 5
-              questions, get 4 right, and the bar closes.
-            </p>
 
             <div className="xtab">
               <button type="button" onClick={() => goto("gaps")}>

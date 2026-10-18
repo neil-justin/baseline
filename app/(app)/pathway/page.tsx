@@ -205,6 +205,7 @@ function buildResources(
       return {
         title: r.title,
         provider: r.provider,
+        url: r.url ?? null,
         type: r.type,
         cost: costText(r),
         time: timeText(r),

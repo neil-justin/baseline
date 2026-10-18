@@ -5,6 +5,9 @@ import type { Resource } from "@/lib/types";
  * Demo-slice subset; expands per the m5 content plan (price tier free|₱,
  * typed course/cert/NC/doc) — the money-shot resource is canon-locked:
  * "Build your first dashboard" — Microsoft Learn, Power BI, free.
+ * Every row's `url` was checked live (Oct 2026) and points at the real,
+ * still-existing page; TESDA's TOP moved off elearn.tesda.gov.ph (dead) to
+ * e-tesda.gov.ph, and Google's Applied Digital Skills lesson pages are gone.
  */
 export const RESOURCES: Resource[] = [
   // --- Software Developer ---
@@ -14,6 +17,8 @@ export const RESOURCES: Resource[] = [
     provider: "Coursera",
     type: "course",
     cost: "free",
+    // "Programming for Everybody (Getting Started with Python)" — UMich, free to audit
+    url: "https://www.coursera.org/learn/python",
     durationHours: 25,
     skillsAddressed: ["Programming logic (Python/Java)"],
     careerId: "swd",
@@ -24,6 +29,7 @@ export const RESOURCES: Resource[] = [
     provider: "Atlassian",
     type: "doc",
     cost: "free",
+    url: "https://www.atlassian.com/git/tutorials/what-is-version-control",
     durationHours: 2,
     skillsAddressed: ["Git (version control)"],
     careerId: "swd",
@@ -35,6 +41,8 @@ export const RESOURCES: Resource[] = [
     provider: "Microsoft Learn — Power BI",
     type: "doc",
     cost: "free",
+    // Learn's beginner tutorial: connect to data, create a report + dashboard
+    url: "https://learn.microsoft.com/en-us/power-bi/fundamentals/service-get-started",
     durationHours: 4,
     skillsAddressed: ["Dashboards (Power BI)"],
     careerId: "da",
@@ -45,6 +53,7 @@ export const RESOURCES: Resource[] = [
     provider: "Khan Academy",
     type: "course",
     cost: "free",
+    url: "https://www.khanacademy.org/computing/computer-programming/sql",
     durationHours: 6,
     skillsAddressed: ["SQL"],
     careerId: "da",
@@ -52,9 +61,12 @@ export const RESOURCES: Resource[] = [
   {
     id: "res-da-sheets-doc",
     title: "Cleaning up messy sheets",
-    provider: "Google — Applied Digital Skills",
+    provider: "Google Workspace Learning Center",
     type: "doc",
     cost: "free",
+    // Google's own "format & clean up data" docs (the old Applied Digital
+    // Skills lesson pages are gone — ADFS curriculum moved into Skillshop)
+    url: "https://support.google.com/a/users/topic/9976025?hl=en",
     durationHours: 2,
     skillsAddressed: ["Data cleaning"],
     careerId: "da",
@@ -65,6 +77,7 @@ export const RESOURCES: Resource[] = [
     provider: "Khan Academy",
     type: "course",
     cost: "free",
+    url: "https://www.khanacademy.org/math/statistics-probability",
     durationHours: 5,
     skillsAddressed: ["Basic statistics"],
     careerId: "da",
@@ -75,6 +88,9 @@ export const RESOURCES: Resource[] = [
     provider: "Google Skillshop",
     type: "cert",
     cost: "free",
+    // Google Analytics Certification course (official Skillshop link, per
+    // support.google.com/analytics/answer/15068052)
+    url: "https://skillshop.docebosaas.com/learn/courses/14810/google-analytics-certification",
     durationHours: 8,
     skillsAddressed: ["Chart interpretation"],
     creditingBody: "Google",
@@ -83,9 +99,12 @@ export const RESOURCES: Resource[] = [
   {
     id: "res-da-report-doc",
     title: "Data storytelling quick guide",
-    provider: "Google — Teaching materials",
+    provider: "Coursera",
     type: "doc",
     cost: "free",
+    // prototype canon: "Data Storytelling — Coursera · free to audit" (course
+    // listing lives behind Coursera's catalog search; no stable course slug)
+    url: "https://www.coursera.org/search?query=data%20storytelling",
     durationHours: 2,
     skillsAddressed: ["Report writing"],
     careerId: "da",
@@ -97,6 +116,9 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "NC",
     cost: "free",
+    // TOP moved off elearn.tesda.gov.ph — now Moodle at e-tesda.gov.ph;
+    // "Electrical and Electronics / Computer System Servicing NC II" category
+    url: "https://e-tesda.gov.ph/course/index.php?categoryid=16",
     durationHours: 12,
     skillsAddressed: ["OS install/config", "Hardware troubleshooting"],
     creditingBody: "TESDA",
