@@ -147,10 +147,6 @@ export default async function AdminCohortPage() {
         </section>
       </main>
 
-      <p className="admin-colophon">
-        <span>READ-ONLY ADMIN VIEW · SEEDED DEMO COHORT OF 7 · EVERY SCORE COMPUTED FROM THE SAME RUBRIC AS THE STUDENT VIEW</span>
-        <span>CAREER READINESS · THESIS PROTOTYPE</span>
-      </p>
     </>
   );
 }

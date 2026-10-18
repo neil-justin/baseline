@@ -1,29 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BackArrow } from "../glyphs";
 
 /** Sign-in form — ported from prototype/signin.html, with the live credential POST
  * in place of the static prototype's always-failing submit. Posts to
- * `/api/auth/signin` with `{ email, password, role }`; the route is added in the
- * session task (lib/session.ts seeded accounts). */
+ * `/api/auth/signin` with `{ email, password }`; the route is added in the
+ * session task (lib/session.ts seeded accounts). One credential form — the
+ * account's role lives in the session and decides the destination client-side
+ * (via the route's {dest} — admin → /admin, student → dashboard/onboarding). */
 export default function SignInForm() {
-  const [role, setRole] = useState<"student" | "admin">("student");
   const [showPw, setShowPw] = useState(false);
   const [pending, setPending] = useState(false);
   const [emailErr, setEmailErr] = useState(false);
   const [passErr, setPassErr] = useState(false);
   const [credsErr, setCredsErr] = useState<string | null>(null);
-
-  // Remembers the role of the last successful sign-in on this device (content plan §10).
-  useEffect(() => {
-    try {
-      const last = window.localStorage.getItem("signin:lastRole");
-      if (last === "student" || last === "admin") setRole(last);
-    } catch {
-      /* private mode — default Student */
-    }
-  }, []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -41,23 +32,16 @@ export default function SignInForm() {
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, role }),
+        body: JSON.stringify({ email, password }),
       });
       if (res.ok) {
         const data = await res.json().catch(() => ({}));
-        try {
-          window.localStorage.setItem("signin:lastRole", role);
-        } catch {
-          /* ignore */
-        }
-        const dest =
-          data?.dest ?? (role === "admin" ? "/admin" : "/onboarding");
+        const dest = data?.dest ?? "/dashboard";
         window.location.assign(dest);
         return;
       }
       const data = await res.json().catch(() => null);
       if (data?.error === "no_account") setCredsErr("no_account");
-      else if (data?.error === "wrong_role") setCredsErr("wrong_role");
       else setCredsErr("mismatch");
     } catch {
       setCredsErr("mismatch");
@@ -68,16 +52,7 @@ export default function SignInForm() {
 
   return (
     <form id="signin-form" noValidate onSubmit={onSubmit}>
-      <div className="rolewise" role="group" aria-label="Account type">
-        <button type="button" aria-pressed={role === "student"} onClick={() => setRole("student")}>
-          Student
-        </button>
-        <button type="button" aria-pressed={role === "admin"} onClick={() => setRole("admin")}>
-          Admin
-        </button>
-      </div>
-
-      <div className="field" style={{ marginTop: 6 }}>
+      <div className="field" style={{ marginTop: 0 }}>
         <div className="field-label">
           <label htmlFor="f-email">Email</label>
         </div>
@@ -148,8 +123,6 @@ export default function SignInForm() {
                 Create one in 30 seconds →
               </a>
             </>
-          ) : credsErr === "wrong_role" ? (
-            <>That&apos;s an admin account — switch the toggle above and retry.</>
           ) : (
             <>
               That email and password don&apos;t match. Check both, or →{" "}

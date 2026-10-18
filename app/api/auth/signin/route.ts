@@ -7,9 +7,11 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * POST /api/auth/signin { email, password, role } → 200 {dest, role}
- * Dest: student with state → /dashboard; student fresh → /onboarding; admin → /admin.
- * Error contract (auth agent's client maps these): bad_credentials | wrong_role | no_account | server
+ * POST /api/auth/signin { email, password } → 200 {dest, role}
+ * One credential form for every account — the role comes from the seeded
+ * account record, never the client. Dest: student with state → /dashboard;
+ * student fresh → /onboarding; admin → /admin (route-level guard: proxy.ts).
+ * Error contract (auth agent's client maps these): bad_credentials | no_account | server
  */
 export async function POST(req: Request) {
   try {
@@ -18,9 +20,6 @@ export async function POST(req: Request) {
     if (!account) return NextResponse.json({ error: "no_account" }, { status: 401 });
     if (account.password !== String(body.password ?? "")) {
       return NextResponse.json({ error: "bad_credentials" }, { status: 401 });
-    }
-    if (body.role && body.role !== account.role) {
-      return NextResponse.json({ error: "wrong_role" }, { status: 403 });
     }
     // ensure the student's state document exists (Neil seeds canon; others fresh)
     if (account.role === "student") {

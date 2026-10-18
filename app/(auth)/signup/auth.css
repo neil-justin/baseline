@@ -1,5 +1,5 @@
 /* Sign-up surface styles — page-specific additions (the .auth-body / .auth-panel /
-   .field / .rolewise / .proto-note framework lives in app/globals.css). The prototype
+   .field / .proto-note framework lives in app/globals.css). The prototype
    signup.html carries no <style> block; the only local addition is the wordmark acting
    as the way back to the landing. */
 

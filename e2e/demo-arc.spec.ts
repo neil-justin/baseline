@@ -301,6 +301,14 @@ test.describe.serial("demo-arc", () => {
 
     /* ══════════ BEAT 10 · admin close ══════════ */
 
+    // the admin surface is session-guarded (proxy.ts) — sign in through the
+    // (single, role-less) form; the account's own role redirects to /admin
+    await page.goto("/signin");
+    await page.locator("#f-email").fill("admin@demo.ph");
+    await page.locator("#f-pass").fill("readiness");
+    await page.getByRole("button", { name: "Sign in" }).click();
+    await page.waitForURL("**/admin");
+
     await page.goto("/admin");
     const demoRow = page.locator(".s-row.row-demo");
     await expect(demoRow.locator(".s-career")).toHaveText("Data Analyst"); // career survives the switch ✓

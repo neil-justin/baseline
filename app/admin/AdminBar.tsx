@@ -11,11 +11,9 @@ export default function AdminBar() {
         <div className="brand">
           <span className="brand-mark" aria-hidden="true" />
           <span className="brand-name">Career Readiness</span>
-          <span className="brand-meta">Admin · read-only</span>
         </div>
         <div className="app-user">
-          <span className="user-chip">ADMIN · SEEDED</span>
-          <Link className="link-quiet" href="/signin">
+          <Link className="admin-signout" href="/signin">
             Sign out
           </Link>
         </div>

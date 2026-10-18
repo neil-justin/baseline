@@ -124,6 +124,12 @@ test("record demo arc", async ({ page }) => {
   await page.waitForTimeout(2600);
   await page.goto("/profile");
   await page.waitForTimeout(2600);
+  // /admin is session-guarded (proxy.ts): sign in as admin through the form
+  await page.goto("/signin");
+  await page.locator("#f-email").fill("admin@demo.ph");
+  await page.locator("#f-pass").fill("readiness");
+  await page.click('button:has-text("Sign in")');
+  await page.waitForURL("**/admin");
   await page.goto("/admin");
   await page.waitForTimeout(2400);
   await page.goto("/dashboard");

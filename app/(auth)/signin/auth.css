@@ -1,5 +1,5 @@
 /* Sign-in surface styles — page-specific additions (the .auth-body / .auth-panel /
-   .field / .rolewise framework lives in app/globals.css). The prototype signin.html
+   .field framework lives in app/globals.css). The prototype signin.html
    carries no <style> block; the only local addition is the wordmark acting as the
    way back to the landing. */
 

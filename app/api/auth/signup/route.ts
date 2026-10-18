@@ -7,9 +7,9 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * POST /api/auth/signup { name, email, password, role } → 200 {dest, role}
- * Creates a student-format account (admin self-serve provisioning is
- * post-defense; the Admin toggle may only sign in to the seeded admin).
+ * POST /api/auth/signup { name, email, password } → 200 {dest, role}
+ * Self-serve sign-up is students-only (admins are seeded; post-defense they are
+ * provisioned/invited, never self-registered).
  */
 export async function POST(req: Request) {
   try {
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     if (password.length < 8) return NextResponse.json({ error: "password_short" }, { status: 400 });
     if (findAccount(email)) return NextResponse.json({ error: "email_taken" }, { status: 409 });
 
-    const role: "student" | "admin" = body.role === "admin" && email === "admin@demo.ph" ? "admin" : "student";
+    const role = "student" as const;
     const account = {
       email,
       password,
@@ -30,9 +30,7 @@ export async function POST(req: Request) {
       fullName: name,
     };
     const cookieVal = sessionCookieValue({ ...account, studentId: account.studentId });
-    if (role === "student") {
-      await db.saveStudentState(account.studentId, newStudentState(account.studentId, name));
-    }
+    await db.saveStudentState(account.studentId, newStudentState(account.studentId, name));
     const store = await cookies();
     store.set(SESSION_COOKIE, cookieVal, {
       httpOnly: true,
@@ -40,7 +38,7 @@ export async function POST(req: Request) {
       path: "/",
       maxAge: 60 * 60 * 12,
     });
-    return NextResponse.json({ dest: role === "admin" ? "/admin" : "/onboarding", role });
+    return NextResponse.json({ dest: "/onboarding", role });
   } catch {
     return NextResponse.json({ error: "server" }, { status: 500 });
   }

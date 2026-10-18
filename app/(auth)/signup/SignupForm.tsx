@@ -4,11 +4,11 @@ import { useState } from "react";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** Sign-up form — ported from prototype/signup.html (no confirm-password; role select
- * per content plan §9). Writes a student-format account via POST `/api/auth/signup`
- * with `{ name, email, password, role }`; the route is added in the session task. */
+/** Sign-up form — ported from prototype/signup.html (no confirm-password). Writes
+ * a student-format account via POST `/api/auth/signup` with `{ name, email,
+ * password }`; the route is added in the session task. Self-serve sign-up is
+ * students-only — admins are provisioned with the seed (post-defense: invited). */
 export default function SignupForm() {
-  const [role, setRole] = useState<"student" | "admin">("student");
   const [showPw, setShowPw] = useState(false);
   const [pending, setPending] = useState(false);
   const [nameErr, setNameErr] = useState(false);
@@ -40,11 +40,11 @@ export default function SignupForm() {
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, role }),
+        body: JSON.stringify({ name, email, password }),
       });
       if (res.ok) {
         const data = await res.json().catch(() => ({}));
-        window.location.assign(data?.dest ?? (role === "admin" ? "/admin" : "/onboarding"));
+        window.location.assign(data?.dest ?? "/onboarding");
         return;
       }
       const data = await res.json().catch(() => null);
@@ -61,20 +61,6 @@ export default function SignupForm() {
 
   return (
     <form id="signup-form" noValidate onSubmit={onSubmit}>
-      <div className="rolewise" role="group" aria-label="Account type">
-        <button type="button" aria-pressed={role === "student"} onClick={() => setRole("student")}>
-          Student
-        </button>
-        <button type="button" aria-pressed={role === "admin"} onClick={() => setRole("admin")}>
-          Admin
-        </button>
-      </div>
-      {role === "admin" && (
-        <p className="role-note">
-          Administration and demo review accounts — created for you; you don&apos;t need one to start.
-        </p>
-      )}
-
       <div className="field" style={{ marginTop: 0 }}>
         <div className="field-label">
           <label htmlFor="f-name">Full name</label>

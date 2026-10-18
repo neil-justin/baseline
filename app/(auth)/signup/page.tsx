@@ -34,9 +34,6 @@ export default function SignUpPage() {
             >
               Start the check.
             </h1>
-            <p className="auth-claim" style={{ color: "var(--ink-2)", fontSize: 15.5 }}>
-              5-minute check · no credit card, no list to join
-            </p>
           </div>
 
           <SignupForm />
@@ -47,7 +44,6 @@ export default function SignUpPage() {
               Sign in <ForwardArrow />
             </a>
           </p>
-          <p className="auth-note">YOUR ANSWERS STAY YOURS</p>
         </div>
       </main>
     </div>
