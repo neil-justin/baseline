@@ -629,7 +629,7 @@ input::placeholder { color: #6F746F; }
 /* ---------- ob shell: progress line + back ---------- */
 
 .ob-top {
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex; justify-content: flex-end; align-items: center;
   padding: 10px 32px; max-width: 1360px; margin: 0 auto;
 }
 .ob-steps {

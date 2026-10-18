@@ -528,10 +528,6 @@ export default function CareerClient({
             </div>
           )}
 
-          <p className="wage-line num">
-            Certified skill pays: <b>₱69 → ₱96 per hour</b> as NC levels rise{" "}
-            <span className="wage-src">(EDCOM 2 TVET Returns Policy Note, 2026)</span>
-          </p>
         </div>
 
         {/* ---------- tab 3 · skills-match ---------- */}

@@ -23,8 +23,6 @@
   background: var(--panel);
   border-bottom: 1px solid var(--line);
 }
-.ob-strip .brand-mark { width: 14px; height: 14px; }
-.ob-strip .brand-name { font-size: 12.5px; }
 
 @media (max-width: 720px) {
   .two-col { grid-template-columns: 1fr; }

@@ -110,9 +110,7 @@ export default function LandingPage() {
                 Sign in
               </a>
             </div>
-            <p className="hero-foot rv" style={{ ["--d" as string]: "380ms" }}>
-              One number · four measured parts · every claim cited.
-            </p>
+
           </div>
 
           {/* sample instrument */}
@@ -250,10 +248,8 @@ export default function LandingPage() {
             </div>
             <div className="rubric-scale rv">
               <span>0</span>
-              <span>your score, out of 100</span>
               <span>100</span>
             </div>
-            <p className="rubric-note-m rv">A bar closes when you pass a short check.</p>
           </div>
         </div>
       </section>
@@ -308,33 +304,10 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-          <div className="loop-wageline rv" data-io data-wageladder>
-            <p className="w num">
-              Certified skill pays by the hour:{" "}
-              <b>
-                <span className="wage-step" style={{ ["--d" as string]: "120ms" }}>
-                  ₱69
-                </span>{" "}
-                <span className="wage-step" style={{ ["--d" as string]: "520ms" }}>
-                  → ₱74
-                </span>{" "}
-                <span className="wage-step" style={{ ["--d" as string]: "920ms" }}>
-                  → ₱96
-                </span>
-              </b>{" "}
-              <span style={{ color: "var(--ink-3)" }}>(no TVET → NC I/II → NC III/IV)</span>
-            </p>
-            <p className="src rv" style={{ ["--d" as string]: "1000ms" }}>
-              EDCOM 2 TVET Returns Policy Note, 2026
-            </p>
-          </div>
           <div className="loop-cta" data-io data-stagger="100" data-cap="220">
             <a className="btn btn-primary btn-hero rv" href="/signup">
               Start check <ReturnArrow />
             </a>
-            <p className="promise rv" style={{ ["--d" as string]: "120ms" }}>
-              The number only grows when you prove a skill.
-            </p>
           </div>
         </div>
       </section>
@@ -372,9 +345,6 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="foot-main rv">
-          <span className="label">
-            {CATALOG_TOTAL}-CAREER CATALOG · RUBRIC-WEIGHTED READOUT · EVERY CLAIM CITED
-          </span>
           <nav className="foot-links" aria-label="Footer">
             <a className="link-quiet" href="/signin">
               Sign in

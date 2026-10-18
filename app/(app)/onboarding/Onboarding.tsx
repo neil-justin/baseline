@@ -266,10 +266,6 @@ export default function Onboarding() {
       {/* OB-0 · progress line (the AppBar owns the sticky brand bar) */}
       <div className="ob-strip">
         <div className="ob-top">
-          <div className="brand">
-            <span className="brand-mark" aria-hidden="true" />
-            <span className="brand-name">Career Readiness</span>
-          </div>
           <span className="ob-steps" aria-live="polite">
             STEP {step} OF 5 ·{" "}
             {STEP_LABELS.map((l, i) => (
