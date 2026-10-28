@@ -1,6 +1,7 @@
 import { test } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
+import { signIn, cohortEmail, DEMO_PASSWORD, neilCreds } from "./helpers";
 
 const DIR = "/tmp/opencode/screenshots/thesis";
 
@@ -25,8 +26,12 @@ async function stabilize(page: import("@playwright/test").Page) {
  * prefers-reduced-motion, so emulate that for deterministic captures.
  */
 test("capture every page", async ({ page }) => {
+  // ADR 0003: student pages are session-honest — sign in as Neil first.
+  const neil = neilCreds();
+  test.skip(!neil.email || !neil.password, "E2E_NEIL_EMAIL / E2E_NEIL_PASSWORD unset — add them to .env.local to run the capture.");
+  await signIn(page, neil.email, neil.password);
   await page.emulateMedia({ reducedMotion: "reduce" });
-  // public + student pages (store auto-seeds canon Neil)
+  // student pages (Neil's canon seed loads for his account)
   for (const [route, name] of [
     ["/", "home"],
     ["/profile", "profile"],
@@ -38,12 +43,9 @@ test("capture every page", async ({ page }) => {
     await page.screenshot({ path: path.join(DIR, `page-${name}.png`), fullPage: true });
   }
 
-  // admin is session-guarded — sign in, role redirect lands on /admin
-  await page.goto("/signin");
-  await page.locator("#f-email").fill("admin@demo.ph");
-  await page.locator("#f-pass").fill("readiness");
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await page.waitForURL("**/admin");
+  // admin is session-guarded — sign in as the counselor persona, role
+  // redirect lands on /admin
+  await signIn(page, cohortEmail("adviser"), DEMO_PASSWORD);
   await stabilize(page);
   fs.mkdirSync(DIR, { recursive: true });
   await page.screenshot({ path: path.join(DIR, "page-admin.png"), fullPage: true });

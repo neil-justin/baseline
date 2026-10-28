@@ -51,6 +51,41 @@ export function kickPort(): Promise<void> {
   });
 }
 
+/**
+ * Auth (ADR 0003): the pages are session-honest — unauthenticated visits
+ * redirect to /signin, so every canon walk signs in first. One credential
+ * form for every account; the account's role in the session decides the
+ * destination (counselor/sysadmin → /admin, student → /dashboard|/onboarding).
+ */
+export async function signIn(page: Page, email: string, password: string) {
+  await page.goto("/signin");
+  await page.locator("#f-email").fill(email);
+  await page.locator("#f-pass").fill(password);
+  await page.getByRole("button", { name: "Sign in" }).click();
+  await page.waitForURL((u) => !u.pathname.startsWith("/signin"));
+}
+
+/** Org-like demo cohort addresses (marco@campus.test …) — matches seed-accounts.mjs. */
+export function cohortEmail(id: string): string {
+  return `${id}@${process.env.SEED_COHORT_DOMAIN || "campus.test"}`;
+}
+
+/** The demo staff password (seed-accounts.mjs SEED_PASSWORD default). */
+export const DEMO_PASSWORD = process.env.SEED_PASSWORD || "readiness";
+
+/** Neil's E2E credentials from the env — skip with a clear message if unset. */
+export function neilCreds(): { email: string; password: string } {
+  const email = process.env.E2E_NEIL_EMAIL;
+  const password = process.env.E2E_NEIL_PASSWORD;
+  if (!email || !password) {
+    console.error(
+      "E2E_NEIL_EMAIL / E2E_NEIL_PASSWORD are not set in .env.local — the canon walk signs in as Neil (ADR 0003). " +
+        "Set them to the seeded Neil account and re-run."
+    );
+  }
+  return { email: email ?? "", password: password ?? "" };
+}
+
 /** Poll an element's text every 200ms until it stops changing, then return it. */
 export async function settled(page: Page, selector: string, timeout = 8000): Promise<string> {
   const deadline = Date.now() + timeout;

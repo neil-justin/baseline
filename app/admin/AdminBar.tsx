@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 /**
  * Admin app bar — ported 1:1 from prototype/admin.html: brand + account,
  * NO student nav (read-only panel surface, not a student surface).
@@ -13,9 +11,11 @@ export default function AdminBar() {
           <span className="brand-name">Career Readiness</span>
         </div>
         <div className="app-user">
-          <Link className="admin-signout" href="/api/auth/signout">
-            Sign out
-          </Link>
+          {/* POST, not a GET <Link> — a prefetched GET sign-out would wipe the
+              session on visit (same footgun as the AppBar sign-out). */}
+          <form action="/api/auth/signout" method="post">
+            <button type="submit" className="admin-signout">Sign out</button>
+          </form>
         </div>
       </div>
     </header>

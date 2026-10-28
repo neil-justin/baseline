@@ -1,4 +1,17 @@
+import fs from "node:fs";
 import { defineConfig } from "@playwright/test";
+
+// The test runner is not a Next process — `next start` loads .env.local on
+// its own, but the specs (and resetStore's service-role client) need the
+// same values in the runner/workers. Parse it without overriding real env.
+if (fs.existsSync(".env.local")) {
+  for (const line of fs.readFileSync(".env.local", "utf8").split("\n")) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
+    if (!m || line.trim().startsWith("#")) continue;
+    const val = (m[2] ?? "").replace(/^["']|["']$/g, "");
+    if (!(m[1] in process.env)) process.env[m[1]] = val;
+  }
+}
 
 export default defineConfig({
   testDir: "./e2e",

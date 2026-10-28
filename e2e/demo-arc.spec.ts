@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { resetStore, settled, shot } from "./helpers";
+import { resetStore, settled, shot, signIn, cohortEmail, DEMO_PASSWORD, neilCreds } from "./helpers";
 
 /**
  * Demo-arc E2E — one walk, beats 1–10 (plan Task 15).
@@ -35,6 +35,22 @@ test.describe.serial("demo-arc", () => {
   test("beats 1–10: canon walk with the exact demo inputs", async ({ page }) => {
     const notes: string[] = [];
     const soft = expect.soft;
+
+    // ADR 0003: every surface is session-honest — the walk runs as Neil (the
+    // demo student whose canon seed lives in lib/fixtures/neil.ts). Credentials
+    // come from the env; the whole walk is skipped (with a clear message)
+    // when they are absent.
+    const neil = neilCreds();
+    test.skip(!neil.email || !neil.password, "E2E_NEIL_EMAIL / E2E_NEIL_PASSWORD unset — add them to .env.local to run the canon walk.");
+    await signIn(page, neil.email, neil.password);
+
+    // Seed fidelity: Neil's fresh canon state (NEIL_SEED, beat-5 total 40)
+    // must be what the store lazily loaded for his account — before the walk
+    // plays onboarding over it.
+    await page.waitForURL("**/dashboard");
+    const seedScore = await settled(page, ".score-big");
+    expect(seedScore).toBe("40"); // NEIL_SEED → SP 30/40 · ES 0 · TP 0 · CC 10 = 40
+    notes.push("seed fidelity: Neil's canon seed loads → dashboard reads 40 pre-walk ✓");
 
     /* ══════════ BEATS 1–4 · onboarding ①–④ ══════════ */
 
@@ -302,11 +318,9 @@ test.describe.serial("demo-arc", () => {
     /* ══════════ BEAT 10 · admin close ══════════ */
 
     // the admin surface is session-guarded (proxy.ts) — sign in through the
-    // (single, role-less) form; the account's own role redirects to /admin
-    await page.goto("/signin");
-    await page.locator("#f-email").fill("admin@demo.ph");
-    await page.locator("#f-pass").fill("readiness");
-    await page.getByRole("button", { name: "Sign in" }).click();
+    // (single, role-less) form; the account's own role redirects to /admin.
+    // The counselor persona is Adviser Admin (adviser@<cohort-domain>).
+    await signIn(page, cohortEmail("adviser"), DEMO_PASSWORD);
     await page.waitForURL("**/admin");
 
     await page.goto("/admin");

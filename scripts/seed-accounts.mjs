@@ -5,6 +5,17 @@
  *
  *   node --env-file=.env.local scripts/seed-accounts.mjs
  *
+ * Email scheme (privacy rule: real addresses NEVER enter the repo — env only):
+ *   - Neil (demo student, canon seed)  = SEED_NEIL_EMAIL   (required — the
+ *     user's real account, e.g. a plus-addressed Gmail)
+ *   - System Admin                     = SEED_SYSADMIN_EMAIL (required — same
+ *     human, plus-addressed; a distinct auth identity, same inbox)
+ *   - Demo cohort (marco, jomar, …)    = <id>@SEED_COHORT_DOMAIN (default
+ *     campus.test) — org-like addresses on a neutral reserved domain
+ *   - Adviser Admin (counselor)        = adviser@SEED_COHORT_DOMAIN
+ * All seeded accounts share the demo password (SEED_PASSWORD, default
+ * "readiness").
+ *
  * Idempotent: auth users that already exist are listed and skipped, profiles
  * and student_state rows are upserted. Students get an empty fresh state
  * (same shape as lib/session.ts newStudentState) — except neil, whose state
@@ -19,26 +30,50 @@ if (!url || !service) {
   console.error("Supabase env missing — run with: node --env-file=.env.local scripts/seed-accounts.mjs");
   process.exit(1);
 }
-const admin = createClient(url, service, {
-  auth: { autoRefreshToken: false, persistSession: false },
-});
 
-const PASSWORD = "readiness";
+// Real-human addresses must come from the environment — never guessed,
+// never hardcoded (they must not enter the repo).
+const NEIL_EMAIL = process.env.SEED_NEIL_EMAIL;
+const SYSADMIN_EMAIL = process.env.SEED_SYSADMIN_EMAIL;
+if (!NEIL_EMAIL) {
+  console.error(
+    "SEED_NEIL_EMAIL is not set — add it to .env.local (Neil's real account email) and re-run.\n" +
+      "Real addresses never enter the repo; the seed reads them from the environment only."
+  );
+  process.exit(1);
+}
+if (!SYSADMIN_EMAIL) {
+  console.error(
+    "SEED_SYSADMIN_EMAIL is not set — add it to .env.local (the System Admin identity, e.g.\n" +
+      "the same Gmail plus-addressed: you+sys-admin@gmail.com) and re-run."
+  );
+  process.exit(1);
+}
+
+// Org-like demo addresses on a neutral reserved domain — safe to commit/print.
+const COHORT_DOMAIN = process.env.SEED_COHORT_DOMAIN || "campus.test";
+const cohortEmail = (id) => `${id}@${COHORT_DOMAIN}`;
+
+const PASSWORD = process.env.SEED_PASSWORD || "readiness";
 
 const STUDENTS = [
-  { id: "neil", fullName: "Neil R." },
-  { id: "marco", fullName: "Marco D." },
-  { id: "jomar", fullName: "Jomar P." },
-  { id: "rafael", fullName: "Rafael G." },
-  { id: "liza", fullName: "Liza C." },
-  { id: "pao", fullName: "Pao M." },
-  { id: "kaye", fullName: "Kaye T." },
+  { id: "neil", email: NEIL_EMAIL, fullName: "Neil R." },
+  { id: "marco", email: cohortEmail("marco"), fullName: "Marco D." },
+  { id: "jomar", email: cohortEmail("jomar"), fullName: "Jomar P." },
+  { id: "rafael", email: cohortEmail("rafael"), fullName: "Rafael G." },
+  { id: "liza", email: cohortEmail("liza"), fullName: "Liza C." },
+  { id: "pao", email: cohortEmail("pao"), fullName: "Pao M." },
+  { id: "kaye", email: cohortEmail("kaye"), fullName: "Kaye T." },
 ];
 
 const STAFF = [
-  { email: "admin@demo.ph", role: "counselor", fullName: "Adviser Admin" },
-  { email: "sysadmin@demo.ph", role: "sysadmin", fullName: "Site Operations" },
+  { email: cohortEmail("adviser"), role: "counselor", fullName: "Adviser Admin" },
+  { email: SYSADMIN_EMAIL, role: "sysadmin", fullName: "Site Operations" },
 ];
+
+const admin = createClient(url, service, {
+  auth: { autoRefreshToken: false, persistSession: false },
+});
 
 function freshState(id, fullName) {
   return {
@@ -84,8 +119,7 @@ async function ensureUser(email, role) {
   return data.user.id;
 }
 
-for (const { id, fullName } of STUDENTS) {
-  const email = `${id}@demo.ph`;
+for (const { id, email, fullName } of STUDENTS) {
   const userId = await ensureUser(email, "student");
 
   const { error: profErr } = await admin
@@ -125,6 +159,7 @@ for (const { email, role, fullName } of STAFF) {
   }
 }
 
-console.log("\nSeed complete. Accounts (password for all: the demo password from the ADR):");
-console.log(`  students : ${STUDENTS.map((s) => s.id + "@demo.ph").join(", ")}`);
-console.log(`  staff    : ${STAFF.map((s) => s.email).join(", ")}`);
+console.log("\nSeed complete. Accounts (password for all: the demo password):");
+console.log(`  students : ${STUDENTS.map((s) => `${s.id} → ${s.email}`).join(", ")}`);
+console.log(`  staff    : ${STAFF.map((s) => `${s.role} → ${s.email}`).join(", ")}`);
+console.log(`  neil's real address is read from SEED_NEIL_EMAIL (redacted in logs: ${NEIL_EMAIL.split("@")[0].split("+")[0]}…@${NEIL_EMAIL.split("@")[1]})`);

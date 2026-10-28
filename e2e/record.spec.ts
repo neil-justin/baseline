@@ -1,5 +1,6 @@
 import { test } from "@playwright/test";
 import fs from "node:fs";
+import { signIn, cohortEmail, DEMO_PASSWORD, neilCreds } from "./helpers";
 
 /**
  * Backup-artifact recorder — walks the full demo arc (canon inputs) with
@@ -11,7 +12,12 @@ test("record demo arc", async ({ page }) => {
   // recorder is opt-in: run explicitly with `npx playwright test e2e/record.spec.ts`
   // (`PLAYWRIGHT_RECORD=1 npx playwright test` also activates it inside full runs)
   test.skip(!process.env.PLAYWRIGHT_RECORD && process.env.RECORD !== "1", "recorder is opt-in");
+  // ADR 0003: the walk runs as Neil (session-honest pages) — /onboarding and
+  // the state APIs are student-gated.
+  const neil = neilCreds();
+  test.skip(!neil.email || !neil.password, "E2E_NEIL_EMAIL / E2E_NEIL_PASSWORD unset — add them to .env.local to record.");
   fs.rmSync("data/state.json", { force: true });
+  await signIn(page, neil.email, neil.password);
   await page.goto("/");
   await page.waitForTimeout(6000); // landing motion: count-ups, scanline
   await page.goto("/signup");
@@ -124,11 +130,8 @@ test("record demo arc", async ({ page }) => {
   await page.waitForTimeout(2600);
   await page.goto("/profile");
   await page.waitForTimeout(2600);
-  // /admin is session-guarded (proxy.ts): sign in as admin through the form
-  await page.goto("/signin");
-  await page.locator("#f-email").fill("admin@demo.ph");
-  await page.locator("#f-pass").fill("readiness");
-  await page.click('button:has-text("Sign in")');
+  // /admin is session-guarded (proxy.ts): sign in as the counselor persona
+  await signIn(page, cohortEmail("adviser"), DEMO_PASSWORD);
   await page.waitForURL("**/admin");
   await page.goto("/admin");
   await page.waitForTimeout(2400);

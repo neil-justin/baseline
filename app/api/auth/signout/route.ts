@@ -5,8 +5,10 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * POST (and GET for the AppBar/AdminBar link) /api/auth/signout — ends the
- * Supabase session (clears the signed cookies) and lands on /signin.
+ * POST /api/auth/signout — ends the Supabase session (clears the signed
+ * cookies) and lands on /signin. The AppBar/AdminBar sign-out is a form
+ * POST (a GET link gets RSC-prefetched, which would end the session on a
+ * mere page visit — e2e-caught).
  */
 async function endSession(req: Request) {
   try {
@@ -15,13 +17,10 @@ async function endSession(req: Request) {
   } catch {
     // env missing / already signed out — still land on /signin
   }
-  return NextResponse.redirect(new URL("/signin", req.url));
+  // 303: a form POST must land on /signin as a GET (307 would re-POST)
+  return NextResponse.redirect(new URL("/signin", req.url), 303);
 }
 
 export async function POST(req: Request) {
-  return endSession(req);
-}
-
-export async function GET(req: Request) {
   return endSession(req);
 }

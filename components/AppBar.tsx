@@ -42,9 +42,19 @@ export default function AppBar({ meta = "" }: { meta?: string }) {
         </nav>
         <div className="app-user">
           <span className="user-chip">{meta}</span>
-          <Link className="link-quiet" href="/api/auth/signout">
-            Sign out
-          </Link>
+          {/* POST, not a GET <Link>: Next prefetches links, and a prefetch
+              against a GET sign-out route would silently end the session
+              (the walk's own visits wiped the cookie — e2e-caught). A form
+              POST is never prefetched. */}
+          <form action="/api/auth/signout" method="post">
+            <button
+              type="submit"
+              className="link-quiet"
+              style={{ background: "none", border: 0, padding: 0, cursor: "pointer", fontFamily: "inherit" }}
+            >
+              Sign out
+            </button>
+          </form>
         </div>
       </div>
     </header>
