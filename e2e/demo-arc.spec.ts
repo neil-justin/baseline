@@ -319,7 +319,7 @@ test.describe.serial("demo-arc", () => {
 
     // the admin surface is session-guarded (proxy.ts) — sign in through the
     // (single, role-less) form; the account's own role redirects to /admin.
-    // The counselor persona is Adviser Admin (adviser@<cohort-domain>).
+    // The counselor persona is Ana Villanueva (ana.villanueva@<cohort-domain>).
     await signIn(page, cohortEmail("adviser"), DEMO_PASSWORD);
     await page.waitForURL("**/admin");
 

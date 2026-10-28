@@ -65,9 +65,30 @@ export async function signIn(page: Page, email: string, password: string) {
   await page.waitForURL((u) => !u.pathname.startsWith("/signin"));
 }
 
-/** Org-like demo cohort addresses (marco@campus.test …) — matches seed-accounts.mjs. */
+/**
+ * Demo cohort roster: id → email local part. Canon lives in
+ * scripts/seed-accounts.mjs (STUDENTS/STAFF) — duplicated here on purpose
+ * (the seed is ESM-only node, helpers run in TS); keep the two in sync.
+ */
+const ROSTER: Record<string, string> = {
+  adviser: "ana.villanueva",
+  marco: "marco.santiago",
+  jomar: "jomar.deleon",
+  rafael: "rafael.mendoza",
+  liza: "liza.navarro",
+  pao: "paolo.reyes", // display name Paolo; id stays 'pao'
+  kaye: "kaye.bautista",
+};
+
+/** Full-name demo cohort addresses (marco.santiago@…) — canon: scripts/seed-accounts.mjs. */
 export function cohortEmail(id: string): string {
-  return `${id}@${process.env.SEED_COHORT_DOMAIN || "campus.test"}`;
+  const local = ROSTER[id];
+  if (!local) {
+    throw new Error(
+      `cohortEmail: unknown id "${id}" — add it to the roster in scripts/seed-accounts.mjs and e2e/helpers.ts`
+    );
+  }
+  return `${local}@${process.env.SEED_COHORT_DOMAIN || "campus.test"}`;
 }
 
 /** The demo staff password (seed-accounts.mjs SEED_PASSWORD default). */

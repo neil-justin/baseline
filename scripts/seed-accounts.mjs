@@ -10,9 +10,10 @@
  *     user's real account, e.g. a plus-addressed Gmail)
  *   - System Admin                     = SEED_SYSADMIN_EMAIL (required — same
  *     human, plus-addressed; a distinct auth identity, same inbox)
- *   - Demo cohort (marco, jomar, …)    = <id>@SEED_COHORT_DOMAIN (default
- *     campus.test) — org-like addresses on a neutral reserved domain
- *   - Adviser Admin (counselor)        = adviser@SEED_COHORT_DOMAIN
+ *   - Demo cohort (marco, jomar, …)    = <first>.<last>@SEED_COHORT_DOMAIN
+ *     (default campus.test) — full-name addresses on a neutral reserved
+ *     domain, e.g. marco.santiago@…
+ *   - Adviser Admin (counselor)        = ana.villanueva@SEED_COHORT_DOMAIN
  * All seeded accounts share the demo password (SEED_PASSWORD, default
  * "readiness").
  *
@@ -52,22 +53,23 @@ if (!SYSADMIN_EMAIL) {
 
 // Org-like demo addresses on a neutral reserved domain — safe to commit/print.
 const COHORT_DOMAIN = process.env.SEED_COHORT_DOMAIN || "campus.test";
-const cohortEmail = (id) => `${id}@${COHORT_DOMAIN}`;
+const cohortEmail = (local) => `${local}@${COHORT_DOMAIN}`;
 
 const PASSWORD = process.env.SEED_PASSWORD || "readiness";
 
 const STUDENTS = [
   { id: "neil", email: NEIL_EMAIL, fullName: "Neil R." },
-  { id: "marco", email: cohortEmail("marco"), fullName: "Marco D." },
-  { id: "jomar", email: cohortEmail("jomar"), fullName: "Jomar P." },
-  { id: "rafael", email: cohortEmail("rafael"), fullName: "Rafael G." },
-  { id: "liza", email: cohortEmail("liza"), fullName: "Liza C." },
-  { id: "pao", email: cohortEmail("pao"), fullName: "Pao M." },
-  { id: "kaye", email: cohortEmail("kaye"), fullName: "Kaye T." },
+  { id: "marco", email: cohortEmail("marco.santiago"), fullName: "Marco Santiago" },
+  { id: "jomar", email: cohortEmail("jomar.deleon"), fullName: "Jomar de Leon" },
+  { id: "rafael", email: cohortEmail("rafael.mendoza"), fullName: "Rafael Mendoza" },
+  { id: "liza", email: cohortEmail("liza.navarro"), fullName: "Liza Navarro" },
+  // display name Paolo; the id stays 'pao' (student_id + student_state key)
+  { id: "pao", email: cohortEmail("paolo.reyes"), fullName: "Paolo Reyes" },
+  { id: "kaye", email: cohortEmail("kaye.bautista"), fullName: "Kaye Bautista" },
 ];
 
 const STAFF = [
-  { email: cohortEmail("adviser"), role: "counselor", fullName: "Adviser Admin" },
+  { email: cohortEmail("ana.villanueva"), role: "counselor", fullName: "Ana Villanueva" },
   { email: SYSADMIN_EMAIL, role: "sysadmin", fullName: "Site Operations" },
 ];
 
