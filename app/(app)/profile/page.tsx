@@ -1,5 +1,6 @@
 import type { BarSource, Career, Resource } from "@/lib/types";
 import { getStudentView } from "@/lib/db";
+import { requireStudent } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
 import { skillsFor } from "@/lib/engines/gaps";
 import { RESOURCES } from "@/lib/fixtures/resources";
@@ -106,7 +107,8 @@ function TrajGraphic({ traj }: { traj: Trajectory }) {
 
 /** M11 Competency snapshot + M12 Career plan — markup ported from prototype/profile.html. */
 export default async function ProfilePage() {
-  const { state, career, score } = await getStudentView("neil");
+  const profile = await requireStudent();
+  const { state, career, score } = await getStudentView(profile.studentId);
   if (!career || !score) return <UndecidedProfile name={state.name} />;
 
   const v = scoreView(career, state);

@@ -13,7 +13,7 @@ export default function AdminBar() {
           <span className="brand-name">Career Readiness</span>
         </div>
         <div className="app-user">
-          <Link className="admin-signout" href="/signin">
+          <Link className="admin-signout" href="/api/auth/signout">
             Sign out
           </Link>
         </div>

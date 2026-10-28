@@ -12,8 +12,9 @@ const NAV = [
   { href: "/profile", label: "Profile", ownRow: true },
 ];
 
-/** Sticky app bar — 5-item nav (locked), CSS-geometric brand mark. */
-export default function AppBar({ meta = "NEIL · G11 · STEM" }: { meta?: string }) {
+/** Sticky app bar — 5-item nav (locked), CSS-geometric brand mark. The user
+ * chip is the session-honest meta line passed by the (app) layout. */
+export default function AppBar({ meta = "" }: { meta?: string }) {
   const pathname = usePathname();
   return (
     <header className="bar">
@@ -41,7 +42,7 @@ export default function AppBar({ meta = "NEIL · G11 · STEM" }: { meta?: string
         </nav>
         <div className="app-user">
           <span className="user-chip">{meta}</span>
-          <Link className="link-quiet" href="/signin">
+          <Link className="link-quiet" href="/api/auth/signout">
             Sign out
           </Link>
         </div>

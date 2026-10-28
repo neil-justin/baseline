@@ -248,7 +248,7 @@ export default function Onboarding() {
   /* ---- OB-5 reveal — every number fetched/engine-derived, never painted ---- */
   useEffect(() => {
     if (screen !== "reveal" || view) return;
-    fetch("/api/state?student=neil")
+    fetch("/api/state")
       .then((r) => r.json())
       .then((data: StateView) => setView(data))
       .catch(() => {});

@@ -1,4 +1,5 @@
 import { getStudentView } from "@/lib/db";
+import { requireStudent } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
 import { rankOpenSkills } from "@/lib/engines/gaps";
 import { getResourcesForCareer, RESOURCES } from "@/lib/fixtures/resources";
@@ -60,7 +61,8 @@ function UndecidedDefault() {
 
 /** M9+M6 Progress — the live record. Markup ported from prototype/progress.html. */
 export default async function ProgressPage() {
-  const { state, career, score } = await getStudentView("neil");
+  const profile = await requireStudent();
+  const { state, career, score } = await getStudentView(profile.studentId);
   if (!career || !score) return <UndecidedDefault />;
 
   const v = scoreView(career, state);
@@ -283,7 +285,7 @@ export default async function ProgressPage() {
       />
       <div className="prog-colophon hair">
         <div className="prog-colophon-in">
-          <span className="label">CAREER READINESS · PROGRESS · NEIL, G11 STEM</span>
+          <span className="label">CAREER READINESS · PROGRESS · {state.name.toUpperCase()}, {state.grade} {state.strand}</span>
           <span className="label">EVERY NUMBER COMPUTED · CHECKS GATE CREDIT</span>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { getStudentView } from "@/lib/db";
+import { requireStudent } from "@/lib/session";
 import { openSkills, rankOpenSkills, stageOne } from "@/lib/engines/gaps";
 import type { BarSource, Career, Resource } from "@/lib/types";
 import { RESOURCES } from "@/lib/fixtures/resources";
@@ -225,7 +226,8 @@ function buildResources(
 
 /** M7 Pathway — engine-fed, never painted. */
 export default async function PathwayPage() {
-  const { state, career } = await getStudentView("neil");
+  const profile = await requireStudent();
+  const { state, career } = await getStudentView(profile.studentId);
 
   if (!career) {
     return (

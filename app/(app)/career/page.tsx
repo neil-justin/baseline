@@ -1,4 +1,5 @@
 import { getStudentView } from "@/lib/db";
+import { requireStudent } from "@/lib/session";
 import { CAREERS, CATALOG_TOTAL, getCareer } from "@/lib/fixtures/catalog";
 import { skillsMatch } from "@/lib/engines/gaps";
 import { scoreView } from "@/lib/engines/rubric";
@@ -36,7 +37,8 @@ function shortSrc(src: BarSource): string {
 }
 
 export default async function CareerPage() {
-  const { state, career } = await getStudentView("neil");
+  const profile = await requireStudent();
+  const { state, career } = await getStudentView(profile.studentId);
 
   // --- current-career card (null → undecided default) ---
   const card = career

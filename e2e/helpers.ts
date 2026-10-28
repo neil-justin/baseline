@@ -5,8 +5,12 @@ import type { Page } from "@playwright/test";
 
 /**
  * demo-arc helpers (plan Task 15).
- *  - resetStore(): start each run from a clean store — the JSON store seeds
- *    canon Neil from code (lib/fixtures/neil.ts) unless data/state.json exists.
+ *  - resetStore(): start each run from a clean store. ADR 0003: with the
+ *    Supabase env present this clears the real tables (student_state +
+ *    credentials) via a service-role client — plain supabase-js, because
+ *    helpers run in node, not through next/headers. Canon Neil reseeds from
+ *    code (lib/fixtures/neil.ts) on the next read. Without the env, the
+ *    JSON-file delete keeps the offline fallback working.
  *  - kickPort(): free port 3000 of a stale server (dev or an older prod build)
  *    BEFORE playwright boots, so webServer `npm run start` serves the current
  *    production build. Called from the spec's global setup hook only — never
@@ -16,7 +20,27 @@ import type { Page } from "@playwright/test";
  *    assert DOM text, not network payloads).
  */
 
-export function resetStore() {
+export async function resetStore() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const service = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (url && service) {
+    const { createClient } = await import("@supabase/supabase-js");
+    const admin = createClient(url, service, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+    // neq-sentinel = delete every row (postgrest-js has no delete-all)
+    for (const [table, col] of [
+      ["student_state", "student_id"],
+      ["credentials", "id"],
+    ] as const) {
+      const { error } = await admin
+        .from(table)
+        .delete()
+        .neq(col, table === "credentials" ? "00000000-0000-0000-0000-000000000000" : "__none__");
+      if (error) throw new Error(`resetStore: ${table} delete failed: ${error.message}`);
+    }
+    return;
+  }
   fs.rmSync(path.join(process.cwd(), "data", "state.json"), { force: true });
 }
 

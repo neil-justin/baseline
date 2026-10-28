@@ -262,7 +262,7 @@ export default function CareerClient({
       });
       if (!res.ok) throw new Error("switch failed");
       router.refresh();
-      const v = await (await fetch("/api/state?student=neil", { cache: "no-store" })).json();
+      const v = await (await fetch("/api/state", { cache: "no-store" })).json();
       const carried = new Set(
         Object.entries(preSwitch.bars)
           .filter(([, src]) => src === "verified")
@@ -319,7 +319,7 @@ export default function CareerClient({
       });
       if (!res.ok) throw new Error("claim failed");
       router.refresh();
-      const v = await (await fetch("/api/state?student=neil", { cache: "no-store" })).json();
+      const v = await (await fetch("/api/state", { cache: "no-store" })).json();
       setRecovered({
         from: reset.dip.score.total,
         score: v.score as Score,

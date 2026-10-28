@@ -1,15 +1,22 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { findAccount, newStudentState, SESSION_COOKIE, sessionCookieValue } from "@/lib/session";
+import { supabaseAdmin, supabaseServer } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
+import { newStudentState } from "@/lib/session";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 /**
  * POST /api/auth/signup { name, email, password } → 200 {dest, role}
- * Self-serve sign-up is students-only (admins are seeded; post-defense they are
- * provisioned/invited, never self-registered).
+ * Self-serve sign-up is students-only (staff are seeded; post-defense they
+ * are provisioned/invited, never self-registered). ADR 0003: the account is
+ * a real Supabase Auth user (hashed password), the role lives in
+ * app_metadata AND the profiles row, then a password sign-in establishes the
+ * signed session cookies.
+ * Error contract (the form's client maps these): name_required | password_short
+ * | email_taken | email_invalid | server
  */
 export async function POST(req: Request) {
   try {
@@ -18,27 +25,58 @@ export async function POST(req: Request) {
     const name = String(body.name ?? "").trim();
     const password = String(body.password ?? "");
     if (name.length === 0) return NextResponse.json({ error: "name_required" }, { status: 400 });
+    if (!EMAIL_RE.test(email)) return NextResponse.json({ error: "email_invalid" }, { status: 400 });
     if (password.length < 8) return NextResponse.json({ error: "password_short" }, { status: 400 });
-    if (findAccount(email)) return NextResponse.json({ error: "email_taken" }, { status: 409 });
 
-    const role = "student" as const;
-    const account = {
+    const admin = supabaseAdmin();
+
+    const { data: existing } = await admin.from("profiles").select("id").eq("email", email).maybeSingle();
+    if (existing) return NextResponse.json({ error: "email_taken" }, { status: 409 });
+
+    const { data: created, error: createErr } = await admin.auth.admin.createUser({
       email,
       password,
-      role,
-      studentId: email.split("@")[0].replace(/[^a-z0-9-]/g, "") || "student",
-      fullName: name,
-    };
-    const cookieVal = sessionCookieValue({ ...account, studentId: account.studentId });
-    await db.saveStudentState(account.studentId, newStudentState(account.studentId, name));
-    const store = await cookies();
-    store.set(SESSION_COOKIE, cookieVal, {
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 12,
+      email_confirm: true,
+      app_metadata: { role: "student" },
     });
-    return NextResponse.json({ dest: "/onboarding", role });
+    if (createErr || !created?.user) {
+      const msg = (createErr?.message ?? "").toLowerCase();
+      if (msg.includes("already") || msg.includes("duplicate") || msg.includes("taken")) {
+        return NextResponse.json({ error: "email_taken" }, { status: 409 });
+      }
+      return NextResponse.json({ error: "server" }, { status: 500 });
+    }
+    const user = created.user;
+
+    // student_id derives from the email prefix, deduped with -2/-3… suffixes
+    const base = email.split("@")[0].replace(/[^a-z0-9-]/g, "") || "student";
+    let studentId = base;
+    for (let n = 2; ; n++) {
+      const { data: taken } = await admin
+        .from("profiles")
+        .select("id")
+        .eq("student_id", studentId)
+        .maybeSingle();
+      if (!taken) break;
+      studentId = `${base}-${n}`;
+    }
+
+    const { error: profErr } = await admin.from("profiles").insert({
+      id: user.id,
+      email,
+      full_name: name,
+      role: "student",
+      student_id: studentId,
+      campus: "demo-campus",
+    });
+    if (profErr) return NextResponse.json({ error: "server" }, { status: 500 });
+
+    await db.saveStudentState(studentId, newStudentState(studentId, name));
+
+    const supabase = await supabaseServer();
+    const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+    if (signInErr) return NextResponse.json({ error: "bad_credentials" }, { status: 401 });
+    return NextResponse.json({ dest: "/onboarding", role: "student" });
   } catch {
     return NextResponse.json({ error: "server" }, { status: 500 });
   }

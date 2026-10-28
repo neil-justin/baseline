@@ -1,4 +1,5 @@
 import { getStudentView } from "@/lib/db";
+import { requireStudent } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
 import { getResourcesForCareer } from "@/lib/fixtures/resources";
 import CountUp from "@/components/CountUp";
@@ -72,7 +73,8 @@ function UndecidedDefault() {
 
 /** M1 Dashboard — the score home. Markup ported from prototype/dashboard.html. */
 export default async function DashboardPage() {
-  const { state, career, score } = await getStudentView("neil");
+  const profile = await requireStudent();
+  const { state, career, score } = await getStudentView(profile.studentId);
   if (!career || !score) return <UndecidedDefault />;
 
   const v = scoreView(career, state);

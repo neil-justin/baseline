@@ -1,51 +1,89 @@
-import type { StudentState } from "@/lib/types";
-import { NEIL_SEED } from "@/lib/fixtures/neil";
+import { redirect } from "next/navigation";
+import { supabaseAdmin, supabaseServer } from "@/lib/supabase/server";
 
 /**
- * Demo session layer — seeded accounts for the local, offline mock defense.
- * No real auth backend; the post-defense swap to hosted Supabase auth replaces
- * ONLY this module (route handlers + surfaces are session-agnostic).
+ * Identity layer (ADR 0003) — who is signed in, per request.
+ * The signed-in user (verified, signed JWT via Supabase Auth) joins to their
+ * profiles row for role/name. The session decides — pages never hardcode a
+ * student.
  *
- * Seeded accounts: the demo student (neil) + the 7-cohort fixture students +
- * one admin. Signup writes a student-format account opted out of the demo.
+ * Roles (CONTEXT.md): student · counselor (the Admin surface person) ·
+ * sysadmin (study team ops).
  */
 
-export interface DemoAccount {
+export type Role = "student" | "counselor" | "sysadmin";
+
+export interface Profile {
+  userId: string;
   email: string;
-  password: string;
-  role: "student" | "admin";
-  studentId: string;
   fullName: string;
+  role: Role;
+  /** Business id across fixtures/engines (neil, marco, …); null for staff. */
+  studentId: string | null;
+  campus: string;
+  yearLevel: string | null;
+  program: string | null;
+  section: string | null;
 }
 
-/** Cohort ids referenced by fixtures (admin surface) + the demo student. */
-const STUDENT_IDS = ["neil", "marco", "jomar", "rafael", "liza", "pao", "kaye"] as const;
-
-export const SEED_PASSWORD = "readiness";
-
-export const ACCOUNTS: DemoAccount[] = [
-  ...STUDENT_IDS.map((id) => ({
-    email: `${id}@demo.ph`,
-    password: SEED_PASSWORD,
-    role: "student" as const,
-    studentId: id,
-    fullName: id === "neil" ? "Neil" : id[0].toUpperCase() + id.slice(1),
-  })),
-  {
-    email: "admin@demo.ph",
-    password: SEED_PASSWORD,
-    role: "admin",
-    studentId: "",
-    fullName: "Adviser Admin",
-  },
-];
-
-export function findAccount(email: string): DemoAccount | undefined {
-  return ACCOUNTS.find((a) => a.email.toLowerCase() === email.toLowerCase());
+export async function getCurrentProfile(): Promise<Profile | null> {
+  const supabase = await supabaseServer();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+  const { data, error } = await supabaseAdmin()
+    .from("profiles")
+    .select("email, full_name, role, student_id, campus, year_level, program, section")
+    .eq("id", user.id)
+    .maybeSingle();
+  if (error || !data) return null;
+  return {
+    userId: user.id,
+    email: data.email,
+    fullName: data.full_name,
+    role: data.role as Role,
+    studentId: data.student_id,
+    campus: data.campus,
+    yearLevel: data.year_level,
+    program: data.program,
+    section: data.section,
+  };
 }
 
-export function newStudentState(id: string, fullName: string): StudentState {
-  if (id === "neil") return structuredClone(NEIL_SEED);
+/** Server-page gate: a signed-in student, else the sign-in page. */
+export async function requireStudent(): Promise<Profile & { studentId: string }> {
+  const profile = await getCurrentProfile();
+  if (!profile || profile.role !== "student" || !profile.studentId) redirect("/signin");
+  // the guard above proved studentId is set (redirect() never returns)
+  return profile as Profile & { studentId: string };
+}
+
+/** Server-page gate: the Admin surface is for Counselors + System Admins. */
+export async function requireStaff(): Promise<Profile> {
+  const profile = await getCurrentProfile();
+  if (!profile || (profile.role !== "counselor" && profile.role !== "sysadmin")) redirect("/signin");
+  return profile;
+}
+
+/**
+ * The acting student for a state read/write route: the signed-in student by
+ * default; a client-supplied `student` param is honored only for staff
+ * (counselor/sysadmin cohort reads). Students can never address another
+ * student's state. Returns null when the caller isn't signed in.
+ */
+export async function actingStudentId(param: unknown): Promise<string | null> {
+  const profile = await getCurrentProfile();
+  if (!profile) return null;
+  if (profile.role === "student" && profile.studentId) return profile.studentId;
+  if (profile.role === "counselor" || profile.role === "sysadmin") {
+    return typeof param === "string" && param.length > 0 ? param : profile.studentId;
+  }
+  return null;
+}
+
+/** Fresh-student default state — unchanged shape (engines own it). */
+export function newStudentState(id: string, fullName: string) {
   return {
     id,
     name: fullName,
@@ -60,21 +98,4 @@ export function newStudentState(id: string, fullName: string): StudentState {
     decisions: { verifiedTransferred: [] },
     events: [],
   };
-}
-
-/** Cookie name for the demo session (set by the auth routes). */
-export const SESSION_COOKIE = "cr_session";
-
-export function sessionCookieValue(a: DemoAccount): string {
-  // no signing — local demo only; hosted-Supabase swap replaces this
-  return Buffer.from(JSON.stringify({ id: a.studentId, role: a.role, name: a.fullName })).toString("base64url");
-}
-
-export function readSession(cookie: string | undefined): { id: string; role: string; name: string } | null {
-  if (!cookie) return null;
-  try {
-    return JSON.parse(Buffer.from(cookie, "base64url").toString("utf8"));
-  } catch {
-    return null;
-  }
 }

@@ -1,26 +1,17 @@
 import Link from "next/link";
 import CountUp from "@/components/CountUp";
 import Reveal from "@/components/Reveal";
-import { getStudentView } from "@/lib/db";
+import { db, getStudentView } from "@/lib/db";
+import { requireStaff } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
 import type { StudentState } from "@/lib/types";
 import AdminBar from "../AdminBar";
-import {
-  COHORT_ORDER,
-  GHOSTS,
-  NEIL_IDENTITY,
-  RUBRIC_MAX,
-  gradeLabel,
-  resolveStudentId,
-  totalFromParts,
-  type AdminFixtureStudent,
-  type RubricValues,
-} from "../defaults";
+import { RUBRIC_MAX, gradeLabel, orderCohort, type RubricValues } from "../defaults";
 import "../admin.css";
 
 export const dynamic = "force-dynamic";
 
-/** Everything Screen B renders — Neil's numbers arrive LIVE, ghosts stay fixtures. */
+/** Everything Screen B renders — all of it computed live from real state. */
 interface ScreenB {
   id: string;
   name: string;
@@ -35,53 +26,37 @@ interface ScreenB {
   context: string;
 }
 
-function fixedParts(p: RubricValues): RubricValues {
+function zeroParts(): RubricValues {
   return {
-    sp: [p.sp[0], p.sp[1] || RUBRIC_MAX.sp],
-    es: [p.es[0], p.es[1] || RUBRIC_MAX.es],
-    tp: [p.tp[0], p.tp[1] || RUBRIC_MAX.tp],
-    cc: [p.cc[0], p.cc[1] || RUBRIC_MAX.cc],
-  };
-}
-
-/** Ghost students render their seeded fixture exactly (transcribed, derived total). */
-function buildGhost(s: AdminFixtureStudent): ScreenB {
-  return {
-    id: s.id,
-    name: s.name,
-    grade: s.grade,
-    career: s.career,
-    score: totalFromParts(s),
-    parts: fixedParts(s),
-    spNote: s.spNote,
-    tpNote: s.tpNote,
-    ccNote: s.ccNote,
-    context: s.context,
+    sp: [0, RUBRIC_MAX.sp],
+    es: [0, RUBRIC_MAX.es],
+    tp: [0, RUBRIC_MAX.tp],
+    cc: [0, RUBRIC_MAX.cc],
   };
 }
 
 /**
- * The demo student recomputes live: store state → computeScore → every line
+ * Any student recomputes live: store state → computeScore → every line
  * derived. Notes echo the computed state; they never originate numbers
  * (`features/content/admin.md` — same no-hardcode rule as everywhere).
  */
-async function buildNeilLive(): Promise<ScreenB> {
-  const { state, career, score } = await getStudentView("neil");
-  const grade = `${gradeLabel(state.grade)} · ${state.strand}`;
+async function buildLive(id: string): Promise<ScreenB> {
+  const { state, career, score } = await getStudentView(id);
+  const grade = state.strand ? `${gradeLabel(state.grade)} · ${state.strand}` : gradeLabel(state.grade);
 
   if (!career || !score) {
     // undecided default state — the mono banner + per-part notes; never blank
     return {
-      id: "neil",
-      name: NEIL_IDENTITY.name,
+      id,
+      name: state.name,
       grade,
       career: null,
       score: 0,
-      parts: fixedParts({ sp: [0, RUBRIC_MAX.sp], es: [0, RUBRIC_MAX.es], tp: [0, RUBRIC_MAX.tp], cc: [0, RUBRIC_MAX.cc] }),
-      spNote: "Baseline from his setup claims only — no career map is measured against yet.",
-      tpNote: "No career picked — his pathway isn’t open yet.",
-      ccNote: "Still deciding — direction locks the remaining points when he picks a career.",
-      context: "No career measured yet — his numbers hold until he picks one.",
+      parts: zeroParts(),
+      spNote: "Baseline from setup claims only — no career map is measured against yet.",
+      tpNote: "No career picked — the pathway isn’t open yet.",
+      ccNote: "Still deciding — direction locks the remaining points when a career is picked.",
+      context: "No career measured yet — the numbers hold until one is picked.",
     };
   }
 
@@ -96,11 +71,11 @@ async function buildNeilLive(): Promise<ScreenB> {
   // source breakdown of the closed bars (echo, never originate)
   const src = sourceCounts(state);
   const checkedSuffix = src.checked > 0 ? ` · ${src.checked} check-verified ·✓✓` : "";
-  const spNote = `${v.closed} of ${v.mapSize} ${career.name} skills on his map · ${src.verified} verified ·✓, ${src.claimed} self-reported${checkedSuffix}.`;
+  const spNote = `${v.closed} of ${v.mapSize} ${career.name} skills on the map · ${src.verified} verified ·✓, ${src.claimed} self-reported${checkedSuffix}.`;
 
   const tpNote =
     v.stageOne.done === 0
-      ? "None yet — his pathway hasn’t opened its first step."
+      ? "None yet — the pathway hasn’t opened its first step."
       : `${v.stageOne.done} of ${v.stageOne.target} first steps done.`;
 
   const ccBits = ["Career confirmed"];
@@ -111,8 +86,8 @@ async function buildNeilLive(): Promise<ScreenB> {
   const context = `${v.closed} of ${v.mapSize} ${career.name} skills counted · First 30 days: ${v.stageOne.done} of ${v.stageOne.target} done`;
 
   return {
-    id: "neil",
-    name: NEIL_IDENTITY.name,
+    id,
+    name: state.name,
     grade,
     career: career.name,
     score: v.total,
@@ -130,11 +105,19 @@ function sourceCounts(s: StudentState) {
   return counts;
 }
 
+/** Real cohort walk: real state ids (COHORT_ORDER first); `?student=` must
+ * name one of them, else the first. TODO(admin-round): detail-page fallback. */
+async function resolveId(raw: string | undefined): Promise<{ ids: string[]; id: string }> {
+  const ids = orderCohort(await db.listStudentStates());
+  const id = raw && ids.includes(raw) ? raw : (ids[0] ?? "neil");
+  return { ids: ids.length ? ids : [id], id };
+}
+
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ student?: string }> }) {
-  const id = resolveStudentId((await searchParams).student);
-  const name = id === "neil" ? NEIL_IDENTITY.name : GHOSTS[id].name;
+  const { id } = await resolveId((await searchParams).student);
+  const { state } = await getStudentView(id);
   return {
-    title: `${name} — Career Readiness · Admin`,
+    title: `${state.name} — Career Readiness · Admin`,
     description:
       "Read-only admin view of one student: their score, the four rubric parts behind it, and the same honest numbers their own dashboard shows.",
   };
@@ -146,13 +129,14 @@ export default async function AdminStudentPage({
 }: {
   searchParams: Promise<{ student?: string }>;
 }) {
-  const id = resolveStudentId((await searchParams).student);
-  const s = id === "neil" ? await buildNeilLive() : buildGhost(GHOSTS[id]);
+  await requireStaff();
+  const { ids, id } = await resolveId((await searchParams).student);
+  const s = await buildLive(id);
 
-  // prev / next within the seeded cohort walk
-  const i = COHORT_ORDER.indexOf(id as (typeof COHORT_ORDER)[number]);
-  const prev = COHORT_ORDER[(i - 1 + COHORT_ORDER.length) % COHORT_ORDER.length];
-  const next = COHORT_ORDER[(i + 1) % COHORT_ORDER.length];
+  // prev / next within the live cohort walk
+  const i = ids.indexOf(id);
+  const prev = ids[(i - 1 + ids.length) % ids.length];
+  const next = ids[(i + 1) % ids.length];
 
   const undecided = s.career === null;
   const ccFull = s.parts.cc[0] === s.parts.cc[1];
@@ -196,7 +180,7 @@ export default async function AdminStudentPage({
 
             {/* undecided default state — shown only when the student has no career yet */}
             <div className="undecided-banner" hidden={!undecided}>
-              <b>NO CAREER YET</b> — the skill map, gap bars, and pathway unlock when he picks one
+              <b>NO CAREER YET</b> — the skill map, gap bars, and pathway unlock when they pick one
             </div>
 
             {/* sub-score breakdown */}
@@ -267,7 +251,7 @@ export default async function AdminStudentPage({
       </main>
 
       <p className="admin-colophon">
-        <span>READ-ONLY ADMIN VIEW · SEEDED FIXTURE — VALUES MATCH THE COHORT TABLE</span>
+        <span>READ-ONLY ADMIN VIEW · EVERY NUMBER COMPUTED FROM THE STUDENT&apos;S LIVE STATE</span>
         <span>CAREER READINESS · THESIS PROTOTYPE</span>
       </p>
     </>

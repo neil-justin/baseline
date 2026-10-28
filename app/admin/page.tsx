@@ -1,35 +1,34 @@
 import Reveal from "@/components/Reveal";
-import { getStudentView } from "@/lib/db";
+import { db, getStudentView } from "@/lib/db";
+import { requireStaff } from "@/lib/session";
+import type { StudentState } from "@/lib/types";
 import AdminBar from "./AdminBar";
 import StudentRow, { type RowSeg } from "./StudentRow";
-import {
-  COHORT_ORDER,
-  GHOSTS,
-  NEIL_IDENTITY,
-  RUBRIC_MAX,
-  totalFromParts,
-  type RubricValues,
-} from "./defaults";
+import { RUBRIC_MAX, orderCohort, type RubricValues } from "./defaults";
 import "./admin.css";
 
 export const dynamic = "force-dynamic";
 
 type ScoreLike = { sp: number; es: number; tp: number; cc: number; total: number };
 
-/** The demo student's row recomputes live — never a hardcoded 51. */
-async function getNeilLive(): Promise<{
+interface LiveRow {
+  id: string;
+  name: string;
+  sub: string;
   career: string | null;
-  score: ScoreLike;
-}> {
-  const { career, score } = await getStudentView("neil");
-  if (!career || !score) {
-    // store has Neil undecided — the undecided default state's zeros
-    return { career: null, score: { sp: 0, es: 0, tp: 0, cc: 0, total: 0 } };
-  }
-  return { career: career.name, score };
+  score: number;
+  parts: RubricValues;
+  active: string;
 }
 
-function neilParts(score: ScoreLike): RubricValues {
+const ZERO_PARTS: RubricValues = {
+  sp: [0, RUBRIC_MAX.sp],
+  es: [0, RUBRIC_MAX.es],
+  tp: [0, RUBRIC_MAX.tp],
+  cc: [0, RUBRIC_MAX.cc],
+};
+
+function partsOf(score: ScoreLike): RubricValues {
   return {
     sp: [score.sp, RUBRIC_MAX.sp],
     es: [score.es, RUBRIC_MAX.es],
@@ -51,16 +50,42 @@ function barAria(name: string, p: RubricValues): string {
   return `${name}'s progress: skill ${p.sp[0]} of ${p.sp[1]}, employability ${p.es[0]} of ${p.es[1]}, training ${p.tp[0]} of ${p.tp[1]}, career clarity ${p.cc[0]} of ${p.cc[1]}`;
 }
 
+/** Last-activity label from the student's own event log — no fixture stamps. */
+function lastActiveLabel(state: StudentState): string {
+  const last = state.events[state.events.length - 1]?.date;
+  if (!last) return "—";
+  const dt = new Date(`${last.split(" ")[0]}T00:00:00`);
+  return Number.isNaN(dt.getTime()) ? "—" : `${dt.toLocaleString("en-US", { month: "short" })} ${dt.getDate()}`;
+}
+
+/**
+ * Every row is LIVE (ADR 0003): real state rows via db.listStudentStates()
+ * (COHORT_ORDER first), each scored through the same getStudentView the
+ * student's own dashboard uses. No fixture numbers exist on this surface.
+ */
+async function buildRows(): Promise<LiveRow[]> {
+  const states = await db.listStudentStates();
+  return Promise.all(
+    orderCohort(states).map(async (id) => {
+      const { state, career, score } = await getStudentView(id);
+      return {
+        id,
+        name: state.name,
+        sub: `${state.grade} · ${state.strand || "—"}`,
+        career: career?.name ?? null,
+        score: score?.total ?? 0,
+        parts: score ? partsOf(score) : ZERO_PARTS,
+        active: lastActiveLabel(state),
+      };
+    })
+  );
+}
+
 /** Screen A — read-only cohort dashboard. Markup ported from prototype/admin.html. */
 export default async function AdminCohortPage() {
-  const { career: neilCareer, score: neilScore } = await getNeilLive();
-  const neilPartsLive = neilParts(neilScore);
-
-  // Every integer on this screen is derived: ghosts from their seeded
-  // sub-scores, Neil from the live store. Nothing painted.
-  const ghostRows = COHORT_ORDER.filter((id) => id !== "neil").map((id) => GHOSTS[id]);
-  const ghostScores = ghostRows.map((s) => totalFromParts(s));
-  const avg = Math.round((neilScore.total + ghostScores.reduce((a, b) => a + b, 0)) / (ghostRows.length + 1));
+  await requireStaff();
+  const rows = await buildRows();
+  const avg = rows.length ? Math.round(rows.reduce((a, r) => a + r.score, 0) / rows.length) : 0;
 
   return (
     <>
@@ -70,8 +95,8 @@ export default async function AdminCohortPage() {
           <Reveal className="admin-head">
             <h1 id="cohorts-h">Students.</h1>
             <p className="role-line">
-              You&apos;re viewing as admin. Students see their own numbers; advisers and panels see everyone&apos;s
-              here.
+              Read-only cohort view. Students see their own numbers; advisers and panels see everyone&apos;s
+              here — every number computed from each student&apos;s real state.
             </p>
           </Reveal>
 
@@ -84,8 +109,8 @@ export default async function AdminCohortPage() {
             <div className="cohort-grid">
               <Reveal className="cohort-cell" delay={0}>
                 <span className="label">STUDENTS</span>
-                <div className="cnum num">{ghostRows.length + 1}</div>
-                <p className="cnote">One Grade 11–12 advisory section, seeded for this demonstration.</p>
+                <div className="cnum num">{rows.length}</div>
+                <p className="cnote">Live roster — one row per student with state in the store.</p>
               </Reveal>
               <Reveal className="cohort-cell" delay={110}>
                 <span className="label">AVERAGE READINESS SCORE</span>
@@ -94,18 +119,18 @@ export default async function AdminCohortPage() {
                   <small>/100</small>
                 </div>
                 <p className="cnote">
-                  The average of the 7 students&apos; scores below — fixture-derived for the 6 seeded rows; the demo
-                  student&apos;s number recomputes live from the same four-part rubric the student view uses.
+                  The average of the live scores below — the same four-part rubric the student view uses,
+                  computed per student at request time.
                 </p>
               </Reveal>
             </div>
-            <p className="cohort-honesty">SEEDED FIXTURE COHORT — GHOST VALUES ARE LABELED, DEMO STUDENT IS LIVE</p>
+            <p className="cohort-honesty">LIVE COHORT — EVERY NUMBER COMPUTED FROM REAL STATE, NOTHING PAINTED</p>
           </Reveal>
 
           {/* student table */}
           <Reveal className="panel cohort-table" delay={46}>
             <div className="ct-head">
-              <span className="label">STUDENTS · {ghostRows.length + 1}</span>
+              <span className="label">STUDENTS · {rows.length}</span>
               <p className="ct-legend">
                 BAR SEGMENTS SHOW EACH PART&apos;S WEIGHT: <b>SKILL · EMPLOYABILITY · TRAINING · CAREER CLARITY</b>
               </p>
@@ -119,28 +144,18 @@ export default async function AdminCohortPage() {
               <span></span>
             </div>
 
-            <StudentRow
-              id="neil"
-              isDemo
-              name={NEIL_IDENTITY.name}
-              sub={NEIL_IDENTITY.sub}
-              career={neilCareer}
-              score={neilScore.total}
-              segs={segments(neilPartsLive)}
-              active={NEIL_IDENTITY.lastActive}
-              ariaLabel={barAria(NEIL_IDENTITY.name, neilPartsLive)}
-            />
-            {ghostRows.map((s) => (
+            {rows.map((r) => (
               <StudentRow
-                key={s.id}
-                id={s.id}
-                name={s.name}
-                sub={s.sub}
-                career={s.career}
-                score={totalFromParts(s)}
-                segs={segments(s)}
-                active={s.lastActive}
-                ariaLabel={barAria(s.name, s)}
+                key={r.id}
+                id={r.id}
+                isDemo={r.id === "neil"}
+                name={r.name}
+                sub={r.sub}
+                career={r.career}
+                score={r.score}
+                segs={segments(r.parts)}
+                active={r.active}
+                ariaLabel={barAria(r.name, r.parts)}
               />
             ))}
           </Reveal>

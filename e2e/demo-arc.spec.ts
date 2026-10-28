@@ -25,11 +25,11 @@ test.describe.serial("demo-arc", () => {
   // a stale server on :3000 must be `fuser -k`-ed before `npx playwright test`
   // so webServer boots the current production build instead of reusing it.)
   test.beforeAll(async () => {
-    resetStore();
+    await resetStore();
   });
 
   test.beforeEach(async () => {
-    resetStore(); // each restart of this walk reseeds canon Neil
+    await resetStore(); // each restart of this walk reseeds canon Neil
   });
 
   test("beats 1–10: canon walk with the exact demo inputs", async ({ page }) => {
