@@ -7,3 +7,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Collaboration rule (standing, user-mandated 2026-10-28)
+
+The user participates in **every** planning decision: each feature, its functionality, its content, and all technical choices (tools, libraries, deployment, infrastructure). Nothing gets decided unilaterally — the agent proposes options with tradeoffs, the user decides, then the decision is recorded. Treat proposals (mockups, architecture drafts, catalog content) as non-authoritative until the user signs off.

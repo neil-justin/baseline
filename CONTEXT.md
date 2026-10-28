@@ -51,3 +51,29 @@ _Avoid_: readiness percentage (implies mastery), career score
 **Diagnostic Tool**:
 The system's scope boundary: it assesses, explains, and prepares. It never matches students to employers, processes applications, or guarantees employment, internship, or hiring outcomes.
 _Avoid_: recommendation engine language that implies determinism ("the AI says you should be X")
+
+### Roles & accounts
+
+**Student**:
+The signed-in person the system diagnoses and prepares — a graduating college student pursuing entry-level corporate roles. All app surfaces render the signed-in Student's own data.
+_Avoid_: user (ambiguous — could mean any role), learner
+
+**Counselor**:
+The staff role — an academic adviser or guidance counselor who signs into the Admin surface to monitor a graduating cohort and audit declared Credentials. "Admin" names the surface, not a person; the person is always a Counselor. A Counselor's view is jurisdiction-scoped: they see only Students in the Sections/Blocks assigned to them, and one Counselor may hold many Sections.
+_Avoid_: admin (as a person — collides with System Admin), superuser
+
+**Year Level**:
+The student's standing in the program (1st–4th year). The college-scope replacement for grade level; cohort groupings build on it.
+_Avoid_: grade level (retired SHS vocabulary)
+
+**Campus**:
+The institution (school campus) whose data space a Student or Counselor belongs to. The intended unit of data isolation for multi-campus deployment — each campus's students, counselors, and sections are isolated from every other's.
+_Avoid_: school (vague), university (presumes size)
+
+**System Admin**:
+The site-operator role held by the study team — manages accounts, seeds demo data, and maintains site health. Distinct from the Counselor; invisible to students.
+_Avoid_: admin (unqualified), developer account
+
+**Credential**:
+An externally earned, evidence-carrying entry a Student declares (Profile → Credentials): a certification, an internship/job, or a personal project/org role. Entries declare skills from the framework vocabulary across all four discipline tracks; with evidence attached, a Credential is auditable by a Counselor, and once verified it counts as a verified skill and closes gaps like a platform completion does.
+_Avoid_: achievement, qualification, badge (gamified connotation)
