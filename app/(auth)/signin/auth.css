@@ -4,3 +4,15 @@
    way back to the landing. */
 
 .bar a.brand { text-decoration: none; color: inherit; }
+
+/* Caps-lock hint — a status line, not an error (so no .field-err styling). */
+.caps-hint {
+  display: none; margin-top: 7px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
+  color: var(--ink-2);
+}
+
+/* The recovery entry point (auth round 2). */
+.forgot-link { margin: 14px 0 0; text-align: center; font-size: 12.5px; }
+.forgot-link a { color: var(--ink-2); text-underline-offset: 3px; }
+.forgot-link a:hover { color: var(--accent); }

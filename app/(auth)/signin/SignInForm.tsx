@@ -14,7 +14,14 @@ export default function SignInForm() {
   const [pending, setPending] = useState(false);
   const [emailErr, setEmailErr] = useState(false);
   const [passErr, setPassErr] = useState(false);
+  const [capsOn, setCapsOn] = useState(false);
   const [credsErr, setCredsErr] = useState<string | null>(null);
+
+  // Caps-lock hint (auth round 2 polish): a small status line under the
+  // password field while the modifier is engaged — never an error.
+  function trackCaps(e: React.KeyboardEvent<HTMLInputElement>) {
+    setCapsOn(e.getModifierState?.("CapsLock") ?? false);
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -84,6 +91,9 @@ export default function SignInForm() {
             placeholder="Your password"
             style={{ paddingRight: 64 }}
             aria-invalid={passErr}
+            onKeyDown={trackCaps}
+            onKeyUp={trackCaps}
+            onBlur={() => setCapsOn(false)}
           />
           <button
             type="button"
@@ -105,6 +115,9 @@ export default function SignInForm() {
             {showPw ? "HIDE" : "SHOW"}
           </button>
         </div>
+        <p className="caps-hint" role="status" style={{ display: capsOn ? "block" : undefined }}>
+          Caps Lock is on.
+        </p>
         <p className="field-err" id="err-pass" role="alert" style={{ display: passErr ? "block" : undefined }}>
           Password goes here.
         </p>
@@ -113,6 +126,10 @@ export default function SignInForm() {
       <button type="submit" className="btn btn-primary btn-block" disabled={pending}>
         {pending ? "Signing you in…" : "Sign in"}
       </button>
+
+      <p className="forgot-link">
+        <a href="/forgot">Forgot password?</a>
+      </p>
 
       {credsErr && (
         <div className="field-err" id="err-creds" role="alert" style={{ display: "block", marginTop: 14 }}>

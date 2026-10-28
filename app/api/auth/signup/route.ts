@@ -15,8 +15,14 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * a real Supabase Auth user (hashed password), the role lives in
  * app_metadata AND the profiles row, then a password sign-in establishes the
  * signed session cookies.
+ * Password policy (auth round 2 — NIST SP 800-63B style, locked brief): min
+ * length 8 and Supabase's leaked-password (HaveIBeenPwned) protection are
+ * enforced server-side by Supabase Auth — both are DASHBOARD toggles
+ * (Auth → Policies), not service-role API settings, so the human steps are
+ * documented in the round report. This route maps the resulting auth errors
+ * distinctly.
  * Error contract (the form's client maps these): name_required | password_short
- * | email_taken | email_invalid | server
+ * | password_breached | email_taken | email_invalid | server
  */
 export async function POST(req: Request) {
   try {
@@ -43,6 +49,15 @@ export async function POST(req: Request) {
       const msg = (createErr?.message ?? "").toLowerCase();
       if (msg.includes("already") || msg.includes("duplicate") || msg.includes("taken")) {
         return NextResponse.json({ error: "email_taken" }, { status: 409 });
+      }
+      // Server-side password policy (Supabase Auth dashboard toggles):
+      // leaked-password protection → password_breached; min-length →
+      // password_short. Distinct strings per the round's error contract.
+      if (msg.includes("breach") || msg.includes("leaked") || msg.includes("have i been pwned")) {
+        return NextResponse.json({ error: "password_breached" }, { status: 422 });
+      }
+      if (msg.includes("at least") || msg.includes("short") || msg.includes("length")) {
+        return NextResponse.json({ error: "password_short" }, { status: 422 });
       }
       return NextResponse.json({ error: "server" }, { status: 500 });
     }

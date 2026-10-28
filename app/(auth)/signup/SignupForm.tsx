@@ -1,21 +1,41 @@
 "use client";
 
 import { useState } from "react";
+import { PasswordFeedback, passwordChecklist } from "../PasswordFeedback";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/** Password field-error kinds (submit-time): short | edge-spaces | common. */
+type PassErr = null | { kind: "short"; missing: number } | { kind: "spaces" } | { kind: "common" };
+
 /** Sign-up form — ported from prototype/signup.html (no confirm-password). Writes
  * a student-format account via POST `/api/auth/signup` with `{ name, email,
- * password }`; the route is added in the session task. Self-serve sign-up is
- * students-only — admins are provisioned with the seed (post-defense: invited). */
+ * password }`. Self-serve sign-up is students-only — admins are provisioned
+ * with the seed (post-defense: invited).
+ *
+ * Password feedback (auth round 2): live strength meter + plain-language
+ * checklist (PasswordFeedback) tick as the user types; the meter/checklist are
+ * client-side UX only — the server contract stays authoritative. Submit is
+ * blocked on the fixable client items (8+ chars, no edge spaces, not on the
+ * tiny common-list pre-check); a bypassed client still meets the server's
+ * policy errors: `password_short` and `password_breached` (Supabase
+ * HaveIBeenPwned protection, mapped in the route). */
 export default function SignupForm() {
   const [showPw, setShowPw] = useState(false);
   const [pending, setPending] = useState(false);
   const [nameErr, setNameErr] = useState(false);
   const [emailErr, setEmailErr] = useState(false);
-  const [passShort, setPassShort] = useState<number | null>(null);
+  const [pw, setPw] = useState("");
+  const [passErr, setPassErr] = useState<PassErr>(null);
   const [noteShown, setNoteShown] = useState(false);
   const [topErr, setTopErr] = useState<string | null>(null);
+
+  function passwordProblem(value: string): PassErr {
+    if (value.length < 8) return { kind: "short", missing: 8 - value.length };
+    if (value !== value.trim()) return { kind: "spaces" };
+    if (!passwordChecklist(value).notCommon) return { kind: "common" };
+    return null;
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -26,10 +46,11 @@ export default function SignupForm() {
 
     setNameErr(!name);
     setEmailErr(!EMAIL_RE.test(email));
-    setPassShort(password.length < 8 ? 8 - password.length : null);
+    const pErr = passwordProblem(password);
+    setPassErr(pErr);
     setTopErr(null);
 
-    const ok = name && EMAIL_RE.test(email) && password.length >= 8;
+    const ok = name && EMAIL_RE.test(email) && !pErr;
     if (!ok) return;
 
     // Prototype behavior kept: the collapsed note reveals once the form validates.
@@ -49,6 +70,8 @@ export default function SignupForm() {
       }
       const data = await res.json().catch(() => null);
       if (data?.error === "email_taken") setTopErr("email_taken");
+      else if (data?.error === "password_breached") setTopErr("password_breached");
+      else if (data?.error === "password_short") setTopErr("password_short");
       else setTopErr("server");
     } catch {
       setTopErr("server");
@@ -56,8 +79,6 @@ export default function SignupForm() {
       setPending(false);
     }
   }
-
-  const passShortCount = passShort;
 
   return (
     <form id="signup-form" noValidate onSubmit={onSubmit}>
@@ -108,10 +129,15 @@ export default function SignupForm() {
             id="f-pass"
             name="password"
             autoComplete="new-password"
-            aria-describedby="err-pass"
+            aria-describedby="err-pass pw-checklist"
             placeholder="8 or more characters"
             style={{ paddingRight: 64 }}
-            aria-invalid={passShortCount !== null}
+            aria-invalid={passErr !== null}
+            value={pw}
+            onChange={(e) => {
+              setPw(e.target.value);
+              if (passErr) setPassErr(passwordProblem(e.target.value));
+            }}
           />
           <button
             type="button"
@@ -133,15 +159,20 @@ export default function SignupForm() {
             {showPw ? "HIDE" : "SHOW"}
           </button>
         </div>
+        <PasswordFeedback password={pw} />
         <p
           className="field-err"
           id="err-pass"
           role="alert"
-          style={{ display: passShortCount !== null ? "block" : undefined }}
+          style={{ display: passErr ? "block" : undefined }}
         >
-          {passShortCount !== null
-            ? `Short by ${passShortCount} character${passShortCount === 1 ? "" : "s"} — 8 or more, please.`
-            : "Short password."}
+          {passErr?.kind === "short"
+            ? `Short by ${passErr.missing} character${passErr.missing === 1 ? "" : "s"} — 8 or more, please.`
+            : passErr?.kind === "spaces"
+              ? "No spaces at the start or end of the password."
+              : passErr?.kind === "common"
+                ? "That password is on public breach lists — please pick a different one."
+                : "Check the password."}
         </p>
       </div>
 
@@ -158,6 +189,10 @@ export default function SignupForm() {
                 Sign in instead →
               </a>
             </>
+          ) : topErr === "password_breached" ? (
+            <>That password shows up on public breach lists — please pick a different one.</>
+          ) : topErr === "password_short" ? (
+            <>That password is too short — 8 or more characters, please.</>
           ) : (
             <>That didn&apos;t go through. Try once more in a minute.</>
           )}

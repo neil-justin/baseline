@@ -52,6 +52,12 @@ _Avoid_: readiness percentage (implies mastery), career score
 The system's scope boundary: it assesses, explains, and prepares. It never matches students to employers, processes applications, or guarantees employment, internship, or hiring outcomes.
 _Avoid_: recommendation engine language that implies determinism ("the AI says you should be X")
 
+### Application materials
+
+**ATS-friendly**:
+Formatting practices that keep a resume machine-readable — text-based content, standard section titles, no content-in-images/text-boxes. A property of formatting, verified by parseability; never a claim about outcomes.
+_Avoid_: "ATS pass", "ATS-proof" (outcome claims — the system never guarantees a specific employer's system accepts anything)
+
 ### Roles & accounts
 
 **Student**:

@@ -1,0 +1,6 @@
+/* Forgot-password surface styles — page-specific additions (the .auth-body /
+   .auth-panel / .field framework lives in app/globals.css). */
+
+.bar a.brand { text-decoration: none; color: inherit; }
+
+.forgot-lead { font-size: 13.5px; line-height: 1.6; color: var(--ink-2); }
