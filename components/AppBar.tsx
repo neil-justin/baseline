@@ -17,8 +17,15 @@ const NAV = [
  * chip is the session-honest meta line passed by the (app) layout. */
 export default function AppBar({ meta = "" }: { meta?: string }) {
   const pathname = usePathname();
+  // Navy Shell chrome (user-pinned dashboard splice): on the dashboard the
+  // app bar is the top edge of the page's one navy mass. The tone switches
+  // at the class level; app/(app)/dashboard/dashboard.css owns the navy
+  // visuals, so every other surface keeps the shared white bar untouched.
+  // The nav labels/hrefs, aria-current and the POST sign-out form below are
+  // the walk's e2e contract — never touched.
+  const navy = pathname === "/dashboard";
   return (
-    <header className="bar">
+    <header className={navy ? "bar bar-navy" : "bar"}>
       <div className="app-bar-in">
         <div className="brand">
           <span className="brand-mark" aria-hidden="true" />

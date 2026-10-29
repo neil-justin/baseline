@@ -17,6 +17,10 @@ import type { StudentState } from "@/lib/types";
  * Catalog round 9: names re-keyed onto the college roster (Neil = 2.1
  * "Associate Software Developer"; the switch walk runs to 2.2 "Software QA
  * Analyst"); skill data comes from the verbatim roster transcription.
+ * Catalog round 11: E1/E2/E3 skill maps filled from
+ * `.scratch/career-path-readiness-research/pending-role-maps.md`
+ * (2026-10-29) — tiers on those rows are derived proposals pending user
+ * ruling.
  */
 
 function scoreFor(s: StudentState) {
@@ -46,14 +50,20 @@ describe("catalog", () => {
     expect(getCareer("its")!.name).toBe("IT Support Engineer");
   });
 
-  it("canon maps: swd is 8 skills, QA money-shot map is 7, IT-support 7; E2/E3 stay empty pending extraction", () => {
+  it("canon maps: swd is 8 skills, QA money-shot map is 7, IT-support 7; E1/E2/E3 carry the 2026-10-29 extraction", () => {
     expect(getCareer("swd")!.skills).toHaveLength(8);
     expect(getCareer("qa")!.skills).toHaveLength(7);
     expect(getCareer("its")!.skills).toHaveLength(7);
-    // extension honesty — no invented rows where the source is pending
+    // extension honesty — demand stays institutional-judgment
     expect(getCareer("da")!.demandBlock.status).toBe("institutional-judgment");
-    expect(getCareer("execsec")!.skills).toHaveLength(0);
-    expect(getCareer("records")!.skills).toHaveLength(0);
+    expect(getCareer("execsec")!.demandBlock.status).toBe("institutional-judgment");
+    expect(getCareer("records")!.demandBlock.status).toBe("institutional-judgment");
+    // transcribed from pending-role-maps.md (2026-10-29): E1 = full PSF-AAI map
+    // (11 FSC + ETL key-task row + 4-ESC bundle row); E2 = 17 O*NET 43-6011
+    // task rows; E3 = 5 PSOC 4415 primary rows + 6 O*NET 43-4171 corroboration
+    expect(getCareer("da")!.skills).toHaveLength(13);
+    expect(getCareer("execsec")!.skills).toHaveLength(17);
+    expect(getCareer("records")!.skills).toHaveLength(11);
   });
 });
 
