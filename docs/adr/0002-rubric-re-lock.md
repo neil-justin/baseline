@@ -13,4 +13,14 @@ The original four-channel rubric (SP 40 / ES 25 / TP 20 / CC 15) was calibrated 
 - The demo persona now requires an internship-status data point (TP reads it).
 - Completion recording remains an engine mechanism (the score must be able to move) even though the standalone Progress surface is cut.
 - Every channel has a measuring feature; reliability claims are fenced (α ≥ .70 within self-report scales only; no predictive-validity claims for the index).
-- Evidence: `.scratch/career-readiness-platform/research/rubric-reweight-evidence.md`.
+- Evidence: `.scratch/career-readiness-platform/research/rubric-reweight-evidence.md` + `application-readiness-factors.md` + `resume-diagnostic-criteria-sources.md`.
+
+## Amendment (2026-10-29): interview descoped; the channel re-derived — not bent
+
+The user descoped **AI Mock Interview** (2026-10-28: "too complicated, may not be worth it") to the **post-defense roadmap** — stage 2; Sackett 2022's ρ = .42 now cites the roadmap, not the current design. Rather than keep the old weights under a bent definition, the channel re-derived by the same evidenced method:
+
+- **Renamed Application Readiness (AR)**: *"can the student's application materials get past the automated screen into human hands?"* — the screening-gate question. The interview's question (performance evidence) moves to the roadmap.
+- **Multi-factor, all deterministic-checkable, all primary-anchored** (`research/application-readiness-factors.md`): resume diagnostic (Fuller et al. 2021; NACE JO 2025; SHRM) · **cover-letter check** on the same diagnostic surface, same feedback-only fences (Wingate, Robie, Powell & Bourdage 2025, *IJSA* — peer-reviewed field study, 183 tracked applications: resume+cover-letter quality predicted more interviews and faster hires) · **professional presence as a declared, link-verified entry** (NACE Professionalism competency, verbatim: "Maintain a positive personal brand…"; Roulin & Levashina 2018; CareerBuilder 2017: 57% of employers less likely to interview candidates they can't find online).
+- **Re-derivation result — new weights: ES 30 / SP 25 / TP 20 / AR 15 / CC 10.** TP rises to 20: its internship/experience evidence is *outcome-level* (4.3–4.5/5 influence), while AR's is *ensemble-of-surroundings* — the honest ordinal is TP ≥ AR. AR did not lose its channel status; it lost its weight inflation.
+- **Honest limits:** every empirical anchor is US-centric; factor-count contradictions in vendor surveys were quarantined (Jobvite vs ResumeLab). Factor-design session registered as ticket 12.
+- Coverage check: every channel still has a measuring feature — ES (Competency Assessment) · SP (Plan steps) · TP (Progress: internships + completions + verified credentials) · AR (Application Materials Diagnostic) · CC (target role + plan started + first item done).

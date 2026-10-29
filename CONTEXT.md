@@ -41,7 +41,7 @@ Curated reference content per role — occupational definition (PSOC), demand ou
 _Avoid_: job market trends, salary guide
 
 **Readiness Channels**:
-The five measured dimensions of the index: Employability Skills (ES), Skill Progress (SP), Application & Interview Readiness (AIR), Training & Experience Progress (TP), and Career Clarity (CC). Each channel is a distinct question about the student that the others cannot substitute for.
+The five measured dimensions of the index: Employability Skills (ES), Skill Progress (SP), Training & Experience Progress (TP), Application Readiness (AR), and Career Clarity (CC). Each channel is a distinct question about the student that the others cannot substitute for. AR (formerly AIR) measures whether the student's application materials get past automated screening into human hands; interview performance is a documented post-defense roadmap item.
 _Avoid_: rubric criteria (the rubric is the formula; the channels are what it measures)
 
 **Career Readiness Index**:
