@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { signIn, neilCreds } from "./helpers";
+import { signIn, neilCreds, resetStore } from "./helpers";
 
 /**
  * Smoke slice of the canon asserts — full demo-arc walk (beats 1–10) lands
@@ -14,6 +14,13 @@ import { signIn, neilCreds } from "./helpers";
 test.describe.serial("canon-smoke", () => {
   const neil = neilCreds();
   test.skip(!neil.email || !neil.password, "E2E_NEIL_EMAIL / E2E_NEIL_PASSWORD unset — add them to .env.local to run the canon smoke.");
+
+  // the tests below read the canon SEED (40) — the store persists across runs
+  // (Supabase), so the baseline is established here (workers:1 makes this
+  // legal: no other spec's walk is mid-flight at reset, see playwright.config)
+  test.beforeAll(async () => {
+    await resetStore();
+  });
 
   test("beat-5 canon: dashboard headline is 40, computed not painted", async ({ page }) => {
     await signIn(page, neil.email, neil.password);
@@ -76,6 +83,6 @@ test.describe.serial("canon-smoke", () => {
     const body = await res.json();
     expect(body.score.total).toBe(40);
     expect(body.score).toMatchObject({ sp: 30, es: 0, tp: 0, cc: 10 });
-    expect(body.career.name).toBe("Software Developer");
+    expect(body.career.name).toBe("Associate Software Developer");
   });
 });

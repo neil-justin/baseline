@@ -8,57 +8,55 @@ web
 
 ## Stack
 
-**UPDATED 2026-10-12 (user, ticket 07 reassessment — judged against demo physics: offline local demo, deprecated heavy features, ~Oct 17 deadline):** Next.js **16** App Router + TypeScript, pin `16.3.x` (bumped from 15 — architecture unchanged: App Router + route handlers) · all backend logic in route handlers · Supabase **local** for the prototype (CLI-backed Postgres + local auth; demo sign-in against seeded local accounts; hosted free tier is the post-defense swap — config change, no code change; one-time prerequisite: enable Docker Desktop WSL integration) · Tailwind v4 + shadcn/ui (unchanged; offline-safe: build-time compile, repo-copied components) · `@react-pdf/renderer` **cut from prototype scope** (serves only post-defense M11/M12 export; prototype Plan renders as a document with no export button) · single repo · no additional tooling/ORM/query libs. Demo runs locally on a laptop with fixtures; one Vercel preview for development.
+**UPDATED 2026-10-28 (ADR 0003 — real auth + Postgres):** Next.js **16** App Router + TypeScript, pin `16.3.x` · route handlers for all server logic · **Supabase (hosted project, live)**: Auth (real sign-up/sign-in/forgot-reset, signed sessions) + Postgres `student_state`/`profiles`/`credentials` via the `StudentStore` seam (JSON file store demoted to dev/test fallback) · Tailwind v4 (+ repo CSS conventions) · playwright e2e (auth-aware) · vitest fixture checks. Deployment: hosted (Vercel + Supabase) but the **defense demo runs locally** (`npm run dev`, port 3000; one dev server per repo dir).
 
 ## Users
 
-- **Primary:** Philippine Senior High School students (Grade 11–12, STEM/ABM/HUMSS/GAS/TVL strands), many undecided about careers, mostly first-generation-to-career-guidance users, on mid-range phones/laptops, defense venue wifi unreliable.
-- **Secondary (demo/eval):** thesis panel + adviser — watch a scripted student journey; admin surface is read-only seeded views.
+- **Primary:** Philippine **graduating college students** (1st–4th year, four discipline tracks: Computer & IT · Business & Management · Accounting & Finance · Office & Administration) seeking entry-level corporate (white-collar, office-based) roles; institution-run cohort use — often mandated, counselor-supervised.
+- **Operational:** **Counselors** (academic advisers or guidance-counseling/career-services staff — title-agnostic, assignment-based; the person is jurisdiction-scoped to Sections) monitoring cohorts, auditing declared credentials.
+- **Evaluator:** thesis panel + expert respondents (IT evaluators, advisers, guidance counselors) — watch the scripted journey and probe validity.
 
 ## Product Purpose
 
-An AI-powered career-readiness platform: guides an SHS student from undecided → chosen PH-relevant career → skills-gap picture → a ranked, staged learning pathway → progress that demonstrably moves a 0–100 Career Readiness Score → portable artifacts (competency profile, career development plan). Success = a defensible mock-defense demo this week, then the thesis defense with a complete, coherent feature story.
+A pre-graduation **career-readiness diagnostic**: a student picks a discipline track → major → target role (declared, then audited), completes a full NACE-aligned competency assessment, sees their five-channel Career Readiness Index (0–100) as the honest baseline, and works a committed, fully-ranked plan (gaps → resources → completions, Plus externally earned credentials) that demonstrably moves the score. The counselor runs the same product per cohort. Success = the **2026-11-07 final defense** with a working system whose every number and claim traces to a recorded, sourced decision.
 
 ## Positioning
 
-Strand-aware, Philippines-specific career readiness: 32 PH careers with curated skill maps + TESDA/entry-path awareness + deterministic, evidence-cited scoring — a mechanism generic US/EU tools (O*NET/ESCO-shaped) cannot truthfully copy.
+**PH-anchored, counselor-run, deterministic-at-the-core.** 36-source-chained PH roles (DOLE-BLE demand-justified or labeled institutional judgment; PSOC 2012-coded; CHED-CMO major mappings) with provenance-tagged skill maps — a mechanism generic US/EU tools (O*NET-first) can't truthfully copy. AI assists *interpretation and explanation*; **scoring is deterministic and auditable**; every AI surface is template-first, and the demo never depends on the LLM.
 
 ## Operating Context
 
-- **TIME-CRITICAL: mock defense THIS WEEK (~Oct 17)** — scope is demo-arc-first (`features/features.md` §8): undecided student → RIASEC → verification → first score → switch BEATS → gap→resource→score money shot → plan close. Everything non-demo-critical is post-defense.
-- Demo: local laptop + fixtures; screen-recording backup; no venue-wifi dependency; no voice/interview equipment (deprecated).
-- Thesis evidence culture: every claim cited (PSA 2026 stats on landing; NACE/WEF/EDCOM2 for the rubric) — no fabricated numbers, ever (see Evidence).
-- All computation fixtures-first (seeded fake data, real logic), engineered for later swap to dynamic content.
+- **TIME-CRITICAL: final defense 2026-11-07** — demo arc is a 7-feature scripted walk (new graduating-BS persona carrying an internship-status data point; before→after arc needs a visible baseline). Local-laptop demo; recorded backup.
+- Evidence culture: **every claim cited** (PSA LFS, DOLE-BLE JobsFit/NJLMF, CHED CMOs, NACE, Fuller et al. 2021, Wingate et al. 2025 *IJSA*) — no fabricated numbers, ever.
+- Decision culture: the user rules every planning decision; proposals are non-authoritative until signed off (AGENTS.md standing rule).
+- Multi-tenant ambition (campus isolation, ticket 11) is **recorded but not built**; the schema carries a campus key; tenancy must not be precluded.
 
 ## Capabilities and Constraints
 
-- 15 thesis "Unique System Features" implemented as 12 modules (M1–M12) behind a **5-item nav**: Dashboard, Career, Pathway, Progress, Profile (+Admin). **UPDATED 2026-10-12 (user): thesis feature names are not rendered as UI labels** — natural-language labels only; the M1–M12 ↔ thesis-name map stays in features.md §1 (development-facing).
-- Score rubric LOCKED: Skill Progress 40 / Employability Skills 25 / Training Progress 20 / Career Clarity 15 — computed, never hardcoded; career switch resets downstream sub-scores.
-- Core engines locked in `features/features.md` (v1.3): RIASEC→top-3 suggestion; skills-match = unweighted "X of Y skills" of demonstrated skills (comprehension-checked completions + verified MCQs only); gap bars close on check-pass (✓✓) or login-verified MCQ (✓); M7 priority = tier (core ×3/secondary ×1), ties → free-PH-resource-first; 5-question checks (pass ≥4/5); single typed resource catalog (course/cert/NC/doc, free|₱); 2 goal types (Training auto-completes from M9; Milestone manual).
-- Onboarding: strand → "career in mind?" → RIASEC (if no) → skills self-report → verification quiz (≤5) → goal suggestion → first score.
-- Deprecated (must NOT appear): AI interview, resume builder, resume analysis, university finder.
-- Terminology: module names M1–M12 per features.md §1 map to thesis feature names.
-- Undecided: product name (design will propose candidates); M11/M12 PDF export post-defense.
+- **7 features** (post-interview-descope): Competency Assessment (NACE 7/8, E&I excluded, with verification) · Skills Gap Analysis · Career Readiness Index & Competency Profile · AI-Assisted Career Path Exploration (advisory, never deterministic) · Course/Cert/Pathway Recommendation · Personalized Career Development Plan (goals fully absorbed — the plan's next step IS the goal; no goal object) · Application Materials Diagnostic (resume now; cover-letter check + professional-presence entry per ticket 12 — feedback-only, no auto-writing, never "ATS pass").
+- **Rubric (ADR 0002, amended): ES 30 / SP 25 / TP 20 / AR 15 / CC 10** — five channels, each with a measuring feature; computed, never painted; formative composite (Lawshe CVR/CVI validation planned); no predictive-validity claims.
+- **Evidence/cognition rules:** verified (·✓ skills transfer across career switches) / checked (✓✓ role-specific, don't transfer) / claimed (never closes bars); verified credentials close gaps; assessment re-take = **latest counts**; reject-with-reason + revision loop for credentials.
+- **Locked surfaces:** Dashboard · Careers (one list, AI-ranked default lens) · My Plan (Steps · Progress, full ranked list) · Prep (single diagnostic surface) · Profile (Competencies · Credentials · Account incl. DPA export/erase) · Admin (plain roster + row marks, composite read-only per-student, timestamped credential audit).
+- **DPA posture:** consent + data-subject rights as working artifacts (export my data; delete my account = real cascade incl. uploaded evidence).
+- **Deprecated (must NOT appear):** interview (post-defense stage 2), resume builder/gen-text beyond the tiered-suggestion fence, university finder, LinkedIn-feedback-as-feature, SHS anything (strands, grade levels, RIASEC).
 
 ## Brand Commitments
 
-- No name/logo exists yet — the product may be referenced by working title (e.g., "Career Path Readiness" from the thesis context) until design names it; name-choosing is part of design, not a constraint.
-- Voice: English-only UI (confirmed; old interview feature's English-only rule carried in spirit), encouragement-copy tone is acceptable but not yet binding.
+- **Working title "Career Readiness"** — no final name/logo yet; naming belongs to design when asked.
+- Voice: English-only UI; honest, non-patronizing copy — the score *advises*, never predicts hiring.
+- **Design direction (user-locked): "professional/enterprise-like"** — the prior SHS look ("unorthodox, hairline tables, instrument labels") is the flagged **anti-reference**. New work must read as credible enterprise product software; the panel judges the Dashboard first.
 
 ## Evidence on Hand
 
-- Landing stats with sources (ticket 04): 6.0% unemployment (PSA LFS Jul 2026), 12.9% underemployment, 38.2% of unemployed are college grads — cite exactly, with year.
-- 29-career PH catalog with per-career skill maps, RIASEC codes, entry paths (ticket 04 markdown — needs fixture extraction; no data files exist yet).
-- Score evidence: `research/score-weights-evidence.md` (NACE 2026, WEF 2025, EDCOM2 2026 wage lines PHP 69→74→96/hr).
-- NO testimonials, NO photos of students, NO school partnerships — nothing fabricated; design must work without fake social proof.
+- Landing-cited stats: 6.0% unemployment (PSA LFS Jul 2026), 12.9% underemployment, 38.2% of unemployed are college grads — cite exactly, with year.
+- Roster: `.scratch/career-path-readiness-research/catalog-roster-dole-ble.md` (demand citations per role); CHED CMO lists; framework sources per skill tag; rubric evidence (ar 0002 + application-readiness-factors + resume-diagnostic-criteria-sources).
+- Instrument evidence: NACE published definitions as content anchor; authorship method locked (draft → user review → expert CVR/CVI).
+- NO fabricated social proof; NOTHING uncited.
 
 ## Product Principles
 
-1. **The score is earned, never painted** — every number on screen must trace to seeded/computed state; the demo's score movement is real.
-2. **Coherent journey over feature grid** — one flow (discover → gap → pathway → do → score → artifacts), five questions, one nav; nothing floats unlabeled.
-3. **Philippines-forward, thesis-honest** — strand/TESDA/PSA reality everywhere; every visible claim carries its source.
-4. **Encouragement without inflation** — honest "you're 40% ready, here's exactly what to do" (never motivational noise, never fake readiness).
-
-## Accessibility & Inclusion
-
-No formal target established yet; assume sensible baseline (contrast, keyboard-navigable, readable at phone sizes). **Adaptiveness is a stated requirement (user, 2026-10-12):** surfaces must hold from phone (390) through tablet (~768) to laptop (1440) and projector (1920) — the defense runs from a laptop, possibly projected. Minors/consent rules are data-privacy territory (ticket 06), not UI-blocking for the defense demo.
+1. **The score is earned, never painted** — every number traces to computed state; honest zeros ("not yet measured") are a feature.
+2. **Advisory, never deterministic** — AI explains; engines compute; the student authors their own materials.
+3. **Counselor-run, student-owned** — the same product renders both views; audits and flags are advisory, never gates.
+4. **Receipts on the surface** — provenance tags, source citations, verified/claimed distinctions are visible where they answer a question.
+5. **Coherence over feature grid** — five questions, one journey; features surface through their question, never as a directory.

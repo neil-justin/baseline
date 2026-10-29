@@ -106,13 +106,17 @@ export function markVerified(state: StudentState, skill: string): ActionResult {
   return { state: { ...state, bars }, note: `${skill} confirmed ·✓` };
 }
 
-/** Goal suggestion consumed by the switch's quick re-assessment (canon Q13:
- *  a new Training goal is suggested in DA terms). Idempotent via setGoal. */
+/**
+ * Goal suggestion consumed by the switch's quick re-assessment (canon Q13:
+ * a new Training goal is suggested in the switch target's terms). Idempotent
+ * via setGoal. Catalog round 9: the switch walk now runs to roster 2.2
+ * "Software QA Analyst" — the canon money-shot goal closes Software Testing.
+ */
 export const SWITCH_GOAL_SUGGESTION: Record<string, { title: string; resourceId: string; skill: string }> = {
-  da: {
-    title: "Build my first dashboard",
-    resourceId: "res-powerbi-dashboards",
-    skill: "Dashboards (Power BI)",
+  qa: {
+    title: "Build my first test plan",
+    resourceId: "res-qa-testing",
+    skill: "Software Testing",
   },
 };
 

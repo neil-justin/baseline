@@ -4,8 +4,12 @@ import type { CheckQuestion } from "@/lib/types";
  * Onboarding page-local fixtures (task 8) — the pre-baked content canon:
  *  - interest quiz: RIASEC-BANK-01 demo slice (onboarding.md OB-3a.3 verbatim)
  *  - suggestion-card narration: OB-3a.9–11 pre-baked fallback lines
- *  - verification MCQs: VMCQ-SWE-01 demo bank (OB-3b-3.4 verbatim where given;
- *    SQL + Technical documentation are hand-written twins in the same style)
+ *  - verification MCQs: VMCQ-SWE-01 demo bank — re-keyed to the college
+ *    catalog's verbatim PSF-SDS rows (round 9). Bank ORDER = draw order: the
+ *    demo draws the first 5 bank items that the student claimed; canon needs
+ *    "Data Design / SQL + data modeling" and "Business Needs Analysis" drawn
+ *    and passed ("2 of 5"), with Applications Development only claimed (not
+ *    drawn) so the Python-goal skill stays self-reported.
  *  - goal suggestion: the OB-4 pre-filled Training goal (resource row resolved
  *    against `lib/fixtures/resources.ts` at render, never painted)
  * RIASEC codes/type keys are internal — never rendered (conventions Q4).
@@ -33,27 +37,28 @@ export const INTEREST_OPTIONS: { v: "strong" | "mid" | "low"; label: string }[] 
   { v: "low", label: "Not really" },
 ];
 
-/** Pre-baked ①fit / ④After-SHS lines per suggestion card (OB-3a.9–11). */
-export const SUGGESTION_CARDS: Record<string, { fitLine: string; afterShs: string }> = {
+/** Pre-baked ①fit / ④entry-route lines per suggestion card (OB-3a.9–11). */
+export const SUGGESTION_CARDS: Record<string, { fitLine: string; entryLine: string }> = {
   swd: {
     fitLine: "You said yes to digging into problems and building things — software is exactly that loop.",
-    afterShs: "BS Computer Science / IT / IS — or TVL-ICT NC II + a bootcamp.",
+    entryLine: "BS CS / IT / IS — campus hiring or internship pipelines into a dev team.",
   },
   da: {
     fitLine: "Your answers liked finding patterns and making sense of numbers — analysts do that all day.",
-    afterShs: "BS Statistics, Math, or CS — or an analytics bootcamp.",
+    entryLine: "BS Statistics / Management Accounting / CS — junior analyst desks and analytics BPM.",
   },
   its: {
-    fitLine: "If you like taking things apart and making them work again, shops, offices and schools all need this.",
-    afterShs: "TESDA Computer Systems Servicing NC II.",
+    fitLine: "If you like taking things apart and making them work again, offices and schools all need this.",
+    entryLine: "BS IT / IS / CS — Tier-1 support ladders in in-house IT or an MSP.",
   },
 };
 
 /**
  * VMCQ-SWE-01 — one MCQ per top-claimed skill, max 5 (locked scope rule,
- * OB-3b-3.2). Canon demo: Neil claims 6 of 8 → 5 items drawn (Programming
- * logic, SQL, Git, Debugging, Technical documentation); SQL + Git pass.
- * `catalogSkill` must match the frozen /api/verify + /api/claim keys exactly.
+ * OB-3b-3.2). Canon demo: Neil claims 6 of 8 → 5 items drawn (support,
+ * agile, SQL-design, business needs, enabling); SQL-design + business needs
+ * pass ("2 of 5 confirmed"). `catalogSkill` must match the frozen
+ * /api/verify + /api/claim keys exactly.
  */
 export interface VMCQ {
   skill: string; // student-facing display name
@@ -65,57 +70,58 @@ export interface VMCQ {
 
 export const VERIFY_BANK: VMCQ[] = [
   {
-    skill: "Programming logic",
-    catalogSkill: "Programming logic (Python/Java)",
-    stem: "In Python, what does `for i in range(3):` do?",
+    skill: "Applications Support",
+    catalogSkill: "Applications Support and Enhancement",
+    stem: "A feature you shipped last month breaks for users. What does 'support and enhancement' mean here?",
     options: [
-      "runs the indented block 3 times",
-      "runs it once",
-      "repeats forever until you stop it",
-      "checks if `i` equals 3",
+      "fix it so the live app works again, and extend it carefully afterwards",
+      "delete the feature and rewrite the app from scratch",
+      "wait for users to give up and stop reporting it",
+      "tell the users the bug is a hardware problem",
+    ],
+    answer: 0,
+  },
+  {
+    skill: "Agile Software Development",
+    catalogSkill: "Agile Software Development",
+    stem: "In an agile sprint, what does the team do at the daily stand-up?",
+    options: [
+      "each person says what they did, what they're picking up, and what's blocking them",
+      "replan the entire product roadmap from zero",
+      "deploy everything built so far straight to production",
+      "nobody speaks; the developers read the meeting notes silently",
     ],
     answer: 0,
   },
   {
     skill: "SQL",
-    catalogSkill: "SQL",
+    catalogSkill: "Data Design / SQL + data modeling",
     stem: "You need a list of every row in the “students” table. Which query do you run?",
     options: ["SELECT * FROM students", "ADD students LIST", "PRINT students", "GET TABLE students"],
     answer: 0,
   },
   {
-    skill: "Git",
-    catalogSkill: "Git (version control)",
-    stem: "You just fixed a bug. What does `git commit` do?",
+    skill: "Business Needs Analysis",
+    catalogSkill: "Business Needs Analysis",
+    stem: "A department says 'reports are slow.' What is a business analyst's job with that input?",
     options: [
-      "saves a snapshot of your changes to the project's history",
-      "uploads your code to GitHub",
-      "deletes your last change",
-      "merges your code with a teammate's",
+      "turn it into a defined requirement: what's slow, why, and what 'fixed' looks like",
+      "buy new laptops for the whole department right away",
+      "silently ignore it until the sprint ends",
+      "tell the department to write their own software",
     ],
     answer: 0,
   },
   {
-    skill: "Debugging",
-    catalogSkill: "Debugging",
-    stem: "Your program crashes with an error pointing to line 12. Best first move?",
+    skill: "Enabling skills",
+    catalogSkill:
+      "Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling Skills, Basic/Intermediate)",
+    stem: "Your teammate's pull request conflicts with yours. The professional first move is",
     options: [
-      "read the error message and look at line 12",
-      "rewrite the whole program",
-      "restart your computer and run it again",
-      "delete line 12",
-    ],
-    answer: 0,
-  },
-  {
-    skill: "Technical documentation",
-    catalogSkill: "Technical documentation",
-    stem: "What is the point of a README file in a project?",
-    options: [
-      "explains what the project is and how to use it",
-      "stores the project's passwords",
-      "makes the code compile faster",
-      "lists every line of code",
+      "talk it through, agree where the change should live, keep the record clean",
+      "force-push your branch over theirs",
+      "open a second repository so you never merge",
+      "let the conflict sit until the release date passes",
     ],
     answer: 0,
   },
@@ -126,17 +132,16 @@ export const GOAL_SUGGESTION: Record<string, { title: string; resourceId: string
   swd: {
     title: "Finish the Python basics course",
     resourceId: "res-python-basics",
-    skill: "Programming logic (Python/Java)",
+    skill: "Applications Development",
   },
 };
 
-/** OB-1 strand taglines (drafts per onboarding.md OB-1.2; card counts are computed from the catalog). */
-export const STRAND_TAGLINES: Record<string, string> = {
-  STEM: "Science, tech, engineering, math — from nurse to software developer.",
-  ABM: "Business, money, running organizations — from accounting to entrepreneurship.",
-  HUMSS: "People, communication, society — from teaching to journalism.",
-  GAS: "Keep your options open while you decide — design, events, more.",
-  TVL: "Hands-on certified skills — from electrician to IT support.",
+/** OB-1 track taglines (round 9: four college tracks; card counts compute live). */
+export const TRACK_TAGLINES: Record<string, string> = {
+  it: "Code, data, networks, cybersecurity — from developer to SOC analyst.",
+  business: "People, money, campaigns, customers — from HR to marketing to sales.",
+  accounting: "Books, ledgers, audit, credit — from bookkeeper to audit associate.",
+  office: "Records, coordination, front desks — the administrative backbone.",
 };
 
 export type { CheckQuestion };

@@ -1,0 +1,106 @@
+/* Prep surface (round 6a) — Resume Diagnostic. Styled strictly from the
+   shared token vocabulary in app/globals.css (panel/label/btn/check mark
+   chips). No new colors, no new shadows. Per-page CSS is the repo pattern. */
+
+.prep-shell { max-width: 980px; padding-bottom: 56px; }
+.prep-sublabel {
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
+}
+
+/* on-ramp */
+.rs-ramp { margin-top: 14px; padding-top: 4px; }
+.rs-ctas { margin-top: 14px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.rs-list { padding: 2px 0; }
+.rs-listrow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 14px;
+  padding: 12px 0 13px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.rs-listrow:last-child { border-bottom: 0; }
+.rs-list-n { color: var(--ink-3); font-size: 12px; padding-top: 2px; grid-row: span 2; }
+.rs-listrow b { font-weight: 600; font-size: 14px; letter-spacing: -0.01em; line-height: 1.4; }
+.rs-list-note { grid-column: 2; margin-top: 4px; font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+.rs-list-src { grid-column: 2; margin-top: 3px; font-size: 10.5px; letter-spacing: 0.03em; color: var(--ink-3); }
+
+/* upload */
+.rs-upload { margin-top: 4px; }
+.rs-file-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 6px 0 0; }
+.rs-file { font-family: var(--mono); font-size: 12.5px; color: var(--ink); max-width: 100%; }
+.rs-file::file-selector-button {
+  font: inherit; font-size: 12.5px; padding: 7px 14px; margin-right: 12px;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--panel); color: var(--ink); cursor: pointer;
+}
+.rs-file::file-selector-button:hover { border-color: #C4C8C3; }
+.rs-note { margin-top: 12px; font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
+.rs-note.rs-err { color: #8a1f1f; font-weight: 550; }
+.rs-notyet { margin-top: 14px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.02em; color: var(--ink-3); }
+.rs-notyet b { color: var(--ink-2); font-weight: 570; }
+
+/* run readout */
+.rs-readout { padding: 16px 16px 14px; }
+.rs-readout-top { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.rs-readout-sub { margin-top: 6px; color: var(--ink-2); font-size: 13px; }
+.rs-readout-score { font-size: 34px; font-weight: 640; letter-spacing: -0.03em; line-height: 1; }
+.rs-readout-score small { font-size: 13px; font-weight: 500; color: var(--ink-3); margin-left: 2px; }
+.rs-air-note { margin-top: 12px; font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
+.rs-air-note b { color: var(--ink); font-weight: 570; }
+
+/* factor check ledgers */
+.rs-factor-head { margin-top: 14px; font-size: 12px; letter-spacing: 0.03em; color: var(--ink-2); }
+.rs-factor-head b { color: var(--ink); }
+.rs-factor-head .rs-fn { color: var(--ink-3); }
+.rs-checks { margin-top: 6px; }
+.rs-check { display: flex; gap: 9px; align-items: baseline; font-size: 12.5px; line-height: 1.6; color: var(--ink); }
+.rs-check .mark { font-family: var(--mono); font-weight: 600; }
+.rs-check .mark.ok { color: #1f6b3a; }
+.rs-check .mark.no { color: #8a1f1f; }
+.rs-check-note { color: var(--ink-3); }
+
+/* findings */
+.rs-findings { padding: 2px 0; }
+.rs-finding { padding: 13px 0 14px; border-bottom: 1px solid var(--line-soft); }
+.rs-finding:last-child { border-bottom: 0; }
+.rs-f-title { display: flex; align-items: center; gap: 10px; }
+.rs-level {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 2px; border: 1px solid var(--line);
+}
+.rs-level.rs-fix { color: #8a1f1f; border-color: #d8b4b4; }
+.rs-level.rs-watch { color: #7a5410; border-color: #d9c896; }
+.rs-level.rs-pass { color: #1f6b3a; }
+.rs-f-skill { color: var(--ink-3); font-size: 11px; }
+.rs-f-head { margin-top: 6px; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+.rs-f-detail { margin-top: 4px; font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
+.rs-suggest { margin-top: 9px; display: grid; gap: 7px; }
+.rs-move { font-size: 12.5px; color: var(--ink); line-height: 1.55; }
+.rs-move b { font-weight: 570; }
+.rs-example {
+  font-size: 12.5px; color: var(--ink-2); line-height: 1.55;
+  border-left: 2px solid var(--line); padding-left: 12px;
+}
+.rs-ex-label { display: block; font-size: 10px; letter-spacing: 0.05em; color: var(--ink-3); margin-bottom: 3px; }
+.rs-ex-src { color: var(--ink-3); font-size: 11px; }
+
+/* guide page */
+.rs-guide-sec { padding: 2px 0; }
+.rs-guide-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; padding: 12px 0 13px; border-bottom: 1px solid var(--line-soft); }
+.rs-guide-row:last-child { border-bottom: 0; }
+.rs-guide-n { color: var(--ink-3); font-size: 12px; padding-top: 3px; }
+.rs-guide-row b { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+.rs-guide-order { margin-top: 3px; font-size: 13px; color: var(--ink); line-height: 1.5; }
+.rs-guide-why { margin-top: 4px; font-size: 11px; color: var(--ink-3); line-height: 1.6; }
+.rs-plain { margin: 6px 0 0; padding-left: 18px; font-size: 12.5px; color: var(--ink-2); line-height: 1.75; }
+
+.rs-foot {
+  margin-top: 6px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em;
+  color: var(--ink-3); text-align: right;
+}
+.src-line { margin-top: 12px; font-size: 10.5px; letter-spacing: 0.02em; color: var(--ink-3); line-height: 1.6; }

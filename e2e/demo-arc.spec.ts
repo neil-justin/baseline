@@ -8,13 +8,14 @@ import { resetStore, settled, shot, signIn, cohortEmail, DEMO_PASSWORD, neilCred
  *   (SP 29 / TP 7 / CC 15); beat-8 "5 of 7 · First 30 days: 1 of 3 done";
  *   trajectory 40 → 51; admin reads the same live numbers.
  *
- * Demo inputs (onboarding.md demo fixture): STEM · "No — help me figure it
- * out" · interest quiz Kind of / Yes / Yes / Not really / Not really / Kind
- * of · cards: Choose Software Developer → Continue · self-report: confident
- * for Programming logic/SQL/Git/Debugging/Agile teamwork/Technical
- * documentation, "Not yet" for API basics/Unit testing · framing Okay/Room
- * to grow/Strong · verification quiz: SQL + Git CORRECT (bank index 0),
- * other three deliberately WRONG (second option) → aggregate "2 of 5".
+ * Demo inputs (round 9 college catalog): Computer & IT track · "No — help
+ * me figure it out" · interest quiz Kind of / Yes / Yes / Not really /
+ * Not really / Kind of · cards: Choose Associate Software Developer →
+ * Continue · self-report: confident for Applications Development/
+ * Applications Support/Agile/Data Design SQL/Business Needs/Enabling
+ * bundle, "Not yet" for Secure-coding/Linux-deployment · framing Okay/Room
+ * to grow/Strong · verification quiz: SQL-design + Business Needs CORRECT
+ * (bank index 0), other three deliberately WRONG (second option) → "2 of 5".
  *
  * Canon checks from the recovery step onward use `expect.soft` (recorded,
  * non-aborting) so a canon mismatch never hides the numbers on later beats.
@@ -56,7 +57,7 @@ test.describe.serial("demo-arc", () => {
 
     await page.goto("/onboarding");
     // OB-1 · strand
-    await page.locator(".strand-card", { hasText: "STEM" }).click();
+    await page.locator(".strand-card", { hasText: "Computer & IT" }).click();
     await page.getByRole("button", { name: "Continue", exact: true }).click();
 
     // OB-2 · branch
@@ -71,15 +72,15 @@ test.describe.serial("demo-arc", () => {
     }
     // loading micro-state (~2s) → suggestion cards
     await page.waitForSelector("text=Careers that fit how you answered", { timeout: 10_000 });
-    await page.locator("button", { hasText: "Choose Software Developer" }).click();
-    await page.locator(".btn-hero", { hasText: "Continue with Software Developer" }).click();
+    await page.locator("button", { hasText: "Choose Associate Software Developer" }).click();
+    await page.locator(".btn-hero", { hasText: "Continue with Associate Software Developer" }).click();
 
     // OB-3b-1 · 8-row self-report
     await expect(page.getByRole("heading", { name: "Now — where are you today?" })).toBeVisible();
-    for (const n of ["Programming logic", "SQL", "Git", "Debugging", "Agile teamwork", "Technical documentation"]) {
+    for (const n of ["Applications Development", "Applications Support", "Agile Software", "Data Design / SQL", "Business Needs", "Collaboration · Communication"]) {
       await page.locator(".skill-row", { hasText: n }).locator("button", { hasText: "I can do this" }).click();
     }
-    for (const n of ["API basics", "Unit testing"]) {
+    for (const n of ["Secure-coding", "Linux + web deployment"]) {
       await page.locator(".skill-row", { hasText: n }).locator("button", { hasText: "Not yet" }).click();
     }
     await expect(page.locator(".num", { hasText: "8 of 8 answered" })).toBeVisible();
@@ -93,7 +94,7 @@ test.describe.serial("demo-arc", () => {
     await page.locator(".skill-row", { hasText: "Problem-solving" }).locator("button", { hasText: "Strong" }).click();
     await page.getByRole("button", { name: "Continue", exact: true }).click();
 
-    // OB-3b-3 · verification mini-quiz — "2 of 5" canon (SQL + Git pass)
+    // OB-3b-3 · verification mini-quiz — "2 of 5" canon (SQL-design + Business Needs pass)
     await expect(page.getByRole("heading", { name: "Make it official — quick skill check" })).toBeVisible();
     await expect(page.locator("text=6 skills")).toBeVisible(); // 6 of 8 claimed
     await expect(page.locator("text=5 short questions")).toBeVisible();
@@ -102,16 +103,20 @@ test.describe.serial("demo-arc", () => {
     for (let i = 0; i < 5; i++) {
       const skill = (await page.locator('.q-skill-tag:has-text("About:")').textContent())!.replace("About: ", "").trim();
       // bank answer index 0 is correct (app/(app)/onboarding/banks.ts); the
-      // demo deliberately answers WRONG (second option) except SQL and Git
-      const pick = skill === "SQL" || skill === "Git" ? 0 : 1;
+      // demo deliberately answers WRONG (second option) except SQL-design and Business Needs
+      const pick = skill === "SQL" || skill === "Business Needs Analysis" ? 0 : 1;
       await page.locator(".q-opts .opt").nth(pick).click();
-      await page.locator("button", { hasText: "Next" }).click();
+      // exact: the bank's option text may itself contain "next" ("what's
+      // next, and …") — case-insensitive hasText would be a strict violation
+      await page.getByRole("button", { name: "Next", exact: true }).click();
     }
     await expect(page.locator(".screen-head h1")).toContainText("2 of 5 confirmed.");
     await expect(page.locator(".okband")).toContainText("SQL");
-    await expect(page.locator(".okband")).toContainText("Git");
-    notes.push("beat 3b result: '2 of 5 confirmed.' · confirmed band lists SQL · Git ✓");
-    await page.waitForTimeout(300); // let the per-question POST /api/verify land
+    await expect(page.locator(".okband")).toContainText("Business Needs");
+    notes.push("beat 3b result: '2 of 5 confirmed.' · confirmed band lists SQL-design · Business Needs ✓");
+    // wait for BOTH per-question POST /api/verify writes to land before the
+    // Continue click — the goal-set state save must not race the last verify
+    await page.waitForTimeout(800);
     await page.getByRole("button", { name: "Continue", exact: true }).click();
 
     // OB-4 · goal — suggested card, pre-filled title
@@ -156,12 +161,12 @@ test.describe.serial("demo-arc", () => {
     await page.locator(".cc-switch .quiet-toggle", { hasText: "Switch career" }).click();
     await page.locator(".disclosure.show .disc-go").click();
     await expect(page.locator(".sw-banner")).toBeVisible(); // browsing banner, nothing changed yet
-    await page.locator(".row-live").first().click(); // the live switch target: Data Analyst
+    await page.locator(".row-live").first().click(); // the live switch target: Software QA Analyst
 
     // cost-first confirm
-    await expect(page.locator("#sw-confirm h1")).toHaveText("Switch to Data Analyst?");
+    await expect(page.locator("#sw-confirm h1")).toHaveText("Switch to Software QA Analyst?");
     await expect(page.locator(".sw-cost")).toContainText("resets skill progress and training progress");
-    await page.locator(".sw-actions .btn-primary").click(); // Switch to Data Analyst
+    await page.locator(".sw-actions .btn-primary").click(); // Switch to Software QA Analyst
 
     // honest dip — the readout says exactly what the switch costs (canon 10)
     await page.waitForSelector("#sw-reset .readout", { timeout: 8000 });
@@ -176,18 +181,18 @@ test.describe.serial("demo-arc", () => {
     notes.push("beat 6 dip: reset readout 10/100 · SP 0/40 ES 0/25 TP 0/20 CC 10/15 · arc-10.png ✓");
 
     // quick re-assessment — BUG-1 fix verified: the carried ·✓ set is persisted
-    // at switch time (decisions.verifiedTransferred), so canon says SQL shows
-    // as THE one locked row here ("Confirmed ·✓ transferred"), the other 6
-    // rows are rateable
+    // at switch time (decisions.verifiedTransferred), so canon says Business
+    // Needs Analysis shows as THE one locked row ("Confirmed ·✓ transferred"
+    // — the SQL-design row is not on the QA map), the others rateable
     await expect(page.locator("#sw-reset .reassess")).toBeVisible();
-    const sqlLocked = page.locator("#sw-reset .skill-row.skill-locked", { hasText: "SQL" });
-    await expect(page.locator("#sw-reset .skill-row")).toHaveCount(7); // the DA map
+    const carriedLocked = page.locator("#sw-reset .skill-row.skill-locked", { hasText: "Business Needs Analysis" });
+    await expect(page.locator("#sw-reset .skill-row")).toHaveCount(7); // the QA map
     await expect(page.locator("#sw-reset .skill-row.skill-locked")).toHaveCount(1); // exactly one locked
-    await expect(sqlLocked).toBeVisible();
-    await expect(sqlLocked.locator(".vbadge")).toContainText("Confirmed ·✓ transferred");
-    await expect(sqlLocked.locator(".choice")).toHaveCount(0); // locked out of the rating set
-    notes.push("beat 6 re-assessment: SQL row locked 'Confirmed ·✓ transferred' (1 of 7 locked, no rating buttons) ✓");
-    for (const n of ["Spreadsheets", "Data cleaning", "Basic statistics"]) {
+    await expect(carriedLocked).toBeVisible();
+    await expect(carriedLocked.locator(".vbadge")).toContainText("Confirmed ·✓ transferred");
+    await expect(carriedLocked.locator(".choice")).toHaveCount(0); // locked out of the rating set
+    notes.push("beat 6 re-assessment: Business Needs row locked 'Confirmed ·✓ transferred' (1 of 7 locked, no rating buttons) ✓");
+    for (const n of ["Test Planning", "Defect management", "Applications Support and Enhancement"]) {
       await page.locator("#sw-reset .skill-row", { hasText: n }).locator("button", { hasText: "Can do" }).click();
     }
     await page.locator("button", { hasText: "See my baseline" }).click();
@@ -197,35 +202,35 @@ test.describe.serial("demo-arc", () => {
     const recTo = ((await page.locator("#sw-recovered .score-to").textContent()) ?? "").trim();
     soft(recTo).toBe("33"); // canon: 10 → 33
     const recLegend = (await page.locator("#sw-recovered .readout-legend").textContent()) ?? "";
-    soft(recLegend).toContain("SP 23/40"); // 40 × 4/7 → 23 (half-down) — SQL ·✓ + 3 self-claims
+    soft(recLegend).toContain("SP 23/40"); // 40 × 4/7 → 23 (half-down) — Business Needs ·✓ + 3 self-claims
     expect(recLegend).toContain("CC 10/15"); // Python goal rides the switch + decided
     const recLine = ((await page.locator("#sw-recovered .rec-line").textContent()) ?? "").replace(/\s+/g, " ");
     soft(recLine).toContain("4 of 7");
-    expect(recLine).toContain("SQL");
-    expect(recLine).toContain("transferred"); // SQL is still in the verifiedTransferred set
+    expect(recLine).toContain("Business Needs");
+    expect(recLine).toContain("transferred"); // the carried ·✓ is still in the verifiedTransferred set
     await shot(page, "arc-33.png");
     notes.push(
       `beat 6 recovered: 10 → ${recTo} (canon 33) · legend "${recLegend.replace(/\s+/g, " ")}" · line "${recLine}" · arc-33.png`
     );
 
     /* ══════════ BEAT 7 · the money shot — set the goal, pass the check, 51 ══════════ */
-    // BUG-2 fix verified: the recovered screen suggests the canon DA Training
-    // goal ("Build my first dashboard" — free · ~4 hours · Microsoft Learn —
-    // Power BI) via "Set this goal" (frozen POST /api/goal, idempotent); the
+    // BUG-2 fix verified: the recovered screen suggests the canon QA Training
+    // goal ("Build my first test plan" — free · ~4 hours · Test Automation
+    // University) via "Set this goal" (frozen POST /api/goal, idempotent); the
     // goal then appears under Progress with its check launcher, and the whole
     // money shot is driven through the real UI: recovered screen → Progress
     // goal row → CheckOverlay → 5 correct answers → 51 (SP 29 / TP 7 / CC 15).
-    // Check bank (lib/fixtures/checks.ts): DASHBOARDS_CHECK answers are all
+    // Check bank (lib/fixtures/checks.ts): TESTING_CHECK answers are all
     // index 0 — the spec answers by driving the options, not the endpoint.
 
-    // the recovered screen suggests the canon DA goal: card = "Set your next
-    // goal" · "free · ~4 hours · Microsoft Learn — Power BI" · closes the
-    // Dashboards gap · "Set this goal" (the title shows on Progress when set)
+    // the recovered screen suggests the canon QA goal: card = "Set your next
+    // goal" · "free · ~4 hours · Test Automation University" · closes the
+    // Software Testing gap · "Set this goal" (the title shows on Progress)
     await expect(page.locator("#sw-recovered .nextcard h3")).toContainText("Set your next goal");
     await expect(page.locator("#sw-recovered .nextcard .n-target")).toContainText(
-      "free · ~4 hours · Microsoft Learn — Power BI"
+      "free · ~4 hours · Test Automation University"
     );
-    await expect(page.locator("#sw-recovered .nextcard")).toContainText("Dashboards");
+    await expect(page.locator("#sw-recovered .nextcard")).toContainText("Software Testing");
     await page.locator("#sw-recovered .nextcard button", { hasText: "Set this goal" }).click();
     await expect(page.locator("#sw-recovered .nextcard button")).toContainText("Goal set");
     notes.push("beat 7 set-goal: 'Set this goal' on the recovered screen → 'Goal set — it's on your Progress page.' ✓");
@@ -234,10 +239,10 @@ test.describe.serial("demo-arc", () => {
     await expect(page.getByRole("heading", { name: "Progress" })).toBeVisible();
 
     // the goal is on Progress, active, with its "Start the check" launcher
-    const daGoalRow = page.locator(".goal-row.active", { hasText: "Build my first dashboard" });
-    await expect(daGoalRow).toBeVisible();
+    const qaGoalRow = page.locator(".goal-row.active", { hasText: "Build my first test plan" });
+    await expect(qaGoalRow).toBeVisible();
     await expect(page.locator(".goal-row.active", { hasText: "Finish the Python basics course" })).toBeVisible();
-    await daGoalRow.locator("button", { hasText: "Start the check" }).click();
+    await qaGoalRow.locator("button", { hasText: "Start the check" }).click();
 
     // CheckOverlay: intro → 5 questions, all correct → aggregate pass result
     const overlay = page.locator(".check-overlay");
@@ -250,7 +255,7 @@ test.describe.serial("demo-arc", () => {
     }
     await expect(overlay.locator(".r-head")).toContainText("You passed — 5 of 5");
     const passBand = ((await overlay.locator(".r-band").textContent()) ?? "").replace(/\s+/g, " ");
-    expect(passBand).toContain("dashboards gap is closed ✓✓");
+    expect(passBand).toContain("software testing gap is closed ✓✓");
     expect(passBand).toContain("The goal you set is done");
     await shot(page, "arc-check-pass.png");
     notes.push(`beat 7 check: overlay pass band "${passBand}" · arc-check-pass.png ✓`);
@@ -258,16 +263,16 @@ test.describe.serial("demo-arc", () => {
 
     // the live record: feed row + closed gap bar + the goal auto-completed
     await page.reload();
-    await expect(page.locator(".feed-row", { hasText: "Build your first dashboard" })).toBeVisible();
+    await expect(page.locator(".feed-row", { hasText: "Setting a foundation for successful test automation" })).toBeVisible();
     await expect(page.locator(".f-pass")).toContainText("Check passed · 5 of 5");
-    await expect(page.locator(".c-gap", { hasText: "Dashboards (Power BI)" })).toBeVisible();
-    await expect(page.locator(".prog-ctx")).toContainText("ready for Data Analyst");
-    const doneGoal = page.locator(".goal-row.done", { hasText: "Build my first dashboard" });
+    await expect(page.locator(".c-gap", { hasText: "Software Testing" })).toBeVisible();
+    await expect(page.locator(".prog-ctx")).toContainText("ready for Software QA Analyst");
+    const doneGoal = page.locator(".goal-row.done", { hasText: "Build my first test plan" });
     await expect(doneGoal).toBeVisible();
     const autoLine = ((await doneGoal.locator(".g-event").textContent()) ?? "").replace(/\s+/g, " ");
     soft(autoLine).toContain("Auto-completed");
     soft(autoLine).toContain("(5 of 5)");
-    soft(autoLine).toContain("dashboards gap");
+    soft(autoLine).toContain("software testing gap");
     notes.push(`beat 7 auto-complete line: "${autoLine}"`);
 
     /* ══════════ dashboard at the money state (canon 51) ══════════ */
@@ -295,8 +300,11 @@ test.describe.serial("demo-arc", () => {
     soft(lead).toContain("5 of 7"); // canon: 5 of 7 skills checked
     expect(lead).toContain("First 30 days: 1 of 3 done"); // 1 of 3 — canon holds
     const queue = (await page.locator(".stagepanel .qrow .q-skill").allTextContents()).map((s) => s.trim());
-    soft(queue).toEqual(["Chart interpretation", "Report writing"]); // remaining stage-① queue — canon
-    expect(lead).not.toContain("Dashboards"); // closed ·✓✓, off the context line
+    soft(queue).toEqual([
+      "Quality Assurance / Quality Standards",
+      "Customer Orientation · Digital Fluency · Learning Agility · Sense Making · Problem Solving (Enabling)",
+    ]); // remaining stage-① queue — canon
+    expect(lead).not.toContain("Software Testing"); // closed ·✓✓, off the context line
     notes.push(`beat 8 pathway: lead "${lead}" · stage-① queue ${JSON.stringify(queue)}`);
 
     /* ══════════ BEAT 9 · profile Plan tab ══════════ */
@@ -304,8 +312,8 @@ test.describe.serial("demo-arc", () => {
     await page.goto("/profile");
     await expect(page.locator("#panel-plan")).toBeVisible(); // Plan is the default tab
     const planText = ((await page.locator("#panel-plan").innerText()) ?? "").replace(/\s+/g, " ");
-    expect(planText).toContain("Data Analyst");
-    expect(planText).not.toContain("Chart interpretation"); // summary only — NEVER the ranked list
+    expect(planText).toContain("Software QA Analyst");
+    expect(planText).not.toContain("Test Planning"); // summary only — NEVER the ranked list
     const trajRows = (await page.locator(".traj-rows .trow").allTextContents()).map((t) => t.replace(/\s+/g, " ").trim());
     expect(trajRows.join(" ")).toContain("40"); // setup point — canon holds
     soft(trajRows.join(" ")).toContain("51"); // canon end point
@@ -325,7 +333,7 @@ test.describe.serial("demo-arc", () => {
 
     await page.goto("/admin");
     const demoRow = page.locator(".s-row.row-demo");
-    await expect(demoRow.locator(".s-career")).toHaveText("Data Analyst"); // career survives the switch ✓
+    await expect(demoRow.locator(".s-career")).toHaveText("Software QA Analyst"); // career survives the switch ✓
     const cohortScore = ((await demoRow.locator(".s-score").textContent()) ?? "").trim();
     soft(cohortScore).toBe("51"); // canon: the live cohort row reads 51
     await page.goto("/admin/student?student=neil");

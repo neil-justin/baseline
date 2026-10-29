@@ -2,114 +2,148 @@ import type { Resource } from "@/lib/types";
 
 /**
  * Resource catalog — single typed catalog (schema: features.md §6.8).
- * Demo-slice subset; expands per the m5 content plan (price tier free|₱,
- * typed course/cert/NC/doc) — the money-shot resource is canon-locked:
- * "Build your first dashboard" — Microsoft Learn, Power BI, free.
- * Every row's `url` was checked live (Oct 2026) and points at the real,
- * still-existing page; TESDA's TOP moved off elearn.tesda.gov.ph (dead) to
- * e-tesda.gov.ph, and Google's Applied Digital Skills lesson pages are gone.
+ * Catalog round 10 (pool-per-skill convention): COMPLETE free pools are
+ * authored for the demo trio's swd map only (roster 2.1, Neil's role); the QA
+ * money-shot resource exists because the canon walk needs it; everything else
+ * is scaffolded for a later dispatch (~35 more roles pending; see report).
+ * Every row was re-checked live (2026-10-29) and points at the real,
+ * still-existing page. Khan Academy pages block this environment's bot checks;
+ * the row was verified live in the previous round and is marked below.
  */
 export const RESOURCES: Resource[] = [
-  // --- Software Developer ---
+  // --- Associate Software Developer (roster 2.1 · id swd) — COMPLETE pool ---
   {
     id: "res-python-basics",
     title: "Python basics course",
     provider: "Coursera",
     type: "course",
     cost: "free",
-    // "Programming for Everybody (Getting Started with Python)" — UMich, free to audit
+    // "Programming for Everybody (Getting Started with Python)" — UMich,
+    // free to audit (re-verified live 2026-10-29)
     url: "https://www.coursera.org/learn/python",
     durationHours: 25,
-    skillsAddressed: ["Programming logic (Python/Java)"],
+    skillsAddressed: ["Applications Development"],
     careerId: "swd",
   },
   {
-    id: "res-swd-git-doc",
-    title: "Git handbook",
-    provider: "Atlassian",
-    type: "doc",
-    cost: "free",
-    url: "https://www.atlassian.com/git/tutorials/what-is-version-control",
-    durationHours: 2,
-    skillsAddressed: ["Git (version control)"],
-    careerId: "swd",
-  },
-  // --- Data Analyst ---
-  {
-    id: "res-powerbi-dashboards",
-    title: "Build your first dashboard",
-    provider: "Microsoft Learn — Power BI",
-    type: "doc",
-    cost: "free",
-    // Learn's beginner tutorial: connect to data, create a report + dashboard
-    url: "https://learn.microsoft.com/en-us/power-bi/fundamentals/service-get-started",
-    durationHours: 4,
-    skillsAddressed: ["Dashboards (Power BI)"],
-    careerId: "da",
-  },
-  {
-    id: "res-da-course-sql",
+    id: "res-swd-sql",
     title: "Intro to SQL for data analysis",
     provider: "Khan Academy",
     type: "course",
     cost: "free",
+    // verified live in the prior round; Khan's CDN blocks this session's
+    // re-check (anti-bot notice) — flagged for the next URL pass
     url: "https://www.khanacademy.org/computing/computer-programming/sql",
     durationHours: 6,
-    skillsAddressed: ["SQL"],
-    careerId: "da",
+    skillsAddressed: ["Data Design / SQL + data modeling"],
+    careerId: "swd",
   },
   {
-    id: "res-da-sheets-doc",
-    title: "Cleaning up messy sheets",
-    provider: "Google Workspace Learning Center",
+    id: "res-swd-support-doc",
+    title: "Git handbook",
+    provider: "Atlassian",
     type: "doc",
     cost: "free",
-    // Google's own "format & clean up data" docs (the old Applied Digital
-    // Skills lesson pages are gone — ADFS curriculum moved into Skillshop)
-    url: "https://support.google.com/a/users/topic/9976025?hl=en",
+    // tracking changes to live applications = the support/enhancement working
+    // method (verified live 2026-10-29)
+    url: "https://www.atlassian.com/git/tutorials/what-is-version-control",
     durationHours: 2,
-    skillsAddressed: ["Data cleaning"],
-    careerId: "da",
+    skillsAddressed: ["Applications Support and Enhancement"],
+    careerId: "swd",
   },
   {
-    id: "res-da-stats-course",
-    title: "Khan Academy — Statistics basics",
-    provider: "Khan Academy",
+    id: "res-swd-agile-doc",
+    title: "What is Agile? — Agile methodology basics",
+    provider: "Atlassian",
+    type: "doc",
+    cost: "free",
+    url: "https://www.atlassian.com/agile",
+    durationHours: 2,
+    skillsAddressed: ["Agile Software Development"],
+    careerId: "swd",
+  },
+  {
+    id: "res-swd-secure-doc",
+    title: "OWASP Top 10 — most critical web application security risks",
+    provider: "OWASP Foundation",
+    type: "doc",
+    cost: "free",
+    url: "https://owasp.org/www-project-top-ten/",
+    durationHours: 4,
+    skillsAddressed: ["Secure-coding practices"],
+    careerId: "swd",
+  },
+  {
+    id: "res-swd-linux-doc",
+    title: "The Linux command line for beginners",
+    provider: "Ubuntu tutorials",
+    type: "doc",
+    cost: "free",
+    // canonical multi-step command-line tutorial (~1h); kept at the
+    // canonical URL (re-verified live 2026-10-29)
+    url: "https://ubuntu.com/tutorials/command-line-for-beginners",
+    durationHours: 2,
+    skillsAddressed: ["Linux + web deployment basics"],
+    careerId: "swd",
+  },
+  {
+    id: "res-swd-bna-course",
+    title: "Business analysis fundamentals",
+    provider: "Coursera",
     type: "course",
     cost: "free",
-    url: "https://www.khanacademy.org/math/statistics-probability",
-    durationHours: 5,
-    skillsAddressed: ["Basic statistics"],
-    careerId: "da",
+    // free-to-audit listing; the catalog surface shows the "Business Analysis
+    // & Process Management guided project — free" route from this listing
+    // (verified live 2026-10-29; no stable free-course slug)
+    url: "https://www.coursera.org/search?query=business%20analysis",
+    durationHours: 3,
+    skillsAddressed: ["Business Needs Analysis"],
+    careerId: "swd",
   },
   {
-    id: "res-da-ga4-cert",
-    title: "Google Analytics 4 certification",
-    provider: "Google Skillshop",
-    type: "cert",
-    cost: "free",
-    // Google Analytics Certification course (official Skillshop link, per
-    // support.google.com/analytics/answer/15068052)
-    url: "https://skillshop.docebosaas.com/learn/courses/14810/google-analytics-certification",
-    durationHours: 8,
-    skillsAddressed: ["Chart interpretation"],
-    creditingBody: "Google",
-    careerId: "da",
-  },
-  {
-    id: "res-da-report-doc",
-    title: "Data storytelling quick guide",
-    provider: "Coursera",
+    id: "res-swd-enable-doc",
+    title: "Team Playbook — free teamwork Plays",
+    provider: "Atlassian",
     type: "doc",
     cost: "free",
-    // prototype canon: "Data Storytelling — Coursera · free to audit" (course
-    // listing lives behind Coursera's catalog search; no stable course slug)
-    url: "https://www.coursera.org/search?query=data%20storytelling",
+    // "Are Plays free? Yes" (verified live 2026-10-29) — the enabling-skills
+    // bundle's PH-relevant practice layer
+    url: "https://www.atlassian.com/team-playbook",
     durationHours: 2,
-    skillsAddressed: ["Report writing"],
-    careerId: "da",
+    skillsAddressed: [
+      "Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling Skills, Basic/Intermediate)",
+    ],
+    careerId: "swd",
   },
-  // --- IT Support Technician (card 3 slice) ---
+  // --- Software QA Analyst (roster 2.2 · id qa) — canon money-shot row only ---
+  {
+    id: "res-qa-testing",
+    title: "Setting a foundation for successful test automation",
+    provider: "Test Automation University",
+    type: "course",
+    cost: "free",
+    // TAU is Applitools' free test-automation academy, certificates included
+    // (verified live 2026-10-29)
+    url: "https://testautomationu.applitools.com/",
+    durationHours: 4,
+    skillsAddressed: ["Software Testing"],
+    creditingBody: "Test Automation University (Applitools)",
+    careerId: "qa",
+  },
+  {
+    id: "res-qa-testing-basics-doc",
+    title: "Test Planning basics — writing test scenarios from requirements",
+    provider: "Test Automation University",
+    type: "doc",
+    cost: "free",
+    // learning-path listing page (verified live 2026-10-29); scaffolded row
+    // for the Test Planning skill
+    url: "https://testautomationu.applitools.com/learningpaths.html",
+    durationHours: 3,
+    skillsAddressed: ["Test Planning"],
+    careerId: "qa",
+  },
+  // --- IT Support Engineer (roster 2.4 · id its) — scaffolded row ---
   {
     id: "res-its-css-nc",
     title: "Computer Systems Servicing NC II — self-paced",
@@ -120,7 +154,7 @@ export const RESOURCES: Resource[] = [
     // "Electrical and Electronics / Computer System Servicing NC II" category
     url: "https://e-tesda.gov.ph/course/index.php?categoryid=16",
     durationHours: 12,
-    skillsAddressed: ["OS install/config", "Hardware troubleshooting"],
+    skillsAddressed: ["Infrastructure Deployment"],
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "its",

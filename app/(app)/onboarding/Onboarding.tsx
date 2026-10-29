@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { SegRubricBar } from "@/components/instrument";
-import { CAREERS, DEMO_SUGGESTION_ORDER, STRANDS } from "@/lib/fixtures/catalog";
+import { CAREERS, DEMO_SUGGESTION_ORDER, TRACKS, TRACK_LABELS } from "@/lib/fixtures/catalog";
 import { RESOURCES } from "@/lib/fixtures/resources";
 import { openSkills, stageOne } from "@/lib/engines/gaps";
 import { WEIGHTS } from "@/lib/engines/score";
@@ -13,7 +13,7 @@ import {
   INTEREST_OPTIONS,
   INTEREST_QUIZ,
   SUGGESTION_CARDS,
-  STRAND_TAGLINES,
+  TRACK_TAGLINES,
   VERIFY_BANK,
   type VMCQ,
 } from "./banks";
@@ -53,7 +53,7 @@ const STEP_OF: Record<Screen, number> = {
   goal: 4,
   reveal: 5,
 };
-const STEP_LABELS = ["Strand", "Career", "Skills", "Goal", "Score"];
+const STEP_LABELS = ["Track", "Career", "Skills", "Goal", "Score"];
 
 const LEVEL_OF: Record<ClaimV, Level> = { can: "confident", kind: "kindof", not: "notyet" };
 const CLAIM_CHIPS: { v: ClaimV; label: string }[] = [
@@ -113,7 +113,7 @@ export default function Onboarding() {
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const career = careerId ? getCareer(careerId) : null;
-  const strandCount = (s: string) => CAREERS.filter((c) => c.strandKeys.includes(s)).length;
+  const trackCount = (t: string) => CAREERS.filter((c) => c.track === t).length;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -283,20 +283,20 @@ export default function Onboarding() {
         {screen === "strand" && (
           <section className="ob-screen app-section">
             <div className="screen-head">
-              <h1>What strand are you in?</h1>
+              <h1>What track are you in?</h1>
               <p>This points you at careers realistic for your track. You&apos;re not locking anything in.</p>
             </div>
             <div className="strand-grid">
-              {STRANDS.map((s) => (
+              {TRACKS.map((t) => (
                 <button
-                  key={s}
+                  key={t}
                   type="button"
-                  className={`panel strand-card ${strand === s ? "sel" : ""}`}
-                  onClick={() => setStrand(s)}
+                  className={`panel strand-card ${strand === t ? "sel" : ""}`}
+                  onClick={() => setStrand(t)}
                 >
-                  <span className="t-name">{s}</span>
-                  <span className="t-tag">{STRAND_TAGLINES[s]}</span>
-                  <span className="t-count">{strandCount(s)} careers mapped</span>
+                  <span className="t-name">{TRACK_LABELS[t]}</span>
+                  <span className="t-tag">{TRACK_TAGLINES[t]}</span>
+                  <span className="t-count">{trackCount(t)} careers mapped</span>
                 </button>
               ))}
             </div>
@@ -309,7 +309,7 @@ export default function Onboarding() {
               </span>
             </div>
             <p className="hero-foot" style={{ marginTop: 16 }}>
-              We&apos;ll show careers for every strand too — this just sets your default view.
+              We&apos;ll show careers for every track too — this just sets your default view.
             </p>
           </section>
         )}
@@ -327,7 +327,7 @@ export default function Onboarding() {
             <div className="card-row two-col">
               <Link className="panel card" href="/career" style={{ textDecoration: "none", color: "inherit" }}>
                 <h3>Yes — I know what I want to do</h3>
-                <p className="c-line">Browse careers for your strand, with entry paths shown.</p>
+                <p className="c-line">Browse careers for your track, with entry routes shown.</p>
               </Link>
               <button className="panel card" type="button" onClick={() => { setQi(0); go("quiz"); }}>
                 <h3>No — help me figure it out</h3>
@@ -414,7 +414,7 @@ export default function Onboarding() {
                     <h3>{c.name}</h3>
                     <p className="c-line">{c.roleSummary}</p>
                     <p className="c-line">
-                      <b>After SHS:</b> {copy.afterShs}
+                      <b>Entry route:</b> {copy.entryLine}
                     </p>
                     <p className="c-line">
                       <b>{c.skills.length} core skills</b> to build
@@ -440,7 +440,7 @@ export default function Onboarding() {
             </div>
             <div className="app-section" style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
               <Link className="link-sub" href="/career">
-                See more careers for STEM
+                See more careers for Computer & IT
               </Link>
               <Link className="link-sub" href="/career">
                 None of these quite fit
@@ -522,7 +522,7 @@ export default function Onboarding() {
                 Continue
               </button>
               <span className="label" style={{ letterSpacing: "0.05em" }}>
-                {Object.keys(sr).length < career.skills.length ? "Answer all 8 to continue" : ""}
+                {Object.keys(sr).length < career.skills.length ? `Answer all ${career.skills.length} to continue` : ""}
               </span>
             </div>
           </section>

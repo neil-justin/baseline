@@ -8,6 +8,7 @@ const NAV = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/career", label: "Career" },
   { href: "/pathway", label: "Pathway" },
+  { href: "/prep", label: "Prep" },
   { href: "/progress", label: "Progress" },
   { href: "/profile", label: "Profile", ownRow: true },
 ];

@@ -17,6 +17,11 @@ export default defineConfig({
   testDir: "./e2e",
   timeout: 60_000,
   retries: 1,
+  // ONE worker — every spec walks the SAME Supabase-backed demo store (canon
+  // Neil + resume runs), so parallel spec files race each other's walked state
+  // and flake regardless of retries. Serial = deterministic ordering, demo-arc
+  // first-walk intact, resume-diagnostic's own reset baseline safe.
+  workers: 1,
   use: {
     // the demo's laptop width; the projector (1920) and phone (390) checks run
     // in the dry-run sweep (plan Task 17)

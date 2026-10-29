@@ -24,7 +24,7 @@ test("record demo arc", async ({ page }) => {
   await page.waitForTimeout(1500);
   await page.goto("/onboarding");
   await page.waitForTimeout(1000);
-  await page.click('button:has-text("STEM")');
+  await page.click('button:has-text("Computer & IT")');
   await page.click('button:has-text("Continue")');
   await page.waitForTimeout(600);
   await page.click('button:has-text("No — help me figure it out")');
@@ -36,13 +36,13 @@ test("record demo arc", async ({ page }) => {
     await page.waitForTimeout(400);
   }
   await page.waitForTimeout(2600);
-  await page.click('button:has-text("Choose Software Developer")');
+  await page.click('button:has-text("Choose Associate Software Developer")');
   await page.waitForTimeout(500);
-  await page.click('button:has-text("Continue with Software Developer")');
+  await page.click('button:has-text("Continue with Associate Software Developer")');
   await page.waitForTimeout(600);
   for (const row of await page.locator(".skill-row").all()) {
     const name = (await row.textContent()) || "";
-    const chip = /Programming logic|Git|Debugging|SQL|Agile teamwork|Technical documentation/.test(name) ? "I can do this" : "Not yet";
+    const chip = /Applications Development|Applications Support|Agile|Data Design|Business Needs|Collaboration/.test(name) ? "I can do this" : "Not yet";
     await row.locator(`button:has-text("${chip}")`).click();
   }
   await page.click('button:has-text("Continue")');
@@ -55,7 +55,7 @@ test("record demo arc", async ({ page }) => {
   await page.waitForTimeout(800);
   await page.click('button:has-text("Start the check")');
   await page.waitForTimeout(800);
-  const pass = ["SQL", "Git"];
+  const pass = ["SQL", "Business Needs"];
   for (let i = 0; i < 5; i++) {
     await page.waitForSelector(".q-opts .opt", { timeout: 10000 });
     const about = (await page.evaluate(() => Array.from(document.querySelectorAll(".q-skill-tag")).map((t) => t.textContent).join(" "))) || "";
@@ -81,9 +81,9 @@ test("record demo arc", async ({ page }) => {
   await page.waitForTimeout(600);
   await page.click(".quiet-toggle.disc-go");
   await page.waitForTimeout(800);
-  await page.click('.index-row:has-text("Data Analyst")');
-  await page.waitForSelector('button:has-text("Switch to Data Analyst")', { timeout: 12000 });
-  await page.click(':is(a, button):has-text("Switch to Data Analyst")');
+  await page.click('.index-row:has-text("Software QA Analyst")');
+  await page.waitForSelector('button:has-text("Switch to Software QA Analyst")', { timeout: 12000 });
+  await page.click(':is(a, button):has-text("Switch to Software QA Analyst")');
   await page.waitForTimeout(2400);
   await page.evaluate(() => {
     const sec = document.querySelector("#sw-reset");
@@ -93,7 +93,7 @@ test("record demo arc", async ({ page }) => {
         const btns = Array.from(child.querySelectorAll(":scope > button"));
         if (btns.length === 3) {
           const label = child.textContent || "";
-          const want = /Spreadsheets|Data cleaning|Basic statistics/i.test(label) ? "Can do" : "Not yet";
+          const want = /Test Planning|Defect management|Applications Support/i.test(label) ? "Can do" : "Not yet";
           for (const b of btns) if (b.textContent.trim() === want) b.click();
         }
         walk(child);

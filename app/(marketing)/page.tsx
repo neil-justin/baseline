@@ -1,4 +1,4 @@
-import { CATALOG_TOTAL, getCareer } from "@/lib/fixtures/catalog";
+import { CATALOG_TOTAL, getCareer, TRACK_LABELS } from "@/lib/fixtures/catalog";
 import type { Career } from "@/lib/types";
 import { NEIL_SEED } from "@/lib/fixtures/neil";
 import { computeScore, WEIGHTS, type Score } from "@/lib/engines/score";
@@ -11,12 +11,12 @@ import "./landing.css";
 export const metadata = {
   title: "Career Readiness — know exactly where you stand",
   description:
-    "An evidence-cited readiness score for 32 Philippine careers — computed from what you can actually do, with a ranked path for every gap.",
+    "An evidence-cited readiness score for 36 Philippine careers — computed from what you can actually do, with a ranked path for every gap.",
 };
 
-/** Strand label rendered the way the index table says it: STEM/ABM → STEM · ABM. */
+/** Track label rendered the way the index table says it. */
 function strandLabel(c: Career): string {
-  return c.strands.map((s: string) => s.replace(/\//g, " · ")).join(" · ");
+  return TRACK_LABELS[c.track];
 }
 
 /** Organic sample-score derivation: the canon beat-5 seed, scored by the engine. */
@@ -31,8 +31,8 @@ function sampleScore(): Score {
   });
 }
 
-/** Hero mini-index rows: five strand-spread careers, fit = demonstrated bars in each career's map. */
-const GAUGE_IDS = ["da", "swd", "nur", "elec", "cook"] as const;
+/** Hero mini-index rows: five track-spread careers, fit = demonstrated bars in each career's map. */
+const GAUGE_IDS = ["swd", "qa", "its", "book", "adminassoc"] as const;
 
 function gaugeRows(): GaugeRow[] {
   const demonstrated = Object.entries(NEIL_SEED.bars)
@@ -50,18 +50,18 @@ function gaugeRows(): GaugeRow[] {
 
 /** The 12-row index preview, in the locked interleaved order (landing-auth.md block 4). */
 const PREVIEW_IDS = [
-  "da",
+  "qa",
   "swd",
-  "elec",
-  "nur",
-  "cook",
-  "tea",
-  "acc",
-  "jou",
-  "cvl",
-  "etec",
-  "fin",
-  "gra",
+  "da",
+  "its",
+  "hra",
+  "mkt",
+  "book",
+  "fas",
+  "adminassoc",
+  "encode",
+  "teller",
+  "csr",
 ] as const;
 
 const RUBRIC_LABELS = [
@@ -193,7 +193,7 @@ export default function LandingPage() {
                 <span className="skills">
                   <span className="num">{c.skills.length}</span>
                 </span>
-                <span className="entry">{c.entryPath}</span>
+                <span className="entry">{c.entryRoute}</span>
               </div>
             );
           })}
@@ -201,7 +201,7 @@ export default function LandingPage() {
 
         <div className="index-foot" data-io data-stagger="90" data-cap="200">
           <p className="rv">
-            The full index has <b className="num">{CATALOG_TOTAL}</b> careers across every SHS strand.
+            The full index has <b className="num">{CATALOG_TOTAL}</b> careers across every PH corporate track.
           </p>
           <a className="btn btn-ghost rv" href="/signup">
             Start check <ReturnArrow />

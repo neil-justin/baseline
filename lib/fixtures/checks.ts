@@ -2,57 +2,64 @@ import type { CheckQuestion } from "@/lib/types";
 
 /**
  * Comprehension checks — 5 Qs, pass ≥ 4/5 (LOCKED, M9). Hand-authored
- * fixtures (13a). The demo's money-shot check is the Power BI resource;
- * the Python check gates the onboarding goal's resource.
+ * fixtures (13a). Catalog round 9: the demo's money-shot check is the
+ * software-testing resource (roster 2.2 walk); the Python check gates the
+ * onboarding goal's resource on the Associate Software Developer map.
  */
-export const DASHBOARDS_CHECK: CheckQuestion[] = [
+
+/** res-qa-testing — the money-shot check (canon beats 6–7). Every answer index 0. */
+export const TESTING_CHECK: CheckQuestion[] = [
   {
-    stem: "In Power BI, what is a dashboard mainly for?",
+    stem: "What is the main purpose of software testing?",
     options: [
-      "Showing key numbers and charts on one readable screen",
-      "Storing raw spreadsheet files",
-      "Writing the code that runs the reports",
-      "Deleting old data automatically",
+      "Finding out whether the software does what it should — before users hit the bugs",
+      "Writing more features while someone else checks them",
+      "Logging into the production database to spot-check numbers",
+      "Replacing the developers' definition of done",
     ],
     answer: 0,
   },
   {
-    stem: "Which Power BI element is a live visual you place on a page?",
-    options: ["A tile", "A cell", "A macro", "A formula bar"],
-    answer: 0,
-  },
-  {
-    stem: "Where does Power BI Desktop get its data for a model?",
+    stem: "A test case is best written from",
     options: [
-      "From sources you connect (files, databases) into its data model",
-      "Only from the internet",
-      "From your screen recorder",
-      "It types the numbers itself",
+      "A requirement or user story — an expected result you can compare against",
+      "The final demo recording",
+      "Whatever the developer pastes into the ticket",
+      "Your memory of a similar app",
     ],
     answer: 0,
   },
   {
-    stem: "What does refreshing a dashboard do?",
+    stem: "You hit a bug that repeats every time. The defect report should include",
     options: [
-      "Pulls the latest data into the visuals",
-      "Deletes all visuals",
-      "Changes the fonts",
-      "Publishes a new report file",
+      "Steps to reproduce, expected vs actual behavior, and the environment",
+      "Just the page screenshot",
+      "A personal note in your own spreadsheet",
+      "Nothing — tell the tester next door verbally",
     ],
     answer: 0,
   },
   {
-    stem: "A good dashboard tile is",
+    stem: "What is regression testing?",
     options: [
-      "One clear number or chart a manager can read at a glance",
-      "Every dataset you own, dumped on one page",
-      "A paragraph of small print",
-      "A password-protected folder",
+      "Re-running existing tests to confirm a fix didn't break something that worked",
+      "Testing only the newest feature",
+      "Skipping tests when time is short",
+      "Deleting old test data after release",
+    ],
+    answer: 0,
+  },
+  {
+    stem: "Which practice keeps the account's quality standard consistent across testers?",
+    options: [
+      "Calibration — comparing scores on the same cases against a shared rubric",
+      "Each tester scores by personal preference",
+      "Only testing on Fridays",
+      "Assigning the same bug to a different team each sprint",
     ],
     answer: 0,
   },
 ];
-
 export const PYTHON_CHECK: CheckQuestion[] = [
   {
     stem: "In Python, what does `for i in range(3):` do?",
@@ -88,7 +95,7 @@ export const PYTHON_CHECK: CheckQuestion[] = [
 
 /** Resource id → its comprehension check. */
 export const CHECKS: Record<string, CheckQuestion[]> = {
-  "res-powerbi-dashboards": DASHBOARDS_CHECK,
+  "res-qa-testing": TESTING_CHECK,
   "res-python-basics": PYTHON_CHECK,
 };
 

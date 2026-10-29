@@ -58,27 +58,47 @@ export interface StudentState {
   events: DemoEvent[];
 }
 
+/**
+ * SkillSpec — one row of a source artifact's skill table, transcribed verbatim
+ * (catalog-roster-dole-ble.md round). `sourceTag` names the framework artifact
+ * the row came from; when a source row bundles several skills (the PSF
+ * "Enabling Skills" lines), the row's name keeps the bundle verbatim.
+ */
 export interface SkillSpec {
   name: string;
   tier: "core" | "secondary";
+  /** framework artifact the row is transcribed from (PSOC = unit-group text) */
+  sourceTag: "PSF" | "TESDA" | "O*NET" | "ESCO" | "NACE" | "PSOC";
   what: string; // one-line student-facing "what it means"
 }
 
+/** The four college tracks (browse keys). */
+export type CareerTrack = "it" | "business" | "accounting" | "office";
+
+/**
+ * College-scope Career (round 9 type reshape). One PSOC-anchored entry-level
+ * role; `demandBlock` carries the DOLE-BLE JobsFit citation; extensions E1–E4
+ * carry `institutional-judgment` (never DOLE-BLE demand).
+ */
 export interface Career {
   id: string;
   name: string;
-  /** raw strand description from ticket 04 (e.g. "TVL-HE (Tourism)") */
-  strands: string[];
-  /** normalized browse keys ⊂ STRANDS — "(any)" careers are open to all */
-  strandKeys: string[];
-  /** RIASEC code — DEV-FACING ONLY, never rendered (conventions) */
-  raCode: string;
+  /** PSOC 2012 unit-group code (as updated 2022) */
+  psocCode: string;
+  psocTitle: string;
+  track: CareerTrack;
+  /** CHED canon majors (ched-major-lists.md round) */
+  degreeMap: string[];
+  /** one line — the common way fresh graduates enter this role */
+  entryRoute: string;
+  demandBlock: {
+    status: "in-demand" | "hard-to-fill" | "institutional-judgment";
+    /** JobsFit LMI 2013–2020 entry number / label, or the extension label */
+    source: string;
+    note: string;
+  };
   roleSummary: string;
-  entryPath: string;
   skills: SkillSpec[];
-  /** degree route leads stage ③ with subject/portfolio; TVL routes with NC */
-  route: "degree" | "tvl";
-  watch?: boolean; // LLM-adjacency — dev-facing only
 }
 
 export type ResourceType = "course" | "cert" | "NC" | "doc";

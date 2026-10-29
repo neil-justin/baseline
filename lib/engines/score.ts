@@ -1,4 +1,14 @@
-/** Core rubric engine — LOCKED: SP 40 / ES 25 / TP 20 / CC 15 (`_fixture-math.md`). */
+/**
+ * Core rubric engine — LOCKED: SP 40 / ES 25 / TP 20 / CC 15 (`_fixture-math.md`).
+ *
+ * AIR_resume integration point (2026-10-28 dispatch, round 6a): the resume
+ * diagnostic computes its channel component deterministically in
+ * `lib/engines/air.ts` (parse-pass gate × format-conformance × keyword
+ * coverage; persisted best-run semantics). It is deliberately NOT wired in
+ * here — the 5-channel score rework (ES 30 / SP 25 / AIR 20 / TP 15 / CC 10)
+ * is a separate round; at rework time, fold the student's best AIR_resume
+ * into the AIR channel. Until then this file keeps the locked SHS weights.
+ */
 
 export const WEIGHTS = { sp: 40, es: 25, tp: 20, cc: 15 } as const;
 

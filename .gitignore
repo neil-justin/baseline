@@ -18,6 +18,7 @@ out/
 .next/
 .vite/
 *.tsbuildinfo
+data/
 
 # --- Environment & secrets ---
 .env

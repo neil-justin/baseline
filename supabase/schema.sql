@@ -60,3 +60,15 @@ create index if not exists credentials_student_idx on public.credentials (studen
 alter table public.profiles      enable row level security;
 alter table public.student_state enable row level security;
 alter table public.credentials   enable row level security;
+
+-- ── Resume diagnostic runs (round 6a — reconstructed from lib/db/resume-run-store.ts
+--    contract: the round's own report never landed) ───────────────────────────
+-- Latest run per student + history counters (unlimited re-runs, best AIR counts).
+create table if not exists public.resume_runs (
+  student_id text primary key,
+  run        jsonb not null,
+  best_air   numeric not null default 0,
+  runs_count integer not null default 0,
+  updated_at timestamptz not null default now()
+);
+alter table public.resume_runs enable row level security;

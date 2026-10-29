@@ -19,7 +19,7 @@ import type {
 
 /**
  * Career surface interactivity — port of prototype/career.html's <script>:
- * 3 tabs (current card / explore by strand / skills-match), the cost-first
+ * 3 tabs (current card / explore by track / skills-match), the cost-first
  * switch disclosure, and the beat-6 chain: confirm → POST /api/switch →
  * honest dip → quick re-assessment → POST /api/claim → recovered baseline.
  *
@@ -33,7 +33,7 @@ type Tab = "current" | "explore" | "match";
 type Flow = "tabs" | "confirm" | "reset" | "recovered";
 type Rating = "yes" | "some" | "no";
 
-const TARGET_NAME = "Data Analyst";
+const TARGET_NAME = "Software QA Analyst";
 const TAB_ORDER: Tab[] = ["current", "explore", "match"];
 const LEVEL_BY_RATING: Record<Rating, "confident" | "kindof" | "notyet"> = {
   yes: "confident",
@@ -41,11 +41,17 @@ const LEVEL_BY_RATING: Record<Rating, "confident" | "kindof" | "notyet"> = {
   no: "notyet",
 };
 const DEFAULT_RATINGS: Record<string, Rating> = {
-  Spreadsheets: "yes",
-  "Data cleaning": "yes",
-  "Basic statistics": "yes",
+  "Test Planning": "yes",
+  "Defect management": "yes",
+  "Applications Support and Enhancement": "yes",
 };
-const STRAND_CHIPS = ["All", "STEM", "ABM", "HUMSS", "GAS", "TVL"] as const;
+const TRACK_CHIPS = [
+  "All",
+  "Computer & IT",
+  "Business & Management",
+  "Accounting & Finance",
+  "Office & Administration",
+] as const;
 
 interface DipView {
   score: Score;
@@ -123,7 +129,7 @@ export default function CareerClient({
   } | null>(null);
   const [reset, setReset] = useState<ResetData | null>(null);
   const [recovered, setRecovered] = useState<RecoveredData | null>(null);
-  const [daGoalPosted, setDaGoalPosted] = useState(false);
+  const [qaGoalPosted, setQaGoalPosted] = useState(false);
 
   /* CLS guard — the three tab panels differ in height, which pushes the page
      end (and scroll position) on every switch. Reserve the tallest panel's
@@ -152,7 +158,7 @@ export default function CareerClient({
     wrap.style.minHeight = max > 0 ? `${max}px` : "";
   };
 
-  /* re-run on every render: covers tab switches, strand filters, and flow returns */
+  /* re-run on every render: covers tab switches, track filters, and flow returns */
   useIsoLayoutEffect(equalizePanels);
 
   useEffect(() => {
@@ -170,7 +176,7 @@ export default function CareerClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function postDaGoal() {
+  async function postQaGoal() {
     setBusy(true);
     try {
       const res = await fetch("/api/goal", {
@@ -178,14 +184,14 @@ export default function CareerClient({
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           student: "neil",
-          title: "Build my first dashboard",
+          title: "Build my first test plan",
           type: "training",
-          resourceId: "res-powerbi-dashboards",
-          skill: "Dashboards (Power BI)",
+          resourceId: "res-qa-testing",
+          skill: "Software Testing",
         }),
       });
       if (!res.ok) throw new Error("goal failed");
-      setDaGoalPosted(true);
+      setQaGoalPosted(true);
       router.refresh();
     } catch {
       /* honest failure: button stays enabled; the demo retries */
@@ -221,7 +227,7 @@ export default function CareerClient({
     selectTab(TAB_ORDER[n]);
   };
 
-  // ---------- strand filter ----------
+  // ---------- track filter ----------
   const rows: ExploreRowData[] =
     strand === "All" ? explore : explore.filter((r) => r.strand.includes(strand));
   const zeroResult = rows.length === 0;
@@ -258,7 +264,7 @@ export default function CareerClient({
       const res = await fetch("/api/switch", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ to: "da", student: "neil" }),
+        body: JSON.stringify({ to: "qa", student: "neil" }),
       });
       if (!res.ok) throw new Error("switch failed");
       router.refresh();
@@ -405,7 +411,7 @@ export default function CareerClient({
         {/* tab bar */}
         <div className="choice tabs" role="tablist" aria-label="Career sections">
           {tabBtn("current", 0, "Current career")}
-          {tabBtn("explore", 1, "Explore by strand")}
+          {tabBtn("explore", 1, "Explore by track")}
           {tabBtn("match", 2, "Skills-match")}
         </div>
 
@@ -489,19 +495,19 @@ export default function CareerClient({
                 <div className="cc-id">
                   <span className="label">CURRENT CAREER</span>
                   <h2 className="cc-name">No career picked yet</h2>
-                  <p className="cc-what">You haven&apos;t picked yet — explore by strand.</p>
+                  <p className="cc-what">You haven&apos;t picked yet — explore by track.</p>
                 </div>
               </div>
               <div className="cc-ctas">
                 <button className="btn btn-primary" type="button" onClick={() => selectTab("explore")}>
-                  Explore by strand
+                  Explore by track
                 </button>
               </div>
             </div>
           )}
         </div>
 
-        {/* ---------- tab 2 · explore by strand ---------- */}
+        {/* ---------- tab 2 · explore by track ---------- */}
         <div id="tab-explore" role="tabpanel" aria-labelledby="tb-explore" hidden={tab !== "explore"}>
           {banner && (
             <div className="sw-banner">
@@ -511,12 +517,12 @@ export default function CareerClient({
           )}
 
           <div className="explore-head">
-            <h2>Explore careers by strand</h2>
-            <p>Every strand leads somewhere real. Each listing shows what it opens up and what it takes to get in.</p>
+            <h2>Explore careers by track</h2>
+            <p>Every track leads somewhere real. Each listing shows what it opens up and what it takes to get in.</p>
           </div>
 
-          <div className="choice choice-sm strand-chips" role="group" aria-label="Filter by strand" id="strand-chips">
-            {STRAND_CHIPS.map((s) => (
+          <div className="choice choice-sm strand-chips" role="group" aria-label="Filter by track" id="strand-chips">
+            {TRACK_CHIPS.map((s) => (
               <button
                 key={s}
                 type="button"
@@ -571,7 +577,7 @@ export default function CareerClient({
           {/* zero-result default state for the strand filter */}
           {zeroResult && (
             <div className="panel explore-empty">
-              No careers indexed for this strand yet — try{" "}
+              No careers indexed for this track yet — try{" "}
               <button className="g-link" type="button" onClick={() => setStrand("All")}>
                 All
               </button>{" "}
@@ -869,10 +875,10 @@ export default function CareerClient({
               <div className="panel nextcard" style={{ maxWidth: 640, marginTop: 16 }}>
                 <h3 style={{ fontSize: 15.5, fontWeight: 640 }}>Set your next goal</h3>
                 <p className="n-target num" style={{ marginTop: 8 }}>
-                  free · ~4 hours · Microsoft Learn — Power BI
+                  free · ~4 hours · Test Automation University
                 </p>
                 <p className="n-why" style={{ marginTop: 6 }}>
-                  Closes your first open gap in Dashboards — one of the skills Data Analysts use every day.
+                  Closes your first open gap in Software Testing — one of the skills QA analysts use every day.
                 </p>
                 <p className="n-why" style={{ marginTop: 10, color: "var(--ink-3)" }}>
                   When you finish the resource and pass its 5-question check, this goal marks itself done —
@@ -882,10 +888,10 @@ export default function CareerClient({
                   <button
                     className="btn btn-primary"
                     type="button"
-                    disabled={daGoalPosted || busy}
-                    onClick={postDaGoal}
+                    disabled={qaGoalPosted || busy}
+                    onClick={postQaGoal}
                   >
-                    {daGoalPosted ? "Goal set — it's on your Progress page." : "Set this goal"}
+                    {qaGoalPosted ? "Goal set — it's on your Progress page." : "Set this goal"}
                   </button>
                 </div>
               </div>

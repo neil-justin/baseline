@@ -173,9 +173,10 @@ export default async function ProfilePage() {
   ].join(" ");
 
   /* Plan §3 — pathway SUMMARY. Stage counts come from v.stageOne (the ranked
-     queue snapshot); the next milestone from the locked stage-③ rule (TVL
-     routes → NC assessment, degree routes → portfolio). Never a ranked item. */
-  const milestoneText = career.route === "tvl" ? "TESDA NC II assessment" : "portfolio milestones";
+     queue snapshot); the next milestone from the locked stage-③ rule (college
+     routes are degree routes → portfolio milestones; round 9). Never a ranked
+     item. */
+  const milestoneText = "portfolio milestones";
   const routeLine =
     v.stageOne.done === 0
       ? `Route · first 30 days: 0 of 3 done · your next step is already picked in your pathway`
@@ -389,7 +390,7 @@ export default async function ProfilePage() {
               You picked <b>{career.name}</b> after exploring the index: the work fits what you enjoy and where
               your strand points.
             </p>
-            <p className="mono-line num">Entry path · {career.entryPath}</p>
+            <p className="mono-line num">Entry route · {career.entryRoute}</p>
           </Reveal>
 
           <Reveal className="doc-sec">

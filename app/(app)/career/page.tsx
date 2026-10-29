@@ -26,11 +26,24 @@ export const dynamic = "force-dynamic";
  * (canon: `_fixture-math.md`); nothing here is painted.
  */
 
-/** ticket-04 hero-table order (m3-exploration.md B.4) */
-const HERO_ORDER = ["da", "swd", "nur", "cvl", "tea", "jou", "acc", "fin", "elec", "etec", "cook", "gra"];
+/** explore index order (round 9: 12 of 36, each track represented) */
+const HERO_ORDER = [
+  "qa",
+  "swd",
+  "da",
+  "its",
+  "hra",
+  "mkt",
+  "book",
+  "audit",
+  "adminassoc",
+  "encode",
+  "teller",
+  "csr",
+];
 
-/** the switch demo runs through the Data Analyst row (beat 6) */
-const SWITCH_TARGET = getCareer("da")!;
+/** the switch demo runs through the Software QA Analyst row (beat 6) */
+const SWITCH_TARGET = getCareer("qa")!;
 
 function shortSrc(src: BarSource): string {
   return src;
@@ -75,7 +88,7 @@ export default async function CareerPage() {
       name: c.name,
       strand: strandDisplay(c),
       skills: c.skills.length,
-      entry: c.entryPath,
+      entry: c.entryRoute,
       live: c.id === SWITCH_TARGET.id,
     }));
 
@@ -107,7 +120,7 @@ export default async function CareerPage() {
         current: c.id === career?.id,
         confirmed,
         selfReported,
-        entry: c.entryPath,
+        entry: c.entryRoute,
       };
     });
   }

@@ -76,11 +76,9 @@ function rationaleFor(
 /** Stage-③ peek — degree routes lead with the entry route's first moves. */
 function stageThreePeek(career: Career): string | null {
   if (career.id === "da") {
-    return "Starts with: 3-project data portfolio · then the Google Data Analytics certificate.";
+    return "Starts with: a small analysis portfolio · then the Google Data Analytics certificate.";
   }
-  return career.route === "tvl"
-    ? "Starts with: the TESDA NC assessment · then your entry portfolio."
-    : "Starts with: an entry portfolio · then your entry credential.";
+  return "Starts with: an entry portfolio · then your entry credential.";
 }
 
 function buildSteps(career: Career, bars: Record<string, { source: BarSource }>, stageOneDone: number, stageOneQueue: string[] | undefined): StepsTab {

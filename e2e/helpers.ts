@@ -32,16 +32,44 @@ export async function resetStore() {
     for (const [table, col] of [
       ["student_state", "student_id"],
       ["credentials", "id"],
+      ["resume_runs", "student_id"],
     ] as const) {
-      const { error } = await admin
-        .from(table)
-        .delete()
-        .neq(col, table === "credentials" ? "00000000-0000-0000-0000-000000000000" : "__none__");
-      if (error) throw new Error(`resetStore: ${table} delete failed: ${error.message}`);
+      const { error } = await admin.from(table).delete().neq(col, table === "credentials" ? "00000000-0000-0000-0000-000000000000" : "__none__");
+      // resume_runs is applied by the USER (resume-round SQL); before that
+      // exists the delete is a no-op, not a failure — keep runs self-consistent
+      const tolerant = table === "resume_runs";
+      if (error && !(tolerant && /does not exist|not find the table|schema cache/i.test(error.message))) {
+        throw new Error(`resetStore: ${table} delete failed: ${error.message}`);
+      }
     }
     return;
   }
   fs.rmSync(path.join(process.cwd(), "data", "state.json"), { force: true });
+  fs.rmSync(path.join(process.cwd(), "data", "resume-runs.json"), { force: true });
+}
+
+/**
+ * Resume-runs-only cleanup for resume-diagnostic.spec.ts — NEVER touches
+ * student_state/credentials: other specs (demo-arc) walk the shared canon
+ * student concurrently (separate playwright workers), and a full resetStore
+ * from this spec would wipe their live walked state mid-beat.
+ */
+export async function resetResumeRuns() {
+  // offline fallback first — always cleared, both cleanups are idempotent
+  fs.rmSync(path.join(process.cwd(), "data", "resume-runs.json"), { force: true });
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const service = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (url && service) {
+    const { createClient } = await import("@supabase/supabase-js");
+    const admin = createClient(url, service, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+    const { error } = await admin.from("resume_runs").delete().neq("student_id", "__none__");
+    // table applied by the USER (resume-round SQL) — pre-SQL this is a no-op
+    if (error && !/does not exist|not find the table|schema cache/i.test(error.message)) {
+      throw new Error(`resetResumeRuns: resume_runs delete failed: ${error.message}`);
+    }
+  }
 }
 
 /** Kill whatever holds :3000 and give the OS a second to release it. */
