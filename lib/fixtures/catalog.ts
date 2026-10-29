@@ -15,9 +15,15 @@ import type { Career, CareerTrack } from "@/lib/types";
  *    E3 Records Clerk, E4 SOC Analyst) carry demandBlock.status
  *    "institutional-judgment" = "not DOLE-BLE-justified — institutional
  *    judgment" (user ruling R4, 2026-10-29). NEVER render them as demand-named.
- *  - E1/E2/E3 skill maps are PARTIAL pending source extraction flagged in the
- *    roster doc (verify list §3/§9-3, §10); E2/E3 carry no rows yet rather
- *    than invented ones.
+ *  - E1/E2/E3 skill maps are transcribed VERBATIM from
+ *    `.scratch/career-path-readiness-research/pending-role-maps.md`
+ *    (2026-10-29 extraction: E1 = full PSF-AAI Associate Data Analyst map,
+ *    E2 = O*NET 43-6011.00, E3 = PSOC 4415 unit tasks + O*NET 43-4171.00
+ *    corroboration; verify list §10 flagged extraction now read).
+ *  - TIERS PENDING USER RULING: every core/secondary assignment on the
+ *    E1/E2/E3 rows is the research's DERIVED PROPOSAL (tiering-basis notes
+ *    §1.4/§2.3/§3.3 of the same doc), not a user ruling — revisit before
+ *    final defense citation.
  *  - 5.4 Administrative Officer was DROPPED (entry-level ruling R3: 2-year
  *    career target, not a direct-entry offer).
  *  - Demand citations median the DOLE-BLE JobsFit LMI Report 2013–2020 lists
@@ -261,15 +267,23 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "institutional-judgment",
       source: "not DOLE-BLE-justified — institutional judgment",
-      note: "E1 extension admitted per ruling R4 (2026-10-29). Un-named on the 2013–2020 lists; likely in NJLMF 2025–2026 (unreachable); PSF-AAI is the government artifact for the family. Skill map PARTIAL — the roster doc extracted only the headline rows of the PSF-AAI 'Associate Data Analyst' map (Data Analytics L2, Data Visualization and Storytelling L3, Data Engineering L2, ETL key tasks, ESC Basic); full FSC extraction pending before final citation.",
+      note: "E1 extension admitted per ruling R4 (2026-10-29). Un-named on the 2013–2020 lists; likely in NJLMF 2025–2026 (unreachable); PSF-AAI is the government artifact for the family. Skill map: FULL — all 11 FSC rows + 4 ESC rows extracted from the official PSF-AAI document (2026-10-29); tiers are derived proposals pending user ruling.",
     },
     roleSummary: "Turns data into visual answers people can act on — analysis, visualization, storytelling under a senior analyst.",
     skills: [
-      { name: "Data Analytics", tier: "core", sourceTag: "PSF", what: "Analyze datasets against the business question (PSF-AAI level L2)." },
-      { name: "Data Visualization and Storytelling", tier: "core", sourceTag: "PSF", what: "Turn finished analysis into charts and a story people can act on (PSF-AAI level L3)." },
-      { name: "Data Engineering", tier: "secondary", sourceTag: "PSF", what: "Handle the data flows feeding the analysis (PSF-AAI level L2)." },
-      { name: "ETL (extract-transform-load workflows)", tier: "core", sourceTag: "PSF", what: "Key tasks: extract, transform, load data safely between systems." },
-      { name: "Enabling Skills & Competencies (ESC, Basic)", tier: "secondary", sourceTag: "PSF", what: "The PSF-AAI cross-cutting enabling layer at associate level." },
+      { name: "Data Analytics", tier: "core", sourceTag: "PSF", what: "Get the data talking: surface the real trend or pattern that answers the business question, using stats and computing tools. (PSF-AAI FSC Level 2)" },
+      { name: "Data Visualization and Storytelling", tier: "core", sourceTag: "PSF", what: "Build the dashboard/visual that makes the finding land, and tell the story behind the numbers. (PSF-AAI FSC Level 3)" },
+      { name: "Business Needs Analysis", tier: "core", sourceTag: "PSF", what: "Nail down what stakeholders actually need before touching data. (PSF-AAI FSC Level 2)" },
+      { name: "ETL (extract-transform-load workflows)", tier: "core", sourceTag: "PSF", what: "Assemble and clean the pipeline piece by piece — gather data, validate it, and keep records trustworthy. (PSF-AAI CWF key-task tier — 'Prepare and analyze data', not a named FSC)" },
+      { name: "Data Engineering", tier: "secondary", sourceTag: "PSF", what: "Handle the 'where data comes from and lives' layer feeding your analysis. (PSF-AAI FSC Level 2)" },
+      { name: "Enabling Skills & Competencies (ESC) — Collaboration, Communication, Digital Fluency, Learning Agility", tier: "secondary", sourceTag: "PSF", what: "Team skills at their entry setting: share info, cooperate, use the digital stack, keep learning. (PSF-AAI ESC, all Basic — the four the role page lists)" },
+      { name: "Applications Development", tier: "secondary", sourceTag: "PSF", what: "Light programming muscle around analytics work (scripts, quick tools). (PSF-AAI FSC Level 3)" },
+      { name: "Artificial Intelligence Ethics and Governance", tier: "secondary", sourceTag: "PSF", what: "Keep AI/data work compliant with governance rules (incl. RA 10173 Data Privacy Act, per the role's performance-expectations clause). (PSF-AAI FSC Level 2)" },
+      { name: "Data Ethics", tier: "secondary", sourceTag: "PSF", what: "Treat data — especially personal data — legally and ethically throughout its lifecycle. (PSF-AAI FSC Level 3)" },
+      { name: "Cyber and Data Breach Incident Management", tier: "secondary", sourceTag: "PSF", what: "Recognize, report and escalate data incidents under the house escalation protocol. (PSF-AAI FSC Level 2)" },
+      { name: "Software Testing", tier: "secondary", sourceTag: "PSF", what: "Sanity-test the tools/reports you produce before they ship. (PSF-AAI FSC Level 2)" },
+      { name: "Configuration Tracking", tier: "secondary", sourceTag: "PSF", what: "Keep change logs tidy so analysis files/scripts are reproducible. (PSF-AAI FSC Level 1)" },
+      { name: "Stakeholder Management", tier: "secondary", sourceTag: "PSF", what: "Know who you report to, who consumes your reports, and keep both in the loop. (PSF-AAI FSC Level 2)" },
     ],
   },
   {
@@ -826,10 +840,28 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "institutional-judgment",
       source: "not DOLE-BLE-justified — institutional judgment",
-      note: "E2 extension admitted per ruling R4 (2026-10-29). Secretarial titles are absent from the 2013–2020 lists; PSA OWS organizes on the family. SKILL TABLE PENDING — O*NET 43-6011 Executive Secretaries was not fetched in the research session; no rows authored rather than invented (roster verify list §10).",
+      note: "E2 extension admitted per ruling R4 (2026-10-29). Secretarial titles are absent from the 2013–2020 lists; PSA OWS organizes on the family. Skill map transcribed from O*NET 43-6011.00 Executive Secretaries and Executive Administrative Assistants (updated 2026, fetched 2026-10-29; pending-role-maps §2) — O*NET reads the family as a mid tier (Job Zone Three), so entry framing stays junior-feeder.",
     },
     roleSummary: "Runs the executive's office — correspondence, schedules, records, coordination — at the executive-support standard.",
-    skills: [],
+    skills: [
+      { name: "Executive schedule & calendar management", tier: "core", sourceTag: "O*NET", what: "Run the calendar of the people you support — no double-booking, no missed window." },
+      { name: "Correspondence & document production", tier: "core", sourceTag: "O*NET", what: "Produce the office's written output — letters, memos, spreadsheets, decks — to standard." },
+      { name: "Meeting administration & minutes", tier: "core", sourceTag: "O*NET", what: "Prepare agendas, take and finish minutes, and make meetings actually happen on time." },
+      { name: "Information gatekeeping: calls & visitors", tier: "core", sourceTag: "O*NET", what: "Answer for the office — route the call, receive the visitor, decide who gets the meeting." },
+      { name: "Research & briefing support for executives", tier: "core", sourceTag: "O*NET", what: "Dig up information and shape it into briefing papers decision-makers can use." },
+      { name: "Incoming-material triage & distribution", tier: "core", sourceTag: "O*NET", what: "Read what comes in, judge what matters, and get it to the right hands." },
+      { name: "Office services coordination", tier: "core", sourceTag: "O*NET", what: "Be the hub that holds office services — records, budget prep, housekeeping — together." },
+      { name: "Travel arrangements", tier: "core", sourceTag: "O*NET", what: "Book trips and itineraries for executives end to end." },
+      { name: "Records & document filing/retrieval", tier: "secondary", sourceTag: "O*NET", what: "Keep corporate files complete and retrievable (also overlaps the filing-clerk skill in E3)." },
+      { name: "General office duties & tools", tier: "secondary", sourceTag: "O*NET", what: "Handle day-to-day office upkeep: supplies, record databases, basic bookkeeping." },
+      { name: "Clerical support across departments", tier: "secondary", sourceTag: "O*NET", what: "Lend admin firepower wherever another department needs it." },
+      { name: "Payroll-information processing", tier: "secondary", sourceTag: "O*NET", what: "Push payroll data into the pay cycle correctly and on time." },
+      { name: "Administrative policy setup & interpretation", tier: "secondary", sourceTag: "O*NET", what: "Explain the office rules — and as you grow, help write them. (senior-heavy tasks)" },
+      { name: "Representing executives / meeting on their behalf", tier: "secondary", sourceTag: "O*NET", what: "Sometimes you *are* the meeting — attend for the executive and report back. (senior-heavy task)" },
+      { name: "Supervision & training of clerical staff", tier: "secondary", sourceTag: "O*NET", what: "Onboard and guide the junior clerks around you. (senior-heavy task)" },
+      { name: "Operating-practice review", tier: "secondary", sourceTag: "O*NET", what: "Look for the slow spots in workflow and propose fixes. (senior-heavy task)" },
+      { name: "Employee time-tracking", tier: "secondary", sourceTag: "O*NET", what: "Keep attendance/time records straight." },
+    ],
   },
   {
     id: "records", // extension E3
@@ -842,10 +874,22 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "institutional-judgment",
       source: "not DOLE-BLE-justified — institutional judgment",
-      note: "E3 extension admitted per ruling R4 (2026-10-29). Not named in DOLE demand lists; natural BSOA feeder; TESDA has no dedicated NC. SKILL TABLE PENDING — O*NET corroboration thin and PSOC 4415 task quotes were not extracted; no rows authored rather than invented (roster verify list §10).",
+      note: "E3 extension admitted per ruling R4 (2026-10-29). Not named in DOLE demand lists; natural BSOA feeder; TESDA has no dedicated NC. Skill map: [PSOC] 4415 unit-text lettered tasks a)–e) as primary rows (phscs PSA-2012 mirror, pending-role-maps §3) + [O*NET] 43-4171.00 Receptionists and Information Clerks (updated 2026, fetched 2026-10-29) as corroboration rows.",
     },
     roleSummary: "Maintains the filing backbone — classification, retrieval, copying — so every office can find its records.",
-    skills: [],
+    skills: [
+      { name: "Sort & classify materials to filing rules", tier: "core", sourceTag: "PSOC", what: "Put every document where the filing system says it belongs. (PSOC 4415 task a)" },
+      { name: "Filing into storage (drawers/cabinets/boxes)", tier: "core", sourceTag: "PSOC", what: "Physically (or digitally) file the records — correctly, immediately, every time. (PSOC 4415 task b)" },
+      { name: "File retrieval on request", tier: "core", sourceTag: "PSOC", what: "Find any filed item on demand without minutes of searching. (PSOC 4415 task c)" },
+      { name: "Filing log / records of materials filed & removed", tier: "core", sourceTag: "PSOC", what: "Track what went in and what went out so nothing is ever \"lost in filing\". (PSOC 4415 task d)" },
+      { name: "Reprographics: photocopy, scan, fax", tier: "core", sourceTag: "PSOC", what: "Operate the copy/scan/fax flow that feeds and mirrors the file. (PSOC 4415 task e)" },
+      { name: "Telephone, switchboard & front-desk duties", tier: "secondary", sourceTag: "O*NET", what: "Take calls, screen them, relay messages — the office's first voice. (corroboration)" },
+      { name: "Visitor greeting & routing", tier: "secondary", sourceTag: "O*NET", what: "Meet visitors, learn what they need, point them to the right door. (corroboration)" },
+      { name: "Appointment & calendar scheduling", tier: "secondary", sourceTag: "O*NET", what: "Keep the office's calendar alive and accurate. (corroboration)" },
+      { name: "Mail & document handling", tier: "secondary", sourceTag: "O*NET", what: "Move paper and messages in and out. (corroboration)" },
+      { name: "Front-office record & database upkeep", tier: "secondary", sourceTag: "O*NET", what: "Keep contact records and logs current. (corroboration)" },
+      { name: "Info & customer-service communication", tier: "secondary", sourceTag: "O*NET", what: "Answer \"who, where, what\" instantly and politely. (corroboration — O*NET essential-skills layer)" },
+    ],
   },
 ];
 
