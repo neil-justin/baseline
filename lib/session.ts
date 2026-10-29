@@ -91,6 +91,7 @@ export function newStudentState(id: string, fullName: string) {
     strand: "",
     careerId: null,
     bars: {},
+    competencies: {},
     goals: [],
     stageOneDone: 0,
     stageOneQueue: [],

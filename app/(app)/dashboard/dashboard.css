@@ -1,100 +1,335 @@
-/* Dashboard surface styles — ported VERBATIM from prototype/dashboard.html <style> (2026-10-14). */
+/* ============================================================
+   DNA v7 — Dashboard surface (LOCKED 2026-10-29)
+   Header band → five channel cells → plan table + queue →
+   competency ledger. Cool white-grey ground, white cards with
+   1px border + whisper shadow, 8px radius; Material wash chips;
+   honest fractions — verified solid, self-report hatched,
+   unmeasured empty, never red. Scoped under `.v7dash` (the
+   page root) — shell chrome lives in ../v7.css, the rest of the
+   app still wears the Index system until its own re-skin.
+   ============================================================ */
 
-body {
-  background-image:
-    linear-gradient(rgba(22,24,26,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(22,24,26,0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
+.v7dash {
+  font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  padding: 12px 16px 24px;
+}
+.v7dash ::selection { background: var(--v-blue-wash); }
+.v7dash :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
+.v7dash a { color: inherit; }
+
+/* ---------- header band card ---------- */
+
+.v7dash .scoreband { margin: 0; }
+.v7dash .band {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 12px;
+}
+.v7dash .band .who { min-width: 190px; }
+.v7dash .band .who .t {
+  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  margin: 0;
+  color: var(--v-ink);
+}
+.v7dash .band .who .m { font: 400 11.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 2px; }
+
+.v7dash .composite { display: flex; align-items: baseline; gap: 6px; }
+.v7dash .composite .score-big {
+  font: 500 46px/1 Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  display: inline-block;
+  min-width: 2ch;
+  color: var(--v-ink);
+}
+.v7dash .composite .c-of { font: 400 13px/1 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7dash .composite-wrap { min-width: 236px; }
+.v7dash .ratemsg { font: 400 11.5px/1.45 Roboto, system-ui, sans-serif; color: var(--v-meta); margin-top: 2px; }
+.v7dash .ratemsg b { color: var(--v-ink); font-weight: 500; }
+
+.v7dash .segs { flex: 1; max-width: 520px; }
+.v7dash .segbar { height: 8px; gap: 3px; }
+/* the Index system's `.seg i` (globals) colors fills earned-green — the v7
+   band restates the channel palette (blue, ES green) and uniform opacity */
+.v7dash .segbar .seg { border-radius: 2px; background: var(--v-track); }
+.v7dash .segbar .seg i { background: var(--v-blue); opacity: 1; }
+.v7dash .segbar .seg:nth-child(2) i { background: var(--v-green); }
+.v7dash .seglabels { display: flex; gap: 3px; margin-top: 8px; }
+.v7dash .seglabels span {
+  flex: 1;
+  text-align: center;
+  font: 400 10.5px/1.2 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+
+  white-space: nowrap;
 }
 
-/* --- score band: hairline-bounded full-bleed white band --- */
-.scoreband {
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  background: var(--panel);
+/* the one CTA — the plan head's do-location */
+.v7dash .cta {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 8px;
+  background: var(--v-blue);
+  color: #fff;
+  font: 500 14px Roboto, system-ui, sans-serif;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3);
+  transition: background-color 0.14s ease, box-shadow 0.14s ease;
 }
-.band-in {
-  max-width: 1360px; margin: 0 auto;
-  padding: 54px 32px 34px;
+.v7dash .cta:hover { background: var(--v-blue-deep); box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35); }
+
+/* ---------- five channel cells ---------- */
+
+.v7dash .kpis {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.v7dash .kpi {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+/* DOM order is (sub-row, score, kbar, chip) for the e2e reader; the flex
+   order below paints title → score → bar → chip → receipt */
+.v7dash .kpi .sub-row { display: contents; }
+.v7dash .kpi .s-name {
+  order: -2;
+  font: 500 13.5px/1.3 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7dash .kpi .s-note { order: 3; font: 400 11px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin: 8px 0 0; }
+.v7dash .kpi .s-note b { color: var(--v-ink); font-weight: 500; }
+.v7dash .kpi .s-note.not-yet { color: var(--v-grey-text); }
+.v7dash .kpi .sub-row .vbadge { font-size: 11px; }
+.v7dash .kpi .score { order: 0; font: 500 22px/1.1 Roboto, system-ui, sans-serif; color: var(--v-ink); margin-top: 6px; }
+.v7dash .kpi .score small { font: 400 12px Roboto, system-ui, sans-serif; color: var(--v-meta); }
+.v7dash .kpi .kbar { order: 1; }
+.v7dash .kpi .chip { order: 2; }
+
+/* honest bars in the cells: solid verified + hatched self-report portions */
+.v7dash .kbar {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--v-track);
+  margin: 10px 0 12px;
+}
+.v7dash .kbar i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--v-blue);
+}
+.v7dash .kbar i.solid.green { background: var(--v-green); }
+.v7dash .kbar i.hatch {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(26, 115, 232, 0.16) 0 2px,
+    transparent 2px 5px
+  );
+}
+
+/* ---------- Material wash chips ---------- */
+
+.v7dash .chip {
+  display: inline-block;
+  font: 500 11px/1.2 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.v7dash .chip.c-blue { background: var(--v-blue-wash); color: var(--v-blue-deep); }
+.v7dash .chip.c-green { background: var(--v-green-wash); color: var(--v-green-text); }
+.v7dash .chip.c-amber { background: var(--v-amber-wash); color: var(--v-amber-text); }
+.v7dash .chip.c-grey { background: var(--v-grey-wash); color: var(--v-grey-text); }
+/* the self-report hatch — quiet 45° stripes over the grey wash */
+.v7dash .chip.hatch-chip {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(60, 64, 67, 0.09) 0 2px,
+    transparent 2px 5px
+  );
+}
+.v7dash .vbadge.ok { color: var(--v-green); font: 500 10px Roboto, system-ui, sans-serif; }
+.v7dash .s-note .vbadge { font-family: Roboto, system-ui, sans-serif; }
+
+/* ---------- cards ---------- */
+
+.v7dash .card {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+}
+.v7dash .card .head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 14px 16px 10px;
+  flex-wrap: wrap;
+}
+.v7dash .card .head b { font: 500 14px/1.3 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7dash .card .head span { font: 400 11.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-meta); }
+.v7dash .foot { padding: 10px 16px 14px; font: 400 11px/1.55 Roboto, system-ui, sans-serif; color: var(--v-meta); }
+.v7dash .foot-link { color: var(--v-blue-deep); text-decoration: none; }
+.v7dash .foot-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.v7dash .low {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* ---------- dense plan table ---------- */
+
+.v7dash .plan-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.v7dash .plan-table th {
+  font: 500 10.5px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+  text-align: left;
+  padding: 8px 16px;
+  border-top: 1px solid var(--v-rows);
+  border-bottom: 1px solid var(--v-rows);
+}
+.v7dash .plan-table .col-item { width: 42%; }
+.v7dash .plan-table td {
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--v-rows);
+  font-size: 13px;
+  vertical-align: middle;
+}
+.v7dash .plan-table tbody tr:hover { background: #f5f8fc; }
+.v7dash .plan-table tr:last-child td { border-bottom: 0; }
+.v7dash .plan-table .item { font: 400 13px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7dash .plan-table .sub { font: 400 11px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 1px; max-width: 60ch; }
+.v7dash .plan-table .eff { font: 500 12px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); white-space: nowrap; }
+
+/* ---------- what moves the number (queue card) ---------- */
+
+.v7dash .actions .row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--v-rows);
+  align-items: center;
+}
+.v7dash .actions .row:hover { background: #f5f8fc; }
+.v7dash .actions .row:last-of-type { border-bottom: 0; }
+.v7dash .actions .row b { font: 400 13px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7dash .actions .row .sub { font: 400 11px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 1px; }
+.v7dash .actions .badge { font: 500 12px/1.2 Roboto, system-ui, sans-serif; color: var(--v-blue-deep); }
+.v7dash .journey-row {
+  padding: 10px 16px 4px;
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-meta);
+}
+.v7dash .journey-row b { color: var(--v-ink2); font-weight: 500; }
+
+/* ---------- competency ledger ---------- */
+
+.v7dash .ledger { margin-top: 0; }
+.v7dash .lgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; padding: 2px 16px 4px; }
+.v7dash .lrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--v-rows);
+}
+.v7dash .lrow .ms { font-size: 16px; color: var(--v-ink2); flex: none; }
+.v7dash .lrow .ms.done { color: var(--v-green); }
+.v7dash .lrow b { font: 400 13px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); font-weight: 400; }
+.v7dash .lrow .chip { margin-left: auto; }
+.v7dash .lcap { padding: 12px 16px 14px; font: 400 11px/1.55 Roboto, system-ui, sans-serif; color: var(--v-meta); }
+
+/* ---------- undecided default (kept from the previous band) ---------- */
+
+.v7dash .band-in {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  margin-bottom: 12px;
   display: grid;
   grid-template-columns: minmax(0, 44fr) minmax(0, 56fr);
   gap: 44px 56px;
   align-items: start;
 }
-.score-readout { margin-top: 14px; font-family: var(--mono); }
-.score-big {
-  font-size: clamp(3.3rem, 6.2vw, 4.6rem);
-  line-height: 1; font-weight: 400; letter-spacing: -0.01em;
+.v7dash .label {
+  font: 500 10.5px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
 }
-/* CountUp goes 0→86; without a reserved width the "of 100" tail nudges right
-   when the count crosses into a second digit (small on-load CLS). */
-.score-readout .score-big { display: inline-block; min-width: 2ch; }
-.score-readout small { font-size: 15px; color: var(--ink-3); margin-left: 8px; }
-.score-line {
-  margin-top: 20px;
-  font-size: 16px; line-height: 1.6; color: var(--ink-2);
-  max-width: 40ch; text-wrap: pretty;
+.v7dash .score-readout { margin-top: 14px; }
+.v7dash .score-readout .score-big {
+  font: 500 46px/1 Roboto, system-ui, sans-serif;
+  display: inline-block;
+  min-width: 2ch;
 }
-.score-line b { color: var(--ink); font-weight: 570; }
+.v7dash .score-readout small { font: 400 13px Roboto, system-ui, sans-serif; color: var(--v-meta); margin-left: 8px; }
+.v7dash .score-left { padding: 20px; }
+.v7dash .score-right { padding: 20px 20px 20px 0; }
+.v7dash .score-line { margin-top: 16px; font: 400 13px/1.6 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 40ch; }
+.v7dash .score-line b { color: var(--v-ink); font-weight: 500; }
+.v7dash .link-sub { color: var(--v-blue-deep); text-decoration: underline; text-underline-offset: 3px; }
+.v7dash .seg-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 9px; }
 
-.seg-head {
-  display: flex; justify-content: space-between; align-items: baseline;
-  gap: 12px; margin-bottom: 9px;
+/* ---------- responsive ---------- */
+
+@media (max-width: 1180px) {
+  .v7dash .kpis { grid-template-columns: repeat(3, 1fr); }
 }
-.score-right .segbar { height: 16px; }
-
-.sub-rows { margin-top: 14px; }
-.sub-row {
-  display: grid;
-  grid-template-columns: minmax(118px, 168px) 1fr;
-  gap: 3px 18px;
-  align-items: baseline;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--line-soft);
-}
-.sub-row:last-child { border-bottom: 0; padding-bottom: 12px; }
-.sub-row .s-name { font-size: 13.5px; font-weight: 570; }
-.sub-row .s-note { font-size: 13px; color: var(--ink-2); line-height: 1.55; }
-.sub-row .s-note b { color: var(--ink); font-weight: 570; }
-
-.journey-row {
-  grid-column: 1 / -1;
-  border-top: 1px solid var(--line-soft);
-  padding-top: 14px;
-  font-family: var(--mono); font-size: 12px; color: var(--ink-2);
-}
-.journey-row b { color: var(--ink); font-weight: 500; }
-
-/* --- work-loop section --- */
-.dash-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
-  gap: 56px;
-  align-items: start;
-}
-.rail { display: grid; gap: 16px; align-content: start; }
-
-.nextcard h2.n-head { font-size: 15.5px; font-weight: 640; letter-spacing: -0.015em; line-height: 1.3; }
-
-.tickers { padding: 4px 16px; }
-.tickers .tickline {
-  display: block; text-decoration: none;
-}
-.tickers .tickline:last-child { border-bottom: 0; }
-.tickers .tickline:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-
-.switch-block { padding: 0 2px; }
-.switch-go { margin-top: 8px; }
-.switch-go .link-sub { font-size: 13px; }
-
-/* --- responsive --- */
 @media (max-width: 1020px) {
-  .band-in { grid-template-columns: 1fr; gap: 36px; padding: 44px 32px 30px; }
-  .dash-grid { grid-template-columns: 1fr; gap: 32px; }
+  .v7dash .band { flex-wrap: wrap; gap: 14px 24px; }
+  .v7dash .who { min-width: 150px; }
+  .v7dash .low { grid-template-columns: 1fr; }
 }
 @media (max-width: 720px) {
-  .band-in { padding: 34px 20px 26px; gap: 28px; }
-  .sub-row { grid-template-columns: 1fr; gap: 2px; }
-  .dash-grid { gap: 24px; }
+  .v7dash { padding: 12px 12px 24px; }
+  .v7dash .band { flex-direction: column; align-items: flex-start; padding: 16px; }
+  .v7dash .who { min-width: 0; }
+  .v7dash .composite-wrap { min-width: 0; }
+  .v7dash .segs { max-width: none; width: 100%; }
+  .v7dash .seglabels { flex-wrap: wrap; }
+  .v7dash .seglabels span { flex: 1 1 30%; white-space: nowrap; }
+  .v7dash .kpis { grid-template-columns: 1fr; }
+  .v7dash .cta { width: 100%; justify-content: center; }
+  .v7dash .lgrid { grid-template-columns: 1fr; }
+  .v7dash .plan-table .eff { font-size: 11.5px; }
 }
-
+@media (max-width: 560px) {
+  .v7dash .plan-table .col-item { width: auto; }
+  .v7dash .plan-table th:nth-child(3),
+  .v7dash .plan-table td:nth-child(3) { display: none; } /* State folds on tiny screens */
+}

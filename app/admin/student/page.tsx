@@ -22,8 +22,13 @@ interface ScreenB {
   parts: RubricValues;
   spNote: string;
   tpNote: string;
+  arNote: string;
   ccNote: string;
   context: string;
+  /** ES receipt — verified NACE competencies (of the assessed 7) */
+  esVerified: number;
+  /** AR channel measured? (unmeasured reads its honest grey row) */
+  arMeasured: boolean;
 }
 
 function zeroParts(): RubricValues {
@@ -31,6 +36,7 @@ function zeroParts(): RubricValues {
     sp: [0, RUBRIC_MAX.sp],
     es: [0, RUBRIC_MAX.es],
     tp: [0, RUBRIC_MAX.tp],
+    ar: [0, RUBRIC_MAX.ar],
     cc: [0, RUBRIC_MAX.cc],
   };
 }
@@ -41,7 +47,7 @@ function zeroParts(): RubricValues {
  * (`features/content/admin.md` — same no-hardcode rule as everywhere).
  */
 async function buildLive(id: string): Promise<ScreenB> {
-  const { state, career, score } = await getStudentView(id);
+  const { state, career, score, ar } = await getStudentView(id);
   const grade = state.strand ? `${gradeLabel(state.grade)} · ${state.strand}` : gradeLabel(state.grade);
 
   if (!career || !score) {
@@ -55,16 +61,20 @@ async function buildLive(id: string): Promise<ScreenB> {
       parts: zeroParts(),
       spNote: "Baseline from setup claims only — no career map is measured against yet.",
       tpNote: "No career picked — the pathway isn’t open yet.",
+      arNote: "Not yet measured — the resume diagnostic in Prep opens this channel.",
       ccNote: "Still deciding — direction locks the remaining points when a career is picked.",
       context: "No career measured yet — the numbers hold until one is picked.",
+      esVerified: 0,
+      arMeasured: false,
     };
   }
 
-  const v = scoreView(career, state);
+  const v = scoreView(career, state, ar);
   const parts: RubricValues = {
     sp: [v.sp, RUBRIC_MAX.sp],
     es: [v.es, RUBRIC_MAX.es],
     tp: [v.tp, RUBRIC_MAX.tp],
+    ar: [v.ar === null ? 0 : v.ar, RUBRIC_MAX.ar],
     cc: [v.cc, RUBRIC_MAX.cc],
   };
 
@@ -78,10 +88,16 @@ async function buildLive(id: string): Promise<ScreenB> {
       ? "None yet — the pathway hasn’t opened its first step."
       : `${v.stageOne.done} of ${v.stageOne.target} first steps done.`;
 
+  const arNote = v.arMeasured
+    ? `Best resume-diagnostic run earns this (${v.ar} of ${RUBRIC_MAX.ar}).`
+    : "Not yet measured — the resume diagnostic in Prep opens this channel.";
+
   const ccBits = ["Career confirmed"];
-  if (state.goals.length > 0) ccBits.push("goal set");
-  if (v.goalCompleted) ccBits.push("first goal finished");
+  if (v.ccStarted) ccBits.push("plan started");
+  if (v.ccFirstDone) ccBits.push("first item done");
   const ccNote = ccBits.join(" · ") + ".";
+  const esVerified = Object.values(state.competencies ?? {}).filter((x) => x === "verified").length;
+  const arMeasured = score.ar !== null;
 
   const context = `${v.closed} of ${v.mapSize} ${career.name} skills counted · First 30 days: ${v.stageOne.done} of ${v.stageOne.target} done`;
 
@@ -94,8 +110,11 @@ async function buildLive(id: string): Promise<ScreenB> {
     parts,
     spNote,
     tpNote,
+    arNote,
     ccNote,
     context,
+    esVerified,
+    arMeasured,
   };
 }
 
@@ -189,12 +208,13 @@ export default async function AdminStudentPage({
               <div
                 className="rubric"
                 role="img"
-                aria-label={`Score ${s.score} of 100: skill progress ${s.parts.sp[0]} of ${s.parts.sp[1]}, employability skills ${s.parts.es[0]} of ${s.parts.es[1]}, training progress ${s.parts.tp[0]} of ${s.parts.tp[1]}, career clarity ${s.parts.cc[0]} of ${s.parts.cc[1]}; segment widths are the rubric weights`}
+                aria-label={`Score ${s.score} of 100: skill progress ${s.parts.sp[0]} of ${s.parts.sp[1]}, employability skills ${s.parts.es[0]} of ${s.parts.es[1]}, training progress ${s.parts.tp[0]} of ${s.parts.tp[1]}, application readiness ${s.arMeasured ? `${s.parts.ar[0]} of ${s.parts.ar[1]}` : "not yet measured"}, career clarity ${s.parts.cc[0]} of ${s.parts.cc[1]}; segment widths are the rubric weights`}
               >
                 {[
                   { pct: RUBRIC_MAX.sp, frac: s.parts.sp[0] / s.parts.sp[1] },
                   { pct: RUBRIC_MAX.es, frac: s.parts.es[0] / s.parts.es[1] },
                   { pct: RUBRIC_MAX.tp, frac: s.parts.tp[0] / s.parts.tp[1] },
+                  { pct: RUBRIC_MAX.ar, frac: s.parts.ar[0] / s.parts.ar[1] },
                   { pct: RUBRIC_MAX.cc, frac: s.parts.cc[0] / s.parts.cc[1] },
                 ].map((seg, k) => (
                   <span className="rseg" key={k} style={{ flex: seg.pct }}>
@@ -215,7 +235,7 @@ export default async function AdminStudentPage({
                   <span className="ss-val num">
                     {s.parts.es[0]} of {s.parts.es[1]}
                   </span>
-                  <span className="ss-note">Of 25 — the full situations battery is coming after setup.</span>
+                  <span className="ss-note">NACE assessment: {s.esVerified} of 7 competencies verified ·✓.</span>
                 </div>
                 <div className="ss-row">
                   <span className="ss-name">Training progress</span>
@@ -223,6 +243,13 @@ export default async function AdminStudentPage({
                     {s.parts.tp[0]} of {s.parts.tp[1]}
                   </span>
                   <span className="ss-note">{s.tpNote}</span>
+                </div>
+                <div className="ss-row">
+                  <span className="ss-name">Application readiness</span>
+                  <span className={`ss-val num${s.arMeasured ? "" : " quiet"}`}>
+                    {s.arMeasured ? `${s.parts.ar[0]} of ${s.parts.ar[1]}` : "not yet measured"}
+                  </span>
+                  <span className="ss-note">{s.arNote}</span>
                 </div>
                 <div className="ss-row">
                   <span className="ss-name">Career clarity</span>

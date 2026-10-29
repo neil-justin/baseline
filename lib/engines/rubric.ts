@@ -1,27 +1,42 @@
 import type { StudentState, Career } from "@/lib/types";
-import { computeScore, WEIGHTS, type Score } from "./score";
+import { computeScore, WEIGHTS, type ArInput, type Score } from "./score";
 
-/** Segmented-bar parts (flattened to the locked 40/25/20/15 proportions). */
+/**
+ * Segmented-bar parts (the ADR 0002 five-channel proportions).
+ * Display order stays the historical SP · ES · TP · AR · CC (the dashboard's
+ * sub-rows read top-down in this order); the ADR's ES 30 / SP 25 / TP 20 /
+ * AR 15 / CC 10 listing is the weight legend, not a render order.
+ * An unmeasured AR part earns 0 and carries `ar` = null — surfaces show
+ * "not yet measured", never a painted zero-bar lie about measurement.
+ */
 export function rubricParts(score: Score) {
   return [
     { pct: WEIGHTS.sp, earnedFrac: score.sp / WEIGHTS.sp },
     { pct: WEIGHTS.es, earnedFrac: score.es / WEIGHTS.es },
     { pct: WEIGHTS.tp, earnedFrac: score.tp / WEIGHTS.tp },
+    {
+      pct: WEIGHTS.ar,
+      earnedFrac: score.ar === null ? 0 : score.ar / WEIGHTS.ar,
+      unmeasured: score.ar === null,
+    },
     { pct: WEIGHTS.cc, earnedFrac: score.cc / WEIGHTS.cc },
   ];
 }
 
-/** Everything a surface needs to read out Neil's state truthfully. */
-export function scoreView(career: Career, s: StudentState) {
+/** Everything a surface needs to read out a student's state truthfully. */
+export function scoreView(career: Career, s: StudentState, ar?: ArInput | null) {
   const score = computeScore({
     bars: s.bars,
     careerId: s.careerId,
     careerSkillCount: career.skills.length,
     goals: s.goals,
     stageOneDone: s.stageOneDone,
+    competencies: s.competencies ?? {},
+    ar,
   });
   const goalActive = s.goals.find((g) => g.type === "training" && g.status === "active") ?? null;
   const goalCompleted = s.goals.find((g) => g.type === "training" && g.status === "completed") ?? null;
+  const esVerified = Object.values(s.competencies ?? {}).filter((v) => v === "verified").length;
   return {
     ...score,
     closed: Object.keys(s.bars).length,
@@ -29,6 +44,13 @@ export function scoreView(career: Career, s: StudentState) {
     stageOne: { done: s.stageOneDone, target: 3 },
     goalActive,
     goalCompleted,
+    /** ES carrier receipt — "X of 7 competencies verified ·✓" */
+    esVerified,
+    ccPicked: s.careerId !== null,
+    ccStarted: s.goals.length > 0,
+    /** any completed plan item — the "first item done" tick (My Plan Q4b) */
+    ccFirstDone: s.goals.some((g) => g.status === "completed"),
+    arMeasured: score.ar !== null,
     parts: rubricParts(score),
   };
 }

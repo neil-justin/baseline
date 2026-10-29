@@ -14,11 +14,12 @@ import type { Score } from "@/lib/engines/score";
  * bar fills 160ms after the readout count settles, via CountUp's onDone).
  */
 
-const PART_TAGS = ["SP", "ES", "TP", "CC"] as const;
+const PART_TAGS = ["SP", "ES", "TP", "AR", "CC"] as const;
 const PART_NAMES = [
   "skill progress",
   "employability skills",
   "training progress",
+  "application readiness",
   "career clarity",
 ] as const;
 
@@ -46,6 +47,8 @@ export default function SampleGauge({
   // rubricParts derives proportions from the computed score (never painted)
   const parts = rubricParts(score);
   const row = rows[sel];
+  // legend values in parts order; an unmeasured AR reads "—" (never a zero)
+  const vals: (number | null)[] = [score.sp, score.es, score.tp, score.ar, score.cc];
 
   return (
     <div className="gauge" id="gauge">
@@ -97,7 +100,7 @@ export default function SampleGauge({
           className={armed ? "rubric-mini armed" : "rubric-mini"}
           role="img"
           aria-label={`Sample score ${score.total} of 100 — ${PART_NAMES.map(
-            (n, i) => `${n} ${[score.sp, score.es, score.tp, score.cc][i]} of ${parts[i].pct}`
+            (n, i) => `${n} ${vals[i] === null ? "not yet measured" : `${vals[i]} of ${parts[i].pct}`}`
           ).join(", ")}`}
         >
           {parts.map((p, i) => (
@@ -109,7 +112,7 @@ export default function SampleGauge({
         <div className="readout-legend">
           {PART_TAGS.map((tag, i) => (
             <span key={tag}>
-              <b>{tag}</b> {[score.sp, score.es, score.tp, score.cc][i]}/{parts[i].pct}
+              <b>{tag}</b> {vals[i] === null ? "—" : `${vals[i]}/${parts[i].pct}`}
             </span>
           ))}
         </div>

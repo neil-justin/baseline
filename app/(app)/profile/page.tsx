@@ -2,6 +2,7 @@ import type { BarSource, Career, Resource } from "@/lib/types";
 import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
+import { WEIGHTS } from "@/lib/engines/score";
 import { skillsFor } from "@/lib/engines/gaps";
 import { RESOURCES } from "@/lib/fixtures/resources";
 import Reveal from "@/components/Reveal";
@@ -108,10 +109,10 @@ function TrajGraphic({ traj }: { traj: Trajectory }) {
 /** M11 Competency snapshot + M12 Career plan — markup ported from prototype/profile.html. */
 export default async function ProfilePage() {
   const profile = await requireStudent();
-  const { state, career, score } = await getStudentView(profile.studentId);
+  const { state, career, score, ar } = await getStudentView(profile.studentId);
   if (!career || !score) return <UndecidedProfile name={state.name} />;
 
-  const v = scoreView(career, state);
+  const v = scoreView(career, state, ar);
   const traj = scoreTrajectory(state);
   const asOf = fmtEventDate(state.events[state.events.length - 1]?.date);
   const byCheck = Object.values(state.bars).filter((b) => b.source === "verified" || b.source === "checked").length;
@@ -201,7 +202,7 @@ export default async function ProfilePage() {
       <div className="stack">
         <ProfileReadout
           score={v.total}
-          parts={v.parts}
+          values={score}
           closed={v.closed}
           mapSize={v.mapSize}
           byCheck={byCheck}
@@ -209,7 +210,7 @@ export default async function ProfilePage() {
           asOf={asOf}
           careerName={career.name}
           strandLabel={gradeLabel(state.grade) + ", " + state.strand}
-          labels={["Skills", "People", "Training", "Direction"]}
+          labels={["Skills", "Employability", "Training", "Application", "Direction"]}
         />
 
         <Reveal className="panel block">
@@ -256,8 +257,8 @@ export default async function ProfilePage() {
             <p className="helper">Starting levels, rated from your setup answers. They grow as the work does.</p>
           </div>
           <div className="zero-strip num">
-            <span>People skills · <b>0 of 25</b></span>
-            <span>the full situations battery comes after setup</span>
+            <span>Employability · <b>{v.es} of {WEIGHTS.es}</b></span>
+            <span>{v.esVerified} of 7 NACE competencies verified ·✓ (the assessment carries this channel)</span>
           </div>
           <div className="comp-grid">
             {COMPETENCIES.map(({ name, probe }) => {
@@ -363,19 +364,25 @@ export default async function ProfilePage() {
             </div>
             <div className="m-ticks">
               <p className="tickline num">
-                Skills — <b>{v.sp} of 40</b>
+                Skills — <b>{v.sp} of {WEIGHTS.sp}</b>
               </p>
               <p className="tickline num">
-                People skills — <b>0 of 25</b> <span className="tick-note">· the full battery comes after setup</span>
+                Employability — <b>{v.es} of {WEIGHTS.es}</b>{" "}
+                <span className="tick-note">· {v.esVerified} of 7 NACE competencies verified ·✓</span>
               </p>
               <p className="tickline num">
-                Training — <b>{v.tp} of 20</b>
+                Training — <b>{v.tp} of {WEIGHTS.tp}</b>
                 {v.stageOne.done > 0 && (
                   <span className="tick-note"> · {v.stageOne.done} of 3 first steps done</span>
                 )}
               </p>
               <p className="tickline num">
-                Career direction — <b className={v.cc === 15 ? "full" : undefined}>{v.cc} of 15</b>
+                Application readiness —{" "}
+                <b>{v.ar === null ? "not yet measured" : `${v.ar} of ${WEIGHTS.ar}`}</b>{" "}
+                <span className="tick-note">· the resume diagnostic in Prep opens this channel</span>
+              </p>
+              <p className="tickline num">
+                Career direction — <b className={v.cc === WEIGHTS.cc ? "full" : undefined}>{v.cc} of {WEIGHTS.cc}</b>
               </p>
             </div>
           </div>

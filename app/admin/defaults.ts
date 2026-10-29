@@ -14,14 +14,15 @@
 export type RubricPart = [earned: number, max: number];
 
 export interface RubricValues {
-  sp: RubricPart; // Skill progress — of 40
-  es: RubricPart; // Employability skills — of 25
+  sp: RubricPart; // Skill progress — of 25
+  es: RubricPart; // Employability skills — of 30
   tp: RubricPart; // Training progress — of 20
-  cc: RubricPart; // Career clarity — of 15
+  ar: RubricPart; // Application readiness — of 15 (null → [0, 15] with "not yet measured")
+  cc: RubricPart; // Career clarity — of 10
 }
 
-/** Locked rubric weights (mirrors lib/engines/score.ts WEIGHTS). */
-export const RUBRIC_MAX = { sp: 40, es: 25, tp: 20, cc: 15 } as const;
+/** Locked rubric weights (mirrors lib/engines/score.ts WEIGHTS — ADR 0002). */
+export const RUBRIC_MAX = { es: 30, sp: 25, tp: 20, ar: 15, cc: 10 } as const;
 
 /**
  * Row ORDER — the admin cohort table order and the prev/next walk. Real

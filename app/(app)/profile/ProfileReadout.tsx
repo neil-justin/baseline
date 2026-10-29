@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 import CountUp from "@/components/CountUp";
+import { WEIGHTS, type Score } from "@/lib/engines/score";
 
 /**
  * The Profile tab's measurement — port of prototype/profile.html's readout:
  * the score counts up once visible and the rubric-mini arms ~160ms after it
- * settles (shared motion grammar, data-sequence semantics).
+ * settles (shared motion grammar, data-sequence semantics). The legend is
+ * engine-fed only; an unmeasured AR reads "—" (never a painted zero).
  */
 export default function ProfileReadout({
-  score,
-  parts,
+  score: total,
+  values,
   closed,
   mapSize,
   byCheck,
@@ -20,8 +22,10 @@ export default function ProfileReadout({
   strandLabel,
   labels,
 }: {
+  /** the computed headline */
   score: number;
-  parts: { pct: number; earnedFrac: number }[];
+  /** the computed sub-values in legend order (sp · es · tp · ar · cc) */
+  values: Score;
   closed: number;
   mapSize: number;
   byCheck: number;
@@ -29,9 +33,11 @@ export default function ProfileReadout({
   asOf: string;
   careerName: string;
   strandLabel: string;
-  labels: string[]; // Skills / People / Training / Direction
+  labels: string[]; // Skills / Employability / Training / Application / Direction
 }) {
   const [armed, setArmed] = useState(false);
+  const vals: (number | null)[] = [values.sp, values.es, values.tp, values.ar, values.cc];
+  const maxes = [WEIGHTS.sp, WEIGHTS.es, WEIGHTS.tp, WEIGHTS.ar, WEIGHTS.cc];
   return (
     <div className="panel readout" data-sequence>
       <div className="readout-head">
@@ -41,11 +47,11 @@ export default function ProfileReadout({
         </div>
         <div className="readout-score num">
           <CountUp
-            to={score}
+            to={total}
             dec={0}
             dur={900}
             onDone={() => setTimeout(() => setArmed(true), 160)}
-            ariaLabel={`Readiness ${score} of 100`}
+            ariaLabel={`Readiness ${total} of 100`}
           />
           <small>/100</small>
         </div>
@@ -53,19 +59,26 @@ export default function ProfileReadout({
       <div
         className={armed ? "rubric-mini armed" : "rubric-mini"}
         role="img"
-        aria-label={`Score ${score} of 100 — skills ${Math.round(parts[0].earnedFrac * 40)} of 40, people skills ${Math.round(parts[1].earnedFrac * 25)} of 25, training ${Math.round(parts[2].earnedFrac * 20)} of 20, career direction ${Math.round(parts[3].earnedFrac * 15)} of 15`}
+        aria-label={`Score ${total} of 100 — ${labels
+          .map((l, i) => `${l.toLowerCase()} ${vals[i] === null ? "not yet measured" : `${vals[i]} of ${maxes[i]}`}`)
+          .join(", ")}`}
       >
-        {parts.map((p, i) => (
-          <div key={i} className="seg" style={{ flex: p.pct }}>
-            <i style={{ ["--earn" as string]: String(p.earnedFrac) }} />
+        {maxes.map((m, i) => (
+          <div
+            key={i}
+            className="seg"
+            style={{ flex: m, ["--earn" as string]: String(vals[i] === null ? 0 : (vals[i] as number) / m) }}
+          >
+            <i />
           </div>
         ))}
       </div>
       <div className="readout-legend num">
-        <span><b>{labels[0]}</b> {Math.round(parts[0].earnedFrac * 40)}/40</span>
-        <span><b>{labels[1]}</b> {Math.round(parts[1].earnedFrac * 25)}/25</span>
-        <span><b>{labels[2]}</b> {Math.round(parts[2].earnedFrac * 20)}/20</span>
-        <span><b>{labels[3]}</b> {Math.round(parts[3].earnedFrac * 15)}/15</span>
+        {labels.map((l, i) => (
+          <span key={l}>
+            <b>{l}</b> {vals[i] === null ? "—" : `${vals[i]}/${maxes[i]}`}
+          </span>
+        ))}
       </div>
       <div className="readout-fit num">
         <b>{closed} of {mapSize}</b> skill bars closed · {byCheck} by check, {bySelf} self-reported

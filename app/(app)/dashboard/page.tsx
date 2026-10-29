@@ -1,45 +1,27 @@
 import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
-import { getResourcesForCareer } from "@/lib/fixtures/resources";
-import CountUp from "@/components/CountUp";
-import Disclosure from "@/components/Disclosure";
+import { planHead, planFor } from "@/lib/engines/plan";
+import {
+  WEIGHTS,
+  CC_TICKS,
+  ASSESSED_COMPETENCIES,
+  roundHalfDown,
+} from "@/lib/engines/score";
 import ScoreSequence from "./ScoreSequence";
 import "./dashboard.css";
 
 export const dynamic = "force-dynamic";
 
-function SourceArrow() {
-  return (
-    <span className="arrow">
-      <svg
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.8}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-        width="0.8em"
-        height="0.8em"
-      >
-        <path d="M16 5v5a3 3 0 0 1-3 3H5" />
-        <path d="M9 9l-4 4 4 4" />
-      </svg>
-    </span>
-  );
+/** "G11" → "Grade 11" (same live-state grade convention as Admin + Profile). */
+function gradeLabel(grade: string): string {
+  const m = grade.match(/^G(\d+.*)$/);
+  return m ? `Grade ${m[1]}` : grade;
 }
 
 function UndecidedDefault() {
   return (
-    <>
-      <section className="app-section">
-        <div className="shell">
-          <div className="screen-head">
-            <h1>Dashboard</h1>
-          </div>
-        </div>
-      </section>
+    <div className="v7dash">
       <section className="scoreband" aria-label="Your readiness score">
         <div className="band-in">
           <div className="score-left">
@@ -56,7 +38,7 @@ function UndecidedDefault() {
           <div className="score-right">
             <div className="seg-head">
               <span className="label">Breakdown</span>
-              <span className="label num">40 / 25 / 20 / 15</span>
+              <span className="label num">{Object.values(WEIGHTS).join(" / ")}</span>
             </div>
             <p className="score-line">
               Pick a career to open your pathway:{" "}
@@ -67,132 +49,400 @@ function UndecidedDefault() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
 
-/** M1 Dashboard — the score home. Markup ported from prototype/dashboard.html. */
+/** M1 Dashboard — the score home. DNA v7 (LOCKED 2026-10-29): header band
+ *  (who · composite 40/100 · segmented five-channel bar · the one CTA), the
+ *  five channel cells, the dense ranked plan table + the projection queue,
+ *  then the competency ledger. Every number is computed (scoreView + the
+ *  locked engine constants); no painted readiness anywhere. */
 export default async function DashboardPage() {
   const profile = await requireStudent();
-  const { state, career, score } = await getStudentView(profile.studentId);
+  const { state, career, score, ar } = await getStudentView(profile.studentId);
   if (!career || !score) return <UndecidedDefault />;
 
-  const v = scoreView(career, state);
-  const topResource = getResourcesForCareer(career.id)[0];
-  const activeGoal = v.goalActive;
-  const completedGoal = v.goalCompleted;
-  const bodyCareer = activeGoal ?? completedGoal;
+  const v = scoreView(career, state, ar);
+  // My Plan round Q4b: the plan's head item IS the commitment; while AR is
+  // unmeasured the head is the diagnostic that opens the channel.
+  const head = planHead(career, state, ar);
+  const plan = planFor(career, state, ar);
+
+  // bar provenance (real data): verified ·✓ vs claimed vs open on the map
+  const barValues = Object.values(state.bars);
+  const verifiedBars = barValues.filter((b) => b.source === "verified").length;
+  const claimedBars = barValues.length - verifiedBars;
+  const mapSize = v.mapSize;
+
+  // SP projection when one more bar closes (locked half-down convention)
+  const spAfterNext = roundHalfDown((WEIGHTS.sp * (v.closed + 1)) / mapSize);
+  const spDelta = Math.max(0, spAfterNext - score.sp);
+
+  const claimedCompetencies = Object.values(state.competencies ?? {}).filter(
+    (s) => s !== "verified"
+  ).length;
+
+  /* ---------- five channel cells (SP · ES · TP · AR · CC) ---------- */
+  const pct = (n: number, d: number) => `${((n / d) * 100).toFixed(3)}%`;
 
   return (
-    <>
-      <section className="app-section">
-        <div className="shell">
-          <div className="screen-head">
-            <h1>Dashboard</h1>
-          </div>
-        </div>
-      </section>
-
+    <div className="v7dash">
+      {/* ── header band: who · composite · five-channel bar · the one CTA ── */}
       <section className="scoreband" aria-label="Your readiness score">
-        <div className="band-in" data-sequence>
+        <div className="band">
+          <div className="who">
+            <h1 className="t">
+              {state.name} · {gradeLabel(state.grade)}
+            </h1>
+            <div className="m">{career.name}</div>
+          </div>
           <ScoreSequence
             score={score.total}
             parts={v.parts}
-            line={
+            labels={[
+              <>
+                SP {score.sp}/{WEIGHTS.sp}
+              </>,
+              <>
+                ES {score.es}/{WEIGHTS.es}
+              </>,
+              <>
+                TP {score.tp}/{WEIGHTS.tp}
+              </>,
+              <>
+                AR {v.arMeasured ? `${score.ar}/${WEIGHTS.ar}` : "—"}
+              </>,
+              <>
+                CC {score.cc}/{WEIGHTS.cc}
+              </>,
+            ]}
+            suffix={
+              v.ccFirstDone || v.arMeasured || v.stageOne.done > 0
+                ? ""
+                : " · your starting line"
+            }
+            ratemsg="Computed from your own records · NACE-aligned"
+            fine={
               <>
                 You&apos;re <b className="num">{score.total}%</b> ready for {career.name}; {v.closed} bars already
                 counted.
               </>
             }
-            right={
-              <div className="sub-rows">
-                <div className="sub-row">
-                  <span className="s-name">Skill progress</span>
-                  <p className="s-note">
-                    You hold <b className="num">{score.sp} of 40</b>; bars close from your claims and your checks,
-                    and each bar shows which.
-                  </p>
-                </div>
-                <div className="sub-row">
-                  <span className="s-name">People skills</span>
-                  <p className="s-note">
-                    You hold <b className="num">0 of 25</b>; the full situations battery comes after setup.
-                  </p>
-                </div>
-                <div className="sub-row">
-                  <span className="s-name">Training progress</span>
-                  <p className="s-note">
-                    You hold <b className="num">{score.tp} of 20</b>;{" "}
-                    {v.stageOne.done === 0 ? "your pathway just started." : `First 30 days: ${v.stageOne.done} of 3 done.`}
-                  </p>
-                </div>
-                <div className="sub-row">
-                  <span className="s-name">Career clarity</span>
-                  <p className="s-note">
-                    You hold <b className="num">{score.cc} of 15</b> — Career picked{" "}
-                    <span className="vbadge ok">{v.cc >= 5 ? "✓" : "—"}</span> · Goal set{" "}
-                    <span className="vbadge ok">{bodyCareer ? "✓" : "—"}</span> · First goal finished:{" "}
-                    {completedGoal ? "yes" : "not yet"}.
-                  </p>
-                </div>
-              </div>
-            }
           />
+          {head && (
+            <a
+              className="cta"
+              href={head.kind === "ar" ? head.href : "/pathway"}
+            >
+              Your next step →
+            </a>
+          )}
+        </div>
+      </section>
+
+      {/* ── five channel KPI cells (the Classroom grid) ── */}
+      <section className="kpis" aria-label="The five channels">
+        <div className="kpi">
+          <div className="sub-row">
+            <span className="s-name">Skill progress</span>
+            <p className="s-note">
+              You hold <b className="num">{score.sp} of {WEIGHTS.sp}</b>; bars close from your claims and your checks,
+              and each bar shows which. {v.closed} of {mapSize} bars closed · {verifiedBars} verified{" "}
+              <span className="vbadge ok">
+                ·✓
+              </span>
+              .
+            </p>
+          </div>
+          <div className="score num">
+            {score.sp} <small>/{WEIGHTS.sp}</small>
+          </div>
+          <div
+            className="kbar"
+            role="img"
+            aria-label={`Skill progress ${score.sp} of ${WEIGHTS.sp} — ${verifiedBars} verified, ${claimedBars} self-report`}
+          >
+            <i className="solid" style={{ width: pct(verifiedBars, mapSize) }} />
+            <i
+              className="hatch"
+              style={{ left: pct(verifiedBars, mapSize), width: pct(claimedBars, mapSize) }}
+            />
+          </div>
+          <span className={`chip ${score.sp >= WEIGHTS.sp ? "c-green" : "c-blue"}`}>
+            {score.sp >= WEIGHTS.sp ? "Complete" : "In progress"}
+          </span>
+        </div>
+
+        <div className="kpi">
+          <div className="sub-row">
+            <span className="s-name">Employability skills</span>
+            <p className="s-note">
+              You hold <b className="num">{score.es} of {WEIGHTS.es}</b> —{" "}
+              {v.esVerified} of 7 NACE competencies verified{" "}
+              <span className="vbadge ok">·✓</span>.
+            </p>
+          </div>
+          <div className="score num">
+            {score.es} <small>/{WEIGHTS.es}</small>
+          </div>
+          <div
+            className="kbar"
+            role="img"
+            aria-label={`Employability skills ${score.es} of ${WEIGHTS.es} — ${v.esVerified} of 7 verified`}
+          >
+            <i className="solid green" style={{ width: pct(score.es, WEIGHTS.es) }} />
+          </div>
+          <span className="chip c-green">{v.esVerified} verified</span>
+        </div>
+
+        <div className="kpi">
+          <div className="sub-row">
+            <span className="s-name">Training progress</span>
+            <p className="s-note">
+              You hold <b className="num">{score.tp} of {WEIGHTS.tp}</b>;{" "}
+              {v.stageOne.done === 0
+                ? "your pathway just started."
+                : `First 30 days: ${v.stageOne.done} of 3 done.`}
+            </p>
+          </div>
+          <div className="score num">
+            {score.tp} <small>/{WEIGHTS.tp}</small>
+          </div>
+          <div
+            className="kbar"
+            role="img"
+            aria-label={`Training progress ${score.tp} of ${WEIGHTS.tp}`}
+          >
+            <i className="solid" style={{ width: pct(score.tp, WEIGHTS.tp) }} />
+          </div>
+          <span
+            className={`chip ${
+              score.tp >= WEIGHTS.tp ? "c-green" : v.stageOne.done > 0 ? "c-blue" : "c-amber"
+            }`}
+          >
+            {score.tp >= WEIGHTS.tp ? "Complete" : v.stageOne.done > 0 ? "In progress" : "Pending evidence"}
+          </span>
+        </div>
+
+        <div className="kpi kpi-ar">
+          <div className="sub-row">
+            <span className="s-name">Application readiness</span>
+            {v.arMeasured ? (
+              <p className="s-note">
+                You hold <b className="num">{score.ar} of {WEIGHTS.ar}</b>; your best resume-diagnostic
+                run counts.
+              </p>
+            ) : (
+              <p className="s-note not-yet">
+                Not yet measured — the resume diagnostic in Prep opens this channel.
+              </p>
+            )}
+          </div>
+          <div className="score num">
+            {v.arMeasured ? score.ar : "—"} <small>/{WEIGHTS.ar}</small>
+          </div>
+          <div
+            className="kbar"
+            role="img"
+            aria-label={
+              v.arMeasured
+                ? `Application readiness ${score.ar} of ${WEIGHTS.ar}`
+                : "Application readiness — not yet measured"
+            }
+          >
+            <i
+              className="solid"
+              style={{ width: v.arMeasured && score.ar !== null ? pct(score.ar, WEIGHTS.ar) : "0" }}
+            />
+          </div>
+          <span
+            className={`chip ${
+              !v.arMeasured ? "c-grey" : score.ar === WEIGHTS.ar ? "c-green" : "c-blue"
+            }`}
+          >
+            {!v.arMeasured ? "Not yet measured" : score.ar === WEIGHTS.ar ? "Complete" : "In progress"}
+          </span>
+        </div>
+
+        <div className="kpi">
+          <div className="sub-row">
+            <span className="s-name">Career clarity</span>
+            <p className="s-note">
+              You hold <b className="num">{score.cc} of {WEIGHTS.cc}</b> — Career picked{" "}
+              <span className="vbadge ok">{v.ccPicked ? "✓" : "—"}</span> · Plan started{" "}
+              <span className="vbadge ok">{v.ccStarted ? "✓" : "—"}</span> · First item done:{" "}
+              {v.ccFirstDone ? "yes" : "not yet"}.
+            </p>
+          </div>
+          <div className="score num">
+            {score.cc} <small>/{WEIGHTS.cc}</small>
+          </div>
+          <div
+            className="kbar"
+            role="img"
+            aria-label={`Career clarity ${score.cc} of ${WEIGHTS.cc}`}
+          >
+            <i className="solid" style={{ width: pct(score.cc, WEIGHTS.cc) }} />
+          </div>
+          <span className={`chip ${score.cc >= WEIGHTS.cc ? "c-green" : "c-blue"}`}>
+            {score.cc >= WEIGHTS.cc ? "Complete" : "In progress"}
+          </span>
+        </div>
+      </section>
+
+      {/* ── dense lower deck: ranked plan table + what moves the number ── */}
+      <section className="low">
+        <div className="card">
+          <div className="head">
+            <b>My Plan — next items</b>
+            <span>ranked · first item is your next step</span>
+          </div>
+          <table className="plan-table">
+            <thead>
+              <tr>
+                <th className="col-item">Item</th>
+                <th>Channel</th>
+                <th>State</th>
+                <th>Effect</th>
+              </tr>
+            </thead>
+            <tbody>
+              {plan.map((item, i) => {
+                if (item.kind === "ar") {
+                  return (
+                    <tr key="ar">
+                      <td>
+                        <div className="item">{item.title}</div>
+                        <div className="sub">{item.reason}</div>
+                      </td>
+                      <td>
+                        <span className="chip c-grey">Application</span>
+                      </td>
+                      <td>
+                        <span className="chip c-grey">Not started</span>
+                      </td>
+                      <td className="eff num">opens AR · up to +{WEIGHTS.ar}</td>
+                    </tr>
+                  );
+                }
+                // skill step — projected SP re-fraction if this bar closes
+                // (each queued row assumes the ones above it closed first)
+                const priorSkillCount = plan
+                  .slice(0, i)
+                  .filter((p) => p.kind === "skill").length;
+                return (
+                  <tr key={item.skill}>
+                    <td>
+                      <div className="item">Close {item.skill}</div>
+                      <div className="sub">
+                        {item.reason}
+                        {item.hasFreeResource ? " · comprehension check on its guide" : ""}
+                      </div>
+                    </td>
+                    <td>
+                      <span className="chip c-blue">Skill progress</span>
+                    </td>
+                    <td>
+                      <span className={`chip ${item.hasFreeResource ? "c-green" : "c-blue"}`}>
+                        {item.hasFreeResource ? "Ready" : "Next"}
+                      </span>
+                    </td>
+                    <td className="eff num">
+                      SP{" "}
+                      {roundHalfDown((WEIGHTS.sp * (v.closed + priorSkillCount)) / mapSize)} →{" "}
+                      {roundHalfDown((WEIGHTS.sp * (v.closed + priorSkillCount + 1)) / mapSize)}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <div className="foot">
+            Every fill is an earned fraction of its channel — no painted readiness.{" "}
+            {plan.length > 3 && (
+              <>
+                The full ranked list lives in{" "}
+                <a className="foot-link" href="/pathway">
+                  My Plan
+                </a>
+                .{" "}
+              </>
+            )}
+            Effects are computed projections for this state (lib/engines/score.ts).
+          </div>
+        </div>
+
+        <div className="card actions">
+          <div className="head">
+            <b>What moves the number</b>
+          </div>
+          {!v.arMeasured && (
+            <div className="row">
+              <div>
+                <b>Run the resume diagnostic</b>
+                <div className="sub">first AR measurement · opens the channel</div>
+              </div>
+              <span className="badge num">up to +{WEIGHTS.ar}</span>
+            </div>
+          )}
+          {plan.some((p) => p.kind === "skill") && (
+            <div className="row">
+              <div>
+                <b>Close a First-30-days bar</b>
+                <div className="sub">check pass closes the bar · SP re-fractions</div>
+              </div>
+              <span className="badge num">+{spDelta}</span>
+            </div>
+          )}
+          {!v.ccFirstDone && (
+            <div className="row">
+              <div>
+                <b>Finish the first plan item</b>
+                <div className="sub">the CC first-item tick</div>
+              </div>
+              <span className="badge num">+{CC_TICKS.firstDone}</span>
+            </div>
+          )}
           <div className="journey-row num">
             Where you are: <b>First 30 days</b>, {v.stageOne.done} of 3 done.
           </div>
-        </div>
-      </section>
-
-      <section className="section wrap" style={{ paddingBottom: 72 }}>
-        <div className="dash-grid">
-          <div className="nextcard">
-            <h2 className="n-head">Your next step</h2>
-            {topResource && (
-              <>
-                <p className="n-why">
-                  {topResource.skillsAddressed[0]} is the top skill for {career.name}, and this course feeds your
-                  first goal. Free to start.
-                </p>
-                <p className="n-target num">
-                  free course · ~{topResource.durationHours} hours · {topResource.provider} — {topResource.title}
-                </p>
-              </>
-            )}
-            <div className="n-cta">
-              <a className="btn btn-primary" href="/pathway">
-                Start this step <SourceArrow />
-              </a>
-            </div>
+          <div className="foot">
+            For the counselor, this same screen reads as cohort readiness — same numbers, more sections.
           </div>
-
-                    <aside className="rail">
-            <div className="panel tickers">
-              <a className="tickline num" href="/progress">
-                <b>
-                  {v.closed} of {v.mapSize}
-                </b>{" "}
-                {career.name} skills on your baseline — <b>2</b> confirmed <span className="vbadge ok">·✓</span> ·
-                First 30 days: <b>{v.stageOne.done} of 3</b> done
-              </a>
-              <a className="tickline num" href="/progress">
-                Goal: <b>{activeGoal ? activeGoal.title : "none yet"}</b> — {activeGoal ? "in progress." : "Careers suggests one."}
-              </a>
-            </div>
-            <Disclosure toggle={`Not sure ${career.name} is it? You can switch anytime.`}>
-              <p>
-                Switching resets the parts of your score that measure progress toward a specific career; skill
-                progress and training progress start over. Skills you&apos;ve already proven stay on your profile.
-              </p>
-              <p className="switch-go">
-                <a className="link-sub" href="/career">
-                  Browse the career index →
-                </a>
-              </p>
-            </Disclosure>
-          </aside>
         </div>
       </section>
-    </>
+
+      {/* ── competency ledger (the ES channel's receipts) ── */}
+      <section className="card ledger" aria-label="Competency ledger — Employability Skills">
+        <div className="head">
+          <b>Competency ledger — Employability Skills</b>
+          <span className="num">
+            {v.esVerified} of {ASSESSED_COMPETENCIES} verified · {claimedCompetencies} self-report
+          </span>
+        </div>
+        <div className="lgrid">
+          {Object.entries(state.competencies ?? {}).map(([name, st]) => (
+            <div className="lrow" key={name}>
+              <span
+                className={`ms ${st === "verified" ? "fill done" : ""}`}
+                aria-hidden="true"
+              >
+                {st === "verified" ? "verified" : "task_alt"}
+              </span>
+              <b>{name}</b>
+              <span className={`chip ${st === "verified" ? "c-green" : "c-grey hatch-chip"}`}>
+                {st === "verified" ? "Verified" : "Self-report"}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="lcap">
+          Verified by the step-③ assessment&apos;s verification battery; self-report never closes bars — it carries a
+          hatch until evidence lands. {ASSESSED_COMPETENCIES} of 8 NACE competencies carried — Equity &amp; Inclusion
+          excluded by recorded choice.
+        </div>
+      </section>
+    </div>
   );
 }

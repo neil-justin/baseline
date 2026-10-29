@@ -3,6 +3,7 @@ import path from "node:path";
 import type { StudentState } from "@/lib/types";
 import { NEIL_SEED } from "@/lib/fixtures/neil";
 import { getCareer } from "@/lib/fixtures/catalog";
+import { resumeRunStore } from "@/lib/db/resume-run-store";
 import { PostgresStudentStore } from "@/lib/db/postgres-store";
 import { supabaseEnv } from "@/lib/supabase/server";
 
@@ -85,18 +86,25 @@ export const db: StudentStore = configured
   ? new SeededStore(new PostgresStudentStore())
   : new JsonStore();
 
-/** Convenience view: state + career + score in one read. */
+import { computeScore, type ArInput, type Score } from "@/lib/engines/score";
+
+/** Convenience view: state + career + score in one read. The AR feed reads
+ *  the resume-run store (best run counts — ADR 0002 amendment; unmeasured
+ *  until a successful diagnostic run exists, never a stale zero). */
 export async function getStudentView(id: string) {
   const s = await db.getStudentState(id);
   const career = getCareer(s.careerId);
-  if (!career) return { state: s, career: null, score: null };
-  const { computeScore } = await import("@/lib/engines/score");
-  const score = computeScore({
+  if (!career) return { state: s, career: null, score: null, ar: null as ArInput | null };
+  const latest = await resumeRunStore.latest(id);
+  const ar: ArInput | null = latest ? { measured: true, bestAir: latest.bestAir } : null;
+  const score: Score = computeScore({
     bars: s.bars,
     careerId: s.careerId,
     careerSkillCount: career.skills.length,
     goals: s.goals,
     stageOneDone: s.stageOneDone,
+    competencies: s.competencies ?? {},
+    ar,
   });
-  return { state: s, career, score };
+  return { state: s, career, score, ar };
 }

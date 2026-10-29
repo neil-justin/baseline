@@ -46,7 +46,9 @@ export function fmtEventDate(d: string | undefined): string {
   return `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]} ${Number(m[1])}`;
 }
 
-function headline(s: Pick<StudentState, "bars" | "careerId" | "goals" | "stageOneDone">): number {
+function headline(
+  s: Pick<StudentState, "bars" | "careerId" | "goals" | "stageOneDone" | "competencies">
+): number {
   const n = getCareer(s.careerId)?.skills.length ?? 0;
   return computeScore({
     bars: s.bars,
@@ -54,6 +56,7 @@ function headline(s: Pick<StudentState, "bars" | "careerId" | "goals" | "stageOn
     careerSkillCount: n,
     goals: s.goals,
     stageOneDone: s.stageOneDone,
+    competencies: s.competencies ?? {},
   }).total;
 }
 

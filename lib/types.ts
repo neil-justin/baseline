@@ -5,6 +5,10 @@ export type BarSource =
   | "checked" // ✓✓ comprehension-checked resource completion
   | "claimed"; // self-report only (flagged; never counts toward skills-match)
 
+/** ES carrier — the step-③ competency assessment's per-competency result
+ *  (7 NACE competencies, E&I excluded by recorded choice; ADR 0002). */
+export type CompetencyStatus = "verified" | "claimed";
+
 export type GoalType = "training" | "milestone";
 export type GoalStatus = "active" | "completed";
 
@@ -44,6 +48,9 @@ export interface StudentState {
   careerId: string | null;
   /** closed gap bars for the current career's skill map, keyed by skill name */
   bars: Record<string, { source: BarSource }>;
+  /** ES carrier: assessment result per NACE competency name (absent key /
+   *  absent field = that competency has no assessment result yet). */
+  competencies?: Record<string, CompetencyStatus>;
   goals: Goal[];
   /** locked TP basis: snapshot of stage-① ranked queue at the last re-rank;
    *  a member closing increments stageOneDone (reset on switch/re-assessment) */

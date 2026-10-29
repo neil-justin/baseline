@@ -97,8 +97,8 @@ function Arrow() {
 
 function BarLabel(score: Score, sub: string): string {
   return (
-    `Score ${score.total} of 100 ${sub} — skill progress ${score.sp} of 40, employability skills ${score.es} of 25, ` +
-    `training progress ${score.tp} of 20, career direction ${score.cc} of 15`
+    `Score ${score.total} of 100 ${sub} — skill progress ${score.sp} of ${WEIGHTS.sp}, employability skills ${score.es} of ${WEIGHTS.es}, ` +
+    `training progress ${score.tp} of ${WEIGHTS.tp}, application readiness ${score.ar === null ? "not yet measured" : score.ar + " of " + WEIGHTS.ar}, career direction ${score.cc} of ${WEIGHTS.cc}`
   );
 }
 
@@ -282,8 +282,9 @@ export default function CareerClient({
         sp,
         es: v.score.es,
         tp: v.score.tp,
+        ar: v.score.ar ?? null,
         cc: v.score.cc,
-        total: sp + v.score.es + v.score.tp + v.score.cc,
+        total: sp + v.score.es + v.score.tp + (v.score.ar ?? 0) + v.score.cc,
       };
       setReset({
         dip: { score: dipScore, parts: rubricParts(dipScore) },
@@ -729,14 +730,15 @@ export default function CareerClient({
                 />
               </div>
               <div className="readout-legend">
-                <span><b>SP</b> {reset.dip.score.sp}/40</span>
-                <span><b>ES</b> {reset.dip.score.es}/25</span>
-                <span><b>TP</b> {reset.dip.score.tp}/20</span>
-                <span><b>CC</b> {reset.dip.score.cc}/15</span>
+                <span><b>SP</b> {reset.dip.score.sp}/{WEIGHTS.sp}</span>
+                <span><b>ES</b> {reset.dip.score.es}/{WEIGHTS.es}</span>
+                <span><b>TP</b> {reset.dip.score.tp}/{WEIGHTS.tp}</span>
+                <span><b>AR</b> {reset.dip.score.ar === null ? "—" : `${reset.dip.score.ar}/${WEIGHTS.ar}`}</span>
+                <span><b>CC</b> {reset.dip.score.cc}/{WEIGHTS.cc}</span>
               </div>
               <div className="readout-fit">
-                The {reset.dip.score.total} that stays is career direction: deciding on {TARGET_NAME} and
-                keeping an active goal are still yours.
+                The {reset.dip.score.total} that stays is competencies and career direction: verified skills ·✓
+                and an active goal survive career-specific resets.
               </div>
             </div>
 
@@ -828,10 +830,11 @@ export default function CareerClient({
                 />
               </div>
               <div className="readout-legend">
-                <span><b>SP</b> {recovered.score.sp}/40</span>
-                <span><b>ES</b> {recovered.score.es}/25</span>
-                <span><b>TP</b> {recovered.score.tp}/20</span>
-                <span><b>CC</b> {recovered.score.cc}/15</span>
+                <span><b>SP</b> {recovered.score.sp}/{WEIGHTS.sp}</span>
+                <span><b>ES</b> {recovered.score.es}/{WEIGHTS.es}</span>
+                <span><b>TP</b> {recovered.score.tp}/{WEIGHTS.tp}</span>
+                <span><b>AR</b> {recovered.score.ar === null ? "—" : `${recovered.score.ar}/${WEIGHTS.ar}`}</span>
+                <span><b>CC</b> {recovered.score.cc}/{WEIGHTS.cc}</span>
               </div>
               <div className="readout-fit">
                 <b className="num">

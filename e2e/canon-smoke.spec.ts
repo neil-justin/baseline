@@ -3,7 +3,9 @@ import { signIn, neilCreds, resetStore } from "./helpers";
 
 /**
  * Smoke slice of the canon asserts — full demo-arc walk (beats 1–10) lands
- * with the remaining surfaces (plan Task 15). Canon: `_fixture-math.md`.
+ * with the remaining surfaces (plan Task 15). Canon: ADR 0002 five-channel
+ * re-lock (ES 30 / SP 25 / TP 20 / AR 15 / CC 10); numbers owned by
+ * `scripts/verify-fixtures.test.ts` and `lib/fixtures/neil.ts`.
  *
  * ADR 0003: every surface is session-honest — each check signs in as Neil
  * (the demo student whose canon seed lives in lib/fixtures/neil.ts). When
@@ -34,20 +36,21 @@ test.describe.serial("canon-smoke", () => {
     expect((await page.textContent(".score-big"))?.trim()).toBe("40");
   });
 
-  test("beat-5 sub-scores: 30/0/0/10 with honest ES line", async ({ page }) => {
+  test("beat-5 sub-scores: 19/17/0/—/4, the five channels with AR's honest grey", async ({ page }) => {
     await signIn(page, neil.email, neil.password);
     await page.goto("/dashboard");
     const rows = await page.locator(".sub-row").allTextContents();
-    expect(rows.length).toBe(4);
-    expect(rows[0]).toContain("30 of 40");
-    expect(rows[1]).toContain("0 of 25");
-    expect(rows[1]).toContain("full situations battery");
-    expect(rows[2]).toContain("0 of 20");
-    expect(rows[3]).toContain("10 of 15");
+    expect(rows.length).toBe(5);
+    expect(rows[0]).toContain("19 of 25"); // SP: 25×6/8 → 18.75 → 19
+    expect(rows[1]).toContain("17 of 30"); // ES: 30×4/7 → 17
+    expect(rows[1]).toContain("4 of 7 NACE competencies verified"); // ES receipt
+    expect(rows[2]).toContain("0 of 20"); // TP: internship pending evidence
+    expect(rows[3]).toContain("Not yet measured"); // AR: no diagnostic run — no stale zero
+    expect(rows[4]).toContain("4 of 10"); // CC: picked 1 + plan started 3
     expect((await page.textContent(".journey-row"))?.trim()).toContain("0 of 3 done");
   });
 
-  test("rubric bar arms to honest fractions: SP 0.75, CC 0.667", async ({ page }) => {
+  test("rubric bar arms to honest fractions: SP 0.76, ES 0.567, AR 0, CC 0.4", async ({ page }) => {
     await signIn(page, neil.email, neil.password);
     await page.goto("/dashboard");
     // Poll until every segment has settled at its earned fraction: segments
@@ -60,7 +63,7 @@ test.describe.serial("canon-smoke", () => {
           const t = getComputedStyle(el).transform;
           return t === "none" ? 0 : parseFloat(t.replace("matrix(", ""));
         });
-        const target = [0.75, 0, 0, 10 / 15];
+        const target = [19 / 25, 17 / 30, 0, 0, 4 / 10];
         return vals.every((v, i) => Math.abs(v - target[i]) < 0.006);
       })
       .catch(() => {});
@@ -68,10 +71,11 @@ test.describe.serial("canon-smoke", () => {
       els.map((el) => getComputedStyle(el).transform)
     );
     const m = fracs.map((t) => (t === "none" ? 0 : parseFloat(t.replace("matrix(", ""))));
-    expect(m[0]).toBeCloseTo(0.75, 1); // SP 30 of 40
-    expect(m[1]).toBeLessThan(0.01); // ES 0 of 25
+    expect(m[0]).toBeCloseTo(0.76, 1); // SP 19 of 25
+    expect(m[1]).toBeCloseTo(17 / 30, 1); // ES 17 of 30
     expect(m[2]).toBeLessThan(0.01); // TP 0 of 20
-    expect(m[3]).toBeCloseTo(0.667, 1); // CC 10 of 15
+    expect(m[3]).toBeLessThan(0.01); // AR unmeasured
+    expect(m[4]).toBeCloseTo(0.4, 1); // CC 4 of 10
   });
 
   test("state API returns the computed canon view", async ({ page }) => {
@@ -82,7 +86,8 @@ test.describe.serial("canon-smoke", () => {
     expect(res.ok()).toBeTruthy();
     const body = await res.json();
     expect(body.score.total).toBe(40);
-    expect(body.score).toMatchObject({ sp: 30, es: 0, tp: 0, cc: 10 });
+    expect(body.score).toMatchObject({ sp: 19, es: 17, tp: 0, cc: 4 });
+    expect(body.score.ar).toBeNull(); // AR unmeasured — honest grey, never a stale zero
     expect(body.career.name).toBe("Associate Software Developer");
   });
 });

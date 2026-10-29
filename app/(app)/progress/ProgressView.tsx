@@ -6,6 +6,7 @@ import CountUp from "@/components/CountUp";
 import Reveal from "@/components/Reveal";
 import CheckOverlay from "./CheckOverlay";
 import type { CheckResourceLite } from "./types";
+import { WEIGHTS } from "@/lib/engines/score";
 
 export interface FeedRow {
   key: string;
@@ -44,9 +45,10 @@ export interface GoalView {
 
 interface Props {
   careerName: string;
-  score: { total: number; sp: number; es: number; tp: number; cc: number };
-  parts: { pct: number; earnedFrac: number }[];
+  score: { total: number; sp: number; es: number; tp: number; ar: number | null; cc: number };
+  parts: { pct: number; earnedFrac: number; unmeasured?: boolean }[];
   rubricAria: string;
+  esVerified: number;
   updated: string | null;
   nextSkill: string | null;
   stageOneDone: number;
@@ -229,16 +231,24 @@ export default function ProgressView(props: Props) {
             </div>
             <div className="prog-subrows">
               <div className="tickline">
-                <b>Skills</b> — {props.score.sp} of 40
+                <b>Skills</b> — {props.score.sp} of {WEIGHTS.sp}
               </div>
               <div className="tickline">
-                <b>Working with people</b> — {props.score.es} of 25 · <span className="tick-note">the full battery comes after setup</span>
+                <b>Employability</b> — {props.score.es} of {WEIGHTS.es} · <span className="tick-note">{props.esVerified} of 7 NACE competencies verified ·✓</span>
               </div>
               <div className="tickline">
-                <b>Training</b> — {props.score.tp} of 20 · {props.stageOneDone} of 3 first steps done
+                <b>Training</b> — {props.score.tp} of {WEIGHTS.tp} · {props.stageOneDone} of 3 first steps done
               </div>
               <div className="tickline">
-                <b>Career direction</b> — {props.score.cc} of 15
+                <b>Application readiness</b> —{" "}
+                {props.score.ar === null ? (
+                  <span className="tick-note">not yet measured — the resume diagnostic in Prep opens this channel</span>
+                ) : (
+                  `${props.score.ar} of ${WEIGHTS.ar}`
+                )}
+              </div>
+              <div className="tickline">
+                <b>Career direction</b> — {props.score.cc} of {WEIGHTS.cc}
               </div>
             </div>
             <div className="readout-fit num">{props.fitLine}</div>

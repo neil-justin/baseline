@@ -1,6 +1,8 @@
 import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
 import { openSkills, rankOpenSkills, stageOne } from "@/lib/engines/gaps";
+import { scoreView } from "@/lib/engines/rubric";
+import { WEIGHTS } from "@/lib/engines/score";
 import type { BarSource, Career, Resource } from "@/lib/types";
 import { RESOURCES } from "@/lib/fixtures/resources";
 import PathwayTabs, {
@@ -125,9 +127,9 @@ function buildSteps(career: Career, bars: Record<string, { source: BarSource }>,
   const band1 = allClosed ? "clear" : `${stageOneDone + queue.length} open`;
   const band2 = `${remain.length} waiting`;
   const band = [
-    { num: "①", name: "First 30 days", count: band1, now: !allClosed },
-    { num: "②", name: "Next steps", count: band2, now: false },
-    { num: "③", name: "Entry-ready", count: "2 milestones", now: false },
+    { num: "1", name: "First 30 days", count: band1, now: !allClosed },
+    { num: "2", name: "Next steps", count: band2, now: false },
+    { num: "3", name: "Entry-ready", count: "2 milestones", now: false },
   ];
 
   return {
@@ -158,7 +160,8 @@ function buildGaps(
   career: Career,
   bars: Record<string, { source: BarSource }>,
   transferred: string[],
-  queue: string[]
+  queue: string[],
+  es: { measured: boolean; earned: number; max: number; verified: number } | null
 ): GapsTab {
   const allClosed = openSkills(career, bars).length === 0;
   const top = queue.length ? resourceFor(career, queue[0]) : null;
@@ -184,6 +187,10 @@ function buildGaps(
     }),
     allClosed,
     top: topRes,
+    esLine: es?.measured
+      ? `${es.earned} of ${es.max} · ${es.verified} of 7 NACE competencies verified ·✓`
+      : undefined,
+    esEarn: es?.measured ? es.earned / es.max : 0,
   };
 }
 
@@ -241,12 +248,23 @@ export default async function PathwayPage() {
   const open = openSkills(career, state.bars);
   const seeded = (state.stageOneQueue ?? []).filter((s) => open.includes(s));
   const queue = seeded.length ? seeded : stageOne(career, open).queue;
+  // ES strip — engine-fed (traceable, never a recomputation here)
+  const vEs = scoreView(career, state);
+  const esMeasured = Object.keys(state.competencies ?? {}).length > 0;
+  const es = esMeasured
+    ? {
+        measured: true,
+        earned: vEs.es,
+        max: WEIGHTS.es,
+        verified: Object.values(state.competencies ?? {}).filter((x) => x === "verified").length,
+      }
+    : null;
 
   return (
     <PathwayTabs
       undecided={false}
       steps={buildSteps(career, state.bars, state.stageOneDone, state.stageOneQueue)}
-      gaps={buildGaps(career, state.bars, state.decisions.verifiedTransferred, queue)}
+      gaps={buildGaps(career, state.bars, state.decisions.verifiedTransferred, queue, es)}
       resources={buildResources(career, state.bars, queue)}
     />
   );

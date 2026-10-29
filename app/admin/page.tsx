@@ -9,7 +9,7 @@ import "./admin.css";
 
 export const dynamic = "force-dynamic";
 
-type ScoreLike = { sp: number; es: number; tp: number; cc: number; total: number };
+type ScoreLike = { sp: number; es: number; tp: number; ar: number | null; cc: number; total: number };
 
 interface LiveRow {
   id: string;
@@ -25,6 +25,7 @@ const ZERO_PARTS: RubricValues = {
   sp: [0, RUBRIC_MAX.sp],
   es: [0, RUBRIC_MAX.es],
   tp: [0, RUBRIC_MAX.tp],
+  ar: [0, RUBRIC_MAX.ar],
   cc: [0, RUBRIC_MAX.cc],
 };
 
@@ -33,6 +34,7 @@ function partsOf(score: ScoreLike): RubricValues {
     sp: [score.sp, RUBRIC_MAX.sp],
     es: [score.es, RUBRIC_MAX.es],
     tp: [score.tp, RUBRIC_MAX.tp],
+    ar: [score.ar === null ? 0 : score.ar, RUBRIC_MAX.ar],
     cc: [score.cc, RUBRIC_MAX.cc],
   };
 }
@@ -42,12 +44,13 @@ function segments(p: RubricValues): RowSeg[] {
     { weight: RUBRIC_MAX.sp, earn: p.sp[0] / p.sp[1] },
     { weight: RUBRIC_MAX.es, earn: p.es[0] / p.es[1] },
     { weight: RUBRIC_MAX.tp, earn: p.tp[0] / p.tp[1] },
+    { weight: RUBRIC_MAX.ar, earn: p.ar[0] / p.ar[1] },
     { weight: RUBRIC_MAX.cc, earn: p.cc[0] / p.cc[1] },
   ];
 }
 
 function barAria(name: string, p: RubricValues): string {
-  return `${name}'s progress: skill ${p.sp[0]} of ${p.sp[1]}, employability ${p.es[0]} of ${p.es[1]}, training ${p.tp[0]} of ${p.tp[1]}, career clarity ${p.cc[0]} of ${p.cc[1]}`;
+  return `${name}'s progress: skill ${p.sp[0]} of ${p.sp[1]}, employability ${p.es[0]} of ${p.es[1]}, training ${p.tp[0]} of ${p.tp[1]}, application readiness ${p.ar[0]} of ${p.ar[1]}, career clarity ${p.cc[0]} of ${p.cc[1]}`;
 }
 
 /** Last-activity label from the student's own event log — no fixture stamps. */
@@ -119,7 +122,7 @@ export default async function AdminCohortPage() {
                   <small>/100</small>
                 </div>
                 <p className="cnote">
-                  The average of the live scores below — the same four-part rubric the student view uses,
+                  The average of the live scores below — the same five-part rubric the student view uses,
                   computed per student at request time.
                 </p>
               </Reveal>

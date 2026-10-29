@@ -1,63 +1,67 @@
 "use client";
 
-import { Fragment } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+/**
+ * DNA v7 shell chrome (LOCKED 2026-10-29): a 56px top bar — brand mark with
+ * the 6px blue inlay, the "Career Readiness" wordmark, and on the right ONLY
+ * the user avatar disc linking to Profile (no search, no notifications, no
+ * invented affordances — the element-budget rule) — over a 48px icon rail
+ * (Material Symbols, active pill). The rail is the primary nav for every
+ * (app) surface; at ≤720px it collapses to a Material bottom nav.
+ *
+ * The avatar initial is the session-honest signed-in student's name initial
+ * (passed by the (app) layout from the store) — never a hardcoded persona.
+ */
 const NAV = [
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/career", label: "Career" },
-  { href: "/pathway", label: "Pathway" },
-  { href: "/prep", label: "Prep" },
-  { href: "/progress", label: "Progress" },
-  { href: "/profile", label: "Profile", ownRow: true },
+  { href: "/dashboard", icon: "space_dashboard", label: "Dashboard" },
+  { href: "/career", icon: "work", label: "Careers" },
+  { href: "/pathway", icon: "checklist", label: "My Plan" },
+  { href: "/prep", icon: "description", label: "Prep" },
+  { href: "/profile", icon: "account_circle", label: "Profile" },
 ];
 
-/** Sticky app bar — 5-item nav (locked), CSS-geometric brand mark. The user
- * chip is the session-honest meta line passed by the (app) layout. */
-export default function AppBar({ meta = "" }: { meta?: string }) {
+export default function AppBar({ initial = "" }: { initial?: string }) {
   const pathname = usePathname();
+  const current = (href: string) =>
+    pathname === href || pathname.startsWith(href + "/");
+
   return (
-    <header className="bar">
-      <div className="app-bar-in">
-        <div className="brand">
-          <span className="brand-mark" aria-hidden="true" />
-          <span className="brand-name">Career Readiness</span>
-        </div>
-        <nav className="app-nav" aria-label="Primary">
-          {NAV.map((item) => {
-            const current = pathname === item.href;
-            return (
-              <Fragment key={item.href}>
-                {item.ownRow ? <span className="nav-spacer" aria-hidden="true" /> : null}
-                {current ? (
-                  <a href={item.href} aria-current="page">
-                    {item.label}
-                  </a>
-                ) : (
-                  <Link href={item.href}>{item.label}</Link>
-                )}
-              </Fragment>
-            );
-          })}
-        </nav>
-        <div className="app-user">
-          <span className="user-chip">{meta}</span>
-          {/* POST, not a GET <Link>: Next prefetches links, and a prefetch
-              against a GET sign-out route would silently end the session
-              (the walk's own visits wiped the cookie — e2e-caught). A form
-              POST is never prefetched. */}
-          <form action="/api/auth/signout" method="post">
-            <button
-              type="submit"
-              className="link-quiet"
-              style={{ background: "none", border: 0, padding: 0, cursor: "pointer", fontFamily: "inherit" }}
-            >
-              Sign out
-            </button>
-          </form>
-        </div>
+    <header className="v7-head" role="banner">
+      <div className="topbar">
+        <span className="brandmark" aria-hidden="true">
+          <i />
+        </span>
+        <span className="brand">Career Readiness</span>
+        <span className="spacer" aria-hidden="true" />
+        {initial ? (
+          <Link
+            className="avatar"
+            href="/profile"
+            aria-label="Profile"
+            title="Profile"
+          >
+            {initial}
+          </Link>
+        ) : null}
       </div>
+      <nav className="rail" aria-label="Primary">
+        {NAV.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            title={item.label}
+            className={current(item.href) ? "on" : ""}
+            aria-current={current(item.href) ? "page" : undefined}
+          >
+            <span className="ms" aria-hidden="true">
+              {item.icon}
+            </span>
+            <span className="rail-caption">{item.label}</span>
+          </Link>
+        ))}
+      </nav>
     </header>
   );
 }

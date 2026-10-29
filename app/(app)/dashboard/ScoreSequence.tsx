@@ -5,28 +5,36 @@ import CountUp from "@/components/CountUp";
 import { SegRubricBar } from "@/components/instrument";
 
 /**
- * The measurement sequence from the prototype's `data-sequence`: the score
- * counts up, the rubric bar arms ~160ms after it settles. Renders as a
- * fragment so `.score-left` and `.score-right` are the band grid's direct
- * children — structure matches prototype/dashboard.html exactly.
+ * The measurement sequence (prototype `data-sequence` semantics): the score
+ * counts up, the segmented five-channel bar arms ~160ms after it settles.
+ * v7 places it in the header band — the composite is the headline, the
+ * segs + channel labels sit beside it (Material state language only, no
+ * entrance motion; the count-up IS the measurement).
  */
 export default function ScoreSequence({
   score,
   parts,
-  line,
-  right,
+  labels,
+  suffix,
+  ratemsg,
+  fine,
 }: {
   score: number;
   parts: { pct: number; earnedFrac: number }[];
-  line: ReactNode;
-  right: ReactNode;
+  /** per-channel label row under the bar, computed ("SP 19/25", "AR —") */
+  labels: ReactNode[];
+  /** honest subtext after "/ 100" — empty string once the plan has moved */
+  suffix: string;
+  /** "Computed from your own records · NACE-aligned" */
+  ratemsg: string;
+  /** second fine-print line (the "% ready for …" readout line) */
+  fine: ReactNode;
 }) {
   const [armed, setArmed] = useState(false);
   return (
     <>
-      <div className="score-left">
-        <span className="label">Readiness</span>
-        <div className="score-readout num">
+      <div className="composite-wrap">
+        <div className="composite">
           <CountUp
             to={score}
             dec={0}
@@ -35,17 +43,23 @@ export default function ScoreSequence({
             className="score-big"
             ariaLabel={`Readiness ${score} of 100`}
           />
-          <small>of 100</small>
+          <span className="c-of num">/ 100{suffix}</span>
         </div>
-        <p className="score-line">{line}</p>
-        {right}
+        <div className="ratemsg">{ratemsg}</div>
+        {fine && <div className="ratemsg num">{fine}</div>}
       </div>
-      <div className="score-right">
-        <div className="seg-head">
-          <span className="label">Breakdown</span>
-          <span className="label num">40 / 25 / 20 / 15</span>
+      <div className="segs">
+        <SegRubricBar
+          parts={parts}
+          armed={armed}
+          height={8}
+          ariaLabel={`Score ${score} of 100 — the five channels`}
+        />
+        <div className="seglabels num">
+          {labels.map((l, i) => (
+            <span key={i}>{l}</span>
+          ))}
         </div>
-        <SegRubricBar parts={parts} armed={armed} height={16} ariaLabel={`Score ${score} of 100`} />
       </div>
     </>
   );

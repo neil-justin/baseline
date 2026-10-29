@@ -28,6 +28,7 @@ function sampleScore(): Score {
     careerSkillCount: seedCareer.skills.length,
     goals: NEIL_SEED.goals,
     stageOneDone: NEIL_SEED.stageOneDone,
+    competencies: NEIL_SEED.competencies,
   });
 }
 
@@ -66,12 +67,13 @@ const PREVIEW_IDS = [
 
 const RUBRIC_LABELS = [
   { n: "Skill progress", d: "what you can do, checked" },
-  { n: "Employability skills", d: "how you work with people" },
+  { n: "Employability skills", d: "the NACE assessment, verified" },
   { n: "Training progress", d: "what you finished and passed" },
-  { n: "Career clarity", d: "whether you’ve chosen and set a goal" },
+  { n: "Application readiness", d: "can your resume get through the screen" },
+  { n: "Career clarity", d: "whether you’ve committed to the plan" },
 ] as const;
 
-const RUBRIC_PCTS = [WEIGHTS.sp, WEIGHTS.es, WEIGHTS.tp, WEIGHTS.cc] as const;
+const RUBRIC_PCTS = [WEIGHTS.sp, WEIGHTS.es, WEIGHTS.tp, WEIGHTS.ar, WEIGHTS.cc] as const;
 
 /** M0 Landing — the public measurement. Markup ported from prototype/index.html. */
 export default function LandingPage() {

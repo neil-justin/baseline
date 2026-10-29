@@ -36,6 +36,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="font/woff2"
           crossOrigin="anonymous"
         />
+        {/* DNA v7 (app-shell) faces — self-hosted, offline venue; preloaded so
+            the `font-display: block` window covers first paint. */}
+        <link
+          rel="preload"
+          href="/fonts/roboto-var-latin.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/material-symbols-outlined-var.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
       </head>
       <body>
         <a className="skip" href="#main">

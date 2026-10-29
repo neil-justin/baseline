@@ -28,9 +28,29 @@ _Avoid_: employability (vaguer), job-readiness (implies an outcome promise)
 The layered, citable source of truth for what skills each role requires. Layers: PSOC (occupational anchor) → PSF (role-level skills, covered sectors) → TESDA office qualifications + O*NET/ESCO (declared gap-fillers where PSF has no sector) → PSF Enabling Skills + NACE (cross-cutting competencies) → CHED CMOs (academic anchor) → DOLE-BLE forecast (demand-side justification for role selection).
 _Avoid_: skillset framework, skills taxonomy (panel shorthand, not a defined term)
 
+**Application Materials Diagnostic (AM)**:
+The AR channel's measuring feature — one flow in Prep: the student uploads their own resume and cover letter, **each uploadable and checkable independently** (per-file runs, latest counts per file; a combined pass stays available). Per-file deterministic checklists with tiered feedback. Feedback-only: it never writes materials and never claims "ATS-pass". The employer name is optional; the role anchor is the declared Target Role.
+_Avoid_: resume builder, ATS checker, material writer
+
+**Cover-Letter Check**:
+The letter half of the AM: parse-pass × keyword-role alignment vs the Target Role's skill map, plus structural checks (salutation present · employer named · closing ask present · 250–500-word band). Not a letter generator — a tailoring checker over the student's own text; the employer field is optional (omitted = employer check honestly "not evaluated"); change of employer = re-run, latest counts.
+_Avoid_: generic letter, generated cover letter, writing assistant
+
+**Professional Presence**:
+The student's declared, findable professional identity — LinkedIn URL plus a professional contact email — carried in Profile → Credentials as a machine-verified entry (stamp: "link-verified", automatic and timestamped; distinct from counselor-audited certifications). A private profile records the honest sub-result "resolves, content not machine-verifiable".
+_Avoid_: LinkedIn clone, social media audit, personal brand score
+
 **Skills Gap**:
 The difference between the skills the target role requires (per the Competency Framework) and the student's currently evidenced skills. Gaps are tiered and drive the learning pathway.
 _Avoid_: weakness, deficiency
+
+**Skill Map**:
+The per-role skill inventory the diagnostics measure against — each row carries a source-verbatim skill name, a tier (core = directly serves the role's primary purpose; secondary = supporting), a descriptor (source text where printed), verbatim task anchors, and resource linkage. Nothing in it is invented: names, levels, and tasks quote a recorded primary source.
+_Avoid_: skill list, syllabus
+
+**Learning Resource**:
+A credible learning pointer attached to a skill row — free/credible online courses, certificates, official docs, and text-based resources; books may be commercial (purchase, labeled). Sourcing is international-first: no residency constraint, and a PH-learner note is attached only where it genuinely matters. Every resource is access-verified at recording time and cites its source.
+_Avoid_: recommendation, link dump
 
 **AI-Assisted**:
 The system's AI division of labor: deterministic engines compute all scores, rankings, and gaps; the LLM writes only the explanatory layer (suggestion framing, step rationale, plan narrative), with template fallback when unavailable.

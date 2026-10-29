@@ -75,11 +75,12 @@ interface StateView {
     strand: string;
     careerId: string | null;
     bars: Record<string, { source: string }>;
+    competencies?: Record<string, string>;
     goals: Goal[];
     stageOneDone: number;
   };
   career: Career | null;
-  score: { sp: number; es: number; tp: number; cc: number; total: number } | null;
+  score: { sp: number; es: number; tp: number; ar: number | null; cc: number; total: number } | null;
 }
 
 export default function Onboarding() {
@@ -776,14 +777,16 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
   const verifiedCount = Object.values(state.bars).filter((b) => b.source === "verified").length;
   const closed = Object.keys(state.bars).length;
   const mapSize = career.skills.length;
+  const esVerified = Object.values(state.competencies ?? {}).filter((v) => v === "verified").length;
   const queue = stageOne(career, openSkills(career, state.bars)).queue;
   const activeGoal = state.goals.some((g) => g.type === "training" && g.status === "active");
   const gradeLabel = state.grade === "G11" ? "GRADE 11" : state.grade;
 
   const parts = [
     { pct: WEIGHTS.sp, earnedFrac: score.sp / WEIGHTS.sp },
-    { pct: WEIGHTS.es, earnedFrac: 0 },
+    { pct: WEIGHTS.es, earnedFrac: score.es / WEIGHTS.es },
     { pct: WEIGHTS.tp, earnedFrac: score.tp / WEIGHTS.tp },
+    { pct: WEIGHTS.ar, earnedFrac: score.ar === null ? 0 : score.ar / WEIGHTS.ar },
     { pct: WEIGHTS.cc, earnedFrac: score.cc / WEIGHTS.cc },
   ];
 
@@ -807,24 +810,29 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
           <SegRubricBar
             parts={parts}
             armed={armed}
-            ariaLabel={`Readiness ${score.total} of 100 — skills ${score.sp} of 40, people skills 0 of 25, training ${score.tp} of 20, direction ${score.cc} of 15`}
+            ariaLabel={`Readiness ${score.total} of 100 — skills ${score.sp} of ${WEIGHTS.sp}, employability ${score.es} of ${WEIGHTS.es}, training ${score.tp} of ${WEIGHTS.tp}, application readiness ${score.ar === null ? "not yet measured" : `${score.ar} of ${WEIGHTS.ar}`}, direction ${score.cc} of ${WEIGHTS.cc}`}
           />
         </div>
         <div className="stack" style={{ marginTop: 14 }}>
           <div className="tickline num">
-            <b>Skills</b> — {score.sp} of 40 · {closed} of {mapSize} skills on your baseline ({verifiedCount}{" "}
+            <b>Skills</b> — {score.sp} of {WEIGHTS.sp} · {closed} of {mapSize} skills on your baseline ({verifiedCount}{" "}
             confirmed <span className="vbadge ok">·✓</span>)
           </div>
           <div className="tickline num">
-            <b>People skills</b> — 0 of 25 · Not yet measured — situations come later
+            <b>Employability</b> — {score.es} of {WEIGHTS.es} ·{" "}
+            {esVerified} of 7 NACE competencies verified <span className="vbadge ok">·✓</span>
           </div>
           <div className="tickline num">
-            <b>Training</b> — {score.tp} of 20 ·{" "}
+            <b>Training</b> — {score.tp} of {WEIGHTS.tp} ·{" "}
             {state.stageOneDone === 0 ? "First 3 steps ready, none finished yet" : `${state.stageOneDone} of 3 done`}
           </div>
           <div className="tickline num">
-            <b>Direction</b> — {score.cc} of 15 · Career picked ·{" "}
-            {activeGoal ? "goal set" : "no goal set — Progress suggests one"}
+            <b>Application readiness</b> — {score.ar === null ? "Not yet measured" : `${score.ar} of ${WEIGHTS.ar}`} ·{" "}
+            {score.ar === null ? "the resume diagnostic (Prep) opens this channel" : "best diagnostic run counts"}
+          </div>
+          <div className="tickline num">
+            <b>Direction</b> — {score.cc} of {WEIGHTS.cc} · Career picked ·{" "}
+            {activeGoal ? "plan started" : "no commitment yet — set your first step next"}
           </div>
         </div>
       </div>

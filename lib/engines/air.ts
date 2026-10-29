@@ -1,5 +1,5 @@
 /**
- * AIR resume component (Q5a, round 6a brief) — deterministic, template-only.
+ * AIR resume component (Q5a, round 6a) — deterministic, template-only.
  *
  * AIR_resume = parse-pass gate × format-conformance × keyword-coverage.
  *  - parse-pass gate: a parse-failed run contributes nothing (scope decision:
@@ -9,10 +9,11 @@
  *  - keyword coverage: fraction of the target role's core-tier skills found in
  *    the resume text (with the role's curated synonym seed).
  *
- * Standalone by design (2026-10-28 dispatch): the 5-channel score rework is a
- * separate round — lib/engines/score.ts carries the integration point comment.
- * The diagnostic result exposes airResume directly; nothing else consumes it
- * yet. Best run counts (unlimited re-runs) — persistence keeps the best.
+ * WIRED IN (ADR 0002 re-lock, 2026-10-29): the score's AR channel is
+ * 15 × bestAir ÷ 100 — `lib/db.ts` feeds the best persisted run into
+ * `computeScore` via the AR input; `lib/db/resume-run-store.ts` keeps the
+ * best-run semantics (unlimited re-runs). Unmeasured (no run) = the channel
+ * sits out — no earned points, no painted zero.
  */
 
 export interface AirResumeInput {

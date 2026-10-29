@@ -3,10 +3,12 @@ import { resetStore, settled, shot, signIn, cohortEmail, DEMO_PASSWORD, neilCred
 
 /**
  * Demo-arc E2E — one walk, beats 1–10 (plan Task 15).
- * Canon: `.scratch/career-readiness-platform/features/content/_fixture-math.md`.
- *   setup 40 → switch dip 10 → post-re-assessment 33 → money shot 51
- *   (SP 29 / TP 7 / CC 15); beat-8 "5 of 7 · First 30 days: 1 of 3 done";
- *   trajectory 40 → 51; admin reads the same live numbers.
+ * Canon: ADR 0002 (amended 2026-10-29) five-channel re-lock.
+ *   setup 40 → switch dip 21 → post-re-assessment 35 → money shot 52
+ *   (SP 18/25 · ES 17/30 · TP 7/20 · CC 10/10; AR sits out unmeasured);
+ *   beat-8 "5 of 7 · First 30 days: 1 of 3 done"; trajectory 40 → 52; admin
+ *   reads the same live numbers. Numbers owned by
+ *   `scripts/verify-fixtures.test.ts` + `lib/fixtures/neil.ts`.
  *
  * Demo inputs (round 9 college catalog): Computer & IT track · "No — help
  * me figure it out" · interest quiz Kind of / Yes / Yes / Not really /
@@ -50,7 +52,7 @@ test.describe.serial("demo-arc", () => {
     // plays onboarding over it.
     await page.waitForURL("**/dashboard");
     const seedScore = await settled(page, ".score-big");
-    expect(seedScore).toBe("40"); // NEIL_SEED → SP 30/40 · ES 0 · TP 0 · CC 10 = 40
+    expect(seedScore).toBe("40"); // NEIL_SEED → SP 19/25 · ES 17/30 · TP 0 · CC 4 = 40
     notes.push("seed fidelity: Neil's canon seed loads → dashboard reads 40 pre-walk ✓");
 
     /* ══════════ BEATS 1–4 · onboarding ①–④ ══════════ */
@@ -129,12 +131,15 @@ test.describe.serial("demo-arc", () => {
     await page.waitForSelector("text=Your starting point", { timeout: 8000 });
     await expect(page.locator(".readout-score")).toContainText("40");
     const revealTicks = (await page.locator(".tickline").allTextContents()).join(" | ");
-    expect(revealTicks).toContain("30 of 40");
+    expect(revealTicks).toContain("19 of 25");
     expect(revealTicks).toContain("6 of 8");
     expect(revealTicks).toContain("(2 confirmed");
+    expect(revealTicks).toContain("17 of 30"); // ES — the step-③ assessment receipt
+    expect(revealTicks).toContain("4 of 7 NACE competencies verified");
+    expect(revealTicks).toContain("Not yet measured"); // AR honest grey
     expect(revealTicks).toContain("0 of 20");
-    expect(revealTicks).toContain("10 of 15");
-    notes.push("beat 5 reveal: 40 · Skills 30 of 40 (6 of 8, 2 confirmed ·✓) · CC 10 of 15 ✓");
+    expect(revealTicks).toContain("4 of 10");
+    notes.push("beat 5 reveal: 40 · Skills 19 of 25 (6 of 8, 2 confirmed ·✓) · ES 17 of 30 · AR not yet measured · CC 4 of 10 ✓");
     await page.locator("a", { hasText: "Take me to my Dashboard" }).click();
     await page.waitForURL("**/dashboard");
 
@@ -142,19 +147,20 @@ test.describe.serial("demo-arc", () => {
     expect(await settled(page, ".score-big")).toBe("40");
     notes.push("beat 5 dashboard: .score-big reads 40 (count-up settled) ✓");
 
-    // sub-score rows — canon beats: SP 30 · ES 0-of-25 honest line · TP 0 · CC 10
+    // sub-score rows — canon beats: SP 19 · ES 17-of-30 assessment receipt · TP 0 · AR grey · CC 4
     const rows5 = (await page.locator(".sub-row").allTextContents()).map((t) => t.trim());
-    expect(rows5).toHaveLength(4);
-    expect(rows5[0]).toContain("30 of 40");
-    expect(rows5[1]).toContain("0 of 25");
-    expect(rows5[1]).toContain("full situations battery"); // ES honest line after setup
+    expect(rows5).toHaveLength(5);
+    expect(rows5[0]).toContain("19 of 25");
+    expect(rows5[1]).toContain("17 of 30");
+    expect(rows5[1]).toContain("4 of 7 NACE competencies verified"); // ES receipt (the assessment carries the channel)
     expect(rows5[2]).toContain("0 of 20");
-    expect(rows5[3]).toContain("10 of 15");
+    expect(rows5[3]).toContain("Not yet measured"); // AR grey
+    expect(rows5[4]).toContain("4 of 10");
     await expect(page.locator(".journey-row")).toContainText("First 30 days, 0 of 3 done");
     await shot(page, "arc-40.png");
-    notes.push("beat 5 dashboard sub-rows: 30 of 40 / 0 of 25 (full battery after setup) / 0 of 20 / 10 of 15 · journey 0 of 3 · arc-40.png ✓");
+    notes.push("beat 5 dashboard sub-rows: 19 of 25 / 17 of 30 (4 of 7 verified ·✓) / 0 of 20 / AR not yet measured / 4 of 10 · journey 0 of 3 · arc-40.png ✓");
 
-    /* ══════════ BEAT 6 · honest dip 40 → 10 → 33 ══════════ */
+    /* ══════════ BEAT 6 · honest dip 40 → 21 → 35 ══════════ */
 
     await page.locator('header a[href="/career"]').click();
     await expect(page.getByRole("heading", { name: "Your career" })).toBeVisible();
@@ -168,17 +174,18 @@ test.describe.serial("demo-arc", () => {
     await expect(page.locator(".sw-cost")).toContainText("resets skill progress and training progress");
     await page.locator(".sw-actions .btn-primary").click(); // Switch to Software QA Analyst
 
-    // honest dip — the readout says exactly what the switch costs (canon 10)
+    // honest dip — the readout says exactly what the switch costs (canon 21)
     await page.waitForSelector("#sw-reset .readout", { timeout: 8000 });
-    await expect(page.locator("#sw-reset .readout-score")).toHaveText(/10\/100/);
+    await expect(page.locator("#sw-reset .readout-score")).toHaveText(/21\/100/);
     const dipLegend = (await page.locator("#sw-reset .readout-legend").textContent()) ?? "";
-    expect(dipLegend).toContain("SP 0/40");
-    expect(dipLegend).toContain("ES 0/25");
+    expect(dipLegend).toContain("SP 0/25");
+    expect(dipLegend).toContain("ES 17/30");
     expect(dipLegend).toContain("TP 0/20");
-    expect(dipLegend).toContain("CC 10/15");
-    await expect(page.locator("#sw-reset .readout-fit")).toContainText("The 10 that stays is career direction");
-    await shot(page, "arc-10.png");
-    notes.push("beat 6 dip: reset readout 10/100 · SP 0/40 ES 0/25 TP 0/20 CC 10/15 · arc-10.png ✓");
+    expect(dipLegend).toContain("AR —"); // unmeasured channel — no stale zero
+    expect(dipLegend).toContain("CC 4/10");
+    await expect(page.locator("#sw-reset .readout-fit")).toContainText("The 21 that stays is competencies and career direction");
+    await shot(page, "arc-21.png");
+    notes.push("beat 6 dip: reset readout 21/100 · SP 0/25 ES 17/30 TP 0/20 AR — CC 4/10 · arc-21.png ✓");
 
     // quick re-assessment — BUG-1 fix verified: the carried ·✓ set is persisted
     // at switch time (decisions.verifiedTransferred), so canon says Business
@@ -198,19 +205,19 @@ test.describe.serial("demo-arc", () => {
     await page.locator("button", { hasText: "See my baseline" }).click();
 
     await page.waitForSelector("#sw-recovered .readout", { timeout: 8000 });
-    await expect(page.locator("#sw-recovered .score-from")).toHaveText("10");
+    await expect(page.locator("#sw-recovered .score-from")).toHaveText("21");
     const recTo = ((await page.locator("#sw-recovered .score-to").textContent()) ?? "").trim();
-    soft(recTo).toBe("33"); // canon: 10 → 33
+    soft(recTo).toBe("35"); // canon: 21 → 35
     const recLegend = (await page.locator("#sw-recovered .readout-legend").textContent()) ?? "";
-    soft(recLegend).toContain("SP 23/40"); // 40 × 4/7 → 23 (half-down) — Business Needs ·✓ + 3 self-claims
-    expect(recLegend).toContain("CC 10/15"); // Python goal rides the switch + decided
+    soft(recLegend).toContain("SP 14/25"); // 25 × 4/7 → 14 — Business Needs ·✓ + 3 self-claims
+    expect(recLegend).toContain("CC 4/10"); // the plan commitment rides the switch + career picked
     const recLine = ((await page.locator("#sw-recovered .rec-line").textContent()) ?? "").replace(/\s+/g, " ");
     soft(recLine).toContain("4 of 7");
     expect(recLine).toContain("Business Needs");
     expect(recLine).toContain("transferred"); // the carried ·✓ is still in the verifiedTransferred set
-    await shot(page, "arc-33.png");
+    await shot(page, "arc-35.png");
     notes.push(
-      `beat 6 recovered: 10 → ${recTo} (canon 33) · legend "${recLegend.replace(/\s+/g, " ")}" · line "${recLine}" · arc-33.png`
+      `beat 6 recovered: 21 → ${recTo} (canon 35) · legend "${recLegend.replace(/\s+/g, " ")}" · line "${recLine}" · arc-35.png`
     );
 
     /* ══════════ BEAT 7 · the money shot — set the goal, pass the check, 51 ══════════ */
@@ -219,7 +226,8 @@ test.describe.serial("demo-arc", () => {
     // University) via "Set this goal" (frozen POST /api/goal, idempotent); the
     // goal then appears under Progress with its check launcher, and the whole
     // money shot is driven through the real UI: recovered screen → Progress
-    // goal row → CheckOverlay → 5 correct answers → 51 (SP 29 / TP 7 / CC 15).
+    // goal row → CheckOverlay → 5 correct answers → 52 (SP 18/25 · TP 7/20 ·
+    // CC 10/10; the plan's first item done ticks CC — My Plan Q4b).
     // Check bank (lib/fixtures/checks.ts): TESTING_CHECK answers are all
     // index 0 — the spec answers by driving the options, not the endpoint.
 
@@ -275,22 +283,23 @@ test.describe.serial("demo-arc", () => {
     soft(autoLine).toContain("software testing gap");
     notes.push(`beat 7 auto-complete line: "${autoLine}"`);
 
-    /* ══════════ dashboard at the money state (canon 51) ══════════ */
+    /* ══════════ dashboard at the money state (canon 52) ══════════ */
 
     await page.goto("/dashboard");
     const money = await settled(page, ".score-big");
     const moneyRows = (await page.locator(".sub-row").allTextContents()).map((t) => t.trim());
-    soft(moneyRows[0]).toContain("29 of 40"); // SP — canon
-    expect(moneyRows[1]).toContain("0 of 25");
-    expect(moneyRows[1]).toContain("full situations battery");
+    soft(moneyRows[0]).toContain("18 of 25"); // SP — canon (25×5/7)
+    expect(moneyRows[1]).toContain("17 of 30"); // ES — the assessment state carries through
+    expect(moneyRows[1]).toContain("4 of 7 NACE competencies verified");
     soft(moneyRows[2]).toContain("7 of 20"); // TP 20×1/3 → 7 — canon
     soft(moneyRows[2]).toContain("First 30 days: 1 of 3 done");
-    soft(moneyRows[3]).toContain("15 of 15"); // canon CC — needs the completed Training goal
-    soft(money).toBe("51"); // canon headline, crosses 50 live
-    await shot(page, money === "51" ? "arc-51.png" : "arc-bug-money-state.png");
+    expect(moneyRows[3]).toContain("Not yet measured"); // AR — the walk never visits Prep
+    soft(moneyRows[4]).toContain("10 of 10"); // canon CC — first item done tick
+    soft(money).toBe("52"); // canon headline, crosses 50 live
+    await shot(page, money === "52" ? "arc-52.png" : "arc-bug-money-state.png");
     notes.push(
-      `beat 7 dashboard: score reads ${money} (canon 51) · sub-rows "${moneyRows.map((r) => r.match(/You hold (.+?);/)?.[1] ?? r).join(" / ")}" · ` +
-        `${money === "51" ? "arc-51.png" : "arc-bug-money-state.png"}`
+      `beat 7 dashboard: score reads ${money} (canon 52) · sub-rows "${moneyRows.map((r) => r.match(/You hold (.+?);/)?.[1] ?? r).join(" / ")}" · ` +
+        `${money === "52" ? "arc-52.png" : "arc-bug-money-state.png"}`
     );
 
     /* ══════════ BEAT 8 · pathway glance ══════════ */
@@ -316,7 +325,7 @@ test.describe.serial("demo-arc", () => {
     expect(planText).not.toContain("Test Planning"); // summary only — NEVER the ranked list
     const trajRows = (await page.locator(".traj-rows .trow").allTextContents()).map((t) => t.replace(/\s+/g, " ").trim());
     expect(trajRows.join(" ")).toContain("40"); // setup point — canon holds
-    soft(trajRows.join(" ")).toContain("51"); // canon end point
+    soft(trajRows.join(" ")).toContain("52"); // canon end point
     const prov = ((await page.locator(".prov").textContent()) ?? "").replace(/\s+/g, " ");
     expect(prov).toContain("1 gap bar closed");
     expect(prov).toContain("1 comprehension check passed");
@@ -335,18 +344,19 @@ test.describe.serial("demo-arc", () => {
     const demoRow = page.locator(".s-row.row-demo");
     await expect(demoRow.locator(".s-career")).toHaveText("Software QA Analyst"); // career survives the switch ✓
     const cohortScore = ((await demoRow.locator(".s-score").textContent()) ?? "").trim();
-    soft(cohortScore).toBe("51"); // canon: the live cohort row reads 51
+    soft(cohortScore).toBe("52"); // canon: the live cohort row reads 52
     await page.goto("/admin/student?student=neil");
     const adminScore = await settled(page, ".dt-score [data-count]");
-    soft(adminScore).toBe("51");
+    soft(adminScore).toBe("52");
     const ss = (await page.locator(".ss-row").allTextContents()).map((t) => t.replace(/\s+/g, " ").trim());
-    soft(ss[0]).toContain("29 of 40"); // SP — canon
-    expect(ss[1]).toContain("0 of 25"); // ES
-    expect(ss[1]).toContain("full situations battery");
+    soft(ss[0]).toContain("18 of 25"); // SP — canon
+    expect(ss[1]).toContain("17 of 30"); // ES — assessment receipt
+    expect(ss[1]).toContain("4 of 7 competencies verified");
     expect(ss[2]).toContain("7 of 20"); // TP 1 of 3 — canon holds
-    soft(ss[3]).toContain("15 of 15"); // CC — canon
+    expect(ss[3]).toContain("not yet measured"); // AR — honest grey
+    soft(ss[4]).toContain("10 of 10"); // CC — canon
     await shot(page, "arc-admin.png");
-    notes.push(`beat 10 admin: cohort row ${cohortScore} · student readout ${adminScore} · rubric ["${ss[0]}", "${ss[1]}", "${ss[2]}", "${ss[3]}"] · arc-admin.png`);
+    notes.push(`beat 10 admin: cohort row ${cohortScore} · student readout ${adminScore} · rubric ["${ss[0]}", "${ss[1]}", "${ss[2]}", "${ss[3]}", "${ss[4]}"] · arc-admin.png`);
 
     // eslint-disable-next-line no-console
     console.log("\n=== demo-arc walk notes ===\n" + notes.map((n) => `• ${n}`).join("\n"));

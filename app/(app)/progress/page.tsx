@@ -1,6 +1,7 @@
 import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
+import { WEIGHTS } from "@/lib/engines/score";
 import { rankOpenSkills } from "@/lib/engines/gaps";
 import { getResourcesForCareer, RESOURCES } from "@/lib/fixtures/resources";
 import { CHECKS } from "@/lib/fixtures/checks";
@@ -62,10 +63,10 @@ function UndecidedDefault() {
 /** M9+M6 Progress — the live record. Markup ported from prototype/progress.html. */
 export default async function ProgressPage() {
   const profile = await requireStudent();
-  const { state, career, score } = await getStudentView(profile.studentId);
+  const { state, career, score, ar } = await getStudentView(profile.studentId);
   if (!career || !score) return <UndecidedDefault />;
 
-  const v = scoreView(career, state);
+  const v = scoreView(career, state, ar);
   const eventsRev = [...state.events].reverse();
   const byKind = (kind: string) => state.events.filter((e) => e.kind === kind);
 
@@ -233,7 +234,7 @@ export default async function ProgressPage() {
     state.stageOneQueue?.[0] ?? rankOpenSkills(career, openSkills)[0]?.skill ?? null;
 
   const parts = v.parts;
-  const rubricAria = `Readiness ${score.total} of 100 — skills ${score.sp} of 40, working with people ${score.es} of 25, training ${score.tp} of 20, career direction ${score.cc} of 15`;
+  const rubricAria = `Readiness ${score.total} of 100 — skills ${score.sp} of ${WEIGHTS.sp}, employability ${score.es} of ${WEIGHTS.es}, training ${score.tp} of ${WEIGHTS.tp}, application readiness ${score.ar === null ? "not yet measured" : `${score.ar} of ${WEIGHTS.ar}`}, career direction ${score.cc} of ${WEIGHTS.cc}`;
 
   // checks available on this page (career's resources + goal-linked ones),
   // with the resource meta the overlay needs
@@ -266,8 +267,9 @@ export default async function ProgressPage() {
       <ProgressView
         careerName={career.name}
         score={score}
-        parts={parts.map((p) => ({ pct: p.pct, earnedFrac: p.earnedFrac }))}
+        parts={parts}
         rubricAria={rubricAria}
+        esVerified={v.esVerified}
         updated={lastEvent ? fmtDate(lastEvent.date) : null}
         nextSkill={nextSkill}
         stageOneDone={v.stageOne.done}

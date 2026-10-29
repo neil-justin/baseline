@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { CAREERS, CATALOG_TOTAL, getCareer } from "@/lib/fixtures/catalog";
-import { computeScore, roundHalfDown } from "@/lib/engines/score";
+import { computeScore, roundHalfDown, ASSESSED_COMPETENCIES } from "@/lib/engines/score";
+import type { ArInput } from "@/lib/engines/score";
 import { rankOpenSkills, stageOne } from "@/lib/engines/gaps";
 import { switchCareer, claimAll, submitCheck } from "@/lib/actions";
 import {
@@ -12,14 +13,15 @@ import {
 import type { StudentState } from "@/lib/types";
 
 /**
- * Canon verification — `_fixture-math.md` is the spec; the NUMBERS are locked
- * (setup 40 → switch dip 10 → post-re-assessment 33 → money shot 51).
+ * Canon verification — the ADR 0002 (amended 2026-10-29) five-channel sheet
+ * is the spec; the NUMBERS live in this file (the engine re-lock round):
+ * baseline 40 → switch dip 22 → post-re-assessment 36 → money shot 51.
  * Catalog round 9: names re-keyed onto the college roster (Neil = 2.1
  * "Associate Software Developer"; the switch walk runs to 2.2 "Software QA
  * Analyst"); skill data comes from the verbatim roster transcription.
  */
 
-function scoreFor(s: StudentState) {
+function scoreFor(s: StudentState, ar: ArInput | null = null) {
   const career = getCareer(s.careerId)!;
   return computeScore({
     bars: s.bars,
@@ -27,6 +29,8 @@ function scoreFor(s: StudentState) {
     careerSkillCount: career.skills.length,
     goals: s.goals,
     stageOneDone: s.stageOneDone,
+    competencies: s.competencies ?? {},
+    ar,
   });
 }
 
@@ -46,70 +50,86 @@ describe("catalog", () => {
     expect(getCareer("its")!.name).toBe("IT Support Engineer");
   });
 
-  it("canon maps: swd is 8 skills, QA money-shot map is 7, IT-support 7; E2/E3 stay empty pending extraction", () => {
+  it("canon maps: swd is 8 skills, QA money-shot map is 7, IT-support 7; E2/E3 hold their extracted rows", () => {
     expect(getCareer("swd")!.skills).toHaveLength(8);
     expect(getCareer("qa")!.skills).toHaveLength(7);
     expect(getCareer("its")!.skills).toHaveLength(7);
-    // extension honesty — no invented rows where the source is pending
+    // extension honesty — rows exist only where the source extraction landed
+    // (catalog round: E2 executive secretary 17 · E3 records 11 transcribed)
     expect(getCareer("da")!.demandBlock.status).toBe("institutional-judgment");
-    expect(getCareer("execsec")!.skills).toHaveLength(0);
-    expect(getCareer("records")!.skills).toHaveLength(0);
+    expect(getCareer("execsec")!.skills).toHaveLength(17);
+    expect(getCareer("records")!.skills).toHaveLength(11);
   });
 });
 
 describe("rounding convention", () => {
-  it("rounds half down", () => {
+  it("rounds nearest, .5 down", () => {
     expect(roundHalfDown(6.667)).toBe(7); // TP 20×1/3
-    expect(roundHalfDown(22.857)).toBe(23); // SP 40×4/7
+    expect(roundHalfDown(17.143)).toBe(17); // ES 30×4/7
+    expect(roundHalfDown(18.75)).toBe(19); // SP 25×6/8
+    expect(roundHalfDown(17.857)).toBe(18); // SP 25×5/7
     expect(roundHalfDown(0.5)).toBe(0);
   });
 });
 
 describe("beat states (Neil)", () => {
-  it("beat 5 — setup: 40 (SP 30, ES 0, TP 0, CC 10)", () => {
+  it("beat 5 — setup: 40 (SP 19, ES 17, TP 0, AR unmeasured, CC 4)", () => {
     const s = scoreFor(NEIL_SEED);
-    expect(s).toEqual({ sp: 30, es: 0, tp: 0, cc: 10, total: 40 });
+    expect(s).toEqual({ sp: 19, es: 17, tp: 0, ar: null, cc: 4, total: 40 });
   });
 
-  it("beat 6 — switch dip: 10 (QA map, 0 closed, kept CC)", () => {
+  it("ES decomposition traces to the assessment state (4 of 7 verified ·✓, half-down)", () => {
+    expect(Object.values(NEIL_SEED.competencies ?? {}).filter((v) => v === "verified").length).toBe(4);
+    expect(ASSESSED_COMPETENCIES).toBe(7); // NACE 7/8, E&I excluded
+  });
+
+  it("beat 6 — switch dip: 21 (QA map, 0 closed; ES + CC stay, TP resets)", () => {
     const before = scoreFor({ ...NEIL_SEED, careerId: "qa", bars: {}, stageOneDone: 0 });
-    expect(before).toEqual({ sp: 0, es: 0, tp: 0, cc: 10, total: 10 });
+    expect(before).toEqual({ sp: 0, es: 17, tp: 0, ar: null, cc: 4, total: 21 });
   });
 
-  it("beat 6→ re-assessment: 33 (SP 23 = 40×4/7)", () => {
+  it("beat 6→ re-assessment: 35 (SP 14 = 25×4/7)", () => {
     const s = scoreFor(applyReassessment({ ...NEIL_SEED, careerId: "qa" }));
-    expect(s).toEqual({ sp: 23, es: 0, tp: 0, cc: 10, total: 33 });
+    expect(s).toEqual({ sp: 14, es: 17, tp: 0, ar: null, cc: 4, total: 35 });
   });
 
-  it("beat 7 — money shot: 51 (SP 29, TP 7, CC 15)", () => {
+  it("beat 7 — money shot: 52 (SP 18, TP 7, CC 10)", () => {
     const afterRA = applyReassessment({ ...NEIL_SEED, careerId: "qa" });
     const withGoal = withQaGoal(afterRA);
     const shot = applyMoneyShot(withGoal);
     const s = scoreFor(shot);
-    expect(s).toEqual({ sp: 29, es: 0, tp: 7, cc: 15, total: 51 });
-    // beat 9 plan: trajectory 40 → 51
+    expect(s).toEqual({ sp: 18, es: 17, tp: 7, ar: null, cc: 10, total: 52 });
+    // beat 9 plan: trajectory 40 → 52
     expect(scoreFor(NEIL_SEED).total).toBe(40);
   });
 
-  it("sans the QA testing goal, the money shot stays CC 10 (goal auto-complete is load-bearing)", () => {
+  it("san the QA plan step, the money shot stays CC 4 (the first-item tick is load-bearing)", () => {
     const shot = applyMoneyShot(applyReassessment({ ...NEIL_SEED, careerId: "qa" }));
-    expect(scoreFor(shot).total).toBeLessThan(51);
+    expect(scoreFor(shot).total).toBeLessThan(52);
+  });
+
+  it("AR feeds honestly: a measured run earns its fraction of 15, a failed gate earns nothing", () => {
+    // bestAir 60 → 15×0.6 = 9; unmeasured = null, never 0
+    expect(scoreFor(NEIL_SEED, { measured: true, bestAir: 60 })).toMatchObject({ ar: 9, total: 49 });
+    expect(scoreFor(NEIL_SEED, { measured: true, bestAir: 0 })).toMatchObject({ ar: 0, total: 40 });
+    expect(scoreFor(NEIL_SEED, { measured: false }).ar).toBeNull();
   });
 });
 
 describe("beat chain through the LIVE action layer (regression guards)", () => {
-  it("beat 6 dip: switch alone reads 10 — the carried ·✓ re-registers only at re-assessment", () => {
+  it("beat 6 dip: switch alone reads 21 — the carried ·✓ re-registers only at re-assessment", () => {
     const switched = switchCareer(NEIL_SEED, "qa").state;
-    // canon: SP 0 (0 closed bars) + CC 10 → dip 10
-    expect(scoreFor(switched)).toEqual({ sp: 0, es: 0, tp: 0, cc: 10, total: 10 });
+    // canon: SP 0 (0 closed bars) + ES + CC stay → dip 21 (AR still unmeasured)
+    expect(scoreFor(switched)).toEqual({ sp: 0, es: 17, tp: 0, ar: null, cc: 4, total: 21 });
     // re-assessment: 3 self-claims + the QA-map-verified Business Needs
-    // Analysis ·✓ re-registers → 33 (the SQL-design row is NOT on the QA map)
+    // Analysis ·✓ re-registers → 35 (SP 25×4/7 = 14; the SQL-design row is
+    // NOT on the QA map)
     const reassessed = claimAll(switched, [
       { skill: "Test Planning", level: "confident" },
       { skill: "Defect management", level: "confident" },
       { skill: "Applications Support and Enhancement", level: "confident" },
     ]).state;
-    expect(scoreFor(reassessed)).toEqual({ sp: 23, es: 0, tp: 0, cc: 10, total: 33 });
+    expect(scoreFor(reassessed)).toEqual({ sp: 14, es: 17, tp: 0, ar: null, cc: 4, total: 35 });
     expect(reassessed.bars["Business Needs Analysis"].source).toBe("verified");
     expect(switched.decisions.verifiedTransferred).toEqual(["Business Needs Analysis"]);
   });
