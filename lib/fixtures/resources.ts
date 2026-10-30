@@ -2326,12 +2326,16 @@ export const RESOURCES: Resource[] = [
     type: "cert",
     cost: "free",
     // end-to-end inbound selling — prospecting, connecting, exploring,
-    // advising, closing; completely free incl. certificate
+    // advising, closing; completely free incl. certificate.
+    // sales.md §Resources — the spec's resource-table cell maps
+    // "Customer Acquisition Management · Sales Closure · Customer Management ·
+    // Account Management" to this resource (Account Management enumerated)
     url: "https://academy.hubspot.com/courses/inbound-sales",
     durationHours: 3,
     skillsAddressed: [
       "Customer Acquisition Management", "Sales Closure", "Customer Management",
       "Customer Relationship Management + Customer Relationship Management Operations",
+      "Account Management",
     ],
     creditingBody: "HubSpot Academy",
     careerId: "sales",
@@ -4744,9 +4748,16 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // interviews, PBC lists
+    // audit.md §Resources — this row sits under the group header that
+    // records "Rows 9–11 — Enabling layer + technology row", so its keying
+    // enumerates the whole group incl. row 9 (Senior-heavy supervision fold-in)
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
-    skillsAddressed: ["Professional Skepticism (attitude) · Communication (Enabling)"],
+    skillsAddressed: [
+      "Senior-heavy supervision tasks",
+      "Professional Skepticism (attitude) · Communication (Enabling)",
+      "Audit technology fluency (accounting software / Excel family)",
+    ],
     creditingBody: "TESDA",
     careerId: "audit",
   },
@@ -4757,9 +4768,16 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // audit-tooling fluency start for row 11 ("standard computer software packages")
+    // audit.md §Resources — this row sits under the group header that
+    // records "Rows 9–11 — Enabling layer + technology row"; the group's
+    // keying enumerates rows 9–11 (row 9 = the Senior-heavy supervision fold-in)
     url: "https://e-tesda.gov.ph/course/index.php?categoryid=1310",
     durationHours: 4,
-    skillsAddressed: ["Audit technology fluency (accounting software / Excel family)"],
+    skillsAddressed: [
+      "Senior-heavy supervision tasks",
+      "Professional Skepticism (attitude) · Communication (Enabling)",
+      "Audit technology fluency (accounting software / Excel family)",
+    ],
     creditingBody: "TESDA",
     careerId: "audit",
   },
