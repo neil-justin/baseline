@@ -64,7 +64,9 @@ export async function mustContainList(career: Career, s: StudentState): Promise<
         .filter((r) => r.kind === "internship")
         .map((r) => ({ title: r.title, organization: r.organization, status: r.status }));
       credentialRows = (data ?? [])
-        .filter((r) => r.kind !== "internship")
+        // 'presence' (ticket 12) is not a resume credential line — it lives in
+        // Profile → Credentials as the fourth kind and feeds AR's presence factor
+        .filter((r) => r.kind !== "internship" && r.kind !== "presence")
         .map((r) => ({ title: r.title, kind: r.kind, status: r.status }));
     } catch {
       /* table not applied yet — the on-ramp renders its honest fallback */

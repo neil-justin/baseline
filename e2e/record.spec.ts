@@ -53,6 +53,42 @@ test("record demo arc", async ({ page }) => {
   }
   await page.click('button:has-text("Continue")');
   await page.waitForTimeout(800);
+  // step ③ · the competency instrument (42 items, server-graded at the end —
+  // canon pattern: verified Communication/Critical Thinking/Teamwork/Technology;
+  // misses on the doc's best-distractor traps) — keep in lockstep with the
+  // demo-arc walk
+  await page.waitForSelector('.screen-head h1:has-text("The competency check")');
+  await page.click('button:has-text("Start the assessment")');
+  await page.waitForTimeout(600);
+  {
+    const words = ["Never", "Rarely", "Sometimes", "Often", "Consistently"];
+    const groups = await page.locator("[data-comp]").all();
+    for (let g = 0; g < groups.length; g++) {
+      for (let s = 0; s < 4; s++) {
+        const pick = (g < 4 ? [5, 4, 4, 5] : [3, 2, 3, 4])[s] - 1;
+        await groups[g].locator(`[data-item$=".${s + 1}"] button:has-text("${words[pick]}")`).click();
+        await page.waitForTimeout(120);
+      }
+    }
+  }
+  await page.click('button:has-text("Continue")');
+  await page.waitForTimeout(500);
+  await page.click('button:has-text("Start the checks")');
+  const keys = {
+    1: [0, 2], 2: [2, 2], 3: [2, 2], 4: [2, 0], 5: [2, 3], 6: [2, 2], 7: [1, 1],
+  };
+  for (let i = 0; i < 14; i++) {
+    await page.waitForSelector(".ob-mcqcard", { timeout: 10000 });
+    const pick = keys[Math.floor(i / 2) + 1][i % 2];
+    await page.locator(".ob-mcqcard .q-opts .opt").nth(pick).click();
+    await page.waitForTimeout(200);
+    await page.locator(".ob-mcqcard button:has-text(\"Next\"), .ob-mcqcard button:has-text(\"See the result\")").first().click();
+    await page.waitForTimeout(300);
+  }
+  await page.waitForSelector('.screen-head h1:has-text("competencies verified")', { timeout: 10000 });
+  await page.waitForTimeout(400);
+  await page.click('button:has-text("Continue")');
+  await page.waitForTimeout(600);
   await page.click('button:has-text("Start the check")');
   await page.waitForTimeout(800);
   const pass = ["SQL", "Business Needs"];
@@ -124,7 +160,34 @@ test("record demo arc", async ({ page }) => {
   await page.waitForTimeout(2200);
   await page.keyboard.press("Escape");
   await page.waitForTimeout(900);
-  await page.screenshot({ path: "/tmp/opencode/screenshots/record-51.png" });
+  // ticket-12 recut, SHIPPED 2026-10-30: the money beat's Application
+  // Materials pass — the resume (52 → 59), the letter check with the employer
+  // field omitted (59 → 64 — the honest "not evaluated — no employer declared"
+  // row), then the presence declaration in Profile → Credentials (64 → 67).
+  await page.goto("/prep");
+  await page.waitForSelector(".rs-upload");
+  await page.setInputFiles('.rs-upload input[type="file"]', "e2e/fixtures/resume-qa.pdf");
+  await page.click('button:has-text("Run the diagnostic")');
+  await page.waitForSelector(".rs-readout", { timeout: 45_000 });
+  await page.waitForTimeout(1200);
+  await page.setInputFiles('.cl-upload input[type="file"]', "e2e/fixtures/cover-letter-qa.txt");
+  await page.click('button:has-text("Run the letter check")');
+  await page.waitForSelector(".cl-readout", { timeout: 45_000 });
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: "/tmp/opencode/screenshots/record-64-letter.png" });
+  await page.goto("/profile");
+  await page.waitForTimeout(1500);
+  await page.click("#tab-profile");
+  await page.fill("#p-url", "https://www.linkedin.com/in/neil-demo");
+  await page.fill("#p-email", "neil.demo@campus.test");
+  await page.click('button:has-text("Declare and stamp")');
+  await page.waitForLoadState("load");
+  await page.click("#tab-profile");
+  await page.waitForTimeout(900);
+  await page.screenshot({ path: "/tmp/opencode/screenshots/record-presence.png" });
+  await page.goto("/dashboard");
+  await page.waitForTimeout(3200);
+  await page.screenshot({ path: "/tmp/opencode/screenshots/record-67.png" });
   // beat 8-10
   await page.goto("/pathway");
   await page.waitForTimeout(2600);

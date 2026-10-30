@@ -1,0 +1,16 @@
+Dear Hiring Manager,
+
+I am applying for the Software QA Analyst role your team has open. My third-year capstone just shipped, and the part of it I am proudest of is not the code we wrote — it is the proof that the code worked. Quality assurance is the work I want as my first job because it is the work I already trust myself to do.
+
+As the capstone team's designated tester, I owned our software testing across two release milestones. I turned user stories into test scenarios first, wrote a test plan with about forty documented test cases, and grouped them by feature so each build got a repeatable pass. For regression testing I re-ran the suite after every change, comparing actual against expected results screen by screen, and I kept the expected-results column dated so nobody inherited stale assumptions.
+
+That habit led me into defect tracking. I logged over sixty defects in our shared tracker, each one with reproduce steps, the build number, a screenshot, and a severity my teammates could act on. I reproduced every report before assigning it, and I closed defects only after re-verifying the fix against the same steps. It is slow, methodical work, and I like it — the tracker stayed trusted because it stayed tidy.
+
+I also built our coverage sheet: a simple table that mapped every test case to the requirement it verified, so we could see which functions were untested before a release. It turned our pre-demo review into a small quality gate — no untested requirement left the room without being named.
+
+What I can promise any team: careful recording, plain language, and the habit of verifying before assuming.
+
+I would welcome the chance to interview and to walk a senior tester through my test plan and one of my defect reports from the capstone. Thank you for your time and consideration.
+
+Sincerely,
+Neil Reyes

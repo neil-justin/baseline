@@ -283,6 +283,7 @@ export default function CareerClient({
         es: v.score.es,
         tp: v.score.tp,
         ar: v.score.ar ?? null,
+        arParts: v.score.arParts,
         cc: v.score.cc,
         total: sp + v.score.es + v.score.tp + (v.score.ar ?? 0) + v.score.cc,
       };

@@ -62,6 +62,23 @@ export const SKILL_SYNONYMS: Record<string, SynonymSeed> = {
   "Network Configuration": {
     like: ["network configuration", "network setup", "router", "switch", "cabling", "wifi setup", "network cables", "ip"],
   },
+
+  // ── Software QA Analyst (qa) — core tier per current roster ────────────
+  // Seeded with the ticket-12 demo re-cut (2026-10-29): the switch walk to qa
+  // makes the money beat's Application Materials pass run against THIS map —
+  // the seeds follow the catalog round's rows (the file's own TODO rule).
+  "Software Testing": {
+    like: ["software testing", "test cases", "test execution", "test automation", "manual testing", "regression testing", "uat", "system testing"],
+  },
+  "Test Planning": {
+    like: ["test planning", "test plan", "test scenarios", "test cases", "test data", "testable conditions"],
+  },
+  "Defect management": {
+    like: ["defect management", "defect tracking", "bug tracking", "bug reports", "log defects", "defect reports"],
+  },
+  "Quality Assurance / Quality Standards": {
+    like: ["quality assurance", "quality standards", "quality gates", "release readiness", "coverage metrics"],
+  },
 };
 
 /**

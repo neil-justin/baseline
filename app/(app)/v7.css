@@ -135,13 +135,21 @@
 }
 .ms.fill { font-variation-settings: "FILL" 1, "wght" 400, "opsz" 24; }
 
-/* ---------- icon rail (desktop) ---------- */
-
+/* ---------- icon rail (desktop) ----------
+   v7.1 Icon-Rail Rule: the rail reads as a WHITE SURFACE STRIP — #FFFFFF
+   ground, 1px #DADCE0 border, whisper shadow, 8px radius — never a bare
+   strip floating on page ground; the active item is a 12px-radius
+   rounded-rect blue-wash pill (#E8F0FE, blue #1A73E8 glyph), never a
+   circular effect. */
 .rail {
   grid-column: 1;
   grid-row: 2;
   width: 48px;
   padding: 8px 0;
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -155,7 +163,7 @@
 .rail a {
   width: 38px;
   height: 38px;
-  border-radius: 50%;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -167,7 +175,7 @@
   transition: background-color 0.14s ease;
 }
 .rail a:hover { background: var(--v-rows); }
-.rail a.on { background: var(--v-blue-pill); color: var(--v-blue-ink); }
+.rail a.on { background: var(--v-blue-wash); color: var(--v-blue); }
 .rail a:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
 .rail .ms { font-size: 20px; }
 .rail-caption { display: none; }
@@ -198,18 +206,21 @@
     justify-content: space-around;
     align-items: stretch;
     background: var(--v-surface);
+    border: 0;
     border-top: 1px solid var(--v-border);
+    border-radius: 0;
+    box-shadow: none;
     z-index: 40;
   }
   .rail a {
-    border-radius: 8px;
-    color: var(--v-meta);
+    border-radius: 12px;
+    color: var(--v-ink2); /* v7.1 floor: state-bearing nav text ≥4.5:1 — meta is decorative-only */
   }
   .rail a:hover { background: transparent; }
   .rail a.on { background: var(--v-blue-wash); color: var(--v-blue-deep); }
   .rail-caption {
     display: block;
-    font: 500 10.5px/1 Roboto, system-ui, sans-serif;
+    font: 500 11px/1 Roboto, system-ui, sans-serif; /* v7.1 floor: nav captions ≥11px */
     margin-top: 3px;
   }
   .v7-main {

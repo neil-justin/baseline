@@ -5,9 +5,12 @@ import path from "node:path";
 
 /**
  * Resume-run store (round 6a) — persistence keeps ONLY:
- *   - the LATEST run per student (full result blob), and
+ *   - the LATEST run per student (full result blob — by construction the most
+ *     recent full attempt; the score's resume factor reads THIS run's own
+ *     airResume per ADR 0002 amendment 3, 2026-10-29 "latest counts"), and
  *   - run-history counts: runs_count (every successful run increments) +
- *     best_air (AIR semantics: unlimited re-runs, best run counts).
+ *     best_air (the best-EVER run's AIR — history/display only; the score
+ *     factor does NOT use it since amendment 3).
  * Parse-failed uploads persist nothing — a failed run is feedback, not a run
  * (scope decision: one SUCCESSFUL diagnostic run = "resume diagnostic done").
  *
@@ -35,6 +38,8 @@ export interface ResumeRunSummary {
 export interface ResumeRunStore {
   latest(studentId: string): Promise<ResumeRunSummary | null>;
   saveRun(studentId: string, run: ResumeDiagnosticRun): Promise<ResumeRunSummary>;
+  /** DPA erasure (ticket 7): remove the student's resume artifact deliberately. */
+  erase(studentId: string): Promise<void>;
 }
 
 /**
@@ -85,6 +90,8 @@ class PostgresResumeRunStore implements ResumeRunStore {
       .upsert({
         student_id: studentId,
         run,
+        // best-EVER air kept for history/display only — the selection reads
+        // the latest run's own airResume (amendment 3, 2026-10-29: latest counts)
         best_air: Math.max(prev?.bestAir ?? 0, run.air.airResume),
         runs_count: (prev?.runsCount ?? 0) + 1,
         updated_at: new Date().toISOString(),
@@ -97,6 +104,15 @@ class PostgresResumeRunStore implements ResumeRunStore {
     }
     const re = await this.latest(studentId);
     return re ?? { run, bestAir: run.air.airResume, runsCount: 1 };
+  }
+
+  async erase(studentId: string): Promise<void> {
+    if (degradedFlag) return jsonStore.erase(studentId);
+    const { error } = await supabaseAdmin().from("resume_runs").delete().eq("student_id", studentId);
+    if (error) {
+      if (isMissingTable(error)) return jsonStore.erase(studentId);
+      throw new Error(`resume_runs erase failed: ${error.message}`);
+    }
   }
 }
 
@@ -134,11 +150,20 @@ const jsonStore = {
     const prev = all[studentId];
     all[studentId] = {
       run,
+      // best-EVER air kept for history/display only — the selection reads
+      // the latest run's own airResume (amendment 3, 2026-10-29: latest counts)
       best_air: Math.max(prev?.best_air ?? 0, run.air.airResume),
       runs_count: (prev?.runs_count ?? 0) + 1,
     };
     await writeAll(all);
     return { run, bestAir: all[studentId].best_air, runsCount: all[studentId].runs_count };
+  },
+  async erase(studentId: string): Promise<void> {
+    const all = await readAll();
+    if (studentId in all) {
+      delete all[studentId];
+      await writeAll(all);
+    }
   },
 };
 
@@ -152,4 +177,5 @@ export const resumeRunStore: ResumeRunStore = configured
         const s = await jsonStore.saveRun(id, run);
         return degradedFlag ? { ...s, degraded: true } : s;
       },
+      erase: jsonStore.erase,
     };

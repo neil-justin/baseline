@@ -1,14 +1,22 @@
 import { test, expect } from "@playwright/test";
+import * as path from "node:path";
 import { resetStore, settled, shot, signIn, cohortEmail, DEMO_PASSWORD, neilCreds } from "./helpers";
 
 /**
  * Demo-arc E2E — one walk, beats 1–10 (plan Task 15).
- * Canon: ADR 0002 (amended 2026-10-29) five-channel re-lock.
- *   setup 40 → switch dip 21 → post-re-assessment 35 → money shot 52
- *   (SP 18/25 · ES 17/30 · TP 7/20 · CC 10/10; AR sits out unmeasured);
- *   beat-8 "5 of 7 · First 30 days: 1 of 3 done"; trajectory 40 → 52; admin
- *   reads the same live numbers. Numbers owned by
- *   `scripts/verify-fixtures.test.ts` + `lib/fixtures/neil.ts`.
+ * Canon: ADR 0002 (amendment 2, ticket 12) five-channel re-lock with the AR
+ * split (resume 7 / letter 5 / presence 3):
+ *   setup 40 → switch dip 21 → post-re-assessment 35 → check pass 52 → the
+ *   Application Materials pass → money beat 67: resume 7 of 7 (resume-qa.pdf,
+ *   AIR 100) → letter 5 of 5 (the canon letter, employer OMITTED — the honest
+ *   skip line) → presence 3 of 3 (the machine-verified offline stamp) — the
+ *   full pass rides docs/demo-beats-recut-2026-10-29.md's §"Where letter +
+ *   presence land in the money beat" (SHIPPED 2026-10-30: the arc asserts the
+ *   letter-state 64 mid-pass, then 67 at the money state). Money state reads
+ *   SP 18/25 · ES 17/30 · TP 7/20 · AR 15/15 · CC 10/10; beat-8 "5 of 7 ·
+ *   First 30 days: 1 of 3 done"; trajectory 40 → 67; admin reads the same
+ *   live numbers. Numbers owned by `scripts/verify-fixtures.test.ts` +
+ *   `lib/fixtures/neil.ts`.
  *
  * Demo inputs (round 9 college catalog): Computer & IT track · "No — help
  * me figure it out" · interest quiz Kind of / Yes / Yes / Not really /
@@ -16,14 +24,28 @@ import { resetStore, settled, shot, signIn, cohortEmail, DEMO_PASSWORD, neilCred
  * Continue · self-report: confident for Applications Development/
  * Applications Support/Agile/Data Design SQL/Business Needs/Enabling
  * bundle, "Not yet" for Secure-coding/Linux-deployment · framing Okay/Room
- * to grow/Strong · verification quiz: SQL-design + Business Needs CORRECT
+ * to grow/Strong · COMPETENCY INSTRUMENT (lib/fixtures/instrument.ts):
+ * 28 self-ratings (5/4/4/5 verified four, 3/2/3/4 claimed three) + 14
+ * checks — both correct on Communication/Critical Thinking/Teamwork/
+ * Technology, the misses on the doc's best-distractor traps → "4 of 7
+ * competencies verified." (server-graded, latest full attempt) ·
+ * verification quiz: SQL-design + Business Needs CORRECT
  * (bank index 0), other three deliberately WRONG (second option) → "2 of 5".
+ * Money-beat uploads: e2e/fixtures/resume-qa.pdf (the QA-targeted canon
+ * resume — all checks green → AIR 100) · e2e/fixtures/cover-letter-qa.txt
+ * (the canon letter — all evaluable checks green → letter 100, employer
+ * field omitted) · presence declared with the LinkedIn URL + professional
+ * email (stamped offline at declaration).
  *
  * Canon checks from the recovery step onward use `expect.soft` (recorded,
  * non-aborting) so a canon mismatch never hides the numbers on later beats.
  */
 
 test.describe.serial("demo-arc", () => {
+  // the walk is long (10 beats + the 42-item instrument) — never let the
+  // runner's 60s default cut the money beat; hook set unchanged
+  test.setTimeout(240_000);
+
   // clean store before the walk. (Port hygiene is handled OUTSIDE playwright:
   // a stale server on :3000 must be `fuser -k`-ed before `npx playwright test`
   // so webServer boots the current production build instead of reusing it.)
@@ -94,6 +116,58 @@ test.describe.serial("demo-arc", () => {
     await page.locator(".skill-row", { hasText: "Teamwork" }).locator("button", { hasText: "Okay" }).click();
     await page.locator(".skill-row", { hasText: "Communication" }).locator("button", { hasText: "Room to grow" }).click();
     await page.locator(".skill-row", { hasText: "Problem-solving" }).locator("button", { hasText: "Strong" }).click();
+    await page.getByRole("button", { name: "Continue", exact: true }).click();
+
+    /* ══ step ③ · THE COMPETENCY INSTRUMENT (user-approved 42-item bank) ══
+       Part A: 28 Likert self-ratings → claimed-only (no verified from ratings).
+       Part B: 14 one-answer situations, graded server-side — verified ⇔ BOTH
+       checks correct in THIS attempt. Canon inputs: Communication (COM-2),
+       Critical Thinking (COM-3), Teamwork (COM-6), Technology (COM-7) both
+       correct; the three misses ride the doc's recorded best-distractor traps
+       (COM-1.M1 → A the aware-yet-inactive, COM-4.M2 → A "it will be fine",
+       COM-5.M2 → D the silent rewrite). Everything else correct — including
+       the second check of each claimed competency — so "no partial credit"
+       is honestly demonstrated: still "4 of 7 competencies verified." */
+    await expect(page.getByRole("heading", { name: "The competency check — the real one." })).toBeVisible();
+    await page.getByRole("button", { name: "Start the assessment" }).click();
+
+    // Part A — 7 competency groups × 4 statements; pattern 5/4/4/5 on the
+    // verified four, 3/2/3/4 on the claimed three
+    const compGroups = await page.locator("[data-comp]").all();
+    expect(compGroups).toHaveLength(7);
+    for (let g = 0; g < compGroups.length; g++) {
+      for (let s = 0; s < 4; s++) {
+        const word = ["Never", "Rarely", "Sometimes", "Often", "Consistently"][(g < 4 ? [5, 4, 4, 5] : [3, 2, 3, 4])[s] - 1];
+        await compGroups[g].locator(`[data-item$=".${s + 1}"] button`, { hasText: word }).click();
+      }
+    }
+    await expect(page.locator(".num", { hasText: "28 of 28 answered" })).toBeVisible();
+    await page.getByRole("button", { name: "Continue", exact: true }).click();
+
+    // Part B — one situation at a time; the attempt POSTs once at the end
+    await expect(page.getByRole("heading", { name: "Part B — the checks." })).toBeVisible();
+    await page.locator("button", { hasText: "Start the checks" }).click();
+    // key = correct option index per COM-x.Mn (lib/fixtures/instrument.ts);
+    // the wrong ones are the recorded distractors above
+    const MCQ_KEYS: Record<string, [number, number]> = {
+      "COM-1": [0, 2],
+      "COM-2": [2, 2],
+      "COM-3": [2, 2],
+      "COM-4": [2, 0],
+      "COM-5": [2, 3],
+      "COM-6": [2, 2],
+      "COM-7": [1, 1],
+    };
+    for (let i = 0; i < 14; i++) {
+      const pick = MCQ_KEYS[`COM-${Math.floor(i / 2) + 1}`][i % 2];
+      await page.locator(".ob-mcqcard .q-opts .opt").nth(pick).click();
+      await page.waitForTimeout(150);
+      await page.locator(".ob-mcqcard button.btn-ghost").click(); // Next … See the result
+      await page.waitForTimeout(200);
+    }
+    await expect(page.locator(".screen-head h1")).toContainText("4 of 7 competencies verified.");
+    await expect(page.locator(".okband")).toContainText("Communication · Critical Thinking · Teamwork · Technology");
+    notes.push("step 3 degree: instrument sat — '4 of 7 competencies verified.' · verified band Communication · Critical Thinking · Teamwork · Technology ✓");
     await page.getByRole("button", { name: "Continue", exact: true }).click();
 
     // OB-3b-3 · verification mini-quiz — "2 of 5" canon (SQL-design + Business Needs pass)
@@ -220,14 +294,14 @@ test.describe.serial("demo-arc", () => {
       `beat 6 recovered: 21 → ${recTo} (canon 35) · legend "${recLegend.replace(/\s+/g, " ")}" · line "${recLine}" · arc-35.png`
     );
 
-    /* ══════════ BEAT 7 · the money shot — set the goal, pass the check, 51 ══════════ */
+    /* ══════════ BEAT 7 · the money beat — check pass 52, then the AM pass ══════════ */
     // BUG-2 fix verified: the recovered screen suggests the canon QA Training
     // goal ("Build my first test plan" — free · ~4 hours · Test Automation
     // University) via "Set this goal" (frozen POST /api/goal, idempotent); the
     // goal then appears under Progress with its check launcher, and the whole
-    // money shot is driven through the real UI: recovered screen → Progress
+    // check pass is driven through the real UI: recovered screen → Progress
     // goal row → CheckOverlay → 5 correct answers → 52 (SP 18/25 · TP 7/20 ·
-    // CC 10/10; the plan's first item done ticks CC — My Plan Q4b).
+    // CC 10/10) — then the ticket-12 AM pass takes the headline to 59.
     // Check bank (lib/fixtures/checks.ts): TESTING_CHECK answers are all
     // index 0 — the spec answers by driving the options, not the endpoint.
 
@@ -283,7 +357,77 @@ test.describe.serial("demo-arc", () => {
     soft(autoLine).toContain("software testing gap");
     notes.push(`beat 7 auto-complete line: "${autoLine}"`);
 
-    /* ══════════ dashboard at the money state (canon 52) ══════════ */
+    /* ── BEAT 7 · Application Materials pass (ticket 12 recut — SHIPPED):
+    // the plan's AR head completes its THREE per-file factors in order
+    // (docs/demo-beats-recut-2026-10-29.md §"Where letter + presence land"):
+    //   resume run (+7 → 59) · letter check (+5 → 64) · presence declaration
+    //   (+3 → 67, Profile → Credentials) — ONLY those numbers move with them.
+    // The split's live per-file proof: the row climbs 7 → 12 → 15 of 15. */
+
+    await page.goto("/prep");
+    await page.waitForSelector(".rs-upload");
+    await page.locator('.rs-upload input[type="file"]').setInputFiles([path.join(process.cwd(), "e2e", "fixtures", "resume-qa.pdf")]);
+    await page.getByRole("button", { name: "Run the diagnostic" }).click();
+    await page.waitForLoadState("load");
+    await expect(page.locator(".rs-readout")).toBeVisible({ timeout: 45_000 });
+    soft((await page.locator(".rs-readout-score").first().textContent()) ?? "").toContain("100");
+    expect(page.locator(".rs-air-note")).toContainText("1 run");
+    notes.push("beat 7 AM pass ①: resume-qa.pdf ran vs Software QA Analyst → AIR 100 · resume factor 7 of 7 → 59 ✓");
+
+    // ② · the cover-letter check — independent upload, employer field OMITTED
+    // (the demo's honest-skip live proof: the row prints the exact line and
+    // the denominator drops it; role alignment runs vs Software QA Analyst)
+    await page.locator('.cl-upload input[type="file"]').setInputFiles([path.join(process.cwd(), "e2e", "fixtures", "cover-letter-qa.txt")]);
+    await page.getByRole("button", { name: "Run the letter check" }).click();
+    await page.waitForLoadState("load");
+    await expect(page.locator(".cl-readout")).toBeVisible({ timeout: 45_000 });
+    soft((await page.locator(".cl-readout .cl-readout-score").first().textContent()) ?? "").toContain("100");
+    const employerRow = (await page.locator(".rs-check", { hasText: "Employer named" }).first().textContent())?.replace(/\s+/g, " ");
+    expect(employerRow).toContain("not evaluated — no employer declared");
+    const clNote = (await page.locator(".cl-air-note").textContent())?.replace(/\s+/g, " ") ?? "";
+    expect(clNote).toContain("3 of 4");
+    notes.push(
+      `beat 7 AM pass ②: canon letter ran (employer omitted) → letter 100 → +5 · row "${employerRow}" · note "${clNote}" ✓`
+    );
+
+    /* ══════════ dashboard after the letter factor (canon 64) ══════════ */
+
+    await page.goto("/dashboard");
+    const mid = await settled(page, ".score-big");
+    const midRows = (await page.locator(".sub-row").allTextContents()).map((t) => t.trim());
+    expect(midRows[3]).toContain("12 of 15"); // AR — resume 7 + letter 5; presence not declared yet
+    expect(midRows[3]).toContain("letter 5/5"); // the letter factor's own receipt
+    expect(midRows[3]).toContain("presence not declared"); // the third factor still grey
+    const midPlan = (await page.locator(".plan-table").innerText()).replace(/\s+/g, " ");
+    expect(midPlan).toContain("Get your application materials ready"); // 2 of 3 measured — still queued
+    expect(midPlan).toContain("presence open");
+    soft(mid).toBe("64"); // canon: check pass 52 + resume 7 + letter 5
+    await shot(page, mid === "64" ? "arc-64.png" : "arc-bug-letter-state.png");
+    notes.push(
+      `beat 7 dashboard after the letter: ${mid} (canon 64 · 52 + 7 + 5) · AR row "${midRows[3].match(/You hold (.+?);/)?.[1] ?? midRows[3]}" · plan task still queued with presence open · ${mid === "64" ? "arc-64.png" : "arc-bug-letter-state.png"}`
+    );
+
+    // ③ · presence declaration — Profile → Credentials, the fourth kind
+    await page.goto("/profile");
+    await page.waitForSelector("#tab-profile");
+    await page.locator("#tab-profile").click();
+    await expect(page.locator("#panel-profile")).toBeVisible(); // tab chrome unhidden (hydration-safe)
+    await page.locator("#p-url").fill("https://www.linkedin.com/in/neil-demo");
+    await page.locator("#p-email").fill("neil.demo@campus.test");
+    await page.getByRole("button", { name: "Declare and stamp" }).click();
+    await page.waitForLoadState("load");
+    // reload re-renders server truth (the Plan tab is the default again — the
+    // stamped row lives in the Profile tab: re-open and assert the record)
+    await page.locator("#tab-profile").click();
+    await expect(page.locator("#panel-profile")).toBeVisible();
+    const presenceRow = (await page.locator("[data-presence-stamp]").textContent()) ?? "";
+    expect(presenceRow).toContain("MACHINE-VERIFIED");
+    const presenceSub = ((await page.locator("[data-presence-sub]").textContent()) ?? "").replace(/\s+/g, " ");
+    expect(presenceSub).toContain("stamped offline");
+    await shot(page, "arc-presence-stamped.png");
+    notes.push(`beat 7 AM pass ③: presence declared → machine-verified offline stamp "${presenceRow}" · "${presenceSub}" · +3 · arc-presence-stamped.png ✓`);
+
+    /* ══════════ dashboard at the money state (canon 67 — the AM pass complete) ══════════ */
 
     await page.goto("/dashboard");
     const money = await settled(page, ".score-big");
@@ -293,13 +437,17 @@ test.describe.serial("demo-arc", () => {
     expect(moneyRows[1]).toContain("4 of 7 NACE competencies verified");
     soft(moneyRows[2]).toContain("7 of 20"); // TP 20×1/3 → 7 — canon
     soft(moneyRows[2]).toContain("First 30 days: 1 of 3 done");
-    expect(moneyRows[3]).toContain("Not yet measured"); // AR — the walk never visits Prep
+    expect(moneyRows[3]).toContain("15 of 15"); // AR — ALL THREE factors measured (the LOCKED 15 riding)
+    expect(moneyRows[3]).toContain("presence 3/3"); // the stamped declaration's receipt
+    expect(moneyRows[3]).not.toContain("not run"); // nothing left grey in the channel
     soft(moneyRows[4]).toContain("10 of 10"); // canon CC — first item done tick
-    soft(money).toBe("52"); // canon headline, crosses 50 live
-    await shot(page, money === "52" ? "arc-52.png" : "arc-bug-money-state.png");
+    const moneyPlan = (await page.locator(".plan-table").innerText()).replace(/\s+/g, " ");
+    expect(moneyPlan).not.toContain("Get your application materials ready"); // completed OUT of the queue
+    soft(money).toBe("67"); // canon headline: check pass 52 + AR 15 (7 + 5 + 3)
+    await shot(page, money === "67" ? "arc-67.png" : "arc-bug-money-state.png");
     notes.push(
-      `beat 7 dashboard: score reads ${money} (canon 52) · sub-rows "${moneyRows.map((r) => r.match(/You hold (.+?);/)?.[1] ?? r).join(" / ")}" · ` +
-        `${money === "52" ? "arc-52.png" : "arc-bug-money-state.png"}`
+      `beat 7 dashboard money state: score reads ${money} (canon 67 · 52 + AR 15) · sub-rows "${moneyRows.map((r) => r.match(/You hold (.+?);/)?.[1] ?? r).join(" / ")}" · ` +
+        `plan task completed out of the queue · ${money === "67" ? "arc-67.png" : "arc-bug-money-state.png"}`
     );
 
     /* ══════════ BEAT 8 · pathway glance ══════════ */
@@ -325,7 +473,9 @@ test.describe.serial("demo-arc", () => {
     expect(planText).not.toContain("Test Planning"); // summary only — NEVER the ranked list
     const trajRows = (await page.locator(".traj-rows .trow").allTextContents()).map((t) => t.replace(/\s+/g, " ").trim());
     expect(trajRows.join(" ")).toContain("40"); // setup point — canon holds
-    soft(trajRows.join(" ")).toContain("52"); // canon end point
+    soft(trajRows.join(" ")).toContain("67"); // canon end point (the full AM pass carries the live headline)
+    expect(trajRows.join(" ")).not.toContain(" 52 "); // the live reading replaced 52 — no stale point
+    expect(trajRows.join(" ")).not.toContain(" 64 "); // the full pass replaced the letter-state reading too
     const prov = ((await page.locator(".prov").textContent()) ?? "").replace(/\s+/g, " ");
     expect(prov).toContain("1 gap bar closed");
     expect(prov).toContain("1 comprehension check passed");
@@ -344,16 +494,18 @@ test.describe.serial("demo-arc", () => {
     const demoRow = page.locator(".s-row.row-demo");
     await expect(demoRow.locator(".s-career")).toHaveText("Software QA Analyst"); // career survives the switch ✓
     const cohortScore = ((await demoRow.locator(".s-score").textContent()) ?? "").trim();
-    soft(cohortScore).toBe("52"); // canon: the live cohort row reads 52
+    soft(cohortScore).toBe("67"); // canon: the live cohort row reads 67 (check pass + the full AR pass)
     await page.goto("/admin/student?student=neil");
     const adminScore = await settled(page, ".dt-score [data-count]");
-    soft(adminScore).toBe("52");
+    soft(adminScore).toBe("67");
     const ss = (await page.locator(".ss-row").allTextContents()).map((t) => t.replace(/\s+/g, " ").trim());
     soft(ss[0]).toContain("18 of 25"); // SP — canon
     expect(ss[1]).toContain("17 of 30"); // ES — assessment receipt
     expect(ss[1]).toContain("4 of 7 competencies verified");
     expect(ss[2]).toContain("7 of 20"); // TP 1 of 3 — canon holds
-    expect(ss[3]).toContain("not yet measured"); // AR — honest grey
+    expect(ss[3]).toContain("15 of 15"); // AR — all three factors measured (resume ✓ letter ✓ presence ✓)
+    expect(ss[3]).toContain("letter 5/5");
+    expect(ss[3]).toContain("presence 3/3");
     soft(ss[4]).toContain("10 of 10"); // CC — canon
     await shot(page, "arc-admin.png");
     notes.push(`beat 10 admin: cohort row ${cohortScore} · student readout ${adminScore} · rubric ["${ss[0]}", "${ss[1]}", "${ss[2]}", "${ss[3]}", "${ss[4]}"] · arc-admin.png`);

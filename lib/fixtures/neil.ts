@@ -7,11 +7,9 @@ import type { StudentState } from "@/lib/types";
  *
  *   ES 17 — 4 of 7 NACE competencies verified ·✓ by the step-③ assessment
  *   (round-half-down of 30 × 4/7 = 17.14 → 17). The competency names are the
- *   app-facing NACE list minus E&I ("Respecting differences" — excluded by
- *   recorded choice in PRODUCT.md: "NACE 7/8, E&I excluded"); "verified"
- *   marks what the assessment's verification confirmed, the rest sat
- *   claimed. The unscored framing probe below is NOT the assessment — it
- *   never feeds ES.
+ *   APPROVED instrument's titles verbatim (lib/fixtures/instrument.ts — 7 of
+ *   8 NACE, E&I excluded by recorded choice; re-keyed onto the instrument in
+ *   the onboarding round, the verified/claimed SPLIT is unchanged). 
  *
  *   SP 19 — 6 of 8 closed bars (nearest-integer, .5 down: 25 × 6/8 = 18.75
  *   → 19): M4 recipe-A semantics carried through the catalog round
@@ -28,12 +26,20 @@ import type { StudentState } from "@/lib/types";
  *   CC 4 — career picked (1) + plan started (3); the first plan item is
  *   still pending (the Python course, act as the committed head item).
  *
- *   AR — UNMEASURED (no resume diagnostic run): contributes no points and
- *   no painted row; surfaces say "not yet measured" until Prep runs.
+ *   AR — UNMEASURED (no Application Materials file has run): contributes no
+ *   points and no painted row; surfaces say "not yet measured" until Prep
+ *   runs. The locked 15-point channel splits resume 7 / letter 5 / presence 3
+ *   (ADR 0002 amendment 2, ticket 12 — each factor measures on its own file,
+ *   unmeasured factors render grey and never paint).
  *
- *   Composite 40 = 17 + 19 + 0 + 4. The demo walk arc: 40 → dip 21 →
- *   recovered 35 → money shot 52 on the new channel maxes (ES 30 / SP 25 /
- *   TP 20 / AR 15 / CC 10).
+ *   Composite 40 = 17 + 19 + 0 + 4. The demo walk arc (docs/
+ *   demo-beats-recut-2026-10-29.md owns the re-cut): 40 → dip 21 → recovered
+ *   35 → check pass 52 → the Application Materials pass (money beat): the
+ *   resume factor 7 of 7 (resume-qa.pdf, AIR 100) → 59, the letter factor 5 of
+ *   5 (the canon letter, employer field omitted — the honest skip line) → 64,
+ *   then the presence declaration 3 of 3 (machine-verified offline stamp) →
+ *   the money headline 67 — all three factors measure in the shipped e2e
+ *   arc (demo-arc.spec.ts). This seed itself stays AR-unmeasured: 40.
  *
  * Catalog-round 9 (2026-10-29): the catalog recomposed to the college roster —
  * Neil's target career is roster 2.1 "Associate Software Developer" (id
@@ -47,15 +53,53 @@ export const NEIL_SEED: StudentState = {
   grade: "G11",
   strand: "Computer & IT",
   careerId: "swd",
-  // Step-③ assessment (ES carrier): 4 of 7 verified ·✓ → 30×4/7 = 17
+  // Step-③ assessment (ES carrier): 4 of 7 verified ·✓ → 30×4/7 = 17. The
+  // keys are the APPROVED instrument's competency titles verbatim (lib/
+  // fixtures/instrument.ts; was the interim app-facing list — re-keyed in the
+  // onboarding instrument round without moving any number). `assessment` is
+  // the latest full attempt this seed stands for; the demo walk replays it
+  // and gradeInstrumentAnswers reproduces exactly this verified/claimed map.
+  assessment: {
+    takenAt: "2026-10-17 09:12",
+    likert: {
+      "COM-1.1": 3, "COM-1.2": 2, "COM-1.3": 3, "COM-1.4": 4,
+      "COM-2.1": 5, "COM-2.2": 4, "COM-2.3": 4, "COM-2.4": 5,
+      "COM-3.1": 5, "COM-3.2": 4, "COM-3.3": 4, "COM-3.4": 5,
+      "COM-4.1": 3, "COM-4.2": 2, "COM-4.3": 3, "COM-4.4": 4,
+      "COM-5.1": 3, "COM-5.2": 2, "COM-5.3": 3, "COM-5.4": 4,
+      "COM-6.1": 5, "COM-6.2": 4, "COM-6.3": 4, "COM-6.4": 5,
+      "COM-7.1": 5, "COM-7.2": 4, "COM-7.3": 4, "COM-7.4": 5,
+    },
+    // the canon MCQ pattern: both correct on COM-2/3/6/7; claimed fees stay
+    // claimed on their recorded best-distractor miss (COM-1.M1 → A, COM-4.M2
+    // → A "it will be fine", COM-5.M2 → D the silent rewrite)
+    mcq: {
+      "COM-1.M1": 0, "COM-1.M2": 2,
+      "COM-2.M1": 2, "COM-2.M2": 2,
+      "COM-3.M1": 2, "COM-3.M2": 2,
+      "COM-4.M1": 2, "COM-4.M2": 0,
+      "COM-5.M1": 2, "COM-5.M2": 3,
+      "COM-6.M1": 2, "COM-6.M2": 2,
+      "COM-7.M1": 1, "COM-7.M2": 1,
+    },
+    competencies: {
+      "Career & Self-Development": "claimed",
+      Communication: "verified",
+      "Critical Thinking": "verified",
+      Leadership: "claimed",
+      Professionalism: "claimed",
+      Teamwork: "verified",
+      Technology: "verified",
+    },
+  },
   competencies: {
-    Communicating: "verified",
-    Teamwork: "verified",
-    "Problem-solving": "verified",
-    "Critical thinking": "verified",
-    Professionalism: "claimed",
+    "Career & Self-Development": "claimed",
+    Communication: "verified",
+    "Critical Thinking": "verified",
     Leadership: "claimed",
-    "Growing your career": "claimed",
+    Professionalism: "claimed",
+    Teamwork: "verified",
+    Technology: "verified",
   },
   // Beat-5 canon: 6 of 8 bars closed → SP = 25×6/8 = 18.75 → 19 (nearest,
   // .5 down); SQL-design + Business-needs upgraded to ·✓ by the verification

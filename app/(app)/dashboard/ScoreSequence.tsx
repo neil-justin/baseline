@@ -21,8 +21,10 @@ export default function ScoreSequence({
 }: {
   score: number;
   parts: { pct: number; earnedFrac: number }[];
-  /** per-channel label row under the bar, computed ("SP 19/25", "AR —") */
-  labels: ReactNode[];
+  /** per-channel label row under the bar, computed ("SP 19/25", "AR —") —
+   * v7.1: plain strings keyed by text; JSX arrays across the RSC boundary
+   * are the documented "unique key prop" warning source */
+  labels: string[];
   /** honest subtext after "/ 100" — empty string once the plan has moved */
   suffix: string;
   /** "Computed from your own records · NACE-aligned" */
@@ -56,8 +58,8 @@ export default function ScoreSequence({
           ariaLabel={`Score ${score} of 100 — the five channels`}
         />
         <div className="seglabels num">
-          {labels.map((l, i) => (
-            <span key={i}>{l}</span>
+          {labels.map((l) => (
+            <span key={l}>{l}</span>
           ))}
         </div>
       </div>

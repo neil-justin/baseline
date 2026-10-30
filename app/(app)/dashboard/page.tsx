@@ -101,21 +101,13 @@ export default async function DashboardPage() {
             score={score.total}
             parts={v.parts}
             labels={[
-              <>
-                SP {score.sp}/{WEIGHTS.sp}
-              </>,
-              <>
-                ES {score.es}/{WEIGHTS.es}
-              </>,
-              <>
-                TP {score.tp}/{WEIGHTS.tp}
-              </>,
-              <>
-                AR {v.arMeasured ? `${score.ar}/${WEIGHTS.ar}` : "—"}
-              </>,
-              <>
-                CC {score.cc}/{WEIGHTS.cc}
-              </>,
+              /* v7.1 key-prop fix: string labels — keyless fragment ARRAYS crossing
+                 the server→client boundary are the "unique key prop" warning source */
+              `SP ${score.sp}/${WEIGHTS.sp}`,
+              `ES ${score.es}/${WEIGHTS.es}`,
+              `TP ${score.tp}/${WEIGHTS.tp}`,
+              v.arMeasured ? `AR ${score.ar}/${WEIGHTS.ar}` : "AR —",
+              `CC ${score.cc}/${WEIGHTS.cc}`,
             ]}
             suffix={
               v.ccFirstDone || v.arMeasured || v.stageOne.done > 0
@@ -230,12 +222,16 @@ export default async function DashboardPage() {
             <span className="s-name">Application readiness</span>
             {v.arMeasured ? (
               <p className="s-note">
-                You hold <b className="num">{score.ar} of {WEIGHTS.ar}</b>; your best resume-diagnostic
-                run counts.
+                You hold <b className="num">{score.ar} of {WEIGHTS.ar}</b>; the three factors score on their
+                own runs — resume{" "}
+                {v.arFactors.resume.earned}/{v.arFactors.resume.max} · letter{" "}
+                {v.arFactors.letter.measured ? `${v.arFactors.letter.earned}/${v.arFactors.letter.max}` : "not run"} · presence{" "}
+                {v.arFactors.presence.measured ? `${v.arFactors.presence.earned}/${v.arFactors.presence.max}` : "not declared"}.
               </p>
             ) : (
               <p className="s-note not-yet">
-                Not yet measured — the resume diagnostic in Prep opens this channel.
+                Not yet measured — the resume diagnostic in Prep opens this channel (resume 7 · letter 5 ·
+                presence 3).
               </p>
             )}
           </div>
@@ -310,19 +306,26 @@ export default async function DashboardPage() {
             <tbody>
               {plan.map((item, i) => {
                 if (item.kind === "ar") {
+                  const measured = [item.checklist.resume, item.checklist.letter, item.checklist.presence].filter(Boolean).length;
+                  const tick = (b: boolean) => (b ? "·✓" : "open");
+                  const arOutstanding = WEIGHTS.ar - (score.ar ?? 0);
                   return (
                     <tr key="ar">
                       <td>
                         <div className="item">{item.title}</div>
-                        <div className="sub">{item.reason}</div>
+                        <div className="sub">
+                          {item.reason} — resume {tick(item.checklist.resume)} · letter {tick(item.checklist.letter)} · presence {tick(item.checklist.presence)}
+                        </div>
                       </td>
                       <td>
                         <span className="chip c-grey">Application</span>
                       </td>
                       <td>
-                        <span className="chip c-grey">Not started</span>
+                        <span className={`chip ${measured > 0 ? "c-blue" : "c-grey"}`}>
+                          {measured > 0 ? `${measured} of 3 measured` : "Not started"}
+                        </span>
                       </td>
-                      <td className="eff num">opens AR · up to +{WEIGHTS.ar}</td>
+                      <td className="eff num">opens AR · up to +{arOutstanding}</td>
                     </tr>
                   );
                 }
@@ -381,9 +384,23 @@ export default async function DashboardPage() {
             <div className="row">
               <div>
                 <b>Run the resume diagnostic</b>
-                <div className="sub">first AR measurement · opens the channel</div>
+                <div className="sub">first AR factor · opens the channel</div>
               </div>
               <span className="badge num">up to +{WEIGHTS.ar}</span>
+            </div>
+          )}
+          {v.arMeasured && !v.arComplete && (
+            <div className="row">
+              <div>
+                <b>Finish your application materials</b>
+                <div className="sub">
+                  {[!v.arFactors.letter.measured && "cover-letter check", !v.arFactors.presence.measured && "presence declaration"]
+                    .filter(Boolean)
+                    .join(" · ")}{" "}
+                  still open
+                </div>
+              </div>
+              <span className="badge num">up to +{WEIGHTS.ar - (score.ar ?? 0)}</span>
             </div>
           )}
           {plan.some((p) => p.kind === "skill") && (

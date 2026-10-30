@@ -1,232 +1,271 @@
 ---
-name: Career Readiness (The Index)
-description: Precision-instrument landing for PH career readiness — cool quiet ground, hairline data tables, one earned-green accent on computed states.
+name: Career Readiness (v7 — the Google-school official console)
+description: A dense official scoring console on cool white-grey ground — white cards with 1px Material borders and whisper shadows, self-hosted Roboto, and a blue command economy where honest state washes (blue/green/amber/grey) verdict every reading.
 colors:
-  quiet-ground: "#F4F5F4"
-  panel-white: "#FFFFFF"
-  ink: "#16181A"
-  ink-secondary: "#515651"
-  ink-micro: "#666C66"
-  hairline: "#DFE1DE"
-  hairline-soft: "#EAEBE9"
-  earned-green: "#0B5F45"
-  earned-green-deep: "#08492F"
-  earned-green-wash: "#0B5F4522"
-  hover-wash: "#F7F8F7"
-  slot-unearned: "#E9EBE8"
-  border-strong: "#C4C8C3"
-  placeholder-grey: "#9AA09A"
+  ground: "#F8F9FA"
+  surface: "#FFFFFF"
+  ink: "#202124"
+  ink-2: "#5F6368"
+  meta: "#80868B"
+  blue: "#1A73E8"
+  blue-deep: "#1557B0"
+  blue-wash: "#E8F0FE"
+  blue-pill: "#C2E7FF"
+  blue-ink: "#012B53"
+  green: "#188038"
+  green-text: "#137333"
+  green-wash: "#E6F4EA"
+  amber: "#B45309"
+  amber-text: "#96590A"
+  amber-wash: "#FEF7E0"
+  grey-text: "#3C4043"
+  grey-wash: "#F1F3F4"
+  border: "#DADCE0"
+  rows: "#E8EAED"
+  track: "#E8EAED"
+  row-hover: "#F5F8FC"
 typography:
-  display:
-    fontFamily: "Archivo, system-ui, -apple-system, sans-serif"
-    fontSize: "clamp(2.5rem, 5.2vw, 4.35rem)"
-    fontWeight: 660
-    lineHeight: 1.04
-    letterSpacing: "-0.032em"
-  headline:
-    fontFamily: "Archivo, system-ui, -apple-system, sans-serif"
-    fontSize: "clamp(1.5rem, 2.6vw, 1.9rem)"
-    fontWeight: 640
-    lineHeight: 1.15
-    letterSpacing: "-0.025em"
-  title:
-    fontFamily: "Archivo, system-ui, -apple-system, sans-serif"
-    fontSize: "15.5px"
-    fontWeight: 620
+  readout:
+    fontFamily: "Roboto, system-ui, sans-serif"
+    fontSize: "46px"
+    fontWeight: 500
+    lineHeight: 1
+  kpi-score:
+    fontFamily: "Roboto, system-ui, sans-serif"
+    fontSize: "22px"
+    fontWeight: 500
+    lineHeight: 1.1
+  page-head:
+    fontFamily: "Roboto, system-ui, sans-serif"
+    fontSize: "22px"
+    fontWeight: 400
+    lineHeight: 1.4
+  section-head:
+    fontFamily: "Roboto, system-ui, sans-serif"
+    fontSize: "16px"
+    fontWeight: 500
     lineHeight: 1.3
-    letterSpacing: "-0.015em"
+  band-title:
+    fontFamily: "Roboto, system-ui, sans-serif"
+    fontSize: "15px"
+    fontWeight: 500
+    lineHeight: 1.35
+  cell-name:
+    fontFamily: "Roboto, system-ui, sans-serif"
+    fontSize: "14.5px"
+    fontWeight: 500
+    lineHeight: 1.4
   body:
-    fontFamily: "Archivo, system-ui, -apple-system, sans-serif"
-    fontSize: "15.5px"
-    fontWeight: 420
-    lineHeight: 1.6
-  label:
-    fontFamily: "Fragment Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
+    fontFamily: "Roboto, system-ui, sans-serif"
+    fontSize: "13.5px"
+    fontWeight: 400
+    lineHeight: 1.5
+  row-title:
+    fontFamily: "Roboto, system-ui, sans-serif"
+    fontSize: "13px"
+    fontWeight: 500
+    lineHeight: 1.4
+  data:
+    fontFamily: "Roboto, system-ui, sans-serif"
+    fontSize: "12px"
+    fontWeight: 400
+    lineHeight: 1.5
+  meta-line:
+    fontFamily: "Roboto, system-ui, sans-serif"
+    fontSize: "11.5px"
+    fontWeight: 400
+    lineHeight: 1.4
+  caption:
+    fontFamily: "Roboto, system-ui, sans-serif"
     fontSize: "11px"
     fontWeight: 400
-    letterSpacing: "0.13em"
-  readout-numeral:
-    fontFamily: "Fragment Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
-    fontSize: "44px"
-    fontWeight: 400
+    lineHeight: 1.55
+  label:
+    fontFamily: "Roboto, system-ui, sans-serif"
+    fontSize: "11px"
+    fontWeight: 500
+    lineHeight: 1.4
+    letterSpacing: "0.08em"
+  nav-caption:
+    fontFamily: "Roboto, system-ui, sans-serif"
+    fontSize: "11px"
+    fontWeight: 500
     lineHeight: 1
-    letterSpacing: "-0.01em"
 rounded:
-  slot: "2px"
-  badge: "3px"
-  inner-control: "4px"
-  panel: "6px"
+  thumb: "4px"
+  tab-thumb: "6px"
+  brandmark: "6px"
+  bar: "2px"
+  panel: "8px"
+  control: "8px"
 spacing:
   xs: "4px"
   sm: "8px"
-  md: "16px"
-  lg: "24px"
-  xl: "56px"
-  section: "64px"
+  md: "12px"
+  lg: "16px"
+  xl: "24px"
 components:
   button-primary:
-    backgroundColor: "{colors.earned-green}"
+    backgroundColor: "{colors.blue}"
     textColor: "#FFFFFF"
-    typography: "600 13px Archivo"
-    rounded: "{rounded.panel}"
-    padding: "10px 18px"
+    typography: "500 13px Roboto"
+    rounded: "{rounded.control}"
+    padding: "8px 20px"
   button-primary-hover:
-    backgroundColor: "{colors.earned-green-deep}"
+    backgroundColor: "{colors.blue-deep}"
   button-ghost:
-    backgroundColor: "{colors.panel-white}"
-    textColor: "{colors.ink}"
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.blue-deep}"
+    typography: "500 13px Roboto"
+    rounded: "{rounded.control}"
+    padding: "8px 20px"
+  card:
+    backgroundColor: "{colors.surface}"
     rounded: "{rounded.panel}"
-    padding: "10px 18px"
-  panel:
-    backgroundColor: "{colors.panel-white}"
+  chip-blue:
+    backgroundColor: "{colors.blue-wash}"
+    textColor: "{colors.blue-deep}"
+    typography: "500 11px Roboto"
+    rounded: "{rounded.thumb}"
+    padding: "3px 8px"
+  chip-green:
+    backgroundColor: "{colors.green-wash}"
+    textColor: "{colors.green-text}"
+    typography: "500 11px Roboto"
+    rounded: "{rounded.thumb}"
+    padding: "3px 8px"
+  chip-amber:
+    backgroundColor: "{colors.amber-wash}"
+    textColor: "{colors.amber-text}"
+    typography: "500 11px Roboto"
+    rounded: "{rounded.thumb}"
+    padding: "3px 8px"
+  chip-grey:
+    backgroundColor: "{colors.grey-wash}"
+    textColor: "{colors.grey-text}"
+    typography: "500 11px Roboto"
+    rounded: "{rounded.thumb}"
+    padding: "3px 8px"
+  rail-active:
+    backgroundColor: "{colors.blue-pill}"
+    textColor: "{colors.blue-ink}"
     rounded: "{rounded.panel}"
-  input-text:
-    backgroundColor: "{colors.panel-white}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.panel}"
-    padding: "10px 12px"
-  instrument-label:
-    textColor: "{colors.ink-micro}"
+  avatar-disc:
+    backgroundColor: "{colors.blue}"
+    textColor: "#FFFFFF"
+  cta:
+    backgroundColor: "{colors.blue}"
+    textColor: "#FFFFFF"
+    typography: "500 14px Roboto"
+    rounded: "{rounded.control}"
+    height: "40px"
 ---
 
-# Design System: Career Readiness (The Index)
+# Design System: Career Readiness (v7 — the Google-school official console)
 
 ## Overview
 
-**Creative North Star: "The Index — a precision instrument."**
+**Creative North Star: "The Google-school official console — an honest scoring instrument, our name."** (DNA v7, user-locked 2026-10-29 with "love it"; the mockup comp is `.impeccable/mocks/decision/v7-design-dna.html`, approved capture `.impeccable/review/v7-design-dna-1440.png`.)
 
-The landing is a measurement, not a pitch. The page reads a student aloud: cited labor statistics, a career index table, a computed rubric readout — so a thesis panel and an undecided Grade 11–12 student both see an instrument, not a promise. Everything sits on a cool quiet ground (#F4F5F4) with white panels drawn only by hairline rules; depth comes from tonal layering and 1px lines, never from shadows or gradients. One deep green (#0B5F45) is the entire accent economy, reserved for what is earned: the primary action, honest bar fills, the selected index row, verified numerals, focus, and error. The category default this world refuses is hero-copy-plus-testimonial-cards: there are no cards, only calibrated surfaces and hairline-ruled tables.
+The signed-in app reads as real product software running a scoring instrument: a cool white-grey ground (#F8F9FA), white cards drawn with 1px #DADCE0 borders and whisper shadows at an 8px radius, a 56px top bar and a 48px Material icon rail with the blue-pill active state. Roboto carries everything (self-hosted variable woff2, `font-display: block` — the venue runs offline; zero hosted-font runtime refs), tracked uppercase labels appear sparingly, and every numeral is tabular. One command economy: **blue #1A73E8 owns action and in-progress**; a semantic wash family (blue / green #188038 / amber #B45309 / grey) states every verdict as a chip or text tint — never red, never a region fill. Density is a feature: the whole story (header band → five channel cells → dense plan table → queue → ledger) fits 1440×900.
 
-Density is deliberately higher than a marketing page — mono data voices at 11–12.5px, three-stat full-bleed band, 12-row index preview — but the register stays calm: generous section padding (64px), tabular numerals everywhere, and microcopy that names its source under every number. Copy is never decorated: no badge chips on stats, no tagline pills; the source line sits under the numeral in tracked mono.
+**The Element-budget rule (the user's lock condition, applies on every surface):** every on-screen element must map to a real feature or a data need — no search bars, no notification bells, no invented affordances (nothing backs them in the 7-feature scope). Prune, don't dress.
 
-**Key Characteristics:**
-- Cool quiet ground, white flat panels, hairline borders — no gradients, no ambient shadows.
-- One accent (#0B5F45) on earned/verified states and the primary action only.
-- Two self-hosted voices: Archivo (variable sans, weights chosen in 10-steps off the axis) and Fragment Mono (labels, data rows, the 44px readout score).
-- Tabular numerals on every number, sans or mono.
-- Structure drawn with 1px hairlines; full-bleed bands bounded top and bottom by hairlines.
-- 6px radius ceiling; sub-element radii step down (4px / 3px / 2px).
-- Fonts self-hosted woff2 with `font-display: block` — the venue runs offline.
+Honesty is the material: numbers are computed (`lib/engines/*`, locked by `scripts/verify-fixtures.test.ts`), never painted; verified state reads solid, self-report hatched, unmeasured empty with an honest "not yet measured"/"—", and nothing is ever red. Material state language only — no entrance motion, no scroll theatrics.
 
 ## Colors
 
-A green-cast neutral family on a cool paper ground, with a single deep signal green that almost never appears — its rarity is the point. There is no Secondary or Tertiary accent; one voice, one meaning.
+The neutral family is cool and disciplined; the semantic family is quiet-but-real. Wash chips state verdicts; washes never fill regions.
 
 ### Primary
-- **Earned Green** (#0B5F45): the primary CTA fill, earned bar fills in the readout, the selected index row's 2px edge and its fit numerals, the readout's fit line, error text and error borders, the focus ring, the caret, and the footer's repeated "Start check ↵". Appears only on states that were earned, verified, or are the one action. Hover deepens to **Earned Green Deep** (#08492F). Text-safe on white at large sizes and always paired with white text when used as a fill.
-- **Earned Green Wash** (#0B5F4522, ~13% alpha): the selected row's background tint, the text-selection color, and the 3px input focus halo. The accent's quiet form — it tints, it never shouts.
+- **Command Blue** (#1A73E8): the one CTA fill ("Your next step →"), rail icon paint, in-progress fills and the SP channel bar, wash-chip ground for in-progress chips, selection. Hover/press deepens to **Command Blue Deep** (#1557B0), the same value that reads as text on white (4.5:1+).
+- **Rail Pill** (#C2E7FF): the 48px icon rail's active pill, inked with **Pill Ink** (#012B53) — the shell's one loud Material gesture.
+
+### Semantic family
+- **Verified Green** (#188038 · text **#137333** · wash **#E6F4EA**): verified/checked evidence — ES channel fill, "·✓ verified quiz", closed evidence bars, "Complete" chips.
+- **Pending Amber** (#B45309 · text **#96590A** · wash **#FEF7E0**): pending evidence (TP before an internship datum or assessment).
+- **Unmeasured Grey** (text **#3C4043** on white; wash **#F1F3F4**, optionally grey-hatched): not-yet-measured, self-report, "no resource cataloged", "—". The most honest color in the system.
 
 ### Neutral
-- **Quiet Ground** (#F4F5F4): the page background; everything rests on it.
-- **Panel White** (#FFFFFF): all panels, the stat band, the rubric block, the evidence footer, buttons, inputs.
-- **Instrument Ink** (#16181A): primary text, headline numerals, the strongest border (brand mark).
-- **Softened Ink** (#515651): secondary text and mono data rows — ≥4.5:1 on white.
-- **Microcopy Ink** (#666C66): instrument labels, source lines, legend entries — ≥4.5:1 on white.
-- **Hairline Grey-Green** (#DFE1DE): the structural hairline — panel borders, band edges, column rules.
-- **Hairline Soft** (#EAEBE9): inner-row dividers inside a panel.
-- **Hover Wash** (#F7F8F7): row and cell hover tint, one step off the ground.
-- **Unearned Slot** (#E9EBE8): the empty segment background behind earned bar fills.
-- **Border Strong** (#C4C8C3): input hover border, text-underline decoration (#B9BDB8 shares this mid-grey register for scrollbars and quiet underlines).
-- **Placeholder Grey** (#9AA09A): input placeholders only — exempt from the 4.5:1 text rule because it is pre-interaction hint text.
+**Ground** #F8F9FA · **Surface** #FFFFFF · **Instrument Ink** #202124 · **Softened Ink** #5F6368 (secondary ≥4.5:1) · **Meta Grey** #80868B (captions/fine print) · **Hairline Border** #DADCE0 · **Row Rules #E8EAED** (inner dividers + idle rail hover) · **Bar Track** #E8EAED · **Row Hover** #F5F8FC (blue-leaning tint).
 
 ### Named Rules
-**The Earned Green Rule.** Green is not decoration; it is a verdict. It appears on the primary CTA, earned bar fills, the selected index row plus its fit numerals, error states, focus, and the footer action — and nowhere else. If a state isn't earned, verified, or the primary action, it stays ink.
+**The Wash Rule.** A verdict is stated by a chip or a text tint from the semantic family. A wash never colors a region, and the family contains no red — partial is blue, evidence-closed is green, waiting-for-evidence is amber, not-yet is grey.
 
-**The Green-Cast Grey Rule.** Every grey in the system is tinted from the ground's hue (a whisper of green in each), never a pure industrial grey. New neutrals must mix from the same family, and text tints must hold ≥4.5:1 on white.
+**The Blue Command Rule.** Blue is action's color — one primary CTA per view (the plan's next step), the rail pill, in-progress fills. Blue never masquerades as "success"; verified is green's meaning.
+
+**The Honest Fraction Rule.** Bar fills render at their computed fraction at rest: solid green/blue for earned/verifiable portions, the self-report portion hatched (45°, blue 16% or grey 9%), unmeasured empty track. Never a full-length tint, never a painted number.
 
 ## Typography
 
-**Display Font:** Archivo (variable, 100–900, self-hosted woff2, with system-ui fallback)
-**Body Font:** Archivo (same variable file)
-**Label/Mono Font:** Fragment Mono (400–500, self-hosted woff2, with ui-monospace fallback)
-
-**Character:** One humanist grotesque carries all prose with tight, engineered tracking on headings; Fragment Mono is the instrument's voice — uppercase tracked labels, data rows, and the readout score. The pairing reads like lab equipment: quiet serifless prose over mono readouts. Both faces ship locally (`font-display: block`) because the venue runs offline; a hosted font sheet is never acceptable.
+**Font:** Roboto (variable 100–900, self-hosted `/fonts/roboto-var-latin.woff2` with `font-display: block`, system-ui fallback). Material Symbols is self-hosted as a **7-glyph subset** (`/fonts/material-symbols-outlined-var.woff2`: `space_dashboard`, `work`, `checklist`, `description`, `account_circle` + ledger's `verified`/`task_alt`) — no glyph expansion without re-subsetting. The contractor's own exemplars: re-subset before adding a new glyph surface.
 
 ### Hierarchy
-- **Display** (660, clamp(2.5rem, 5.2vw, 4.35rem), lh 1.04, −0.032em, balanced wrap): the single h1 per page — "Know exactly where you stand."
-- **Stat numeral** (560, clamp(2.6rem, 4.5vw, 3.6rem), lh 1, −0.035em, tabular, unit as 0.42em sub): the three-stat band's headline numbers. Archivo, not mono — the page's one exception to the mono-numeral voice.
-- **Headline** (640, clamp(1.5rem, 2.6vw, 1.9rem), lh 1.15, −0.025em): section h2.
-- **Title** (620, 15.5px, lh 1.3, −0.015em): step/card headings (h3).
-- **Body** (420, 15.5px, lh 1.6): running prose; lede paragraphs at 15.5px/1.62 in Softened Ink, capped ~52ch.
-- **Data row** (Fragment Mono 400, 12–12.5px, lh 1.45–1.6): index rows, source lists, legend lines.
-- **Readout numeral** (Fragment Mono 400, 44px, lh 1, −0.01em): the score, with `/100` at 15px in Microcopy Ink.
-- **Label** (Fragment Mono 400, 11px, +0.13em, uppercase, Microcopy Ink): every instrument label — CAREER INDEX, READINESS · SAMPLE STUDENT, source lines, footer colophon.
+- **Readout** (500, 46px, lh 1): the composite score, one per page, min-width 2ch, tabular.
+- **Page head** (400, 22px, lh 1.4, ≤52ch, balanced): surface h1 / tab headings; **KPI score** (500, 22px) with a 12px "of N" companion in the five channel cells.
+- **Section head** (500, 16px) · **Band title** (500, 15px) · **Cell name** (500, 13–14.5px): queue names and channel names.
+- **Body** (400, 13.5px/1.5): prose, rationales (≤62ch), notes; receipts and fine print at **Meta line** (11.5px) and **Caption** (11px).
+- **Data** (400, 12px, tabular): table cells, cost/time; **Row title** (500, 13px).
+- **Label** (500, 11px, +0.08em, uppercase, #5F6368): tracked instrument counters ("0 OF 3 DONE", "2 OPEN", table column heads) — sparingly, at most one per instrument block; **Nav captions** (11px) under bottom-nav icons. *(v7.1: floors amended — see amendments section.)*
 
 ### Named Rules
-**The Tabular Rule.** Every numeral is tabular — `font-variant-numeric: tabular-nums` on every number-bearing element, sans or mono alike. Readout and table numerals speak in Fragment Mono; the stat band's display numerals are the sanctioned Archivo-tabular exception.
+**The Tabular Rule.** `font-variant-numeric: tabular-nums` on every number-bearing element; the readout and table numerals min-width–guarded.
 
-**The Variable Weight Ladder.** Weights are picked in 10-steps off Archivo's variable axis — 420 body, 480–530 quiet emphasis, 550–570 links and soft-strong, 600–620 buttons and titles, 640–660 headings. Never snap to the 400/700 defaults; the fine ladder is what keeps the register calm.
-
-**The Tracked Label Rule.** Instrument labels are 11px Fragment Mono, uppercase, +0.13em, in Microcopy Ink. (The direction contract pinned 10px; the shipped build uses 11px — the build wins.) Every readout, table, and band carries one; a number without its tracked label is an uncalibrated reading.
+**The Sparing Label Rule.** Tracked uppercase is calibration, not decoration — one per block; a numeral without its label or chip is uncalibrated.
 
 ## Layout
 
-Content lives in a 1200px wrap with 32px gutters (20px under 720px); full-bleed bands — app bar, stat band, rubric block, evidence footer — run edge-to-edge, bounded by hairlines, with their inner grids capped at 1360px. The page alternates between these two modes: quiet ground sections (hero, index preview, work loop) and full-bleed white bands (stats, rubric, evidence).
+The shell is a fixed grid: 56px top bar full-width, 48px icon rail column, content beside the rail (`.v7` in `app/(app)/v7.css`). Surface content runs 16–24px page padding on My Plan (≤1400px) and 12px/16px on the Dashboard, cards stacked on a 12px rhythm. Gap arithmetic: 12px between cards, 24–28px between instrument levels; queue rows breathe 16–17px vertically.
 
-The first viewport is a two-column instrument: left ~55% headline + claim + CTAs, right ~45% the gauge (mini index over readout), columns aligned to start, 56px gap. The rubric block splits 42/58, evidence 46/54, always with 56px gaps. Sections breathe at 64px vertical padding (48px under 720px); the hero sits at 52/56px.
-
-Spacing runs on a 4px base: 8–16px inside components (panel padding 16px, row padding 10–12px), 24–28px between blocks, 56px between columns and 64px between sections. Breakpoints at 1020px (columns collapse to one; stat dividers rotate from left-border to top-border; loop grid stacks) and 720px (column heads hide, index rows re-grid to career/strand/entry with skills right-aligned, instrument labels and quiet links drop).
+Responsive: 1180px KPI cells fold 5→3; 1020px deck collapses to one column; 860px queue rows fold their CTA under content; **720px the rail becomes a Material bottom nav** (64px, captions on) and bands/tables stack; 560px tables fold their least-critical column.
 
 ## Elevation & Depth
 
-Flat by construction. Depth is tonal and linear: white panels on Quiet Ground, separated by 1px hairlines; nothing floats. There are no gradients anywhere, and no ambient or drop shadows — the single sanctioned shadow in the system is the 1px lift on a segmented control's selected thumb. Focus and selection use the accent's wash form (3px halo, 13% selection tint), which reads as calibration, not elevation.
+Quietly lifted, still official: the whisper shadow (`0 1px 2px rgba(60,64,67,.10)`) is the standing card depth; the blue CTA carries its own tinted lift (`0 1px 3px rgba(26,115,232,.3)`); the segmented thumb shares the whisper register. Hover states tint surfaces (#F5F8FC; rail hover #E8EAED) — depth never grows on hover except the CTA's intended 2px/6px press-forward.
 
 ### Shadow Vocabulary
-- **Thumb lift** (`box-shadow: 0 1px 3px rgba(22, 24, 26, 0.07)`): the selected thumb of a segmented control (e.g. a `.choice` toggle or pathway tab). The only resting shadow in the system; do not generalize it to panels or cards.
-
-### Named Rules
-**The Flat Instrument Rule.** Panels are flat white with 1px hairline borders at rest. Shadows are not depth — the only permissible one is the segmented-control thumb lift. Depth is conveyed by tonal layering (white on ground) and hairline rules.
+**card-whisper** `0 1px 2px rgba(60,64,67,0.10)` · **cta-lift** `0 1px 3px rgba(26,115,232,0.30)` · **tab-thumb** (whisper register). Nothing else; no zero-offset halos, no hard offsets.
 
 ## Shapes
 
-The form language is small-radius rectangular, drawn with lines rather than fills. Panels, buttons, and inputs share the 6px radius; sub-elements step down inside their containers — 4px for inner segmented thumbs, 3px for mono badges, 2px for rubric bar segments, 2px on focus outlines. Borders are always 1px hairlines (#DFE1DE externally, #EAEBE9 between rows of the same panel); the brand mark is the one 1.5px stroke. Adjacent cells in a grid (stat band, loop steps, source list) are separated by 1px shared borders, not gaps-in-space. Nothing is clipped to circles or pills; the silhouette vocabulary is the ruled rectangle.
+8px radius everywhere structural (cards, tables, CTA, buttons, tab-strip track); 6px inner controls inside their 8px container (tab thumbs, brand mark); 4px wash chips and small thumbs; the rail pill, avatar, and step numerals are the only circles. Borders are always exactly 1px #DADCE0 (external) and #E8EAED (inner rows). Step numerals and chevrons are CSS-drawn (ink circle / border chevron) — glyphs come only from the 7-glyph subset.
 
 ## Components
 
-### Buttons
-- **Shape:** softly squared (6px radius), inline-flex, 9px glyph gap.
-- **Primary:** Earned Green fill, white text, 600 weight at 13px, padding 10px 18px (hero variant 14px / 13px 22px). Trailing glyph (↵) set in Fragment Mono at 0.85 opacity.
-- **Hover / Active / Focus:** hover deepens to Earned Green Deep; active presses `translateY(1px)`; focus-visible is a 2px accent outline offset 2px. Transitions 0.12–0.15s ease on background/border/transform.
-- **Ghost:** Panel White fill, 1px Hairline border, Instrument Ink text at 550 weight; hover shifts border to Softened Ink. Green never appears on ghost buttons.
-- **Quiet links:** 12.5px Softened Ink; hover underlines with 3px offset. The underlined sub-action ("Browse the career index →", 13.5px, #B9BDB8 underline) turns accent-green on hover — hover is a sanctioned green moment.
-
-### Inputs / Fields
-- **Style:** Panel White fill, 1px Hairline border, 6px radius, padding 10px 12px, 14px Archivo, Instrument Ink text; caret colored Earned Green.
-- **Hover:** border shifts to Border Strong (#C4C8C3).
-- **Focus:** border turns Earned Green with a 3px Earned Green Wash halo (`box-shadow: 0 0 0 3px var(--selection)`); no outline.
-- **Error:** the message and the border both take Earned Green at 530/12px — this world earns its errors with the same accent, never a red. Field rules ("required" etc.) render as 9.5px tracked mono microcopy.
-
-### Panels / Containers
-- **Corner Style:** 6px radius, the system ceiling.
-- **Background:** Panel White only.
-- **Shadow Strategy:** none — see the Flat Instrument Rule.
-- **Border:** 1px Hairline externally; 1px Hairline Soft between internal rows.
-- **Internal Padding:** 16px in the readout and mini-index head/rows; 26px on auth forms.
-
-### Chips / Badges
-- **Style:** Fragment Mono 11px, 1px Hairline border, 3px radius, 1px 6px padding, Softened Ink on Panel White. Used only as inline metadata ("SAMPLE 40") inside step beats — never as colored status pills.
-
-### Navigation
-- **App bar:** sticky Panel White strip with a bottom hairline; 18px CSS-geometric brand mark (1.5px Instrument Ink square containing a 6px Earned Green square — the one decorative green), 640-weight 14px wordmark, mono 11px meta ("32 careers · sample score"). Quiet links right; the primary CTA is the only filled element. Under 720px the quiet links and meta drop, leaving brand + CTA.
-
-### Signature Component: the readiness gauge
-The page's memorable instrument, and the pattern all score surfaces must follow. Two stacked panels: the **mini index** — mono 12px rows with a hairline-soft divider each, hover wash, and a selected state that earns a 13% green wash, a 2px green left edge, and green fit numerals; and the **readout** — 44px mono tabular score over a 10px-tall segmented rubric bar (2px gaps, 2px segment radius) whose fills are honest `scaleX` fractions of the earned score (SP 30/40 → 0.75), animated 1.1s on `cubic-bezier(0.16, 1, 0.3, 1)` with 80ms stagger and disabled under `prefers-reduced-motion`, over Unearned Slot backgrounds. Below: an 11px mono legend (SP/ES/TP/CC with fractions) and the fit line whose key numeral is green. Selecting an index row swaps the fit line live; the bar and the row stay in sync — the instrument visibly takes a measurement.
+- **v7 App Shell** — 56px top bar (brand mark with 6px blue inlay, wordmark, spacer, avatar disc → Profile as the ONLY right affordance), 48px icon rail (blue pill active), main column. ≤720px → bottom nav.
+- **Button — Primary/Ghost** (see frontmatter). One primary per view.
+- **Wash Chips** — blue/green/amber/grey 500 11px +0.04em, 4px radius; grey chip optionally grey-hatched for self-report.
+- **Honest bars** — 4px (KPI) / 8px (gap ledger) tracks at 2px radius; solid/hatched/empty per the fraction rules.
+- **Dense tables** — plan + resource catalogs: collapsed borders, #E8EAED row rules, row hover, tracked head row (My Plan's head band sits on #FAFBFC), `↗`/`→` arrows are copy, not icons.
+- **Stage band** — three instrument cells with CSS-drawn 26px ink-circle numerals; current emphasis is chip + ink treatment (band cell stays unfilled per the v7.1 Wash Rule). *On the re-cut My Plan surface the live implementation is the band-resident tab strip with stage counters as band furniture; this entry reworded 2026-10-29 (v7.1 round) — the pre-amendment "blue wash" wording is superseded.* Collapses to a column ≤720px.
+- **Tab strip** — Material segmented on #F1F3F4: white thumb, whisper shadow, roving arrow-key tablist, hash deep-links (`#steps` default — My Plan's beat-8 open location).
 
 ## Do's and Don'ts
 
-### Do:
-- **Do** set every numeral tabular (`tabular-nums`), and voice data (index rows, legends, sources, the score) in Fragment Mono at 11–12.5px.
-- **Do** label every readout with the 11px tracked uppercase instrument label before its data.
-- **Do** keep text tints ≥4.5:1 on white — Softened Ink (#515651) and Microcopy Ink (#666C66) are the floor, not placeholders for lighter greys.
-- **Do** draw structure with 1px hairlines (#DFE1DE outer, #EAEBE9 inner) and separate full-bleed bands with hairlines top and bottom.
-- **Do** animate bar fills as honest fractions of earned state (scaleX of the earned share, 1.1s cubic-bezier(0.16,1,0.3,1), 80ms stagger, `prefers-reduced-motion` kills it).
-- **Do** self-host both faces as woff2 with `font-display: block`; the venue runs offline.
-- **Do** pick weights in 10-steps off Archivo's variable axis (420 body … 660 display).
+**Do**
+- Start from the `--v-` tokens in `app/(app)/v7.css`; scope new surface CSS under its own `.v7<surface>` root.
+- State every verdict with the wash family; keep one CTA per view — it is the plan's next step.
+- Keep content strings and e2e hooks verbatim through any presentation change (`#panel-*`, `.lead-mono`, `.stagepanel .qrow .q-skill`, dashboard set).
+- Reseed canon (delete the `student_state` row for neil via `scripts/delete-neil-state.mjs`) before evidence captures; play captures in before/after named pairs into `.impeccable/review/`.
+- Draw structural glyphs in CSS; keep the Material subset frozen until a deliberate re-subset.
+- Run the finish pipeline: detector → desktop+mobile captures → finish review → documenter (DESIGN.md + design.json + surface doc from built truth) → clean build.
 
-### Don't:
-- **Don't** paint readiness: a bar never fills past its earned fraction, and no number appears without computation behind it or a named source under it.
-- **Don't** use green decoratively — background tints, headings, borders, or icons that aren't earned/verified/primary-action/error/focus stay ink.
-- **Don't** add gradients, glows, or ambient shadows; panels stay flat with hairline borders (the segmented thumb's 1px lift is the sole exception).
-- **Don't** build the category-default hero-plus-testimonial-cards layout: no cards, no quote components, no student photos, no fabricated social proof — tables and calibrated panels only.
-- **Don't** exceed the 6px radius, and never give a sub-element a radius larger than its container's.
-- **Don't** reach for icon fonts or glyph-icon sets; marks are geometric CSS (squares, hairlines) and arrows are typographic punctuation in the mono voice.
+**Don't**
+- Don't add search, bells, sign-out, or invented affordances on the student chrome (element-budget rule); sign-out stays pruned.
+- Don't paint a number or confirm a claim the engine didn't compute; no red anywhere.
+- Don't fill regions with wash colors or ship entrance animations — state language only.
+- Don't use hosted font sheets; don't expand glyphs beyond the subset.
+- Don't exceed the shadow vocabulary or the 8px radius ceiling-in-reverse (no bigger-radius children than container).
+- Don't consult the superseded worlds as reference: The Index (green hairline instrument, 6px ceiling, drafting grid) and the Navy Console (gradient mass) are both rejected directions, kept only as anti-references on legacy surfaces awaiting their own v7 re-skin.
+- Don't rely on the network or an LLM during the demo — template fallbacks everywhere.
+
+## v7.1 amendments — binding for every future surface (user-ruled 2026-10-29)
+
+Born from the My-Plan DNA critique (29/40). These extend, never replace, the v7 law above.
+
+1. **The Floor Rule.** Minimum UI text = 11px (label and nav-caption tokens amended from 10.5px). State-bearing grey text uses ink-2 `#5F6368` or darker (≥4.5:1 on white); `meta` `#80868B` (3.7:1) is demoted to decorative non-state fine print only, always adjacent to a labeled instrument. Detector floors (`undersized-ui-text`, `low-contrast`) are gates, not style opinions.
+2. **The Wash Rule (settled).** Washes color chips, tints, and text — never REGION fills, anywhere. The stage-band blue-wash cell (pathway) was ruled out-of-family on 2026-10-29; emphasis on a current stage = chip + tactile treatment, not a filled band.
+3. **The Effort-Number Rule.** Any ranked, queued, or next-step item carries the number it moves (weight/effect, e.g. `SP 19 → 22 · +3`) — computed from `lib/engines`, never painted. Dashboard parity everywhere; a plan surface whose rows say "carries the most weight" while hiding the weights fails the family.
+4. **The Named-Surface Rule.** Every surface opens with a header band naming itself and carrying its instrument counters. No nameless pages; a bare tab strip on bare ground is not a page head.
+5. **Traceability.** Ruling record: `.scratch/career-readiness-platform/map.md` (2026-10-29 evening entries). Dashboard already-approved captures get re-shot once the token floor lands; `design.json` regenerates from built truth after that round (currently stale by doctor report — do not treat its typed values as current law).
+6. **The Icon-Rail Rule (user-ruled 2026-10-29 evening).** The icon rail reads as a white surface strip: `#FFFFFF` ground, 1px `#DADCE0` border, whisper shadow, 8px radius — never a bare strip floating on page ground. The active state is a rounded RECTANGLE blue-wash pill (12px radius, `#E8F0FE` wash, blue `#1A73E8` glyph) — circular active effects are out-of-family. Applies to the shared shell now and to every future surface sweep.

@@ -1,9 +1,41 @@
-/* Prep surface (round 6a) — Resume Diagnostic. Styled strictly from the
+/* Prep surface (round 6a + ticket-12 split, 2026-10-30). Styled strictly from the
    shared token vocabulary in app/globals.css (panel/label/btn/check mark
-   chips). No new colors, no new shadows. Per-page CSS is the repo pattern. */
+   chips). No new colors, no new shadows. Per-page CSS is the repo pattern.
+   v7.1 law on this surface: 11px floors on instrument labels, state-bearing
+   text rides --ink-2 (≥4.5:1), wash chips not region fills. */
 
 .prep-shell { max-width: 980px; padding-bottom: 56px; }
+.prep-instrument {
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 12px; /* instrument counter band — v7.1 ≥11px */
+  letter-spacing: 0.02em;
+  color: var(--ink-2); /* state-bearing — v7.1 grey floor */
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.prep-instrument b { color: var(--ink); font-weight: 570; }
+
+/* the two per-file factors on the one surface (per-file AM semantics) */
+.prep-flow { margin-top: 16px; }
+.prep-factor { padding: 2px 0 8px; }
+.prep-factor-head {
+  font-size: 17px; /* family panel-head step (Profile .block h2 register) */
+  font-weight: 640;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+.prep-src { margin-top: 2px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.03em; /* v7.1 floor */ color: var(--ink-3); }
+.prep-src a { color: var(--ink-2); }
+
 .prep-sublabel {
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--ink-2); /* state-bearing — v7.1 grey floor */
+}
+.cl-sublabel {
   margin-top: 6px;
   font-family: var(--mono);
   font-size: 12px;
@@ -27,7 +59,7 @@
 .rs-list-n { color: var(--ink-3); font-size: 12px; padding-top: 2px; grid-row: span 2; }
 .rs-listrow b { font-weight: 600; font-size: 14px; letter-spacing: -0.01em; line-height: 1.4; }
 .rs-list-note { grid-column: 2; margin-top: 4px; font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
-.rs-list-src { grid-column: 2; margin-top: 3px; font-size: 10.5px; letter-spacing: 0.03em; color: var(--ink-3); }
+.rs-list-src { grid-column: 2; margin-top: 3px; font-size: 11px; letter-spacing: 0.03em; /* v7.1 floor */ color: var(--ink-3); }
 
 /* upload */
 .rs-upload { margin-top: 4px; }
@@ -45,13 +77,24 @@
 .rs-notyet b { color: var(--ink-2); font-weight: 570; }
 
 /* run readout */
-.rs-readout { padding: 16px 16px 14px; }
-.rs-readout-top { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
-.rs-readout-sub { margin-top: 6px; color: var(--ink-2); font-size: 13px; }
-.rs-readout-score { font-size: 34px; font-weight: 640; letter-spacing: -0.03em; line-height: 1; }
-.rs-readout-score small { font-size: 13px; font-weight: 500; color: var(--ink-3); margin-left: 2px; }
-.rs-air-note { margin-top: 12px; font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
-.rs-air-note b { color: var(--ink); font-weight: 570; }
+.rs-readout, .cl-readout { padding: 16px 16px 14px; }
+.rs-readout-top, .cl-readout-top { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.rs-readout-sub, .cl-readout-sub { margin-top: 6px; color: var(--ink-2); font-size: 13px; }
+.rs-readout-score, .cl-readout-score { font-size: 34px; font-weight: 640; letter-spacing: -0.03em; line-height: 1; }
+.rs-readout-score small, .cl-readout-score small { font-size: 13px; font-weight: 500; color: var(--ink-3); margin-left: 2px; }
+.rs-air-note, .cl-air-note { margin-top: 12px; font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
+.rs-air-note b, .cl-air-note b { color: var(--ink); font-weight: 570; }
+
+/* letter-check ledger — reuses the resume check rows + the honest skip mark */
+.cl-role-line {
+  display: block; /* a block row: the role bit must wrap as prose, not flex items */
+  font-size: 12.5px;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.cl-role-label { font-size: 11px; letter-spacing: 0.06em; color: var(--ink-3); display: inline-block; margin-right: 4px; } /* v7.1 floor */
+.rs-check { flex-wrap: wrap; } /* narrow widths: the honest note wraps to its own line, never crushed */
+.rs-check .mark.skip { color: var(--ink-3); font-weight: 500; } /* honestly skipped — never ✓, never ✕ */
 
 /* factor check ledgers */
 .rs-factor-head { margin-top: 14px; font-size: 12px; letter-spacing: 0.03em; color: var(--ink-2); }
@@ -70,7 +113,7 @@
 .rs-finding:last-child { border-bottom: 0; }
 .rs-f-title { display: flex; align-items: center; gap: 10px; }
 .rs-level {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; /* v7.1 floor */
   padding: 2px 8px; border-radius: 2px; border: 1px solid var(--line);
 }
 .rs-level.rs-fix { color: #8a1f1f; border-color: #d8b4b4; }
@@ -86,7 +129,7 @@
   font-size: 12.5px; color: var(--ink-2); line-height: 1.55;
   border-left: 2px solid var(--line); padding-left: 12px;
 }
-.rs-ex-label { display: block; font-size: 10px; letter-spacing: 0.05em; color: var(--ink-3); margin-bottom: 3px; }
+.rs-ex-label { display: block; font-size: 11px; letter-spacing: 0.05em; /* v7.1 floor */ color: var(--ink-3); margin-bottom: 3px; }
 .rs-ex-src { color: var(--ink-3); font-size: 11px; }
 
 /* guide page */
@@ -100,7 +143,38 @@
 .rs-plain { margin: 6px 0 0; padding-left: 18px; font-size: 12.5px; color: var(--ink-2); line-height: 1.75; }
 
 .rs-foot {
-  margin-top: 6px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em;
+  margin-top: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; /* v7.1 floor */
   color: var(--ink-3); text-align: right;
 }
-.src-line { margin-top: 12px; font-size: 10.5px; letter-spacing: 0.02em; color: var(--ink-3); line-height: 1.6; }
+.src-line { margin-top: 12px; font-size: 11px; letter-spacing: 0.02em; /* v7.1 floor */ color: var(--ink-3); line-height: 1.6; }
+
+/* ── cover-letter upload (ticket 12) — mirrors the resume upload's register ┘ */
+.cl-upload { margin-top: 4px; }
+.cl-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 12px 16px;
+  align-items: end;
+  padding: 6px 0 0;
+}
+.cl-field { display: grid; gap: 5px; }
+@media (max-width: 720px) {
+  .cl-row { grid-template-columns: 1fr; }
+}
+.cl-label { font-size: 11px; letter-spacing: 0.05em; /* v7.1 floor */ color: var(--ink-3); }
+.cl-opt { color: var(--ink-3); letter-spacing: 0.02em; }
+.cl-input {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink);
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  max-width: 300px;
+}
+.cl-input::placeholder { color: var(--ink-3); } /* focus rides the family :focus-visible ring */
+.cl-note { margin-top: 12px; font-size: 12.5px; color: var(--ink-2); line-height: 1.55; max-width: 74ch; }
+.cl-note.cl-err { color: #8a1f1f; font-weight: 550; }
+.cl-notyet { margin-top: 14px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.02em; color: var(--ink-3); }
+.cl-notyet b { color: var(--ink-2); font-weight: 570; }

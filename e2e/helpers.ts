@@ -21,6 +21,12 @@ import type { Page } from "@playwright/test";
  */
 
 export async function resetStore() {
+  // the JSON fallback stores (degraded-mode residue) get cleared FIRST — with
+  // the Supabase env present a degraded store (schema pending) writes them,
+  // and a stale row would resurrect measured AR factors across spec resets
+  fs.rmSync(path.join(process.cwd(), "data", "state.json"), { force: true });
+  fs.rmSync(path.join(process.cwd(), "data", "resume-runs.json"), { force: true });
+  fs.rmSync(path.join(process.cwd(), "data", "letter-runs.json"), { force: true });
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const service = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (url && service) {
@@ -33,19 +39,19 @@ export async function resetStore() {
       ["student_state", "student_id"],
       ["credentials", "id"],
       ["resume_runs", "student_id"],
+      ["letter_runs", "student_id"],
     ] as const) {
       const { error } = await admin.from(table).delete().neq(col, table === "credentials" ? "00000000-0000-0000-0000-000000000000" : "__none__");
-      // resume_runs is applied by the USER (resume-round SQL); before that
-      // exists the delete is a no-op, not a failure — keep runs self-consistent
-      const tolerant = table === "resume_runs";
+      // resume_runs / letter_runs are applied by the USER (resume round /
+      // ticket-12 Prep round SQL); before those exist each delete is a no-op,
+      // not a failure — keep runs self-consistent
+      const tolerant = table === "resume_runs" || table === "letter_runs";
       if (error && !(tolerant && /does not exist|not find the table|schema cache/i.test(error.message))) {
         throw new Error(`resetStore: ${table} delete failed: ${error.message}`);
       }
     }
     return;
   }
-  fs.rmSync(path.join(process.cwd(), "data", "state.json"), { force: true });
-  fs.rmSync(path.join(process.cwd(), "data", "resume-runs.json"), { force: true });
 }
 
 /**

@@ -1,7 +1,7 @@
 import type { DemoEvent, StudentState } from "@/lib/types";
 import { NEIL_SEED } from "@/lib/fixtures/neil";
 import { getCareer } from "@/lib/fixtures/catalog";
-import { computeScore } from "@/lib/engines/score";
+import { computeScore, type ArInput } from "@/lib/engines/score";
 
 /**
  * Score-trajectory derivation for the Plan §5 timeline — computed, never painted.
@@ -18,6 +18,11 @@ import { computeScore } from "@/lib/engines/score";
  *     computed score (Setup) and point B = the live score (First completions).
  *  3. With no completions proven, there is exactly one derivable score — the
  *     current one — so the trajectory is a single dated point and the UI says so.
+ *
+ * The AR factor feed (`ar`) rides the "now" reading wherever the caller has
+ * it (getStudentView) — after the Application Materials pass the live point
+ * matches the dashboard headline to the point (ticket-12 recut consistency;
+ * the Setup point stays the pre-walk seed, AR unmeasured).
  */
 
 export interface TrajPoint {
@@ -47,7 +52,8 @@ export function fmtEventDate(d: string | undefined): string {
 }
 
 function headline(
-  s: Pick<StudentState, "bars" | "careerId" | "goals" | "stageOneDone" | "competencies">
+  s: Pick<StudentState, "bars" | "careerId" | "goals" | "stageOneDone" | "competencies">,
+  ar?: ArInput | null
 ): number {
   const n = getCareer(s.careerId)?.skills.length ?? 0;
   return computeScore({
@@ -57,6 +63,7 @@ function headline(
     goals: s.goals,
     stageOneDone: s.stageOneDone,
     competencies: s.competencies ?? {},
+    ar,
   }).total;
 }
 
@@ -65,7 +72,7 @@ function scoredValue(detail: string): number | null {
   return all ? Number(all[all.length - 1]) : null;
 }
 
-export function scoreTrajectory(state: StudentState): Trajectory {
+export function scoreTrajectory(state: StudentState, ar?: ArInput | null): Trajectory {
   const events: DemoEvent[] = state.events ?? [];
   const prov = {
     barCloses: events.filter((e) => e.kind === "bar-closed").length,
@@ -84,7 +91,7 @@ export function scoreTrajectory(state: StudentState): Trajectory {
     return { points, lineage: "scored-events", delta, prov };
   }
 
-  const now = headline(state);
+  const now = headline(state, ar);
   // 2 · proven setup-and-now lineage: switched + at least one comprehension pass
   const switched = events.some((e) => e.kind === "career-switched");
   const lastPass = [...events].reverse().find((e) => e.kind === "check-passed");

@@ -86,7 +86,7 @@ export default function ResumeUpload({ careerName }: { careerName: string }) {
         </button>
       </div>
       <p className={`rs-note${err ? " rs-err" : ""}`} role="status" aria-live="polite">
-        {err ?? "Rejections are expected and named: oversized, empty, encrypted, image-only (no OCR — re-export), or something that doesn't read as a resume. Unlimited re-runs; your best run counts."}
+        {err ?? "Rejections are expected and named: oversized, empty, encrypted, image-only (no OCR — re-export), or something that doesn't read as a resume. Unlimited re-runs; your latest run counts — re-running replaces the stored one."}
       </p>
     </section>
   );

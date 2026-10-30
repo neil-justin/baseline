@@ -1,7 +1,14 @@
 import type { CheckQuestion } from "@/lib/types";
 
 /**
- * Onboarding page-local fixtures (task 8) — the pre-baked content canon:
+ * Onboarding page-local fixtures — the pre-baked demo content canon.
+ *
+ * IMPORTANT (instrument round, 2026-10-29): the 42-item competency
+ * instrument is NOT demo-local — its user-approved content bank lives in
+ * `lib/fixtures/instrument.ts` (verbatim from
+ * .scratch/career-path-readiness-platform/features/content/
+ * instrument-competencies-draft.md; server-graded via app/api/assessment).
+ * This file keeps only the page-local demo narration:
  *  - interest quiz: RIASEC-BANK-01 demo slice (onboarding.md OB-3a.3 verbatim)
  *  - suggestion-card narration: OB-3a.9–11 pre-baked fallback lines
  *  - verification MCQs: VMCQ-SWE-01 demo bank — re-keyed to the college

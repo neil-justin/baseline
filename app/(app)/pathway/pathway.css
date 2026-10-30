@@ -1,299 +1,663 @@
-/* Pathway surface styles — ported VERBATIM from prototype/pathway.html <style> (2026-10-14).
-   Queue instrument: stage band, ranked rows, badged gap bars (.gap-row lives in globals.css),
-   typed resource catalog. No new colors beyond the tokens. */
+/* ============================================================
+   DNA v7 — My Plan surface (/pathway), RE-CUT to the dashboard
+   DNA (v7.1 amendments, user-ruled 2026-10-29). The v1 reskin
+   (token-true, composition-orphaned) is replaced: a header band
+   names the surface and carries the tab strip + stage counters;
+   the ranked queue renders as the family's dense plan table with
+   wash chips and computed SP effects; gaps re-break into cells
+   with column heads + chips; numerals are the drawn 26px ink
+   circles everywhere.
+   Cool white-grey ground, white cards with 1px border + whisper
+   shadow, 8px radius; Material wash chips for state (blue
+   in-progress / green verified / amber pending / grey
+   unmeasured); honest fractions — evidence-closed solid,
+   self-report hatched, open empty, never red — inside cell
+   frames, never full-width stripes. Scoped under `.v7plan`
+   (the page root); shell chrome lives in ../v7.css. No entrance
+   motion (DNA lock).
+   ============================================================ */
 
-/* drafting sheet — same faint grid the index page carries */
-body {
-  background-image:
-    linear-gradient(rgba(22,24,26,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(22,24,26,0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
+.v7plan {
+  font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  padding: 12px 16px 24px;
+}
+.v7plan ::selection { background: var(--v-blue-wash); }
+.v7plan :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
+.v7plan a { color: inherit; }
+
+/* ---------- header band — names the surface, carries the tabs ---------- */
+
+.v7plan .planband { margin: 0; }
+.v7plan .planband .band {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  padding: 12px 16px 0;
+  margin-bottom: 12px;
+}
+.v7plan .planband .headrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px 18px;
+  flex-wrap: wrap;
+  padding: 2px 0 12px;
+}
+.v7plan .planband .who .t {
+  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
+  margin: 0;
+  color: var(--v-ink);
+}
+.v7plan .planband .who .m {
+  font: 400 11.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  margin-top: 2px;
 }
 
-.pg { padding: 34px 32px 84px; }
+/* tab strip (Material segmented — thumb lift = the one shadow) */
 
-/* ---------- tab strip (segmented, thumb lift = the one shadow) ---------- */
-
-.tabrow { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; }
-.ptabs {
-  display: inline-flex; gap: 4px;
-  background: #ECEFEC; border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 3px;
+.v7plan .ptabs {
+  display: inline-flex;
+  gap: 4px;
+  background: var(--v-grey-wash);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  padding: 3px;
 }
-.ptabs [role="tab"] {
-  padding: 6px 14px; border-radius: 4px;
-  font-size: 12.5px; font-weight: 550; color: var(--ink-2);
+.v7plan .ptabs [role="tab"] {
+  padding: 7px 16px;
+  border-radius: 6px;
+  font: 500 12.5px/1.2 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
   white-space: nowrap;
   transition: background-color 0.12s ease, color 0.12s ease;
 }
-.ptabs [role="tab"]:hover { color: var(--ink); }
-.ptabs [role="tab"][aria-selected="true"] {
-  background: var(--panel); color: var(--ink);
-  border: 1px solid var(--line);
-  box-shadow: 0 1px 3px rgba(22, 24, 26, 0.07);
+.v7plan .ptabs [role="tab"]:hover { color: var(--v-ink); }
+.v7plan .ptabs [role="tab"][aria-selected="true"] {
+  background: var(--v-surface);
+  color: var(--v-ink);
+  border: 1px solid var(--v-border);
+  box-shadow: var(--v-shadow);
   margin: -1px;
 }
+.v7plan .ptabs [role="tab"]:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 1px; }
 
-/* ---------- tab panel motion (one authored moment) ---------- */
+/* stage counters — band furniture, drawn-circle numerals; the current
+   stage reads via chip + ink emphasis, never a filled cell (Wash Rule) */
 
-.tabpanel.entering { animation: panelin 0.35s ease-out both; }
-@keyframes panelin {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: none; }
+.v7plan .planband .stageband {
+  display: flex;
+  align-items: stretch;
+  border-top: 1px solid var(--v-rows);
 }
-@media (prefers-reduced-motion: reduce) {
-  .tabpanel.entering { animation: none; }
+.v7plan .planband .stagecell {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px 12px 0;
+}
+.v7plan .planband .stagecell + .stagecell {
+  border-left: 1px solid var(--v-rows);
+  padding-left: 18px;
+}
+/* the step numeral — CSS-drawn circle, no glyph font (26px, family spec) */
+.v7plan .stagecell .s-num,
+.v7plan .stage-rowbtn .s-num,
+.v7plan .stage-static .s-num {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--v-border);
+  border-radius: 50%;
+  font: 500 12px/1 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
+}
+.v7plan .stagecell .s-txt { min-width: 0; }
+.v7plan .stagecell .s-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 400 13px/1.3 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7plan .stagecell .s-count {
+  display: block;
+  font: 400 11px/1.3 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.v7plan .stagecell.now .s-num {
+  border-color: var(--v-blue);
+  color: var(--v-blue-deep);
+}
+.v7plan .stagecell.now .s-name { color: var(--v-ink); font-weight: 500; }
+.v7plan .stagecell.now .s-count { color: var(--v-blue-deep); }
+
+/* the family's wash chips (dashboard clone) */
+
+.v7plan .chip {
+  display: inline-block;
+  font: 500 11px/1.2 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.v7plan .chip.c-blue { background: var(--v-blue-wash); color: var(--v-blue-deep); }
+.v7plan .chip.c-green { background: var(--v-green-wash); color: var(--v-green-text); }
+.v7plan .chip.c-amber { background: var(--v-amber-wash); color: var(--v-amber-text); }
+.v7plan .chip.c-grey { background: var(--v-grey-wash); color: var(--v-grey-text); }
+/* the self-report hatch — quiet 45° stripes over the grey wash */
+.v7plan .chip.hatch-chip {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(60, 64, 67, 0.09) 0 2px,
+    transparent 2px 5px
+  );
 }
 
 /* ---------- per-tab head ---------- */
 
-.tabpanel h1 {
-  font-size: clamp(1.45rem, 2.4vw, 1.8rem);
-  font-weight: 640; letter-spacing: -0.025em; line-height: 1.18;
-  max-width: 34ch; text-wrap: balance;
+.v7plan .tabpanel { margin-top: 4px; }
+.v7plan .tabpanel .ptitle {
+  font: 400 22px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0;
+  max-width: 52ch;
+  text-wrap: balance;
+  margin: 8px 0 12px;
 }
-.lead-mono {
-  margin-top: 10px;
-  font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em;
-  color: var(--ink-2);
+.v7plan .lead-mono {
+  margin: -4px 0 12px;
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
   font-variant-numeric: tabular-nums;
 }
-.lead-mono b { color: var(--accent); font-weight: 500; }
-.lead-mono .sep { color: var(--ink-3); margin: 0 6px; }
-.tabpanel { margin-top: 26px; }
+.v7plan .lead-mono b { color: var(--v-ink); font-weight: 500; }
+.v7plan .lead-mono .sep { color: var(--v-meta); margin: 0 6px; }
 
-/* ---------- undecided default (edge-case audit §2.35) ---------- */
+/* ---------- cards ---------- */
 
-.defaultband {
-  margin-top: 24px;
-  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 22px 24px;
+.v7plan .card {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  /* full-bleed instrument card — the Index-era globals .card keeps 16px
+     padding + flex column; this surface's heads/tables carry their own */
+  display: block;
+  padding: 0;
 }
-.defaultband p { font-size: 14px; line-height: 1.55; color: var(--ink-2); max-width: 52ch; }
-.defaultband .n-cta { margin-top: 14px; }
-
-/* ---------- stage band ---------- */
-
-.stageband {
-  display: flex; align-items: stretch;
-  margin-top: 24px;
-  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
-  overflow: hidden;
+.v7plan .card + .card { margin-top: 12px; }
+.v7plan .card .head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 14px 16px 10px;
+  flex-wrap: wrap;
 }
-.stagecell {
-  flex: 1 1 0; min-width: 0;
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 18px; position: relative;
+.v7plan .card .head b { font: 500 14px/1.3 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7plan .card .head span { font: 400 11.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); } /* v7.1: state-bearing → ink-2 */
+/* the one tracked label per card — the instrument counter */
+.v7plan .card .head .label {
+  flex: none;
+  margin-left: auto;
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
 }
-.stagecell + .stagecell { border-left: 1px solid var(--line); }
-.stagecell + .stagecell::before {
-  content: "→";
-  position: absolute; left: 0; top: 50%;
-  transform: translate(-50%, -50%);
-  font-family: var(--mono); font-size: 11px; color: var(--ink-3);
-  background: var(--panel); padding: 2px 1px; line-height: 1;
-}
-.stagecell .s-num { font-family: var(--mono); font-size: 14px; color: var(--ink-3); flex: none; }
-.stagecell .s-txt { min-width: 0; }
-.stagecell .s-name { display: block; font-size: 13px; font-weight: 550; color: var(--ink-2); line-height: 1.3; }
-.stagecell .s-count { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink-3); margin-top: 2px; font-variant-numeric: tabular-nums; }
-.stagecell.now { background: #F7F8F7; }
-.stagecell.now .s-name { color: var(--ink); font-weight: 600; }
-.stagecell.now .s-count { color: var(--ink-2); }
-
-/* ---------- stage ① panel — ranked rows ---------- */
-
-.stagepanel {
-  margin-top: 10px;
-  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
-}
-.stagehead {
-  display: flex; justify-content: space-between; align-items: baseline; gap: 14px;
-  padding: 15px 20px 13px; border-bottom: 1px solid var(--line);
-}
-.stagehead h2 { font-size: 15.5px; font-weight: 640; letter-spacing: -0.015em; }
-.stagehead .sub { margin-top: 2px; font-size: 12.5px; color: var(--ink-2); }
-.stagehead .label { flex: none; }
-
-.qrow {
-  display: grid; grid-template-columns: 44px minmax(0, 1fr) auto;
-  gap: 4px 18px; align-items: start;
-  padding: 16px 20px 17px;
-  border-bottom: 1px solid var(--line-soft);
-}
-.qrow:last-of-type { border-bottom: 0; }
-.qrow .rank,
-.xrow .rank {
-  font-family: var(--mono); font-size: 17px; line-height: 1.3;
-  color: var(--ink-2); font-variant-numeric: tabular-nums;
-}
-.q-top { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
-.q-skill { font-size: 14.5px; font-weight: 620; letter-spacing: -0.01em; }
-.q-res { font-family: var(--mono); font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
-.q-res b { font-weight: 500; color: var(--ink); }
-.q-why { margin-top: 8px; font-size: 13.5px; line-height: 1.55; color: var(--ink-2); max-width: 62ch; }
-.q-why b { color: var(--ink); font-weight: 570; }
-.q-cta .btn { padding: 8px 16px; font-size: 12.5px; }
-.q-cta .q-nogap {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
-  color: var(--ink-3); line-height: 1.5; max-width: 34ch; text-align: right;
+.v7plan .foot {
+  padding: 10px 16px 14px;
+  font: 400 11px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
 }
 
-.qfoot {
-  padding: 13px 20px 15px;
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
-  color: var(--ink-3);
-}
-.stagewide {
-  padding: 18px 20px 20px;
-  font-size: 13.5px; line-height: 1.6; color: var(--ink-2); max-width: 62ch;
-}
-.stagewide b { color: var(--ink); font-weight: 570; }
+/* ---------- buttons (queue CTAs; overrides the Index .btn in globals) ---------- */
 
-/* ---------- collapsed stage rows ---------- */
-
-.stagerows { display: grid; gap: 10px; margin-top: 10px; }
-.stage-collapsible {
-  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
-  overflow: hidden;
+.v7plan .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 13px/1.2 Roboto, system-ui, sans-serif;
+  padding: 8px 20px;
+  border-radius: 8px;
+  transition: background-color 0.14s ease, border-color 0.14s ease,
+    box-shadow 0.14s ease, color 0.14s ease;
 }
-.stage-rowbtn {
-  width: 100%; display: flex; align-items: center; gap: 12px;
-  padding: 13px 20px; text-align: left; background: none; border: 0;
+.v7plan .btn:active { transform: translateY(0.5px); }
+.v7plan .btn-primary {
+  background: var(--v-blue);
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3);
+}
+.v7plan .btn-primary:hover { background: var(--v-blue-deep); box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35); }
+.v7plan .btn-ghost {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  color: var(--v-blue-deep);
+  font-weight: 500;
+}
+.v7plan .btn-ghost:hover { border-color: var(--v-blue); background: var(--v-blue-wash); }
+
+/* ---------- dense plan table — STEP / RESOURCE / STATE / EFFECT / ACTION ---------- */
+
+.v7plan .plan-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.v7plan .plan-table th {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+  text-align: left;
+  padding: 8px 16px;
+  border-top: 1px solid var(--v-rows);
+  border-bottom: 1px solid var(--v-rows);
+}
+.v7plan .card .plan-table { border-top: 1px solid var(--v-rows); }
+.v7plan .plan-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--v-rows);
+  font-size: 13px;
+  vertical-align: middle;
+}
+.v7plan .plan-table tbody tr { transition: background-color 0.12s ease; }
+.v7plan .plan-table tbody tr:hover { background: #f5f8fc; }
+.v7plan .plan-table tr:last-child td { border-bottom: 0; }
+.v7plan .plan-table .ct-res { width: 24%; }
+.v7plan .plan-table .ct-state { width: 9%; }
+.v7plan .plan-table .ct-eff { width: 13%; }
+.v7plan .plan-table .ct-act { width: 108px; }
+
+/* ranked-row furniture — drawn numerals, never bare digits */
+.v7plan .plan-table .item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.v7plan .plan-table .rank {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--v-border);
+  border-radius: 50%;
+  font: 500 12px/1 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
+}
+.v7plan .plan-table .q-skill {
+  font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7plan .q-why {
+  margin-top: 4px;
+  font: 400 11.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 62ch;
+}
+/* the resource pointer — structural one-liner in its own cell */
+.v7plan .q-res {
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
+}
+.v7plan .q-res b { font-weight: 500; color: var(--v-ink); }
+.v7plan .q-nogap {
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-grey-text);
+  max-width: 34ch;
+}
+.v7plan .plan-table .eff {
+  font: 500 12px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  white-space: nowrap;
+}
+.v7plan .plan-table .ct-act .btn {
+  padding: 7px 14px;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.v7plan .stagewide {
+  padding: 16px 16px 18px;
+  font: 400 13.5px/1.6 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 62ch;
+}
+.v7plan .stagewide b { color: var(--v-ink); font-weight: 500; }
+
+/* ---------- stages card (② accordion + ③ static; the peek ends the tab) ---------- */
+
+.v7plan .stages { overflow: hidden; }
+.v7plan .stage-rowbtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  text-align: left;
+  background: none;
+  border: 0;
   transition: background-color 0.12s ease;
 }
-.stage-rowbtn:hover { background: #F7F8F7; }
-.stage-rowbtn .s-num { font-family: var(--mono); font-size: 14px; color: var(--ink-3); flex: none; }
-.stage-rowbtn .sr-name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
-.stage-rowbtn .sr-count { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink-3); font-variant-numeric: tabular-nums; }
-.stage-rowbtn .chev {
-  margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--ink-2);
-  transition: transform 0.2s ease;
+.v7plan .stage-rowbtn:hover { background: #f5f8fc; }
+.v7plan .stage-rowbtn .sr-name,
+.v7plan .stage-static .sr-name {
+  font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
 }
-.stage-rowbtn[aria-expanded="true"] .chev { transform: rotate(180deg); }
-.stage-static {
-  display: flex; align-items: center; gap: 12px; padding: 13px 20px;
-}
-.stage-peek {
-  padding: 0 20px 13px 46px;
-  font-family: var(--mono); font-size: 11.5px; line-height: 1.5; color: var(--ink-2);
+.v7plan .stage-rowbtn .sr-count,
+.v7plan .stage-static .sr-count {
+  font: 400 11.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2); /* v7.1: state text → ink-2 ≥4.5:1 */
   font-variant-numeric: tabular-nums;
 }
-.stage-expand { border-top: 1px solid var(--line-soft); }
-.stage-expand.entering { animation: panelin 0.3s ease-out both; }
-@media (prefers-reduced-motion: reduce) { .stage-expand.entering { animation: none; } }
-.xrow {
-  display: grid; grid-template-columns: 44px minmax(0, 1fr) auto;
-  gap: 4px 18px; align-items: start;
-  padding: 12px 20px;
+/* chevron drawn with borders — no glyph font */
+.v7plan .stage-rowbtn .chev {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-right: 2px solid var(--v-ink2);
+  border-bottom: 2px solid var(--v-ink2);
+  margin-left: auto;
+  transition: transform 0.2s ease;
 }
-.xrow + .xrow { border-top: 1px solid var(--line-soft); }
-.xrow .x-name { font-size: 13.5px; font-weight: 570; color: var(--ink-2); }
-.xrow .x-note {
-  font-family: var(--mono); font-size: 11px; line-height: 1.5; color: var(--ink-3); max-width: 46ch;
+.v7plan .stage-rowbtn[aria-expanded="true"] .chev { transform: rotate(225deg); }
+.v7plan .stage-static {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  border-top: 1px solid var(--v-rows);
 }
-.xrow .g-link { margin-left: 12px; }
-
-/* ---------- cross-tab footer ---------- */
-
-.xtab { margin-top: 28px; display: flex; gap: 26px; flex-wrap: wrap; }
-.xtab button { font-family: var(--sans); font-size: 13px; color: var(--ink-2); text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
-.xtab button b { font-weight: 570; color: var(--ink); }
-.xtab button:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-
-/* ---------- gaps tab ---------- */
-
-.gaplist { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 6px 20px; }
-.gaplist .gap-row { padding: 13px 0; }
-.g-status { font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; color: var(--ink-2); text-align: right; }
-.g-status .ok { color: var(--accent); font-weight: 500; }
-.g-status .unverified { color: var(--ink-3); }
-.g-link { font-family: var(--sans); font-size: 12.5px; font-weight: 550; color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #B9BDB8; background: none; border: 0; padding: 0; cursor: pointer; }
-.g-link:hover { color: var(--accent); text-decoration-color: var(--accent); }
-.gap-row .g-bar i.claim { background: rgba(22, 24, 26, 0.3); }
-.gapnote {
-  padding: 12px 0 4px;
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
-  color: var(--ink-3); line-height: 1.6;
+.v7plan .stage-rowbtn + .stage-expand { border-top: 0; }
+.v7plan .stage-expand { border-top: 1px solid var(--v-rows); border-bottom: 1px solid var(--v-rows); }
+.v7plan .stage-expand .plan-table th { border-top: 0; }
+.v7plan .stage-expand .plan-table td { padding: 9px 16px; }
+.v7plan .x-name {
+  font: 400 13px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
 }
-.softpanel {
-  margin-top: 10px;
-  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 14px 20px 12px;
+.v7plan .x-note {
+  margin-top: 4px;
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-grey-text);
+  max-width: 46ch;
 }
-.softpanel .gap-row { padding: 10px 0 12px; }
-.soft-note { margin-top: 8px; font-size: 12.5px; color: var(--ink-2); }
-.gap-cta { margin-top: 22px; font-size: 13px; color: var(--ink-2); }
-.gap-cta b { font-weight: 570; color: var(--ink); }
-.gap-cta .g-link { margin-left: 4px; }
-.gap-allclosed { font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 500; letter-spacing: 0.02em; }
+.v7plan .stage-peek {
+  margin: 0;
+  border-top: 1px solid var(--v-rows);
+  padding: 10px 16px 14px 54px;
+  font: 400 11.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- gaps tab — badged skills ledger (cells + heads + chips) ---------- */
+
+.v7plan .gap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  border-top: 1px solid var(--v-rows);
+}
+.v7plan .gap-table th {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+  text-align: left;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--v-rows);
+}
+.v7plan .gap-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--v-rows);
+  vertical-align: middle;
+}
+.v7plan .gap-table tr:last-child td { border-bottom: 0; }
+.v7plan .gap-table .ct-state { width: 118px; }
+.v7plan .gap-table .ct-bar { width: 150px; }
+.v7plan .gap-table tbody tr { transition: background-color 0.12s ease; }
+.v7plan .gap-table tbody tr:hover { background: #f5f8fc; }
+.v7plan .g-row .g-name {
+  font: 400 13px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7plan .g-status {
+  margin-top: 3px;
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
+}
+.v7plan .g-status .ok { color: var(--v-green-text); font-weight: 500; }
+.v7plan .g-status .unverified { color: var(--v-grey-text); }
+/* the honest bar lives INSIDE its cell frame — 8px ledger track */
+.v7plan .g-row .g-bar {
+  height: 8px;
+  border-radius: 2px;
+  background: var(--v-track);
+  overflow: hidden;
+}
+.v7plan .g-row .g-bar i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--v-green);
+  transform: scaleX(var(--earn, 0));
+  transform-origin: left;
+}
+/* honest fills: evidence-closed solid green, self-report hatched blue, open empty */
+.v7plan .g-row .g-bar i.claim {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(26, 115, 232, 0.16) 0 2px,
+    transparent 2px 5px
+  );
+}
+.v7plan .g-link {
+  font: 500 12px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-blue-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(26, 115, 232, 0.35);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.v7plan .g-link:hover { color: var(--v-blue); text-decoration-color: var(--v-blue); }
+
+/* the ES strip on the same ledger footing */
+.v7plan .softpanel { overflow: hidden; }
+.v7plan .softpanel .g-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 118px 150px;
+  gap: 0;
+  align-items: center;
+  padding: 12px 16px;
+}
+.v7plan .softpanel .g-row .g-name { font: 500 13px/1.4 Roboto, system-ui, sans-serif; }
+/* column lines match the ledger's td geometry exactly (no grid gap) */
+.v7plan .softpanel .g-row .es-state { padding-left: 16px; }
+.v7plan .softpanel .g-row .ct-bar { padding: 0 16px; }
+/* the ES strip's fill is engine-measured — blue channel fill; unmeasured stays empty */
+.v7plan .softpanel .g-row .ct-bar .g-bar { height: 4px; }
+.v7plan .softpanel .g-row .g-bar i { background: var(--v-blue); }
+.v7plan .gap-cta {
+  margin: 14px 2px 0;
+  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7plan .gap-cta b { font-weight: 500; color: var(--v-ink); }
+.v7plan .gap-allclosed {
+  font: 500 12px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-green-text);
+  font-weight: 500;
+}
 
 /* ---------- resources tab — typed catalog table ---------- */
 
-.res-table { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
-.res-row {
-  display: flex; align-items: baseline; gap: 14px;
+.v7plan .card.rescard { overflow: hidden; }
+.v7plan .res-table { width: 100%; }
+.v7plan .res-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
   padding: 11px 16px;
-  border-bottom: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--v-rows);
   transition: background-color 0.12s ease;
+  scroll-margin-top: 70px;
 }
-.res-row:not(.res-heads):hover { background: #F7F8F7; }
-.res-row:last-child { border-bottom: 0; }
-.res-heads { padding: 10px 16px; border-bottom: 1px solid var(--line); }
-.res-main { width: 31%; flex: none; min-width: 0; }
-.res-type { width: 8%; flex: none; }
-.res-cost { width: 9%; flex: none; }
-.res-time { width: 10%; flex: none; }
-.res-feeds { flex: 1 1 auto; min-width: 0; }
-.res-main .r-title { font-family: var(--sans); font-size: 13px; font-weight: 570; color: var(--ink); display: block; }
-.res-main .r-prov { display: block; margin-top: 2px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
-.res-heads span, .res-type, .res-cost, .res-time {
-  font-family: var(--mono); font-size: 12px; color: var(--ink-2);
+.v7plan .res-row:not(.res-heads):hover { background: #f5f8fc; }
+.v7plan .res-row:last-child { border-bottom: 0; }
+.v7plan .res-heads { padding: 10px 16px; border-bottom: 1px solid var(--v-border); background: #fafbfc; }
+.v7plan .res-main { width: 31%; flex: none; min-width: 0; }
+.v7plan .res-type { width: 8%; flex: none; }
+.v7plan .res-cost { width: 9%; flex: none; }
+.v7plan .res-time { width: 10%; flex: none; }
+.v7plan .res-feeds { flex: 1 1 auto; min-width: 0; }
+.v7plan .res-main .r-title {
+  font: 400 13px/1.4 Roboto, system-ui, sans-serif;
+  font-weight: 500;
+  color: var(--v-ink);
+  display: block;
+}
+.v7plan .res-main .r-prov {
+  display: block;
+  margin-top: 2px;
+  font: 400 11px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-meta); /* decorative provider line, adjacent to the title datum */
+}
+.v7plan .res-heads span,
+.v7plan .res-type,
+.v7plan .res-cost,
+.v7plan .res-time {
+  font: 400 12px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
   font-variant-numeric: tabular-nums;
 }
-.res-heads span { font-size: 11px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--ink-3); }
-.res-feeds { font-family: var(--mono); font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
-.res-feeds .r-route { display: block; margin-top: 2px; font-size: 11px; color: var(--ink-3); }
-.res-feeds .ok { color: var(--accent); font-weight: 500; }
-.r-start {
-  display: inline-block; margin-left: 8px;
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
-  color: var(--ink-2); border: 1px solid var(--line);
-  border-radius: 3px; padding: 1px 7px; vertical-align: 1px;
+.v7plan .res-heads span {
+  font-size: 11px; /* v7.1 floor: labels ≥11px */
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7plan .res-feeds {
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
+}
+.v7plan .res-feeds .r-route { display: block; margin-top: 2px; font-size: 11px; color: var(--v-ink2); }
+.v7plan .res-feeds .ok { color: var(--v-green-text); font-weight: 500; }
+.v7plan .r-start {
+  display: inline-block;
+  margin-left: 8px;
+  font: 500 11px/1.3 Roboto, system-ui, sans-serif;
+  color: var(--v-blue-deep);
+  background: var(--v-blue-wash);
+  border-radius: 4px;
+  padding: 2px 8px;
+  vertical-align: 1px;
+  white-space: nowrap;
 }
 /* external link on the verified resource URL */
-.res-main a.r-title { color: var(--ink); text-decoration: none; }
-.res-main a.r-title:hover { text-decoration: underline; }
-.res-main a.r-title:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
-.res-main .r-ext { margin-left: 4px; font-size: 11px; color: var(--ink-3); }
-.res-foot {
-  margin-top: 14px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
-  color: var(--ink-3); line-height: 1.6; max-width: 74ch;
+.v7plan .res-main a.r-title { color: var(--v-ink); text-decoration: none; }
+.v7plan .res-main a.r-title:hover { text-decoration: underline; text-underline-offset: 3px; }
+.v7plan .res-main a.r-title:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; border-radius: 2px; }
+.v7plan .res-main .r-ext { margin-left: 4px; font-size: 11px; color: var(--v-meta); }
+/* the anchored-in row from a Start CTA — the row-hover tint held at rest
+   (a resting highlight of the mapped resource; cleared by any tab switch) */
+.v7plan .res-row.anchored {
+  background: #f5f8fc;
 }
+
+/* ---------- undecided default (edge-case audit §2.35) ---------- */
+
+.v7plan .defaultband {
+  margin-top: 12px;
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  padding: 22px 24px;
+}
+.v7plan .defaultband p { font-size: 14px; line-height: 1.55; color: var(--v-ink2); max-width: 52ch; }
+.v7plan .defaultband .n-cta { margin-top: 14px; }
 
 /* ---------- responsive ---------- */
 
-@media (max-width: 860px) {
-  .qrow { grid-template-columns: 36px minmax(0, 1fr); }
-  .qrow .q-cta { grid-column: 2; justify-self: start; margin-top: 8px; }
-  .qrow .rank, .xrow .rank { font-size: 15px; }
-  .stagecell { padding: 11px 14px; }
-  .stagecell .s-name { font-size: 12.5px; }
+@media (max-width: 1020px) {
+  .v7plan .plan-table .ct-res { width: 30%; }
 }
+/* State folds on tablets — the chips duplicate the scan the rows already carry */
+@media (max-width: 920px) {
+  .v7plan .plan-table .ct-state { display: none; }
+}
+
 @media (max-width: 720px) {
-  .pg { padding: 30px 20px 72px; }
-  .stageband { flex-direction: column; }
-  .stagecell + .stagecell { border-left: 0; border-top: 1px solid var(--line); }
-  .stagecell + .stagecell::before {
-    content: "↓"; left: 24px; top: 0;
-    transform: translate(-50%, -50%);
+  .v7plan { padding: 12px 12px 80px; }
+  .v7plan .planband .band { padding: 12px 12px 0; }
+  /* block-stacked tables re-show the folded State cell (≤920 hide) */
+  .v7plan .plan-table .ct-state { display: block; }
+  /* the stage counters stack as a column */
+  .v7plan .planband .stageband { flex-direction: column; }
+  .v7plan .planband .stagecell,
+  .v7plan .planband .stagecell + .stagecell {
+    border-left: 0;
+    padding: 10px 0 10px 0;
   }
-  .stagecell + .stagecell { position: relative; }
-  .xrow { grid-template-columns: 36px minmax(0, 1fr); }
-  .res-row { flex-wrap: wrap; gap: 4px 16px; padding: 11px 14px; }
-  .res-main { width: 100%; }
-  .res-type, .res-cost, .res-time { width: auto; }
-  .res-feeds { flex: 1 1 100%; }
-  .res-heads { display: none; }
-  .stage-peek { padding-left: 20px; }
+  .v7plan .planband .stagecell + .stagecell { border-top: 1px solid var(--v-rows); }
+  .v7plan .planband .stagecell:last-child { padding-bottom: 12px; }
+  /* queue + remains tables stack into dense blocks */
+  .v7plan .plan-table,
+  .v7plan .plan-table tbody,
+  .v7plan .plan-table tr,
+  .v7plan .plan-table td {
+    display: block;
+    width: auto;
+  }
+  .v7plan .plan-table thead { display: none; }
+  .v7plan .plan-table tbody tr { border-bottom: 1px solid var(--v-rows); padding: 12px 12px; }
+  .v7plan .plan-table tbody tr:last-child { border-bottom: 0; }
+  .v7plan .plan-table td { padding: 0 0 10px; border-bottom: 0; }
+  .v7plan .plan-table td:last-child,
+  .v7plan .plan-table tbody tr:last-child td:last-child { padding-bottom: 0; }
+  .v7plan .plan-table .ct-act .btn { padding: 8px 16px; }
+  .v7plan .q-nogap,
+  .v7plan .x-note { max-width: none; }
+  /* the gaps ledger stacks: name/status → chip+bar line */
+  .v7plan .gap-table,
+  .v7plan .gap-table tbody,
+  .v7plan .gap-table tr,
+  .v7plan .gap-table td {
+    display: block;
+    width: auto;
+  }
+  .v7plan .gap-table thead { display: none; }
+  .v7plan .gap-table tbody tr { border-bottom: 1px solid var(--v-rows); padding: 12px 12px; }
+  .v7plan .gap-table tbody tr:last-child { border-bottom: 0; }
+  .v7plan .gap-table td { padding: 0 0 10px; border-bottom: 0; }
+  .v7plan .gap-table td:last-child { padding-bottom: 0; }
+  .v7plan .softpanel .gap-row { grid-template-columns: minmax(0, 1fr) auto; }
+  /* resources rows wrap */
+  .v7plan .res-row { flex-wrap: wrap; gap: 4px 16px; padding: 11px 12px; }
+  .v7plan .res-main { width: 100%; }
+  .v7plan .res-type, .v7plan .res-cost, .v7plan .res-time { width: auto; }
+  .v7plan .res-feeds { flex: 1 1 100%; }
+  .v7plan .res-heads { display: none; }
 }

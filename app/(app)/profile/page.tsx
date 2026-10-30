@@ -4,10 +4,13 @@ import { requireStudent } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
 import { WEIGHTS } from "@/lib/engines/score";
 import { skillsFor } from "@/lib/engines/gaps";
+import { presenceMeasured } from "@/lib/engines/air";
 import { RESOURCES } from "@/lib/fixtures/resources";
 import Reveal from "@/components/Reveal";
 import ProfileTabs from "./ProfileTabs";
 import ProfileReadout from "./ProfileReadout";
+import PresenceCard from "./PresenceCard";
+import DpaArtifacts from "./DpaArtifacts";
 import { scoreTrajectory, fmtEventDate, type TrajPoint, type Trajectory } from "./trajectory";
 import "./profile.css";
 
@@ -113,7 +116,7 @@ export default async function ProfilePage() {
   if (!career || !score) return <UndecidedProfile name={state.name} />;
 
   const v = scoreView(career, state, ar);
-  const traj = scoreTrajectory(state);
+  const traj = scoreTrajectory(state, ar);
   const asOf = fmtEventDate(state.events[state.events.length - 1]?.date);
   const byCheck = Object.values(state.bars).filter((b) => b.source === "verified" || b.source === "checked").length;
   const bySelf = Object.values(state.bars).filter((b) => b.source === "claimed").length;
@@ -161,6 +164,12 @@ export default async function ProfilePage() {
     };
   });
 
+  /* Presence — the FOURTH credential kind (ticket 12): declared + machine-
+     verified, never counselor-audited. The stamp is what the offline demo
+     presents; the private account's honest sub-result is recorded here. */
+  const presence = state.presence ?? null;
+  const presenceMeasuredNow = presenceMeasured(presence);
+
   /* Goals, in plain words */
   const completedGoals = state.goals.filter((g) => g.status === "completed");
   const activeGoals = state.goals.filter((g) => g.status === "active");
@@ -189,6 +198,15 @@ export default async function ProfilePage() {
       ? `You're at ${v.total}. Your pathway has already picked the next step; clear it and the score moves again.`
       : `You're at ${v.total}. Every item below is something you can start this week — your pathway already picked the first one.`;
   const switched = state.events.some((e) => e.kind === "career-switched");
+
+  /* AR presence ticker (ticket 12): the declared entry's machine-verified stamp. */
+  const presenceTicker = (() => {
+    const p = state.presence;
+    if (!p?.stamp) return "not declared";
+    if (v.arFactors.presence.measured)
+      return `${v.arFactors.presence.earned} of ${v.arFactors.presence.max} · stamped ${fmtEventDate(p.stamp.verifiedAt)}`;
+    return "declared — format check failed, not yet measured";
+  })();
 
   const identity = (
     <p className="page-id num">
@@ -288,8 +306,32 @@ export default async function ProfilePage() {
         <Reveal className="panel block">
           <div className="b-head">
             <h2>Credentials you&apos;ve earned</h2>
+            <p className="helper">
+              Four kinds land here: the platform&apos;s checked trainings, your declared credentials, and —
+              since the ticket-12 round — <b>professional presence</b>, declared below and verified by its
+              machine stamp.
+            </p>
           </div>
-          {credentialRows.length === 0 && (
+          {presence && presence.stamp && (
+            <div className="prow presence-row" data-presence-row>
+              <span className="p-name">Professional presence — LinkedIn</span>
+              {presenceMeasuredNow ? (
+                <span className="p-badge vbadge ok" data-presence-stamp={`MACHINE-VERIFIED ${fmtEventDate(presence.stamp.verifiedAt).toUpperCase()}`}>
+                  MACHINE-VERIFIED · {fmtEventDate(presence.stamp.verifiedAt).toUpperCase()}
+                </span>
+              ) : (
+                <span className="p-badge st-open">DECLARED — FORMAT CHECK FAILED, NOT YET MEASURED</span>
+              )}
+              <span className="p-sub" data-presence-sub>
+                {presence.linkedinUrl} · {presence.email} ·{" "}
+                {presence.stamp.offline ? "stamped offline — no network look-up ran" : ""}
+                {presence.stamp.checks.linkedinUrlFormat === "fail" ? " · URL format failed" : ""}
+                {presence.stamp.checks.professionalEmailFormat === "fail" ? " · email format failed" : ""}
+                {presence.stamp.contentNote ? ` · ${presence.stamp.contentNote}` : ""}
+              </span>
+            </div>
+          )}
+          {credentialRows.length === 0 && !presence && (
             <p className="doc-p" style={{ marginTop: 12 }}>
               None yet — your route&apos;s first credential appears the moment its check passes.
             </p>
@@ -313,7 +355,28 @@ export default async function ProfilePage() {
               <span className="p-sub">Your route&apos;s next credential, not earned yet</span>
             </div>
           </div>
-          <p className="src-line num">A credential appears here only when its check passes</p>
+          <p className="src-line num">
+            A platform credential appears here only when its check passes · counselor-audited kinds carry
+            their stamp on the entry itself
+          </p>
+          <div className="presence-wrap">
+            <PresenceCard
+              declared={
+                presence?.stamp
+                  ? {
+                      linkedinUrl: presence.linkedinUrl,
+                      email: presence.email,
+                      verifiedAt: presence.stamp.verifiedAt,
+                      privateNote: Boolean(presence.stamp.contentNote),
+                    }
+                  : null
+              }
+            />
+          </div>
+          <p className="src-line num">
+            Presence (ticket 12) is machine-verified at declaration — the timestamped stamp, never a
+            counselor audit. It is the fourth kind and feeds Application-Readiness&apos; 3-point factor.
+          </p>
         </Reveal>
 
         <Reveal className="panel block">
@@ -334,6 +397,23 @@ export default async function ProfilePage() {
             <button className="quiet-toggle" type="button" data-goto="plan">
               See the full plan
             </button>
+          </p>
+        </Reveal>
+
+        <Reveal className="panel block">
+          <div className="b-head">
+            <h2>Your data — the DPA&apos;s two rights, working here</h2>
+            <p className="helper">
+              RA 10173 data-subject rights as artifacts (ticket 7 lock): one honest export of everything the
+              system holds on you, and a real erase behind an explicit confirm. Erasure removes the whole
+              record — the counselor roster loses your row; that is what erasure means.
+            </p>
+          </div>
+          <DpaArtifacts studentId={state.id} />
+          <p className="src-line num">
+            Export: profile · state · event history · credentials · resume runs · letter runs · presence ·
+            Erase: auth user → profile → state → credentials → run stores (evidence objects follow the
+            storage bucket when the credential writer ships)
           </p>
         </Reveal>
       </div>
@@ -379,7 +459,12 @@ export default async function ProfilePage() {
               <p className="tickline num">
                 Application readiness —{" "}
                 <b>{v.ar === null ? "not yet measured" : `${v.ar} of ${WEIGHTS.ar}`}</b>{" "}
-                <span className="tick-note">· the resume diagnostic in Prep opens this channel</span>
+                <span className="tick-note">
+                  · resume {v.arFactors.resume.measured ? `${v.arFactors.resume.earned} of ${v.arFactors.resume.max}` : "not run"} ·
+                  letter {v.arFactors.letter.measured ? `${v.arFactors.letter.earned} of ${v.arFactors.letter.max}` : "not run"} ·
+                  presence {presenceTicker}{" "}
+                  — each factor measures on its own run/file
+                </span>
               </p>
               <p className="tickline num">
                 Career direction — <b className={v.cc === WEIGHTS.cc ? "full" : undefined}>{v.cc} of {WEIGHTS.cc}</b>

@@ -4,6 +4,7 @@ import type { StudentState } from "@/lib/types";
 import { NEIL_SEED } from "@/lib/fixtures/neil";
 import { getCareer } from "@/lib/fixtures/catalog";
 import { resumeRunStore } from "@/lib/db/resume-run-store";
+import { letterRunStore } from "@/lib/db/letter-run-store";
 import { PostgresStudentStore } from "@/lib/db/postgres-store";
 import { supabaseEnv } from "@/lib/supabase/server";
 
@@ -87,16 +88,39 @@ export const db: StudentStore = configured
   : new JsonStore();
 
 import { computeScore, type ArInput, type Score } from "@/lib/engines/score";
+import { presenceMeasured } from "@/lib/engines/air";
 
-/** Convenience view: state + career + score in one read. The AR feed reads
- *  the resume-run store (best run counts — ADR 0002 amendment; unmeasured
- *  until a successful diagnostic run exists, never a stale zero). */
+/** Convenience view: state + career + score in one read. The AR feed is the
+ *  THREE per-file factors (ADR 0002 amendment 2; selection per amendment 3 —
+ *  LATEST COUNTS, 2026-10-29 user ruling): the latest full resume attempt's
+ *  own AIR from `resume-run-store` (the store keeps ONE run per student — the
+ *  stored run IS the most recent full attempt, no best-strike), the latest
+ *  letter check from `letter-run-store` (shipped 2026-10-30 with the Prep
+ *  surface — per-file AM semantics: the letter keeps its own latest attempt),
+ *  and the presence stamp from state. A factor without its source stays
+ *  unmeasured; the channel reads null while nothing measured, never a stale
+ *  zero. */
 export async function getStudentView(id: string) {
   const s = await db.getStudentState(id);
   const career = getCareer(s.careerId);
   if (!career) return { state: s, career: null, score: null, ar: null as ArInput | null };
   const latest = await resumeRunStore.latest(id);
-  const ar: ArInput | null = latest ? { measured: true, bestAir: latest.bestAir } : null;
+  // Amendment 3 (2026-10-29, user-ruled): the factor reads the LATEST full
+  // attempt's own AIR — the stored run — never the best-struck `bestAir`
+  // history: re-running a worse file drops points (latest counts).
+  const resume = latest ? { measured: true, latestAir: latest.run.air.airResume } : null;
+  // the letter factor joins with the Prep check surface (ticket 12; shipped
+  // 2026-10-30): the store keeps ONE check per student — its own airLetter IS
+  // the checkScore; re-running the letter replaces it (latest counts)
+  const latestLetter = await letterRunStore.latest(id);
+  const letter: ArInput["letter"] = latestLetter
+    ? { measured: true, checkScore: latestLetter.run.air.airLetter }
+    : null;
+  const presence = presenceMeasured(s.presence) ? { measured: true } : null;
+  const ar: ArInput | null =
+    resume || letter || presence
+      ? { resume, letter, presence }
+      : null;
   const score: Score = computeScore({
     bars: s.bars,
     careerId: s.careerId,

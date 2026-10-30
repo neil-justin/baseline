@@ -88,8 +88,10 @@ async function buildLive(id: string): Promise<ScreenB> {
       ? "None yet — the pathway hasn’t opened its first step."
       : `${v.stageOne.done} of ${v.stageOne.target} first steps done.`;
 
+  const factorLine = (p: { measured: boolean; earned: number; max: number }) =>
+    p.measured ? `${p.earned}/${p.max}` : "open";
   const arNote = v.arMeasured
-    ? `Best resume-diagnostic run earns this (${v.ar} of ${RUBRIC_MAX.ar}).`
+    ? `Measured factors earn this (${v.ar} of ${RUBRIC_MAX.ar}) — resume ${factorLine(v.arFactors.resume)} · letter ${factorLine(v.arFactors.letter)} · presence ${factorLine(v.arFactors.presence)}.`
     : "Not yet measured — the resume diagnostic in Prep opens this channel.";
 
   const ccBits = ["Career confirmed"];

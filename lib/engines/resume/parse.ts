@@ -143,7 +143,7 @@ export async function intakeResumeFile(file: IntakeFile): Promise<IntakeResult> 
         return reject(
           "scanned",
           "This PDF carries essentially no readable text — it reads as a scan or an image-only export. " +
-            "Re-export a text-based PDF from Word or Google Docs (File → Export → PDF); the letter you " +
+            "Re-export a text-based PDF from Word or Google Docs (File → Export → PDF); the resume you " +
             "typed has to be real text, not a picture of it."
         );
       }

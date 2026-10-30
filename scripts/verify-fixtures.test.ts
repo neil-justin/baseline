@@ -1,9 +1,17 @@
 import { describe, it, expect } from "vitest";
 import { CAREERS, CATALOG_TOTAL, getCareer } from "@/lib/fixtures/catalog";
-import { computeScore, roundHalfDown, ASSESSED_COMPETENCIES } from "@/lib/engines/score";
+import { computeScore, roundHalfDown, ASSESSED_COMPETENCIES, AR_FACTORS } from "@/lib/engines/score";
 import type { ArInput } from "@/lib/engines/score";
+import {
+  EMPLOYER_SKIP_NOTE,
+  computeLetterCheck,
+  stampPresence,
+  presenceMeasured,
+} from "@/lib/engines/air";
 import { rankOpenSkills, stageOne } from "@/lib/engines/gaps";
+import { planFor, planHead } from "@/lib/engines/plan";
 import { switchCareer, claimAll, submitCheck } from "@/lib/actions";
+import type { PresenceDeclaration } from "@/lib/types";
 import {
   NEIL_SEED,
   applyReassessment,
@@ -13,9 +21,11 @@ import {
 import type { StudentState } from "@/lib/types";
 
 /**
- * Canon verification — the ADR 0002 (amended 2026-10-29) five-channel sheet
- * is the spec; the NUMBERS live in this file (the engine re-lock round):
- * baseline 40 → switch dip 22 → post-re-assessment 36 → money shot 51.
+ * Canon verification — the ADR 0002 (amendment 2, ticket 12) five-channel
+ * sheet is the spec; the NUMBERS live in this file (engine re-lock + AR split
+ * round): seed 40 → switch dip 21 → re-assessment 35 → check pass 52 → money
+ * beat 59 (the Application Materials pass's resume factor lands 7 of 7;
+ * the recorded 67 comes when the letter + presence surfaces ship).
  * Catalog round 9: names re-keyed onto the college roster (Neil = 2.1
  * "Associate Software Developer"; the switch walk runs to 2.2 "Software QA
  * Analyst"); skill data comes from the verbatim roster transcription.
@@ -75,7 +85,19 @@ describe("rounding convention", () => {
 describe("beat states (Neil)", () => {
   it("beat 5 — setup: 40 (SP 19, ES 17, TP 0, AR unmeasured, CC 4)", () => {
     const s = scoreFor(NEIL_SEED);
-    expect(s).toEqual({ sp: 19, es: 17, tp: 0, ar: null, cc: 4, total: 40 });
+    expect(s).toEqual({
+      sp: 19,
+      es: 17,
+      tp: 0,
+      ar: null,
+      cc: 4,
+      total: 40,
+      arParts: {
+        resume: { measured: false, earned: 0, max: 7 },
+        letter: { measured: false, earned: 0, max: 5 },
+        presence: { measured: false, earned: 0, max: 3 },
+      },
+    });
   });
 
   it("ES decomposition traces to the assessment state (4 of 7 verified ·✓, half-down)", () => {
@@ -85,21 +107,42 @@ describe("beat states (Neil)", () => {
 
   it("beat 6 — switch dip: 21 (QA map, 0 closed; ES + CC stay, TP resets)", () => {
     const before = scoreFor({ ...NEIL_SEED, careerId: "qa", bars: {}, stageOneDone: 0 });
-    expect(before).toEqual({ sp: 0, es: 17, tp: 0, ar: null, cc: 4, total: 21 });
+    expect(before).toMatchObject({ sp: 0, es: 17, tp: 0, ar: null, cc: 4, total: 21 });
   });
 
   it("beat 6→ re-assessment: 35 (SP 14 = 25×4/7)", () => {
     const s = scoreFor(applyReassessment({ ...NEIL_SEED, careerId: "qa" }));
-    expect(s).toEqual({ sp: 14, es: 17, tp: 0, ar: null, cc: 4, total: 35 });
+    expect(s).toMatchObject({ sp: 14, es: 17, tp: 0, ar: null, cc: 4, total: 35 });
   });
 
-  it("beat 7 — money shot: 52 (SP 18, TP 7, CC 10)", () => {
+  it("beat 7 — check pass 52, then the money beat's resume run lands 59 (AR split in)", () => {
     const afterRA = applyReassessment({ ...NEIL_SEED, careerId: "qa" });
     const withGoal = withQaGoal(afterRA);
     const shot = applyMoneyShot(withGoal);
-    const s = scoreFor(shot);
-    expect(s).toEqual({ sp: 18, es: 17, tp: 7, ar: null, cc: 10, total: 52 });
-    // beat 9 plan: trajectory 40 → 52
+    // check-pass state — AR still unmeasured → 52 (SP 18 · TP 7 · CC 10)
+    expect(scoreFor(shot)).toEqual({
+      sp: 18,
+      es: 17,
+      tp: 7,
+      ar: null,
+      cc: 10,
+      total: 52,
+      arParts: {
+        resume: { measured: false, earned: 0, max: 7 },
+        letter: { measured: false, earned: 0, max: 5 },
+        presence: { measured: false, earned: 0, max: 3 },
+      },
+    });
+    // ticket-12 recut: the money beat's resume diagnostic (resume-qa.pdf, all
+    // checks green) measures the resume factor 7 of 7 → the headline 59
+    const money = scoreFor(shot, { resume: { measured: true, latestAir: 100 } });
+    expect(money).toMatchObject({ sp: 18, es: 17, tp: 7, ar: 7, cc: 10, total: 59 });
+    expect(money.arParts).toEqual({
+      resume: { measured: true, earned: 7, max: 7 },
+      letter: { measured: false, earned: 0, max: 5 },
+      presence: { measured: false, earned: 0, max: 3 },
+    });
+    // beat 9 plan: trajectory 40 → 52 → 59
     expect(scoreFor(NEIL_SEED).total).toBe(40);
   });
 
@@ -108,11 +151,128 @@ describe("beat states (Neil)", () => {
     expect(scoreFor(shot).total).toBeLessThan(52);
   });
 
-  it("AR feeds honestly: a measured run earns its fraction of 15, a failed gate earns nothing", () => {
-    // bestAir 60 → 15×0.6 = 9; unmeasured = null, never 0
-    expect(scoreFor(NEIL_SEED, { measured: true, bestAir: 60 })).toMatchObject({ ar: 9, total: 49 });
-    expect(scoreFor(NEIL_SEED, { measured: true, bestAir: 0 })).toMatchObject({ ar: 0, total: 40 });
-    expect(scoreFor(NEIL_SEED, { measured: false }).ar).toBeNull();
+  it("AR feeds honestly per factor: each file earns its own fraction of 7/5/3, unmeasured factors render nothing", () => {
+    // resume factor: latestAir 60 → 7×0.6 = 4.2 → 4 — measured, letter/presence open.
+    // The resume feed is the LATEST full attempt's AIR (amendment 3, 2026-10-29:
+    // latest counts — built in lib/db.ts getStudentView from the stored run; the
+    // store's best_air stays best-ever history only). The suite pins the
+    // arithmetic against the given input; there was never a best-vs-latest
+    // assertion here because the selection lives at the feed-builder seam.
+    const resumeOnly = scoreFor(NEIL_SEED, { resume: { measured: true, latestAir: 60 } });
+    expect(resumeOnly).toMatchObject({ ar: 4, total: 44 });
+    expect(resumeOnly.arParts).toMatchObject({ resume: { measured: true, earned: 4, max: 7 } });
+    // a failed parse gate earns nothing but still measures — an honest 0
+    expect(scoreFor(NEIL_SEED, { resume: { measured: true, latestAir: 0 } })).toMatchObject({ ar: 0, total: 40 });
+    // letter factor: checkScore 40 → 5×0.4 = 2; presence factor: 3 all-or-nothing
+    expect(scoreFor(NEIL_SEED, { letter: { measured: true, checkScore: 40 } })).toMatchObject({ ar: 2, total: 42 });
+    expect(scoreFor(NEIL_SEED, { presence: { measured: true } })).toMatchObject({ ar: 3, total: 43 });
+    // combined: 7 + 5 + 3 = the locked 15 (52 + ...)
+    expect(scoreFor(NEIL_SEED, {
+      resume: { measured: true, latestAir: 100 },
+      letter: { measured: true, checkScore: 100 },
+      presence: { measured: true },
+    })).toMatchObject({ ar: 15, total: 55 });
+    // nothing measured → null, never a painted 0
+    expect(scoreFor(NEIL_SEED, { resume: { measured: false }, letter: { measured: false }, presence: { measured: false } }).ar).toBeNull();
+    expect(scoreFor(NEIL_SEED).ar).toBeNull();
+    // the locked split header
+    expect(AR_FACTORS).toEqual({ resume: 7, letter: 5, presence: 3 });
+    // the AR plan task rides the split: head 'Run the resume diagnostic' while
+    // unmeasured (locked head semantics) → the checklist task once anything
+    // measures → completes out when all three land (ticket 12)
+    const qa = getCareer("qa")!;
+    const seedState = { ...NEIL_SEED, careerId: "qa" as const };
+    const planHeadUnmeasured = planHead(qa, seedState, null);
+    expect(planHeadUnmeasured).toMatchObject({ kind: "ar", title: "Run the resume diagnostic", href: "/prep" });
+    expect((planHeadUnmeasured as { checklist?: unknown }).checklist).toEqual({ resume: false, letter: false, presence: false });
+    const planHeadResumeOnly = planHead(qa, seedState, { resume: { measured: true, latestAir: 100 } });
+    expect(planHeadResumeOnly).toMatchObject({ kind: "ar", title: "Get your application materials ready" });
+    expect((planHeadResumeOnly as { checklist?: unknown }).checklist).toEqual({ resume: true, letter: false, presence: false });
+    const planAllMeasured = planFor(qa, seedState, {
+      resume: { measured: true, latestAir: 100 },
+      letter: { measured: true, checkScore: 100 },
+      presence: { measured: true },
+    });
+    expect(planAllMeasured.some((i) => i.kind === "ar")).toBe(false);
+  });
+});
+
+describe("letter + presence engines (ticket 12 surface round, 2026-10-30)", () => {
+  it("letter check: the employer field omitted → the honest skip line, denominator drops it; a declared-but-unnamed employer RUNS and fails", () => {
+    // the exact honesty copy (surfaces print this line verbatim)
+    expect(EMPLOYER_SKIP_NOTE).toBe("not evaluated — no employer declared");
+    const omitted = computeLetterCheck({
+      parsePass: true,
+      keywordScore: 1,
+      checks: { salutation: true, closingAsk: true, wordBand: true },
+    });
+    // never silently failed, never silently scored: the skip rides the ledger
+    expect(omitted.employerMentioned).toBeNull();
+    expect(omitted.employerEvaluated).toBe(false);
+    expect(omitted.structuralScore).toBe(1); // 3 of 3 evaluable ran, all passed
+    expect(omitted.airLetter).toBe(100); // letter 5 of 5 (canon demo letter)
+    // declaring the employer adds the check to the denominator — and a miss
+    // honestly fails it (4 evaluable → 0.75), never a silent skip
+    const declaredMiss = computeLetterCheck({
+      parsePass: true,
+      keywordScore: 1,
+      checks: { salutation: true, closingAsk: true, wordBand: true, employerMentioned: false },
+      employerDeclared: true,
+    });
+    expect(declaredMiss.employerMentioned).toBe(false);
+    expect(declaredMiss.structuralScore).toBe(3 / 4);
+    expect(declaredMiss.airLetter).toBe(75);
+  });
+
+  it("presence stamp: offline deterministic checks + the honest private line; malformed entries never measure", () => {
+    const stamp = stampPresence(
+      { linkedinUrl: "https://www.linkedin.com/in/neil-demo", email: "neil.demo@campus.test", privateAccount: true },
+      "2026-10-17 10:12"
+    );
+    expect(stamp.checks).toEqual({ linkedinUrlFormat: "pass", professionalEmailFormat: "pass" });
+    expect(stamp.offline).toBe(true); // nothing here network-fetches — the recorded ruling
+    expect(stamp.contentNote).toBe("resolves, content not machine-verifiable");
+    const declared: PresenceDeclaration = {
+      linkedinUrl: "https://www.linkedin.com/in/neil-demo",
+      email: "neil.demo@campus.test",
+      declaredAt: "2026-10-17 10:12",
+      stamp,
+    };
+    expect(presenceMeasured(declared)).toBe(true);
+    // a malformed URL formats-check FAILS — the declaration is feedback, and
+    // the factor stays unmeasured (never a painted zero)
+    const bad = stampPresence({ linkedinUrl: "http://x.com/about", email: "neil.demo@campus.test" }, "2026-10-17 10:12");
+    expect(bad.checks.linkedinUrlFormat).toBe("fail");
+    expect(presenceMeasured({ ...declared, stamp: bad })).toBe(false);
+    expect(presenceMeasured(null)).toBe(false);
+    expect(presenceMeasured(undefined)).toBe(false);
+  });
+
+  it("money beat re-cut live (2026-10-30): the letter check lands 64, presence completes the pass at 67 — the arc's numbers", () => {
+    const shot = applyMoneyShot(withQaGoal(applyReassessment({ ...NEIL_SEED, careerId: "qa" })));
+    // after the letter check (letter 5 of 5 on the canon letter): 52 + 7 + 5
+    const afterLetter = scoreFor(shot, {
+      resume: { measured: true, latestAir: 100 },
+      letter: { measured: true, checkScore: 100 },
+    });
+    expect(afterLetter).toMatchObject({ ar: 12, total: 64 });
+    expect(afterLetter.arParts).toEqual({
+      resume: { measured: true, earned: 7, max: 7 },
+      letter: { measured: true, earned: 5, max: 5 },
+      presence: { measured: false, earned: 0, max: 3 },
+    });
+    // the presence declaration stamps the third factor → 67 (the LOCKED 15)
+    const full = scoreFor(shot, {
+      resume: { measured: true, latestAir: 100 },
+      letter: { measured: true, checkScore: 100 },
+      presence: { measured: true },
+    });
+    expect(full).toMatchObject({ sp: 18, es: 17, tp: 7, ar: 15, cc: 10, total: 67 });
+    expect(full.arParts).toEqual({
+      resume: { measured: true, earned: 7, max: 7 },
+      letter: { measured: true, earned: 5, max: 5 },
+      presence: { measured: true, earned: 3, max: 3 },
+    });
   });
 });
 
@@ -120,7 +280,7 @@ describe("beat chain through the LIVE action layer (regression guards)", () => {
   it("beat 6 dip: switch alone reads 21 — the carried ·✓ re-registers only at re-assessment", () => {
     const switched = switchCareer(NEIL_SEED, "qa").state;
     // canon: SP 0 (0 closed bars) + ES + CC stay → dip 21 (AR still unmeasured)
-    expect(scoreFor(switched)).toEqual({ sp: 0, es: 17, tp: 0, ar: null, cc: 4, total: 21 });
+    expect(scoreFor(switched)).toMatchObject({ sp: 0, es: 17, tp: 0, ar: null, cc: 4, total: 21 });
     // re-assessment: 3 self-claims + the QA-map-verified Business Needs
     // Analysis ·✓ re-registers → 35 (SP 25×4/7 = 14; the SQL-design row is
     // NOT on the QA map)
@@ -129,7 +289,7 @@ describe("beat chain through the LIVE action layer (regression guards)", () => {
       { skill: "Defect management", level: "confident" },
       { skill: "Applications Support and Enhancement", level: "confident" },
     ]).state;
-    expect(scoreFor(reassessed)).toEqual({ sp: 14, es: 17, tp: 0, ar: null, cc: 4, total: 35 });
+    expect(scoreFor(reassessed)).toMatchObject({ sp: 14, es: 17, tp: 0, ar: null, cc: 4, total: 35 });
     expect(reassessed.bars["Business Needs Analysis"].source).toBe("verified");
     expect(switched.decisions.verifiedTransferred).toEqual(["Business Needs Analysis"]);
   });

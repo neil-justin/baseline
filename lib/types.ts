@@ -9,6 +9,26 @@ export type BarSource =
  *  (7 NACE competencies, E&I excluded by recorded choice; ADR 0002). */
 export type CompetencyStatus = "verified" | "claimed";
 
+/**
+ * The competency instrument's LATEST FULL ATTEMPT (42 items: 28 Likert +
+ * 14 verification MCQs — lib/fixtures/instrument.ts, user-approved content
+ * bank). The carrier sits beside `competencies` (engines read `competencies`
+ * only); every full attempt OVERWRITES it — the state shows the current
+ * assessment, never history ("Retake: latest attempt counts", Round 7 lock).
+ * MCQ answers persist server-graded — a failed retake recomputes the whole
+ * `competencies` map and can drop a verified competency (intended).
+ */
+export interface CompetencyAttempt {
+  /** attempt completion stamp (demo-day date format "2026-10-17 09:31") */
+  takenAt: string;
+  /** statement id (COM-x.y) → rating 1–5 */
+  likert: Record<string, number>;
+  /** MCQ id (COM-x.Mn) → chosen option index (graded against the bank key) */
+  mcq: Record<string, number>;
+  /** the grade this attempt produced — mirrors `competencies` at this moment */
+  competencies: Record<string, CompetencyStatus>;
+}
+
 export type GoalType = "training" | "milestone";
 export type GoalStatus = "active" | "completed";
 
@@ -30,6 +50,7 @@ export type DemoEventKind =
   | "goal-completed"
   | "goal-set"
   | "career-switched"
+  | "presence-stamped" // ticket 12: the machine-verified presence declaration (Profile → Credentials)
   | "scored";
 
 export interface DemoEvent {
@@ -37,6 +58,36 @@ export interface DemoEvent {
   kind: DemoEventKind;
   detail: string;
   source?: BarSource;
+}
+
+/**
+ * Professional Presence (ticket 12, ADR 0002 amendment 2) — the declared
+ * LinkedIn + professional contact email living in Profile → Credentials as
+ * the FOURTH credential kind, distinguished from counselor-audited kinds by
+ * its stamp: machine-verified (automatic, timestamped). Look-up is offline by
+ * recorded ruling — the stamp grades what's deterministic without the network
+ * (URL shape · email format) and the timestamp is what the offline demo
+ * presents. Carrier is the state blob (JsonStore fallback included; engines
+ * and fixtures stay offline-deterministic).
+ */
+export interface PresenceDeclaration {
+  linkedinUrl: string;
+  email: string;
+  declaredAt: string;
+  /** machine-verified, timestamped — see lib/engines/air.ts (stampPresence) */
+  stamp: PresenceStamp;
+}
+
+export interface PresenceStamp {
+  verifiedAt: string;
+  checks: {
+    linkedinUrlFormat: "pass" | "fail";
+    professionalEmailFormat: "pass" | "fail";
+  };
+  /** honest sub-result: private account → "resolves, content not machine-verifiable" */
+  contentNote?: string;
+  /** no network look-up ran — the offline venue presents the stamp */
+  offline: boolean;
 }
 
 export interface StudentState {
@@ -51,6 +102,8 @@ export interface StudentState {
   /** ES carrier: assessment result per NACE competency name (absent key /
    *  absent field = that competency has no assessment result yet). */
   competencies?: Record<string, CompetencyStatus>;
+  /** the instrument's latest full attempt (retakes overwrite — latest counts) */
+  assessment?: CompetencyAttempt;
   goals: Goal[];
   /** locked TP basis: snapshot of stage-① ranked queue at the last re-rank;
    *  a member closing increments stageOneDone (reset on switch/re-assessment) */
@@ -62,6 +115,8 @@ export interface StudentState {
   decisions: {
     verifiedTransferred: string[]; // skills whose ·✓ transferred across a switch
   };
+  /** AR's presence factor (3 of 15): the declared entry; absent = not declared yet */
+  presence?: PresenceDeclaration;
   events: DemoEvent[];
 }
 

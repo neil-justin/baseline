@@ -242,7 +242,7 @@ export default function ProgressView(props: Props) {
               <div className="tickline">
                 <b>Application readiness</b> —{" "}
                 {props.score.ar === null ? (
-                  <span className="tick-note">not yet measured — the resume diagnostic in Prep opens this channel</span>
+                  <span className="tick-note">not yet measured — the resume diagnostic in Prep opens this channel (resume 7 · letter 5 · presence 3)</span>
                 ) : (
                   `${props.score.ar} of ${WEIGHTS.ar}`
                 )}

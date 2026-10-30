@@ -22,7 +22,7 @@ A pre-graduation **career-readiness diagnostic**: a student picks a discipline t
 
 ## Positioning
 
-**PH-anchored, counselor-run, deterministic-at-the-core.** 36-source-chained PH roles (DOLE-BLE demand-justified or labeled institutional judgment; PSOC 2012-coded; CHED-CMO major mappings) with provenance-tagged skill maps — a mechanism generic US/EU tools (O*NET-first) can't truthfully copy. AI assists *interpretation and explanation*; **scoring is deterministic and auditable**; every AI surface is template-first, and the demo never depends on the LLM.
+**PH-grounded, counselor-run, deterministic-at-the-core (source model C — re-locked 2026-10-29, ADR 0005).** Skill/task **content** runs on the O*NET Web Services API — pulled at extraction time under a pinned O*NET version, cross-verified across all 36 roles with logged diffs (never silent), never called at runtime (offline demo; fairness/determinism). The **PH layer** is deliberately thin and document-snapshotted, covering exactly what O*NET cannot provide: labor demand (DOLE-BLE JobsFit), degree→role mapping (CHED CMO lists), and the official occupation taxonomy (PSOC 2012, carried by the locally parsed `phscs` dataset). PSF/TESDA framework extracts remain as cited secondary evidence where already recorded. Provenance tags ride every skill row. AI assists *interpretation and explanation*; **scoring is deterministic and auditable**; every AI surface is template-first, and the demo never depends on the LLM.
 
 ## Operating Context
 

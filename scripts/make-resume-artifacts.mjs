@@ -291,6 +291,30 @@ const GOOD_LINES = [
   "Applications Development · Python · SQL · Secure-coding practices · Git",
 ];
 
+/** The canon demo's Application Materials pass (ticket 12 recut): after the
+ *  switch to Software QA Analyst, the money beat's resume diagnostic uploads
+ *  the QA-targeted resume — same five format checks pass, and the role's four
+ *  core-tier keyword rows all appear (bare names + the qa synonym seed). */
+const GOOD_QA_LINES = [
+  "Neil Mallari",
+  "neil.mallari@campus.test · 0917 555 0101 · Quezon City",
+  "",
+  "EDUCATION",
+  "BS Information Technology — AISAT College · Expected 2027",
+  "Coursework: Software Quality Assurance, Database Systems",
+  "",
+  "EXPERIENCE",
+  "Department IT Office — QA Student Aide   Jun 2025 - Mar 2026",
+  "- Ran software testing cycles for the lab's 24-PC image — 3 regression suites each term",
+  "- Drafted the department test plan and test data set for the enrollment system release",
+  "- Kept defect tracking discipline on the bug board — logged 40+ tickets, verified 12 fixes",
+  "Capstone Prep Team — Junior Tester   Jun 2026 - Oct 2026",
+  "- Practiced quality assurance gates on the capstone build and read specs into testable conditions",
+  "",
+  "SKILLS",
+  "Software Testing · Test Planning · Defect management · Quality Assurance / Quality Standards · Git",
+];
+
 /** Interpretation paragraphs — parses as text, reads as nothing like a resume. */
 const IRRELEVANT_LINES = [
   "Chicken Adobo",
@@ -316,6 +340,8 @@ writeFileSync(path.join(ROOT, "public", "resume-reference.pdf"), makePdf({ lines
 writeFileSync(path.join(ROOT, "public", "resume-reference.docx"), makeDocx(TEMPLATE_LINES));
 writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-good.pdf"), makePdf({ lines: GOOD_LINES }));
 writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-good.docx"), makeDocx(GOOD_LINES));
+// the demo's QA-targeted application-materials pass (ticket 12 recut)
+writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-qa.pdf"), makePdf({ lines: GOOD_QA_LINES }));
 writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-irrelevant.pdf"), makePdf({ lines: IRRELEVANT_LINES }));
 writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-empty.pdf"), makePdf({ lines: [] }));
 writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-scanned.pdf"), makePdf({ imageOnly: true }));

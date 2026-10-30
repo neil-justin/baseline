@@ -4,7 +4,9 @@ import { signIn, neilCreds, resetStore } from "./helpers";
 /**
  * Smoke slice of the canon asserts — full demo-arc walk (beats 1–10) lands
  * with the remaining surfaces (plan Task 15). Canon: ADR 0002 five-channel
- * re-lock (ES 30 / SP 25 / TP 20 / AR 15 / CC 10); numbers owned by
+ * re-lock (ES 30 / SP 25 / TP 20 / AR 15 / CC 10) with the ticket-12 split —
+ * the seed keeps the AR channel fully unmeasured (grey across 7/5/3); the
+ * money beat records 59 once the resume factor lands. Numbers owned by
  * `scripts/verify-fixtures.test.ts` and `lib/fixtures/neil.ts`.
  *
  * ADR 0003: every surface is session-honest — each check signs in as Neil

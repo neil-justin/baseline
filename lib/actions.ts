@@ -3,6 +3,12 @@ import type { Career } from "@/lib/types";
 import { getCareer } from "@/lib/fixtures/catalog";
 import { getCheck } from "@/lib/fixtures/checks";
 import { RESOURCES } from "@/lib/fixtures/resources";
+import {
+  INSTRUMENT_MCQ_BY_ID,
+  INSTRUMENT_MCQ_IDS,
+  INSTRUMENT_STATEMENT_IDS,
+  gradeInstrumentAnswers,
+} from "@/lib/fixtures/instrument";
 import { openSkills, stageOne } from "@/lib/engines/gaps";
 
 /**
@@ -217,4 +223,79 @@ export function submitCheck(state: StudentState, resourceId: string, answers: nu
 
 function RESOURCES_LOOKUP(resourceId: string): Resource | undefined {
   return RESOURCES.find((r) => r.id === resourceId);
+}
+
+/**
+ * Competency instrument submit — the step-③ assessment's single write
+ * (app/api/assessment). Graded SERVER-SIDE against the user-approved bank
+ * (lib/fixtures/instrument.ts): a competency is verified ⇔ BOTH of its
+ * verification MCQs are answered correctly in THIS attempt; every rated
+ * competency otherwise stays claimed (self-report never earns ES points).
+ * A full attempt (all 28 ratings + all 14 MCQs) OVERWRITES
+ * `state.competencies` + the attempt record — "Retake: latest attempt counts"
+ * (Round 7 lock): a later, weaker sitting honestly drops a verified mark;
+ * the previous attempt is not summed, best-struck, or kept as history.
+ */
+export function submitAssessment(
+  state: StudentState,
+  answers: { likert: Record<string, number>; mcq: Record<string, number> }
+): ActionResult {
+  if (!instrumentComplete(answers.likert, answers.mcq)) {
+    return { state, error: "incomplete attempt — a full sitting is required" };
+  }
+  const competencies = gradeInstrumentAnswers(answers);
+  const attempted: StudentState = {
+    ...state,
+    competencies,
+    assessment: {
+      takenAt: nowStamp() + " 09:31",
+      likert: normalizeAnswers(answers.likert),
+      mcq: normalizeAnswers(answers.mcq),
+      competencies,
+    },
+    events: [
+      ...state.events,
+      {
+        date: nowStamp(),
+        kind: "scored" as const,
+        detail: `Competency assessment sat — ${Object.values(competencies).filter((v) => v === "verified").length} of 7 verified ·✓`,
+      },
+    ],
+  };
+  const verified = Object.values(competencies).filter((v) => v === "verified").length;
+  return { state: attempted, note: `${verified} of 7 competencies verified ·✓` };
+}
+
+/** A full attempt: every bank item answered within its value range. */
+function instrumentComplete(
+  likert: Record<string, number>,
+  mcq: Record<string, number>
+): boolean {
+  return (
+    INSTRUMENT_STATEMENT_IDS.every((id) => {
+      const v = likert[id];
+      return typeof v === "number" && v >= 1 && v <= 5;
+    }) &&
+    INSTRUMENT_MCQ_IDS.every((id) => {
+      const v = mcq[id];
+      const item = INSTRUMENT_MCQ_BY_ID.get(id);
+      return (
+        item !== undefined && typeof v === "number" && v >= 0 && v < item.options.length
+      );
+    })
+  );
+}
+
+/** Strip any key the bank doesn't know (defensive: never persist stray data). */
+function normalizeAnswers(a: Record<string, number>): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const [k, v] of Object.entries(a)) {
+    if (
+      INSTRUMENT_STATEMENT_IDS.includes(k) ||
+      (INSTRUMENT_MCQ_BY_ID.has(k) && typeof v === "number")
+    ) {
+      out[k] = v;
+    }
+  }
+  return out;
 }

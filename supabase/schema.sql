@@ -35,24 +35,37 @@ create table if not exists public.student_state (
 );
 
 -- ── Credentials (Profile → Credentials; ticket-recorded 2026-10-28) ─────
+-- Ticket 12 (2026-10-29): 'presence' is the FOURTH kind — the declared
+-- LinkedIn + professional contact email, machine-verified by a timestamped
+-- stamp (verified_at set at declaration, never counselor-audited). An offline
+-- deployment presents the stamp; the app never network-fetches the link
+-- (lib/engines/air.ts grades the deterministic offline checks).
 create table if not exists public.credentials (
   id              uuid primary key default gen_random_uuid(),
   student_id      text not null references public.profiles(student_id) on delete cascade,
-  kind            text not null check (kind in ('certification', 'internship', 'project')),
+  kind            text not null check (kind in ('certification', 'internship', 'project', 'presence')),
   title           text not null,
   organization    text,
   started_on      date,
   ended_on        date,
-  evidence_url    text,
-  evidence_note   text,
+  evidence_url    text,   -- presence rows: the LinkedIn URL
+  evidence_note   text,   -- presence rows: the professional contact email
   -- Skills declared from the framework vocabulary (closes gaps when verified).
   declared_skills text[] not null default '{}',
   -- declared (evidence attached, pending audit) → verified / rejected by a Counselor.
+  -- presence rows are stamped instead: status 'verified' + verified_at AT DECLARATION.
   status          text not null default 'declared' check (status in ('declared', 'verified', 'rejected')),
   verified_by     text,
   verified_at     timestamptz,
   created_at      timestamptz not null default now()
 );
+
+-- Migration note (ticket 12, 2026-10-29): for an already-applied schema the
+-- kind constraint re-creates as:
+--   alter table public.credentials drop constraint credentials_kind_check;
+--   alter table public.credentials
+--     add constraint credentials_kind_check
+--     check (kind in ('certification', 'internship', 'project', 'presence'));
 
 create index if not exists credentials_student_idx on public.credentials (student_id);
 
@@ -72,3 +85,15 @@ create table if not exists public.resume_runs (
   updated_at timestamptz not null default now()
 );
 alter table public.resume_runs enable row level security;
+
+-- ── Cover-letter check runs (ticket-12 Prep pass, 2026-10-30 — mirrors
+--    resume_runs; lib/db/letter-run-store.ts is the seam) ───────────────────
+-- LATEST COUNTS (per-file AM semantics): ONE row per student — the stored run
+-- IS the most recent check (no best column; runs_count is history only).
+create table if not exists public.letter_runs (
+  student_id text primary key,
+  run        jsonb not null,
+  runs_count integer not null default 0,
+  updated_at timestamptz not null default now()
+);
+alter table public.letter_runs enable row level security;

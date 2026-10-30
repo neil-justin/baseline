@@ -5,9 +5,15 @@ import Link from "next/link";
 import { SegRubricBar } from "@/components/instrument";
 import { CAREERS, DEMO_SUGGESTION_ORDER, TRACKS, TRACK_LABELS } from "@/lib/fixtures/catalog";
 import { RESOURCES } from "@/lib/fixtures/resources";
+import {
+  INSTRUMENT,
+  INSTRUMENT_LIKERT_SCALE,
+  gradeInstrumentAnswers,
+  type InstrumentAnswers,
+} from "@/lib/fixtures/instrument";
 import { openSkills, stageOne } from "@/lib/engines/gaps";
 import { WEIGHTS } from "@/lib/engines/score";
-import type { Career, Goal } from "@/lib/types";
+import type { Career, CompetencyStatus, Goal } from "@/lib/types";
 import {
   GOAL_SUGGESTION,
   INTEREST_OPTIONS,
@@ -19,12 +25,25 @@ import {
 } from "./banks";
 
 /**
- * Onboarding ①–⑤ — one client-side stepper (task 8).
+ * Onboarding ①–⑤ — one client-side stepper.
  * Screens: strand → branch → interest quiz → suggestion cards →
- * 8-row self-report → M8-lite framing prompt → verification mini-quiz →
- * goal → first-score reveal. Markup ported 1:1 from prototype/onboarding.html;
- * copy verbatim from features/content/onboarding.md (OB-1…OB-5 tables);
- * demo mechanics canon from _fixture-math.md (5-item quiz → "2 of 5").
+ * 8-row self-report → M8-lite framing prompt → THE COMPETENCY INSTRUMENT
+ * (intro → Part A 28 self-report Likert statements → Part B 14 verification
+ * MCQs → server-graded result) → skill verification mini-quiz → goal →
+ * first-score reveal.
+ *
+ * The instrument is the user-approved 42-item content bank
+ * (lib/fixtures/instrument.ts — strings verbatim from
+ * .scratch/career-path-readiness-platform/features/content/
+ * instrument-competencies-draft.md). Evidence states per product truth:
+ * Likert ratings alone → CLAIMED; a competency is VERIFIED ⇔ BOTH of its
+ * MCQs are answered correctly in the LATEST FULL attempt — one server write
+ * (POST /api/assessment) at the end of Part B; retakes overwrite (latest
+ * counts, Round 7 lock; a weaker re-sit honestly drops verified). The
+ * client-side keys drive the immediate per-item feedback only — the result
+ * screen reads the SERVER's grade.
+ * OB-1…OB-5 copy verbatim from features/content/onboarding.md (OB-1…OB-5
+ * tables); demo mechanics canon from _fixture-math.md (5-item quiz → "2 of 5").
  */
 
 type Level = "confident" | "kindof" | "notyet";
@@ -37,6 +56,10 @@ type Screen =
   | "cards"
   | "selfreport"
   | "framing"
+  | "assessIntro"
+  | "likert"
+  | "situations"
+  | "assessResult"
   | "verify"
   | "goal"
   | "reveal";
@@ -49,6 +72,10 @@ const STEP_OF: Record<Screen, number> = {
   cards: 2,
   selfreport: 3,
   framing: 3,
+  assessIntro: 3,
+  likert: 3,
+  situations: 3,
+  assessResult: 3,
   verify: 3,
   goal: 4,
   reveal: 5,
@@ -64,6 +91,11 @@ const CLAIM_CHIPS: { v: ClaimV; label: string }[] = [
 const FRAME_ROWS = ["Teamwork", "Communication", "Problem-solving"];
 const FRAME_CHIPS = ["Strong", "Okay", "Room to grow"];
 
+const STATEMENT_TOTAL = INSTRUMENT.reduce((n, c) => n + c.statements.length, 0);
+const MCQ_TOTAL = INSTRUMENT.reduce((n, c) => n + c.mcqs.length, 0);
+/** flat MCQ run order: COM-1.M1, COM-1.M2, COM-2.M1 … COM-7.M2 */
+const MCQ_RUN = INSTRUMENT.flatMap((c) => c.mcqs.map((m) => ({ comp: c, mcq: m })));
+
 const getCareer = (id: string): Career | null => CAREERS.find((c) => c.id === id) ?? null;
 
 /** GET /api/state payload (frozen read-only endpoint). */
@@ -75,7 +107,7 @@ interface StateView {
     strand: string;
     careerId: string | null;
     bars: Record<string, { source: string }>;
-    competencies?: Record<string, string>;
+    competencies?: Record<string, CompetencyStatus>;
     goals: Goal[];
     stageOneDone: number;
   };
@@ -95,6 +127,17 @@ export default function Onboarding() {
   // OB-3b-1 self-report · OB-3b-2 framing
   const [sr, setSr] = useState<Record<string, ClaimV>>({});
   const [frame, setFrame] = useState<Record<string, string>>({});
+
+  // step ③ — the competency instrument (Part A ratings + Part B checks)
+  const [sitView, setSitView] = useState<"intro" | "question">("intro");
+  const [sitIdx, setSitIdx] = useState(0);
+  const [sitPicked, setSitPicked] = useState<number | null>(null);
+  const [sitAnswered, setSitAnswered] = useState(false);
+  const [likertChoices, setLikertChoices] = useState<Record<string, number>>({});
+  const [mcqChoices, setMcqChoices] = useState<Record<string, number>>({});
+  /** the SERVER's grade for the just-completed attempt (assessResult reads it) */
+  const [grade, setGrade] = useState<Record<string, CompetencyStatus> | null>(null);
+  const [posting, setPosting] = useState(false);
 
   // OB-3b-3 verification quiz
   const [vView, setVView] = useState<"intro" | "question" | "result">("intro");
@@ -170,6 +213,72 @@ export default function Onboarding() {
     go("framing");
   }
 
+  /* ---- step ③ · Part A — the instrument's self-report statements ---- */
+  function rate(item: string, value: number) {
+    setLikertChoices((prev) => ({ ...prev, [item]: value }));
+  }
+
+  function beginSituations() {
+    if (Object.keys(likertChoices).length < STATEMENT_TOTAL) return;
+    setSitView("intro");
+    setSitIdx(0);
+    setSitPicked(null);
+    setSitAnswered(false);
+    go("situations");
+  }
+
+  /* ---- step ③ · Part B — the verification checks; the attempt POSTs ONCE,
+            at the end, and the result reads the server grade ---- */
+  function answerSituational(mcqId: string, i: number) {
+    if (sitAnswered) return;
+    const mcq = MCQ_RUN[sitIdx]?.mcq;
+    if (!mcq || mcq.id !== mcqId) return;
+    setSitPicked(i);
+    setSitAnswered(true);
+    setMcqChoices((prev) => ({ ...prev, [mcqId]: i }));
+  }
+
+  async function situationsNext() {
+    if (!sitAnswered) return;
+    if (sitIdx + 1 < MCQ_RUN.length) {
+      setSitIdx(sitIdx + 1);
+      setSitPicked(null);
+      setSitAnswered(false);
+      return;
+    }
+    // last item — the full attempt writes once, then the result screen shows
+    // the SERVER's grade (never a client-computed verdict)
+    setPosting(true);
+    const payload: InstrumentAnswers = {
+      likert: Object.fromEntries(
+        INSTRUMENT.flatMap((c) => c.statements.map((s) => [s.id, likertChoices[s.id] ?? 0]))
+      ),
+      mcq: Object.fromEntries(
+        MCQ_RUN.map(({ mcq }) => [mcq.id, mcqChoices[mcq.id] ?? -1])
+      ),
+    };
+    try {
+      const res = await fetch("/api/assessment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (data?.state?.competencies) {
+        setGrade(data.state.competencies);
+        go("assessResult");
+      } else {
+        setGrade(gradeInstrumentAnswers(payload)); // honest offline fallback (store is the demo)
+        go("assessResult");
+      }
+    } catch {
+      setGrade(gradeInstrumentAnswers(payload)); // store offline → local compute, same rule
+      go("assessResult");
+    } finally {
+      setPosting(false);
+    }
+  }
+
   /* ---- OB-3b-3 verification quiz (canon: ≤5 items, one per top-claimed skill) ---- */
   function startVerify() {
     const claimed = career
@@ -213,6 +322,7 @@ export default function Onboarding() {
   }
 
   const claimsCount = career ? career.skills.filter((s) => sr[s.name] === "can").length : 0;
+  const likertAnswered = Object.keys(likertChoices).length;
 
   /* ---- OB-4 goal ---- */
   const sug = GOAL_SUGG(((careerId && GOAL_SUGGESTION[careerId]) || (career ? GOAL_SUGGESTION[career.id] : null)) ?? null, career);
@@ -263,26 +373,38 @@ export default function Onboarding() {
   const step = STEP_OF[screen];
 
   return (
-    <>
-      {/* OB-0 · progress line (the AppBar owns the sticky brand bar) */}
-      <div className="ob-strip">
-        <div className="ob-top">
-          <span className="ob-steps" aria-live="polite">
-            STEP {step} OF 5 ·{" "}
-            {STEP_LABELS.map((l, i) => (
-              <span key={l}>
-                {i > 0 && <span className="ob-later"> → </span>}
-                {i === step - 1 ? <b>{l}</b> : <span className="ob-later">{l}</span>}
-              </span>
-            ))}
+    <div className="v7ob">
+      {/* OB-0 · the header band — names the surface + the 5-step instrument */}
+      <header className="ob-band">
+        <div className="ob-band-in">
+          <div className="ob-band-who">
+            <span className="ob-band-name">Getting started</span>
+            <span className="ob-band-meta">One sitting, five steps — ending on your computed starting line.</span>
+          </div>
+          <nav className="ob-steps-strip" aria-label="Onboarding steps">
+            {STEP_LABELS.map((l, i) => {
+              const idx = i + 1;
+              const cls = idx === step ? "now" : idx < step ? "done" : "todo";
+              return (
+                <span key={l} className={`ob-step ${cls}`}>
+                  <span className="ob-step-num" aria-hidden="true">
+                    {idx < step ? "✓" : idx}
+                  </span>
+                  <span className="ob-step-label">{l}</span>
+                </span>
+              );
+            })}
+          </nav>
+          <span className="ob-strip-label num" aria-live="polite">
+            STEP {step} OF 5
           </span>
         </div>
-      </div>
+      </header>
 
-      <div className="shell" style={{ maxWidth: 920, paddingBottom: 72 }}>
-        {/* ============ OB-1 · ① Strand select ============ */}
+      <div className="shell ob-shell">
+        {/* ============ OB-1 · ① Track select ============ */}
         {screen === "strand" && (
-          <section className="ob-screen app-section">
+          <section className="ob-screen">
             <div className="screen-head">
               <h1>What track are you in?</h1>
               <p>This points you at careers realistic for your track. You&apos;re not locking anything in.</p>
@@ -301,23 +423,23 @@ export default function Onboarding() {
                 </button>
               ))}
             </div>
-            <div className="app-section" style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div className="ob-ctas">
               <button className="btn btn-primary" disabled={!strand} onClick={() => go("branch")}>
                 Continue
               </button>
-              <span className="label" style={{ letterSpacing: "0.05em" }}>
+              <span className="ob-hint" aria-live="polite">
                 {strand ? "" : "Pick one to continue"}
               </span>
             </div>
-            <p className="hero-foot" style={{ marginTop: 16 }}>
+            <p className="ob-fine">
               We&apos;ll show careers for every track too — this just sets your default view.
             </p>
           </section>
         )}
 
-        {/* ============ OB-2 · ② career-in-mind branch ============ */}
+        {/* ============ OB-2 · ② Career-in-mind branch ============ */}
         {screen === "branch" && (
-          <section className="ob-screen app-section">
+          <section className="ob-screen">
             <button className="ob-back" onClick={() => back("strand")}>
               ← Back
             </button>
@@ -325,7 +447,7 @@ export default function Onboarding() {
               <h1>Do you have a career in mind?</h1>
               <p>Most answers here are &ldquo;not yet&rdquo; — and that&apos;s exactly what this app is for.</p>
             </div>
-            <div className="card-row two-col">
+            <div className="ob-branch">
               <Link className="panel card" href="/career" style={{ textDecoration: "none", color: "inherit" }}>
                 <h3>Yes — I know what I want to do</h3>
                 <p className="c-line">Browse careers for your track, with entry routes shown.</p>
@@ -335,7 +457,7 @@ export default function Onboarding() {
                 <p className="c-line">6 quick questions about what you enjoy, then we suggest careers that fit.</p>
               </button>
             </div>
-            <p className="hero-foot" style={{ marginTop: 18 }}>
+            <p className="ob-fine" style={{ marginTop: 18 }}>
               Whichever you pick, you can change your career anytime — switching resets your plan and takes two
               minutes.
             </p>
@@ -344,7 +466,7 @@ export default function Onboarding() {
 
         {/* ============ OB-3a · interest quiz, live ============ */}
         {screen === "quiz" && (
-          <section className="ob-screen app-section">
+          <section className="ob-screen">
             <button
               className="ob-back"
               onClick={() => {
@@ -363,7 +485,7 @@ export default function Onboarding() {
                 6 questions, about a minute.
               </p>
             </div>
-            <div className="panel" style={{ padding: 24, maxWidth: 640 }}>
+            <div className="panel ob-quizcard">
               <span className="q-skill-tag">Question {qi + 1} of {INTEREST_QUIZ.length}</span>
               <p className="q-stem" style={{ marginTop: 10 }}>{INTEREST_QUIZ[qi]}</p>
               <div className="q-opts" style={{ marginTop: 22 }}>
@@ -379,21 +501,21 @@ export default function Onboarding() {
 
         {/* ============ loading micro-state (OB-3a.6) ============ */}
         {screen === "loading" && (
-          <section className="ob-screen app-section">
+          <section className="ob-screen">
             <div className="screen-head">
               <h1>Reading your answers…</h1>
             </div>
-            <div className="card-row" style={{ maxWidth: 880 }} aria-hidden="true">
-              <div className="panel" style={{ height: 180, background: "#EFF1EF" }} />
-              <div className="panel" style={{ height: 180, background: "#EFF1EF" }} />
-              <div className="panel" style={{ height: 180, background: "#EFF1EF" }} />
+            <div className="ob-loading" aria-hidden="true">
+              <div className="panel ob-skel" />
+              <div className="panel ob-skel" />
+              <div className="panel ob-skel" />
             </div>
           </section>
         )}
 
         {/* ============ OB-3a · suggestion cards + pick ============ */}
         {screen === "cards" && (
-          <section className="ob-screen app-section">
+          <section className="ob-screen">
             <button className="ob-back" onClick={() => back("branch")}>
               ← Back
             </button>
@@ -403,7 +525,7 @@ export default function Onboarding() {
                 Based on your strand and what you told us. Pick the one that feels right — you can switch later.
               </p>
             </div>
-            <div className="card-row" style={{ maxWidth: 980 }}>
+            <div className="ob-cards">
               {DEMO_SUGGESTION_ORDER.map((id) => {
                 const c = getCareer(id);
                 if (!c) return null;
@@ -439,7 +561,7 @@ export default function Onboarding() {
                 );
               })}
             </div>
-            <div className="app-section" style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+            <div className="ob-links">
               <Link className="link-sub" href="/career">
                 See more careers for Computer & IT
               </Link>
@@ -448,7 +570,7 @@ export default function Onboarding() {
               </Link>
             </div>
             {career && (
-              <div className="app-section">
+              <div className="ob-ctas">
                 <button
                   className="btn btn-primary btn-hero"
                   onClick={() => {
@@ -465,7 +587,7 @@ export default function Onboarding() {
 
         {/* ============ OB-3b-1 · skills self-report ============ */}
         {screen === "selfreport" && career && (
-          <section className="ob-screen app-section">
+          <section className="ob-screen">
             <button className="ob-back" onClick={() => back("cards")}>
               ← Back
             </button>
@@ -477,15 +599,7 @@ export default function Onboarding() {
               </p>
             </div>
             <div className="panel">
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "10px 16px",
-                  borderBottom: "1px solid var(--line)",
-                }}
-              >
+              <div className="panel-bar">
                 <span className="label">
                   {career.name} · {career.skills.length} core skills
                 </span>
@@ -514,7 +628,7 @@ export default function Onboarding() {
                 </div>
               ))}
             </div>
-            <div className="app-section" style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div className="ob-ctas">
               <button
                 className="btn btn-primary"
                 disabled={Object.keys(sr).length < career.skills.length}
@@ -522,7 +636,7 @@ export default function Onboarding() {
               >
                 Continue
               </button>
-              <span className="label" style={{ letterSpacing: "0.05em" }}>
+              <span className="ob-hint" aria-live="polite">
                 {Object.keys(sr).length < career.skills.length ? `Answer all ${career.skills.length} to continue` : ""}
               </span>
             </div>
@@ -531,7 +645,7 @@ export default function Onboarding() {
 
         {/* ============ OB-3b-2 · soft-skills framing prompt (M8-lite, unscored) ============ */}
         {screen === "framing" && (
-          <section className="ob-screen app-section">
+          <section className="ob-screen">
             <button className="ob-back" onClick={() => back("selfreport")}>
               ← Back
             </button>
@@ -541,12 +655,10 @@ export default function Onboarding() {
                 In a 2026 employer survey, teamwork ranked higher than technical skill — 85% wanted it on a
                 resume, against 73% for technical know-how.
               </p>
-              <p className="label" style={{ marginTop: 6 }}>
-                Job Outlook 2026 employer survey
-              </p>
+              <p className="ob-src">Job Outlook 2026 employer survey</p>
             </div>
             <div className="panel" style={{ maxWidth: 640 }}>
-              <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--line-soft)" }}>
+              <div className="panel-bar">
                 <span className="q-skill-tag">Quick gut-check, honestly, right now — how do these three feel?</span>
               </div>
               {FRAME_ROWS.map((row) => (
@@ -567,25 +679,271 @@ export default function Onboarding() {
                 </div>
               ))}
             </div>
-            <p style={{ marginTop: 14, fontSize: 13, color: "var(--ink-2)", maxWidth: "56ch" }}>
-              Quick ratings are only a first read — people aren&apos;t good at rating themselves. Later,
-              you&apos;ll answer short real-life situations that measure this properly. Nothing here changes your
-              score.
+            <p className="ob-note">
+              Quick ratings are only a first read — people aren&apos;t good at rating themselves. The full
+              competency check comes next, with short real-life situations that measure this properly. Nothing
+              here changes your score.
             </p>
-            <div className="app-section">
-              <button className="btn btn-primary" onClick={() => { setVView("intro"); go("verify"); }}>
+            <div className="ob-ctas">
+              <button className="btn btn-primary" onClick={() => go("assessIntro")}>
                 Continue
               </button>
             </div>
           </section>
         )}
 
+        {/* ============ step ③ · the competency instrument — intro ============ */}
+        {screen === "assessIntro" && (
+          <section className="ob-screen">
+            <button className="ob-back" onClick={() => back("framing")}>
+              ← Back
+            </button>
+            <div className="screen-head" style={{ marginTop: 12 }}>
+              <h1>The competency check — the real one.</h1>
+              <p>
+                Seven core workplace competencies employers rank highest, from the national career-readiness
+                standard (NACE). Two parts, both required:
+              </p>
+            </div>
+            <div className="ob-parts">
+              <div className="panel nextcard">
+                <span className="label">PART A · SELF-RATINGS</span>
+                <h3>{STATEMENT_TOTAL} statements — how you work</h3>
+                <p className="n-why">
+                  About 6 minutes. Every rating is self-report: it marks a competency as{" "}
+                  <b>claimed</b> — a claimed competency carries no points.
+                </p>
+              </div>
+              <div className="panel nextcard">
+                <span className="label">PART B · THE CHECKS</span>
+                <h3>{MCQ_TOTAL} one-answer situations</h3>
+                <p className="n-why">
+                  About 10 minutes. A competency is <b>verified ·✓</b> when BOTH of its checks are answered
+                  correctly in this sitting — that&apos;s what earns into your index.
+                </p>
+              </div>
+            </div>
+            <div className="ob-ctas">
+              <button
+                className="btn btn-primary"
+                onClick={() => go("likert")}
+              >
+                Start the assessment
+              </button>
+              <span className="ob-hint">About 15 minutes in total — that&apos;s an honest estimate.</span>
+            </div>
+            <p className="ob-fine">
+              Retakes are allowed and your latest full sitting always counts. The standard lists 8
+              competencies; Equity &amp; Inclusion is under review by NACE and isn&apos;t rated here — 7 carried,
+              stated choice.
+            </p>
+          </section>
+        )}
+
+        {/* ============ step ③ · Part A — 28 Likert statements in 7 groups ============ */}
+        {screen === "likert" && (
+          <section className="ob-screen">
+            <button className="ob-back" onClick={() => back("assessIntro")}>
+              ← Back
+            </button>
+            <div className="screen-head" style={{ marginTop: 12 }}>
+              <h1>Part A — how you work, honestly.</h1>
+              <p>
+                Rate how often each behavior is already yours. First-person and specific — if a statement
+                doesn&apos;t describe a habit, that&apos;s a real answer too.
+              </p>
+            </div>
+            <div className="panel">
+              <div className="panel-bar">
+                <span className="label">PART A · SELF-RATING</span>
+                <span className="label num">
+                  {likertAnswered} of {STATEMENT_TOTAL} answered
+                </span>
+              </div>
+              <p className="ob-scale-legend num">
+                1 = never · 2 = rarely · 3 = sometimes · 4 = often · 5 = consistently — &ldquo;consistently&rdquo;
+                means the behavior is your settled habit, not occasional.
+              </p>
+              {INSTRUMENT.map((c) => (
+                <div key={c.title} className="inst-group" data-comp={c.title}>
+                  <div className="inst-head">
+                    <div className="inst-head-line">
+                      <h3>{c.title}</h3>
+                      <span className="chip c-grey hatch-chip" aria-hidden="true">
+                        Self-report
+                      </span>
+                    </div>
+                    <blockquote>{c.definition}</blockquote>
+                  </div>
+                  {c.statements.map((s, si) => (
+                    <div key={s.id} className="inst-row" data-item={s.id}>
+                      <p className="q-stem-md">{s.text}</p>
+                      <div
+                        className="scale"
+                        role="group"
+                        aria-label={`${c.title} — statement ${si + 1}, rate 1 to 5`}
+                      >
+                        {INSTRUMENT_LIKERT_SCALE.map((o) => (
+                          <button
+                            key={o.value}
+                            type="button"
+                            aria-pressed={likertChoices[s.id] === o.value}
+                            aria-label={`${o.value} — ${o.label}`}
+                            onClick={() => rate(s.id, o.value)}
+                          >
+                            {o.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div className="ob-ctas">
+              <button
+                className="btn btn-primary"
+                disabled={likertAnswered < STATEMENT_TOTAL}
+                onClick={beginSituations}
+              >
+                Continue
+              </button>
+              <span className="ob-hint" aria-live="polite">
+                {likertAnswered < STATEMENT_TOTAL
+                  ? `Answer all ${STATEMENT_TOTAL} to continue`
+                  : "Self-ratings recorded — the checks follow."}
+              </span>
+            </div>
+          </section>
+        )}
+
+        {/* ============ step ③ · Part B — 14 verification checks ============ */}
+        {screen === "situations" && (
+          <section className="ob-screen">
+            {sitView === "intro" && (
+              <div>
+                <button className="ob-back" onClick={() => back("likert")}>
+                  ← Back
+                </button>
+                <div className="screen-head" style={{ marginTop: 12 }}>
+                  <h1>Part B — the checks.</h1>
+                  <p>
+                    {MCQ_TOTAL} real-life situations, one best answer each. What verifies a competency is
+                    answering <b>both</b> of its two checks correctly in this sitting — one right and one wrong
+                    keeps it claimed, and no partial credit carries across sittings.
+                  </p>
+                </div>
+                <div className="ob-ctas">
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      setSitView("question");
+                      setSitIdx(0);
+                      setSitPicked(null);
+                      setSitAnswered(false);
+                    }}
+                  >
+                    Start the checks
+                  </button>
+                  <span className="ob-hint">About 10 minutes.</span>
+                </div>
+              </div>
+            )}
+
+            {sitView === "question" && MCQ_RUN[sitIdx] && (() => {
+              const { comp, mcq } = MCQ_RUN[sitIdx];
+              const pickedKey = sitPicked;
+              const passed = pickedKey !== null && pickedKey === mcq.key;
+              const thisCompIdx = INSTRUMENT.findIndex((c) => c.title === comp.title) + 1;
+              return (
+                <div>
+                  <div className="ob-qbar">
+                    <span className="q-skill-tag num">
+                      Question {sitIdx + 1} of {MCQ_RUN.length} · {thisCompIdx} of 7 · {comp.title}
+                    </span>
+                    <button className="ob-back" onClick={() => back("likert")}>
+                      ← Back
+                    </button>
+                  </div>
+                  <div className="panel ob-mcqcard" style={{ maxWidth: 640 }} data-mcq={mcq.id}>
+                    <p className="q-stem" style={{ marginTop: 0 }}>{mcq.stem}</p>
+                    <div className="q-opts">
+                      {mcq.options.map((t, i) => (
+                        <button
+                          key={i}
+                          className="opt"
+                          type="button"
+                          onClick={() => answerSituational(mcq.id, i)}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                    <div className={`q-band ${sitAnswered ? "show" : ""} ${passed ? "pass" : "fail"}`}>
+                      {sitAnswered &&
+                        (passed
+                          ? "Correct — this is the competency's core move. Keep it up."
+                          : `Not quite. The strongest answer is: ${mcq.options[mcq.key]} Both of this competency's checks must be answered correctly to verify it.`)}
+                    </div>
+                    <div style={{ marginTop: 16 }}>
+                      <button className="btn btn-ghost" disabled={!sitAnswered || posting} onClick={situationsNext}>
+                        {sitIdx + 1 >= MCQ_RUN.length ? (posting ? "Scoring…" : "See the result") : "Next"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </section>
+        )}
+
+        {/* ============ step ③ · instrument result — the server's grade ============ */}
+        {screen === "assessResult" && grade && (() => {
+          const verifiedTitles = INSTRUMENT.filter((c) => grade[c.title] === "verified").map((c) => c.title);
+          const claimedTitles = INSTRUMENT.filter((c) => grade[c.title] === "claimed").map((c) => c.title);
+          const n = verifiedTitles.length;
+          return (
+            <section className="ob-screen">
+              <div className="screen-head">
+                <h1>
+                  {n} of {INSTRUMENT.length} competencies verified.
+                </h1>
+                <p>
+                  {n === INSTRUMENT.length
+                    ? "A clean sweep — every competency carried both checks."
+                    : n > 0
+                      ? "The verified ones answered both of their checks correctly in this sitting."
+                      : "None verified yet — that's fine and it's honest. Your self-ratings stand as claimed."}
+                </p>
+              </div>
+              {verifiedTitles.length > 0 && (
+                <div className="okband" style={{ maxWidth: 560 }}>
+                  Verified on your profile: <b>{verifiedTitles.join(" · ")}</b>{" "}
+                  <span className="vbadge ok">·✓</span>
+                </div>
+              )}
+              {claimedTitles.length > 0 && (
+                <p className="ob-note" style={{ maxWidth: 560 }}>
+                  Claimed (self-report only): {claimedTitles.join(" · ")}. A rating alone never earns points
+                  and never closes a bar — the pair of checks is what verifies. Retakes: your latest full
+                  sitting always counts, so building the skills and re-sitting honestly moves this.
+                </p>
+              )}
+              <div className="ob-ctas">
+                <button className="btn btn-primary" onClick={() => { setVView("intro"); go("verify"); }}>
+                  Continue
+                </button>
+              </div>
+            </section>
+          );
+        })()}
+
         {/* ============ OB-3b-3 · verification mini-quiz ============ */}
         {screen === "verify" && (
-          <section className="ob-screen app-section">
+          <section className="ob-screen">
             {vView === "intro" && (
               <div>
-                <button className="ob-back" onClick={() => back("framing")}>
+                <button className="ob-back" onClick={() => back("assessResult")}>
                   ← Back
                 </button>
                 <div className="screen-head" style={{ marginTop: 12 }}>
@@ -608,14 +966,7 @@ export default function Onboarding() {
               const passed = picked !== null && picked === q.answer;
               return (
                 <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      maxWidth: 640,
-                    }}
-                  >
+                  <div className="ob-qbar" style={{ maxWidth: 640 }}>
                     <span className="q-skill-tag num">
                       Question {vi + 1} of {quizItems.length}
                     </span>
@@ -631,7 +982,7 @@ export default function Onboarding() {
                       ← Back
                     </button>
                   </div>
-                  <div className="panel" style={{ padding: 24, maxWidth: 640, marginTop: 12 }}>
+                  <div className="panel ob-mcqcard" style={{ maxWidth: 640, marginTop: 12 }}>
                     <span className="q-skill-tag">About: {q.skill}</span>
                     <p className="q-stem" style={{ marginTop: 10 }}>{q.stem}</p>
                     <div className="q-opts">
@@ -693,7 +1044,7 @@ export default function Onboarding() {
                       <span className="vbadge ok">·✓</span>
                     </div>
                   )}
-                  <div className="app-section">
+                  <div className="ob-ctas">
                     <button className="btn btn-primary" onClick={() => go("goal")}>
                       Continue
                     </button>
@@ -706,7 +1057,7 @@ export default function Onboarding() {
 
         {/* ============ OB-4 · goal suggestion ============ */}
         {screen === "goal" && career && sug && (
-          <section className="ob-screen app-section">
+          <section className="ob-screen">
             <button className="ob-back" onClick={() => { setVView("intro"); back("verify"); }}>
               ← Back
             </button>
@@ -723,8 +1074,8 @@ export default function Onboarding() {
                   style={{
                     flex: 1,
                     font: "inherit",
-                    fontWeight: 640,
-                    color: "var(--ink)",
+                    fontWeight: 500,
+                    color: "var(--v-ink)",
                     background: "none",
                     border: "1px solid transparent",
                     borderRadius: 4,
@@ -738,7 +1089,7 @@ export default function Onboarding() {
                 Closes your first gap in {sug.skill} — the top skill for {career.name}.
               </p>
               {sug.resourceId && (
-                <p className="n-why" style={{ marginTop: 12, color: "var(--ink-3)" }}>
+                <p className="n-why" style={{ marginTop: 12 }}>
                   When you finish the course and pass its 5-question check, this goal marks itself done —
                   automatically, under Progress. You&apos;ll see it happen.
                 </p>
@@ -747,7 +1098,7 @@ export default function Onboarding() {
                 <button className="btn btn-primary" onClick={setGoal}>
                   Set this goal
                 </button>
-                <button className="quiet-toggle" type="button" onClick={skipGoal}>
+                <button className="ob-quiet" type="button" onClick={skipGoal}>
                   Skip for now
                 </button>
               </div>
@@ -765,7 +1116,7 @@ export default function Onboarding() {
           <Reveal view={view} armed={armed} quizItems={quizItems} />
         )}
       </div>
-    </>
+    </div>
   );
 }
 
@@ -777,7 +1128,9 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
   const verifiedCount = Object.values(state.bars).filter((b) => b.source === "verified").length;
   const closed = Object.keys(state.bars).length;
   const mapSize = career.skills.length;
-  const esVerified = Object.values(state.competencies ?? {}).filter((v) => v === "verified").length;
+  const competencyEntries = Object.entries(state.competencies ?? {});
+  const esVerified = competencyEntries.filter(([, v]) => v === "verified").length;
+  const esClaimed = competencyEntries.filter(([, v]) => v === "claimed").length;
   const queue = stageOne(career, openSkills(career, state.bars)).queue;
   const activeGoal = state.goals.some((g) => g.type === "training" && g.status === "active");
   const gradeLabel = state.grade === "G11" ? "GRADE 11" : state.grade;
@@ -791,7 +1144,7 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
   ];
 
   return (
-    <section className="ob-screen app-section">
+    <section className="ob-screen">
       <div className="screen-head">
         <h1>Your starting point</h1>
         <p>Computed from everything you just did. Not a grade — a before-and-after number.</p>
@@ -799,7 +1152,7 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
       <div className="panel readout" style={{ maxWidth: 640 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
           <span className="label">
-            READINESS · <b className="sample-tag" style={{ color: "var(--ink)", fontWeight: 600 }}>NEIL · {gradeLabel} · {state.strand}</b>
+            READINESS · <b className="ob-who">NEIL · {gradeLabel} · {state.strand}</b>
           </span>
           <div className="readout-score num">
             <span aria-label={`Readiness ${score.total} of 100`}>{score.total}</span>
@@ -821,6 +1174,7 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
           <div className="tickline num">
             <b>Employability</b> — {score.es} of {WEIGHTS.es} ·{" "}
             {esVerified} of 7 NACE competencies verified <span className="vbadge ok">·✓</span>
+            {esClaimed > 0 && <span> · {esClaimed} claimed (self-report — no points painted)</span>}
           </div>
           <div className="tickline num">
             <b>Training</b> — {score.tp} of {WEIGHTS.tp} ·{" "}
@@ -828,7 +1182,7 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
           </div>
           <div className="tickline num">
             <b>Application readiness</b> — {score.ar === null ? "Not yet measured" : `${score.ar} of ${WEIGHTS.ar}`} ·{" "}
-            {score.ar === null ? "the resume diagnostic (Prep) opens this channel" : "best diagnostic run counts"}
+            {score.ar === null ? "the resume diagnostic (Prep) opens this channel" : "unlimited re-runs — your latest run counts"}
           </div>
           <div className="tickline num">
             <b>Direction</b> — {score.cc} of {WEIGHTS.cc} · Career picked ·{" "}
@@ -837,7 +1191,7 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
         </div>
       </div>
 
-      <div className="app-section" style={{ maxWidth: 640 }}>
+      <div className="ob-section-wide" style={{ maxWidth: 640 }}>
         <div className="panel nextcard">
           <h3>Your learning pathway is ready</h3>
           <p className="n-why">
@@ -860,7 +1214,7 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
         </div>
       </div>
 
-      <div className="app-section" style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
+      <div className="ob-ctas" style={{ gap: 20, flexWrap: "wrap" }}>
         <Link className="btn btn-primary btn-hero" href="/dashboard">
           Take me to my Dashboard
         </Link>

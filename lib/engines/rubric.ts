@@ -6,8 +6,11 @@ import { computeScore, WEIGHTS, type ArInput, type Score } from "./score";
  * Display order stays the historical SP · ES · TP · AR · CC (the dashboard's
  * sub-rows read top-down in this order); the ADR's ES 30 / SP 25 / TP 20 /
  * AR 15 / CC 10 listing is the weight legend, not a render order.
- * An unmeasured AR part earns 0 and carries `ar` = null — surfaces show
- * "not yet measured", never a painted zero-bar lie about measurement.
+ * AR's earned fraction fills as its THREE per-file factors land (resume 7 /
+ * letter 5 / presence 3); the part carries `unmeasured` = true only while
+ * NOTHING is measured — surfaces show "not yet measured" (grey), never a
+ * painted zero-bar lie about measurement. Partial factors read through
+ * `scoreView().arFactors` (engine receipts, per-file honest).
  */
 export function rubricParts(score: Score) {
   return [
@@ -51,6 +54,13 @@ export function scoreView(career: Career, s: StudentState, ar?: ArInput | null) 
     /** any completed plan item — the "first item done" tick (My Plan Q4b) */
     ccFirstDone: s.goals.some((g) => g.status === "completed"),
     arMeasured: score.ar !== null,
+    /** AR split receipts (ticket 12): one row per factor — resume/letter/presence */
+    arFactors: score.arParts,
+    /** every AR factor measured — the channel's 15 could read complete */
+    arComplete:
+      score.arParts.resume.measured &&
+      score.arParts.letter.measured &&
+      score.arParts.presence.measured,
     parts: rubricParts(score),
   };
 }
