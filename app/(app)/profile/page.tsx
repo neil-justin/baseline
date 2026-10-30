@@ -7,6 +7,7 @@ import { skillsFor } from "@/lib/engines/gaps";
 import { presenceMeasured } from "@/lib/engines/air";
 import { RESOURCES } from "@/lib/fixtures/resources";
 import { INSTRUMENT } from "@/lib/fixtures/instrument";
+import { trackLabelOf } from "@/lib/fixtures/catalog";
 import { credentialStore, credentialsPersistenceNotice } from "@/lib/db/credential-store";
 import ProfileTabs from "./ProfileTabs";
 import ProfileReadout from "./ProfileReadout";
@@ -21,10 +22,10 @@ export const dynamic = "force-dynamic";
 
 /* ── derived display helpers (+ can) ────────────────────────────────────── */
 
-function gradeLabel(grade: string): string {
-  const m = grade.match(/^G(\d+.*)$/);
-  return m ? `Grade ${m[1]}` : grade;
-}
+/* persona year+track line ("4th Year, Computer & IT") — the state's new
+   vocabulary; the SHS-era gradeLabel()/`grade` is gone (2026-10-30 sweep) */
+const yearTrack = (s: { yearLevel: string; track: string }) =>
+  [s.yearLevel, trackLabelOf(s.track)].filter(Boolean).join(", ");
 
 const plural = (n: number, word: string, pluralWord?: string) =>
   `${n} ${n === 1 ? word : (pluralWord ?? word + "s")}`;
@@ -238,7 +239,9 @@ export default async function ProfilePage() {
 
   const identity = (
     <p className="band-id num">
-      {state.name} · {gradeLabel(state.grade)}, {state.strand} · Target: <b>{career.name}</b>
+      {/* persona line: "Neil · 4th Year, Computer & IT · Target: …" — the state's
+          yearLevel + the track's TRACK_LABELS label, the Account tab consistent */}
+      {state.name} · {yearTrack(state)} · Target: <b>{career.name}</b>
     </p>
   );
 
@@ -256,7 +259,7 @@ export default async function ProfilePage() {
         bySelf={bySelf}
         asOf={asOf}
         careerName={career.name}
-        strandLabel={gradeLabel(state.grade) + ", " + state.strand}
+        identityLabel={yearTrack(state)}
         labels={["Skills", "Employability", "Training", "Application", "Direction"]}
       />
 
@@ -600,7 +603,7 @@ export default async function ProfilePage() {
           </h3>
           <p className="doc-p">
             You picked <b>{career.name}</b> after exploring the index: the work fits what you enjoy and where
-            your strand points.
+            your track points.
           </p>
           <p className="mono-line num">Entry route · {career.entryRoute}</p>
         </div>
@@ -772,8 +775,9 @@ export default async function ProfilePage() {
         foot={
           <footer className="pro-foot">
             <span className="label num">
-              Profile report · {state.name.toUpperCase()} · {state.grade} {state.strand} · every number dated and
-              sourced
+              Profile report · {state.name.toUpperCase()} ·{" "}
+              {[state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(" · ")} · every number dated
+              and sourced
             </span>
             <a className="link-quiet" href="/dashboard">
               Back to dashboard

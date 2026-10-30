@@ -61,6 +61,13 @@ export const TRACK_LABELS: Record<CareerTrack, string> = {
   office: "Office & Administration",
 };
 
+/** StudentState.track (a TRACKS key) → its display label ("it" → "Computer &
+ *  IT"); "" / unknown key → "" so undecided/legacy rows never print SHS-era
+ *  strand vocabulary. */
+export function trackLabelOf(trackKey: string): string {
+  return TRACKS.includes(trackKey as CareerTrack) ? TRACK_LABELS[trackKey as CareerTrack] : "";
+}
+
 export const CAREERS: Career[] = [
   // == ─── Track 1 · Computer & IT (11: roster 2.1–2.9 + E1 + E4) ─────────────
   {

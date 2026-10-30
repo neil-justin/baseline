@@ -3,7 +3,7 @@ import { requireStudent } from "@/lib/session";
 import { CAREERS, CATALOG_TOTAL, getCareer } from "@/lib/fixtures/catalog";
 import { skillsMatch } from "@/lib/engines/gaps";
 import { scoreView } from "@/lib/engines/rubric";
-import { TRACK_LABELS } from "@/lib/fixtures/catalog";
+import { TRACK_LABELS, trackLabelOf } from "@/lib/fixtures/catalog";
 import type { BarSource } from "@/lib/types";
 import CareerClient from "./CareerClient";
 import {
@@ -60,7 +60,7 @@ export default async function CareerPage() {
           name: career.name,
           what: careerWhat(career),
           why: careerWhyLine(career),
-          strandDisplay: TRACK_LABELS[career.track],
+          trackLabel: trackLabelOf(career.track),
           entry: entryDisplay(career),
           closed: v.closed,
           mapSize: v.mapSize,

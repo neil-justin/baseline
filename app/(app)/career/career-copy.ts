@@ -38,7 +38,7 @@ export function entryDisplay(c: Career): string {
 }
 
 /** Track label is the college-era browse display (round 9). */
-export function strandDisplay(c: Career): string {
+export function trackLabel(c: Career): string {
   return TRACK_LABELS[c.track];
 }
 

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { SegRubricBar } from "@/components/instrument";
-import { CAREERS, DEMO_SUGGESTION_ORDER, TRACKS, TRACK_LABELS } from "@/lib/fixtures/catalog";
+import { CAREERS, DEMO_SUGGESTION_ORDER, TRACKS, TRACK_LABELS, trackLabelOf } from "@/lib/fixtures/catalog";
 import { RESOURCES } from "@/lib/fixtures/resources";
 import {
   INSTRUMENT,
@@ -103,8 +103,8 @@ interface StateView {
   state: {
     id: string;
     name: string;
-    grade: string;
-    strand: string;
+    yearLevel: string;
+    track: string;
     careerId: string | null;
     bars: Record<string, { source: string }>;
     competencies?: Record<string, CompetencyStatus>;
@@ -522,7 +522,7 @@ export default function Onboarding() {
             <div className="screen-head" style={{ marginTop: 12 }}>
               <h1>Careers that fit how you answered</h1>
               <p>
-                Based on your strand and what you told us. Pick the one that feels right — you can switch later.
+                Based on your track and what you told us. Pick the one that feels right — you can switch later.
               </p>
             </div>
             <div className="ob-cards">
@@ -1133,7 +1133,9 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
   const esClaimed = competencyEntries.filter(([, v]) => v === "claimed").length;
   const queue = stageOne(career, openSkills(career, state.bars)).queue;
   const activeGoal = state.goals.some((g) => g.type === "training" && g.status === "active");
-  const gradeLabel = state.grade === "G11" ? "GRADE 11" : state.grade;
+  // persona line: "NEIL · 4th Year · Computer & IT" — the state's vocabulary
+  // prints verbatim (yearLevel + the track's TRACK_LABELS label); no G-regex.
+  const whoLine = [state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(" · ");
 
   const parts = [
     { pct: WEIGHTS.sp, earnedFrac: score.sp / WEIGHTS.sp },
@@ -1152,7 +1154,7 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
       <div className="panel readout" style={{ maxWidth: 640 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
           <span className="label">
-            READINESS · <b className="ob-who">NEIL · {gradeLabel} · {state.strand}</b>
+            READINESS · <b className="ob-who">NEIL · {whoLine}</b>
           </span>
           <div className="readout-score num">
             <span aria-label={`Readiness ${score.total} of 100`}>{score.total}</span>

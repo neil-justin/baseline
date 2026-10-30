@@ -57,7 +57,8 @@ export interface CareerCardData {
   name: string;
   what: string;
   why: string;
-  strandDisplay: string;
+  /** persona line print — the college track's TRACK_LABELS label ("Computer & IT") */
+  trackLabel: string;
   entry: string;
   closed: number;
   mapSize: number;

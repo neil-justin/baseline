@@ -28,8 +28,8 @@ function requeueStageOne(state: StudentState, career: Career): StudentState {
   return { ...state, stageOneQueue: queue };
 }
 
-export function setStrand(state: StudentState, strand: string): ActionResult {
-  return { state: { ...state, strand } };
+export function setTrack(state: StudentState, track: string): ActionResult {
+  return { state: { ...state, track } };
 }
 
 export function chooseCareer(state: StudentState, careerId: string): ActionResult {

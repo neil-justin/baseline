@@ -6,7 +6,7 @@ import { requireStaff } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
 import type { StudentState } from "@/lib/types";
 import AdminBar from "../AdminBar";
-import { RUBRIC_MAX, gradeLabel, orderCohort, type RubricValues } from "../defaults";
+import { RUBRIC_MAX, orderCohort, personaMeta, type RubricValues } from "../defaults";
 import "../admin.css";
 
 export const dynamic = "force-dynamic";
@@ -15,7 +15,9 @@ export const dynamic = "force-dynamic";
 interface ScreenB {
   id: string;
   name: string;
-  grade: string;
+  /** persona meta line ("4th Year · Computer & IT") — the same vocabulary the
+   *  cohort row prints (personaMeta); no painted numbers ride it */
+  meta: string;
   /** declared career; null = undecided default state (mono banner) */
   career: string | null;
   score: number;
@@ -48,14 +50,14 @@ function zeroParts(): RubricValues {
  */
 async function buildLive(id: string): Promise<ScreenB> {
   const { state, career, score, ar } = await getStudentView(id);
-  const grade = state.strand ? `${gradeLabel(state.grade)} · ${state.strand}` : gradeLabel(state.grade);
+  const meta = personaMeta(state.yearLevel, state.track);
 
   if (!career || !score) {
     // undecided default state — the mono banner + per-part notes; never blank
     return {
       id,
       name: state.name,
-      grade,
+      meta,
       career: null,
       score: 0,
       parts: zeroParts(),
@@ -106,7 +108,7 @@ async function buildLive(id: string): Promise<ScreenB> {
   return {
     id,
     name: state.name,
-    grade,
+    meta,
     career: career.name,
     score: v.total,
     parts,
@@ -185,7 +187,7 @@ export default async function AdminStudentPage({
                   {s.name} — {undecided ? "Still deciding" : s.career}
                 </h2>
                 <p className="dt-meta">
-                  <span>{s.grade}</span>
+                  <span>{s.meta}</span>
                   <span className="ro">READ-ONLY MIRROR OF THEIR OWN DASHBOARD</span>
                 </p>
               </div>

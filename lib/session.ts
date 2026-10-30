@@ -82,13 +82,15 @@ export async function actingStudentId(param: unknown): Promise<string | null> {
   return null;
 }
 
-/** Fresh-student default state — unchanged shape (engines own it). */
+/** Fresh-student default state — unchanged shape (engines own it).
+ *  College persona defaults: year level canon "4th Year"; track undecided
+ *  (OB-1 asks it, lib/fixtures/catalog.ts TRACKS keys are the values). */
 export function newStudentState(id: string, fullName: string) {
   return {
     id,
     name: fullName,
-    grade: "G11",
-    strand: "",
+    yearLevel: "4th Year",
+    track: "",
     careerId: null,
     bars: {},
     competencies: {},

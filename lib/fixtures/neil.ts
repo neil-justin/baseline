@@ -50,8 +50,10 @@ import type { StudentState } from "@/lib/types";
 export const NEIL_SEED: StudentState = {
   id: "neil",
   name: "Neil",
-  grade: "G11",
-  strand: "Computer & IT",
+  // persona canon "Neil, 4th Year" (.impeccable/surfaces/dashboard.md line —
+  // college scope; the SHS-era `grade: "G11"` / `strand` fields are gone).
+  yearLevel: "4th Year",
+  track: "it", // TRACKS key → prints "Computer & IT" (TRACK_LABELS)
   careerId: "swd",
   // Step-③ assessment (ES carrier): 4 of 7 verified ·✓ → 30×4/7 = 17. The
   // keys are the APPROVED instrument's competency titles verbatim (lib/

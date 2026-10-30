@@ -404,7 +404,7 @@ export default function CareerClient({
                 <h2 className="cc-name">{card.name}</h2>
                 <p className="cc-what">{card.what}</p>
               </div>
-              <span className="chip c-blue cc-badge">{card.strandDisplay}</span>
+              <span className="chip c-blue cc-badge">{card.trackLabel}</span>
             </div>
 
             <div className="cc-grid">

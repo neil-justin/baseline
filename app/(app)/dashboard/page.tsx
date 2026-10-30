@@ -13,12 +13,6 @@ import "./dashboard.css";
 
 export const dynamic = "force-dynamic";
 
-/** "G11" → "Grade 11" (same live-state grade convention as Admin + Profile). */
-function gradeLabel(grade: string): string {
-  const m = grade.match(/^G(\d+.*)$/);
-  return m ? `Grade ${m[1]}` : grade;
-}
-
 function UndecidedDefault() {
   return (
     <div className="v7dash">
@@ -93,7 +87,9 @@ export default async function DashboardPage() {
         <div className="band">
           <div className="who">
             <h1 className="t">
-              {state.name} · {gradeLabel(state.grade)}
+              {/* persona line: "Neil · 4th Year" — the state's yearLevel IS the
+                  print (the G-regex gradeLabel helper died with the SHS scope) */}
+              {state.name} · {state.yearLevel}
             </h1>
             <div className="m">{career.name}</div>
           </div>

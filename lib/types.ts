@@ -93,8 +93,13 @@ export interface PresenceStamp {
 export interface StudentState {
   id: string;
   name: string;
-  grade: string;
-  strand: string;
+  /** live year-level print ("4th Year") — college scope, ACCOUNT-tab consistent
+   *  (profiles.year_level); SHS-era `grade: "G11"` was swept 2026-10-30. */
+  yearLevel: string;
+  /** the student's college track — a TRACKS key from lib/fixtures/catalog.ts
+   *  ("it" · "business" · "accounting" · "office"); "" = undecided. Print sites
+   *  map it through TRACK_LABELS (SHS-era `strand` was swept 2026-10-30). */
+  track: string;
   /** null = undecided (cold start) */
   careerId: string | null;
   /** closed gap bars for the current career's skill map, keyed by skill name */

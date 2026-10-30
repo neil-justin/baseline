@@ -35,12 +35,16 @@ export default function SampleGauge({
   rows,
   total,
   score,
-  strand,
+  yearLevel,
+  track,
 }: {
   rows: GaugeRow[];
   total: number;
   score: Score;
-  strand: string;
+  /** sample persona state vocabulary — "4th Year" (SHS-era "Grade 11" is gone) */
+  yearLevel: string;
+  /** sample persona track — the TRACK_LABELS label ("Computer & IT") */
+  track: string;
 }) {
   const [sel, setSel] = useState(0);
   const [armed, setArmed] = useState(false);
@@ -82,7 +86,7 @@ export default function SampleGauge({
               READINESS · <b className="sample-tag">SAMPLE STUDENT</b>
             </span>
             <div className="readout-sub">
-              out of 100 · Grade 11 · {strand}
+              out of 100 · {yearLevel} · {track}
             </div>
           </div>
           <div className="readout-score">

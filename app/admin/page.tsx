@@ -4,7 +4,7 @@ import { requireStaff } from "@/lib/session";
 import type { StudentState } from "@/lib/types";
 import AdminBar from "./AdminBar";
 import StudentRow, { type RowSeg } from "./StudentRow";
-import { RUBRIC_MAX, orderCohort, type RubricValues } from "./defaults";
+import { RUBRIC_MAX, orderCohort, personaMeta, type RubricValues } from "./defaults";
 import "./admin.css";
 
 export const dynamic = "force-dynamic";
@@ -74,7 +74,7 @@ async function buildRows(): Promise<LiveRow[]> {
       return {
         id,
         name: state.name,
-        sub: `${state.grade} · ${state.strand || "—"}`,
+        sub: personaMeta(state.yearLevel, state.track),
         career: career?.name ?? null,
         score: score?.total ?? 0,
         parts: score ? partsOf(score) : ZERO_PARTS,

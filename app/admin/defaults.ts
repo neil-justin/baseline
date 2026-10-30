@@ -11,6 +11,8 @@
  * a number.
  */
 
+import { trackLabelOf } from "@/lib/fixtures/catalog";
+
 export type RubricPart = [earned: number, max: number];
 
 export interface RubricValues {
@@ -31,12 +33,14 @@ export const RUBRIC_MAX = { es: 30, sp: 25, tp: 20, ar: 15, cc: 10 } as const;
  */
 export const COHORT_ORDER = ["neil", "karla", "marco", "liza", "bea", "jomar", "rafael"] as const;
 
-/** "G11" → "Grade 11" (live-state grade format → admin meta line). */
-export function gradeLabel(grade: string): string {
-  const m = grade.match(/^G(\d+)/i);
-  return m ? `Grade ${m[1]}` : grade;
+/** Persona meta line — "4th Year · Computer & IT" from the state's new
+ *  vocabulary (yearLevel + the track's TRACK_LABELS label); empty/unknown
+ *  parts drop out, all-empty → "—". The SHS-era gradeLabel()/`grade` state
+ *  field are gone with the 2026-10-30 sweep. */
+export function personaMeta(yearLevel: string, track: string): string {
+  const line = [yearLevel, trackLabelOf(track)].filter(Boolean).join(" · ");
+  return line || "—";
 }
-
 /** The live cohort, ordered: COHORT_ORDER ids that have real state first,
  * then every other state id (post-migration sign-ups) in store order. */
 export function orderCohort(states: Record<string, unknown>): string[] {

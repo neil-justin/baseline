@@ -81,8 +81,8 @@ function freshState(id, fullName) {
   return {
     id,
     name: fullName,
-    grade: "G11",
-    strand: "",
+    yearLevel: "4th Year",
+    track: "",
     careerId: null,
     bars: {},
     goals: [],

@@ -1,4 +1,4 @@
-import { CATALOG_TOTAL, getCareer, TRACK_LABELS } from "@/lib/fixtures/catalog";
+import { CATALOG_TOTAL, getCareer, trackLabelOf } from "@/lib/fixtures/catalog";
 import type { Career } from "@/lib/types";
 import { NEIL_SEED } from "@/lib/fixtures/neil";
 import { computeScore, WEIGHTS, type Score } from "@/lib/engines/score";
@@ -16,7 +16,7 @@ export const metadata = {
 
 /** Track label rendered the way the index table says it. */
 function strandLabel(c: Career): string {
-  return TRACK_LABELS[c.track];
+  return trackLabelOf(c.track);
 }
 
 /** Organic sample-score derivation: the canon beat-5 seed, scored by the engine. */
@@ -98,7 +98,7 @@ export default function LandingPage() {
             </h1>
             <p className="lede rv" style={{ ["--d" as string]: "180ms" }}>
               6.0% of the labor force is out of work, a four-year high, and 38.2% of the unemployed
-              finished college. Finishing a strand is not the same as being ready. Five minutes gives
+              finished college. Finishing a degree is not the same as being ready. Five minutes gives
               you one number and the next steps.
             </p>
             <div className="hero-ctas" data-io data-stagger="80" data-cap="260">
@@ -120,7 +120,8 @@ export default function LandingPage() {
             rows={gauge}
             total={CATALOG_TOTAL}
             score={score}
-            strand={NEIL_SEED.strand}
+            yearLevel={NEIL_SEED.yearLevel}
+            track={trackLabelOf(NEIL_SEED.track)}
           />
         </div>
       </section>

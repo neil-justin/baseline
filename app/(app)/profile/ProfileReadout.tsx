@@ -19,7 +19,7 @@ export default function ProfileReadout({
   bySelf,
   asOf,
   careerName,
-  strandLabel,
+  identityLabel,
   labels,
 }: {
   /** the computed headline */
@@ -32,7 +32,8 @@ export default function ProfileReadout({
   bySelf: number;
   asOf: string;
   careerName: string;
-  strandLabel: string;
+  /** persona line ("4th Year, Computer & IT") — state vocabulary, no strand */
+  identityLabel: string;
   labels: string[]; // Skills / Employability / Training / Application / Direction
 }) {
   const [armed, setArmed] = useState(false);
@@ -43,7 +44,7 @@ export default function ProfileReadout({
       <div className="readout-head">
         <div>
           <span className="label num">Readiness · {asOf}</span>
-          <div className="readout-sub">out of 100 · {careerName} · {strandLabel}</div>
+          <div className="readout-sub">out of 100 · {careerName} · {identityLabel}</div>
         </div>
         <div className="readout-score num">
           <CountUp

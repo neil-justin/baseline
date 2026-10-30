@@ -31,7 +31,7 @@ export default function StudentRow({
 }: {
   id: string;
   name: string;
-  /** compact sub-line that wraps under the name cell ("G11 · STEM") */
+  /** compact sub-line that wraps under the name cell ("4th Year · Computer & IT") */
   sub: string;
   /** declared career, or null for "Still deciding" */
   career: string | null;

@@ -5,6 +5,7 @@ import { WEIGHTS } from "@/lib/engines/score";
 import { rankOpenSkills } from "@/lib/engines/gaps";
 import { getResourcesForCareer, RESOURCES } from "@/lib/fixtures/resources";
 import { CHECKS } from "@/lib/fixtures/checks";
+import { trackLabelOf } from "@/lib/fixtures/catalog";
 import type { BarSource, Resource } from "@/lib/types";
 import "./progress.css";
 import ProgressView from "./ProgressView";
@@ -287,7 +288,10 @@ export default async function ProgressPage() {
       />
       <div className="prog-colophon hair">
         <div className="prog-colophon-in">
-          <span className="label">CAREER READINESS · PROGRESS · {state.name.toUpperCase()}, {state.grade} {state.strand}</span>
+          <span className="label">
+            CAREER READINESS · PROGRESS · {state.name.toUpperCase()},{" "}
+            {[state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(" · ")}
+          </span>
           <span className="label">EVERY NUMBER COMPUTED · CHECKS GATE CREDIT</span>
         </div>
       </div>
