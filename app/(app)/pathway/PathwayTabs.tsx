@@ -1,22 +1,26 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-
-/* useLayoutEffect runs before paint on the client (no shift on first
-   hydration) but React warns during SSR — pick per environment. */
-const useIsoLayoutEffect =
-  typeof window === "undefined" ? useEffect : useLayoutEffect;
+import { useEffect, useState } from "react";
 
 /**
- * Pathway tabs — MY PLAN re-cut to the dashboard DNA (v7.1, 2026-10-29):
- * a header band naming the surface ("My Plan") carries the tab strip and
- * the stage counters (drawn-circle numerals, current stage = chip + ink
- * emphasis, never a filled cell); the ranked First-30-days queue renders
- * as the family's dense plan table (STEP / RESOURCE / STATE / EFFECT /
- * ACTION heads, wash chips, computed SP effects); gaps re-break into
- * cells/column-heads with wash chips; the resources catalog keeps the
- * typed table and honors per-row start anchors. Content strings, e2e
- * hooks and roles stay verbatim; no entrance motion (DNA lock).
+ * Pathway tabs — MY PLAN, v7.2 Composition A (user-picked from the
+ * myplan-header-variants mock, 2026-10-30): a grey tray band names the
+ * surface ("My Plan") and carries the ranked path line + the stage
+ * counters (drawn-circle numerals, current stage = chip + ink emphasis,
+ * never a filled cell); the tabs MARRY the content card they control —
+ * cardtop = the segmented tablist + the computed "X OF N DONE" kicker;
+ * the forced-break mega ptitle headlines are abolished; the lead-mono
+ * counter lines stay verbatim. The equalize-panels height reservation
+ * (retired with this round) reserved the tallest hidden panel on the
+ * wrapper — its "footer push" purpose died with the v7.1 breadcrumb-row
+ * deletion, and inside the married card it read as a white void; the
+ * card now sizes to the active panel's content. The ranked
+ * First-30-days queue keeps the family's dense plan table (STEP /
+ * RESOURCE / STATE / EFFECT / ACTION heads, wash chips, computed SP
+ * effects); gaps re-break into cells/column-heads with wash chips; the
+ * resources catalog keeps the typed table and honors per-row start
+ * anchors. Content strings, e2e hooks and roles stay verbatim; no
+ * entrance motion (DNA lock).
  */
 
 export interface QRow {
@@ -46,7 +50,6 @@ export interface StageBandCell {
 }
 
 export interface StepsTab {
-  h1: string;
   closed: number;
   mapSize: number;
   done: number;
@@ -76,7 +79,6 @@ export interface GapRow {
 }
 
 export interface GapsTab {
-  h1: string;
   careerName: string;
   closed: number;
   mapSize: number;
@@ -107,7 +109,6 @@ export interface ResRow {
 }
 
 export interface ResourcesTab {
-  h1: string;
   careerName: string;
   rows: ResRow[];
   allClosed: boolean;
@@ -157,52 +158,6 @@ export default function PathwayTabs({
   const [seq, setSeq] = useState(0); // >0 only after a user-initiated switch
   const [s2open, setS2open] = useState(false);
   const [anchor, setAnchor] = useState<string | null>(null);
-  const rootRef = useRef<HTMLDivElement>(null);
-  const panelsRef = useRef<HTMLDivElement>(null);
-
-  /* CLS guard — panels differ in height, which used to push the footer on
-     every switch. Reserve the tallest panel's height on the wrapper so the
-     page height stays constant across tabs. Hidden panels are flashed
-     (visibility:hidden, pre-paint) to measure them. */
-  const equalizePanels = () => {
-    const wrap = panelsRef.current;
-    if (!wrap) return;
-    let max = 0;
-    for (const p of Array.from(
-      wrap.querySelectorAll<HTMLElement>(".tabpanel")
-    )) {
-      const wasHidden = p.hidden;
-      if (wasHidden) {
-        p.hidden = false;
-        p.style.visibility = "hidden";
-      }
-      max = Math.max(max, p.offsetHeight);
-      if (wasHidden) {
-        p.hidden = true;
-        p.style.visibility = "";
-      }
-    }
-    wrap.style.minHeight = max > 0 ? `${max}px` : "";
-  };
-
-  /* re-run on every render: covers tab switches, accordion toggles, and
-     fresh server data */
-  useIsoLayoutEffect(equalizePanels);
-
-  useEffect(() => {
-    let raf = 0;
-    const remeasure = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(equalizePanels);
-    };
-    window.addEventListener("resize", remeasure);
-    document.fonts?.ready.then(remeasure).catch(() => {});
-    return () => {
-      window.removeEventListener("resize", remeasure);
-      cancelAnimationFrame(raf);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   /* open tab from hash (default: ranked steps — beat 8 opens here) */
   useEffect(() => {
@@ -286,33 +241,46 @@ export default function PathwayTabs({
   ) : null;
 
   return (
-    <div className="v7plan" ref={rootRef}>
-      {/* header band — names the surface, carries the tabs + stage counters */}
+    <div className="v7plan">
+      {/* grey tray band (v7.2 Composition A): names the surface + the ranked
+          path line; the stage strip stays as band furniture. NO tabs here —
+          they marry the content card. Undecided: "My Plan" only, no desc. */}
       <section className="planband" aria-label="My Plan">
         <div className="band">
-          <div className="headrow">
+          <div className="bandrow">
             <div className="who">
               <h1 className="t">My Plan</h1>
-              {careerName ? <div className="m">For {careerName}</div> : null}
-            </div>
-            <div className="ptabs" role="tablist" aria-label="Pathway sections" onKeyDown={onTablistKey}>
-              {TABS.map((t) => (
-                <button key={t.id} type="button" {...tab(t.id)}>
-                  {t.label}
-                </button>
-              ))}
+              {careerName ? (
+                <p className="m">For {careerName} — your next steps, ranked by what carries the most weight first.</p>
+              ) : null}
             </div>
           </div>
           {stageBand}
         </div>
       </section>
 
-      <div className="tabpanels" ref={panelsRef}>
-      {undecided ? (
-        <section className="tabpanel" id="panel-steps" role="tabpanel" aria-labelledby="tab-steps" hidden={active !== "steps"}>
-          {defaultElement()}
-        </section>
-      ) : null}
+      {/* the ONE card the tabs marry — cardtop = tablist + the steps kicker */}
+      <section className="card tabcard">
+        <div className="cardtop">
+          <div className="ptabs" role="tablist" aria-label="Pathway sections" onKeyDown={onTablistKey}>
+            {TABS.map((t) => (
+              <button key={t.id} type="button" {...tab(t.id)}>
+                {t.label}
+              </button>
+            ))}
+          </div>
+          {!undecided && active === "steps" && !steps.allClosed ? (
+            <span className="kicker num">
+              {steps.done} OF {steps.done + steps.queue.length} DONE
+            </span>
+          ) : null}
+        </div>
+        <div className="tabpanels">
+        {undecided ? (
+          <section className="tabpanel" id="panel-steps" role="tabpanel" aria-labelledby="tab-steps" hidden={active !== "steps"}>
+            {defaultElement()}
+          </section>
+        ) : null}
 
       {/* ══════════════ TAB · RANKED STEPS (default, beat 8) ══════════════ */}
       {!undecided ? (
@@ -324,21 +292,15 @@ export default function PathwayTabs({
           aria-labelledby="tab-steps"
           hidden={active !== "steps"}
         >
-          <h2 className="ptitle">{steps.h1}</h2>
           <p className="lead-mono num">
             <b>{steps.closed}</b> of {steps.mapSize} skills checked <span className="sep">·</span> First 30
             days: <b>{steps.done}</b> of {steps.done + steps.queue.length} done
           </p>
 
-          <div className="card stagepanel">
+          <section className="panel-sec stagepanel">
             <div className="head">
               <b>First 30 days</b>
               <span>{steps.sub}</span>
-              {!steps.allClosed ? (
-                <span className="label num">
-                  {steps.done} OF {steps.done + steps.queue.length} DONE
-                </span>
-              ) : null}
             </div>
 
             {steps.clearLine ? (
@@ -403,10 +365,10 @@ export default function PathwayTabs({
             )}
 
             {!steps.clearLine ? <div className="foot">{steps.qfoot}</div> : null}
-          </div>
+          </section>
 
-          {/* stage ② accordion + stage ③ — one ending card, the peek line closes it */}
-          <div className="card stages">
+          {/* stage ② accordion + stage ③ — one ending section, the peek line closes it */}
+          <section className="panel-sec stages">
             {steps.remain.length > 0 ? (
               <button
                 className="stage-rowbtn"
@@ -487,7 +449,7 @@ export default function PathwayTabs({
               <span className="sr-count num">2 milestones</span>
             </div>
             {steps.peek ? <p className="stage-peek">{steps.peek}</p> : null}
-          </div>
+          </section>
         </section>
       ) : null}
 
@@ -504,14 +466,13 @@ export default function PathwayTabs({
           defaultElement()
         ) : (
           <>
-            <h2 className="ptitle">{gaps.h1}</h2>
             <p className="lead-mono num">
               For {gaps.careerName} <span className="sep">·</span> <b>{gaps.closed}</b> of {gaps.mapSize} skills
               checked
             </p>
 
             {/* badged skills ledger — cells + column heads + wash chips */}
-            <div className="card ledger">
+            <section className="panel-sec ledger">
               <div className="head">
                 <b>{gaps.careerName} skills</b>
                 <span>{gaps.mapSize} skills, one bar each — the badge says how it was closed.</span>
@@ -588,10 +549,10 @@ export default function PathwayTabs({
                 ✓ verified quiz: passed the short check · ✓✓ checked resource: finished it and passed ·
                 self-reported: your claim; a short check locks it in.
               </div>
-            </div>
+            </section>
 
             {/* honest competency strip (ES — the step-③ assessment carries it) */}
-            <div className="card softpanel">
+            <section className="panel-sec softpanel">
               <div className="g-row es-row">
                 <div>
                   <div className="g-name">Employability skills</div>
@@ -615,7 +576,7 @@ export default function PathwayTabs({
                   ? "NACE competencies verified by your assessment — E&I excluded by recorded choice."
                   : "The NACE assessment hasn’t measured this yet; nothing here stalls your next step."}
               </div>
-            </div>
+            </section>
 
             {gaps.allClosed ? (
               <p className="gap-cta"><span className="gap-allclosed">✓ everything closed.</span></p>
@@ -637,12 +598,11 @@ export default function PathwayTabs({
           defaultElement()
         ) : (
           <>
-            <h2 className="ptitle">{resources.h1}</h2>
             <p className="lead-mono num">
               For {resources.careerName} <span className="sep">·</span> free options first
             </p>
 
-            <div className="card rescard">
+            <section className="panel-sec rescard">
               <div className="res-table">
                 <div className="res-row res-heads" aria-hidden="true">
                   <span className="res-main">Resource</span>
@@ -685,11 +645,12 @@ export default function PathwayTabs({
                   </div>
                 ))}
               </div>
-            </div>
+            </section>
           </>
         )}
       </section>
       </div>
+      </section>
     </div>
   );
 }

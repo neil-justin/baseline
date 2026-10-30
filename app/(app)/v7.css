@@ -1,9 +1,14 @@
 /* ============================================================
    DNA v7 — the Google-school official console (LOCKED 2026-10-29)
-   App-shell system for every (app) surface: 56px top bar (brand
-   mark + wordmark + avatar disc only — no search, no bells) and
-   a 48px icon rail (Material pill active state). Roboto +
-   Material Symbols are SELF-HOSTED (defense venue runs offline).
+   App-shell system for every (app) surface. v7.2 shell round
+   (user-ruled 2026-10-30, from rail-margin-variants.html): the
+   56px top bar (brand mark + wordmark + icon+name headnav tabs +
+   avatar disc — no search, no bells) IS the desktop navigation;
+   the 48px icon rail RETIRES on desktop and survives solely as
+   the ≤720px Material bottom nav; the app frame caps at 1240px
+   centered with 8px shared gutters (the topbar lives inside the
+   cap, mock-verbatim). Roboto + Material Symbols are SELF-HOSTED
+   (defense venue runs offline).
 
    Everything is scoped under `.v7` (the (app) layout root) so the
    Index system in globals.css — and the surfaces still wearing it —
@@ -53,12 +58,22 @@
 
   background: var(--v-ground);
   min-height: 100dvh;
+  /* v7.2 shared-gutter cap: the frame (topbar INSIDE it, mock-verbatim)
+     caps at 1240px, centered, 8px shared gutters — no full-bleed stretch */
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 8px;
   display: grid;
-  grid-template-columns: 48px 1fr;
+  grid-template-columns: 1fr;
   grid-template-rows: 56px 1fr;
   position: relative;
   z-index: 0;
 }
+
+/* v7.2: beyond-cap margins read the cool console ground on (app) routes
+   only — the body ground is the Index-era #F4F5F4, so extend it narrowly
+   via :has; non-(app) routes (landing/auth/admin) keep their own wrappers */
+body:has(.v7) { background: #f8f9fa; }
 
 /* the shell <header> is display:contents so its children grid ARTH onto
    .v7's rows (topbar full-width, rail column) — role restored explicitly */
@@ -71,11 +86,11 @@
   grid-row: 1;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
   height: 56px;
   background: var(--v-surface);
   border-bottom: 1px solid var(--v-border);
-  padding: 0 12px 0 16px;
+  padding: 0 20px;
   position: sticky;
   top: 0;
   z-index: 40;
@@ -97,8 +112,7 @@
   background: var(--v-blue);
   border-radius: 1px;
 }
-.brand { font: 500 16px/1.2 Roboto, system-ui, sans-serif; padding: 0 10px 0 6px; color: var(--v-ink); }
-.topbar .spacer { flex: 1; }
+.brand { font: 500 16px/1.2 Roboto, system-ui, sans-serif; padding: 0 6px; color: var(--v-ink); }
 /* the ONLY right-side affordance: the user avatar disc → Profile */
 .avatar {
   width: 30px;
@@ -110,11 +124,44 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 4px;
+  margin-left: auto;
   flex: none;
   text-decoration: none;
 }
 .avatar:hover { background: var(--v-blue-deep); }
+
+/* ---------- headnav — the desktop top-bar tabs (v7.2, mock-verbatim
+   rail-margin-variants "top": flex gap 6px, items = Material icon +
+   13.5px/500 label, 7px 14px padding, 12px radius, idle ink-2; the
+   surface's own tab gets the #E8F0FE wash + #1557B0 ink; transparent
+   hover; no other affordances in the bar) ---------- */
+.headnav {
+  display: flex;
+  gap: 6px;
+  margin-left: 26px;
+  flex: 1;
+}
+.headnav a {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--v-ink2);
+  text-decoration: none;
+  font: 500 13.5px/1.2 Roboto, system-ui, sans-serif;
+  padding: 7px 14px;
+  border-radius: 12px;
+  white-space: nowrap;
+  transition: background-color 0.14s ease, color 0.14s ease;
+}
+.headnav a:hover { background: transparent; color: var(--v-ink); }
+.headnav a.on { background: var(--v-blue-wash); color: var(--v-blue-deep); }
+.headnav a.on:hover { background: var(--v-blue-wash); color: var(--v-blue-deep); }
+.headnav .ms { font-size: 18px; opacity: 0.85; }
+.headnav a.on .ms { opacity: 1; }
+.headnav a:focus-visible {
+  outline: 2px solid var(--v-blue);
+  outline-offset: 2px;
+}
 
 /* ---------- Material Symbols (self-hosted variable font) ---------- */
 
@@ -135,13 +182,12 @@
 }
 .ms.fill { font-variation-settings: "FILL" 1, "wght" 400, "opsz" 24; }
 
-/* ---------- icon rail (desktop) ----------
-   v7.1 Icon-Rail Rule: the rail reads as a WHITE SURFACE STRIP — #FFFFFF
-   ground, 1px #DADCE0 border, whisper shadow, 8px radius — never a bare
-   strip floating on page ground; the active item is a 12px-radius
-   rounded-rect blue-wash pill (#E8F0FE, blue #1A73E8 glyph), never a
-   circular effect. */
+/* ---------- icon rail (desktop) — RETIRED v7.2 ----------
+   The desktop rail is out of navigation (v7.2 shell round): the top bar's
+   headnav serves desktop. The .rail ELEMENT stays in the DOM and styles
+   below feed the ≤720px Material bottom nav. */
 .rail {
+  display: none;
   grid-column: 1;
   grid-row: 2;
   width: 48px;
@@ -150,7 +196,6 @@
   border: 1px solid var(--v-border);
   border-radius: 8px;
   box-shadow: var(--v-shadow);
-  display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
@@ -181,16 +226,18 @@
 .rail-caption { display: none; }
 
 .v7-main {
-  grid-column: 2;
+  grid-column: 1;
   grid-row: 2;
   min-width: 0;
 }
 
-/* ---------- responsive: rail collapses to a bottom nav ---------- */
+/* ---------- responsive: ≤720px — the Material bottom nav (the rail's
+   sole surviving form, v7.2) ---------- */
 
 @media (max-width: 720px) {
-  .v7 { grid-template-columns: 1fr; }
+  .headnav { display: none; }
   .rail {
+    display: flex;
     grid-column: 1;
     grid-row: auto;
     position: fixed;

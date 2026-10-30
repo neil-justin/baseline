@@ -1,20 +1,22 @@
 /* ============================================================
-   DNA v7 — My Plan surface (/pathway), RE-CUT to the dashboard
-   DNA (v7.1 amendments, user-ruled 2026-10-29). The v1 reskin
-   (token-true, composition-orphaned) is replaced: a header band
-   names the surface and carries the tab strip + stage counters;
-   the ranked queue renders as the family's dense plan table with
+   DNA v7 — My Plan surface (/pathway), v7.2 Composition A
+   (user-picked 2026-10-30, myplan-header-variants mock "A").
+   The grey tray band (#F1F3F4, 1px #DADCE0 border, 8px radius,
+   whisper shadow) names the surface and carries the ranked path
+   line + the stage counters; the tabs MARRY the content card they
+   control — cardtop = the segmented tablist + the computed
+   "X OF N DONE" kicker; the forced-break mega ptitle headlines
+   are abolished. The former per-tab cards become flush sections
+   of the one married card (never a card inside a card): the
+   ranked queue keeps the family's dense plan table with
    wash chips and computed SP effects; gaps re-break into cells
    with column heads + chips; numerals are the drawn 26px ink
    circles everywhere.
    Cool white-grey ground, white cards with 1px border + whisper
-   shadow, 8px radius; Material wash chips for state (blue
-   in-progress / green verified / amber pending / grey
-   unmeasured); honest fractions — evidence-closed solid,
-   self-report hatched, open empty, never red — inside cell
-   frames, never full-width stripes. Scoped under `.v7plan`
-   (the page root); shell chrome lives in ../v7.css. No entrance
-   motion (DNA lock).
+   shadow, 8px radius; Material wash chips for state; honest
+   fractions inside cell frames, never full-width stripes. Scoped
+   under `.v7plan` (the page root); shell chrome lives in
+   ../v7.css. No entrance motion (DNA lock).
    ============================================================ */
 
 .v7plan {
@@ -26,32 +28,32 @@
 .v7plan :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
 .v7plan a { color: inherit; }
 
-/* ---------- header band — names the surface, carries the tabs ---------- */
+/* ---------- header band — the grey tray (v7.2 Composition A) ---------- */
 
 .v7plan .planband { margin: 0; }
 .v7plan .planband .band {
-  background: var(--v-surface);
+  background: var(--v-grey-wash);
   border: 1px solid var(--v-border);
   border-radius: 8px;
   box-shadow: var(--v-shadow);
-  padding: 12px 16px 0;
-  margin-bottom: 12px;
+  padding: 14px 18px 0;
+  margin-bottom: 14px;
 }
-.v7plan .planband .headrow {
+.v7plan .planband .bandrow {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 12px 18px;
+  gap: 14px;
   flex-wrap: wrap;
-  padding: 2px 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--v-rows);
 }
 .v7plan .planband .who .t {
-  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
+  font: 500 18px/1.35 Roboto, system-ui, sans-serif;
   margin: 0;
   color: var(--v-ink);
 }
 .v7plan .planband .who .m {
-  font: 400 11.5px/1.4 Roboto, system-ui, sans-serif;
+  font: 400 13px/1.45 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   margin-top: 2px;
 }
@@ -84,13 +86,13 @@
 }
 .v7plan .ptabs [role="tab"]:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 1px; }
 
-/* stage counters — band furniture, drawn-circle numerals; the current
-   stage reads via chip + ink emphasis, never a filled cell (Wash Rule) */
+/* stage counters — tray furniture below the bandrow's rule (the bandrow
+   owns the divider now); drawn-circle numerals; the current stage reads
+   via chip + ink emphasis, never a filled cell (Wash Rule) */
 
 .v7plan .planband .stageband {
   display: flex;
   align-items: stretch;
-  border-top: 1px solid var(--v-rows);
 }
 .v7plan .planband .stagecell {
   flex: 1 1 0;
@@ -165,24 +167,48 @@
   );
 }
 
-/* ---------- per-tab head ---------- */
+/* ---------- the married card (v7.2 Composition A) ----------
+   ONE white card: cardtop carries the tablist + the computed steps
+   kicker; the active tabpanel renders inside it. The former per-tab
+   cards are flush `.panel-sec` sections of this card — never a card
+   inside a card. */
 
-.v7plan .tabpanel { margin-top: 4px; }
-.v7plan .tabpanel .ptitle {
-  font: 400 22px/1.4 Roboto, system-ui, sans-serif;
-  letter-spacing: 0;
-  max-width: 52ch;
-  text-wrap: balance;
-  margin: 8px 0 12px;
+.v7plan .card.tabcard { overflow: hidden; }
+.v7plan .tabcard .cardtop {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--v-rows);
+}
+/* the computed steps counter — the tracked-instrument register, married
+   to the card the tablist controls (moved out of the stagepanel head) */
+.v7plan .tabcard .cardtop .kicker {
+  flex: none;
+  margin-left: auto;
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
+}
+
+.v7plan .tabcard .tabpanel { margin: 0; }
+.v7plan .tabcard .lead-mono {
+  margin: 12px 16px;
 }
 .v7plan .lead-mono {
-  margin: -4px 0 12px;
+  margin: 0;
   font: 400 12px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   font-variant-numeric: tabular-nums;
 }
 .v7plan .lead-mono b { color: var(--v-ink); font-weight: 500; }
 .v7plan .lead-mono .sep { color: var(--v-meta); margin: 0 6px; }
+
+/* flush sections of the married card — the panel's former cards */
+.v7plan .panel-sec + .panel-sec { border-top: 1px solid var(--v-rows); }
 
 /* ---------- cards ---------- */
 
@@ -196,7 +222,6 @@
   display: block;
   padding: 0;
 }
-.v7plan .card + .card { margin-top: 12px; }
 .v7plan .card .head {
   display: flex;
   align-items: baseline;
@@ -341,7 +366,6 @@
 
 /* ---------- stages card (② accordion + ③ static; the peek ends the tab) ---------- */
 
-.v7plan .stages { overflow: hidden; }
 .v7plan .stage-rowbtn {
   width: 100%;
   display: flex;
@@ -482,7 +506,6 @@
 .v7plan .g-link:hover { color: var(--v-blue); text-decoration-color: var(--v-blue); }
 
 /* the ES strip on the same ledger footing */
-.v7plan .softpanel { overflow: hidden; }
 .v7plan .softpanel .g-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 118px 150px;
@@ -511,7 +534,6 @@
 
 /* ---------- resources tab — typed catalog table ---------- */
 
-.v7plan .card.rescard { overflow: hidden; }
 .v7plan .res-table { width: 100%; }
 .v7plan .res-row {
   display: flex;
@@ -586,15 +608,15 @@
   background: #f5f8fc;
 }
 
-/* ---------- undecided default (edge-case audit §2.35) ---------- */
+/* ---------- undecided default (edge-case audit §2.35) — a plain padded
+   block INSIDE the married card now (no card-in-card chrome, v7.2) */
 
-.v7plan .defaultband {
-  margin-top: 12px;
-  background: var(--v-surface);
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  box-shadow: var(--v-shadow);
-  padding: 22px 24px;
+.v7plan .tabcard .defaultband {
+  margin: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 24px 16px 28px;
 }
 .v7plan .defaultband p { font-size: 14px; line-height: 1.55; color: var(--v-ink2); max-width: 52ch; }
 .v7plan .defaultband .n-cta { margin-top: 14px; }
@@ -612,6 +634,9 @@
 @media (max-width: 720px) {
   .v7plan { padding: 12px 12px 80px; }
   .v7plan .planband .band { padding: 12px 12px 0; }
+  /* the married cardtop folds two-line: tabs, then the steps kicker */
+  .v7plan .tabcard .cardtop { padding: 8px 12px; }
+  .v7plan .tabcard .cardtop .kicker { flex: 1 1 100%; margin-left: 0; text-align: right; }
   /* block-stacked tables re-show the folded State cell (≤920 hide) */
   .v7plan .plan-table .ct-state { display: block; }
   /* the stage counters stack as a column */

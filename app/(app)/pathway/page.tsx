@@ -144,7 +144,6 @@ function buildSteps(
   ];
 
   return {
-    h1: `Your next steps toward ${career.name}, ordered by what carries the most weight first.`,
     closed: closedCount,
     mapSize,
     done: stageOneDone,
@@ -178,7 +177,6 @@ function buildGaps(
 ): GapsTab {
   const allClosed = openSkills(career, bars).length === 0;
   return {
-    h1: "Your gaps",
     careerName: career.name,
     closed: Object.keys(bars).length,
     mapSize: career.skills.length,
@@ -235,7 +233,6 @@ function buildResources(
     }
   );
   return {
-    h1: "Resources to close your gaps",
     careerName: career.name,
     rows,
     allClosed,
