@@ -27,7 +27,7 @@ if (error) {
   process.exit(1);
 }
 console.log(`deleted ${data?.length ?? 0} row(s) — student_id='neil' only`);
-for (const table of ["resume_runs", "letter_runs"]) {
+for (const table of ["resume_runs", "letter_runs", "credentials"]) {
   const { data: rows, error: runErr } = await admin
     .from(table)
     .delete()
@@ -47,7 +47,7 @@ for (const table of ["resume_runs", "letter_runs"]) {
 }
 // dev fallback stores (degraded schema or offline mode): clear Neil's rows so
 // a reseed can never read them back
-for (const file of ["data/resume-runs.json", "data/letter-runs.json"]) {
+for (const file of ["data/resume-runs.json", "data/letter-runs.json", "data/credentials.json"]) {
   if (existsSync(file)) {
     rmSync(file);
     console.log(`cleared dev fallback ${file}`);

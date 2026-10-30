@@ -57,8 +57,16 @@ create table if not exists public.credentials (
   status          text not null default 'declared' check (status in ('declared', 'verified', 'rejected')),
   verified_by     text,
   verified_at     timestamptz,
+  -- the audit's note — the REJECT-with-reason line (Round 7 re-cut, 2026-10-30
+  -- profile sweep): the Counselor writes it on a 'rejected' ruling; the student
+  -- side renders it verbatim and the revision loop carries it.
+  audit_note      text,
   created_at      timestamptz not null default now()
 );
+
+-- Migration note (round-7 re-cut, 2026-10-30): for an already-applied schema
+-- the audit-note column adds as:
+--   alter table public.credentials add column audit_note text;
 
 -- Migration note (ticket 12, 2026-10-29): for an already-applied schema the
 -- kind constraint re-creates as:
