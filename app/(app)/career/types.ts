@@ -9,27 +9,39 @@ export interface VerifiedBarData {
   src: string;
 }
 
-export interface ExploreRowData {
+/**
+ * One row of the careers one-list (ruled page architecture, 2026-10-30):
+ * the AI-ranked "Best matches for you" lens and the track-filtered
+ * "All roles" lens both render THIS dataset — the fit numbers are engine
+ * truth (skillsMatch over demonstrated bars only), never painted.
+ */
+export interface RoleRowData {
   id: string;
   name: string;
-  /** display strand line, "(any)" → "· open to any strand" */
-  strand: string;
-  skills: number;
+  /** college track display label ("Computer & IT" · …) */
+  trackLabel: string;
+  /** unweighted demonstrated overlap — "x of y" via skillsMatch (locked M3) */
+  x: number;
+  /** size of the career's skill map */
+  y: number;
+  /** one-line what-you-do (WHAT trio override → roleSummary) */
+  what: string;
+  /** why-this-fits for the CURRENT target only (hand-authored trio/fallback) */
+  why: string;
   entry: string;
   /** the one row wired to the switch flow (demo beat 6) */
   live: boolean;
-}
-
-export interface MatchRowData {
-  id: string;
-  name: string;
-  /** unweighted demonstrated count (verified ·✓ / checked ·✓✓ only) */
-  x: number;
-  y: number;
+  /** the declared target row */
   current: boolean;
+  /** provenance of the fit number — empty unless x > 0 */
   confirmed: VerifiedBarData[];
+  /** claimed skills that sit on this map (never counted toward matching) */
   selfReported: string[];
-  entry: string;
+  /** role-detail blocks — catalog truth, cited */
+  psoc: string;
+  majors: string;
+  demand: string;
+  skillsSummary: string;
 }
 
 export interface ReassessRow {
@@ -53,18 +65,18 @@ export interface CareerCardData {
 }
 
 export interface CareerProps {
-  /** null = undecided student → current-career tab shows the explore CTA default */
+  /** null = undecided student → the current-career card shows the browse CTA default */
   card: CareerCardData | null;
   /** all proven skills on the profile (verified ·✓ / checked ·✓✓), any career */
   verifiedBars: VerifiedBarData[];
   activeGoalTitle: string | null;
   /** pre-switch bars snapshot: Record<skill, source> — the dip's carried-exclusion basis */
   barsSources: Record<string, string>;
-  explore: ExploreRowData[];
+  /** the whole catalog as ranked rows (Best matches + All roles share it) */
+  roles: RoleRowData[];
   exploreTotal: number;
-  matches: MatchRowData[];
-  /** zero confirmed skills → skills-match renders its single compressed default row */
+  /** zero demonstrated skills → the ranked lens renders its compressed default row */
   zeroConfirmed: boolean;
-  /** the switch target's 7-skill map for the quick re-assessment screen */
+  /** the switch target's 7-skill map for the quick re-assessment screen (canon: qa) */
   reassess: ReassessRow[];
 }

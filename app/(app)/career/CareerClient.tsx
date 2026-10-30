@@ -1,40 +1,45 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SegRubricBar, VBadge } from "@/components/instrument";
 import { rubricParts } from "@/lib/engines/rubric";
 import { roundHalfDown, WEIGHTS, type Score } from "@/lib/engines/score";
-
-/* useLayoutEffect runs before paint on the client (no shift on first
-   hydration) but React warns during SSR — pick per environment. */
-const useIsoLayoutEffect =
-  typeof window === "undefined" ? useEffect : useLayoutEffect;
-import type {
-  CareerProps,
-  ExploreRowData,
-  MatchRowData,
-  VerifiedBarData,
-} from "./types";
+import { reassessDisplay, reassessWhat } from "./career-copy";
+import type { CareerProps, RoleRowData, VerifiedBarData } from "./types";
 
 /**
- * Career surface interactivity — port of prototype/career.html's <script>:
- * 3 tabs (current card / explore by track / skills-match), the cost-first
- * switch disclosure, and the beat-6 chain: confirm → POST /api/switch →
- * honest dip → quick re-assessment → POST /api/claim → recovered baseline.
+ * v7.2 Careers surface interactivity — one role list, zero sub-tabs (ruled
+ * page architecture 2026-10-28): the AI-ranked "Best matches for you" lens is
+ * the DEFAULT reader of the single role card, with the track-filtered "All
+ * roles" fallback; role rows expand into the ruled role-detail blocks
+ * (catalog truth only), and the beat-6 SWITCH chain stays byte-honest:
+ * confirm → POST /api/switch → honest dip → quick re-assessment →
+ * POST /api/claim → recovered baseline.
  *
  * Dip basis: canon `_fixture-math.md` beat 6 reads SP 0 at the switch — a
  * ·✓ skill's transfer re-registers on the new career map at the re-assessment.
  * The readout therefore counts bars closed on the new map EXCLUDING the
- · carried set (computed from the real state transition, never painted).
+ * carried set (computed from the real state transition, never painted).
  */
 
-type Tab = "current" | "explore" | "match";
+type Lens = "ranked" | (typeof TRACK_CHIPS)[number];
 type Flow = "tabs" | "confirm" | "reset" | "recovered";
 type Rating = "yes" | "some" | "no";
 
-const TARGET_NAME = "Software QA Analyst";
-const TAB_ORDER: Tab[] = ["current", "explore", "match"];
+const TRACK_CHIPS = [
+  "All",
+  "Computer & IT",
+  "Business & Management",
+  "Accounting & Finance",
+  "Office & Administration",
+] as const;
+const LENS_CHIPS = ["Best matches for you", ...TRACK_CHIPS] as const;
+
+const CANON_TARGET: { id: string; name: string } = {
+  id: "qa",
+  name: "Software QA Analyst",
+};
 const LEVEL_BY_RATING: Record<Rating, "confident" | "kindof" | "notyet"> = {
   yes: "confident",
   some: "kindof",
@@ -45,13 +50,6 @@ const DEFAULT_RATINGS: Record<string, Rating> = {
   "Defect management": "yes",
   "Applications Support and Enhancement": "yes",
 };
-const TRACK_CHIPS = [
-  "All",
-  "Computer & IT",
-  "Business & Management",
-  "Accounting & Finance",
-  "Office & Administration",
-] as const;
 
 interface DipView {
   score: Score;
@@ -95,6 +93,11 @@ function Arrow() {
   );
 }
 
+function Chev() {
+  /* drawn chevron — borders, no glyph font (family spec) */
+  return <span className="chev" aria-hidden="true" />;
+}
+
 function BarLabel(score: Score, sub: string): string {
   return (
     `Score ${score.total} of 100 ${sub} — skill progress ${score.sp} of ${WEIGHTS.sp}, employability skills ${score.es} of ${WEIGHTS.es}, ` +
@@ -107,20 +110,20 @@ export default function CareerClient({
   verifiedBars,
   activeGoalTitle,
   barsSources,
-  explore,
+  roles,
   exploreTotal,
-  matches,
   zeroConfirmed,
-  reassess,
+  reassess: reassessCanon,
 }: CareerProps) {
   const router = useRouter();
-  const [tab, setTab] = useState<Tab>("current");
+  const [lens, setLens] = useState<Lens>("ranked");
+  const [openId, setOpenId] = useState<string | null>(null);
   const [flow, setFlow] = useState<Flow>("tabs");
   const [discOpen, setDiscOpen] = useState(false);
   const [banner, setBanner] = useState(false);
-  const [strand, setStrand] = useState<string>("All");
   const [busy, setBusy] = useState(false);
   const [armed, setArmed] = useState(false);
+  const [flowTarget, setFlowTarget] = useState<{ id: string; name: string }>(CANON_TARGET);
   const [preSwitch, setPreSwitch] = useState<{
     fromName: string;
     verified: VerifiedBarData[];
@@ -130,81 +133,13 @@ export default function CareerClient({
   const [reset, setReset] = useState<ResetData | null>(null);
   const [recovered, setRecovered] = useState<RecoveredData | null>(null);
   const [qaGoalPosted, setQaGoalPosted] = useState(false);
+  const [reassess, setReassess] = useState(reassessCanon);
 
-  /* CLS guard — the three tab panels differ in height, which pushes the page
-     end (and scroll position) on every switch. Reserve the tallest panel's
-     height on the wrapper so the page height stays constant across tabs.
-     Hidden panels are flashed (visibility:hidden, pre-paint) to measure. */
-  const panelsRef = useRef<HTMLDivElement>(null);
-
-  const equalizePanels = () => {
-    const wrap = panelsRef.current;
-    if (!wrap) return;
-    let max = 0;
-    for (const p of Array.from(
-      wrap.querySelectorAll<HTMLElement>('[role="tabpanel"]')
-    )) {
-      const wasHidden = p.hidden;
-      if (wasHidden) {
-        p.hidden = false;
-        p.style.visibility = "hidden";
-      }
-      max = Math.max(max, p.offsetHeight);
-      if (wasHidden) {
-        p.hidden = true;
-        p.style.visibility = "";
-      }
-    }
-    wrap.style.minHeight = max > 0 ? `${max}px` : "";
-  };
-
-  /* re-run on every render: covers tab switches, track filters, and flow returns */
-  useIsoLayoutEffect(equalizePanels);
-
-  useEffect(() => {
-    let raf = 0;
-    const remeasure = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(equalizePanels);
-    };
-    window.addEventListener("resize", remeasure);
-    document.fonts?.ready.then(remeasure).catch(() => {});
-    return () => {
-      window.removeEventListener("resize", remeasure);
-      cancelAnimationFrame(raf);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  async function postQaGoal() {
-    setBusy(true);
-    try {
-      const res = await fetch("/api/goal", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          student: "neil",
-          title: "Build my first test plan",
-          type: "training",
-          resourceId: "res-qa-testing",
-          skill: "Software Testing",
-        }),
-      });
-      if (!res.ok) throw new Error("goal failed");
-      setQaGoalPosted(true);
-      router.refresh();
-    } catch {
-      /* honest failure: button stays enabled; the demo retries */
-    } finally {
-      setBusy(false);
-    }
-  }
   const [ratings, setRatings] = useState<Record<string, Rating>>(() =>
-    Object.fromEntries(reassess.map((r) => [r.name, DEFAULT_RATINGS[r.name] ?? "no"]))
+    Object.fromEntries(reassessCanon.map((r) => [r.name, DEFAULT_RATINGS[r.name] ?? "no"]))
   );
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  // arm the reset/recovered rubric bars ~250ms after the section shows
+  /* arm the reset/recovered rubric bars ~250ms after the section shows */
   useEffect(() => {
     if (flow === "reset" || flow === "recovered") {
       const t = setTimeout(() => setArmed(true), 250);
@@ -213,27 +148,79 @@ export default function CareerClient({
     setArmed(false);
   }, [flow]);
 
-  const selectTab = (id: Tab) => {
-    setTab(id);
-    window.scrollTo(0, 0);
-  };
+  const scrollTop = () => window.scrollTo(0, 0);
 
-  const onTabKey = (e: React.KeyboardEvent, index: number) => {
-    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-    e.preventDefault();
-    const d = e.key === "ArrowRight" ? 1 : -1;
-    const n = (index + d + TAB_ORDER.length) % TAB_ORDER.length;
-    tabRefs.current[n]?.focus();
-    selectTab(TAB_ORDER[n]);
-  };
-
-  // ---------- track filter ----------
-  const rows: ExploreRowData[] =
-    strand === "All" ? explore : explore.filter((r) => r.strand.includes(strand));
+  // ---------- lens + the one list ----------
+  /* ranked ordering reads the engine's fit numbers (server-computed
+     skillsMatch), deepest overlap first, catalog order breaking ties —
+     never a painted rank */
+  const ranked = [...roles].sort((a, b) => b.x - a.x);
+  const rows: RoleRowData[] =
+    lens === "ranked"
+      ? ranked
+      : lens === "All"
+        ? roles
+        : roles.filter((r) => r.trackLabel === lens);
   const zeroResult = rows.length === 0;
+  const colsClass = lens === "ranked" ? "cols-ranked" : "cols-track";
+
+  const rowWhy = (r: RoleRowData) => {
+    if (r.current) return r.why;
+    if (r.x > 0) return "receipts" as const;
+    return r.what;
+  };
+
+  const matchSub = (m: RoleRowData) => {
+    if (m.x === 0) {
+      return null; // zero rows read the what-line instead (see rowWhy)
+    }
+    return (
+      <>
+        {m.confirmed.map((c, i) => (
+          <span key={c.name}>
+            {i > 0 && " "}
+            <VBadge ok>
+              {c.name} ·{c.src === "verified" ? "✓" : "✓✓"}
+            </VBadge>
+          </span>
+        ))}{" "}
+        confirmed
+        {m.selfReported.length > 0
+          ? ` · ${m.selfReported.map((n) => n.toLowerCase()).join(", ")} self-reported`
+          : ""}
+      </>
+    );
+  };
 
   // ---------- switch flow ----------
-  const openConfirm = () => {
+  const openConfirm = async (id: string) => {
+    // canon keeps the server-fed re-assessment rows; other roles resolve
+    // their own skill map lazily (catalog import is code-split)
+    if (id !== CANON_TARGET.id) {
+      try {
+        const { getCareer } = await import("@/lib/fixtures/catalog");
+        const t = getCareer(id);
+        if (t) {
+          setFlowTarget({ id: t.id, name: t.name });
+          const next = t.skills.map((s) => ({
+            name: s.name,
+            display: reassessDisplay(s.name),
+            what: reassessWhat(s.name, s.what),
+          }));
+          setReassess(next);
+          setRatings((prev) => {
+            const merged: Record<string, Rating> = {};
+            for (const r of next) merged[r.name] = prev[r.name] ?? DEFAULT_RATINGS[r.name] ?? "no";
+            return merged;
+          });
+        }
+      } catch {
+        return; // honest failure — nothing changes
+      }
+    } else {
+      setFlowTarget(CANON_TARGET);
+      setReassess(reassessCanon);
+    }
     setPreSwitch({
       fromName: card?.name ?? "",
       verified: verifiedBars,
@@ -242,19 +229,20 @@ export default function CareerClient({
     });
     setDiscOpen(false);
     setFlow("confirm");
-    window.scrollTo(0, 0);
+    scrollTop();
   };
 
   const enterSwitch = () => {
     setDiscOpen(false);
     setBanner(true);
-    selectTab("explore");
+    setLens("All");
+    scrollTop();
   };
 
   const cancelSwitch = () => {
     setBanner(false);
     setFlow("tabs");
-    selectTab("current");
+    scrollTop();
   };
 
   async function doSwitch() {
@@ -264,7 +252,7 @@ export default function CareerClient({
       const res = await fetch("/api/switch", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ to: "qa", student: "neil" }),
+        body: JSON.stringify({ to: flowTarget.id, student: "neil" }),
       });
       if (!res.ok) throw new Error("switch failed");
       router.refresh();
@@ -294,7 +282,7 @@ export default function CareerClient({
         carried: v.state.decisions?.verifiedTransferred ?? [],
       });
       setFlow("reset");
-      window.scrollTo(0, 0);
+      scrollTop();
     } catch {
       setFlow("tabs");
     } finally {
@@ -338,7 +326,7 @@ export default function CareerClient({
           .map(([name]) => name),
       });
       setFlow("recovered");
-      window.scrollTo(0, 0);
+      scrollTop();
     } catch {
       setFlow("reset");
     } finally {
@@ -346,171 +334,172 @@ export default function CareerClient({
     }
   }
 
-  const backToCareer = (toTab: Tab) => {
+  const backToCareer = () => {
     setRecovered(null);
     setFlow("tabs");
     setBanner(false);
-    selectTab(toTab);
+    setLens("ranked");
+    scrollTop();
   };
 
-  // ---------- markup helpers ----------
-  const tabBtn = (id: Tab, index: number, label: string) => (
-    <button
-      key={id}
-      ref={(el) => {
-        tabRefs.current[index] = el;
-      }}
-      className="tab-btn"
-      id={`tb-${id}`}
-      role="tab"
-      data-panel={`tab-${id}`}
-      aria-selected={tab === id}
-      aria-controls={`tab-${id}`}
-      tabIndex={tab === id ? 0 : -1}
-      onClick={() => selectTab(id)}
-      onKeyDown={(e) => onTabKey(e, index)}
-    >
-      {label}
-    </button>
+  async function postQaGoal() {
+    setBusy(true);
+    try {
+      const res = await fetch("/api/goal", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          student: "neil",
+          title: "Build my first test plan",
+          type: "training",
+          resourceId: "res-qa-testing",
+          skill: "Software Testing",
+        }),
+      });
+      if (!res.ok) throw new Error("goal failed");
+      setQaGoalPosted(true);
+      router.refresh();
+    } catch {
+      /* honest failure: button stays enabled; the demo retries */
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  // ---------- markup ----------
+  const bandcell = (label: string, value: string, num?: boolean) => (
+    <div className="bcell" key={label}>
+      <span className="label">{label}</span>
+      <span className={`bval${num ? " num" : ""}`}>{value}</span>
+    </div>
   );
 
-  const matchSub = (m: MatchRowData) => {
-    if (m.x === 0) {
-      return <>no overlap yet; its {m.y} skills aren&apos;t on your baseline ({m.entry})</>;
-    }
-    return (
-      <>
-        {m.confirmed.map((c, i) => (
-          <span key={c.name}>
-            {i > 0 && " "}
-            <VBadge ok>
-              {c.name} ·{c.src === "verified" ? "✓" : "✓✓"}
-            </VBadge>
-          </span>
-        ))}{" "}
-        confirmed
-        {m.selfReported.length > 0
-          ? ` · ${m.selfReported.map((n) => n.toLowerCase()).join(", ")} self-reported`
-          : m.x === 1
-            ? " · the only skill the two lists share"
-            : ""}
-      </>
-    );
-  };
-
   return (
-    <>
+    <div className="v7career">
       {/* ============================================================
-          VIEW · Career (tabs) — default state
+          VIEW · Careers — default state (one list, zero sub-tabs)
           ============================================================ */}
-      <div id="career-view" className="app-section" style={{ paddingBottom: 64 }} hidden={flow !== "tabs"}>
-        <div className="shell">
-        <div className="screen-head">
-          <h1>Your career</h1>
-          <p>Where you&apos;re headed. Change it whenever you want.</p>
-        </div>
+      <section id="career-view" hidden={flow !== "tabs"}>
+        {/* named band — instrument counters computed from state */}
+        <header className="band">
+          <div className="bandrow">
+            <div className="who">
+              <h1 className="t">Your career</h1>
+              <p className="m">Where you&apos;re headed. Change it whenever you want.</p>
+            </div>
+            <div className="bandcells">
+              {bandcell("Target role", card ? card.name : "Not picked yet")}
+              {bandcell("Skill map", card ? `${card.closed} of ${card.mapSize} on your baseline` : "—", true)}
+              {bandcell("First 30 days", card ? `${card.stageOneDone} of 3 done` : "—", true)}
+            </div>
+          </div>
+        </header>
 
-        {/* tab bar */}
-        <div className="choice tabs" role="tablist" aria-label="Career sections">
-          {tabBtn("current", 0, "Current career")}
-          {tabBtn("explore", 1, "Explore by track")}
-          {tabBtn("match", 2, "Skills-match")}
-        </div>
-
-        <div className="tabpanels" ref={panelsRef}>
-        {/* ---------- tab 1 · current career card ---------- */}
-        <div id="tab-current" role="tabpanel" aria-labelledby="tb-current" hidden={tab !== "current"}>
-          {card ? (
-            <div className="panel cc-card">
-              <div className="cc-top">
-                <div className="cc-id">
-                  <span className="label">CURRENT CAREER</span>
-                  <h2 className="cc-name">{card.name}</h2>
-                  <p className="cc-what">{card.what}</p>
-                </div>
-                <span className="badge">{card.strandDisplay}</span>
+        {/* ---------- current-career card ---------- */}
+        {card ? (
+          <div className="card cc-card">
+            <div className="cc-top">
+              <div className="cc-id">
+                <span className="label">CURRENT CAREER</span>
+                <h2 className="cc-name">{card.name}</h2>
+                <p className="cc-what">{card.what}</p>
               </div>
+              <span className="chip c-blue cc-badge">{card.strandDisplay}</span>
+            </div>
 
-              <div className="cc-grid">
-                <div className="cc-why">
-                  <span className="label">WHY THIS FITS YOU</span>
-                  <p>{card.why}</p>
-                </div>
-                <div className="cc-facts">
-                  <div className="cc-fact">
-                    <span className="label">ENTRY PATH</span>
-                    <p className="num">{card.entry}</p>
-                  </div>
-                  <div className="cc-fact">
-                    <span className="label">SKILL MAP</span>
-                    <p className="num">
-                      {card.closed} of {card.mapSize} skills on your baseline · First 30 days:{" "}
-                      {card.stageOneDone} of 3 done
-                    </p>
-                  </div>
-                </div>
+            <div className="cc-grid">
+              <div className="cc-why">
+                <span className="label">WHY THIS FITS YOU</span>
+                <p>{card.why}</p>
               </div>
-
-              <div className="cc-ctas">
-                <a className="btn btn-primary" href="/pathway">
-                  See your gaps <Arrow />
-                </a>
-                <button className="btn btn-ghost" type="button" onClick={() => selectTab("explore")}>
-                  Explore more careers
-                </button>
-              </div>
-
-              <div className="cc-switch">
-                <button
-                  className="quiet-toggle"
-                  type="button"
-                  aria-expanded={discOpen}
-                  aria-controls="switch-disclosure"
-                  onClick={() => setDiscOpen((o) => !o)}
-                >
-                  Switch career
-                </button>
-                <div className={`disclosure ${discOpen ? "show" : ""}`} id="switch-disclosure">
-                  <p>
-                    Switching resets your gap bars and your score toward the new career; it rebuilds from
-                    what you can actually do. Skills you&apos;ve already proven (
-                    {verifiedBars.map((b, i) => (
-                      <span key={b.name}>
-                        {i > 0 && " "}
-                        <VBadge ok>
-                          {b.name} ·{b.src === "verified" ? "✓" : "✓✓"}
-                        </VBadge>
-                      </span>
-                    ))}
-                    ) and your goals stay confirmed on your profile.{" "}
-                    <button className="quiet-toggle disc-go" type="button" onClick={enterSwitch}>
-                      Browse careers to switch →
-                    </button>
+              <div className="cc-facts">
+                <div className="cc-fact">
+                  <span className="label">ENTRY PATH</span>
+                  <p className="num">{card.entry}</p>
+                </div>
+                <div className="cc-fact">
+                  <span className="label">SKILL MAP</span>
+                  <p className="num">
+                    {card.closed} of {card.mapSize} skills on your baseline · First 30 days:{" "}
+                    {card.stageOneDone} of 3 done
                   </p>
                 </div>
               </div>
             </div>
-          ) : (
-            /* ⏳ undecided default (edge-case audit §2) */
-            <div className="panel cc-card">
-              <div className="cc-top">
-                <div className="cc-id">
-                  <span className="label">CURRENT CAREER</span>
-                  <h2 className="cc-name">No career picked yet</h2>
-                  <p className="cc-what">You haven&apos;t picked yet — explore by track.</p>
-                </div>
-              </div>
-              <div className="cc-ctas">
-                <button className="btn btn-primary" type="button" onClick={() => selectTab("explore")}>
-                  Explore by track
-                </button>
+
+            <div className="cc-ctas">
+              <a className="btn btn-primary" href="/pathway">
+                See your gaps <Arrow />
+              </a>
+              <button
+                className="btn btn-ghost"
+                type="button"
+                onClick={() => {
+                  setLens("All");
+                  scrollTop();
+                }}
+              >
+                Explore more careers
+              </button>
+            </div>
+
+            <div className="cc-switch">
+              <button
+                className="quiet-toggle"
+                type="button"
+                aria-expanded={discOpen}
+                aria-controls="switch-disclosure"
+                onClick={() => setDiscOpen((o) => !o)}
+              >
+                Switch career
+              </button>
+              <div className={`disclosure ${discOpen ? "show" : ""}`} id="switch-disclosure">
+                <p>
+                  Switching resets your gap bars and your score toward the new career; it rebuilds from
+                  what you can actually do. Skills you&apos;ve already proven (
+                  {verifiedBars.map((b, i) => (
+                    <span key={b.name}>
+                      {i > 0 && " "}
+                      <VBadge ok>
+                        {b.name} ·{b.src === "verified" ? "✓" : "✓✓"}
+                      </VBadge>
+                    </span>
+                  ))}
+                  ) and your goals stay confirmed on your profile.{" "}
+                  <button className="quiet-toggle disc-go" type="button" onClick={enterSwitch}>
+                    Browse careers to switch →
+                  </button>
+                </p>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          /* undecided default (edge-case audit §2) */
+          <div className="card cc-card">
+            <div className="cc-top">
+              <div className="cc-id">
+                <span className="label">CURRENT CAREER</span>
+                <h2 className="cc-name">No career picked yet</h2>
+                <p className="cc-what">You haven&apos;t picked yet — explore by track.</p>
+              </div>
+            </div>
+            <div className="cc-ctas">
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={() => {
+                  setLens("All");
+                  scrollTop();
+                }}
+              >
+                Explore by track
+              </button>
+            </div>
+          </div>
+        )}
 
-        {/* ---------- tab 2 · explore by track ---------- */}
-        <div id="tab-explore" role="tabpanel" aria-labelledby="tb-explore" hidden={tab !== "explore"}>
+        {/* ---------- the one role list (Best matches / All roles) ---------- */}
+        <div className="card rolecard">
           {banner && (
             <div className="sw-banner">
               You&apos;re browsing to switch. Look around first; nothing changes until you pick a new career
@@ -518,87 +507,40 @@ export default function CareerClient({
             </div>
           )}
 
-          <div className="explore-head">
-            <h2>Explore careers by track</h2>
-            <p>Every track leads somewhere real. Each listing shows what it opens up and what it takes to get in.</p>
-          </div>
-
-          <div className="choice choice-sm strand-chips" role="group" aria-label="Filter by track" id="strand-chips">
-            {TRACK_CHIPS.map((s) => (
-              <button
-                key={s}
-                type="button"
-                aria-pressed={strand === s}
-                onClick={() => setStrand(s)}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-          <p className="label explore-count num" id="explore-count">
-            SHOWING {rows.length} OF {exploreTotal} CAREERS
-          </p>
-
-          <div className="panel index-table" style={{ overflow: "hidden" }}>
-            <div className="index-colheads label" aria-hidden="true">
-              <span>CAREER</span>
-              <span>STRAND</span>
-              <span>SKILLS</span>
-              <span>ENTRY PATH</span>
-            </div>
-            {rows.map((r) =>
-              r.live && card?.id !== r.id ? (
+          <div className="cardtop">
+            <div className="ptabs" role="group" aria-label="Filter by track" id="strand-chips">
+              {LENS_CHIPS.map((s) => (
                 <button
-                  key={r.id}
-                  className="index-row row-live"
+                  key={s}
                   type="button"
-                  onClick={openConfirm}
+                  aria-pressed={lens === s}
+                  onClick={() => {
+                    setLens(s as Lens);
+                    setOpenId(null);
+                  }}
                 >
-                  <span className="career">
-                    {r.name} <span className="mono row-go" aria-hidden="true">→</span>
-                  </span>
-                  <span className="strand">{r.strand}</span>
-                  <span className="skills">
-                    <span className="num">{r.skills}</span>
-                  </span>
-                  <span className="entry">{r.entry}</span>
+                  {s}
                 </button>
-              ) : (
-                <div key={r.id} className="index-row">
-                  <span className="career">{r.name}</span>
-                  <span className="strand">{r.strand}</span>
-                  <span className="skills">
-                    <span className="num">{r.skills}</span>
-                  </span>
-                  <span className="entry">{r.entry}</span>
-                </div>
-              )
-            )}
-          </div>
-
-          {/* zero-result default state for the strand filter */}
-          {zeroResult && (
-            <div className="panel explore-empty">
-              No careers indexed for this track yet — try{" "}
-              <button className="g-link" type="button" onClick={() => setStrand("All")}>
-                All
-              </button>{" "}
-              to see the full index.
+              ))}
             </div>
-          )}
-
-        </div>
-
-        {/* ---------- tab 3 · skills-match ---------- */}
-        <div id="tab-match" role="tabpanel" aria-labelledby="tb-match" hidden={tab !== "match"}>
-          <div className="explore-head">
-            <h2>Careers closest to what you know</h2>
-            <p>Ranked by how much of each career&apos;s skill list is already on your baseline.</p>
+            <span className="kicker num" id="explore-count">
+              SHOWING {rows.length} OF {exploreTotal} CAREERS
+            </span>
           </div>
 
-          {zeroConfirmed ? (
-            /* ⏳ zero-confirmed default (edge-case audit §2): single compressed row */
-            <div className="panel match-table">
+          {/* lens context — one small head per lens, kept from the previous tabs */}
+          <div className="lens-head">
+            <b>{lens === "ranked" ? "Careers closest to what you know" : "Explore careers by track"}</b>
+            <span>
+              {lens === "ranked"
+                ? "Ranked by how much of each career's skill list is already on your baseline."
+                : "Every track leads somewhere real. Each listing shows what it opens up and what it takes to get in."}
+            </span>
+          </div>
+
+          {zeroConfirmed && lens === "ranked" ? (
+            /* zero-demonstrated default (edge-case audit §2): the compressed row */
+            <div className="match-table">
               <div className="match-head label" aria-hidden="true">
                 <span>CAREER</span>
                 <span>SKILLS IN COMMON</span>
@@ -615,49 +557,188 @@ export default function CareerClient({
                 </p>
               </div>
             </div>
+          ) : zeroResult ? (
+            <div className="match-table explore-empty">
+              No careers indexed for this track yet — try{" "}
+              <button className="g-link" type="button" onClick={() => setLens("All")}>
+                All
+              </button>{" "}
+              to see the full index.
+            </div>
           ) : (
-            <div className="panel match-table">
-              <div className="match-head label" aria-hidden="true">
-                <span>CAREER</span>
-                <span>SKILLS IN COMMON</span>
+            <div className={`index-table ${colsClass}`}>
+              <div className="index-colheads" aria-hidden="true">
+                {lens === "ranked" && <span className="ch-rank">RANK</span>}
+                <span className="ch-career">CAREER</span>
+                {lens === "ranked" ? (
+                  <span className="ch-fit">SKILLS IN COMMON</span>
+                ) : (
+                  <>
+                    <span className="ch-track">TRACK</span>
+                    <span className="ch-skills">SKILLS</span>
+                  </>
+                )}
+                <span className="ch-entry">ENTRY PATH</span>
+                <span className="ch-exp" aria-hidden="true" />
               </div>
-              {matches.map((m) => (
-                <div className="match-row" key={m.id}>
-                  <div className="m-main">
-                    <span className="m-name">{m.name}</span>
-                    {m.current && <span className="badge">CURRENT</span>}
+
+              {rows.map((r, i) => {
+                const liveRow = r.live && card?.id !== r.id;
+                if (liveRow) {
+                  return (
+                    <button
+                      key={r.id}
+                      className={`index-row row-live ${colsClass}`}
+                      type="button"
+                      onClick={() => openConfirm(r.id)}
+                    >
+                      {lens === "ranked" && <span className="rank num">{i + 1}</span>}
+                      <span className="cell-career">
+                        <span className="c-name">
+                          {r.name} <span className="mono row-go" aria-hidden="true">→</span>
+                        </span>
+                        <span className="c-sub num">
+                          {rowWhy(r) === "receipts" ? matchSub(r) : rowWhy(r)}
+                        </span>
+                      </span>
+                      {lens === "ranked" ? (
+                        <span className="cell-fit" aria-label={`${r.x} of ${r.y} skills in common`}>
+                          <span className="fit-line num">{r.x} of {r.y}</span>
+                          <span className="mbar" aria-hidden="true">
+                            <i style={{ width: `${(r.x / r.y) * 100}%` }} />
+                          </span>
+                        </span>
+                      ) : (
+                        <>
+                          <span className="cell-track">{r.trackLabel}</span>
+                          <span className="cell-skills num">{r.y}</span>
+                        </>
+                      )}
+                      <span className="cell-entry num">{r.entry}</span>
+                      <span className="cell-exp" aria-hidden="true" />
+                    </button>
+                  );
+                }
+                return (
+                  <div className="role-block" key={r.id}>
+                    <div
+                      className={`index-row ${colsClass}${openId === r.id ? " row-open" : ""}`}
+                      onClick={() => setOpenId((cur) => (cur === r.id ? null : r.id))}
+                    >
+                      {lens === "ranked" && <span className="rank num">{i + 1}</span>}
+                      <span className="cell-career">
+                        <button
+                          type="button"
+                          className="row-name"
+                          aria-expanded={openId === r.id}
+                          aria-controls={`detail-${r.id}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setOpenId((cur) => (cur === r.id ? null : r.id));
+                          }}
+                        >
+                          {r.name}
+                        </button>
+                        {r.current && <span className="chip c-blue">CURRENT</span>}
+                        <span className="c-sub num">
+                          {rowWhy(r) === "receipts" ? matchSub(r) : rowWhy(r)}
+                        </span>
+                      </span>
+                      {lens === "ranked" ? (
+                        <span className="cell-fit" aria-label={`${r.x} of ${r.y} skills in common`}>
+                          <span className={`fit-line num ${r.x === 0 ? "fit-zero" : ""}`}>
+                            {r.x} of {r.y}
+                          </span>
+                          <span className="mbar" aria-hidden="true">
+                            <i style={{ width: `${(r.x / r.y) * 100}%` }} />
+                          </span>
+                        </span>
+                      ) : (
+                        <>
+                          <span className="cell-track">{r.trackLabel}</span>
+                          <span className="cell-skills num">{r.y}</span>
+                        </>
+                      )}
+                      <span className="cell-entry num">{r.entry}</span>
+                      <span className="cell-exp" aria-hidden="true">
+                        <Chev />
+                      </span>
+                    </div>
+
+                    {/* role detail — catalog truth only (ruled blocks) */}
+                    {openId === r.id && (
+                      <div className="index-detail" id={`detail-${r.id}`}>
+                        <div className="d-grid">
+                          <div className="d-block d-wide">
+                            <span className="label">WHAT THE JOB IS</span>
+                            <p>{r.what}</p>
+                            <p className="d-psoc num">Registered occupation — {r.psoc}</p>
+                          </div>
+                          <div className="d-block">
+                            <span className="label">ENTRY PATH</span>
+                            <p>{r.entry}</p>
+                          </div>
+                          <div className="d-block">
+                            <span className="label">MAJORS THAT MAP HERE</span>
+                            <p>{r.majors}</p>
+                          </div>
+                          <div className="d-block">
+                            <span className="label">JOB MARKET</span>
+                            <p>{r.demand}</p>
+                          </div>
+                          <div className="d-block">
+                            <span className="label">SKILL MAP</span>
+                            <p className="num">{r.skillsSummary}</p>
+                          </div>
+                        </div>
+                        {!r.current && (
+                          <div className="d-cta">
+                            <button
+                              className="btn btn-ghost"
+                              type="button"
+                              onClick={() => openConfirm(r.id)}
+                            >
+                              Change target role
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
-                  <span className={`m-fit num ${m.x === 0 ? "m-zero" : ""}`}>{m.x} of {m.y}</span>
-                  <p className="m-sub num">{matchSub(m)}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
-          <p className="match-note">
-            Matching uses confirmed skills only. Confirm more from <a href="/progress">Progress</a> to
-            widen this list. Skills you marked yourself during setup feed your baseline bars, but they
-            never count toward matching.
-          </p>
+          {/* the matching honesty note lives on the ranked lens */}
+          {lens === "ranked" && (
+            <p className="match-note">
+              Matching uses confirmed skills only. Confirm more from <a href="/progress">Progress</a> to
+              widen this list. Skills you marked yourself during setup feed your baseline bars, but they
+              never count toward matching.
+            </p>
+          )}
         </div>
-        </div>
-        </div>
-      </div>
+      </section>
 
       {/* ============================================================
-          SWITCH FLOW — Software Developer → Data Analyst (beat 6)
+          SWITCH FLOW — Software Developer → Software QA Analyst (beat 6)
           ============================================================ */}
 
       {/* state 1 · confirm, cost first */}
-      <section id="sw-confirm" className="app-section" hidden={flow !== "confirm"}>
+      <section id="sw-confirm" hidden={flow !== "confirm"}>
         {flow === "confirm" && preSwitch && (
-          <div className="shell">
-            <div className="screen-head">
-              <h1>Switch to {TARGET_NAME}?</h1>
-            </div>
-            <div className="panel sw-panel">
+          <>
+            <header className="band">
+              <div className="bandrow">
+                <div className="who">
+                  <h1 className="t">Switch to {flowTarget.name}?</h1>
+                </div>
+              </div>
+            </header>
+            <div className="card sw-panel">
               <p className="sw-cost">
-                Switching to {TARGET_NAME} resets skill progress and training progress toward it — your
+                Switching to {flowTarget.name} resets skill progress and training progress toward it — your
                 score drops to its floor and rebuilds.
               </p>
               <div className="sw-stays">
@@ -684,36 +765,40 @@ export default function CareerClient({
                   disabled={busy}
                   onClick={doSwitch}
                 >
-                  {busy ? "Switching…" : `Switch to ${TARGET_NAME}`}
+                  {busy ? "Switching…" : `Switch to ${flowTarget.name}`}
                 </button>
                 <button className="btn btn-ghost" type="button" onClick={cancelSwitch}>
                   Keep {preSwitch.fromName}
                 </button>
               </div>
             </div>
-          </div>
+          </>
         )}
       </section>
 
       {/* state 2 · honest drop + quick re-assessment */}
-      <section id="sw-reset" className="app-section" hidden={flow !== "reset"}>
+      <section id="sw-reset" hidden={flow !== "reset"}>
         {flow === "reset" && reset && preSwitch && (
-          <div className="shell">
-            <div className="screen-head">
-              <h1>Score reset for your new career</h1>
-              <p>
-                Your gap bars and training progress were built around {preSwitch.fromName}. Switching
-                resets them to measure {TARGET_NAME}&apos;s {reassess.length} skills instead: the score
-                drops to its floor and rebuilds from what you can actually do. It starts measuring the
-                right things, not punishing you.
-              </p>
-            </div>
+          <>
+            <header className="band">
+              <div className="bandrow">
+                <div className="who">
+                  <h1 className="t">Score reset for your new career</h1>
+                  <p className="m">
+                    Your gap bars and training progress were built around {preSwitch.fromName}. Switching
+                    resets them to measure {flowTarget.name}&apos;s {reassess.length} skills instead: the score
+                    drops to its floor and rebuilds from what you can actually do. It starts measuring the
+                    right things, not punishing you.
+                  </p>
+                </div>
+              </div>
+            </header>
 
-            <div className="panel readout">
+            <div className="card readout">
               <div className="readout-head">
                 <div>
                   <span className="label">
-                    READINESS · <b className="sample-tag">{TARGET_NAME.toUpperCase()}</b>
+                    READINESS · <b className="sample-tag">{flowTarget.name.toUpperCase()}</b>
                   </span>
                   <div className="readout-sub">out of 100 · right after the switch</div>
                 </div>
@@ -744,12 +829,12 @@ export default function CareerClient({
             </div>
 
             <div className="reassess">
-              <h2>Where you stand on {TARGET_NAME}</h2>
+              <h2>Where you stand on {flowTarget.name}</h2>
               <p>
                 Rate each skill: claims feed your baseline, but only skills you pass a check on count as
                 confirmed.
               </p>
-              <div className="panel skill-list">
+              <div className="card skill-list">
                 {reassess.map((r) => {
                   const locked = isLockedSkill(r.name);
                   return (
@@ -795,23 +880,27 @@ export default function CareerClient({
                 {busy ? "Reading…" : "See my baseline"}
               </button>
             </div>
-          </div>
+          </>
         )}
       </section>
 
       {/* state 3 · recovered */}
-      <section id="sw-recovered" className="app-section" hidden={flow !== "recovered"}>
+      <section id="sw-recovered" hidden={flow !== "recovered"}>
         {flow === "recovered" && recovered && (
-          <div className="shell">
-            <div className="screen-head">
-              <h1>Your baseline on {TARGET_NAME}</h1>
-            </div>
+          <>
+            <header className="band">
+              <div className="bandrow">
+                <div className="who">
+                  <h1 className="t">Your baseline on {flowTarget.name}</h1>
+                </div>
+              </div>
+            </header>
 
-            <div className="panel readout">
+            <div className="card readout">
               <div className="readout-head">
                 <div>
                   <span className="label">
-                    READINESS · <b className="sample-tag">{TARGET_NAME.toUpperCase()}</b>
+                    READINESS · <b className="sample-tag">{flowTarget.name.toUpperCase()}</b>
                   </span>
                   <div className="readout-sub">out of 100 · reset, then rebuilt from your re-assessment</div>
                 </div>
@@ -845,7 +934,7 @@ export default function CareerClient({
               </div>
             </div>
 
-            <div className="panel recover-panel">
+            <div className="card recover-panel">
               <span className="label">YOUR BASELINE</span>
               <p className="rec-line num">
                 {recovered.closed} of {reassess.length} skills on your baseline
@@ -875,42 +964,46 @@ export default function CareerClient({
                 Self-reported skills feed the baseline but never count toward Skills-match — only checks
                 you pass do.
               </p>
-              {/* canon Q13: a new Training goal is suggested in the new career's terms */}
-              <div className="panel nextcard" style={{ maxWidth: 640, marginTop: 16 }}>
-                <h3 style={{ fontSize: 15.5, fontWeight: 640 }}>Set your next goal</h3>
-                <p className="n-target num" style={{ marginTop: 8 }}>
-                  free · ~4 hours · Test Automation University
-                </p>
-                <p className="n-why" style={{ marginTop: 6 }}>
-                  Closes your first open gap in Software Testing — one of the skills QA analysts use every day.
-                </p>
-                <p className="n-why" style={{ marginTop: 10, color: "var(--ink-3)" }}>
-                  When you finish the resource and pass its 5-question check, this goal marks itself done —
-                  automatically, under Progress. You&apos;ll see it happen.
-                </p>
-                <div className="n-cta" style={{ marginTop: 12 }}>
-                  <button
-                    className="btn btn-primary"
-                    type="button"
-                    disabled={qaGoalPosted || busy}
-                    onClick={postQaGoal}
-                  >
-                    {qaGoalPosted ? "Goal set — it's on your Progress page." : "Set this goal"}
-                  </button>
+              {/* canon Q13: a new Training goal is suggested in the new career's terms —
+                  the canon suggestion is wired to the QA walk (beat 7) */}
+              {flowTarget.id === CANON_TARGET.id && (
+                <div className="card nextcard">
+                  <h3>Set your next goal</h3>
+                  <p className="n-target num">
+                    free · ~4 hours · Test Automation University
+                  </p>
+                  <p className="n-why">
+                    Closes your first open gap in Software Testing — one of the skills QA analysts use every day.
+                  </p>
+                  <p className="n-why n-why-quiet">
+                    When you finish the resource and pass its 5-question check, this goal marks itself done —
+                    automatically, under Progress. You&apos;ll see it happen.
+                  </p>
+                  <div className="n-cta">
+                    <button
+                      className="btn btn-primary"
+                      type="button"
+                      disabled={qaGoalPosted || busy}
+                      onClick={postQaGoal}
+                    >
+                      {qaGoalPosted ? "Goal set — it's on your Progress page." : "Set this goal"}
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="sw-actions">
-                <a className="btn btn-primary" href="/pathway">
+              )}
+              <div className="sw-actions rec-actions">
+                {/* the view's one primary is the suggested goal; the gaps stay a ghost */}
+                <a className="btn btn-ghost" href="/pathway">
                   See your gaps <Arrow />
                 </a>
-                <button className="btn btn-ghost" type="button" onClick={() => backToCareer("current")}>
+                <button className="btn btn-ghost" type="button" onClick={() => backToCareer()}>
                   Back to Career
                 </button>
               </div>
             </div>
-          </div>
+          </>
         )}
       </section>
-    </>
+    </div>
   );
 }
