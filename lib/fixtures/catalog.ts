@@ -3,14 +3,23 @@ import type { Career, CareerTrack } from "@/lib/types";
 /**
  * College-scope career catalog — 36 entry-level PH roles, transcribed verbatim
  * from `.scratch/career-path-readiness-research/catalog-roster-dole-ble.md`
- * (the canon roster; RULINGS section at the bottom is authoritative).
+ * (the canon roster; RULINGS section at the bottom is authoritative), now
+ * converted to the BLESSED role specs (2026-10-30 per-track conversion
+ * blessing, map.md): every role's skill rows follow
+ * `.scratch/career-path-readiness-research/role-specs/<roleId>.md` (names
+ * verbatim, blessed tiers, source tags per the row's own framework artifact;
+ * deep per-row descriptor/anchor/provenance data lives in `lib/fixtures/
+ * rowspec.ts`).
  *
  * Rules:
- *  - `skills` rows are VERBATIM from the research doc's per-role skill tables:
- *    name, tier (core/secondary), source tag ([PSF]/[TESDA]/[O*NET]/[ESCO]/
- *    [NACE]), and the "what it means" line. Never invented.
- *    Rows whose source bundles several PSF enabling skills keep the bundle as
- *    one row (as the artifact prints it).
+ *  - `skills` rows are VERBATIM from the blessed specs: name, tier
+ *    (core/secondary), source tag ([PSF]/[TESDA]/[O*NET]/[ESCO]/[NACE]/[PSOC]),
+ *    and the one-line student-facing "what". Paraphrase rows carry the
+ *    constructed row name per the accepted-naming ruling; their flags ride
+ *    the rowspec layer. ESC merges where sources print multiple PSF enabling
+ *    skills keep the bundle as one row (ESC presentation ruling
+ *    2026-10-29); mkt's ESC items print inside the artifact's own Primary
+ *    list and are carried as that list prints them.
  *  - The four extension roles (E1 Data Analyst, E2 Executive Secretary,
  *    E3 Records Clerk, E4 SOC Analyst) carry demandBlock.status
  *    "institutional-judgment" = "not DOLE-BLE-justified — institutional
@@ -20,18 +29,27 @@ import type { Career, CareerTrack } from "@/lib/types";
  *    (2026-10-29 extraction: E1 = full PSF-AAI Associate Data Analyst map,
  *    E2 = O*NET 43-6011.00, E3 = PSOC 4415 unit tasks + O*NET 43-4171.00
  *    corroboration; verify list §10 flagged extraction now read).
- *  - TIERS PENDING USER RULING: every core/secondary assignment on the
- *    E1/E2/E3 rows is the research's DERIVED PROPOSAL (tiering-basis notes
- *    §1.4/§2.3/§3.3 of the same doc), not a user ruling — revisit before
- *    final defense citation.
+ *  - Canon demo Trio is a HARD GATE: `swd` (8 rows), `qa` (7), `its` (7),
+ *    `da` (13), plus the extracted `execsec` (17) / `records` (11) maps stay
+ *    byte-identical — the canonical Neil seed math (score 40, verified/
+ *    claimed pattern) keys on these row names and counts
+ *    (scripts/verify-fixtures.test.ts asserts it). The conversion enriches
+ *    the other 30 roles per the blessed specs; the demo-trio deep data rides
+ *    the rowspec layer.
  *  - 5.4 Administrative Officer was DROPPED (entry-level ruling R3: 2-year
  *    career target, not a direct-entry offer).
  *  - Demand citations median the DOLE-BLE JobsFit LMI Report 2013–2020 lists
- *    (in-demand / hard-to-fill entry numbers) — not the unread NJLMF 2025–2026.
+ *    (in-demand / hard-to-fill entry numbers) — not the unread NJLMF 2025–26.
  *  - `psocCode` = PSOC 2012 unit group (as updated 2022) — the catalog's
  *    registered classifier; "PSOC 2025" was verified wanting (ruling R2).
  *  - Demo ids `swd` / `da` / `its` are frozen interop keys (resume engine
  *    synonyms.ts + DEMO_SUGGESTION_ORDER); they map to roster rows 2.1, E1, 2.4.
+ *  - cybersec's display name is "Security Analyst" — the anchored rung's
+ *    printed name (CYB-V3, ruled 2026-10-29; supersedes the roster family
+ *    label).
+ *  - audit row 11 (technology row) cites the O*NET Software Skills list as an
+ *    attribution placeholder: individual tool names stay UNQUOTED until the
+ *    O*NET data version is pinned at enrich time (Model C, ADR 0005).
  */
 
 export const TRACKS: CareerTrack[] = ["it", "business", "accounting", "office"];
@@ -46,6 +64,8 @@ export const TRACK_LABELS: Record<CareerTrack, string> = {
 export const CAREERS: Career[] = [
   // == ─── Track 1 · Computer & IT (11: roster 2.1–2.9 + E1 + E4) ─────────────
   {
+    // CANON LOCK (byte-identical rows): swd is Neil's seed role — the seed
+    // math (SP 25×6/8 = 19) and bars key on these exact rows.
     id: "swd", // roster 2.1 (demo interop id)
     name: "Associate Software Developer",
     psocCode: "2512",
@@ -71,6 +91,9 @@ export const CAREERS: Career[] = [
     ],
   },
   {
+    // CANON LOCK (byte-identical rows): qa is the money-beat walk — the beat
+    // math (dip → 35 → 52 → 59/67) and bars key on these exact rows; the
+    // spec's 25-FSC card projection stays in role-specs/qa.md (ESC ruling).
     id: "qa", // roster 2.2
     name: "Software QA Analyst",
     psocCode: "2519",
@@ -114,11 +137,13 @@ export const CAREERS: Career[] = [
       { name: "Solution Support (UAT & hand-over)", tier: "core", sourceTag: "PSF", what: "Coordinate user-acceptance testing; support deployment/training/change management." },
       { name: "Process modeling (flow diagrams, use cases)", tier: "core", sourceTag: "PSF", what: "Draw process flow / use-case models for analysis hand-off." },
       { name: "Business Needs Analysis", tier: "core", sourceTag: "PSF", what: "Frame stakeholder questions into analytics/requirements." },
-      { name: "Team Enablement", tier: "secondary", sourceTag: "PSF", what: "Agile ceremonies; cross-department relationships." },
-      { name: "Collaboration · Communication · Digital Fluency · Learning Agility (Enabling)", tier: "secondary", sourceTag: "PSF", what: "People-facing layer of the BA job." },
+      { name: "Team Enablement", tier: "core", sourceTag: "PSF", what: "Agile ceremonies; cross-department relationships. (BA-V2: the source prints it as one of the role's own work functions — ruled core 2026-10-29.)" },
+      { name: "Collaboration · Communication · Digital Fluency · Learning Agility (Enabling)", tier: "secondary", sourceTag: "PSF", what: "People-facing layer of the BA job (Digital Fluency/Problem Solving print Advanced on this map; rest Intermediate)." },
     ],
   },
   {
+    // CANON LOCK (byte-identical rows): its is the third demo suggestion —
+    // seed assertions key its map length at 7 (spec sub-rows stay spec-only).
     id: "its", // roster 2.4 (demo interop id)
     name: "IT Support Engineer",
     psocCode: "3512",
@@ -158,11 +183,15 @@ export const CAREERS: Career[] = [
     roleSummary: "Keeps servers and networks healthy — accounts, patching, backups — and executes the maintenance windows behind shared services.",
     skills: [
       { name: "Systems administration (user groups, upgrades, backups)", tier: "core", sourceTag: "PSF", what: "Keep servers/services healthy; manage accounts, patching, backups." },
+      { name: "↳ CWF sub-row: Design and develop new systems", tier: "core", sourceTag: "PSF", what: "Assist builds/integration of new systems under ITIL discipline." },
+      { name: "↳ CWF sub-row: Optimize systems performance", tier: "core", sourceTag: "PSF", what: "Component optimisation, research, metrics tracking for capacity." },
+      { name: "↳ CWF sub-row: Resolve system-related incidents", tier: "core", sourceTag: "PSF", what: "Identify/resolve, escalate unresolved system issues." },
       { name: "Network Administration and Maintenance", tier: "core", sourceTag: "PSF", what: "Keep connectivity and shared services stable." },
       { name: "Infrastructure Support", tier: "core", sourceTag: "PSF", what: "Execute maintenance windows and support tickets." },
-      { name: "Security Administration", tier: "secondary", sourceTag: "PSF", what: "Maintain access controls, policies on the systems they own." },
+      { name: "↳ CWF sub-row: Oversee service level agreements and service improvements", tier: "core", sourceTag: "PSF", what: "SLA-assist duties — objectives, logs, recurring-incident flags." },
+      { name: "Security Administration", tier: "secondary", sourceTag: "PSF", what: "Maintain access controls, policies on the systems they own (L3 gates the engineer rung)." },
       { name: "IT Asset Management", tier: "secondary", sourceTag: "PSF", what: "Handed hardware/software catalogs and license hygiene." },
-      { name: "System Integration", tier: "secondary", sourceTag: "PSF", what: "Connect new tools to existing environments safely." },
+      { name: "System Integration", tier: "secondary", sourceTag: "PSF", what: "Connect new tools to existing environments safely (L3, kept secondary per the ladder)." },
       { name: "Configuration Tracking · Cyber-and-Data-Breach Incident Management · Business Needs Analysis", tier: "secondary", sourceTag: "PSF", what: "Traceability + escalation discipline." },
       { name: "Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)", tier: "secondary", sourceTag: "PSF", what: "Operational team behavior." },
     ],
@@ -183,17 +212,23 @@ export const CAREERS: Career[] = [
     roleSummary: "Installs and maintains the database systems behind the business — backups, recovery drills, and secure access.",
     skills: [
       { name: "Database Administration", tier: "core", sourceTag: "PSF", what: "Install, configure, maintain DBMS; run backup/recovery drills." },
+      { name: "↳ CWF sub-row: Oversee database administration", tier: "core", sourceTag: "PSF", what: "Environments, upgrades, installs; backup/recovery procedures." },
+      { name: "↳ CWF sub-row: Design and develop new database", tier: "core", sourceTag: "PSF", what: "Assist design needs, procedures, flows, indexing, stored procedures." },
+      { name: "↳ CWF sub-row: Optimize database performance", tier: "core", sourceTag: "PSF", what: "Component optimisation; audits; operational metrics." },
+      { name: "↳ CWF sub-row: Resolve database incidents", tier: "core", sourceTag: "PSF", what: "Diagnose/mitigate; escalate under org procedures." },
+      { name: "Database security controls", tier: "core", sourceTag: "PSF", what: "Privileges, permissions, integrity controls (printed CWF \"Manage database security\")." },
       { name: "Data Engineering", tier: "secondary", sourceTag: "PSF", what: "Handle data flows feeding the databases." },
-      { name: "Data Migration", tier: "secondary", sourceTag: "PSF", what: "Move schemas/data across environments safely." },
-      { name: "Database security controls", tier: "core", sourceTag: "PSF", what: "Privileges, permissions, integrity controls." },
+      { name: "Data Migration", tier: "secondary", sourceTag: "PSF", what: "Move schemas/data across environments safely (L3, kept secondary per the ladder)." },
       { name: "Infrastructure Support", tier: "secondary", sourceTag: "PSF", what: "Understand where the database lives." },
-      { name: "Problem Management", tier: "secondary", sourceTag: "PSF", what: "Diagnose and close recurring DB incidents." },
+      { name: "Problem Management", tier: "secondary", sourceTag: "PSF", what: "Diagnose and close recurring DB incidents (L3, kept secondary)." },
       { name: "Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)", tier: "secondary", sourceTag: "PSF", what: "Team/ops behavior." },
     ],
   },
   {
     id: "cybersec", // roster 2.7
-    name: "Cybersecurity Operations (entry)",
+    // Display name = "Security Analyst" (CYB-V3, ruled 2026-10-29 — the
+    // anchored rung's printed name; the roster family label is superseded).
+    name: "Security Analyst",
     psocCode: "2523",
     psocTitle: "Computer network professionals",
     track: "it",
@@ -202,7 +237,7 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #146 (IT Security Engineer)",
-      note: "PSOC mapping judgment, flagged in the roster (no dedicated cyber analyst unit in PSOC 2012): 2523/2519-family anchor, labeled per ruling R2.",
+      note: "PSOC mapping judgment, flagged in the roster (no dedicated cyber analyst unit in PSOC 2012): 2523/2519-family anchor, labeled per ruling R2. Fixture display name \"Security Analyst\" per CYB-V3 (2026-10-29).",
     },
     roleSummary: "Reads alerts and correlates events in a security queue, escalating true positives along defined playbooks.",
     skills: [
@@ -210,7 +245,7 @@ export const CAREERS: Career[] = [
       { name: "Cyber and Data Breach Incident Management", tier: "secondary", sourceTag: "PSF", what: "Follow breach-response playbooks." },
       { name: "Network administration & maintenance", tier: "secondary", sourceTag: "PSF", what: "Understand the networks being defended." },
       { name: "Vulnerability assessment support (VAPT analyst track)", tier: "secondary", sourceTag: "PSF", what: "Run scans, triage findings under supervision." },
-      { name: "Collaboration · Communication · Problem Solving · Digital Fluency (Enabling)", tier: "secondary", sourceTag: "PSF", what: "War-room behavior." },
+      { name: "Collaboration · Communication · Problem Solving · Digital Fluency (Enabling)", tier: "secondary", sourceTag: "PSF", what: "War-room behavior (dup-cell ESC levels render honestly per CYB-V2)." },
     ],
   },
   {
@@ -224,11 +259,12 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #271 (Web Developer)",
-      note: "Also #272 Web Programmer. Skill rows are a declared [O*NET] gap-filler per ADR-0001 — the PSF-SDS has no dedicated entry web-developer map.",
+      note: "Also #272 Web Programmer. Skill rows are a declared [O*NET] gap-filler per ADR-0001 — the PSF-SDS has no dedicated entry web-developer map (O*NET 15-1254.00 \"Web Developers\", updated 2026).",
     },
     roleSummary: "Builds and maintains websites — responsive front-ends, CMS builds, deploys — usually as first-employee or agency junior.",
     skills: [
       { name: "Client-side coding (HTML/CSS/JS)", tier: "core", sourceTag: "O*NET", what: "Build and maintain responsive web UIs." },
+      { name: "↳ task-cluster sub-row: site life-operations", tier: "core", sourceTag: "O*NET", what: "Test after revisions, update content, back up, renew domains, improve performance." },
       { name: "CMS administration (WordPress etc.)", tier: "core", sourceTag: "O*NET", what: "Content structure, themes, plugins, basic hosting." },
       { name: "Responsive/UI basics + accessibility", tier: "secondary", sourceTag: "O*NET", what: "Cross-device rendering, WCAG-conscious markup." },
       { name: "Version control (git)", tier: "secondary", sourceTag: "O*NET", what: "Team-safe code management." },
@@ -246,18 +282,24 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #126 (Graphic Artist)",
-      note: "Also Hard-to-Fill #1–#3 (2D Digital Animator / Animation Artist / Animation Checker — all asterisked 'not completely defined in the PSOC'). Feeds Business-track marketing work.",
+      note: "Also Hard-to-Fill #1–#3 (2D Digital Animator / Animation Artist / Animation Checker — all asterisked 'not completely defined in the PSOC'). Feeds Business-track marketing work. Row shape ruled 2026-10-29: the verbatim six TESDA TR unit names are the core rows (DIG-V1).",
     },
     roleSummary: "Produces brand, print, packaging, and animation assets to brief, revising with clients inside deadline.",
     skills: [
-      { name: "Develop designs for (logo/typograph/package/display)", tier: "core", sourceTag: "TESDA", what: "Produce brand/print/packaging assets to brief." },
-      { name: "Use specialized graphic/animation tools (Adobe suite, Blender etc.)", tier: "core", sourceTag: "TESDA", what: "Tool proficiency." },
-      { name: "Follow creative brief + brand guideline development", tier: "core", sourceTag: "PSF", what: "Creative constraints discipline." },
-      { name: "Client communication & revision handling", tier: "secondary", sourceTag: "NACE", what: "Iterate with clients within deadline." },
+      { name: "DEVELOP DESIGNS FOR A LOGO (ICT216313)", tier: "core", sourceTag: "TESDA", what: "Incorporate visual design/communication principles into logo development." },
+      { name: "DEVELOP DESIGNS FOR PRINT MEDIA (ICT216314)", tier: "core", sourceTag: "TESDA", what: "Posters, tarpaulin, magazine, brochures — printed-output design." },
+      { name: "DEVELOP DESIGNS FOR USER EXPERIENCE (ICT216315)", tier: "core", sourceTag: "TESDA", what: "Design development for user experience." },
+      { name: "DEVELOP DESIGNS FOR USER INTERFACE (ICT216316)", tier: "core", sourceTag: "TESDA", what: "Design development for user interface." },
+      { name: "DEVELOP DESIGNS FOR PRODUCT PACKAGING (ICT216317)", tier: "core", sourceTag: "TESDA", what: "Design development for product packaging." },
+      { name: "DESIGN BOOTH AND PRODUCT WINDOW / DISPLAY (ICT216318)", tier: "core", sourceTag: "TESDA", what: "Booth and product window/display design and production." },
+      { name: "Use specialized graphic/animation tools (Adobe suite, Blender etc.)", tier: "core", sourceTag: "TESDA", what: "Tool proficiency across the suite + Blender-class animation tools." },
+      { name: "Follow creative brief + brand guideline development", tier: "core", sourceTag: "TESDA", what: "The TR's brief-discipline loop: receive brief → design → submit for approval → liaise." },
+      { name: "Client communication & revision handling", tier: "secondary", sourceTag: "NACE", what: "Iterate with clients within deadline (TR Required Skills set as printed)." },
+      { name: "Junior 2D Animator — [PSF-DAA] (counterpart, optional — user ruling 2026-10-29 ADD)", tier: "secondary", sourceTag: "PSF", what: "The Junior-2D-Animator counterpart rung of the same family (map/name recorded only — no FSC levels)." },
     ],
   },
   {
-    id: "da", // extension E1 (demo interop id)
+    id: "da", // extension E1 (demo interop id) — CANON LOCK (byte-identical rows)
     name: "Data Analyst (junior)",
     psocCode: "3314",
     psocTitle: "Statistical, mathematical and related associate professionals",
@@ -287,7 +329,7 @@ export const CAREERS: Career[] = [
     ],
   },
   {
-    id: "soc", // extension E4
+    id: "soc", // extension E4 — converted per the blessed soc.md draft (36/36)
     name: "SOC Analyst",
     psocCode: "2523",
     psocTitle: "Computer network professionals",
@@ -297,15 +339,17 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "institutional-judgment",
       source: "not DOLE-BLE-justified — institutional judgment",
-      note: "E4 extension admitted per ruling R4 (2026-10-29); demand-named cousin is 2.7 Cybersecurity Operations (#146 IT Security Engineer). Per-instance PSF-SDS FSC pending extraction (roster verify list §9-3) — rows below carry the 2.7 extraction as the family's entry rung.",
+      note: "E4 extension admitted per ruling R4 (2026-10-29); demand-named cousin is 2.7 (JobsFit #146 IT Security Engineer). Skill rows converted per the blessed soc.md draft (2026-10-30): the PSF-SDS Security Operations Analyst rung's three printed CWFs + TESDA Cyber Threat Monitoring NC I units + O*NET 15-1212.00 adjacent-listing discipline. SOC-V1: the displayed pairing (catalog \"SOC Analyst\" vs the artifact's \"Security Operations Analyst\" print) rides the standing name-discipline note — catalog keeps its roster display pending a user call.",
     },
-    roleSummary: "Watches the security queue inside a 24/7 SOC — alerts triaged, events correlated, breached-response playbooks followed.",
+    roleSummary: "Watches the security queue inside a 24/7 SOC — alerts triaged, events correlated, breach-response playbooks followed.",
     skills: [
-      { name: "Threat analysis / monitoring", tier: "core", sourceTag: "PSF", what: "Read alerts, correlate events, escalate true positives." },
-      { name: "Cyber and Data Breach Incident Management", tier: "secondary", sourceTag: "PSF", what: "Follow breach-response playbooks." },
-      { name: "Network administration & maintenance", tier: "secondary", sourceTag: "PSF", what: "Understand the networks being defended." },
-      { name: "Vulnerability assessment support (VAPT analyst track)", tier: "secondary", sourceTag: "PSF", what: "Run scans, triage findings under supervision." },
-      { name: "Collaboration · Communication · Problem Solving · Digital Fluency (Enabling)", tier: "secondary", sourceTag: "PSF", what: "War-room behavior." },
+      { name: "Monitor cyber security systems", tier: "core", sourceTag: "PSF", what: "Real-time analysis/trending of security log data; watch the queue, escalate anomalies. (printed CWF)" },
+      { name: "Maintain cyber security operations", tier: "core", sourceTag: "PSF", what: "Keep the monitoring stack running — data sources, check schedules, status reports. (printed CWF)" },
+      { name: "Manage response to cyber security incidents", tier: "core", sourceTag: "PSF", what: "Evaluate severity, keep status updates through an incident's lifecycle, prepare the final report. (printed CWF)" },
+      { name: "Threat Analysis and Defence · Threat Intelligence and Detection (family FSC cross-cite)", tier: "secondary", sourceTag: "PSF", what: "Back the queue decisioning — attack-framework knowledge, IOC/threat-intel feeds. (SOC-V2 levels pending facsimile)" },
+      { name: "Vulnerability scanning (VAPT-adjacent, TESDA-printed)", tier: "secondary", sourceTag: "TESDA", what: "Check the scanning schedule, scan the assets, file the report (Cyber Threat Monitoring NC I unit ICT251313)." },
+      { name: "Network security understanding (network administration family)", tier: "secondary", sourceTag: "TESDA", what: "LAN/WAN/port-forwarding architecture + firewall/EDR/NDR alert fluency." },
+      { name: "Collaboration · Communication · Problem Solving · Digital Fluency (Enabling)", tier: "secondary", sourceTag: "PSF", what: "Analytical war-room behavior; on-call shift discipline. (ESC levels pending SOC-V2 facsimile)" },
     ],
   },
 
@@ -321,17 +365,29 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #139 (Human Resource Officer)",
-      note: "Also Hard-to-Fill #7 (Wholesale/Retail) 'Human Resource Specialist' — a deep HR ladder feeds entry openings.",
+      note: "Also Hard-to-Fill #7 (Wholesale/Retail) 'Human Resource Specialist' — a deep HR ladder feeds entry openings. Converted per the blessed hra.md (PSF-HCD Associate, Talent Attraction and Talent Management, printed pp.62–63).",
     },
     roleSummary: "Runs the people-operations floor: sourcing channels, initial screening, onboarding logistics, records.",
     skills: [
-      { name: "Recruitment channel management", tier: "core", sourceTag: "PSF", what: "Run wide-net and targeted sourcing channels; track conversion rates per channel." },
-      { name: "Selection management", tier: "core", sourceTag: "PSF", what: "Conduct initial screening; administer assessments; keep applicant banks." },
-      { name: "Onboarding", tier: "core", sourceTag: "PSF", what: "Coordinate paperwork, orientation, day-1 logistics for new hires." },
-      { name: "Job analysis and evaluation", tier: "secondary", sourceTag: "PSF", what: "Gather accurate job descriptions from business units." },
-      { name: "Employee/ Data Collection & Preparation ; Data Management", tier: "core", sourceTag: "PSF", what: "Maintain candidate and employee records." },
-      { name: "Voluntary/Involuntary Exit Management", tier: "secondary", sourceTag: "PSF", what: "Process separations, records, clearances." },
-      { name: "Human Resources Analytics and Insights", tier: "secondary", sourceTag: "PSF", what: "Hiring funnel metrics per channel." },
+      { name: "Recruitment Channel Management", tier: "core", sourceTag: "PSF", what: "Evaluate the sourcing channels that secure candidates; track conversion per channel." },
+      { name: "Selection Management", tier: "core", sourceTag: "PSF", what: "Screen initial applicants; administer assessments; keep the applicant bank." },
+      { name: "Onboarding", tier: "core", sourceTag: "PSF", what: "Set up work access, orientation logistics and welcome packs for new hires." },
+      { name: "Data Collection and Preparation", tier: "core", sourceTag: "PSF", what: "Collect HR data for business and HR insights." },
+      { name: "Data Management", tier: "core", sourceTag: "PSF", what: "Keep candidate/employee records accurate, complete and retrievable. (flagged paraphrase)" },
+      { name: "Digital Marketing and Communication", tier: "core", sourceTag: "PSF", what: "Employer-brand reach plans and hiring collaterals." },
+      { name: "Diversity, Equity, Inclusion and Belonging Management", tier: "core", sourceTag: "PSF", what: "Run hiring under non-discrimination and data-privacy law (RA 10173/RA 10911 in the CWF's Required Knowledge). (flagged paraphrase)" },
+      { name: "Talent Capability Assessment", tier: "core", sourceTag: "PSF", what: "Assessment tools and processes that evaluate employees' capabilities." },
+      { name: "Employee Communication Management", tier: "core", sourceTag: "PSF", what: "Deliver recruiting and people-ops messages clearly. (flagged paraphrase)" },
+      { name: "Voluntary Exit Management", tier: "secondary", sourceTag: "PSF", what: "Process separations, records, clearances. (flagged paraphrase)" },
+      { name: "Involuntary Exit Management", tier: "secondary", sourceTag: "PSF", what: "Employer-initiated separations handled safely under procedure. (flagged paraphrase)" },
+      { name: "Job Analysis and Evaluation", tier: "secondary", sourceTag: "PSF", what: "Define/evaluate job requirements against metrics or structures." },
+      { name: "Employee Mobility Management", tier: "secondary", sourceTag: "PSF", what: "Internal moves — transfers, promotions, redeployment — and their records. (flagged paraphrase)" },
+      { name: "Human Resources Analytics and Insights", tier: "secondary", sourceTag: "PSF", what: "Hiring funnel metrics per channel, assessment outcomes, talent gaps. (flagged paraphrase)" },
+      { name: "Human Resources Practices Implementation", tier: "secondary", sourceTag: "PSF", what: "Apply company HR policy correctly in every people action. (flagged paraphrase)" },
+      { name: "Human Resources Systems Management", tier: "secondary", sourceTag: "PSF", what: "Keep the HRIS/ATS records flowing — enter, track, report. (flagged paraphrase)" },
+      { name: "Performance Management", tier: "secondary", sourceTag: "PSF", what: "Records support for performance cycles. (flagged paraphrase)" },
+      { name: "Skills Framework Adoption", tier: "secondary", sourceTag: "PSF", what: "Log skills-framework vocabulary inside people processes. (flagged paraphrase)" },
+      { name: "Stakeholder Engagement and Management", tier: "secondary", sourceTag: "PSF", what: "Day-to-day work with hiring managers, applicants, new hires, vendors. (flagged paraphrase)" },
       { name: "Communication · Adaptability · Customer Orientation · Digital Fluency · Learning Agility · Self-Management (Enabling, Basic)", tier: "secondary", sourceTag: "PSF", what: "Candidate-facing tier-1 behavior." },
     ],
   },
@@ -346,17 +402,25 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #264 (Training Specialist)",
-      note: "Also named under the IT/BPM in-demand grouping (#32) — demand spans industries.",
+      note: "Also named under the IT/BPM in-demand grouping (#32) — demand spans industries. Converted per the blessed training.md (PSF-HCD Associate, Learning and Organization Development, printed pp.85–86).",
     },
     roleSummary: "Coordinates the learning engine — needs capture, program logistics, LMS upkeep — behind corporate L&D.",
     skills: [
-      { name: "Learning Needs Analysis", tier: "core", sourceTag: "PSF", what: "Turn manager inputs and surveys into documented learning needs." },
-      { name: "Learning and Development Programs Management", tier: "core", sourceTag: "PSF", what: "Schedule, register, track participation in learning programs." },
+      { name: "Learning Needs Analysis", tier: "core", sourceTag: "PSF", what: "Analyze capability/performance gaps to identify learning needs." },
+      { name: "Learning and Development Programs Management", tier: "core", sourceTag: "PSF", what: "Schedule, register, track participation in learning programs. (flagged paraphrase)" },
+      { name: "Data Management", tier: "core", sourceTag: "PSF", what: "Maintain the learning-program database and LMS records cleanly. (flagged paraphrase)" },
       { name: "Onboarding", tier: "core", sourceTag: "PSF", what: "Support onboarding/offboarding program execution." },
       { name: "Data Collection and Preparation", tier: "core", sourceTag: "PSF", what: "Collate survey and evaluation data for L/OD measures." },
-      { name: "Employee Communication", tier: "secondary", sourceTag: "PSF", what: "Course comms and reminders." },
-      { name: "Human Resources Systems Management (LMS administration)", tier: "secondary", sourceTag: "PSF", what: "Maintain the LMS; generate post-learning reports." },
-      { name: "Communication · Customer Orientation · Learning Agility · Problem Solving · Self-Management (Enabling, Basic)", tier: "secondary", sourceTag: "PSF", what: "Learner-facing service behavior." },
+      { name: "Voluntary Exit Management", tier: "secondary", sourceTag: "PSF", what: "Keep exit paperwork flowing with the L&D calendar. (flagged paraphrase)" },
+      { name: "Involuntary Exit Management", tier: "secondary", sourceTag: "PSF", what: "Employer-initiated separations, same admin support. (flagged paraphrase)" },
+      { name: "Employee Communication", tier: "secondary", sourceTag: "PSF", what: "Course comms and reminders. (flagged paraphrase)" },
+      { name: "Human Resources Systems Management", tier: "secondary", sourceTag: "PSF", what: "LMS administration — enrollments, catalogs, reports. (flagged paraphrase)" },
+      { name: "Performance Management", tier: "secondary", sourceTag: "PSF", what: "Records support for performance-linked learning. (flagged paraphrase)" },
+      { name: "Human Resources Analytics and Insights", tier: "secondary", sourceTag: "PSF", what: "Participation and effectiveness reporting from learning data. (flagged paraphrase)" },
+      { name: "Human Resources Practices Implementation", tier: "secondary", sourceTag: "PSF", what: "Apply people-policy inside program administration. (flagged paraphrase)" },
+      { name: "Skills Framework Adoption", tier: "secondary", sourceTag: "PSF", what: "Skills-framework vocabulary in learning records. (flagged paraphrase)" },
+      { name: "Stakeholder Engagement and Management", tier: "secondary", sourceTag: "PSF", what: "Venues, vendors, trainers — the admin-facing relationship set. (flagged paraphrase)" },
+      { name: "Communication · Customer Orientation · Learning Agility · Self-Management · Problem Solving (Enabling, Basic)", tier: "secondary", sourceTag: "PSF", what: "Learner-facing service behavior (Problem Solving restored from the printed ESC list)." },
     ],
   },
   {
@@ -370,18 +434,35 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #167 (Marketing Specialist)",
-      note: "Also #166 Marketing Sales Officer, #168 Marketing Supervisor, #169 Marketing Telemarketer; hard-to-fill 'Marketing Officer' (Wholesale & Retail #5).",
+      note: "Also #166 Marketing Sales Officer, #168 Marketing Supervisor, #169 Marketing Telemarketer; hard-to-fill 'Marketing Officer' (Wholesale & Retail #5). Converted per the blessed mkt.md (PSF-BD Marketing Associate/Assistant/Coordinator, printed pp.16–17) — study.com-attributed glossary quotes stripped to paraphrase per the recorded ruling.",
     },
     roleSummary: "Keeps campaign engines running — digital and social coordination, content assets, market data collation.",
     skills: [
-      { name: "Digital Marketing", tier: "core", sourceTag: "PSF", what: "Coordinate paid digital campaigns." },
-      { name: "Social Media Marketing", tier: "core", sourceTag: "PSF", what: "Schedule, monitor, respond on platforms." },
-      { name: "Content Development and Strategy", tier: "core", sourceTag: "PSF", what: "Coordinate campaign content assets." },
-      { name: "Market Intelligence / Market Profiling / Market Trend Analysis", tier: "core", sourceTag: "PSF", what: "Collate market & competitor data." },
-      { name: "Communications within Distribution Channels · Marketing Communications Plan Development · Marketing Mix Management · Media Strategy Development", tier: "core", sourceTag: "PSF", what: "Execute the plan across channels." },
-      { name: "Data Analysis and Interpretation / Data-mining and Modelling", tier: "secondary", sourceTag: "PSF", what: "Basic keyword/web statistics reporting." },
-      { name: "Brand Campaign Management · Collateral/Visual Collateral Production · Events Planning and Management", tier: "secondary", sourceTag: "PSF", what: "Asset production and event support." },
-      { name: "Communication · Collaboration · Customer Orientation · Digital Fluency (Enabling, Basic)", tier: "secondary", sourceTag: "PSF", what: "Team execution behavior." },
+      { name: "Business Environment Analysis", tier: "core", sourceTag: "PSF", what: "Read the market/technological environment around campaigns." },
+      { name: "Communications within Distribution Channels", tier: "core", sourceTag: "PSF", what: "Coordinate channel partners' marketing communications." },
+      { name: "Consumer Intelligence Analysis", tier: "core", sourceTag: "PSF", what: "Turn consumer-pattern data into actionable campaign knowledge." },
+      { name: "Content Development and Strategy", tier: "core", sourceTag: "PSF", what: "Brief, source and produce campaign content assets." },
+      { name: "Digital Marketing", tier: "core", sourceTag: "PSF", what: "Coordinate paid/owned digital campaign activity." },
+      { name: "Market Intelligence", tier: "core", sourceTag: "PSF", what: "Assemble market/competitor intelligence for campaign and growth decisions." },
+      { name: "Market Profiling", tier: "core", sourceTag: "PSF", what: "Segment and profile targets for campaigns." },
+      { name: "Market Trend Analysis", tier: "core", sourceTag: "PSF", what: "Read historical data and market conditions to spot and predict trends." },
+      { name: "Marketing Communications Plan Development", tier: "core", sourceTag: "PSF", what: "Shape the message plan across channels." },
+      { name: "Marketing Mix Management", tier: "core", sourceTag: "PSF", what: "Manage the essentials — product mix, pricing, promotion, placement — as one system." },
+      { name: "Media Strategy Development", tier: "core", sourceTag: "PSF", what: "Choose channels and placement for campaign reach." },
+      { name: "Social Media Marketing", tier: "core", sourceTag: "PSF", what: "Schedule, monitor and respond on social platforms." },
+      { name: "Communication (ESC-layer, printed in the Primary block)", tier: "secondary", sourceTag: "PSF", what: "Campaign coordination messaging (ESC Basic; carried where the artifact prints it)." },
+      { name: "Collaboration (ESC, Basic)", tier: "secondary", sourceTag: "PSF", what: "Execute campaigns as a coordinated team." },
+      { name: "Customer Orientation (ESC, Basic)", tier: "secondary", sourceTag: "PSF", what: "Anchor coordination decisions to what customers respond to." },
+      { name: "Digital Fluency (ESC, Basic)", tier: "secondary", sourceTag: "PSF", what: "Run campaign tooling fluently." },
+      { name: "Data Analysis and Interpretation", tier: "secondary", sourceTag: "PSF", what: "Keyword research and web-statistics reporting." },
+      { name: "E-Commerce Campaign Management", tier: "secondary", sourceTag: "PSF", what: "Support campaign assets that drive online-store activity." },
+      { name: "Trend Forecasting", tier: "secondary", sourceTag: "PSF", what: "Surface what's rising so campaigns stay current." },
+      { name: "Brand Campaign Management · Brand Guideline Development · Brand Marketing · Brand Portfolio Management", tier: "secondary", sourceTag: "PSF", what: "Brand-side campaign assets and consistency discipline." },
+      { name: "Business Opportunities Development · Demand Analysis · Market Research", tier: "secondary", sourceTag: "PSF", what: "Growth/demand research support." },
+      { name: "Category Marketing · Collateral Production · Visual Collaterals Production · Content Management", tier: "secondary", sourceTag: "PSF", what: "Collateral production and content upkeep." },
+      { name: "Data-mining and Modelling · Research and Information Synthesis", tier: "secondary", sourceTag: "PSF", what: "Data-mining preparation support." },
+      { name: "Events Planning and Management · Proposal Writing · Media Platforms Management", tier: "secondary", sourceTag: "PSF", what: "Event support, proposals, platform upkeep." },
+      { name: "International Trade Legislation for Business · Retailing and the Economy · Website Design", tier: "secondary", sourceTag: "PSF", what: "Context/design support as printed." },
     ],
   },
   {
@@ -395,16 +476,27 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #232 (Sales Consultant)",
-      note: "Also #166 Marketing Sales Officer. Field sales involves travel/outside calls — a role-context point, not a skill penalty.",
+      note: "Also #166 Marketing Sales Officer. Field sales involves travel/outside calls — a role-context point, not a skill penalty. Converted per the blessed sales.md (PSF-BD Sales Associate/Assistant, printed pp.8–9): the paid LinkedIn-Learning path is noted in copy but stays OUT of the resource pool (ruling 2026-10-29); study.com-attributed glossary quotes stripped.",
     },
     roleSummary: "Prospects, qualifies, and moves deals — keeping the pipeline records clean from first call to delivery paperwork.",
     skills: [
-      { name: "Customer Acquisition Management", tier: "core", sourceTag: "PSF", what: "Prospect, qualify, follow up inbound/outbound leads." },
-      { name: "Customer Relationship Management / CRM Operations", tier: "core", sourceTag: "PSF", what: "Keep the pipeline records clean." },
-      { name: "Order Fulfillment Administration", tier: "core", sourceTag: "PSF", what: "Paperwork that turns a won deal into delivery." },
-      { name: "Product Advisory / Product Demonstration", tier: "core", sourceTag: "PSF", what: "Explain the offer; run simple demos." },
-      { name: "Customer Behavior Analysis", tier: "secondary", sourceTag: "PSF", what: "Read the buyer's signals." },
-      { name: "Communication · Collaboration · Customer Orientation · Global Perspective · Problem Solving (Enabling)", tier: "secondary", sourceTag: "PSF", what: "Client-facing behaviors." },
+      { name: "Customer Acquisition Management", tier: "core", sourceTag: "PSF", what: "Prospect, qualify and follow up leads across inbound/outbound channels." },
+      { name: "Customer Relationship Management + Customer Relationship Management Operations", tier: "core", sourceTag: "PSF", what: "Manage and analyze customer interactions across the lifecycle; keep pipeline records clean. (both FSCs printed; carried as one row)" },
+      { name: "Sales Closure", tier: "core", sourceTag: "PSF", what: "Run the closing loop — follow-ups, contract submission, payment monitoring." },
+      { name: "Sales Delivery + Delivery Management", tier: "core", sourceTag: "PSF", what: "Track the deal through delivery to done. (both FSCs printed; carried as one row)" },
+      { name: "Order Fulfilment Administration", tier: "core", sourceTag: "PSF", what: "The paperwork chain that turns a won deal into delivery." },
+      { name: "Product Advisory + Product Demonstration", tier: "core", sourceTag: "PSF", what: "Explain the offer; run simple demos. (both FSCs printed; carried as one row)" },
+      { name: "After-sales Service", tier: "core", sourceTag: "PSF", what: "Keep the account healthy after the sale — follow-ups, issue resolution." },
+      { name: "Customer Management", tier: "core", sourceTag: "PSF", what: "Day-to-day account relationship stewardship." },
+      { name: "Customer Behavior Analysis", tier: "secondary", sourceTag: "PSF", what: "Read the buyer's signals with analysis tools and approaches." },
+      { name: "Contract and Vendor Management", tier: "secondary", sourceTag: "PSF", what: "Contracts, price quotations, partner paperwork." },
+      { name: "Account Management", tier: "secondary", sourceTag: "PSF", what: "The structured account plan layer as accounts mature." },
+      { name: "Customer Experience Management", tier: "secondary", sourceTag: "PSF", what: "Experience quality across touchpoints." },
+      { name: "Design Concepts Generation · Idea Generation and Selection · Narrative Design · Shopper Marketing Campaign Management", tier: "secondary", sourceTag: "PSF", what: "Co-marketing asset ideation support." },
+      { name: "Retail Space Utilization", tier: "secondary", sourceTag: "PSF", what: "Retail-context selling where the channel is store-based." },
+      { name: "Stakeholder Management", tier: "secondary", sourceTag: "PSF", what: "Multi-party coordination across the selling team." },
+      { name: "Supplier Performance · Supplier Sourcing", tier: "secondary", sourceTag: "PSF", what: "Channel/vendor hygiene from the sales side." },
+      { name: "Communication · Collaboration · Customer Orientation · Global Perspective · Problem Solving (Enabling)", tier: "secondary", sourceTag: "PSF", what: "Client-facing behaviors (printed: Communication/Collaboration/Customer Orientation I, Global Perspective B, Problem Solving I)." },
     ],
   },
   {
@@ -418,17 +510,20 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #84 (Customer Service Representative)",
-      note: "Also #52 Call Center Agent, #82 Customer Care Representative, #83 Customer Service Assistant — the CSR family is heavily represented on the lists.",
+      note: "Also #52 Call Center Agent, #82 Customer Care Representative, #83 Customer Service Assistant — the CSR family is heavily represented on the lists. Converted per the blessed csr.md (dual-source: PSF-CCB Agent/CS&S printed pp.14–15 + TESDA CCS NC II TR amended 2014-10-01).",
     },
     roleSummary: "Handles customer contacts end to end within SLA — English transactions, empathy, CRM logging, data privacy discipline.",
     skills: [
-      { name: "Counter service delivery processes", tier: "core", sourceTag: "PSF", what: "End-to-end call/chat handling within SLA." },
-      { name: "Communicate effectively in English for customer service", tier: "core", sourceTag: "TESDA", what: "English-language customer transactions." },
-      { name: "Customer Handling and Care", tier: "core", sourceTag: "PSF", what: "Customer empathy + resolution behavior." },
-      { name: "Customer Relationship Management", tier: "core", sourceTag: "PSF", what: "Record/track follow-ups in CRM systems." },
-      { name: "Compliance with Legal Regulations / Data Privacy (RA 10173 invoked in doc)", tier: "core", sourceTag: "PSF", what: "Handle personal data inside the call per law." },
-      { name: "Digital Fluency (systems + tools)", tier: "secondary", sourceTag: "PSF", what: "CRM, telephony, case tools fluency." },
-      { name: "Communication · Customer Orientation · Problem Solving · Global Perspective (Enabling, Basic/Intermediate)", tier: "secondary", sourceTag: "PSF", what: "Service behavior." },
+      { name: "Communicate effectively in English for customer service", tier: "core", sourceTag: "TESDA", what: "English-language customer transactions (CCS NC II ICT313365)." },
+      { name: "Perform customer service delivery processes", tier: "core", sourceTag: "TESDA", what: "Inbound/outbound call handling per enterprise procedures (ICT313366)." },
+      { name: "Demonstrate ability to effectively engage customers", tier: "core", sourceTag: "TESDA", what: "Sense and acknowledge customer feelings inside the call (ICT313367)." },
+      { name: "Customer Service Delivery", tier: "core", sourceTag: "PSF", what: "Anticipate needs; deliver quality service on time." },
+      { name: "Customer Handling and Care", tier: "core", sourceTag: "PSF", what: "Empathy, de-escalation and resolution behavior inside the call. (flagged paraphrase)" },
+      { name: "Customer Relationship Management", tier: "core", sourceTag: "PSF", what: "Log every customer interaction accurately in the CRM. (flagged paraphrase)" },
+      { name: "Compliance with Legal Regulations", tier: "core", sourceTag: "PSF", what: "Handle personal data and service rules inside the call per law (RA 10173 in the doc). (flagged paraphrase)" },
+      { name: "Technology and Systems Application", tier: "secondary", sourceTag: "PSF", what: "CRM, telephony, case tools fluency." },
+      { name: "Consumer Intelligence Analysis · Sentiment Analysis · Problem Identification · Continuous Improvement Management · Customer Acquisition Management · Brand Campaign Management (printed FSC list block)", tier: "secondary", sourceTag: "PSF", what: "The wide printed FSC list as ONE grouped row (the agent's growth edge)." },
+      { name: "Collaboration · Communication · Customer Orientation · Digital Fluency · Problem Solving · Global Perspective (Enabling, Basic/Intermediate)", tier: "secondary", sourceTag: "PSF", what: "Service behavior (printed stages carried)." },
     ],
   },
   {
@@ -442,15 +537,19 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "hard-to-fill",
       source: "JobsFit LMI 2013–2020 · Hard-to-Fill #5, Transport & Logistics (Operations Analyst)",
-      note: "Also In-demand #191 (Operations Staff, same functional family). Skill rows are a declared [O*NET] gap-filler — no PH artifact owns this role family.",
+      note: "Also In-demand #191 (Operations Staff, same functional family). Skill rows are a declared [O*NET] gap-filler — no PH artifact owns this role family (O*NET 13-1111.00 Management Analysts, updated 2026); flagged condensed row names per the accepted naming ruling.",
     },
     roleSummary: "Maps how work actually flows — gathers, observes, frames options — and writes the findings down.",
     skills: [
-      { name: "Process study/gathering & analysis", tier: "core", sourceTag: "O*NET", what: "Map the current workflow." },
-      { name: "Interviewing/on-site observation", tier: "core", sourceTag: "O*NET", what: "Talk to doers, not dashboards." },
-      { name: "Solution framing (alternative methods of proceeding)", tier: "core", sourceTag: "O*NET", what: "Present options, not verdicts." },
-      { name: "Documentation & recommendation write-ups", tier: "core", sourceTag: "O*NET", what: "SOPs and findings memos." },
-      { name: "Data hygiene basics (Excel/SQL pulls)", tier: "secondary", sourceTag: "O*NET", what: "Practical analyst tooling." },
+      { name: "Process study planning (scoping the study of work problems)", tier: "core", sourceTag: "O*NET", what: "Scope the study of work problems and procedures." },
+      { name: "Information gathering & organizing", tier: "core", sourceTag: "O*NET", what: "Collect and structure the evidence." },
+      { name: "On-site observation & interviewing", tier: "core", sourceTag: "O*NET", what: "Talk to doers, not dashboards." },
+      { name: "Data analysis & solution framing", tier: "core", sourceTag: "O*NET", what: "Present options, not verdicts." },
+      { name: "Findings documentation & recommendation write-ups", tier: "core", sourceTag: "O*NET", what: "SOPs and findings memos." },
+      { name: "Implementation support & training of revised methods", tier: "secondary", sourceTag: "O*NET", what: "Manuals and training for new forms/reports/procedures." },
+      { name: "Forms/reports review & redesign", tier: "secondary", sourceTag: "O*NET", what: "Format, distribution and purpose reviews." },
+      { name: "Records-management program design", tier: "secondary", sourceTag: "O*NET", what: "Filing/protection/retrieval program support." },
+      { name: "PSOC 2421 corroboration block (lettered task a)", tier: "secondary", sourceTag: "PSOC", what: "Objectives/strategies framing the family prints (no O*NET counterpart)." },
       { name: "Communication · Critical Thinking · Teamwork (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Cross-functional behavior." },
     ],
   },
@@ -465,14 +564,19 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #215 (Purchasing Officer, Power & Utilities)",
-      note: "Also #48 Buyer/Purchasing Agent (Retail). Skill rows are a declared [O*NET] gap-filler; no TESDA procurement NC verified.",
+      note: "Also #48 Buyer/Purchasing Agent (Retail). Skill rows are a declared [O*NET] gap-filler; no TESDA procurement NC verified. RA 9184 caveat rides its resource wherever it renders (keep-with-flag ruling 2026-10-29).",
     },
     roleSummary: "Runs the PO lifecycle — requisitions, bids, price proposals, compliance — keeping sourcing honest and papered.",
     skills: [
-      { name: "Purchase order issuance and requisition review", tier: "core", sourceTag: "O*NET", what: "Core PO lifecycle skill." },
-      { name: "Bid/quote evaluation", tier: "core", sourceTag: "O*NET", what: "Comparing vendors on total value." },
-      { name: "Compliance & policy adherence (procurement rules)", tier: "core", sourceTag: "O*NET", what: "Guardrails in sourcing." },
-      { name: "Product specification write-ups", tier: "secondary", sourceTag: "O*NET", what: "Translating business need into spec." },
+      { name: "Purchase order issuance & requisition review", tier: "core", sourceTag: "O*NET", what: "Prepare POs, solicit bids, review requisitions." },
+      { name: "Price-proposal analysis", tier: "core", sourceTag: "O*NET", what: "Analyze price proposals to determine reasonable prices." },
+      { name: "Best-value purchasing (quality/price/amount)", tier: "core", sourceTag: "O*NET", what: "Highest quality at the lowest price in correct amounts." },
+      { name: "Legal & policy compliance (procurement rules)", tier: "core", sourceTag: "O*NET", what: "Monitor and follow applicable laws and regulations." },
+      { name: "Supplier research & evaluation", tier: "secondary", sourceTag: "O*NET", what: "Evaluate suppliers on the printed capability set." },
+      { name: "Contract performance monitoring", tier: "secondary", sourceTag: "O*NET", what: "Monitor contract compliance; administer/vendor negotiations." },
+      { name: "Product specification writing", tier: "secondary", sourceTag: "O*NET", what: "Write/review product specs with working technical knowledge." },
+      { name: "Records & shipment monitoring", tier: "secondary", sourceTag: "O*NET", what: "Purchase records, costs, deliveries; resolve undelivered goods." },
+      { name: "Market watching (supply/demand, price trends)", tier: "secondary", sourceTag: "O*NET", what: "Track market conditions and price trends." },
       { name: "Communication · Critical Thinking · Ethics/Professionalism (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Vendor relationships." },
     ],
   },
@@ -487,14 +591,21 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #216 (Quality Analyst, IT/BPM grouping)",
-      note: "Same #216 as 2.2 — the platform serves both flavors (software QA / contact-center QA). PSOC mapping judgment flagged in the roster; exact per-instance PSF-CCB FSC pending extraction (roster verify list §9-3).",
+      note: "Same #216 as 2.2 — the platform serves both flavors (software QA / contact-center QA). PSOC mapping judgment flagged in the roster; the per-instance PSF-CCB Quality Auditor extraction is now closed (blessed ccqa.md, printed pp.34–35) — the Supervisor+ rungs stay unextracted (not entry roles).",
     },
     roleSummary: "Scores interactions against the account's quality standards and turns the patterns into coaching.",
     skills: [
-      { name: "Quality Standards application", tier: "core", sourceTag: "PSF", what: "Apply scoring rubric consistently." },
-      { name: "Service metrics analysis (sentiment analysis, problem identification)", tier: "core", sourceTag: "PSF", what: "Detect quality patterns in interactions." },
-      { name: "Calibration/compliance reporting discipline", tier: "core", sourceTag: "PSF", what: "Align scoring with the account's quality standards." },
-      { name: "Customer Orientation · Communication · Critical Thinking (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Coaching conversations." },
+      { name: "Data Analytics", tier: "core", sourceTag: "PSF", what: "Elucidate data with BI tools and analytics techniques to uncover trends." },
+      { name: "Continuous Improvement", tier: "core", sourceTag: "PSF", what: "Turn audit findings into improvement follow-ups. (flagged paraphrase)" },
+      { name: "Customer Behavior Analysis", tier: "core", sourceTag: "PSF", what: "Analyze information on customer behaviors (shared FSC with PSF-BD — provenance flagged)." },
+      { name: "Customer Management", tier: "core", sourceTag: "PSF", what: "Stakeholder-side coordination of the quality program. (flagged paraphrase)" },
+      { name: "Systems Thinking", tier: "core", sourceTag: "PSF", what: "Read quality issues as system-wide patterns. (flagged paraphrase)" },
+      { name: "Document Control", tier: "core", sourceTag: "PSF", what: "Audit documentation discipline — record, store, track. (flagged paraphrase)" },
+      { name: "Technical Report Writing", tier: "core", sourceTag: "PSF", what: "QA reports and coaching feedback write-ups. (flagged paraphrase)" },
+      { name: "Analytical Method Validation", tier: "secondary", sourceTag: "PSF", what: "Keep the scoring method sound and repeatable. (flagged paraphrase)" },
+      { name: "Data Visualization", tier: "secondary", sourceTag: "PSF", what: "Dashboards/graphs for KPI communication. (flagged paraphrase)" },
+      { name: "Change Management · Concept Creation · Coaching and Mentoring · Conflict Resolution · Risk Management and Administration", tier: "secondary", sourceTag: "PSF", what: "Supporting behaviors for the QA seat (one row per printed FSC in the spec)." },
+      { name: "Collaboration · Communication · Creative Thinking · Critical Thinking · Customer Orientation · Digital Fluency · Problem Solving · Project Management · Research · Stakeholder Management (Enabling, I/B)", tier: "secondary", sourceTag: "PSF", what: "Coaching-conversation and analysis behavior layer (printed stages carried)." },
     ],
   },
   {
@@ -508,13 +619,22 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #99 (Event Manager, asterisked)",
-      note: "Plus Hard-to-Fill 'Event Coordinator' (Hotel/Restaurant/Tourism grouping). White-collar-adjacent corporate-events variant. Skill rows are a declared [O*NET] gap-filler — no PSF event doc exists.",
+      note: "Plus Hard-to-Fill 'Event Coordinator' (Hotel/Restaurant/Tourism grouping). White-collar-adjacent corporate-events variant. Skill rows are a declared [O*NET] gap-filler (O*NET 13-1121.00, updated 2026; fetched live 2026-10-29) — no PSF event doc exists. The asterisk note travels with the demand citation.",
     },
     roleSummary: "Coordinates the events chain — venues, vendors, registration — and tracks the budget without surprises.",
     skills: [
-      { name: "Venue/vendor coordination & booking paperwork", tier: "core", sourceTag: "O*NET", what: "The core logistics chain." },
-      { name: "Registration/RSVP systems operation", tier: "core", sourceTag: "O*NET", what: "Attendee data handling basics." },
-      { name: "Budget tracking for events", tier: "secondary", sourceTag: "O*NET", what: "Basic finance hygiene." },
+      { name: "Client objectives & requirements determination", tier: "core", sourceTag: "O*NET", what: "Consult with customers on event objectives and requirements." },
+      { name: "Event services coordination", tier: "core", sourceTag: "O*NET", what: "Coordinate the accommodation/equipment/catering chain." },
+      { name: "Provider evaluation & selection; contract negotiation", tier: "core", sourceTag: "O*NET", what: "Evaluate providers; negotiate contracts within budget." },
+      { name: "Facility inspection & conformity", tier: "core", sourceTag: "O*NET", what: "Inspect facilities against customer requirements." },
+      { name: "Program, agenda, budget & services planning", tier: "core", sourceTag: "O*NET", what: "Plan the program, agenda and budget; monitor with sponsors." },
+      { name: "Participant registration", tier: "core", sourceTag: "O*NET", what: "Organize registration of event participants." },
+      { name: "Event-records keeping (incl. financials)", tier: "core", sourceTag: "O*NET", what: "Maintain records of event aspects, financials included; verify accuracy." },
+      { name: "Event monitoring, compliance & problem resolution", tier: "core", sourceTag: "O*NET", what: "Monitor compliance and satisfaction; resolve problems. (the permit task keeps its US-institution PH note)" },
+      { name: "Bills review & payment approval", tier: "secondary", sourceTag: "O*NET", what: "Review bills; approve payment under finance." },
+      { name: "Post-event evaluation", tier: "secondary", sourceTag: "O*NET", what: "Evaluate how future events could improve." },
+      { name: "Marketing & publicizing support", tier: "secondary", sourceTag: "O*NET", what: "Promote events; produce brochures/publications." },
+      { name: "Administrative details & inquiries", tier: "secondary", sourceTag: "O*NET", what: "Financial admin, promo-material dissemination, inquiry responses." },
       { name: "Communication · Professionalism · Teamwork (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Client/hotel coordination behavior." },
     ],
   },
@@ -531,15 +651,19 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #38 (Bookkeeper)",
-      note: "No PSF sector doc covers accounting (ADR-0001) — skills anchor on the TESDA Bookkeeping NC III TR as written.",
+      note: "No PSF sector doc covers accounting (ADR-0001) — skills anchor on the TESDA Bookkeeping NC III TR as written (TR fetched live 2026-10-29 from the reachable Downloadables URL; \"100% accuracy\" lines are unit-scoped and verbatim per V-book-2).",
     },
     roleSummary: "Records the business's transactions end to end — journals to ledgers to trial balance to financial reports.",
     skills: [
-      { name: "Journalize transactions", tier: "core", sourceTag: "TESDA", what: "Record business transactions in journals." },
-      { name: "Post transactions", tier: "core", sourceTag: "TESDA", what: "Transfer journal entries to ledgers (100% accuracy standard in TR)." },
-      { name: "Prepare trial balance", tier: "core", sourceTag: "TESDA", what: "Extract and summarize pre/post-closing trial balances." },
+      { name: "Journalize transactions", tier: "core", sourceTag: "TESDA", what: "Record business transactions in journals (\"Journal entries are prepared with 100% accuracy\")." },
+      { name: "Post transactions", tier: "core", sourceTag: "TESDA", what: "Transfer journal entries to ledgers (\"Postings are done with 100% accuracy\")." },
+      { name: "Prepare trial balance", tier: "core", sourceTag: "TESDA", what: "Extract and summarize trial balances (\"Trial Balances are extracted with 100% accuracy\")." },
       { name: "Prepare financial reports (manual)", tier: "core", sourceTag: "TESDA", what: "FS generation from ledger." },
-      { name: "Review internal control system", tier: "secondary", sourceTag: "TESDA", what: "Basic control checks in line with industry practice." },
+      { name: "Review internal control system", tier: "secondary", sourceTag: "TESDA", what: "Basic control checks in line with industry practice (the NC III incremental advanced unit)." },
+      { name: "Verify and record financial documents & records", tier: "secondary", sourceTag: "O*NET", what: "Check/verify figures and documents for correct entry." },
+      { name: "Operate accounting software", tier: "secondary", sourceTag: "O*NET", what: "ERP/data-entry fluency on accounting software." },
+      { name: "PSOC 3313 record-to-report envelope", tier: "secondary", sourceTag: "PSOC", what: "Maintain complete transaction records with guidance from Accountants." },
+      { name: "Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Office-behavior layer." },
     ],
   },
   {
@@ -553,15 +677,19 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #3 (Accounting Clerk)",
-      note: "Third occupation on the entire national list.",
+      note: "Third occupation on the entire national list. Converted per the blessed acctclerk.md (O*NET 43-3031.00 gap-filler + PSOC 4311 corroborating nearly 1:1): the platform's former \"3-way match\" label is replaced by the source-verbatim row name per V-acctclerk-3 (the matching substance rides the O*NET anchor).",
     },
     roleSummary: "Runs the AP/AR core loop — invoice matching, reconciliation, spreadsheet-and-accounting-software accuracy.",
     skills: [
-      { name: "Match invoices to POs/receipts (3-way match)", tier: "core", sourceTag: "O*NET", what: "The AP core loop." },
-      { name: "Reconcile supplier accounts & statements to ledgers", tier: "core", sourceTag: "PSOC", what: "Month-end readiness." },
-      { name: "Operate accounting software & spreadsheets", tier: "core", sourceTag: "O*NET", what: "ERP/data-entry fluency." },
-      { name: "Journalize/post transactions (bookkeeping cycle)", tier: "secondary", sourceTag: "TESDA", what: "Needed for close support tasks." },
-      { name: "Petty cash / collections recording", tier: "secondary", sourceTag: "PSOC", what: "Cash-handling accounting." },
+      { name: "Check figures, postings, and documents for correct entry, mathematical accuracy, and proper codes", tier: "core", sourceTag: "O*NET", what: "The checking loop — figures, postings, invoice matching, coding." },
+      { name: "Operate computers programmed with accounting software", tier: "core", sourceTag: "O*NET", what: "Accounting-software and spreadsheet fluency." },
+      { name: "Classify, record, and summarize numerical and financial data to compile and keep financial records, using journals and ledgers or computers", tier: "core", sourceTag: "O*NET", what: "The record-keeping loop (PSOC 4311 letter c confirms verbatim)." },
+      { name: "Reconcile or note and report discrepancies found in records", tier: "core", sourceTag: "O*NET", what: "Month-end readiness — reconcile and report." },
+      { name: "Prepare and issue account statements / bills / invoices", tier: "core", sourceTag: "O*NET", what: "Statement/bill/invoice preparation and issue." },
+      { name: "Receive, record, and bank cash, checks, and vouchers (petty cash / collections recording)", tier: "secondary", sourceTag: "O*NET", what: "Cash-handling accounting. (platform parenthetical kept with its footnote)" },
+      { name: "Journalize/post transactions (bookkeeping cycle)", tier: "secondary", sourceTag: "TESDA", what: "Close-support tasks on the bookkeeping cycle." },
+      { name: "Government forms & compliance paperwork", tier: "secondary", sourceTag: "O*NET", what: "Forms/returns processing (PH regulatory layer is a later addendum)." },
+      { name: "PSOC 4311 record-keeping envelope", tier: "secondary", sourceTag: "PSOC", what: "The unit's own compute/post/verify envelope." },
       { name: "Communication · Professionalism · Critical Thinking (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Original-document discipline." },
     ],
   },
@@ -576,15 +704,20 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #196 (Payroll Assistant/Analyst)",
-      note: "Skill rows are a declared [O*NET] gap-filler; PH statutory-pay knowledge (13th month, premiums) is a platform layer from BIR/DOLE publications (later pass).",
+      note: "Skill rows are a declared [O*NET] gap-filler (O*NET 43-3051.00), dual-quoted with PSOC 4313; PH statutory-pay knowledge (13th month, premiums) is the platform layer — the DOLE-BWC handbook (via the official NWPC mirror) is the verified free document. SSS/PhilHealth/Pag-IBIG portals stand only as labeled start-here placeholders (keep-with-flag ruling 2026-10-29); BIR eFPS tutorial pages dead-in-copy while unreachable.",
     },
     roleSummary: "Verifies time and attendance, computes wages with statutory deductions, and balances the payroll register to the bank.",
     skills: [
-      { name: "Time/attendance data verification & posting", tier: "core", sourceTag: "O*NET", what: "The source-of-truth loop." },
-      { name: "Wages & statutory deductions computation", tier: "core", sourceTag: "O*NET", what: "Gross → net runs including withholding tax, SSS/PhilHealth/Pag-IBIG." },
-      { name: "Payroll register balancing & reconciliation", tier: "core", sourceTag: "O*NET", what: "Bank-vs-ledger match." },
-      { name: "Employee payroll query handling", tier: "secondary", sourceTag: "O*NET", what: "Employee-facing service." },
+      { name: "Verify attendance, hours worked, and pay adjustments, and post information onto designated records", tier: "core", sourceTag: "O*NET", what: "The source-of-truth loop (PSOC 4313 e confirms verbatim)." },
+      { name: "Compute wages and deductions, and enter data into computers", tier: "core", sourceTag: "O*NET", what: "Gross → net runs including withholding tax, SSS/PhilHealth/Pag-IBIG." },
+      { name: "Prepare and balance period-end reports, and reconcile issued payrolls to bank statements", tier: "core", sourceTag: "O*NET", what: "Bank-vs-ledger match." },
+      { name: "Process and issue employee paychecks and statements of earnings and deductions", tier: "core", sourceTag: "O*NET", what: "Pay-out step of the loop." },
+      { name: "Prepare and file payroll tax returns / statutory paperwork", tier: "secondary", sourceTag: "O*NET", what: "PH statutory paperwork layer (BIR/SSS context — flagged placeholders)." },
+
+      { name: "Provide information to employees and managers on payroll matters, tax issues, benefit plans, and collective agreement provisions", tier: "secondary", sourceTag: "O*NET", what: "Employee-facing service." },
+      { name: "Keep leave records", tier: "secondary", sourceTag: "O*NET", what: "Leave trackers (SL/VL, service incentive leave)." },
       { name: "Records hygiene & confidentiality (RA 10173 context)", tier: "secondary", sourceTag: "NACE", what: "PII discipline." },
+      { name: "Communication · Professionalism (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Employee-facing behavior." },
     ],
   },
   {
@@ -598,15 +731,20 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #45 (BPS Finance and Accounting Officer, asterisked)",
-      note: "Also #5 Accounting/Finance Associate; #4 Accounting Supervisor is the next rung. PSF-GIH per-role map pending extraction (roster verify list) — the entry here is [O*NET]-anchored until confirmed.",
+      note: "Also #5 Accounting/Finance Associate; #4 Accounting Supervisor is the next rung. Converted per the blessed fas.md — [PSF] primary upgraded to PSF-GIH F&A \"Agent/Associate/Representative/Analyst\" (printed pp.92–93, spread pins V-fas-1/2/3 resolved 2026-10-29); the old \"SOX/internal-controls\" catalog label is re-anchored to the printed FSC Internal Controls.",
     },
     roleSummary: "Processes the GL engine in a shared service — journal entries, month-end support, ERP transactions with control-checklist discipline.",
     skills: [
-      { name: "GL & journal entry processing", tier: "core", sourceTag: "O*NET", what: "Record-to-report basics." },
-      { name: "Month-end close support (accruals, reconciliations)", tier: "core", sourceTag: "O*NET", what: "Balance sheet reconciliations." },
-      { name: "ERP transactions (general ledger modules)", tier: "core", sourceTag: "O*NET", what: "SAP/Oracle/NetSuite navigation." },
-      { name: "SOX/internal-controls checklist discipline", tier: "secondary", sourceTag: "PSOC", what: "Control frameworks awareness." },
-      { name: "Team communication · Professionalism (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Shared-services behavior." },
+      { name: "Perform financial accounting and corporate reporting activities", tier: "core", sourceTag: "PSF", what: "Month-end support, accurate records, double-entry processing. (printed CWF)" },
+      { name: "Process business transactions and reports using information technology tools", tier: "core", sourceTag: "PSF", what: "Accounting-system reports, account-code mapping, accurate data entry. (printed CWF)" },
+      { name: "Support strategic planning", tier: "core", sourceTag: "PSF", what: "Budgeting/forecasting assistance; balance-sheet and P&L analysis support. (printed CWF)" },
+      { name: "Accounting and Tax Systems", tier: "core", sourceTag: "PSF", what: "Input/operate accounting systems (printed L2/L3 cells — relabeled per facsimile)." },
+      { name: "Data Collection and Analysis", tier: "core", sourceTag: "PSF", what: "Collect with BI tools; analyse for insights (printed L3/L4 cells — relabeled per facsimile)." },
+      { name: "Financial Analysis", tier: "core", sourceTag: "PSF", what: "Ratio analyses on statements for insights. (printed L3 at the entry rung — ruled accepted verbatim; one-line framing: the framework's own entry sizing)" },
+      { name: "Internal Controls", tier: "secondary", sourceTag: "PSF", what: "Evaluate control effectiveness; spot control gaps (printed 2–3 progression as printed)." },
+      { name: "Diversity Awareness and Management", tier: "secondary", sourceTag: "PSF", what: "Awareness side of people interactions (honest thin on resources)." },
+      { name: "Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Sense Making · Transdisciplinary Thinking (Enabling, B/I)", tier: "secondary", sourceTag: "PSF", what: "ESC strip as printed (Collaboration B · Communication I · Digital Fluency I · Learning Agility B · Problem Solving B · Sense Making B · Transdisciplinary B)." },
+      { name: "O*NET corroboration block (operating-the-GL-engine tasks)", tier: "secondary", sourceTag: "O*NET", what: "The O*NET 43-3031.00 side of the same record-to-report loop — quoted, not renamed." },
     ],
   },
   {
@@ -620,14 +758,19 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #108 (Financial Analyst)",
-      note: "Demand is economy-wide: also named under IT/BPM (#34) and Hotel/Restaurant/Tourism (#52) groupings. Declared [O*NET] gap-filler; CPA/CFA is NOT an entry gate.",
+      note: "Demand is economy-wide: also named under IT/BPM (#34) and Hotel/Restaurant/Tourism (#52) groupings. Declared [O*NET] gap-filler (13-2051.00 Financial and Investment Analysts) dual-quoted with PSOC 2413 — the least contested gap-filler row set in the track; CPA/CFA is NOT an entry gate.",
     },
     roleSummary: "Reads financial statements and industry trends into models, write-ups, and a recommendation supportable in review.",
     skills: [
-      { name: "Financial statement analysis & modeling", tier: "core", sourceTag: "O*NET", what: "Build the base DCF-driven story." },
-      { name: "Industry/company research write-ups", tier: "core", sourceTag: "O*NET", what: "Communicate the recommendation." },
-      { name: "Internal rate/ROI/NPV & capitalization advice", tier: "secondary", sourceTag: "O*NET", what: "Capital budgeting fluency." },
-      { name: "Data hygiene (Excel robustness)", tier: "secondary", sourceTag: "O*NET", what: "Spreadsheet engineering." },
+      { name: "Analyze financial information to forecast business, industry, or economic conditions for investment decisions", tier: "core", sourceTag: "O*NET", what: "Build the base DCF-driven story." },
+      { name: "Monitor economic, industrial, and corporate developments", tier: "core", sourceTag: "O*NET", what: "Stay abreast across publications and sources." },
+      { name: "Employ financial models to develop solutions or assess the financial or capital impact of transactions", tier: "core", sourceTag: "O*NET", what: "Model-design work for decisions." },
+      { name: "Interpret data on price, yield, stability, future investment-risk trends, economic influences", tier: "core", sourceTag: "O*NET", what: "Read the market data the desk runs on." },
+      { name: "Recommend investments and investment timing", tier: "core", sourceTag: "O*NET", what: "The desk's output — recommendations supportable in review." },
+      { name: "Present oral or written reports on general economic trends, individual corporations, and entire industries", tier: "core", sourceTag: "O*NET", what: "The communication backbone of the analyst job." },
+      { name: "Draw charts and graphs, using computer spreadsheets, to illustrate technical reports", tier: "secondary", sourceTag: "O*NET", what: "Spreadsheet visualization." },
+      { name: "Advise clients on aspects of capitalization, such as amounts, sources, or timing", tier: "secondary", sourceTag: "O*NET", what: "Capital budgeting fluency (normally senior-received work)." },
+      { name: "Supervise, train, or mentor junior team members", tier: "secondary", sourceTag: "O*NET", what: "Senior-heavy; kept for honesty of the full task list (resourceless by declaration)." },
       { name: "Communication · Critical Thinking · Professionalism (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Analyst craft behavior." },
     ],
   },
@@ -642,13 +785,15 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "hard-to-fill",
       source: "JobsFit LMI 2013–2020 · Hard-to-Fill (Wholesale & Retail grouping) · Treasury Assistant",
-      note: "Hybrid [O*NET Tellers + PSOC 4312] tiering, openly flagged in the roster — no O*NET occupation matches corporate treasury assistant exactly.",
+      note: "Hybrid [O*NET Tellers + PSOC 4312] tiering, openly flagged in the roster — no O*NET occupation matches corporate treasury assistant exactly. Declared hybrid basis accepted (ruling: gaps accepted, no forced searches); no invented \"cash positioning/forecasting\".",
     },
     roleSummary: "Balances cash, reconciles the spreadsheets, and keeps the treasury paperwork moving with zero surprises.",
     skills: [
-      { name: "Cash balancing & daily transaction tracking", tier: "core", sourceTag: "O*NET", what: "Daily cash discipline." },
-      { name: "Bank reconciliation spreadsheets", tier: "core", sourceTag: "O*NET", what: "Recon bookkeeping." },
-      { name: "Treasury documentation (LC/PO/financial instrument paperwork)", tier: "secondary", sourceTag: "PSOC", what: "Documentation-side workflow." },
+      { name: "Balance currency, coin, and checks in cash drawers at ends of shifts and calculate daily transactions, using computers, calculators, or adding machines", tier: "core", sourceTag: "O*NET", what: "Daily cash discipline (borrowed O*NET-Tellers task; hybrid flagged)." },
+      { name: "Enter customers' transactions into computers to record transactions and issue computer-generated receipts", tier: "core", sourceTag: "O*NET", what: "Transaction entry and receipts." },
+      { name: "Reconcile records of financial transactions", tier: "core", sourceTag: "O*NET", what: "Spreadsheet recon (the old \"Bank reconciliation spreadsheets\" label renamed to the quoted O*NET verb with attribution)." },
+      { name: "Prepare financial documents, and calculate interest or brokerage charges and stamp duties payable", tier: "secondary", sourceTag: "PSOC", what: "LC/PO/instrument paperwork flavor (PSOC 4312 d)." },
+      { name: "Maintain records of bonds, shares and other securities bought or sold on behalf of clients or employer", tier: "secondary", sourceTag: "PSOC", what: "Securities-record upkeep (PSOC 4312 e)." },
       { name: "Accuracy/Professionalism (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Zero-surprise cash behavior." },
     ],
   },
@@ -663,15 +808,19 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #62 (Collector, Banking and Finance grouping)",
-      note: "A PH-native customer-service corporate occupation on the DOLE lists — not a trades role.",
+      note: "A PH-native customer-service corporate occupation on the DOLE lists — not a trades role. Declared [O*NET] gap-filler (43-3011.00) + PSOC 4214; thin-resource zone accepted (no free collections-specific training verified — BSP 403, CFI paid); RA 3765 stays flagged dead-in-copy wherever named (never a live link, ruling 2026-10-29).",
     },
     roleSummary: "Locates and notifies customers of delinquent accounts, arranges repayment, and logs every touch.",
     skills: [
-      { name: "Delinquent-account outreach (phone/mail/visit discipline)", tier: "core", sourceTag: "O*NET", what: "The core collection loop." },
-      { name: "Repayment scheduling/negotiation", tier: "core", sourceTag: "O*NET", what: "Solving-not-hounding approach." },
-      { name: "Account-status documentation & CRM logging", tier: "core", sourceTag: "O*NET", what: "Every touch logged." },
-      { name: "Speech-tone handling + objection management", tier: "secondary", sourceTag: "O*NET", what: "Conversational craft." },
-      { name: "Data tracking hygiene · Professionalism (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Skip-tracing ethics." },
+      { name: "Locate and notify customers of delinquent accounts by mail, telephone, or personal visits to solicit payment", tier: "core", sourceTag: "O*NET", what: "The core collection loop." },
+      { name: "Arrange for debt repayment or establish repayment schedules, based on customers' financial situations", tier: "core", sourceTag: "O*NET", what: "Solving-not-hounding approach." },
+      { name: "Record information about financial status of customers and status of collection efforts", tier: "core", sourceTag: "O*NET", what: "Case-file reading and recording." },
+      { name: "Confer with customers by telephone or in person to determine reasons for overdue payments and to review the terms of sales, service, or credit contracts", tier: "core", sourceTag: "O*NET", what: "The conversation craft." },
+      { name: "Receive payments and post amounts paid to customer accounts", tier: "core", sourceTag: "O*NET", what: "Money-handling close of the loop." },
+      { name: "Trace delinquent customers to new addresses by inquiring at post offices, telephone companies, credit bureaus, or through the questioning of neighbors", tier: "secondary", sourceTag: "O*NET", what: "Skip-tracing (ethics-sensitive — DPA + conduct note carried)." },
+      { name: "Recommend legal action or disconnection when payment cannot be obtained / negotiate credit extensions", tier: "secondary", sourceTag: "O*NET", what: "Escalation and concession authority (flagged paraphrase name)." },
+      { name: "Administrative upkeep of assigned accounts", tier: "secondary", sourceTag: "O*NET", what: "Account-record upkeep (flagged paraphrase name)." },
+      { name: "Communication · Professionalism (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Skip-tracing ethics, customer care." },
     ],
   },
   {
@@ -685,14 +834,18 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #80 (Credit Investigator)",
-      note: "Hybrid [PSOC 3312 unit text + O*NET Loan Officers] tiering, openly declared — tiering is judgment-based and flagged.",
+      note: "Hybrid [PSOC 3312 unit text + O*NET Loan Officers] tiering, openly declared — tiering is judgment-based and flagged (PSOC-weighted at the investigator band). Label spelling split preserved as printed (\"Credit and loans officers\" label vs \"Credit and loan officers…\" description).",
     },
     roleSummary: "Verifies documents, assesses financial status, and supports credit decisions within authority limits.",
     skills: [
-      { name: "Document verification (income/ID/collateral docs)", tier: "core", sourceTag: "PSOC", what: "KYC quality." },
-      { name: "Financial-status assessment", tier: "core", sourceTag: "O*NET", what: "Case-file reading." },
-      { name: "Loan/credit workflow systems operation", tier: "core", sourceTag: "PSOC", what: "Decision-support within authority." },
-      { name: "Customer interaction & explanation", tier: "secondary", sourceTag: "O*NET", what: "Client-facing credit conversations." },
+      { name: "Researching and evaluating loan applicant's financial status, references, credit and ability to repay the loan", tier: "core", sourceTag: "PSOC", what: "Case-file reading (the occupational core — PSOC letter b)." },
+      { name: "Interviewing applicants for personal, mortgage, student and business loans", tier: "core", sourceTag: "PSOC", what: "Client-facing credit conversations (PSOC letter a)." },
+      { name: "Submitting credit and loan applications to management with recommendations for approval or rejection; approving or rejecting within authorized limits", tier: "core", sourceTag: "PSOC", what: "Decision-support within authority (PSOC letters c–d)." },
+      { name: "Keeping records of payments, and preparing routine letters requesting payment for overdue accounts and forwarding these for legal action", tier: "core", sourceTag: "PSOC", what: "KYC quality (PSOC letter e)." },
+      { name: "Completing credit and loan documentation", tier: "core", sourceTag: "PSOC", what: "Documentation completeness (PSOC letter f)." },
+      { name: "Explain to customers the different types of loans and credit options (including terms)", tier: "secondary", sourceTag: "O*NET", what: "Client-facing credit conversations." },
+      { name: "Confer with underwriters to resolve mortgage application problems / submit applications to credit analysts", tier: "secondary", sourceTag: "O*NET", what: "Underwriter liaison (adjacent-band pathway row)."},
+      { name: "Sizing the credit portfolio (delinquent-account reports)", tier: "secondary", sourceTag: "O*NET", what: "Delinquency reporting (borders coll — kept as adjacency)." },
       { name: "Integrity/Professionalism (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Financial-services ethics." },
     ],
   },
@@ -707,14 +860,18 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #29 (Bank Teller, Banking and Finance grouping)",
-      note: "[O*NET]-anchored; branch-service decorum from NACE cross-cutting — no PH framework covers teller skill detail.",
+      note: "[O*NET]-anchored (43-3071.00 Tellers) dual-quoted with PSOC 4211; branch-service decorum from NACE cross-cutting — no PH framework covers teller skill detail. The post-office flank (letter d)) stays quoted for source honesty with bank-branch framing (accepted row-naming ruling).",
     },
     roleSummary: "Handles the branch's cash and transactions to daily zero variance — verification, signature checks, accurate systems entry.",
     skills: [
-      { name: "Cash drawer balancing & transaction logging", tier: "core", sourceTag: "O*NET", what: "Daily zero-variance." },
-      { name: "Deposit/withdrawal verification & signature checking", tier: "core", sourceTag: "O*NET", what: "Transaction integrity." },
-      { name: "Customer transaction systems (prompt/accurate data entry)", tier: "core", sourceTag: "O*NET", what: "System fluency." },
-      { name: "Front-desk service etiquette", tier: "secondary", sourceTag: "NACE", what: "Branch behavior." },
+      { name: "Balance currency, coin, and checks in cash drawers at ends of shifts and calculate daily transactions, using computers, calculators, or adding machines", tier: "core", sourceTag: "O*NET", what: "Daily zero-variance." },
+      { name: "Receive checks and cash for deposit, verify amounts, and check accuracy of deposit slips", tier: "core", sourceTag: "O*NET", what: "Transaction integrity — signatures, amounts, funds." },
+      { name: "Enter customers' transactions into computers to record transactions and issue computer-generated receipts", tier: "core", sourceTag: "O*NET", what: "System fluency." },
+      { name: "Resolve problems or discrepancies concerning customers' accounts", tier: "core", sourceTag: "O*NET", what: "The zero-variance discipline." },
+      { name: "Receive mortgage, loan, or public utility bill payments, verifying payment dates and amounts due / process term deposits and other savings-plan transactions", tier: "core", sourceTag: "O*NET", what: "Counter-transaction breadth." },
+      { name: "Customer service & special services (cards, checks ordering)", tier: "secondary", sourceTag: "O*NET", what: "Cards/checks ordering (post-office letter d) kept as printed source honesty)." },
+      { name: "Explain, promote, or sell banking products", tier: "secondary", sourceTag: "O*NET", what: "Tailored recommendations on products." },
+      { name: "Front-desk service etiquette (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Branch behavior." },
       { name: "Professionalism · Teamwork (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Bank-culture fit." },
     ],
   },
@@ -729,15 +886,21 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #22 (Auditor)",
-      note: "Also named under the IT/BPM grouping (#33). Strongest 'gap-filler honesty' case — hybrid [O*NET 13-2011.00 + PSOC 3313] with no PH competency framework covering audit.",
+      note: "Also named under the IT/BPM grouping (#33). Strongest 'gap-filler honesty' case — hybrid [O*NET 13-2011.00 + PSOC 3313] with no PH competency framework covering audit. Row 11 (technology row) is the ruled ADD with its O*NET Software-Skills attribution placeholder — individual tool names stay UNQUOTED until the O*NET data version is pinned (Model C).",
     },
     roleSummary: "Reconciles accounts, tests the historical record, and keeps the audit trail signed off — the workpaper craft.",
     skills: [
-      { name: "Account reconciliation & historical testing", tier: "core", sourceTag: "O*NET", what: "Substantive testing core." },
-      { name: "Documentation (audit workpapers) & sign-off discipline", tier: "core", sourceTag: "O*NET", what: "The audit trail." },
-      { name: "Compliance frameworks (PFRS, local tax)", tier: "secondary", sourceTag: "O*NET", what: "Regulatory context (PH addendum later)." },
-      { name: "Sampling analytics (Excel/IDEA)", tier: "secondary", sourceTag: "O*NET", what: "Audit software literacy." },
-      { name: "Professional Skepticism (attitude) · Communication (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Audit-culture craft." },
+      { name: "Prepare, examine, or analyze accounting records, financial statements, or other financial reports to assess accuracy, completeness, and conformance to reporting and procedural standards", tier: "core", sourceTag: "O*NET", what: "Substantive testing core." },
+      { name: "Review accounts for discrepancies and reconcile differences", tier: "core", sourceTag: "O*NET", what: "Reconciliation discipline." },
+      { name: "Collect and analyze data to detect deficient controls, duplicated effort, extravagance, fraud, or non-compliance with laws, regulations, and management policies", tier: "core", sourceTag: "O*NET", what: "The internal-control nucleus of associate testing." },
+      { name: "Inspect cash on hand, notes receivable and payable, negotiable securities, and canceled checks to confirm records are accurate", tier: "core", sourceTag: "O*NET", what: "The inspection loop (PSOC 3313 carries the entry-band \"with guidance from Accountants\" ratio)." },
+      { name: "Examine records and interview workers to ensure recording of transactions and compliance with laws and regulations", tier: "core", sourceTag: "O*NET", what: "Interviews and compliance ensures." },
+      { name: "Prepare detailed reports on audit findings", tier: "core", sourceTag: "O*NET", what: "The audit trail (the \"sign-off\" label is a platform label, flagged)." },
+      { name: "Prepare adjusting journal entries / establish tables of accounts and assign entries to proper accounts", tier: "secondary", sourceTag: "O*NET", what: "Close-support account mapping under supervision." },
+      { name: "Compliance / tax analog & frameworks", tier: "secondary", sourceTag: "O*NET", what: "Regulatory context (PH PFRS/tax addendum later)." },
+      { name: "Senior-heavy supervision tasks", tier: "secondary", sourceTag: "O*NET", what: "Not entry expectations — honesty fold-in." },
+      { name: "Professional Skepticism (attitude) · Communication (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Audit-culture craft (skepticism kept per ruling 2026-10-29; NACE-backed, attributed)." },
+      { name: "Audit technology fluency (accounting software / Excel family)", tier: "secondary", sourceTag: "O*NET", what: "Standard accounting software / Excel family — anchored to the O*NET Software Skills list; individual tool names print only after the O*NET data version is pinned. [O*NET version-pin placeholder — unquoted until the enrich pass]" },
     ],
   },
 
@@ -753,7 +916,7 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #8 (Administrative Associate)",
-      note: "Rank 8 on the entire national list. PSOC mapping judgment flagged in the roster; the 2013–2020 DOLE list title 'Administrative Associate' sits between the two unit groups.",
+      note: "Rank 8 on the entire national list. PSOC mapping judgment flagged in the roster; the JobsFit list title sits between the two unit groups. O*NET 43-6014 re-extracted this pass (31 tasks, 200); Job-Zone honesty note stands (Zone 1–2 low-formation — the BSOA framing is not inflated).",
     },
     roleSummary: "The department's records backbone — filing systems, databases, front-of-department calls, office equipment.",
     skills: [
@@ -766,7 +929,7 @@ export const CAREERS: Career[] = [
     ],
   },
   {
-    id: "clerk", // roster 5.2
+    id: "clerk", // roster 5.2 — split row shape ruled 2026-10-29 (e/g/h → three thin rows)
     name: "Office Clerk",
     psocCode: "4110",
     psocTitle: "General office clerks",
@@ -776,19 +939,23 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #189 (Office Clerks)",
-      note: "[O*NET]-anchored; the honesty is narrowing the title to 'general office clerk' — the mental model students need.",
+      note: "[O*NET]-anchored; the honesty is narrowing the title to 'general office clerk' — the mental model students need. Row shape ruled 2026-10-29: the unit letter e/g/h bundle is split into three thin rows exactly as the sources print the tasks (row 6 declared resourceless-thin).",
     },
     roleSummary: "Keeps the office flowing — records sorted and filed, calls answered and routed, requests answered from the files.",
     skills: [
-      { name: "Records ordering & filing (manual/computer)", tier: "core", sourceTag: "O*NET", what: "Core clerk task." },
-      { name: "Mail/phone handling (incl. answering/directing calls)", tier: "core", sourceTag: "O*NET", what: "Office switchboard basics." },
-      { name: "Document retrieval/reporting from records", tier: "core", sourceTag: "O*NET", what: "Information service task." },
-      { name: "Data entry for business transactions", tier: "secondary", sourceTag: "O*NET", what: "Beneath the specialist data-entry role (5.3)." },
+      { name: "Recording, preparing, sorting, classifying and filing information", tier: "core", sourceTag: "PSOC", what: "Core clerk task (unit letter a)." },
+      { name: "Sorting, opening and sending mail", tier: "core", sourceTag: "PSOC", what: "Office mail flow (unit letter b)." },
+      { name: "Photocopying and sending documents", tier: "core", sourceTag: "PSOC", what: "Document reproduction (unit letter c)." },
+      { name: "Routine reports & correspondence", tier: "core", sourceTag: "PSOC", what: "Routine written output (unit letter d)." },
+      { name: "Responding to enquiries (telephone/electronic) or forwarding", tier: "core", sourceTag: "PSOC", what: "Enquiry service from records (unit letter f)." },
+      { name: "Recording issue of equipment to staff", tier: "secondary", sourceTag: "PSOC", what: "Equipment-issue register (unit letter e — thin lettered row; declared resourceless-thin)." },
+      { name: "Checking figures, preparing invoices and recording details of financial transactions made", tier: "secondary", sourceTag: "PSOC", what: "Figures/invoices/transaction details (unit letter g — thin lettered row)." },
+      { name: "Transcribing information into computers, and proof-reading and correcting copy", tier: "secondary", sourceTag: "PSOC", what: "Transcription throughput (unit letter h — thin lettered row; carries the O*NET database-systems anchor in the split)." },
       { name: "Communication · Professionalism (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Workday reliability." },
     ],
   },
   {
-    id: "encode", // roster 5.3
+    id: "encode", // roster 5.3 — d/e split ruled 2026-10-29 (crypto anchor KEPT)
     name: "Data Encoder",
     psocCode: "4132",
     psocTitle: "Data entry clerks",
@@ -798,19 +965,22 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #95 (Encoder, asterisked)",
-      note: "Asterisked = not fully defined in PSOC 2012, so the employer title is the anchor. Declared [O*NET] gap-filler.",
+      note: "Asterisked = not fully defined in PSOC 2012, so the employer title is the anchor. Declared [O*NET] gap-filler (O*NET 43-9021.00, all 9 tasks). Ruled row shape 2026-10-29: letters d)/e) are split thin rows; the \"cryptographic procedures\" O*NET anchor is KEPT (source-printed) and stations with the data-movement row.",
     },
     roleSummary: "Enters data the right field the first time — accuracy loops, pre-entry sorting, throughput under deadline.",
     skills: [
-      { name: "Source-document reading & field mapping", tier: "core", sourceTag: "O*NET", what: "Correct-field discipline." },
+      { name: "Receiving & registering source documents for data capture", tier: "core", sourceTag: "PSOC", what: "Ingest discipline — what lands, when, where." },
+      { name: "Source-document reading & field mapping (entering from source material)", tier: "core", sourceTag: "O*NET", what: "Correct-field discipline." },
       { name: "Accuracy/error detection & correction", tier: "core", sourceTag: "O*NET", what: "QA personal loop." },
       { name: "Compilation, sorting, verification before entry", tier: "core", sourceTag: "O*NET", what: "Pre-entry quality." },
-      { name: "Typing speed & tool fluency", tier: "secondary", sourceTag: "O*NET", what: "Throughput management." },
-      { name: "Confidentiality (Etiquette/Professionalism)", tier: "secondary", sourceTag: "NACE", what: "PII/financial data respect." },
+      { name: "Storing completed documents & logs (records + throughput discipline)", tier: "secondary", sourceTag: "O*NET", what: "Where finished work goes; proof of throughput." },
+      { name: "Operating bookkeeping and calculating machines", tier: "secondary", sourceTag: "PSOC", what: "Machine operation (unit letter d — thin lettered row)." },
+      { name: "Importing and exporting data between different database systems and softwares", tier: "secondary", sourceTag: "PSOC", what: "Data movement (unit letter e — thin lettered row; carries the KEPT cryptographic-procedures O*NET anchor)." },
+      { name: "Confidentiality (Etiquette/Professionalism — Enabling)", tier: "secondary", sourceTag: "NACE", what: "PII/financial data respect." },
     ],
   },
   {
-    id: "desk", // roster 5.5
+    id: "desk", // roster 5.5 — 5 lettered PSOC 4225 core rows (ruled shape 2026-10-29)
     name: "Counter / Enquiry Clerk",
     psocCode: "4225",
     psocTitle: "Enquiry clerks — counter clerk/desk clerk/information clerk",
@@ -820,16 +990,20 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #122 (Frontline Desk Service, asterisked)",
-      note: "Asterisked; the title is named in the Hotel/Restaurant/Tourism grouping — the catalog keeps it for corporate front-desk/reception adjacency and refuses hotel-specific framing. 2 of 3 skill rows come from corroborated PSF-CCB behavior language, honestly labeled.",
+      note: "Asterisked; the title is named in the Hotel/Restaurant/Tourism grouping — the catalog keeps it for corporate front-desk/reception adjacency and refuses hotel-specific framing. Row shape RULED 2026-10-29: the 5 lettered PSOC 4225 core rows are the adopted shape (unit text parsed 2026-10-29 from the phscs v0.2.0 dataset — possessive literally printed per VD1-1).",
     },
     roleSummary: "Receives walk-ins and calls, logs and follows up inquiries, and carries the corporate front-desk standard.",
     skills: [
-      { name: "Walk-in visitor & phone reception (translate-request-escalate)", tier: "core", sourceTag: "PSF", what: "Multi-channel front-desk flow." },
-      { name: "Log & follow-up inquiries", tier: "core", sourceTag: "PSF", what: "Visitor/inquiry logging." },
-      { name: "Corporate conduct/appearance standards", tier: "secondary", sourceTag: "NACE", what: "Office-culture fit." },
+      { name: "Answering inquiries about goods/services/policies (availability, location, price)", tier: "core", sourceTag: "PSOC", what: "The unit's defining act (lettered task a)." },
+      { name: "Assisting on problems, advice, information (member of the counter service set)", tier: "core", sourceTag: "PSOC", what: "Be where difficult requests are handled first (lettered task b)." },
+      { name: "Recording information about enquiries and complaints", tier: "core", sourceTag: "PSOC", what: "Visitor/inquiry logging (lettered task c)." },
+      { name: "Referring complex enquiries to team leaders or expert advisers", tier: "core", sourceTag: "PSOC", what: "The translate-request-escalate pattern (lettered task d)." },
+      { name: "Issuing forms, information kits and brochures", tier: "core", sourceTag: "PSOC", what: "Counter-side document service (lettered task e)." },
+      { name: "Communication & professionalism at the corporate front-desk (Enabling)", tier: "secondary", sourceTag: "PSF", what: "Office-culture fit (PSF-CCB behavior language usable verbatim; OpenLearn backing rides the keep-with-flag verdict)." },
     ],
   },
   {
+    // CANON-adjacent extension: rows byte-identical to the E2 extraction (17).
     id: "execsec", // extension E2
     name: "Executive Secretary",
     psocCode: "3343",
@@ -840,7 +1014,7 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "institutional-judgment",
       source: "not DOLE-BLE-justified — institutional judgment",
-      note: "E2 extension admitted per ruling R4 (2026-10-29). Secretarial titles are absent from the 2013–2020 lists; PSA OWS organizes on the family. Skill map transcribed from O*NET 43-6011.00 Executive Secretaries and Executive Administrative Assistants (updated 2026, fetched 2026-10-29; pending-role-maps §2) — O*NET reads the family as a mid tier (Job Zone Three), so entry framing stays junior-feeder.",
+      note: "E2 extension admitted per ruling R4 (2026-10-29). Secretarial titles are absent from the 2013–2020 lists; PSA OWS organizes on the family. Skill map transcribed from O*NET 43-6011.00 Executive Secretaries and Executive Administrative Assistants (updated 2026, 23/23 tasks re-extracted 2026-10-29; pending-role-maps §2) — O*NET reads the family as a mid tier (Job Zone Three), so entry framing stays junior-feeder.",
     },
     roleSummary: "Runs the executive's office — correspondence, schedules, records, coordination — at the executive-support standard.",
     skills: [
@@ -864,6 +1038,7 @@ export const CAREERS: Career[] = [
     ],
   },
   {
+    // CANON-adjacent extension: rows byte-identical to the E3 extraction (11).
     id: "records", // extension E3
     name: "Records Clerk",
     psocCode: "4415",
