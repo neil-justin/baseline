@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import "../prep.css";
 
 export const metadata: Metadata = {
   title: "Resume format guide — Career Readiness",
@@ -55,21 +56,29 @@ const BULLETS = [
 
 /**
  * Prep → Resume → Guide. The diagnostic's on-ramp door (empty state routes
- * here) plus the downloadable reference template.
+ * here) plus the downloadable reference template. Shared .v7prep world
+ * (prep.css): named band → one card of flush sections (the sections table is
+ * a real STEP / RULE / WHY table in the pathway plan-table register, drawn
+ * ink-circle numerals) → the ghost back pointer. One blue primary: the .docx
+ * reference download.
  */
 export default function GuidePage() {
   return (
-    <div className="shell prep-shell">
-      <div className="screen-head">
-        <h1>Resume format guide</h1>
-        <p className="page-id num">reference · curated, sourced · not a builder</p>
-      </div>
-      <p className="prep-sublabel num">
-        Start here → write your resume yourself (Docs/Word, outside this system) → run the diagnostic
-      </p>
+    <div className="v7prep">
+      <header className="band">
+        <div className="bandrow">
+          <div className="who">
+            <h1 className="t">Resume format guide</h1>
+            <p className="m">reference · curated, sourced · not a builder</p>
+          </div>
+        </div>
+      </header>
 
-      <div className="stack" style={{ marginTop: 14 }}>
-        <section className="panel block">
+      <section className="card guide-card">
+        <section className="panel-sec">
+          <p className="prep-sublabel num">
+            Start here → write your resume yourself (Docs/Word, outside this system) → run the diagnostic
+          </p>
           <div className="b-head">
             <h2>The standard sections, in order</h2>
             <p className="helper">
@@ -77,21 +86,34 @@ export default function GuidePage() {
               conventions converges on this structure.
             </p>
           </div>
-          <div className="rs-guide-sec">
-            {SECTIONS.map((s, i) => (
-              <div className="rs-guide-row" key={i}>
-                <span className="rs-guide-n num">{String(i + 1).padStart(2, "0")}</span>
-                <div>
-                  <b>{s.name}</b>
-                  <p className="rs-guide-order">{s.order}</p>
-                  <p className="rs-guide-why num">{s.why}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <table className="guide-table num">
+            <thead>
+              <tr>
+                <th className="ct-step">Step</th>
+                <th>Rule</th>
+                <th>Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              {SECTIONS.map((s, i) => (
+                <tr key={i}>
+                  <td className="ct-step">
+                    <span className="g-num num">{i + 1}</span>
+                  </td>
+                  <td className="ct-rule">
+                    <b>{s.name}</b>
+                    <p className="rs-guide-order">{s.order}</p>
+                  </td>
+                  <td>
+                    <p className="rs-guide-why num">{s.why}</p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </section>
 
-        <section className="panel block">
+        <section className="panel-sec">
           <div className="b-head">
             <h2>The five checks, so you can self-mark before the run</h2>
           </div>
@@ -109,7 +131,7 @@ export default function GuidePage() {
           </p>
         </section>
 
-        <section className="panel block">
+        <section className="panel-sec">
           <div className="b-head">
             <h2>Plain layout, by design</h2>
             <p className="helper">
@@ -124,7 +146,7 @@ export default function GuidePage() {
           </ul>
         </section>
 
-        <section className="panel block">
+        <section className="panel-sec">
           <div className="b-head">
             <h2>Download the reference template</h2>
             <p className="helper">
@@ -140,13 +162,13 @@ export default function GuidePage() {
               Reference template (.pdf)
             </a>
           </div>
-          <p style={{ marginTop: 12 }}>
-            <Link className="link-sub" href="/prep">
+          <p className="g-back">
+            <Link className="btn btn-ghost" href="/prep">
               Back to the Resume Diagnostic →
             </Link>
           </p>
         </section>
-      </div>
+      </section>
     </div>
   );
 }

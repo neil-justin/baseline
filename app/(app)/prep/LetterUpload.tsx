@@ -30,7 +30,7 @@ const REJECT_COPY: Record<string, string> = {
   format_check_failed: "The format checks didn't pass. Nothing was saved or scored.",
 };
 
-export default function LetterUpload({ careerName, employerRow }: { careerName: string; employerRow: string }) {
+export default function LetterUpload({ careerName, employerRow, primary = false }: { careerName: string; employerRow: string; primary?: boolean }) {
   const fileInput = useRef<HTMLInputElement>(null);
   const [employer, setEmployer] = useState("");
   const [busy, setBusy] = useState(false);
@@ -67,7 +67,7 @@ export default function LetterUpload({ careerName, employerRow }: { careerName: 
   }
 
   return (
-    <section className="panel block cl-upload" aria-label="Run the cover-letter check">
+    <section className="cl-upload" aria-label="Run the cover-letter check">
       <div className="b-head">
         <h2>Run the letter check — one TXT, PDF, or DOCX at a time</h2>
         <p className="helper">
@@ -104,7 +104,10 @@ export default function LetterUpload({ careerName, employerRow }: { careerName: 
             onChange={(e) => setEmployer(e.target.value)}
           />
         </div>
-        <button className="btn btn-primary btn-sm" onClick={check} disabled={busy}>
+        {/* Blue Command Rule: this button carries the surface's one blue only
+            while the letter is the surface's own next step (resume has run,
+            the letter has NOT) — the page passes it, nothing painted. */}
+        <button className={`btn ${primary ? "btn-primary" : "btn-ghost"} btn-sm`} onClick={check} disabled={busy}>
           {busy ? "Reading the letter…" : "Run the letter check"}
         </button>
       </div>

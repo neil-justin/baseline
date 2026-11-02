@@ -1,180 +1,735 @@
-/* Prep surface (round 6a + ticket-12 split, 2026-10-30). Styled strictly from the
-   shared token vocabulary in app/globals.css (panel/label/btn/check mark
-   chips). No new colors, no new shadows. Per-page CSS is the repo pattern.
-   v7.1 law on this surface: 11px floors on instrument labels, state-bearing
-   text rides --ink-2 (≥4.5:1), wash chips not region fills. */
+/* ============================================================
+   DNA v7 — Prep surface (/prep + /prep/guide), the v7.1/v7.2
+   sweep it never got (SWEEP DIRECTIVE, .impeccable/surfaces/prep.md).
+   A named band (v7.2 Composition A — the grey tray) carries the
+   AR channel cells — resume 7 / letter 5 / presence 3 + the
+   APPLICATION READINESS /15 readout — every number computed from
+   score.arParts (getStudentView), never painted. The two per-file
+   flows render as TWO MARRIED CARDS (user-ruled: tall, not tabs):
+   a cardtop strip (title left + computed run-status kicker right)
+   then FLUSH sections separated by #E8EAED rules — never a card
+   inside a card. The checks are REAL tables (tracked 11px
+   uppercase column heads, row rules, tabular numerals, the honest
+   "—" where a cell holds nothing); findings are row-blocks with
+   wash verdict chips (fix=blue / watch=amber / pass=green — no
+   red anywhere); the must-contain ledger is a four-column table.
+   ONE blue primary at a time (Blue Command Rule): state A = the
+   format-guide CTA, state B (resume run, letter not) = the
+   letter's upload button, state C = none.
+   Cool white-grey ground, white cards 1px #DADCE0 + whisper
+   shadow + 8px radius, Roboto 13.5px body, honest grey "—".
+   Scoped under `.v7prep` off the --v-* tokens in ../v7.css —
+   no globals.css Index vocabulary (no mono body, no green
+   primary, no .shell/.panel register). /prep/guide shares this
+   world (Table: STEP / RULE / WHY in the pathway plan-table
+   register, drawn 26px ink-circle numerals). No entrance motion
+   (DNA lock). e2e hooks preserved byte-verbatim (rs-* / cl-* /
+   prep-sublabel set).
+   ============================================================ */
 
-.prep-shell { max-width: 980px; padding-bottom: 56px; }
-.prep-instrument {
+.v7prep {
+  font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  padding: 12px 16px 24px;
+}
+.v7prep ::selection { background: var(--v-blue-wash); }
+.v7prep :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
+.v7prep a { color: inherit; }
+.v7prep .num { font-variant-numeric: tabular-nums; }
+
+/* ---------- named band — the grey tray (v7.2 Composition A) ---------- */
+
+.v7prep .band {
+  background: var(--v-grey-wash);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  padding: 14px 18px;
+  margin-bottom: 12px;
+}
+.v7prep .bandrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 28px;
+  flex-wrap: wrap;
+}
+.v7prep .who { min-width: 220px; }
+.v7prep .who .t {
+  font: 500 18px/1.35 Roboto, system-ui, sans-serif;
+  margin: 0;
+  color: var(--v-ink);
+}
+.v7prep .who .m {
+  font: 400 13px/1.45 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  margin-top: 2px;
+  max-width: 74ch;
+}
+.v7prep .bandcells {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+.v7prep .bcell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 2px 18px;
+  border-left: 1px solid var(--v-rows);
+  min-width: 0;
+}
+.v7prep .bcell:first-child { border-left: 0; padding-left: 0; }
+.v7prep .label {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+  white-space: nowrap;
+}
+.v7prep .bval-row { display: flex; align-items: center; gap: 8px; }
+.v7prep .bval { font: 500 13px/1.35 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7prep .bval.num { font-variant-numeric: tabular-nums; }
+.v7prep .bquiet { color: var(--v-grey-text); }
+/* the /15 readout cell — the band's KPI register (500 22px + 12px companion) */
+.v7prep .b-ar .ar-val {
+  font: 500 22px/1.1 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: baseline;
+}
+.v7prep .b-ar .ar-val small {
+  font: 400 12px/1 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  margin-left: 2px;
+}
+
+/* wash chips (band state + verdict chips) */
+
+.v7prep .chip {
+  display: inline-block;
+  font: 500 11px/1.2 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.v7prep .chip.c-green { background: var(--v-green-wash); color: var(--v-green-text); }
+.v7prep .chip.c-grey { background: var(--v-grey-wash); color: var(--v-grey-text); }
+/* the grey tray would swallow a grey-wash chip — band state chips sit on white */
+.v7prep .band .chip.c-grey {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+}
+
+/* ---------- cards — the married register ---------- */
+
+.v7prep .card {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.v7prep .cardtop {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--v-rows);
+}
+.v7prep .cardtop .ct-id { min-width: 0; }
+.v7prep .cardtop .ct-id h2 {
+  font: 500 16px/1.3 Roboto, system-ui, sans-serif;
+  margin: 0;
+  color: var(--v-ink);
+}
+.v7prep .cardtop .prep-sublabel,
+.v7prep .cardtop .cl-sublabel {
+  margin-top: 2px;
+  font-size: 11.5px; /* v7.1 floor */
+  max-width: 66ch;
+}
+.v7prep .cardtop .kicker {
+  flex: none;
+  margin-left: auto;
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- flush sections of the married card ---------- */
+
+.v7prep .panel-sec { padding: 14px 16px 16px; }
+.v7prep .card > .panel-sec + .panel-sec,
+.v7prep .card > .rs-upload,
+.v7prep .card > .cl-upload,
+.v7prep .card > .prep-src-sec { border-top: 1px solid var(--v-rows); }
+.v7prep .card > .cardtop + .panel-sec { border-top: 0; }
+
+.v7prep .b-head h2 {
+  font: 500 16px/1.3 Roboto, system-ui, sans-serif;
+  margin: 0;
+  color: var(--v-ink);
+}
+.v7prep .b-head .helper {
+  margin-top: 4px;
+  font: 400 12px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 70ch;
+}
+.v7prep .b-head .helper b { color: var(--v-ink); font-weight: 500; }
+
+/* the surface disclaimers (prep-sublabel / cl-sublabel) */
+.v7prep .prep-sublabel,
+.v7prep .cl-sublabel {
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 70ch;
+}
+.v7prep .panel-sec > .prep-sublabel { margin: 0 0 12px; }
+
+/* ---------- buttons (the family; overrides the Index .btn in globals) ---------- */
+
+.v7prep .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 13px/1.2 Roboto, system-ui, sans-serif;
+  padding: 8px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.14s ease, border-color 0.14s ease,
+    box-shadow 0.14s ease, color 0.14s ease;
+}
+.v7prep .btn:active { transform: translateY(0.5px); }
+.v7prep .btn-primary {
+  background: var(--v-blue);
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3);
+}
+.v7prep .btn-primary:hover { background: var(--v-blue-deep); box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35); }
+.v7prep .btn-ghost {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  color: var(--v-blue-deep);
+  font-weight: 500;
+}
+.v7prep .btn-ghost:hover { border-color: var(--v-blue); background: var(--v-blue-wash); }
+.v7prep .btn-sm { padding: 7px 14px; font-size: 12.5px; }
+.v7prep .arrow { display: inline-flex; align-items: center; opacity: 0.85; font-family: Roboto, system-ui, sans-serif; font-weight: 400; }
+.v7prep .rs-ctas { margin-top: 14px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.v7prep .link-quiet {
+  color: var(--v-blue-deep);
+  font: 500 12.5px/1.4 Roboto, system-ui, sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(26, 115, 232, 0.35);
+}
+.v7prep .link-quiet:hover { color: var(--v-blue); text-decoration-color: var(--v-blue); }
+
+/* ---------- the run readout (flush strip; KPI score register) ---------- */
+
+.v7prep .rs-readout-top,
+.v7prep .cl-readout-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.v7prep .rs-readout .label,
+.v7prep .cl-readout .label { display: block; white-space: normal; }
+.v7prep .rs-readout-sub,
+.v7prep .cl-readout-sub {
+  margin-top: 4px;
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7prep .rs-readout-sub b,
+.v7prep .cl-readout-sub b { color: var(--v-ink); font-weight: 500; }
+.v7prep .rs-readout-score,
+.v7prep .cl-readout-score {
+  font: 500 22px/1.1 Roboto, system-ui, sans-serif; /* KPI score register */
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+  display: inline-flex;
+  align-items: baseline;
+  font-variant-numeric: tabular-nums;
+}
+.v7prep .rs-readout-score small,
+.v7prep .cl-readout-score small {
+  font: 400 12px/1 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  margin-left: 2px;
+}
+.v7prep .rs-air-note,
+.v7prep .cl-air-note {
   margin-top: 10px;
-  font-family: var(--mono);
-  font-size: 12px; /* instrument counter band — v7.1 ≥11px */
+  font: 400 12px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 76ch;
+}
+.v7prep .rs-air-note b,
+.v7prep .cl-air-note b { color: var(--v-ink); font-weight: 500; }
+
+/* ---------- checks — REAL tables (tracked heads, row rules) ---------- */
+
+.v7prep .checks-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.v7prep .checks-table thead th {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+  text-align: left;
+  padding: 0 16px 7px 0;
+  border-bottom: 1px solid var(--v-rows);
+  white-space: nowrap;
+}
+.v7prep .checks-table td {
+  padding: 9px 16px 9px 0;
+  border-bottom: 1px solid var(--v-rows);
+  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  vertical-align: top;
+  min-width: 0;
+}
+.v7prep .checks-table .ct-check { width: 36%; }
+.v7prep .checks-table .ct-result { width: 84px; }
+.v7prep .checks-table tbody tr:last-child td { border-bottom: 0; }
+.v7prep .checks-table tbody tr { transition: background-color 0.12s ease; }
+.v7prep .checks-table tbody tr:hover { background: #f5f8fc; }
+
+/* the factor receipts ride as group rows (.rs-factor-head — hook intact) */
+.v7prep .checks-table .rs-factor-head th {
+  padding: 14px 16px 8px 0;
+  border-bottom: 1px solid var(--v-rows);
+  font: 500 12px/1.5 Roboto, system-ui, sans-serif;
   letter-spacing: 0.02em;
-  color: var(--ink-2); /* state-bearing — v7.1 grey floor */
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--line);
+  color: var(--v-ink2);
+  text-align: left;
 }
-.prep-instrument b { color: var(--ink); font-weight: 570; }
+.v7prep .rs-factor-head b { color: var(--v-ink); font-weight: 500; }
+.v7prep .rs-factor-head .rs-fn { color: var(--v-meta); font-weight: 400; letter-spacing: 0.02em; }
 
-/* the two per-file factors on the one surface (per-file AM semantics) */
-.prep-flow { margin-top: 16px; }
-.prep-factor { padding: 2px 0 8px; }
-.prep-factor-head {
-  font-size: 17px; /* family panel-head step (Profile .block h2 register) */
-  font-weight: 640;
-  letter-spacing: -0.02em;
-  line-height: 1.25;
+/* the marks — the honest language: green pass family, amber for a fail
+   (never red), grey "—" for the honestly-skipped row */
+.v7prep .checks-table .rs-check .mark { font-weight: 600; }
+.v7prep .checks-table .rs-check .mark.ok { color: var(--v-green-text); }
+.v7prep .checks-table .rs-check .mark.no { color: var(--v-amber-text); }
+.v7prep .checks-table .rs-check .mark.skip { color: var(--v-grey-text); font-weight: 500; }
+.v7prep .rs-check-note { color: var(--v-ink2); font-size: 12px; }
+.v7prep .cl-notyet { color: var(--v-grey-text); font-size: 12px; font-weight: 500; }
+
+/* the letter's role-anchor receipt rides as the table's first group row */
+.v7prep .checks-table .cl-role-line th {
+  padding: 14px 16px 8px 0;
+  border-bottom: 1px solid var(--v-rows);
+  font: 400 12.5px/1.6 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  text-align: left;
 }
-.prep-src { margin-top: 2px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.03em; /* v7.1 floor */ color: var(--ink-3); }
-.prep-src a { color: var(--ink-2); }
+.v7prep .cl-role-line b { color: var(--v-ink); font-weight: 500; }
+.v7prep .cl-role-label {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  color: var(--v-ink2);
+  margin-right: 2px;
+}
 
-.prep-sublabel {
+/* the fence captions */
+.v7prep .src-line {
+  margin-top: 12px;
+  font: 400 11.5px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 76ch;
+}
+
+/* ---------- findings — row blocks with wash verdict chips ---------- */
+
+.v7prep .rs-findings { margin-top: 6px; }
+.v7prep .rs-finding {
+  padding: 12px 0 14px;
+  border-bottom: 1px solid var(--v-rows);
+  min-width: 0;
+}
+.v7prep .rs-findings .rs-finding:last-child { border-bottom: 0; padding-bottom: 2px; }
+.v7prep .rs-f-title { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.v7prep .rs-level {
+  display: inline-block;
+  font: 500 11px/1.2 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.v7prep .rs-level.rs-fix { background: var(--v-blue-wash); color: var(--v-blue-deep); } /* the actionable verdict — blue owns action */
+.v7prep .rs-level.rs-watch { background: var(--v-amber-wash); color: var(--v-amber-text); }
+.v7prep .rs-level.rs-pass { background: var(--v-green-wash); color: var(--v-green-text); }
+.v7prep .rs-f-skill { color: var(--v-ink2); font-size: 11px; }
+.v7prep .rs-f-head {
+  margin-top: 7px;
+  font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7prep .rs-f-detail {
+  margin-top: 4px;
+  font: 400 12px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 70ch;
+}
+.v7prep .rs-suggest { margin-top: 9px; }
+.v7prep .rs-move {
+  font: 400 12.5px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  max-width: 70ch;
+}
+.v7prep .rs-move b { font-weight: 500; }
+.v7prep .rs-example {
+  margin-top: 7px;
+  font: 400 12.5px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  border-left: 2px solid var(--v-border);
+  padding-left: 12px;
+  max-width: 66ch;
+}
+.v7prep .rs-ex-label {
+  display: block;
+  font-size: 11px; /* v7.1 floor */
+  letter-spacing: 0.05em;
+  color: var(--v-ink2);
+  margin-bottom: 3px;
+}
+.v7prep .rs-ex-src { color: var(--v-ink2); font-size: 11px; }
+
+/* ---------- the must-contain ledger — the four-column table ---------- */
+
+.v7prep .rs-list {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.v7prep .rs-list th {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+  text-align: left;
+  padding: 0 16px 7px 0;
+  border-bottom: 1px solid var(--v-rows);
+  white-space: nowrap;
+}
+.v7prep .rs-list td {
+  padding: 11px 16px 11px 0;
+  border-bottom: 1px solid var(--v-rows);
+  vertical-align: top;
+  min-width: 0;
+}
+.v7prep .rs-list tbody tr:last-child td { border-bottom: 0; }
+.v7prep .rs-list tbody tr { transition: background-color 0.12s ease; }
+.v7prep .rs-list tbody tr:hover { background: #f5f8fc; }
+.v7prep .rs-list .ct-no { width: 40px; }
+.v7prep .rs-list-n { color: var(--v-meta); font-size: 12px; font-weight: 500; } /* decorative numeral */
+.v7prep .ct-what b {
+  font: 500 13px/1.45 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7prep .ct-why-col { font: 400 12px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7prep .rs-list-src { font: 400 11px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7prep .rs-list .ct-src { width: 200px; }
+
+/* ---------- honest lines (the not-yet register) ---------- */
+
+.v7prep .rs-notyet,
+.v7prep .cl-notyet {
+  margin-top: 14px;
+  font: 400 11.5px/1.55 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  color: var(--v-grey-text); /* state-bearing grey ≥4.5:1 (v7.1) */
+  max-width: 74ch;
+}
+.v7prep .rs-notyet b,
+.v7prep .cl-notyet b { color: var(--v-ink2); font-weight: 600; }
+/* an inline not-yet span inside the receipts line stands as its own block */
+.v7prep .rs-air-note .rs-notyet,
+.v7prep .cl-air-note .cl-notyet {
+  display: block;
   margin-top: 6px;
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 0.02em;
-  color: var(--ink-2); /* state-bearing — v7.1 grey floor */
-}
-.cl-sublabel {
-  margin-top: 6px;
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 0.02em;
-  color: var(--ink-2);
+  font-weight: 500;
 }
 
-/* on-ramp */
-.rs-ramp { margin-top: 14px; padding-top: 4px; }
-.rs-ctas { margin-top: 14px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
-.rs-list { padding: 2px 0; }
-.rs-listrow {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  column-gap: 14px;
-  padding: 12px 0 13px;
-  border-bottom: 1px solid var(--line-soft);
+/* ---------- the run info feet ---------- */
+
+.v7prep .rs-foot {
+  display: block;
+  margin: 0;
+  padding: 10px 16px 12px;
+  border-top: 1px solid var(--v-rows);
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
+  letter-spacing: 0.06em;
+  color: var(--v-ink2);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
-.rs-listrow:last-child { border-bottom: 0; }
-.rs-list-n { color: var(--ink-3); font-size: 12px; padding-top: 2px; grid-row: span 2; }
-.rs-listrow b { font-weight: 600; font-size: 14px; letter-spacing: -0.01em; line-height: 1.4; }
-.rs-list-note { grid-column: 2; margin-top: 4px; font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
-.rs-list-src { grid-column: 2; margin-top: 3px; font-size: 11px; letter-spacing: 0.03em; /* v7.1 floor */ color: var(--ink-3); }
-
-/* upload */
-.rs-upload { margin-top: 4px; }
-.rs-file-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 6px 0 0; }
-.rs-file { font-family: var(--mono); font-size: 12.5px; color: var(--ink); max-width: 100%; }
-.rs-file::file-selector-button {
-  font: inherit; font-size: 12.5px; padding: 7px 14px; margin-right: 12px;
-  border: 1px solid var(--line); border-radius: var(--radius);
-  background: var(--panel); color: var(--ink); cursor: pointer;
+.v7prep .prep-src-sec { padding: 12px 16px 14px; }
+.v7prep .prep-src {
+  margin: 0;
+  font: 400 11.5px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 78ch;
 }
-.rs-file::file-selector-button:hover { border-color: #C4C8C3; }
-.rs-note { margin-top: 12px; font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
-.rs-note.rs-err { color: #8a1f1f; font-weight: 550; }
-.rs-notyet { margin-top: 14px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.02em; color: var(--ink-3); }
-.rs-notyet b { color: var(--ink-2); font-weight: 570; }
-
-/* run readout */
-.rs-readout, .cl-readout { padding: 16px 16px 14px; }
-.rs-readout-top, .cl-readout-top { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
-.rs-readout-sub, .cl-readout-sub { margin-top: 6px; color: var(--ink-2); font-size: 13px; }
-.rs-readout-score, .cl-readout-score { font-size: 34px; font-weight: 640; letter-spacing: -0.03em; line-height: 1; }
-.rs-readout-score small, .cl-readout-score small { font-size: 13px; font-weight: 500; color: var(--ink-3); margin-left: 2px; }
-.rs-air-note, .cl-air-note { margin-top: 12px; font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
-.rs-air-note b, .cl-air-note b { color: var(--ink); font-weight: 570; }
-
-/* letter-check ledger — reuses the resume check rows + the honest skip mark */
-.cl-role-line {
-  display: block; /* a block row: the role bit must wrap as prose, not flex items */
-  font-size: 12.5px;
-  color: var(--ink-2);
-  line-height: 1.6;
+.v7prep .prep-src a {
+  color: var(--v-blue-deep);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(26, 115, 232, 0.35);
 }
-.cl-role-label { font-size: 11px; letter-spacing: 0.06em; color: var(--ink-3); display: inline-block; margin-right: 4px; } /* v7.1 floor */
-.rs-check { flex-wrap: wrap; } /* narrow widths: the honest note wraps to its own line, never crushed */
-.rs-check .mark.skip { color: var(--ink-3); font-weight: 500; } /* honestly skipped — never ✓, never ✕ */
+.v7prep .prep-src a:hover { text-decoration-color: var(--v-blue); }
 
-/* factor check ledgers */
-.rs-factor-head { margin-top: 14px; font-size: 12px; letter-spacing: 0.03em; color: var(--ink-2); }
-.rs-factor-head b { color: var(--ink); }
-.rs-factor-head .rs-fn { color: var(--ink-3); }
-.rs-checks { margin-top: 6px; }
-.rs-check { display: flex; gap: 9px; align-items: baseline; font-size: 12.5px; line-height: 1.6; color: var(--ink); }
-.rs-check .mark { font-family: var(--mono); font-weight: 600; }
-.rs-check .mark.ok { color: #1f6b3a; }
-.rs-check .mark.no { color: #8a1f1f; }
-.rs-check-note { color: var(--ink-3); }
+/* ---------- the intake rows (both flows) ---------- */
 
-/* findings */
-.rs-findings { padding: 2px 0; }
-.rs-finding { padding: 13px 0 14px; border-bottom: 1px solid var(--line-soft); }
-.rs-finding:last-child { border-bottom: 0; }
-.rs-f-title { display: flex; align-items: center; gap: 10px; }
-.rs-level {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; /* v7.1 floor */
-  padding: 2px 8px; border-radius: 2px; border: 1px solid var(--line);
+.v7prep .rs-upload,
+.v7prep .cl-upload { padding: 14px 16px 16px; }
+.v7prep .rs-file-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.v7prep .rs-file {
+  font: 400 12.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  max-width: 100%;
 }
-.rs-level.rs-fix { color: #8a1f1f; border-color: #d8b4b4; }
-.rs-level.rs-watch { color: #7a5410; border-color: #d9c896; }
-.rs-level.rs-pass { color: #1f6b3a; }
-.rs-f-skill { color: var(--ink-3); font-size: 11px; }
-.rs-f-head { margin-top: 6px; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
-.rs-f-detail { margin-top: 4px; font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
-.rs-suggest { margin-top: 9px; display: grid; gap: 7px; }
-.rs-move { font-size: 12.5px; color: var(--ink); line-height: 1.55; }
-.rs-move b { font-weight: 570; }
-.rs-example {
-  font-size: 12.5px; color: var(--ink-2); line-height: 1.55;
-  border-left: 2px solid var(--line); padding-left: 12px;
+.v7prep .rs-file::file-selector-button {
+  font: 500 12.5px/1.2 Roboto, system-ui, sans-serif;
+  padding: 7px 14px;
+  margin-right: 12px;
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  background: var(--v-surface);
+  color: var(--v-blue-deep);
+  cursor: pointer;
+  transition: background-color 0.14s ease, border-color 0.14s ease;
 }
-.rs-ex-label { display: block; font-size: 11px; letter-spacing: 0.05em; /* v7.1 floor */ color: var(--ink-3); margin-bottom: 3px; }
-.rs-ex-src { color: var(--ink-3); font-size: 11px; }
-
-/* guide page */
-.rs-guide-sec { padding: 2px 0; }
-.rs-guide-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; padding: 12px 0 13px; border-bottom: 1px solid var(--line-soft); }
-.rs-guide-row:last-child { border-bottom: 0; }
-.rs-guide-n { color: var(--ink-3); font-size: 12px; padding-top: 3px; }
-.rs-guide-row b { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
-.rs-guide-order { margin-top: 3px; font-size: 13px; color: var(--ink); line-height: 1.5; }
-.rs-guide-why { margin-top: 4px; font-size: 11px; color: var(--ink-3); line-height: 1.6; }
-.rs-plain { margin: 6px 0 0; padding-left: 18px; font-size: 12.5px; color: var(--ink-2); line-height: 1.75; }
-
-.rs-foot {
-  margin-top: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; /* v7.1 floor */
-  color: var(--ink-3); text-align: right;
+.v7prep .rs-file::file-selector-button:hover { border-color: var(--v-blue); background: var(--v-blue-wash); }
+.v7prep .rs-file::file-selector-button:focus-visible {
+  outline: 2px solid var(--v-blue);
+  outline-offset: 2px;
 }
-.src-line { margin-top: 12px; font-size: 11px; letter-spacing: 0.02em; /* v7.1 floor */ color: var(--ink-3); line-height: 1.6; }
+.v7prep .rs-note,
+.v7prep .cl-note {
+  margin-top: 12px;
+  font: 400 12px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 74ch;
+}
+.v7prep .rs-note.rs-err,
+.v7prep .cl-note.cl-err {
+  color: var(--v-amber-text); /* rejection state — amber, never red */
+  font-weight: 500;
+}
 
-/* ── cover-letter upload (ticket 12) — mirrors the resume upload's register ┘ */
-.cl-upload { margin-top: 4px; }
-.cl-row {
+/* the letter intake grid */
+.v7prep .cl-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
   gap: 12px 16px;
   align-items: end;
-  padding: 6px 0 0;
 }
-.cl-field { display: grid; gap: 5px; }
+.v7prep .cl-field { display: grid; gap: 5px; }
+.v7prep .cl-label {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
+  letter-spacing: 0.05em;
+  color: var(--v-ink2);
+}
+.v7prep .cl-opt { color: var(--v-ink2); font-weight: 400; }
+.v7prep .cl-input {
+  font: 400 13px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  padding: 8px 10px;
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  background: var(--v-surface);
+  max-width: 320px;
+}
+.v7prep .cl-input::placeholder { color: var(--v-meta); } /* decorative — focus rides the v7 focus ring */
+
+/* ---------- the no-career honest block (married-card register) ---------- */
+
+.v7prep .nc-card { padding: 16px 18px 18px; }
+.v7prep .nc-card .nc-cta { margin: 14px 0 0; }
+
+/* ---------- /prep/guide — the same .v7prep world ---------- */
+
+.v7prep .guide-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.v7prep .guide-table th {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+  text-align: left;
+  padding: 0 16px 7px 0;
+  border-bottom: 1px solid var(--v-rows);
+  white-space: nowrap;
+}
+.v7prep .guide-table td {
+  padding: 12px 16px 12px 0;
+  border-bottom: 1px solid var(--v-rows);
+  vertical-align: top;
+  min-width: 0;
+}
+.v7prep .guide-table tbody tr:last-child td { border-bottom: 0; }
+.v7prep .guide-table tbody tr { transition: background-color 0.12s ease; }
+.v7prep .guide-table tbody tr:hover { background: #f5f8fc; }
+.v7prep .guide-table .ct-step { width: 44px; }
+/* the drawn numeral — CSS ink circle, no glyph font (family spec) */
+.v7prep .g-num {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--v-border);
+  border-radius: 50%;
+  font: 500 12px/1 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
+}
+.v7prep .guide-table .ct-rule b {
+  font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7prep .rs-guide-order {
+  margin: 3px 0 0;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  max-width: 52ch;
+}
+.v7prep .rs-guide-why {
+  margin: 0;
+  font: 400 11.5px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 58ch;
+}
+
+/* the five self-mark checks — numbered drawn circles, not verdict glyphs */
+.v7prep .rs-checks .rs-check {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font: 400 13px/1.6 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  padding: 9px 0;
+  border-bottom: 1px solid var(--v-rows);
+}
+.v7prep .rs-checks .rs-check:last-child { border-bottom: 0; padding-bottom: 2px; }
+.v7prep .rs-checks .rs-check .mark {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--v-border);
+  border-radius: 50%;
+  font: 500 11px/1 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7prep .rs-plain {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  font: 400 12.5px/1.75 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7prep .rs-plain li + li { margin-top: 4px; }
+.v7prep .g-back { margin: 14px 0 0; }
+
+/* ---------- responsive (the family folds) ---------- */
+
 @media (max-width: 720px) {
-  .cl-row { grid-template-columns: 1fr; }
+  .v7prep { padding: 12px 12px 80px; } /* clears the ≤720px bottom nav */
+  .v7prep .band { padding: 12px 14px; }
+  .v7prep .who { min-width: 0; }
+  /* band cells fold 4 → a 2×2 tray grid */
+  .v7prep .bandcells {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .v7prep .bandcells .bcell { border-left: 1px solid var(--v-rows); padding: 8px 0 8px 14px; }
+  .v7prep .bandcells .bcell:first-child { border-left: 0; padding-left: 0; }
+  .v7prep .bandcells .bcell:nth-child(2n + 1) { border-left: 0; padding-left: 0; }
+  .v7prep .bandcells .bcell:nth-child(n + 3) { border-top: 1px solid var(--v-rows); }
+  .v7prep .b-ar .ar-val { font-size: 20px; }
+  /* the cardtop folds two-line: title block, then the run kicker */
+  .v7prep .cardtop .kicker { flex: 1 1 100%; margin-left: 0; }
+  .v7prep .panel-sec { padding: 12px 12px 14px; }
+  .v7prep .cl-row { grid-template-columns: 1fr; }
+  .v7prep .cl-input { max-width: none; }
+  /* stacked tables (the pathway fold): rows read as blocks over row rules */
+  .v7prep .checks-table,
+  .v7prep .rs-list,
+  .v7prep .guide-table,
+  .v7prep .checks-table tbody,
+  .v7prep .rs-list tbody,
+  .v7prep .guide-table tbody,
+  .v7prep .checks-table tr,
+  .v7prep .rs-list tr,
+  .v7prep .guide-table tr,
+  .v7prep .checks-table th,
+  .v7prep .checks-table td,
+  .v7prep .rs-list th,
+  .v7prep .rs-list td,
+  .v7prep .guide-table th,
+  .v7prep .guide-table td {
+    display: block;
+    width: auto;
+  }
+  .v7prep .checks-table thead,
+  .v7prep .rs-list thead,
+  .v7prep .guide-table thead { display: none; }
+  .v7prep .checks-table tbody tr,
+  .v7prep .rs-list tbody tr,
+  .v7prep .guide-table tbody tr {
+    border-bottom: 1px solid var(--v-rows);
+    padding: 10px 0;
+  }
+  .v7prep .checks-table tbody tr:last-child,
+  .v7prep .rs-list tbody tr:last-child,
+  .v7prep .guide-table tbody tr:last-child { border-bottom: 0; }
+  .v7prep .checks-table td,
+  .v7prep .rs-list td,
+  .v7prep .guide-table td { padding: 2px 0 10px; border-bottom: 0; }
+  .v7prep .checks-table td:last-child,
+  .v7prep .rs-list td:last-child,
+  .v7prep .guide-table td:last-child { padding-bottom: 0; }
+  .v7prep .checks-table .rs-factor-head th { padding: 4px 0 6px; }
 }
-.cl-label { font-size: 11px; letter-spacing: 0.05em; /* v7.1 floor */ color: var(--ink-3); }
-.cl-opt { color: var(--ink-3); letter-spacing: 0.02em; }
-.cl-input {
-  font-family: var(--sans);
-  font-size: 13px;
-  color: var(--ink);
-  padding: 7px 10px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--panel);
-  max-width: 300px;
+
+@media (max-width: 560px) {
+  /* the tray folds to a single column of honest cells */
+  .v7prep .bandcells { grid-template-columns: 1fr; }
+  .v7prep .bandcells .bcell { border-left: 0; padding-left: 0; }
+  .v7prep .bandcells .bcell:nth-child(n + 2) { border-top: 1px solid var(--v-rows); }
+  .v7prep .rs-file-row { align-items: stretch; flex-direction: column; }
+  .v7prep .rs-list .ct-src { width: auto; }
 }
-.cl-input::placeholder { color: var(--ink-3); } /* focus rides the family :focus-visible ring */
-.cl-note { margin-top: 12px; font-size: 12.5px; color: var(--ink-2); line-height: 1.55; max-width: 74ch; }
-.cl-note.cl-err { color: #8a1f1f; font-weight: 550; }
-.cl-notyet { margin-top: 14px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.02em; color: var(--ink-3); }
-.cl-notyet b { color: var(--ink-2); font-weight: 570; }

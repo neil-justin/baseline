@@ -30,7 +30,7 @@ const REJECT_COPY: Record<string, string> = {
   parse_error: "This file's structure couldn't be read — try exporting the resume again.",
 };
 
-export default function ResumeUpload({ careerName }: { careerName: string }) {
+export default function ResumeUpload({ careerName, primary = false }: { careerName: string; primary?: boolean }) {
   const fileInput = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -63,7 +63,7 @@ export default function ResumeUpload({ careerName }: { careerName: string }) {
   }
 
   return (
-    <section className="panel block rs-upload" aria-label="Run the resume diagnostic">
+    <section className="rs-upload" aria-label="Run the resume diagnostic">
       <div className="b-head">
         <h2>Run the diagnostic — one PDF or DOCX at a time</h2>
         <p className="helper">
@@ -81,7 +81,10 @@ export default function ResumeUpload({ careerName }: { careerName: string }) {
           aria-label="Resume file (PDF or DOCX — one file, up to 5 MB)"
           onChange={() => setErr(null)}
         />
-        <button className="btn btn-primary btn-sm" onClick={upload} disabled={busy}>
+        {/* Blue Command Rule: this surface's one blue lives on the surface's
+            next step (the format-guide CTA in the no-run state) — the re-run
+            row stays ghost. */}
+        <button className={`btn ${primary ? "btn-primary" : "btn-ghost"} btn-sm`} onClick={upload} disabled={busy}>
           {busy ? "Reading the file…" : "Run the diagnostic"}
         </button>
       </div>

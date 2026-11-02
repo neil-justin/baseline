@@ -5,6 +5,7 @@ import { requireStudent } from "@/lib/session";
 import { resumeRunStore, resumePersistenceNotice, type ResumeRunSummary } from "@/lib/db/resume-run-store";
 import { letterRunStore, letterPersistenceNotice, type LetterRunSummary } from "@/lib/db/letter-run-store";
 import { EMPLOYER_SKIP_NOTE } from "@/lib/engines/air";
+import { AR_FACTORS } from "@/lib/engines/score";
 import type { ResumeFinding } from "@/lib/engines/resume/analyze";
 import { mustContainList, type MustContainItem } from "./must-contain";
 import ResumeUpload from "./ResumeUpload";
@@ -22,11 +23,13 @@ export const metadata: Metadata = {
 /**
  * Prep — "Application materials" (feature #7, round 6a + ticket 12 split).
  * The system ADVISES the student's own files; it never authors, hosts, or
- * edits one. ONE diagnostic surface carrying TWO independent per-file flows:
+ * edits one. ONE diagnostic surface carrying TWO independent per-file flows
+ * as TWO MARRIED CARDS (v7.1 rule 4 + v7.2 Composition A sweep, user-ruled —
+ * tall cards, never tabs):
  *
  *  - Resume diagnostic (7 of 15 AR): no run → the on-ramp (format guide +
- *    must-contain list + upload); a run → the stored LATEST result (latest
- *    counts, amendment 3) + findings + re-run.
+ *    must-contain table + upload); a run → the stored LATEST result (latest
+ *    counts, amendment 3) + the three-factor checks tables + findings + re-run.
  *  - Cover-letter check (5 of 15 AR): independent upload (TXT/PDF/DOCX) +
  *    OPTIONAL employer field → the deterministic structural set (salutation ·
  *    employer named-or-honestly-skipped · closing ask · 250–500 words) + role
@@ -36,7 +39,11 @@ export const metadata: Metadata = {
  *    silent fail, never a silent score.
  *
  * The third factor (presence, 3 of 15) declares in Profile → Credentials —
- * this surface carries the pointer, not the input (ticket 12 flow).
+ * this surface carries the pointer, not the input (ticket 12 flow). The
+ * band's AR cells are computed from the same engine receipts this page
+ * already reads (score.arParts). Blue Command Rule: at most ONE blue primary
+ * per state — resume's guide CTA until the resume has run, then the letter's
+ * run button until it has too; nothing pending → all ghost.
  * HONESTY CONTRACT: a factor without its own run renders "not yet measured"
  * (never painted); re-runs are unlimited and the LATEST run is the one that
  * counts; nothing here claims an "ATS pass".
@@ -46,6 +53,48 @@ const fmtDT = (iso: string) => {
   const d = new Date(iso);
   return `${d.toLocaleString("en-US", { month: "short" })} ${d.getDate()} · ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 };
+
+/* ── the band's AR channel cells — computed, never painted ──────────────── */
+
+type PartView = { measured: boolean; earned: number; max: number };
+
+function BandCell({ name, part, notRun }: { name: string; part: PartView; notRun: string }) {
+  return (
+    <div className="bcell">
+      <span className="label">
+        {name} · {part.max}
+      </span>
+      <span className="bval-row">
+        <span className={`bval num${part.measured ? "" : " bquiet"}`}>
+          {part.measured ? `${part.earned}/${part.max}` : "—"}
+        </span>
+        {part.measured ? (
+          <span className="chip c-green">·✓</span>
+        ) : (
+          <span className="chip c-grey">{notRun}</span>
+        )}
+      </span>
+    </div>
+  );
+}
+
+function ArCell({ value }: { value: number | null }) {
+  return (
+    <div className="bcell b-ar">
+      <span className="label">Application readiness</span>
+      <span className={`ar-val num${value === null ? " bquiet" : ""}`}>
+        {value === null ? (
+          "—"
+        ) : (
+          <>
+            {value}
+            <small>/15</small>
+          </>
+        )}
+      </span>
+    </div>
+  );
+}
 
 function FindingCard({ f }: { f: ResumeFinding }) {
   return (
@@ -76,7 +125,7 @@ function FindingCard({ f }: { f: ResumeFinding }) {
   );
 }
 
-/* ── no-resume on-ramp (Q7a) ─────────────────────────────────────────────── */
+/* ── no-resume on-ramp (Q7a) — flush sections of married card 1 ─────────── */
 
 function OnRamp({
   items,
@@ -86,8 +135,8 @@ function OnRamp({
   children: ReactNode;
 }) {
   return (
-    <div className="stack rs-ramp">
-      <section className="panel block">
+    <>
+      <section className="panel-sec">
         <div className="b-head">
           <h2>No resume on file yet — that&apos;s the normal start</h2>
           <p className="helper">
@@ -113,7 +162,7 @@ function OnRamp({
         </p>
       </section>
 
-      <section className="panel block">
+      <section className="panel-sec">
         <div className="b-head">
           <h2>What your resume must contain to score</h2>
           <p className="helper">
@@ -121,24 +170,36 @@ function OnRamp({
             on your resume, the first diagnostic run has something real to measure.
           </p>
         </div>
-        <div className="rs-list">
-          {items.map((it, i) => (
-            <div className="rs-listrow" key={i}>
-              <span className="rs-list-n num">{String(i + 1).padStart(2, "0")}</span>
-              <b>{it.label}</b>
-              <span className="rs-list-note">{it.note}</span>
-              <span className="rs-list-src num">{it.src}</span>
-            </div>
-          ))}
-        </div>
+        <table className="rs-list num">
+          <thead>
+            <tr>
+              <th className="ct-no">№</th>
+              <th>Must contain</th>
+              <th>Why</th>
+              <th className="ct-src">Comes from</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((it, i) => (
+              <tr className="rs-listrow" key={i}>
+                <td className="rs-list-n num">{String(i + 1).padStart(2, "0")}</td>
+                <td className="ct-what">
+                  <b>{it.label}</b>
+                </td>
+                <td className="ct-why-col">{it.note}</td>
+                <td className="rs-list-src num">{it.src}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
 
       {children}
-    </div>
+    </>
   );
 }
 
-/* ── resume run result ──────────────────────────────────────────────────── */
+/* ── resume run result — flush sections of married card 1 ───────────────── */
 
 function RunResult({
   run,
@@ -151,14 +212,29 @@ function RunResult({
   studentName: string;
   children: ReactNode;
 }) {
-  const factorHead = (name: string, score: number, note: string) => (
-    <p className="rs-factor-head num">
-      {name} — <b>{Math.round(score * 100)}%</b> <span className="rs-fn">{note}</span>
-    </p>
-  );
+  const factorChecks: { name: string; score: number; note: string; checks: { label: string; ok: boolean; note?: string }[] }[] = [
+    {
+      name: "Parseability",
+      score: run.parseability.score,
+      note: "text present and extractable, per-page sanity",
+      checks: run.parseability.checks,
+    },
+    {
+      name: "Format conformance",
+      score: run.format.score,
+      note: `vs the guide${run.flags.onepageEstimated ? " (layout-independent estimate)" : ""}`,
+      checks: run.format.checks,
+    },
+    {
+      name: "Keyword alignment",
+      score: run.keywords.score,
+      note: `core-tier skills of ${run.careerName} found in the text`,
+      checks: run.keywords.checks,
+    },
+  ];
   return (
-    <div className="stack">
-      <section className="panel rs-readout" data-sequence>
+    <>
+      <section className="panel-sec rs-readout">
         <div className="rs-readout-top">
           <div>
             <span className="label num">Resume diagnostic · {fmtDT(run.at)}</span>
@@ -185,43 +261,46 @@ function RunResult({
         </p>
       </section>
 
-      <section className="panel block">
+      <section className="panel-sec">
         <div className="b-head">
           <h2>The three factors</h2>
         </div>
-        {factorHead("Parseability", run.parseability.score, "text present and extractable, per-page sanity")}
-        <div className="rs-checks">
-          {run.parseability.checks.map((c, i) => (
-            <p className="rs-check num" key={i}>
-              <span className={`mark ${c.ok ? "ok" : "no"}`}>{c.ok ? "✓" : "✕"}</span> {c.label}
-              {c.note ? <span className="rs-check-note"> · {c.note}</span> : null}
-            </p>
+        <table className="checks-table num">
+          <thead>
+            <tr>
+              <th className="ct-check">Check</th>
+              <th className="ct-result">Result</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          {factorChecks.map((f) => (
+            <tbody key={f.name}>
+              <tr className="rs-factor-head num">
+                <th colSpan={3} scope="colgroup">
+                  {f.name} — <b>{Math.round(f.score * 100)}%</b> <span className="rs-fn">{f.note}</span>
+                </th>
+              </tr>
+              {f.checks.map((c, i) => (
+                <tr className="rs-check num" key={i}>
+                  <td>{c.label}</td>
+                  <td>
+                    <span className={`mark ${c.ok ? "ok" : "no"}`}>{c.ok ? "✓" : "✕"}</span>
+                  </td>
+                  <td>
+                    {c.note ? <span className="rs-check-note">{c.note}</span> : <span className="bquiet">—</span>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           ))}
-        </div>
-        {factorHead("Format conformance", run.format.score, `vs the guide${run.flags.onepageEstimated ? " (layout-independent estimate)" : ""}`)}
-        <div className="rs-checks">
-          {run.format.checks.map((c, i) => (
-            <p className="rs-check num" key={i}>
-              <span className={`mark ${c.ok ? "ok" : "no"}`}>{c.ok ? "✓" : "✕"}</span> {c.label}
-              {c.note ? <span className="rs-check-note"> · {c.note}</span> : null}
-            </p>
-          ))}
-        </div>
-        {factorHead("Keyword alignment", run.keywords.score, `core-tier skills of ${run.careerName} found in the text`)}
-        <div className="rs-checks">
-          {run.keywords.checks.map((c, i) => (
-            <p className="rs-check num" key={i}>
-              <span className={`mark ${c.ok ? "ok" : "no"}`}>{c.ok ? "✓" : "✕"}</span> {c.label}
-            </p>
-          ))}
-        </div>
+        </table>
         <p className="src-line num">
           Deterministic templates only — no LLM calls in this layer. `ATS-friendly` is a formatting
           property, a claim about none: no outcome promise is made here.
         </p>
       </section>
 
-      <section className="panel block">
+      <section className="panel-sec">
         <div className="b-head">
           <h2>Findings and suggestions</h2>
           <p className="helper">
@@ -239,11 +318,11 @@ function RunResult({
 
       {children}
       <p className="rs-foot num">{studentName.toUpperCase()} · RUN {runsCount} · LATEST {run.air.airResume} · PARSE GATE {run.air.parsePass}</p>
-    </div>
+    </>
   );
 }
 
-/* ── the cover-letter check (ticket 12) ─────────────────────────────────── */
+/* ── the cover-letter check (ticket 12) — flush sections of married card 2 ── */
 
 const LETTER_KINDS: Record<string, string> = { txt: "TXT", pdf: "PDF", docx: "Word" };
 
@@ -256,8 +335,8 @@ function LetterResult({ run, runsCount, studentName, children }: {
   const rowMark = (ok: boolean | null) =>
     ok === true ? "✓" : ok === false ? "✕" : "—";
   return (
-    <div className="stack">
-      <section className="panel cl-readout" data-sequence>
+    <>
+      <section className="panel-sec cl-readout">
         <div className="cl-readout-top">
           <div>
             <span className="label num">Cover-letter check · {fmtDT(run.at)}</span>
@@ -284,7 +363,7 @@ function LetterResult({ run, runsCount, studentName, children }: {
         </p>
       </section>
 
-      <section className="panel block">
+      <section className="panel-sec">
         <div className="b-head">
           <h2>The checks</h2>
           <p className="helper">
@@ -292,35 +371,59 @@ function LetterResult({ run, runsCount, studentName, children }: {
             honest line and drops from the math — it is never failed into silence.
           </p>
         </div>
-        <div className="rs-checks">
-          <p className="cl-role-line num">
-            <span className="cl-role-label num">ROLE ALIGNMENT</span> — {run.keywords.filter((k) => k.ok).length} of {run.keywords.length} core skills of <b>{run.careerName}</b> found in the text · the Role anchor is always the declared Target Role
-          </p>
-          {run.keywords.map((c, i) => (
-            <p className="rs-check num" key={`kw-${i}`}>
-              <span className={`mark ${c.ok ? "ok" : "no"}`}>{c.ok ? "✓" : "✕"}</span> {c.label}
-            </p>
-          ))}
-          {run.checks.map((c, i) => (
-            <p className="rs-check num" key={`st-${i}`}>
-              <span className={`mark ${c.ok === null ? "skip" : c.ok ? "ok" : "no"}`}>{rowMark(c.ok)}</span> {c.label}
-              {c.note ? (
-                c.ok === null && c.label === "Employer named" ? (
-                  <span className="cl-notyet"> · {c.note}</span>
-                ) : (
-                  <span className="rs-check-note"> · {c.note}</span>
-                )
-              ) : null}
-            </p>
-          ))}
-        </div>
+        <table className="checks-table num">
+          <thead>
+            <tr>
+              <th className="ct-check">Check</th>
+              <th className="ct-result">Result</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="cl-role-line num">
+              <th colSpan={3} scope="colgroup">
+                <span className="cl-role-label num">ROLE ALIGNMENT</span> — {run.keywords.filter((k) => k.ok).length} of {run.keywords.length} core skills of <b>{run.careerName}</b> found in the text · the Role anchor is always the declared Target Role
+              </th>
+            </tr>
+            {run.keywords.map((c, i) => (
+              <tr className="rs-check num" key={`kw-${i}`}>
+                <td>{c.label}</td>
+                <td>
+                  <span className={`mark ${c.ok ? "ok" : "no"}`}>{c.ok ? "✓" : "✕"}</span>
+                </td>
+                <td>
+                  <span className="bquiet">—</span>
+                </td>
+              </tr>
+            ))}
+            {run.checks.map((c, i) => (
+              <tr className="rs-check num" key={`st-${i}`}>
+                <td>{c.label}</td>
+                <td>
+                  <span className={`mark ${c.ok === null ? "skip" : c.ok ? "ok" : "no"}`}>{rowMark(c.ok)}</span>
+                </td>
+                <td>
+                  {c.note ? (
+                    c.ok === null && c.label === "Employer named" ? (
+                      <span className="cl-notyet">{c.note}</span>
+                    ) : (
+                      <span className="rs-check-note">{c.note}</span>
+                    )
+                  ) : (
+                    <span className="bquiet">—</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         <p className="src-line num">
           Feedback only — the system advises the letter you brought, never writes one; no LLM here, and
           no “ATS pass” is claimed: the editor&apos;s promise to you is the next draft, not an outcome.
         </p>
       </section>
 
-      <section className="panel block">
+      <section className="panel-sec">
         <div className="b-head">
           <h2>Findings and suggestions</h2>
           <p className="helper">
@@ -353,7 +456,7 @@ function LetterResult({ run, runsCount, studentName, children }: {
       <p className="rs-foot num">
         {studentName.toUpperCase()} · LETTER RUN {runsCount} · LATEST {run.air.airLetter} · PARSE GATE {run.air.parsePass}
       </p>
-    </div>
+    </>
   );
 }
 
@@ -370,49 +473,81 @@ export default async function PrepPage() {
     : null;
   const items = career ? await mustContainList(career, state) : [];
 
+  /* Blue Command Rule — at most ONE blue primary per state:
+     resume not run        → the resume's format-guide CTA carries it;
+     resume run, letter not → the letter's run button takes it;
+     both run              → nothing pending, everything stays ghost. */
+  const resumeHasRun = Boolean(latestResume);
+  const letterHasRun = Boolean(latestLetter);
+  const letterPrimary = resumeHasRun && !letterHasRun;
+
   const resumeChildren = (
     <ResumeUpload careerName={career?.name ?? ""} />
   );
 
   const letterChildren = (
-    <LetterUpload careerName={career?.name ?? ""} employerRow={EMPLOYER_SKIP_NOTE} />
+    <LetterUpload careerName={career?.name ?? ""} employerRow={EMPLOYER_SKIP_NOTE} primary={letterPrimary} />
   );
 
+  /* the band's AR receipts — the same engine receipts the page already
+     reads (score.arParts from getStudentView); a null score (no target
+     role) renders the honest "—" in every cell, never a painted zero */
+  const unmeasured = (max: number): PartView => ({ measured: false, earned: 0, max });
+  const parts = score?.arParts ?? {
+    resume: unmeasured(AR_FACTORS.resume),
+    letter: unmeasured(AR_FACTORS.letter),
+    presence: unmeasured(AR_FACTORS.presence),
+  };
+
   return (
-    <div className="shell prep-shell">
-      <div className="screen-head">
-        <h1>Prep</h1>
-        <p className="page-id num">
-          {state.name} · target: <b>{career?.name ?? "no role picked yet"}</b>
-        </p>
-      </div>
-      <p className="prep-instrument num" role="status">
-        Application readiness · <b>{score && score.ar !== null ? `${score.ar}` : "—"}</b> of 15{" "}
-        {score && score.ar !== null
-          ? `— resume ${score.arParts.resume.earned}/${score.arParts.resume.max} · letter ${score.arParts.letter.earned}/${score.arParts.letter.max} · presence ${score.arParts.presence.measured ? `${score.arParts.presence.earned}/${score.arParts.presence.max}` : "not declared"}`
-          : "— resume 7 · letter 5 · presence 3, each measuring on its own file (presence declares in Profile → Credentials)"}
-      </p>
+    <div className="v7prep">
+      {/* named band — the grey tray; the instrument counters are band furniture */}
+      <header className="band">
+        <div className="bandrow">
+          <div className="who">
+            <h1 className="t">Prep</h1>
+            {career ? (
+              <p className="m">For {career.name} — the resume, the cover letter, and the presence stamp, each measuring on its own file.</p>
+            ) : (
+              <p className="m">The resume, the cover letter, and the presence stamp, each measuring on its own file.</p>
+            )}
+          </div>
+          <div className="bandcells">
+            <BandCell name="Resume" part={parts.resume} notRun="NOT YET RUN" />
+            <BandCell name="Letter" part={parts.letter} notRun="NOT YET CHECKED" />
+            <BandCell name="Presence" part={parts.presence} notRun="NOT DECLARED" />
+            <ArCell value={score?.ar ?? null} />
+          </div>
+        </div>
+      </header>
 
       {!career ? (
-        <div className="panel block" style={{ marginTop: 14 }}>
+        <section className="card nc-card">
           <div className="b-head">
             <h2>Pick your target role first</h2>
             <p className="helper">Every diagnostic measures against one target role at a time.</p>
           </div>
-          <p style={{ marginTop: 10 }}>
+          <p className="nc-cta">
             <a className="btn btn-primary" href="/career">
               Browse the career index <span className="arrow num">↵</span>
             </a>
           </p>
-        </div>
+        </section>
       ) : (
-        <div className="stack prep-flow">
-          {/* ── resume diagnostic (7 of 15) ── */}
-          <section className="prep-factor">
-            <h2 className="prep-factor-head">Resume Diagnostic</h2>
-            <p className="prep-sublabel num">
-              Feedback only · the system advises the resume — it never authors, hosts, or edits it
-            </p>
+        <>
+          {/* ── card 1 · the resume diagnostic (7 of 15) — a married card ── */}
+          <section className="card">
+            <div className="cardtop">
+              <div className="ct-id">
+                <h2>Resume diagnostic (7 of 15)</h2>
+                <p className="prep-sublabel num">
+                  Feedback only · the system advises the resume — it never authors, hosts, or edits it
+                </p>
+              </div>
+              <span className="kicker num">
+                {latestResume ? `LATEST RUN · ${latestResume.run.air.airResume}/100` : "NOT YET RUN"}
+              </span>
+            </div>
             {latestResume ? (
               <RunResult run={latestResume.run} runsCount={latestResume.runsCount} studentName={state.name}>
                 {resumeChildren}
@@ -424,15 +559,26 @@ export default async function PrepPage() {
             )}
           </section>
 
-          {/* ── cover-letter check (5 of 15) — independent per-file flow ── */}
-          <section className="prep-factor">
-            <h2 className="prep-factor-head">Cover-letter check</h2>
-            <p className="cl-sublabel num">
-              Independent upload · the letter runs on its own file, separate from the resume — your latest letter check counts
-            </p>
-            {!latestLetter ? (
-              <div className="stack rs-ramp">
-                <section className="panel block">
+          {/* ── card 2 · the cover-letter check (5 of 15) — married card, independent flow ── */}
+          <section className="card">
+            <div className="cardtop">
+              <div className="ct-id">
+                <h2>Cover-letter check (5 of 15)</h2>
+                <p className="cl-sublabel num">
+                  Independent upload · the letter runs on its own file, separate from the resume — your latest letter check counts
+                </p>
+              </div>
+              <span className="kicker num">
+                {latestLetter ? `LATEST CHECK · ${latestLetter.run.air.airLetter}/100` : "NOT YET CHECKED"}
+              </span>
+            </div>
+            {latestLetter ? (
+              <LetterResult run={latestLetter.run} runsCount={latestLetter.runsCount} studentName={state.name}>
+                {letterChildren}
+              </LetterResult>
+            ) : (
+              <>
+                <section className="panel-sec">
                   <div className="b-head">
                     <h2>No letter checked yet</h2>
                     <p className="helper">
@@ -448,20 +594,18 @@ export default async function PrepPage() {
                   </p>
                 </section>
                 {letterChildren}
-              </div>
-            ) : (
-              <LetterResult run={latestLetter.run} runsCount={latestLetter.runsCount} studentName={state.name}>
-                {letterChildren}
-              </LetterResult>
+              </>
             )}
-          </section>
 
-          {/* ── the third factor lives in Profile → Credentials (ticket 12 flow) ── */}
-          <p className="prep-src num">
-            THIRD FACTOR · presence (3 of 15) is a declared entry, not an upload —{" "}
-            <a href="/profile">Profile → Credentials</a> stamps it, machine-verified and timestamped, offline.
-          </p>
-        </div>
+            {/* the third factor lives in Profile → Credentials (ticket 12 flow) */}
+            <section className="panel-sec prep-src-sec">
+              <p className="prep-src num">
+                THIRD FACTOR · presence (3 of 15) is a declared entry, not an upload —{" "}
+                <a href="/profile#profile">Profile → Credentials</a> stamps it, machine-verified and timestamped, offline.
+              </p>
+            </section>
+          </section>
+        </>
       )}
     </div>
   );
