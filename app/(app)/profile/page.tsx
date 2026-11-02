@@ -291,12 +291,18 @@ export default async function ProfilePage() {
 
       {/* starting levels, demoted: one card, the 8 dotted levels as one
           wrapped strip of name + dots units — caption-weight names, the
-          full-table form retired; the dots' aria-labels stay byte-verbatim */}
+          full-table form retired; Wave-3 P1 (2026-11-03): the units say
+          what they are — setup answers from onboarding, kept honest ("setup
+          answer: {word}"), with the caption naming the battery's role; the
+          5-dot visual stays */}
       <div className="card">
         <div className="head">
           <b>Starting levels with people</b>
           <span className="num">{ratedStart} of {COMPETENCIES.length} rated at setup</span>
         </div>
+        <p className="lvl-cap">
+          Dots = your setup answers at onboarding — the NACE battery measures the same competencies for real.
+        </p>
         <div className="lvl-strip">
           {COMPETENCIES.map(({ name, probe }) => {
             const word = probe ? state.softSkills[probe] : undefined;
@@ -307,8 +313,9 @@ export default async function ProfilePage() {
                 <span
                   className="dots num"
                   role="img"
+                  title={level > 0 ? `${name}: setup answer: ${word}` : `${name}: not rated yet — the full battery will measure it`}
                   aria-label={
-                    level > 0 ? `${name}: level ${level} of 5` : `${name}: not rated yet — the full battery will measure it`
+                    level > 0 ? `${name}: setup answer: ${word}` : `${name}: not rated yet — the full battery will measure it`
                   }
                 >
                   {[1, 2, 3, 4, 5].map((d) => (

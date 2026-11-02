@@ -43,6 +43,9 @@ export interface GoalView {
   title: string;
   type: "training" | "milestone";
   status: "active" | "completed";
+  /** the completed receipt — Wave-3 Pr3: ONE line, doneLine now carries the
+   *  whole auto-completed sentence ("Auto-completed Oct 17 · 4 of 5 passed")
+   *  and autoLine stays in the shape only for the set-goal note slot */
   doneLine: string | null;
   autoLine: string | null;
   statusLine: string;
@@ -321,7 +324,12 @@ export default function ProgressView(props: Props) {
                 Check passed · {row.correct} of {row.total}
               </span>
               <span className="chip c-green">Checked ·✓✓</span>
-              <span className="f-lock">pass at 4 of 5</span>
+              {/* Pr1 (Wave-3): the "pass at 4 of 5" restatement survives ONLY
+                  the 5-of-5 margin case — the pass mark line otherwise just
+                  repeats what the score already says */}
+              {row.correct === row.total && (
+                <span className="f-lock">pass at 4 of 5</span>
+              )}
             </div>
             <span className="f-when">{row.date}</span>
           </div>
@@ -339,11 +347,11 @@ export default function ProgressView(props: Props) {
       <section className="card">
         <div className="head">
           <h2 className="h-title">Skills you&apos;ve closed</h2>
-          <span className="num">
-            <b>
-              {props.closedCount} of {props.mapSize}
-            </b>{" "}
-            {props.careerName} skills closed
+          {/* Pr2 (Wave-3): the head counter moves to the kicker register —
+              "N OF M CLOSED"; the career name leaves the counter (the band's
+              "Target: {career}" line carries the band context) */}
+          <span className="label num">
+            {props.closedCount} OF {props.mapSize} CLOSED
           </span>
         </div>
         <div className="closed-list">
@@ -412,8 +420,11 @@ export default function ProgressView(props: Props) {
                     <span className="g-title">{title}</span>
                     {g.type === "training" && <span className="chip c-green">Checked ·✓✓</span>}
                   </div>
+                  {/* Pr3 (Wave-3): the completed receipt is ONE line — the
+                      auto-note carries the date + score; no doneLine/autoLine
+                      double (the type keeps autoLine for the active-note slot
+                      only) */}
                   <div className="g-status num">{g.doneLine}</div>
-                  {g.autoLine && <div className="g-event okband num">{g.autoLine}</div>}
                 </div>
               );
             }

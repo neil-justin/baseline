@@ -576,8 +576,16 @@
 
 /* ---------- Competencies Phase-2 register: the demoted starting-levels
    strip — one wrapped line of name + dots units, caption-weight names so
-   the unit reads secondary next to the full cards; the dots' aria-labels
-   ("level N of 5" / the honest unrated line) stay byte-verbatim ---------- */
+   the unit reads secondary next to the full cards; Wave-3 P1: the units
+   read their setup answers ("setup answer: {word}"), the caption states
+   the battery's role ---------- */
+
+.v7profile .lvl-cap {
+  margin: 0;
+  padding: 10px 16px 0;
+  font: 400 12.5px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
 
 .v7profile .lvl-strip {
   display: flex;

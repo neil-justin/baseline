@@ -62,6 +62,11 @@ export interface CareerCardData {
   entry: string;
   closed: number;
   mapSize: number;
+  /** Wave-3 C1 — the Skill map bar splits: provenance counts over the SAME
+   *  premise as `closed` (all bars on the profile) — verified·✓ + checked·✓✓
+   *  share paints solid, self-reported claims paint the hatch segment */
+  verified: number;
+  claimed: number;
   stageOneDone: number;
 }
 

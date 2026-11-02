@@ -256,11 +256,11 @@ test.describe.serial("demo-arc", () => {
     await page.waitForSelector("#sw-reset .readout", { timeout: 8000 });
     await expect(page.locator("#sw-reset .readout-score")).toHaveText(/21\/100/);
     const dipLegend = (await page.locator("#sw-reset .readout-legend").textContent()) ?? "";
-    expect(dipLegend).toContain("SP 0/25");
-    expect(dipLegend).toContain("ES 17/30");
-    expect(dipLegend).toContain("TP 0/20");
-    expect(dipLegend).toContain("AR —"); // unmeasured channel — no stale zero
-    expect(dipLegend).toContain("CC 4/10");
+    expect(dipLegend).toContain("Skill progress 0/25"); // Wave-3 C5: full channel words, codes banned
+    expect(dipLegend).toContain("Employability 17/30");
+    expect(dipLegend).toContain("Training 0/20");
+    expect(dipLegend).toContain("Application readiness —"); // unmeasured channel — no stale zero
+    expect(dipLegend).toContain("Career direction 4/10");
     await expect(page.locator("#sw-reset .readout-fit")).toContainText("The 21 that stays is competencies and career direction");
     await shot(page, "arc-21.png");
     notes.push("beat 6 dip: reset readout 21/100 · SP 0/25 ES 17/30 TP 0/20 AR — CC 4/10 · arc-21.png ✓");
@@ -287,8 +287,8 @@ test.describe.serial("demo-arc", () => {
     const recTo = ((await page.locator("#sw-recovered .score-to").textContent()) ?? "").trim();
     soft(recTo).toBe("35"); // canon: 21 → 35
     const recLegend = (await page.locator("#sw-recovered .readout-legend").textContent()) ?? "";
-    soft(recLegend).toContain("SP 14/25"); // 25 × 4/7 → 14 — Business Needs ·✓ + 3 self-claims
-    expect(recLegend).toContain("CC 4/10"); // the plan commitment rides the switch + career picked
+    soft(recLegend).toContain("Skill progress 14/25"); // 25 × 4/7 → 14 — Business Needs ·✓ + 3 self-claims
+    expect(recLegend).toContain("Career direction 4/10"); // the plan commitment rides the switch + career picked
     const recLine = ((await page.locator("#sw-recovered .rec-line").textContent()) ?? "").replace(/\s+/g, " ");
     soft(recLine).toContain("4 of 7");
     expect(recLine).toContain("Business Needs");
@@ -355,9 +355,11 @@ test.describe.serial("demo-arc", () => {
     await expect(page.locator(".prog-ctx")).toContainText("ready for Software QA Analyst");
     const doneGoal = page.locator(".goal-row.done", { hasText: "Build my first test plan" });
     await expect(doneGoal).toBeVisible();
-    const autoLine = ((await doneGoal.locator(".g-event").textContent()) ?? "").replace(/\s+/g, " ");
+    /* Wave-3 Pr3: the completed-goal receipt is ONE line (.g-status reads
+       it — the .g-event slot retired with the doneLine/autoLine double) */
+    const autoLine = ((await doneGoal.locator(".g-status").textContent()) ?? "").replace(/\s+/g, " ");
     soft(autoLine).toContain("Auto-completed");
-    soft(autoLine).toContain("(5 of 5)");
+    soft(autoLine).toContain("5 of 5 passed");
     soft(autoLine).toContain("software testing gap");
     notes.push(`beat 7 auto-complete line: "${autoLine}"`);
 

@@ -51,6 +51,17 @@
   padding-top: 10px;
   border-top: 1px solid var(--v-rows);
 }
+/* Wave-3 C1 (2026-11-03) — the split map bar: the hatch segment speaks a
+   self-reported share, per the Dashboard `.kbar i.hatch` recipe (45° blue
+   stripes — fine at the 4px band register). `.v7 .bcell .kbar` in ../v7.css
+   carries the shared geometry; only the hatch segment needed a local rule. */
+.v7career .bcell .kbar i.hatch {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(26, 115, 232, 0.16) 0 2px,
+    transparent 2px 5px
+  );
+}
 
 .v7career .label {
   font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
@@ -601,9 +612,18 @@
 
 @media (max-width: 860px) {
   .v7career .index-table.cols-ranked { --cols: 30px minmax(0, 1.2fr) 120px 24px; }
-  .v7career .index-table.cols-ranked .ch-entry,
-  .v7career .index-table.cols-ranked .cell-entry { display: none; } /* entry folds under the detail */
-  .v7career .index-colheads, .v7career .index-row { gap: 12px; }
+  /* Wave-3 C3 (2026-11-03): the ENTRY PATH column does NOT disappear at the
+     fold — the column head folds away and the entry cell re-slots as a
+     full-width lower row under the detail (the skill-row mobile fold),
+     so the content is present at narrow widths, not deleted. */
+  .v7career .index-table.cols-ranked .ch-entry { display: none; }
+  .v7career .index-table.cols-ranked .cell-entry {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    padding-left: 42px; /* aligned under the career cell (30px rank + 12px gap) */
+  }
+  .v7career .index-colheads { gap: 12px; }
+  .v7career .index-row { gap: 4px 12px; } /* the fold row stacks the entry under it */
 }
 
 @media (max-width: 720px) {
@@ -632,6 +652,7 @@
 
 @media (max-width: 560px) {
   .v7career .index-table.cols-ranked { --cols: 26px minmax(0, 1fr) 96px 22px; }
+  .v7career .index-table.cols-ranked .cell-entry { padding-left: 38px; } /* fold re-aligns to the tighter rank column */
   .v7career .rank { width: 24px; height: 24px; font-size: 11px; }
   .v7career .mbar { max-width: 84px; }
   .v7career .choice button { padding: 4px 9px; font-size: 11.5px; }

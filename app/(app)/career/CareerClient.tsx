@@ -418,30 +418,52 @@ export default function CareerClient({
       register (2026-11-03 user ruling): a slash fraction + the ONE 4px
       honest bar (blue fill = earned share, green only when FULLY earned).
       No chips — prep's notRun/·✓ semantics are factor-specific; bare text
-      cells stay bare (the track cell never carries a fake fraction). */
+      cells stay bare (the track cell never carries a fake fraction).
+      Wave-3 C1 (2026-11-03 ruling): the Skill map bar SPLITS provenance the
+      way Dashboard's SP cell does — solid = verified·✓ + checked·✓✓ share,
+      the following hatch segment = the self-reported share (45° stripes,
+      fine at the 4px register); the split rides the SAME cellBar hook so
+      the First 30 days cell keeps its single honest fill. */
   const cellBar = (
     label: string,
     earned: number,
     max: number,
-    ariaNote: string
-  ) => (
-    <div className="bcell" key={label}>
-      <span className="label">{label}</span>
-      <span className="bval num">
-        {earned}/{max}
-      </span>
-      <div
-        className="kbar"
-        role="img"
-        aria-label={`${label}: ${earned} of ${max} ${ariaNote}`}
-      >
-        <i
-          className={earned >= max && max > 0 ? "solid green" : "solid"}
-          style={{ width: max > 0 ? `${Math.round((earned / max) * 100)}%` : "0" }}
-        />
+    ariaNote: string,
+    provenance?: { verified: number; claimed: number }
+  ) => {
+    const pct = (n: number) => (max > 0 ? Math.min(100, Math.round((n / max) * 100)) : 0);
+    const aria =
+      provenance == null
+        ? `${label}: ${earned} of ${max} ${ariaNote}`
+        : `${label}: ${earned} of ${max} ${ariaNote} — ${provenance.verified} verified ·✓ or checked ·✓✓, ${provenance.claimed} self-reported`;
+    return (
+      <div className="bcell" key={label}>
+        <span className="label">{label}</span>
+        <span className="bval num">
+          {earned}/{max}
+        </span>
+        <div className="kbar" role="img" aria-label={aria}>
+          {provenance ? (
+            <>
+              <i
+                className={provenance.verified >= max && max > 0 ? "solid green" : "solid"}
+                style={{ width: `${pct(provenance.verified)}%` }}
+              />
+              <i
+                className="hatch"
+                style={{ left: `${pct(provenance.verified)}%`, width: `${pct(provenance.claimed)}%` }}
+              />
+            </>
+          ) : (
+            <i
+              className={earned >= max && max > 0 ? "solid green" : "solid"}
+              style={{ width: max > 0 ? `${Math.round((earned / max) * 100)}%` : "0" }}
+            />
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="v7career">
@@ -517,7 +539,10 @@ export default function CareerClient({
           {card && (
             <div className="bandcells">
               {bandcell("Track", card.trackLabel)}
-              {cellBar("Skill map", card.closed, card.mapSize, "closed bars")}
+              {cellBar("Skill map", card.closed, card.mapSize, "closed bars", {
+                verified: card.verified,
+                claimed: card.claimed,
+              })}
               {cellBar("First 30 days", card.stageOneDone, 3, "done")}
             </div>
           )}
@@ -833,11 +858,11 @@ export default function CareerClient({
                 />
               </div>
               <div className="readout-legend">
-                <span><b>SP</b> {reset.dip.score.sp}/{WEIGHTS.sp}</span>
-                <span><b>ES</b> {reset.dip.score.es}/{WEIGHTS.es}</span>
-                <span><b>TP</b> {reset.dip.score.tp}/{WEIGHTS.tp}</span>
-                <span><b>AR</b> {reset.dip.score.ar === null ? "—" : `${reset.dip.score.ar}/${WEIGHTS.ar}`}</span>
-                <span><b>CC</b> {reset.dip.score.cc}/{WEIGHTS.cc}</span>
+                <span><b>Skill progress</b> {reset.dip.score.sp}/{WEIGHTS.sp}</span>
+                <span><b>Employability</b> {reset.dip.score.es}/{WEIGHTS.es}</span>
+                <span><b>Training</b> {reset.dip.score.tp}/{WEIGHTS.tp}</span>
+                <span><b>Application readiness</b> {reset.dip.score.ar === null ? "—" : `${reset.dip.score.ar}/${WEIGHTS.ar}`}</span>
+                <span><b>Career direction</b> {reset.dip.score.cc}/{WEIGHTS.cc}</span>
               </div>
               <div className="readout-fit">
                 What stays is competencies and career direction: verified skills ·✓ and an active
@@ -933,11 +958,11 @@ export default function CareerClient({
                 />
               </div>
               <div className="readout-legend">
-                <span><b>SP</b> {recovered.score.sp}/{WEIGHTS.sp}</span>
-                <span><b>ES</b> {recovered.score.es}/{WEIGHTS.es}</span>
-                <span><b>TP</b> {recovered.score.tp}/{WEIGHTS.tp}</span>
-                <span><b>AR</b> {recovered.score.ar === null ? "—" : `${recovered.score.ar}/${WEIGHTS.ar}`}</span>
-                <span><b>CC</b> {recovered.score.cc}/{WEIGHTS.cc}</span>
+                <span><b>Skill progress</b> {recovered.score.sp}/{WEIGHTS.sp}</span>
+                <span><b>Employability</b> {recovered.score.es}/{WEIGHTS.es}</span>
+                <span><b>Training</b> {recovered.score.tp}/{WEIGHTS.tp}</span>
+                <span><b>Application readiness</b> {recovered.score.ar === null ? "—" : `${recovered.score.ar}/${WEIGHTS.ar}`}</span>
+                <span><b>Career direction</b> {recovered.score.cc}/{WEIGHTS.cc}</span>
               </div>
               <div className="readout-fit">
                 The reset measured the right things, then rebuilt on what you reported.

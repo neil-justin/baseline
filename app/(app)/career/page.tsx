@@ -77,6 +77,10 @@ export default async function CareerPage() {
           entry: entryDisplay(career),
           closed: v.closed,
           mapSize: v.mapSize,
+          verified: Object.values(state.bars).filter(
+            (b) => b.source === "verified" || b.source === "checked"
+          ).length,
+          claimed: Object.values(state.bars).filter((b) => b.source === "claimed").length,
           stageOneDone: v.stageOne.done,
         };
       })()

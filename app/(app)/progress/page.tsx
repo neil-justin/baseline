@@ -165,15 +165,18 @@ export default async function ProgressPage() {
       : undefined;
     if (g.status === "completed") {
       const date = fmtDate(g.completedAt ?? checkEv?.date ?? "2026-10-17");
+      // Pr3 (Wave-3): ONE receipt line — the auto-completed training goal
+      // reads "Auto-completed Oct 17 · 4 of 5 passed" (+ its gap-close
+      // receipt when the check closed one); no doneLine/autoLine double
       let doneLine = `Done ${date}`;
-      let autoLine: string | null = null;
       if (checkEv) {
         const m = checkEv.detail.match(/^Check passed \((\d+) of (\d+)\)/);
         const n = m ? m[1] : "4";
-        doneLine = `Done ${fmtDate(checkEv.date)} · check passed ${n} of 5`;
         const skill = resource?.skillsAddressed[0];
         const closedGap = skill ? closedGapEvent(skill) : false;
-        autoLine = `Auto-completed ${fmtDate(checkEv.date)} · you passed the check on “${resource?.title}” (${n} of 5)${closedGap ? `, which closed your ${skillShort(skill ?? "skill")} gap` : ""} and finished this goal.`;
+        doneLine = `Auto-completed ${fmtDate(checkEv.date)} · ${n} of 5 passed${
+          closedGap ? `, closed your ${skillShort(skill ?? "skill")} gap` : ""
+        }`;
       }
       return {
         id: g.id,
@@ -182,7 +185,7 @@ export default async function ProgressPage() {
         status: g.status,
         meta: null,
         doneLine: g.type === "milestone" ? `Done ${date} · marked by you` : doneLine,
-        autoLine: g.type === "training" ? autoLine : null,
+        autoLine: null,
         statusLine: "",
         check: null,
       };

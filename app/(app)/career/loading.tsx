@@ -1,13 +1,15 @@
 import "./career.css";
 
 /**
- * Tier 3.5 route skeleton — Careers (amended 2026-11-03: TEXT-FREE).
- * Mirrors the committed stage order (named band + bandcells tray → the lens
- * chips rail → the ONE rolecard holding the match rows) using the page's REAL
- * structural classes. NO real text — the h1, chip labels and row names are
- * shape bars; one polite status region announces. Static-chrome rule kept:
- * the band renders pure track-grey shapes. Pulse gated by
- * prefers-reduced-motion (../v7.css .skel).
+ * Tier 3.5 route skeleton — Careers (Wave-3 C4 rewrite, 2026-11-03).
+ * Mirrors the page's DEFAULT committed stage: the named band + bandcells
+ * tray → the lens chips rail → the ONE rolecard as the RANKED INDEX TABLE
+ * (tracked column heads + rows + cells — rank circle, career name + sub,
+ * "x of y"-shaped fit cell with its match bar, entry cell, chevron), NOT
+ * the zero-confirmed compressed row. TEXT-FREE still: the h1, head labels
+ * and cell values are shape bars; one polite status region announces.
+ * Static-chrome rule kept: the band renders pure track-grey shapes. Pulse
+ * gated by prefers-reduced-motion (../v7.css .skel).
  */
 export default function Loading() {
   return (
@@ -44,16 +46,39 @@ export default function Loading() {
           </span>
         </div>
 
+        {/* the ranked index default — tracked column heads, then row cells
+            in the RANK / CAREER / SKILLS IN COMMON / ENTRY PATH template */}
         <div className="card rolecard">
-          <div className="match-table">
+          <div className="index-table cols-ranked">
+            <div className="index-colheads">
+              <span className="skel" style={{ width: 34, height: 11 }} />
+              <span className="skel" style={{ width: 52, height: 11 }} />
+              <span className="skel" style={{ width: 118, height: 11 }} />
+              <span className="skel" style={{ width: 74, height: 11 }} />
+              <span aria-hidden="true" />
+            </div>
             {Array.from({ length: 4 }, (_, r) => (
-              <div className="match-row" key={r}>
-                <div className="m-main">
-                  <span className="skel" style={{ width: 150, height: 18 }} />
-                  <span className="skel" style={{ width: 40, height: 18 }} />
-                </div>
-                <span className="skel" style={{ width: 76, height: 19 }} />
-                <span className="skel" style={{ width: "62%", height: 16, marginTop: 4 }} />
+              <div className="index-row" key={r}>
+                <span className="skel" style={{ width: 26, height: 26, borderRadius: 999 }} />
+                <span className="cell-career">
+                  <span className="skel" style={{ width: 110 + (r % 3) * 40, height: 15, display: "block" }} />
+                  <span
+                    className="skel"
+                    style={{ width: `${62 - (r % 3) * 6}%`, height: 12, marginTop: 6, display: "block" }}
+                  />
+                </span>
+                <span className="cell-fit">
+                  <span className="skel" style={{ width: 46, height: 12 }} />
+                  <span className="mbar" aria-hidden="true">
+                    <i style={{ width: `${42 - r * 9}%` }} />
+                  </span>
+                </span>
+                <span className="cell-entry">
+                  <span className="skel" style={{ width: 74, height: 12 }} />
+                </span>
+                <span className="cell-exp" aria-hidden="true">
+                  <span className="chev" />
+                </span>
               </div>
             ))}
           </div>

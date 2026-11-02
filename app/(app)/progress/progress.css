@@ -588,15 +588,14 @@
 }
 .v7prog .r-line:last-child { border-bottom: 0; }
 .v7prog .r-line .r-stem { flex: 1; min-width: 0; }
+/* Pr4 (Wave-3): the per-question marks are wash chips (green ·✓ / grey ·✗)
+   — .v7prog .chip supplies the wash grammar; this rule only keeps the mark
+   aligned in its line. Never red (the family's no-red law). */
 .v7prog .r-mark {
-  font: 500 12px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
   flex: none;
+  align-self: center;
   font-variant-numeric: tabular-nums;
 }
-.v7prog .r-mark.ok { color: var(--v-green-text); }
-/* honest misses read amber — the family has no red */
-.v7prog .r-mark:not(.ok) { color: var(--v-amber-text); }
 .v7prog .check-ctas {
   margin-top: 22px;
   display: flex;

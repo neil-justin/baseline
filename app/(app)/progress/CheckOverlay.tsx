@@ -191,7 +191,15 @@ export default function CheckOverlay({
                 const ok = answers[i] === q.answer;
                 return (
                   <div className="r-line" key={i}>
-                    <span className={`r-mark num ${ok ? "ok" : ""}`}>{ok ? "✓" : "✗"}</span>
+                    {/* Pr4 (Wave-3): the per-question marks are wash chips —
+                        green ·✓ correct, grey ·✗ missed; never red, no bare
+                        glyphs (the family's chip grammar carries both tones) */}
+                    <span
+                      className={`r-mark num chip ${ok ? "c-green" : "c-grey"}`}
+                      title={ok ? "Correct" : "Missed"}
+                    >
+                      {ok ? "·✓" : "·✗"}
+                    </span>
                     <span className="r-stem">{q.stem}</span>
                   </div>
                 );
