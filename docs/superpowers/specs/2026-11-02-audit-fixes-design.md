@@ -135,6 +135,15 @@ New manual-QA findings; design decisions run through the grilling session (2026-
 
 Queue position: after Tier 2b (header content plan), before Tier 3 (animation/landing).
 
+## Tier 2d — Tab presentation consistency (user-prioritized, re-ordered 2026-11-02 late)
+
+User finding (§6.3 of `handoff/handoff-2026-11-02-audit-session.md`): Ranked steps / Your gaps /
+Resources render the same skill universe with roughly different design/structure. Goal: ONE
+consistent design across the three tabs. This becomes the PRIORITY design item; the resource
+relevance/assessment alignment (§6.1/6.2) moves to BACKGROUND data streams (content passes on
+`lib/fixtures/resources.ts` + `checks.ts` — the resource algorithm engine reads authored
+`skillsAddressed`/`pick:`/checks data; no conflict with the design work).
+
 ## Tier 3 — Design pass
 
 - **Animation (subtle, existing kit)**: `components/Reveal.tsx`, `components/CountUp.tsx`,
