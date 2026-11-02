@@ -3,16 +3,16 @@
 import { useRef, useState } from "react";
 
 /**
- * The cover-letter check's intake motion (ticket 12): pick ONE file (TXT/PDF/
- * DOCX) plus the OPTIONAL employer anchor field, POST to
- * /api/cover-letter/check, and on a successful check the page reloads — the
- * server page re-renders the stored run (the ResumeUpload reload pattern:
- * the run's result is server-rendered from the store; a document load
- * re-renders honestly every time). Rejections show the locked reason inline
- * (aria-live) and persist nothing. NO authoring surface exists — there is no
- * paste box, no generated letter, no editing inside the system (the same hard
- * fence as the resume round). Per-file AM semantics: this runs INDEPENDENT
- * of the resume upload; each flow keeps its own latest attempt.
+ * The cover-letter checker's intake (v7.4 minimal-tool recut): the SAME
+ * dropzone pattern as the resume — one file (TXT/PDF/DOCX) lands and the
+ * check runs immediately. The OPTIONAL employer anchor sits as one small
+ * field BENEATH the zone (fill it before dropping, or leave it empty — the
+ * omitted case skips its check honestly and prints the exact line in the
+ * results). POST to /api/cover-letter/check; on success the page reloads
+ * (the server page re-renders the stored run). Rejections show the locked
+ * reason inline (aria-live, .cl-err — e2e contract) and persist nothing.
+ * NO authoring surface exists — no paste box, no generated letter, nothing
+ * edited inside the system (the same hard fence as the resume round).
  */
 
 const REJECT_COPY: Record<string, string> = {
@@ -20,7 +20,7 @@ const REJECT_COPY: Record<string, string> = {
   unauthorized: "Your session ended — sign in again and re-upload.",
   no_career: "Pick your target role first — the check measures against it.",
   no_file: "Choose a cover letter file first (TXT, PDF, or DOCX).",
-  multi_file: "One file at a time — upload the cover letter as a single PDF, DOCX, or TXT.",
+  multi_file: "One file at a time — drop the cover letter as a single PDF, DOCX, or TXT.",
   oversize: "Over the 5 MB limit — a plain, text-only letter export stays well under it. Remove images and export the letter again.",
   empty: "The file carries almost no text — a letter needs its body.",
   encrypted: "This file is password-protected or encrypted — save an unlocked copy as a PDF, DOCX, or TXT and upload that.",
@@ -30,26 +30,21 @@ const REJECT_COPY: Record<string, string> = {
   format_check_failed: "The format checks didn't pass. Nothing was saved or scored.",
 };
 
-export default function LetterUpload({ careerName, employerRow, primary = false }: { careerName: string; employerRow: string; primary?: boolean }) {
+export default function LetterUpload() {
   const fileInput = useRef<HTMLInputElement>(null);
   const [employer, setEmployer] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [drag, setDrag] = useState(false);
 
-  async function check() {
-    setErr(null);
-    const files = fileInput.current?.files;
-    if (!files || files.length === 0) {
-      setErr("Choose a cover letter file first (TXT, PDF, or DOCX).");
-      return;
-    }
+  async function check(files: FileList | null) {
+    if (!files || files.length === 0) return;
     const form = new FormData();
     form.append("letter", files[0]);
     const anchor = employer.trim();
-    if (anchor.length > 0) {
-      form.append("employer", anchor);
-    } // absent = the optional check skips honestly — nothing invented
+    if (anchor.length > 0) form.append("employer", anchor); // absent = the optional check skips honestly — nothing invented
     setBusy(true);
+    setErr(null);
     try {
       const res = await fetch("/api/cover-letter/check", { method: "POST", body: form });
       if (res.ok) {
@@ -67,32 +62,59 @@ export default function LetterUpload({ careerName, employerRow, primary = false 
   }
 
   return (
-    <section className="cl-upload" aria-label="Run the cover-letter check">
-      <div className="b-head">
-        <h2>Run the letter check — one TXT, PDF, or DOCX at a time</h2>
-        <p className="helper">
-          The letter is read for feedback inside this run and never stored. Target role: <b>{careerName}</b>.
-        </p>
+    <section className="cl-upload dropzone" aria-label="Run the cover-letter checker">
+      <div
+        role="button"
+        tabIndex={busy ? -1 : 0}
+        className={`dz-zone${drag ? " dz-over" : ""}`}
+        onClick={() => !busy && fileInput.current?.click()}
+        onKeyDown={(e) => {
+          if (!busy && (e.key === "Enter" || e.key === " ")) {
+            e.preventDefault();
+            fileInput.current?.click();
+          }
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDrag(true);
+        }}
+        onDragLeave={() => setDrag(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDrag(false);
+          if (!busy) void check(e.dataTransfer.files);
+        }}
+        aria-label="Drop your cover letter here (TXT, PDF, or DOCX) or click to browse — the checker runs on drop"
+      >
+        {busy ? (
+          <span className="dz-busy">Reading the letter…</span>
+        ) : err ? (
+          <span className="cl-err dz-err" role="status" aria-live="polite">
+            {err}
+          </span>
+        ) : (
+          <>
+            <span className="ms dz-icon" aria-hidden="true">
+              mail
+            </span>
+            <span className="dz-head">Drop your cover letter here</span>
+            <span className="dz-sub">TXT, PDF, or DOCX · it runs the moment the file lands</span>
+          </>
+        )}
       </div>
-      <div className="cl-row">
-        <div className="cl-field">
-          <label className="cl-label num" htmlFor="cl-file">
-            Your letter
-          </label>
-          <input
-            ref={fileInput}
-            type="file"
-            id="cl-file"
-            className="rs-file"
-            accept=".txt,.pdf,.docx,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            aria-label="Cover letter file (TXT, PDF, or DOCX — one file, up to 5 MB)"
-            onChange={() => setErr(null)}
-          />
-        </div>
-        <div className="cl-field cl-field-anchor">
-          <label className="cl-label num" htmlFor="cl-employer">
-            Employer <span className="cl-opt num">optional</span>
-          </label>
+      <input
+        ref={fileInput}
+        type="file"
+        className="rs-file dz-input"
+        accept=".txt,.pdf,.docx,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        onChange={(e) => {
+          void check(e.target.files);
+          e.target.value = "";
+        }}
+      />
+      <div className="cl-field cl-below">
+        <label className="rs-links num" htmlFor="cl-employer">
+          Employer{" "}
           <input
             type="text"
             id="cl-employer"
@@ -100,23 +122,11 @@ export default function LetterUpload({ careerName, employerRow, primary = false 
             value={employer}
             maxLength={120}
             aria-label="Employer (optional)"
-            placeholder="Leave empty if you're applying generally"
+            placeholder="Optional — a company name runs its own check. Leave empty if you're applying generally."
             onChange={(e) => setEmployer(e.target.value)}
           />
-        </div>
-        {/* Blue Command Rule: this button carries the surface's one blue only
-            while the letter is the surface's own next step (resume has run,
-            the letter has NOT) — the page passes it, nothing painted. */}
-        <button className={`btn ${primary ? "btn-primary" : "btn-ghost"} btn-sm`} onClick={check} disabled={busy}>
-          {busy ? "Reading the letter…" : "Run the letter check"}
-        </button>
+        </label>
       </div>
-      <p className={`cl-note${err ? " cl-err" : ""}`} role="status" aria-live="polite">
-        {err ??
-          "Rejections are named here: oversized, unreadable, encrypted, image-only (no OCR — re-export), or more than one file. If you leave the employer field empty, that check is skipped honestly — it prints “" +
-            employerRow +
-            "” and drops from the fraction. Unlimited re-runs; your latest letter check counts — a new run replaces the stored one."}
-      </p>
     </section>
   );
 }
