@@ -384,7 +384,13 @@ test.describe.serial("demo-arc", () => {
     await page.locator('.cl-upload input[type="file"]').setInputFiles([path.join(process.cwd(), "e2e", "fixtures", "cover-letter-qa.txt")]);
     await page.waitForLoadState("load");
     await expect(page.locator(".cl-readout")).toBeVisible({ timeout: 45_000 });
+    // the RELOADED document (readout names the new letter) before opening
+    // the collapsed checks — clicks can land on the stale doc
+    await expect(page.locator(".cl-readout-sub")).toContainText("cover-letter-qa.txt", { timeout: 45_000 });
     soft((await page.locator(".cl-readout .cl-readout-score").first().textContent()) ?? "").toContain("100");
+    // the employer honesty row lives behind the collapsed checks disclosure —
+    // open it, then read the exact skip line
+    await page.locator(".rs-disc summary", { hasText: "The checks" }).click();
     const employerRow = (await page.locator(".rs-check", { hasText: "Employer named" }).first().textContent())?.replace(/\s+/g, " ");
     expect(employerRow).toContain("not evaluated — no employer declared");
     notes.push(

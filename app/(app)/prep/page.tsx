@@ -20,19 +20,21 @@ export const metadata: Metadata = {
 };
 
 /**
- * Prep — "Application materials" (v7.4 minimal-tool recut, user ruling
- * 2026-11-02 against the resume-checker UX survey). ONE surface carrying
- * TWO sibling tool cards — each its own dropzone-first tool:
+ * Prep — "Application materials" (v7.4 minimal-tool recut, user rulings
+ * 2026-11-02). ONE surface carrying TWO sibling tool cards — each its own
+ * dropzone-first tool:
  *
  *  - Resume checker (7 of 15 AR): the intake is ONE dropzone — drop or
  *    browse, the diagnostic runs on the drop, no default prose (the format
  *    guide + the Harvard template are one quiet links line beneath the
- *    zone). With a run: the stored LATEST result (readout → three-factor
- *    checks → findings → re-run zone → NEXT handoff to the letter tab).
- *  - Cover-letter checker (5 of 15): same dropzone pattern + ONE optional
- *    employer field beneath; structural checks + role alignment vs the
- *    declared Target Role; employer-omitted still prints the exact honesty
- *    line in its row — the denominator drops the check.
+ *    zone). With a run: the compact readout FIRST, the re-run dropzone
+ *    directly beneath it (no scrolling to try another file), then the
+ *    three-factor checks and the findings as COLLAPSED on-demand
+ *    disclosures. No NEXT pointer — the labels are the tabs.
+ *  - Cover-letter checker (5 of 15): same pattern. The optional employer
+ *    anchor field appears ONLY once a letter has run (idle = pure
+ *    dropzone); a typed employer runs the employer check on the re-drop;
+ *    omitted still prints the exact honesty line in its row.
  *
  * Presence is NOT a tab: it lives where it is declared (Profile →
  * Credentials); the band's computed counter cell is its state here.
@@ -130,16 +132,13 @@ function ResumeLinks() {
   );
 }
 
-/* ── resume run result — readout → checks → findings → re-run → next ────── */
+/* ── resume run result — readout → re-run zone → on-demand detail ───────── */
 
 function RunResult({
   run,
-  next,
   children,
 }: {
   run: NonNullable<ResumeRunSummary["run"]>;
-  /** the declared next step (the letter tab handoff; null when nothing remains) */
-  next?: ReactNode;
   children: ReactNode;
 }) {
   const factorChecks: { name: string; score: number; note: string; checks: { label: string; ok: boolean; note?: string }[] }[] = [
@@ -162,6 +161,10 @@ function RunResult({
       checks: run.keywords.checks,
     },
   ];
+  const allGreen = factorChecks.every((f) => f.score === 1);
+  const factorPct = Math.round(
+    (factorChecks.reduce((sum, f) => sum + f.score, 0) / factorChecks.length) * 100
+  );
   return (
     <>
       <section className="panel-sec rs-readout">
@@ -187,10 +190,16 @@ function RunResult({
         </p>
       </section>
 
-      <section className="panel-sec">
-        <div className="b-head">
-          <h2>The three factors</h2>
-        </div>
+      {/* the re-run zone rides DIRECTLY under the readout — no scrolling to
+          try another file (user ruling 2026-11-02) */}
+      {children}
+
+      {/* on-demand detail (collapsed): the tool's resting state is
+          score + upload; the tables open a click away */}
+      <details className="rs-disc">
+        <summary className="num">
+          The three factors — {allGreen ? "all green" : `${factorPct}% overall`}
+        </summary>
         <table className="checks-table num">
           <thead>
             <tr>
@@ -220,24 +229,18 @@ function RunResult({
             </tbody>
           ))}
         </table>
-      </section>
+      </details>
 
-      <section className="panel-sec">
-        <div className="b-head">
-          <h2>Findings and suggestions</h2>
-          {run.findings.length === 0 && <p className="helper">No fixes found in this run</p>}
-        </div>
+      <details className="rs-disc">
+        <summary className="num">
+          Findings — {run.findings.length === 0 ? "no fixes found" : `${run.findings.length} to review`}
+        </summary>
         <div className="rs-findings">
           {run.findings.map((f) => (
             <FindingCard key={f.id} f={f} />
           ))}
         </div>
-      </section>
-
-      {/* the re-run zone rides AT THE END of the results (the dropzone reappears) */}
-      {children}
-
-      {next}
+      </details>
     </>
   );
 }
@@ -246,14 +249,14 @@ function RunResult({
 
 const LETTER_KINDS: Record<string, string> = { txt: "TXT", pdf: "PDF", docx: "Word" };
 
-function LetterResult({ run, next, children }: {
+function LetterResult({ run, children }: {
   run: NonNullable<LetterRunSummary["run"]>;
-  /** the declared next step (null — presence is not a Prep tab anymore) */
-  next?: ReactNode;
   children: ReactNode;
 }) {
   const rowMark = (ok: boolean | null) =>
     ok === true ? "✓" : ok === false ? "✕" : "—";
+  const allRan = run.checks.every((c) => c.ok !== null);
+  const checkCount = run.checks.filter((c) => c.ok !== null).length;
   return (
     <>
       <section className="panel-sec cl-readout">
@@ -279,10 +282,15 @@ function LetterResult({ run, next, children }: {
         </p>
       </section>
 
-      <section className="panel-sec">
-        <div className="b-head">
-          <h2>The checks</h2>
-        </div>
+      {/* the re-check zone rides DIRECTLY under the readout; the optional
+          employer field lives here (only visible once a letter has run) */}
+      {children}
+
+      {/* on-demand detail (collapsed) */}
+      <details className="rs-disc">
+        <summary className="num">
+          The checks — {allRan ? "all ran" : `${checkCount} of ${run.checks.length} ran`}
+        </summary>
         <table className="checks-table num">
           <thead>
             <tr>
@@ -329,13 +337,12 @@ function LetterResult({ run, next, children }: {
             ))}
           </tbody>
         </table>
-      </section>
+      </details>
 
-      <section className="panel-sec">
-        <div className="b-head">
-          <h2>Findings and suggestions</h2>
-          {run.findings.length === 0 && <p className="helper">No fixes found in this check</p>}
-        </div>
+      <details className="rs-disc">
+        <summary className="num">
+          Findings — {run.findings.length === 0 ? "no fixes found" : `${run.findings.length} to review`}
+        </summary>
         <div className="rs-findings">
           {run.findings.map((f) => (
             <div className="rs-finding" key={f.id}>
@@ -354,12 +361,7 @@ function LetterResult({ run, next, children }: {
             </div>
           ))}
         </div>
-      </section>
-
-      {/* the re-check zone rides AT THE END of the results */}
-      {children}
-
-      {next}
+      </details>
     </>
   );
 }
@@ -379,20 +381,11 @@ export default async function PrepPage() {
   const resumeHasRun = Boolean(latestResume);
   const letterHasRun = Boolean(latestLetter);
 
-  /* the letter surface's declared NEXT — forces-on-own-files honesty: the
-     results end with the sibling-tool handoff (no wizard gate). Presence is
-     NOT a step here; its state is the band cell alone. */
-  const nextLetterStep = !letterHasRun ? (
-    <a className="nextstep" href="#letter">
-      <span className="label num">NEXT</span>
-      <p>
-        <b>The cover-letter checker</b> · earns 5 of the 15-point AR channel — bring the letter you wrote yourself.
-      </p>
-    </a>
-  ) : null;
-
   /* the two tool children — the intake surface (dropzone) is the hero, with
-     the one quiet links line under the resume's zone */
+     the one quiet links line under the resume's zone. The letter's optional
+     employer field APPEARS ONLY AFTER the first letter check (user ruling
+     2026-11-02: the idle screen stays a pure dropzone; from the result view
+     a typed employer anchors the re-run) */
   const resumeChildren = (
     <>
       <ResumeUpload />
@@ -400,7 +393,7 @@ export default async function PrepPage() {
     </>
   );
 
-  const letterChildren = <LetterUpload />;
+  const letterChildren = <LetterUpload showEmployer={letterHasRun} />;
 
   /* the band's AR receipts — the same engine receipts the page already
      reads (score.arParts from getStudentView); a null score (no target
@@ -413,7 +406,7 @@ export default async function PrepPage() {
   };
 
   const resumePanel = latestResume ? (
-    <RunResult run={latestResume.run} next={nextLetterStep}>
+    <RunResult run={latestResume.run}>
       {resumeChildren}
     </RunResult>
   ) : (

@@ -199,28 +199,31 @@
 }
 .v7prep .prep-sublabel { padding: 10px 16px 0; margin: 0; }
 
-/* the declared next step — results end with the handoff (survey
-   convention, no wizard gate) */
-.v7prep .nextstep {
+/* ---------- on-demand disclosures (v7.5 reorder): the result's detail
+   sections collapse — the resting card is score + upload ---------- */
+.v7prep .rs-disc { padding: 0 16px 12px; }
+.v7prep .card > .rs-disc,
+.v7prep .card > .rs-disc + .rs-disc { border-top: 1px solid var(--v-rows); }
+.v7prep .rs-disc > summary {
+  cursor: pointer;
+  list-style: none;
   display: flex;
-  align-items: baseline;
-  gap: 12px;
-  padding: 12px 16px 14px;
-  border-top: 1px solid var(--v-rows);
-  text-decoration: none;
-  transition: background-color 0.12s ease;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  font: 500 13px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
 }
-.v7prep .nextstep:hover { background: var(--v-grey-wash); }
-.v7prep .nextstep .label {
-  flex: none;
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--v-blue-deep);
+.v7prep .rs-disc > summary::-webkit-details-marker { display: none; }
+.v7prep .rs-disc > summary::before {
+  content: "▸";
+  color: var(--v-ink2);
+  font-size: 11px;
 }
-.v7prep .nextstep p { margin: 0; font: 400 12.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 70ch; }
-.v7prep .nextstep b { color: var(--v-ink); font-weight: 500; }
-.v7prep .nextstep:hover p b { color: var(--v-blue-deep); }
+.v7prep .rs-disc[open] > summary { color: var(--v-blue-deep); }
+.v7prep .rs-disc[open] > summary::before { content: "▾"; }
+.v7prep .rs-disc .checks-table { margin-top: 0; }
+.v7prep .rs-disc .rs-findings { padding-bottom: 2px; }
 
 /* ---------- flush sections of the married card ---------- */
 

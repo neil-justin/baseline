@@ -6,13 +6,16 @@ import { useRef, useState } from "react";
  * The cover-letter checker's intake (v7.4 minimal-tool recut): the SAME
  * dropzone pattern as the resume — one file (TXT/PDF/DOCX) lands and the
  * check runs immediately. The OPTIONAL employer anchor sits as one small
- * field BENEATH the zone (fill it before dropping, or leave it empty — the
- * omitted case skips its check honestly and prints the exact line in the
- * results). POST to /api/cover-letter/check; on success the page reloads
- * (the server page re-renders the stored run). Rejections show the locked
- * reason inline (aria-live, .cl-err — e2e contract) and persist nothing.
- * NO authoring surface exists — no paste box, no generated letter, nothing
- * edited inside the system (the same hard fence as the resume round).
+ * field BENEATH the zone — and only renders once the letter has run
+ * (showEmployer; user ruling 2026-11-02: the idle screen stays a pure
+ * dropzone). Fill it before dropping to anchor the employer check on the
+ * re-run, or leave it empty — the omitted case skips its check honestly
+ * and prints the exact line in the results. POST to
+ * /api/cover-letter/check; on success the page reloads (the server page
+ * re-renders the stored run). Rejections show the locked reason inline
+ * (aria-live, .cl-err — e2e contract) and persist nothing. NO authoring
+ * surface exists — no paste box, no generated letter, nothing edited
+ * inside the system (the same hard fence as the resume round).
  */
 
 const REJECT_COPY: Record<string, string> = {
@@ -30,7 +33,7 @@ const REJECT_COPY: Record<string, string> = {
   format_check_failed: "The format checks didn't pass. Nothing was saved or scored.",
 };
 
-export default function LetterUpload() {
+export default function LetterUpload({ showEmployer = false }: { showEmployer?: boolean }) {
   const fileInput = useRef<HTMLInputElement>(null);
   const [employer, setEmployer] = useState("");
   const [busy, setBusy] = useState(false);
@@ -113,21 +116,23 @@ export default function LetterUpload() {
           e.target.value = "";
         }}
       />
-      <div className="cl-field cl-below">
-        <label className="rs-links num" htmlFor="cl-employer">
-          Employer{" "}
-          <input
-            type="text"
-            id="cl-employer"
-            className="cl-input"
-            value={employer}
-            maxLength={120}
-            aria-label="Employer (optional)"
-            placeholder="Optional — a company name runs its own check. Leave empty if you're applying generally."
-            onChange={(e) => setEmployer(e.target.value)}
-          />
-        </label>
-      </div>
+      {showEmployer ? (
+        <div className="cl-field cl-below">
+          <label className="rs-links num" htmlFor="cl-employer">
+            Employer{" "}
+            <input
+              type="text"
+              id="cl-employer"
+              className="cl-input"
+              value={employer}
+              maxLength={120}
+              aria-label="Employer (optional)"
+              placeholder="Optional — a company name runs its own check. Leave empty if you're applying generally."
+              onChange={(e) => setEmployer(e.target.value)}
+            />
+          </label>
+        </div>
+      ) : null}
     </section>
   );
 }

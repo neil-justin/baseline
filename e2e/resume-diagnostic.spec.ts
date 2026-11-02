@@ -71,7 +71,12 @@ test.describe.serial("resume-diagnostic", () => {
     await expect(page.locator(".rs-readout")).toBeVisible({ timeout: 45_000 });
     await expect(page.locator(".rs-readout-score")).toContainText("100");
 
-    // three deterministic factors, all checks green on the generated resume
+    // the re-run dropzone rides at the TOP (no scrolling to try another file)
+    await expect(page.locator(".rs-upload .dz-zone").first()).toBeVisible();
+
+    // three deterministic factors, all checks green — behind their collapsed
+    // on-demand disclosure (open it to read the rows)
+    await page.locator(".rs-disc summary", { hasText: "The three factors" }).click();
     await expect(page.locator(".rs-factor-head").first()).toContainText("Parseability — 100%");
     await expect(page.locator(".rs-factor-head", { hasText: "Format conformance" })).toContainText("100%");
     await expect(page.locator(".rs-factor-head", { hasText: "Keyword alignment" })).toContainText("100%");
@@ -82,8 +87,8 @@ test.describe.serial("resume-diagnostic", () => {
     // AIR provenance line: parse × format × keywords (1 × 1 × 1)
     await expect(page.locator(".rs-air-note")).toContainText("parse 1 × format 1 × keywords 1", { timeout: 45_000 });
     await expect(page.locator(".rs-air-note")).toContainText("your latest run counts");
-    // feedback honesty: no fixes needed → the null-findings line, no pasted text
-    await expect(page.locator(".b-head .helper", { hasText: "No fixes found in this run" })).toBeVisible();
+    // feedback honesty: no fixes needed → the collapsed findings summary says so
+    await expect(page.locator(".rs-disc summary", { hasText: "Findings" })).toContainText("no fixes found");
 
     /* ── locked rejection matrix (persist nothing) ───────────────────────── */
     const err = page.locator(".rs-err");
@@ -121,11 +126,15 @@ test.describe.serial("resume-diagnostic", () => {
     await expect(page.locator(".rs-readout-score")).toContainText("100", { timeout: 45_000 });
     await expect(page.locator(".rs-air-note")).toContainText("your latest run counts", { timeout: 45_000 });
     // content ruled, right-named file → still no fixes needed
-    await expect(page.locator(".b-head .helper", { hasText: "No fixes found in this run" })).toBeVisible();
+    await expect(page.locator(".rs-disc summary", { hasText: "Findings" })).toContainText("no fixes found");
 
     // extension lying: .pdf name with DOCX content — sniffed by content, flagged
     await upload(page, "resume-mismatch.pdf");
-    await expect(page.locator(".rs-finding", { hasText: "File extension doesn't match what's inside" })).toBeVisible({ timeout: 45_000 });
+    // wait for the RELOADED document (readout names the new file) before
+    // toggling the collapsed findings — clicks can land on the stale doc
+    await expect(page.locator(".rs-readout-sub")).toContainText("resume-mismatch.pdf", { timeout: 45_000 });
+    await page.locator(".rs-disc summary", { hasText: "Findings" }).click();
+    await expect(page.locator(".rs-finding", { hasText: "File extension doesn't match what's inside" })).toBeVisible();
     await expect(page.locator(".rs-air-note")).toContainText("your latest run counts", { timeout: 45_000 });
     // the finding ledger renders — every fix row carries "the move"
     await expect(page.locator(".rs-finding").first()).toBeVisible();
