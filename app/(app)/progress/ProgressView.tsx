@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import CountUp from "@/components/CountUp";
-import Reveal from "@/components/Reveal";
 import CheckOverlay from "./CheckOverlay";
 import type { CheckResourceLite } from "./types";
 import { WEIGHTS } from "@/lib/engines/score";
@@ -32,6 +31,12 @@ export interface Suggestion {
   target: string;
 }
 
+export interface ArFactorLite {
+  measured: boolean;
+  earned: number;
+  max: number;
+}
+
 export interface GoalView {
   id: string;
   title: string;
@@ -45,16 +50,21 @@ export interface GoalView {
 
 interface Props {
   careerName: string;
+  /** persona line ("Neil · 4th Year, Computer & IT") — state vocabulary */
+  persona: string;
   score: { total: number; sp: number; es: number; tp: number; ar: number | null; cc: number };
   parts: { pct: number; earnedFrac: number; unmeasured?: boolean }[];
+  /** AR split receipts (ticket 12) — computed per-factor views, not painted */
+  arFactors: { resume: ArFactorLite; letter: ArFactorLite; presence: ArFactorLite };
   rubricAria: string;
   esVerified: number;
   updated: string | null;
   nextSkill: string | null;
+  nextFree: boolean;
   stageOneDone: number;
   fitLine: string;
-  mapSize: number;
   openSkillCount: number;
+  mapSize: number;
   feedRows: FeedRow[];
   closedRows: ClosedRow[];
   closedCount: number;
@@ -63,12 +73,14 @@ interface Props {
   suggestion: Suggestion | null;
   checkResources: Record<string, CheckResourceLite>;
   checks: Record<string, { stem: string; options: string[]; answer: number }[]>;
+  /** the surface report line — server-rendered from state, inside the root */
+  foot: ReactNode;
 }
 
-const BADGES: Record<ClosedRow["source"], { text: string; ok: boolean }> = {
-  verified: { text: "·✓ verified quiz", ok: true },
-  checked: { text: "✓✓ checked resource", ok: true },
-  claimed: { text: "self-reported", ok: false },
+const BADGES: Record<ClosedRow["source"], { text: string; cls: string }> = {
+  verified: { text: "·✓ verified quiz", cls: "chip c-green" },
+  checked: { text: "✓✓ checked resource", cls: "chip c-green" },
+  claimed: { text: "self-reported", cls: "chip c-grey hatch-chip" },
 };
 
 function skillShortLabel(skill: string) {
@@ -76,10 +88,13 @@ function skillShortLabel(skill: string) {
 }
 
 /**
- * Progress page body — the record surface. Markup ported from
- * prototype/progress.html; the only interactive machinery on top of it is the
- * small M6 goal slice (inline edit · quiet new-goal entry · suggested goal)
- * and the comprehension-check overlay launched from check-gated goals.
+ * Progress page body — the record surface, DNA v7 (the v7.2 sweep round).
+ * The band names the surface and carries the two-column head (left prose +
+ * the family's one primary CTA; right the computed readout instrument);
+ * sections run as flush-head white cards (feed → closed bars → goals), and
+ * the check overlay rides the same ground. The small M6 goal slice (inline
+ * edit · quiet new-goal entry · suggested goal) keeps its prototype
+ * semantics; the only motion is the count-up measurement (no entrance).
  */
 export default function ProgressView(props: Props) {
   const router = useRouter();
@@ -170,157 +185,180 @@ export default function ProgressView(props: Props) {
     ? props.goals.some((g) => g.status === "active" && g.type === "training" && g.check?.resourceId === openCheck)
     : false;
 
-  return (
-    <div className="shell prog-shell">
-      {/* 1 · page head + readiness readout */}
-      <section className="app-section prog-head">
-        <div className="prog-grid">
-          <Reveal className="prog-intro">
-            <h1>Progress</h1>
-            <p className="prog-sub">What you&apos;ve finished and what it proves.</p>
-            <p className="prog-ctx num">
-              You&apos;re <b>{props.score.total}%</b> ready for {props.careerName}
-              {props.nextSkill !== null && props.openSkillCount > 0 ? (
-                <>
-                  ; next: <b>{props.nextSkill}</b>.
-                </>
-              ) : null}{" "}
-              Free to start.
-            </p>
-            <div className="prog-ctas">
-              <a className="btn btn-primary" href="/pathway">
-                Open Pathway{" "}
-                <span className="arrow">
-                  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" width="0.8em" height="0.8em">
-                    <path d="M4 10h11" />
-                    <path d="M11 5l5 5-5 5" />
-                  </svg>
-                </span>
-              </a>
-              <a className="link-sub" href="#goals">
-                Jump to your goals
-              </a>
-            </div>
-            <p className="prog-foot">Every number here is computed from your record.</p>
-          </Reveal>
+  /* the AR tickline's receipts — per-factor honest views (never "15" alone) */
+  const arReceipts = props.score.ar === null ? null : (
+    <>
+      {" · resume "}
+      {props.arFactors.resume.earned}/{props.arFactors.resume.max} · letter{" "}
+      {props.arFactors.letter.measured
+        ? `${props.arFactors.letter.earned}/${props.arFactors.letter.max}`
+        : "not run"}{" "}
+      · presence{" "}
+      {props.arFactors.presence.measured
+        ? `${props.arFactors.presence.earned}/${props.arFactors.presence.max}`
+        : "not declared"}
+    </>
+  );
 
-          <Reveal className="panel readout prog-readout">
-            <div className="readout-head">
-              <div>
-                <span className="label">READINESS · {props.careerName}</span>
-                <div className="readout-sub num">of 100 · updated {props.updated ?? "at set-up"}</div>
+  return (
+    <div className="v7prog">
+      {/* ── the named-surface band: left prose + action / right the readout ── */}
+      <section className="proband" aria-label="Progress">
+        <div className="band">
+          <div className="bandrow">
+            <div className="who">
+              <h1>Progress</h1>
+              <p className="band-id">
+                {props.persona} · Target: <b>{props.careerName}</b>
+              </p>
+              <p className="prog-sub">What you&apos;ve finished and what it proves.</p>
+              <p className="prog-ctx num">
+                You&apos;re <b>{props.score.total}%</b> ready for {props.careerName}
+                {props.nextSkill !== null && props.openSkillCount > 0 ? (
+                  <>
+                    ; next: <b>{props.nextSkill}</b>.
+                    {props.nextFree ? " Free to start." : ""}
+                  </>
+                ) : null}
+              </p>
+              <div className="prog-ctas">
+                <a className="btn btn-primary" href="/pathway">
+                  Open Pathway <span className="arrow num">→</span>
+                </a>
+                <a className="link-quiet" href="#goals">
+                  Jump to your goals
+                </a>
               </div>
-              <div className="readout-score num">
-                <CountUp
-                  to={props.score.total}
-                  dec={0}
-                  dur={900}
-                  onDone={() => setArmed(true)}
-                  ariaLabel={`Readiness ${props.score.total} of 100`}
-                  className="prog-score"
-                />
-                <small>/100</small>
-              </div>
+              <p className="prog-foot num">Every number here is computed from your record.</p>
             </div>
-            <div className={armed ? "rubric-mini armed" : "rubric-mini"} role="img" aria-label={props.rubricAria}>
-              {props.parts.map((p, i) => (
-                <div className="seg" style={{ flex: p.pct, ["--earn" as string]: String(p.earnedFrac) } as CSSProperties} key={i}>
-                  <i />
+
+            <div className="prog-scale">
+              <div className="readout-head">
+                <div>
+                  <span className="label num">Readiness · {props.careerName}</span>
+                  <div className="readout-sub num">{props.updated ? `updated ${props.updated}` : "recorded at set-up"}</div>
                 </div>
-              ))}
+                <div className="readout-score num">
+                  <CountUp
+                    to={props.score.total}
+                    dec={0}
+                    dur={900}
+                    onDone={() => setArmed(true)}
+                    ariaLabel={`Readiness ${props.score.total} of 100`}
+                  />
+                  <small>/100</small>
+                </div>
+              </div>
+              <div className={armed ? "rubric-mini armed" : "rubric-mini"} role="img" aria-label={props.rubricAria}>
+                {props.parts.map((p, i) => (
+                  <div className="seg" style={{ flex: p.pct, ["--earn" as string]: String(p.earnedFrac) } as CSSProperties} key={i}>
+                    <i />
+                  </div>
+                ))}
+              </div>
+              <div className="prog-subrows">
+                <div className="tickline">
+                  <b>Skills</b> — {props.score.sp} of {WEIGHTS.sp}
+                </div>
+                <div className="tickline">
+                  <b>Employability</b> — {props.score.es} of {WEIGHTS.es} ·{" "}
+                  <span className="tick-note">{props.esVerified} of 7 NACE competencies verified ·✓</span>
+                </div>
+                <div className="tickline">
+                  <b>Training</b> — {props.score.tp} of {WEIGHTS.tp} · {props.stageOneDone} of 3 first steps done
+                </div>
+                <div className="tickline">
+                  <b>Application readiness</b> —{" "}
+                  {props.score.ar === null ? (
+                    <span className="tick-note">not yet measured — the resume diagnostic in Prep opens this channel (resume 7 · letter 5 · presence 3)</span>
+                  ) : (
+                    <>
+                      {props.score.ar} of {WEIGHTS.ar}
+                      <span className="tick-note">{arReceipts}</span>
+                    </>
+                  )}
+                </div>
+                <div className="tickline">
+                  <b>Career direction</b> — {props.score.cc} of {WEIGHTS.cc}
+                </div>
+              </div>
+              <div className="readout-fit num">{props.fitLine}</div>
             </div>
-            <div className="prog-subrows">
-              <div className="tickline">
-                <b>Skills</b> — {props.score.sp} of {WEIGHTS.sp}
-              </div>
-              <div className="tickline">
-                <b>Employability</b> — {props.score.es} of {WEIGHTS.es} · <span className="tick-note">{props.esVerified} of 7 NACE competencies verified ·✓</span>
-              </div>
-              <div className="tickline">
-                <b>Training</b> — {props.score.tp} of {WEIGHTS.tp} · {props.stageOneDone} of 3 first steps done
-              </div>
-              <div className="tickline">
-                <b>Application readiness</b> —{" "}
-                {props.score.ar === null ? (
-                  <span className="tick-note">not yet measured — the resume diagnostic in Prep opens this channel (resume 7 · letter 5 · presence 3)</span>
-                ) : (
-                  `${props.score.ar} of ${WEIGHTS.ar}`
-                )}
-              </div>
-              <div className="tickline">
-                <b>Career direction</b> — {props.score.cc} of {WEIGHTS.cc}
-              </div>
-            </div>
-            <div className="readout-fit num">{props.fitLine}</div>
-          </Reveal>
+          </div>
         </div>
       </section>
 
-      {/* 2 · completed and checked */}
-      <section className="app-section">
-        <Reveal as="div" className="sec-head">
-          <h2>Completed and checked</h2>
-          <p>A resource counts when its check passes, not when it&apos;s clicked. Each row is a dated event with its source.</p>
-        </Reveal>
-        <Reveal className="panel feed">
+      {/* ── completed and checked — the dated feed ── */}
+      <section className="card feed">
+        <div className="head">
+          <h2 className="h-title">Completed and checked</h2>
+          <span>A resource counts when its check passes, not when it&apos;s clicked. Each row is a dated event with its source.</span>
           {props.feedRows.length > 0 && (
-            <div className="feed-cols label" aria-hidden="true">
-              <span>Resource</span>
-              <span>Result</span>
-              <span>When</span>
-            </div>
+            <span className="label num">
+              {props.feedRows.length} PASSED
+            </span>
           )}
-          {props.feedRows.map((row) => (
-            <div className="feed-row" key={row.key}>
-              <div className="f-main">
-                <span className="f-title">{row.title}</span>
-                {row.meta !== "" && <span className="f-meta">{row.meta}</span>}
-                {row.skill !== null && row.closed && (
-                  <span className="f-closed">
-                    Closed your <b>{skillShortLabel(row.skill)}</b> gap
-                  </span>
-                )}
-              </div>
-              <div className="f-result">
-                <span className="f-pass num">
-                  Check passed · {row.correct} of {row.total}
+        </div>
+        {props.feedRows.length > 0 && (
+          <div className="feed-cols" aria-hidden="true">
+            <span>Resource</span>
+            <span>Result</span>
+            <span>When</span>
+          </div>
+        )}
+        {props.feedRows.map((row) => (
+          <div className="feed-row" key={row.key}>
+            <div className="f-main">
+              <span className="f-title">{row.title}</span>
+              {row.meta !== "" && <span className="f-meta">{row.meta}</span>}
+              {row.skill !== null && row.closed && (
+                <span className="f-closed">
+                  Closed your <b>{skillShortLabel(row.skill)}</b> gap
                 </span>
-                <span className="vbadge ok">✓✓ checked resource</span>
-                <span className="f-lock">pass at 4 of 5</span>
-              </div>
-              <span className="f-when num">{row.date}</span>
+              )}
             </div>
-          ))}
-          {props.feedRows.length === 0 ? (
-            <p className="feed-tail">Nothing yet — your first completion lands here the moment a check passes.</p>
-          ) : (
-            <p className="feed-tail">
-              Nothing else is marked done yet; your next step is waiting in <a href="/pathway">Pathway</a>.
-            </p>
-          )}
-        </Reveal>
+            <div className="f-result">
+              <span className="f-pass">
+                Check passed · {row.correct} of {row.total}
+              </span>
+              <span className="chip c-green">✓✓ checked resource</span>
+              <span className="f-lock">pass at 4 of 5</span>
+            </div>
+            <span className="f-when">{row.date}</span>
+          </div>
+        ))}
+        {props.feedRows.length === 0 ? (
+          <p className="feed-tail">Nothing yet — your first completion lands here the moment a check passes.</p>
+        ) : (
+          <p className="feed-tail">
+            Nothing else is marked done yet; your next step is waiting in <a href="/pathway">Pathway</a>.
+          </p>
+        )}
       </section>
 
-      {/* 3 · gap-closure history */}
-      <section className="app-section">
-        <Reveal as="div" className="sec-head">
-          <h2>Skills you&apos;ve closed</h2>
-          <p className="num-lede num">
+      {/* ── skills you've closed — the bar ledger with its evidence paths ── */}
+      <section className="card">
+        <div className="head">
+          <h2 className="h-title">Skills you&apos;ve closed</h2>
+          <span className="num">
             <b>
               {props.closedCount} of {props.mapSize}
             </b>{" "}
             {props.careerName} skills closed. Each row says which path closed it.
-          </p>
-        </Reveal>
-        <Reveal className="panel closed-list">
+          </span>
+        </div>
+        <div className="closed-list">
           {props.closedRows.map((row) => (
             <div className="c-gap" key={row.name}>
               <div className="c-gap-top">
                 <span className="g-name">{row.name}</span>
-                <span className={`vbadge ${BADGES[row.source].ok ? "ok" : ""}`}>{BADGES[row.source].text}</span>
+                <span className={BADGES[row.source].cls}>{BADGES[row.source].text}</span>
               </div>
               <div className="g-bar">
-                <i style={{ ["--earn" as string]: "1" } as CSSProperties} />
+                <i
+                  className={row.source === "claimed" ? "claim" : ""}
+                  style={{ ["--earn" as string]: "1" } as CSSProperties}
+                />
               </div>
               <div className="c-gap-note num">{row.note}</div>
             </div>
@@ -328,38 +366,35 @@ export default function ProgressView(props: Props) {
           {props.closedRows.length === 0 && (
             <p className="feed-tail">No bars closed yet — a passed check closes one live.</p>
           )}
-        </Reveal>
+        </div>
         {props.openSkills.length > 0 && (
-          <p className="open-foot">
+          <p className="open-foot num">
             {props.openSkillCount} of {props.mapSize} still open: {props.openSkills.join(" · ")}. The next step for each is
             ranked in <a href="/pathway">Pathway</a>.
           </p>
         )}
       </section>
 
-      {/* 4 · goals */}
-      <section className="app-section" id="goals">
-        <Reveal as="div" className="sec-head">
-          <h2>Your goals</h2>
+      {/* ── your goals — the recorded commitments ── */}
+      <section className="card goals" id="goals">
+        <div className="head">
+          <h2 className="h-title">Your goals</h2>
           {props.goals.length > 0 ? (
-            <p className="num-lede num">
-              <b>
-                {props.goals.filter((g) => g.status === "completed").length} of {props.goals.length}
-              </b>{" "}
-              done
-            </p>
+            <span className="label num">
+              {props.goals.filter((g) => g.status === "completed").length} OF {props.goals.length} DONE
+            </span>
           ) : (
-            <p className="num-lede">No goals yet — accept your suggested goal (training auto-completes) or set your own.</p>
+            <span>No goals yet — accept your suggested goal (training auto-completes) or set your own.</span>
           )}
-        </Reveal>
-        <Reveal className="panel goals">
+        </div>
+        <div className="goals-list">
           {props.suggestion && !sugDismissed && (
-            <div className="card goal-suggest">
+            <div className="goal-suggest">
               <h3>Suggested from your biggest gap</h3>
               <p className="n-why">{props.suggestion.title} — it&apos;s your top-ranked next step.</p>
-              <p className="n-target num">{props.suggestion.target}</p>
+              <p className="n-target">{props.suggestion.target}</p>
               <div className="sug-cta">
-                <button className="btn btn-primary" type="button" onClick={acceptSuggestion} disabled={busy}>
+                <button className="btn btn-ghost btn-sm" type="button" onClick={acceptSuggestion} disabled={busy}>
                   Set this goal
                 </button>
                 <button className="quiet-toggle" type="button" onClick={() => setSugDismissed(true)}>
@@ -376,10 +411,10 @@ export default function ProgressView(props: Props) {
                 <div className="goal-row done" key={g.id}>
                   <div className="g-top">
                     <span className="g-title">{title}</span>
-                    {g.type === "training" && <span className="vbadge ok">✓✓ checked resource</span>}
+                    {g.type === "training" && <span className="chip c-green">✓✓ checked resource</span>}
                   </div>
                   <div className="g-status num">{g.doneLine}</div>
-                  {g.autoLine && <div className="okband g-event num">{g.autoLine}</div>}
+                  {g.autoLine && <div className="g-event okband num">{g.autoLine}</div>}
                 </div>
               );
             }
@@ -466,7 +501,7 @@ export default function ProgressView(props: Props) {
                 ref={ngInput}
                 onChange={(e) => setNewTitle(e.target.value)}
               />
-              <div className="choice choice-sm" role="group" aria-label="Goal type">
+              <div className="choice" role="group" aria-label="Goal type">
                 <button type="button" aria-pressed={newType === "training"} onClick={() => setNewType("training")}>
                   Training goal
                 </button>
@@ -478,9 +513,9 @@ export default function ProgressView(props: Props) {
                 {busy ? "Setting…" : "Set goal"}
               </button>
             </form>
-            {newNote && !newOpen && <div className="okband g-event num">{newNote}</div>}
+            {newNote && !newOpen && <div className="g-event okband num">{newNote}</div>}
           </div>
-        </Reveal>
+        </div>
       </section>
 
       {checkResource && openCheck && (
@@ -491,6 +526,8 @@ export default function ProgressView(props: Props) {
           onClose={() => setOpenCheck(null)}
         />
       )}
+
+      {props.foot}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
 import { WEIGHTS } from "@/lib/engines/score";
-import { rankOpenSkills } from "@/lib/engines/gaps";
+import { rankOpenSkills, openSkills as openSkillNames, stageOne } from "@/lib/engines/gaps";
 import { getResourcesForCareer, RESOURCES } from "@/lib/fixtures/resources";
 import { CHECKS } from "@/lib/fixtures/checks";
 import { trackLabelOf } from "@/lib/fixtures/catalog";
@@ -40,36 +40,44 @@ function skillShort(skill: string) {
   return skill.split("(")[0].trim().toLowerCase();
 }
 
-function UndecidedDefault() {
+function UndecidedDefault({ name }: { name: string }) {
   return (
-    <div className="shell prog-shell">
-      <section className="app-section">
-        <div className="prog-grid">
-          <div className="prog-intro">
-            <h1>Progress</h1>
-            <p className="prog-sub">What you&apos;ve finished and what it proves.</p>
-            <p className="prog-ctx">
-              No career picked yet — nothing to measure toward yet.{" "}
-              <a className="link-sub" href="/career">
-                Browse the career index →
-              </a>
-            </p>
+    <div className="v7prog">
+      <section className="proband" aria-label="Progress">
+        <div className="band">
+          <div className="bandrow">
+            <div className="who">
+              <h1>Progress</h1>
+              <p className="band-id">{name} · no career picked yet</p>
+            </div>
           </div>
         </div>
+      </section>
+      <section className="card defaultcard">
+        <p className="prog-sub pad">
+          No career picked yet — nothing to measure toward yet.{" "}
+          <a className="link-sub" href="/career">
+            Browse the career index →
+          </a>
+        </p>
       </section>
     </div>
   );
 }
 
-/** M9+M6 Progress — the live record. Markup ported from prototype/progress.html. */
+/** M9+M6 Progress — the live record. v7 register: the named band carries the
+ *  two-column head (left prose action, right the computed readout); feed,
+ *  bar ledger and goals run as flush-head cards; numbers are the real store/
+ *  engine views (scoreView + computed counters), never a painted one. */
 export default async function ProgressPage() {
   const profile = await requireStudent();
   const { state, career, score, ar } = await getStudentView(profile.studentId);
-  if (!career || !score) return <UndecidedDefault />;
+  if (!career || !score) return <UndecidedDefault name={state.name} />;
 
   const v = scoreView(career, state, ar);
   const eventsRev = [...state.events].reverse();
   const byKind = (kind: string) => state.events.filter((e) => e.kind === kind);
+  const openSkillsArr = openSkillNames(career, state.bars);
 
   // ---- feed rows: one per passed check, newest first -----------------------
   const closedGapEvent = (skill: string) =>
@@ -208,8 +216,7 @@ export default async function ProgressPage() {
   // ---- suggestion: only fires with zero goals (the ④ default) --------------
   let suggestion: { title: string; resourceId: string; skill: string; target: string; hours: number; provider: string } | null = null;
   if (state.goals.length === 0) {
-    const open = career.skills.map((s) => s.name).filter((n) => !(n in state.bars));
-    const ranked = rankOpenSkills(career, open);
+    const ranked = rankOpenSkills(career, openSkillsArr);
     const top = ranked.find((r) => r.hasFreeResource);
     const res = top ? getResourcesForCareer(career.id).find((r) => r.skillsAddressed.includes(top.skill)) : null;
     if (res) {
@@ -232,7 +239,15 @@ export default async function ProgressPage() {
   const fitLine = `${lastEvent ? fmtDate(lastEvent.date) : "set-up"} · ${count(checkEvents.length, "check")} passed, ${count(byKind("bar-closed").length, "bar")} closed, ${count(goalsDone, "goal")} done.`;
 
   const nextSkill =
-    state.stageOneQueue?.[0] ?? rankOpenSkills(career, openSkills)[0]?.skill ?? null;
+    // the ranked-first-30-days head — the same engine view the pathway shows:
+    // the persisted stage-① snapshot filtered to still-open skills, else the
+    // live rankOpenSkills computation (a closed bar never reads as "next")
+    ((state.stageOneQueue ?? []).filter((s) => openSkillsArr.includes(s))[0] ??
+      stageOne(career, openSkillsArr).queue[0]) ??
+    rankOpenSkills(career, openSkillsArr)[0]?.skill ??
+    null;
+  const nextRanked = rankOpenSkills(career, openSkillsArr).find((r) => r.skill === nextSkill);
+  const nextFree = nextRanked ? nextRanked.hasFreeResource : false;
 
   const parts = v.parts;
   const rubricAria = `Readiness ${score.total} of 100 — skills ${score.sp} of ${WEIGHTS.sp}, employability ${score.es} of ${WEIGHTS.es}, training ${score.tp} of ${WEIGHTS.tp}, application readiness ${score.ar === null ? "not yet measured" : `${score.ar} of ${WEIGHTS.ar}`}, career direction ${score.cc} of ${WEIGHTS.cc}`;
@@ -263,38 +278,44 @@ export default async function ProgressPage() {
     }
   }
 
-  return (
-    <>
-      <ProgressView
-        careerName={career.name}
-        score={score}
-        parts={parts}
-        rubricAria={rubricAria}
-        esVerified={v.esVerified}
-        updated={lastEvent ? fmtDate(lastEvent.date) : null}
-        nextSkill={nextSkill}
-        stageOneDone={v.stageOne.done}
-        fitLine={fitLine}
-        openSkillCount={openSkills.length}
-        mapSize={career.skills.length}
-        feedRows={feedRows}
-        closedRows={closedRows}
-        closedCount={closedRows.length}
-        openSkills={openSkills}
-        goals={goalViews}
-        suggestion={suggestion}
-        checkResources={checkResources}
-        checks={checks}
-      />
-      <div className="prog-colophon hair">
-        <div className="prog-colophon-in">
-          <span className="label">
-            CAREER READINESS · PROGRESS · {state.name.toUpperCase()},{" "}
-            {[state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(" · ")}
-          </span>
-          <span className="label">EVERY NUMBER COMPUTED · CHECKS GATE CREDIT</span>
-        </div>
+  const persona = [state.name, [state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(", ")].join(" · ");
+  const foot = (
+    <footer className="prog-colophon">
+      <div className="prog-colophon-in">
+        <span className="label">
+          CAREER READINESS · PROGRESS · {state.name.toUpperCase()},{" "}
+          {[state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(" · ")}
+        </span>
+        <span className="label">EVERY NUMBER COMPUTED · CHECKS GATE CREDIT</span>
       </div>
-    </>
+    </footer>
+  );
+
+  return (
+    <ProgressView
+      careerName={career.name}
+      persona={persona}
+      score={score}
+      parts={parts}
+      arFactors={v.arFactors}
+      rubricAria={rubricAria}
+      esVerified={v.esVerified}
+      updated={lastEvent ? fmtDate(lastEvent.date) : null}
+      nextSkill={nextSkill}
+      nextFree={nextFree}
+      stageOneDone={v.stageOne.done}
+      fitLine={fitLine}
+      openSkillCount={openSkillsArr.length}
+      mapSize={career.skills.length}
+      feedRows={feedRows}
+      closedRows={closedRows}
+      closedCount={closedRows.length}
+      openSkills={openSkillsArr}
+      goals={goalViews}
+      suggestion={suggestion}
+      checkResources={checkResources}
+      checks={checks}
+      foot={foot}
+    />
   );
 }

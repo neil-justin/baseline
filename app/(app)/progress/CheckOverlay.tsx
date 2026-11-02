@@ -2,17 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Reveal from "@/components/Reveal";
 import type { CheckQuestionLite, CheckResourceLite } from "./types";
 
 const PASS_MARK = 4; // LOCKED: pass ≥ 4 of 5
 
 /**
  * Comprehension-check overlay — full-screen over Progress, launched from a
- * check-gated goal ("Start the check") or the feed. One question at a time,
- * answers changeable until Next, no timer, no mid-run feedback; the aggregate
- * result lands once, with the per-question list. POSTs the frozen
- * `/api/check` route, then refreshes the record behind the overlay.
+ * check-gated goal ("Start the check") or the feed. DNA v7 (the v7.2 sweep
+ * round): the same cool ground as the record behind it; its own cockpit
+ * grammar one primary per step state. One question at a time, answers
+ * changeable until Next, no timer, no mid-run feedback; the aggregate result
+ * lands once, with the per-question list. POSTs the frozen `/api/check`
+ * route, then refreshes the record behind the overlay. No entrance motion
+ * (DNA lock).
  */
 export default function CheckOverlay({
   resource,
@@ -113,7 +115,7 @@ export default function CheckOverlay({
         </div>
 
         {step === "intro" && (
-          <Reveal className="panel check-panel">
+          <div className="check-panel">
             <h2 className="r-head">Quick check — {resource.title}</h2>
             <p className="r-note">
               {total} questions · about 1 minute · pass {PASS_MARK} of {total} or better to close your{" "}
@@ -128,11 +130,11 @@ export default function CheckOverlay({
                 Not now
               </button>
             </div>
-          </Reveal>
+          </div>
         )}
 
         {step === "run" && (
-          <Reveal className="panel check-panel">
+          <div className="check-panel">
             <div className="check-top">
               <span className="q-skill-tag num">
                 Question {qi + 1} of {total}
@@ -159,7 +161,7 @@ export default function CheckOverlay({
             </div>
             <div className="check-next">
               <button
-                className="btn btn-ghost"
+                className="btn btn-primary"
                 type="button"
                 disabled={answers[qi] === null || busy}
                 onClick={() => (qi + 1 < total ? setQi(qi + 1) : submit())}
@@ -167,11 +169,11 @@ export default function CheckOverlay({
                 {busy ? "Checking…" : qi + 1 < total ? "Next" : "See results"}
               </button>
             </div>
-          </Reveal>
+          </div>
         )}
 
         {step === "result" && result && result.passed && (
-          <Reveal className="panel check-panel">
+          <div className="check-panel">
             <h2 className="r-head">
               You passed — {result.correct} of {result.total}
             </h2>
@@ -200,11 +202,11 @@ export default function CheckOverlay({
                 Back to Progress
               </button>
             </div>
-          </Reveal>
+          </div>
         )}
 
         {step === "result" && result && !result.passed && (
-          <Reveal className="panel check-panel">
+          <div className="check-panel">
             <h2 className="r-head">
               Close — {result.correct} of {result.total}
             </h2>
@@ -221,7 +223,7 @@ export default function CheckOverlay({
                 Retake the check
               </button>
             </div>
-          </Reveal>
+          </div>
         )}
 
         {error && step !== "result" && <div className="q-band fail show num">{error}</div>}
