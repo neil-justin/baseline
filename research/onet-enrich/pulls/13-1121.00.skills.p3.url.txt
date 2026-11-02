@@ -1,0 +1,1 @@
+https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/skills?start=21&end=30

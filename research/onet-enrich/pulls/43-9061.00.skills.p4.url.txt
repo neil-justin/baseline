@@ -1,0 +1,1 @@
+https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/skills?start=31&end=35

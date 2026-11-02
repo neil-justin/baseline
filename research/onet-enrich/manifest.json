@@ -1,0 +1,4288 @@
+{
+  "generated_utc": "2026-11-02T07:08:25.307Z",
+  "pull_id": "onet-enrich-extraction-2026-11-02",
+  "api_base": "https://api-v2.onetcenter.org/",
+  "api_version_field": "2.0.0",
+  "onet_database_name": "O*NET 31.0",
+  "onet_database_object": {
+    "url": "https://www.onetcenter.org/database.html",
+    "name": "O*NET 31.0"
+  },
+  "taxonomy_name": "O*NET-SOC 2019",
+  "version_capture_source": "GET /about/ (v2 info resource) — verbatim response fields",
+  "fixture_derivation": {
+    "tracks_total": 36,
+    "source_files": [
+      "lib/fixtures/catalog.ts",
+      "lib/fixtures/rowspec.ts",
+      "lib/fixtures/rowspec/it.ts",
+      "lib/fixtures/rowspec/business.ts",
+      "lib/fixtures/rowspec/accounting.ts",
+      "lib/fixtures/rowspec/office.ts"
+    ],
+    "distinct_onet_codes": 18,
+    "codes": [
+      "15-1253.00",
+      "15-1254.00",
+      "15-1212.00",
+      "13-1111.00",
+      "13-1023.00",
+      "13-1121.00",
+      "43-3031.00",
+      "43-3051.00",
+      "13-2051.00",
+      "43-3071.00",
+      "43-3011.00",
+      "13-2072.00",
+      "13-2011.00",
+      "43-6014.00",
+      "43-9061.00",
+      "43-9021.00",
+      "43-6011.00",
+      "43-4171.00"
+    ],
+    "code_to_roles": {
+      "15-1253.00": {
+        "roles": [
+          "qa"
+        ],
+        "sources": [
+          "rowspec/it.ts (qa corroboration rows)"
+        ],
+        "pulls": {},
+        "title": "Software Quality Assurance Analysts and Testers",
+        "description_len": 456,
+        "sample_of_reported_titles": [
+          "Automation Tester",
+          "Information Technology Analyst (IT Analyst)",
+          "Quality Assurance Analyst (QA Analyst)",
+          "Quality Assurance Engineer (QA Engineer)",
+          "Quality Engineer",
+          "Software Quality Assurance Analyst (SQA Analyst)",
+          "Software Quality Assurance Engineer (SQA Engineer)",
+          "Software Quality Engineer",
+          "Software Test Engineer",
+          "Test Engineer"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2022
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2020
+            },
+            {
+              "title": "Education",
+              "source": "Occupational Expert",
+              "year": 2022
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2022
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2026
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2022
+            },
+            {
+              "title": "Knowledge",
+              "source": "Occupational Expert",
+              "year": 2022
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Employer Job Postings",
+              "year": 2026
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Occupational Expert",
+              "year": 2022
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2022
+            },
+            {
+              "title": "Work Activities",
+              "source": "Occupational Expert",
+              "year": 2022
+            },
+            {
+              "title": "Work Context",
+              "source": "Occupational Expert",
+              "year": 2022
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "15-1254.00": {
+        "roles": [
+          "webdev"
+        ],
+        "sources": [
+          "catalog.ts webdev demandBlock note",
+          "rowspec/it.ts webdev rows"
+        ],
+        "pulls": {},
+        "title": "Web Developers",
+        "description_len": 402,
+        "sample_of_reported_titles": [
+          "Technology Applications Engineer",
+          "Web Architect",
+          "Web Design Specialist",
+          "Web Developer",
+          "Webmaster"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2017
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2020
+            },
+            {
+              "title": "Education",
+              "source": "Occupational Expert",
+              "year": 2017
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2017
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2026
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2017
+            },
+            {
+              "title": "Knowledge",
+              "source": "Occupational Expert",
+              "year": 2017
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Employer Job Postings",
+              "year": 2026
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Analyst",
+              "year": 2020
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2017
+            },
+            {
+              "title": "Work Activities",
+              "source": "Occupational Expert",
+              "year": 2017
+            },
+            {
+              "title": "Work Context",
+              "source": "Occupational Expert",
+              "year": 2017
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "15-1212.00": {
+        "roles": [
+          "soc"
+        ],
+        "sources": [
+          "rowspec/it.ts soc rows (attributed O*NET anchors)",
+          "catalog.ts soc demandBlock note"
+        ],
+        "pulls": {},
+        "title": "Information Security Analysts",
+        "description_len": 394,
+        "sample_of_reported_titles": [
+          "Information Security Officer",
+          "Information Security Specialist",
+          "Information Systems Security Analyst",
+          "Information Systems Security Officer (ISSO)",
+          "Information Technology Security Analyst (IT Security Analyst)",
+          "Network Security Analyst",
+          "Security Analyst",
+          "Systems Analyst"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2024
+            },
+            {
+              "title": "Education",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2026
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Knowledge",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Employer Job Postings",
+              "year": 2026
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Work Activities",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Work Context",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "13-1111.00": {
+        "roles": [
+          "opsanalyst"
+        ],
+        "sources": [
+          "catalog.ts opsanalyst demandBlock note",
+          "rowspec/business.ts opsanalyst rows"
+        ],
+        "pulls": {},
+        "title": "Management Analysts",
+        "description_len": 299,
+        "sample_of_reported_titles": [
+          "Administrative Analyst",
+          "Business Analyst",
+          "Business Consultant",
+          "Employment Programs Analyst",
+          "Management Analyst",
+          "Management Consultant",
+          "Organizational Development Consultant",
+          "Performance Management Analyst",
+          "Program Management Analyst"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2022
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2023
+            },
+            {
+              "title": "Education",
+              "source": "Occupational Expert",
+              "year": 2022
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2022
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2026
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2022
+            },
+            {
+              "title": "Knowledge",
+              "source": "Occupational Expert",
+              "year": 2022
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Employer Job Postings",
+              "year": 2026
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Occupational Expert",
+              "year": 2022
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2022
+            },
+            {
+              "title": "Work Activities",
+              "source": "Occupational Expert",
+              "year": 2022
+            },
+            {
+              "title": "Work Context",
+              "source": "Occupational Expert",
+              "year": 2022
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "13-1023.00": {
+        "roles": [
+          "purch"
+        ],
+        "sources": [
+          "rowspec/business.ts purch rows"
+        ],
+        "pulls": {},
+        "title": "Purchasing Agents, Except Wholesale, Retail, and Farm Products",
+        "description_len": 198,
+        "sample_of_reported_titles": [
+          "Buyer",
+          "Contract Administrator (Contract Admin)",
+          "Procurement and Contracting Administrator (Procurement and Contracting Admin)",
+          "Procurement and Contracting Buyer",
+          "Procurement Official",
+          "Procurement Specialist",
+          "Purchasing Administrator (Purchasing Admin)",
+          "Purchasing Agent",
+          "Purchasing and Contracts Coordinator"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2014
+            },
+            {
+              "title": "Education",
+              "source": "Occupational Expert",
+              "year": 2025
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2026
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Knowledge",
+              "source": "Occupational Expert",
+              "year": 2025
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Multiple sources",
+              "year": 2025
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Occupational Expert",
+              "year": 2025
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Work Activities",
+              "source": "Occupational Expert",
+              "year": 2025
+            },
+            {
+              "title": "Work Context",
+              "source": "Occupational Expert",
+              "year": 2025
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "13-1121.00": {
+        "roles": [
+          "events"
+        ],
+        "sources": [
+          "catalog.ts events demandBlock note",
+          "rowspec/business.ts events rows"
+        ],
+        "pulls": {},
+        "title": "Meeting, Convention, and Event Planners",
+        "description_len": 129,
+        "sample_of_reported_titles": [
+          "Catering Director",
+          "Conference Planner",
+          "Conference Planning Manager",
+          "Conference Services Director",
+          "Conference Services Manager",
+          "Convention Services Director",
+          "Convention Services Manager (CSM)",
+          "Event Coordinator",
+          "Events Manager",
+          "Special Events Coordinator"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2016
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2014
+            },
+            {
+              "title": "Education",
+              "source": "Incumbent",
+              "year": 2016
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2016
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2026
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2016
+            },
+            {
+              "title": "Knowledge",
+              "source": "Incumbent",
+              "year": 2016
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Employer Job Postings",
+              "year": 2026
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Incumbent",
+              "year": 2016
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2016
+            },
+            {
+              "title": "Work Activities",
+              "source": "Incumbent",
+              "year": 2016
+            },
+            {
+              "title": "Work Context",
+              "source": "Incumbent",
+              "year": 2016
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "43-3031.00": {
+        "roles": [
+          "book",
+          "acctclerk",
+          "fas"
+        ],
+        "sources": [
+          "rowspec/accounting.ts (book corroboration; acctclerk primary; fas corroboration block)"
+        ],
+        "pulls": {},
+        "title": "Bookkeeping, Accounting, and Auditing Clerks",
+        "description_len": 364,
+        "sample_of_reported_titles": [
+          "Account Clerk",
+          "Accounting Assistant",
+          "Accounting Associate",
+          "Accounting Clerk",
+          "Accounting Specialist",
+          "Accounting Technician",
+          "Accounts Payable Clerk",
+          "Accounts Payable Specialist",
+          "Accounts Payables Clerk",
+          "Accounts Receivable Clerk"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2017
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2024
+            },
+            {
+              "title": "Education",
+              "source": "Incumbent",
+              "year": 2017
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2017
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2023
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2017
+            },
+            {
+              "title": "Knowledge",
+              "source": "Incumbent",
+              "year": 2017
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Employer Job Postings",
+              "year": 2026
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Incumbent",
+              "year": 2017
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2017
+            },
+            {
+              "title": "Work Activities",
+              "source": "Incumbent",
+              "year": 2017
+            },
+            {
+              "title": "Work Context",
+              "source": "Incumbent",
+              "year": 2017
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "43-3051.00": {
+        "roles": [
+          "pay"
+        ],
+        "sources": [
+          "catalog.ts pay demandBlock note",
+          "rowspec/accounting.ts pay rows"
+        ],
+        "pulls": {},
+        "title": "Payroll and Timekeeping Clerks",
+        "description_len": 179,
+        "sample_of_reported_titles": [
+          "Payroll Assistant",
+          "Payroll Clerk",
+          "Payroll Coordinator",
+          "Payroll Representative",
+          "Payroll Specialist",
+          "Payroll Technician",
+          "Personnel Assistant",
+          "Personnel Technician",
+          "Timekeeper"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2022
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2024
+            },
+            {
+              "title": "Education",
+              "source": "Incumbent",
+              "year": 2022
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2022
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2026
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2022
+            },
+            {
+              "title": "Knowledge",
+              "source": "Incumbent",
+              "year": 2022
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Employer Job Postings",
+              "year": 2026
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Incumbent",
+              "year": 2022
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2022
+            },
+            {
+              "title": "Work Activities",
+              "source": "Incumbent",
+              "year": 2022
+            },
+            {
+              "title": "Work Context",
+              "source": "Incumbent",
+              "year": 2022
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "13-2051.00": {
+        "roles": [
+          "fin"
+        ],
+        "sources": [
+          "catalog.ts fin demandBlock note",
+          "rowspec/accounting.ts fin rows"
+        ],
+        "pulls": {},
+        "title": "Financial and Investment Analysts",
+        "description_len": 162,
+        "sample_of_reported_titles": [
+          "Analyst",
+          "Credit Products Officer",
+          "Equity Research Analyst",
+          "Financial Analyst",
+          "Investment Analyst",
+          "Planning Analyst",
+          "Portfolio Manager",
+          "Real Estate Analyst",
+          "Securities Analyst",
+          "Trust Officer"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning",
+              "year": 2023
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2020
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2025
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst - Preliminary",
+              "year": 2021
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Multiple sources",
+              "year": 2025
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Analyst",
+              "year": 2020
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "43-3071.00": {
+        "roles": [
+          "teller",
+          "treasury"
+        ],
+        "sources": [
+          "rowspec/accounting.ts (teller primary; treasury hybrid)"
+        ],
+        "pulls": {},
+        "title": "Tellers",
+        "description_len": 135,
+        "sample_of_reported_titles": [
+          "Account Representative",
+          "Bank Teller",
+          "Branch Operations Specialist",
+          "Customer Relationship Specialist",
+          "Customer Service Associate (CSA)",
+          "Financial Services Representative (FSR)",
+          "Member Services Representative",
+          "Personal Banking Representative",
+          "Roving Teller",
+          "Teller"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2024
+            },
+            {
+              "title": "Education",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2026
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2026
+            },
+            {
+              "title": "Knowledge",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Employer Job Postings",
+              "year": 2025
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Work Activities",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Work Context",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "43-3011.00": {
+        "roles": [
+          "coll"
+        ],
+        "sources": [
+          "catalog.ts coll demandBlock note",
+          "rowspec/accounting.ts coll rows"
+        ],
+        "pulls": {},
+        "title": "Bill and Account Collectors",
+        "description_len": 375,
+        "sample_of_reported_titles": [
+          "Account Representative",
+          "Accounts Receivable Specialist (AR Specialist)",
+          "Collection Agent",
+          "Collection Specialist",
+          "Collector",
+          "Debt Collector",
+          "Patient Access Specialist",
+          "Patient Account Representative",
+          "Telephone Collector"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2021
+            },
+            {
+              "title": "Education",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2026
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2026
+            },
+            {
+              "title": "Knowledge",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Employer Job Postings",
+              "year": 2026
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Work Activities",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Work Context",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "13-2072.00": {
+        "roles": [
+          "credit"
+        ],
+        "sources": [
+          "rowspec/accounting.ts credit rows"
+        ],
+        "pulls": {},
+        "title": "Loan Officers",
+        "description_len": 280,
+        "sample_of_reported_titles": [
+          "Commercial Banker",
+          "Commercial Loan Officer",
+          "Corporate Banking Officer",
+          "Financial Aid Advisor",
+          "Financial Aid Counselor",
+          "Financial Aid Officer",
+          "Financial Counselor",
+          "Loan Counselor",
+          "Loan Officer",
+          "Mortgage Loan Officer"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2020
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2020
+            },
+            {
+              "title": "Education",
+              "source": "Incumbent",
+              "year": 2020
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2020
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2026
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2020
+            },
+            {
+              "title": "Knowledge",
+              "source": "Incumbent",
+              "year": 2020
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Employer Job Postings",
+              "year": 2026
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Analyst",
+              "year": 2020
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2020
+            },
+            {
+              "title": "Work Activities",
+              "source": "Incumbent",
+              "year": 2020
+            },
+            {
+              "title": "Work Context",
+              "source": "Incumbent",
+              "year": 2020
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "13-2011.00": {
+        "roles": [
+          "audit"
+        ],
+        "sources": [
+          "catalog.ts audit demandBlock note",
+          "rowspec/accounting.ts audit rows"
+        ],
+        "pulls": {},
+        "title": "Accountants and Auditors",
+        "description_len": 236,
+        "sample_of_reported_titles": [
+          "Accountant",
+          "Accounting Officer",
+          "Audit Partner",
+          "Auditor",
+          "Cost Accountant",
+          "CPA (Certified Public Accountant)",
+          "Financial Auditor",
+          "Financial Reporting Accountant",
+          "General Accountant",
+          "Internal Auditor"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2026
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2026
+            },
+            {
+              "title": "Education",
+              "source": "Occupational Expert",
+              "year": 2026
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2026
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2026
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2026
+            },
+            {
+              "title": "Knowledge",
+              "source": "Occupational Expert",
+              "year": 2026
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Employer Job Postings",
+              "year": 2026
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Occupational Expert",
+              "year": 2026
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2026
+            },
+            {
+              "title": "Work Activities",
+              "source": "Occupational Expert",
+              "year": 2026
+            },
+            {
+              "title": "Work Context",
+              "source": "Occupational Expert",
+              "year": 2026
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "43-6014.00": {
+        "roles": [
+          "adminassoc"
+        ],
+        "sources": [
+          "rowspec/office.ts adminassoc rows",
+          "catalog.ts adminassoc demandBlock note"
+        ],
+        "pulls": {},
+        "title": "Secretaries and Administrative Assistants, Except Legal, Medical, and Executive",
+        "description_len": 190,
+        "sample_of_reported_titles": [
+          "Administrative Assistant (Admin Assistant)",
+          "Administrative Clerk",
+          "Administrative Secretary (Admin Secretary)",
+          "Administrative Specialist (Admin Specialist)",
+          "Administrative Support Assistant (ASA)",
+          "Administrative Technician",
+          "Department Secretary",
+          "Office Assistant",
+          "Secretary",
+          "Staff Assistant"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2019
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2024
+            },
+            {
+              "title": "Education",
+              "source": "Incumbent",
+              "year": 2019
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2019
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2025
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2026
+            },
+            {
+              "title": "Knowledge",
+              "source": "Incumbent",
+              "year": 2019
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Multiple sources",
+              "year": 2025
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Incumbent",
+              "year": 2019
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2019
+            },
+            {
+              "title": "Work Activities",
+              "source": "Incumbent",
+              "year": 2019
+            },
+            {
+              "title": "Work Context",
+              "source": "Incumbent",
+              "year": 2019
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "43-9061.00": {
+        "roles": [
+          "clerk"
+        ],
+        "sources": [
+          "rowspec/office.ts clerk rows"
+        ],
+        "pulls": {},
+        "title": "Office Clerks, General",
+        "description_len": 387,
+        "sample_of_reported_titles": [
+          "Administrative Clerk (Admin Clerk)",
+          "Clerical Aide",
+          "Clerical Assistant",
+          "Clerk",
+          "General Clerk",
+          "Office Assistant",
+          "Office Clerk",
+          "Office Services Specialist",
+          "Office Support Assistant"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2024
+            },
+            {
+              "title": "Education",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2025
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2026
+            },
+            {
+              "title": "Knowledge",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Employer Job Postings",
+              "year": 2025
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Work Activities",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Work Context",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "43-9021.00": {
+        "roles": [
+          "encode"
+        ],
+        "sources": [
+          "catalog.ts encode demandBlock note",
+          "rowspec/office.ts encode rows"
+        ],
+        "pulls": {},
+        "title": "Data Entry Keyers",
+        "description_len": 146,
+        "sample_of_reported_titles": [
+          "Data Capture Specialist",
+          "Data Entry Clerk",
+          "Data Entry Machine Operator",
+          "Data Entry Operator",
+          "Data Entry Specialist",
+          "Data Transcriber",
+          "Records Clerk",
+          "Underwriting Support Specialist"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2021
+            },
+            {
+              "title": "Education",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2026
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2026
+            },
+            {
+              "title": "Knowledge",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Employer Job Postings",
+              "year": 2025
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2018
+            },
+            {
+              "title": "Work Activities",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Work Context",
+              "source": "Incumbent",
+              "year": 2018
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "43-6011.00": {
+        "roles": [
+          "execsec"
+        ],
+        "sources": [
+          "catalog.ts execsec demandBlock note",
+          "rowspec/office.ts execsec rows"
+        ],
+        "pulls": {},
+        "title": "Executive Secretaries and Executive Administrative Assistants",
+        "description_len": 350,
+        "sample_of_reported_titles": [
+          "Administrative Aide",
+          "Administrative Assistant",
+          "Administrative Associate",
+          "Administrative Coordinator",
+          "Administrative Secretary",
+          "Administrative Specialist",
+          "Executive Administrative Assistant",
+          "Executive Assistant",
+          "Executive Secretary",
+          "Office Assistant"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2017
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2021
+            },
+            {
+              "title": "Education",
+              "source": "Incumbent",
+              "year": 2017
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2017
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2026
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2017
+            },
+            {
+              "title": "Knowledge",
+              "source": "Incumbent",
+              "year": 2017
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Multiple sources",
+              "year": 2025
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Incumbent",
+              "year": 2017
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2017
+            },
+            {
+              "title": "Work Activities",
+              "source": "Incumbent",
+              "year": 2017
+            },
+            {
+              "title": "Work Context",
+              "source": "Incumbent",
+              "year": 2017
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      },
+      "43-4171.00": {
+        "roles": [
+          "records"
+        ],
+        "sources": [
+          "catalog.ts records demandBlock note",
+          "rowspec/office.ts records rows"
+        ],
+        "pulls": {},
+        "title": "Receptionists and Information Clerks",
+        "description_len": 238,
+        "sample_of_reported_titles": [
+          "Clerk Specialist",
+          "Front Desk Receptionist",
+          "Greeter",
+          "Information Assistant (Info Assistant)",
+          "Medical Receptionist",
+          "Member Services Representative (Member Services Rep)",
+          "Office Assistant",
+          "Receptionist",
+          "Registration Clerk",
+          "Scheduler"
+        ],
+        "updated": {
+          "year": 2026,
+          "contents": [
+            {
+              "title": "Abilities",
+              "source": "Analyst",
+              "year": 2023
+            },
+            {
+              "title": "Career Interest Types",
+              "source": "Machine Learning/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Detailed Work Activities",
+              "source": "Analyst",
+              "year": 2024
+            },
+            {
+              "title": "Education",
+              "source": "Incumbent",
+              "year": 2023
+            },
+            {
+              "title": "Essential Skills",
+              "source": "Analyst",
+              "year": 2023
+            },
+            {
+              "title": "Job Titles",
+              "source": "Multiple sources",
+              "year": 2025
+            },
+            {
+              "title": "Job Zone",
+              "source": "Analyst",
+              "year": 2026
+            },
+            {
+              "title": "Knowledge",
+              "source": "Incumbent",
+              "year": 2023
+            },
+            {
+              "title": "Related Occupations",
+              "source": "Machine Learning/Analyst",
+              "year": 2025
+            },
+            {
+              "title": "Software Skills",
+              "source": "Multiple sources",
+              "year": 2025
+            },
+            {
+              "title": "Specific Interest Areas",
+              "source": "AI/Expert",
+              "year": 2026
+            },
+            {
+              "title": "Tasks",
+              "source": "Incumbent",
+              "year": 2023
+            },
+            {
+              "title": "Transferable Skills",
+              "source": "Analyst",
+              "year": 2023
+            },
+            {
+              "title": "Work Activities",
+              "source": "Incumbent",
+              "year": 2023
+            },
+            {
+              "title": "Work Context",
+              "source": "Incumbent",
+              "year": 2023
+            },
+            {
+              "title": "Work Styles",
+              "source": "AI/Expert",
+              "year": 2025
+            }
+          ]
+        }
+      }
+    },
+    "roles_with_no_onet_code_recorded": [
+      "swd",
+      "ba",
+      "its",
+      "sysadmin",
+      "dba",
+      "cybersec",
+      "digart",
+      "da",
+      "hra",
+      "training",
+      "mkt",
+      "sales",
+      "csr",
+      "ccqa",
+      "desk"
+    ],
+    "no_code_note": "Extraction fact: 15 of the 36 tracks carry NO provenance-keyed O*NET-SOC anchor in lib/fixtures (their skill rows are [PSF]/[TESDA]/[PSOC]/[NACE]-sourced). No code was guessed or substituted for them; no O*NET pull exists for them."
+  },
+  "endpoints": {
+    "about": [
+      {
+        "url": "https://api-v2.onetcenter.org/about/",
+        "status": 200,
+        "bytes": 191,
+        "ms": 850,
+        "attempts": 1,
+        "file": "about.json"
+      }
+    ],
+    "main": [
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00",
+        "status": 200,
+        "bytes": 6265,
+        "ms": 775,
+        "attempts": 1,
+        "file": "15-1253.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00",
+        "status": 200,
+        "bytes": 5623,
+        "ms": 252,
+        "attempts": 1,
+        "file": "15-1254.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00",
+        "status": 200,
+        "bytes": 6071,
+        "ms": 257,
+        "attempts": 1,
+        "file": "15-1212.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00",
+        "status": 200,
+        "bytes": 6033,
+        "ms": 256,
+        "attempts": 1,
+        "file": "13-1111.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00",
+        "status": 200,
+        "bytes": 5993,
+        "ms": 255,
+        "attempts": 1,
+        "file": "13-1023.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00",
+        "status": 200,
+        "bytes": 5537,
+        "ms": 253,
+        "attempts": 1,
+        "file": "13-1121.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00",
+        "status": 200,
+        "bytes": 6029,
+        "ms": 263,
+        "attempts": 1,
+        "file": "43-3031.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00",
+        "status": 200,
+        "bytes": 5683,
+        "ms": 487,
+        "attempts": 1,
+        "file": "43-3051.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2051.00",
+        "status": 200,
+        "bytes": 3763,
+        "ms": 256,
+        "attempts": 1,
+        "file": "13-2051.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00",
+        "status": 200,
+        "bytes": 5707,
+        "ms": 483,
+        "attempts": 1,
+        "file": "43-3071.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00",
+        "status": 200,
+        "bytes": 5656,
+        "ms": 263,
+        "attempts": 1,
+        "file": "43-3011.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00",
+        "status": 200,
+        "bytes": 5808,
+        "ms": 255,
+        "attempts": 1,
+        "file": "13-2072.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00",
+        "status": 200,
+        "bytes": 5939,
+        "ms": 477,
+        "attempts": 1,
+        "file": "13-2011.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00",
+        "status": 200,
+        "bytes": 5948,
+        "ms": 263,
+        "attempts": 1,
+        "file": "43-6014.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00",
+        "status": 200,
+        "bytes": 5980,
+        "ms": 253,
+        "attempts": 1,
+        "file": "43-9061.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9021.00",
+        "status": 200,
+        "bytes": 5644,
+        "ms": 266,
+        "attempts": 1,
+        "file": "43-9021.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00",
+        "status": 200,
+        "bytes": 5691,
+        "ms": 253,
+        "attempts": 1,
+        "file": "43-6011.00.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00",
+        "status": 200,
+        "bytes": 5627,
+        "ms": 251,
+        "attempts": 1,
+        "file": "43-4171.00.json"
+      }
+    ],
+    "tech": [
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/technology_skills",
+        "status": 200,
+        "bytes": 37475,
+        "ms": 697,
+        "attempts": 1,
+        "file": "15-1253.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/technology_skills",
+        "status": 200,
+        "bytes": 23834,
+        "ms": 918,
+        "attempts": 1,
+        "file": "15-1254.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/technology_skills",
+        "status": 200,
+        "bytes": 21664,
+        "ms": 687,
+        "attempts": 1,
+        "file": "15-1212.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/technology_skills",
+        "status": 200,
+        "bytes": 18025,
+        "ms": 1129,
+        "attempts": 1,
+        "file": "13-1111.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00/details/technology_skills",
+        "status": 200,
+        "bytes": 8143,
+        "ms": 462,
+        "attempts": 1,
+        "file": "13-1023.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/technology_skills",
+        "status": 200,
+        "bytes": 6759,
+        "ms": 242,
+        "attempts": 1,
+        "file": "13-1121.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/technology_skills",
+        "status": 200,
+        "bytes": 15091,
+        "ms": 913,
+        "attempts": 1,
+        "file": "43-3031.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/technology_skills",
+        "status": 200,
+        "bytes": 10145,
+        "ms": 726,
+        "attempts": 1,
+        "file": "43-3051.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2051.00/details/technology_skills",
+        "status": 200,
+        "bytes": 23412,
+        "ms": 1364,
+        "attempts": 1,
+        "file": "13-2051.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00/details/technology_skills",
+        "status": 200,
+        "bytes": 4202,
+        "ms": 238,
+        "attempts": 1,
+        "file": "43-3071.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00/details/technology_skills",
+        "status": 200,
+        "bytes": 6538,
+        "ms": 240,
+        "attempts": 1,
+        "file": "43-3011.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/technology_skills",
+        "status": 200,
+        "bytes": 13350,
+        "ms": 690,
+        "attempts": 1,
+        "file": "13-2072.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/technology_skills",
+        "status": 200,
+        "bytes": 27901,
+        "ms": 910,
+        "attempts": 1,
+        "file": "13-2011.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/technology_skills",
+        "status": 200,
+        "bytes": 10046,
+        "ms": 685,
+        "attempts": 1,
+        "file": "43-6014.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/technology_skills",
+        "status": 200,
+        "bytes": 7643,
+        "ms": 236,
+        "attempts": 1,
+        "file": "43-9061.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9021.00/details/technology_skills",
+        "status": 200,
+        "bytes": 5287,
+        "ms": 458,
+        "attempts": 1,
+        "file": "43-9021.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/technology_skills",
+        "status": 200,
+        "bytes": 8877,
+        "ms": 463,
+        "attempts": 1,
+        "file": "43-6011.00.tech-skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00/details/technology_skills",
+        "status": 200,
+        "bytes": 6578,
+        "ms": 237,
+        "attempts": 1,
+        "file": "43-4171.00.tech-skills.json"
+      }
+    ],
+    "tasks": [
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/tasks",
+        "status": 200,
+        "bytes": 2503,
+        "ms": 234,
+        "attempts": 1,
+        "file": "15-1253.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/tasks",
+        "status": 200,
+        "bytes": 2590,
+        "ms": 231,
+        "attempts": 1,
+        "file": "15-1254.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/tasks",
+        "status": 200,
+        "bytes": 2817,
+        "ms": 230,
+        "attempts": 1,
+        "file": "15-1212.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/tasks",
+        "status": 200,
+        "bytes": 2799,
+        "ms": 232,
+        "attempts": 1,
+        "file": "13-1111.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00/details/tasks",
+        "status": 200,
+        "bytes": 2690,
+        "ms": 232,
+        "attempts": 1,
+        "file": "13-1023.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/tasks",
+        "status": 200,
+        "bytes": 2645,
+        "ms": 633,
+        "attempts": 1,
+        "file": "13-1121.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/tasks",
+        "status": 200,
+        "bytes": 2511,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-3031.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/tasks",
+        "status": 200,
+        "bytes": 2518,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-3051.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2051.00/details/tasks",
+        "status": 200,
+        "bytes": 2297,
+        "ms": 233,
+        "attempts": 1,
+        "file": "13-2051.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00/details/tasks",
+        "status": 200,
+        "bytes": 2797,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-3071.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00/details/tasks",
+        "status": 200,
+        "bytes": 2649,
+        "ms": 232,
+        "attempts": 1,
+        "file": "43-3011.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/tasks",
+        "status": 200,
+        "bytes": 2599,
+        "ms": 695,
+        "attempts": 1,
+        "file": "13-2072.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/tasks",
+        "status": 200,
+        "bytes": 2737,
+        "ms": 236,
+        "attempts": 1,
+        "file": "13-2011.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/tasks",
+        "status": 200,
+        "bytes": 2704,
+        "ms": 233,
+        "attempts": 1,
+        "file": "43-6014.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/tasks",
+        "status": 200,
+        "bytes": 2620,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-9061.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9021.00/details/tasks",
+        "status": 200,
+        "bytes": 2194,
+        "ms": 230,
+        "attempts": 1,
+        "file": "43-9021.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/tasks",
+        "status": 200,
+        "bytes": 2607,
+        "ms": 229,
+        "attempts": 1,
+        "file": "43-6011.00.tasks.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00/details/tasks",
+        "status": 200,
+        "bytes": 2596,
+        "ms": 229,
+        "attempts": 1,
+        "file": "43-4171.00.tasks.json"
+      }
+    ],
+    "skills": [
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/skills",
+        "status": 200,
+        "bytes": 2918,
+        "ms": 236,
+        "attempts": 1,
+        "file": "15-1253.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/skills",
+        "status": 200,
+        "bytes": 2866,
+        "ms": 233,
+        "attempts": 1,
+        "file": "15-1254.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/skills",
+        "status": 200,
+        "bytes": 2957,
+        "ms": 232,
+        "attempts": 1,
+        "file": "15-1212.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/skills",
+        "status": 200,
+        "bytes": 2850,
+        "ms": 233,
+        "attempts": 1,
+        "file": "13-1111.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00/details/skills",
+        "status": 200,
+        "bytes": 2882,
+        "ms": 232,
+        "attempts": 1,
+        "file": "13-1023.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/skills",
+        "status": 200,
+        "bytes": 2744,
+        "ms": 1264,
+        "attempts": 1,
+        "file": "13-1121.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/skills",
+        "status": 200,
+        "bytes": 2733,
+        "ms": 232,
+        "attempts": 1,
+        "file": "43-3031.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/skills",
+        "status": 200,
+        "bytes": 2798,
+        "ms": 232,
+        "attempts": 1,
+        "file": "43-3051.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2051.00/details/skills",
+        "status": 200,
+        "bytes": 42,
+        "ms": 232,
+        "attempts": 1,
+        "file": "13-2051.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00/details/skills",
+        "status": 200,
+        "bytes": 2688,
+        "ms": 232,
+        "attempts": 1,
+        "file": "43-3071.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00/details/skills",
+        "status": 200,
+        "bytes": 2713,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-3011.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/skills",
+        "status": 200,
+        "bytes": 2826,
+        "ms": 453,
+        "attempts": 1,
+        "file": "13-2072.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/skills",
+        "status": 200,
+        "bytes": 2867,
+        "ms": 232,
+        "attempts": 1,
+        "file": "13-2011.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/skills",
+        "status": 200,
+        "bytes": 2732,
+        "ms": 235,
+        "attempts": 1,
+        "file": "43-6014.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/skills",
+        "status": 200,
+        "bytes": 2702,
+        "ms": 230,
+        "attempts": 1,
+        "file": "43-9061.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9021.00/details/skills",
+        "status": 200,
+        "bytes": 2815,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-9021.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/skills",
+        "status": 200,
+        "bytes": 2692,
+        "ms": 232,
+        "attempts": 1,
+        "file": "43-6011.00.skills.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00/details/skills",
+        "status": 200,
+        "bytes": 2702,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-4171.00.skills.json"
+      }
+    ],
+    "work_activities": [
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/work_activities",
+        "status": 200,
+        "bytes": 3322,
+        "ms": 916,
+        "attempts": 1,
+        "file": "15-1253.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/work_activities",
+        "status": 200,
+        "bytes": 3260,
+        "ms": 232,
+        "attempts": 1,
+        "file": "15-1254.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/work_activities",
+        "status": 200,
+        "bytes": 3322,
+        "ms": 232,
+        "attempts": 1,
+        "file": "15-1212.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/work_activities",
+        "status": 200,
+        "bytes": 3378,
+        "ms": 233,
+        "attempts": 1,
+        "file": "13-1111.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00/details/work_activities",
+        "status": 200,
+        "bytes": 3481,
+        "ms": 243,
+        "attempts": 1,
+        "file": "13-1023.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/work_activities",
+        "status": 200,
+        "bytes": 3466,
+        "ms": 234,
+        "attempts": 1,
+        "file": "13-1121.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/work_activities",
+        "status": 200,
+        "bytes": 3445,
+        "ms": 241,
+        "attempts": 1,
+        "file": "43-3031.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/work_activities",
+        "status": 200,
+        "bytes": 3252,
+        "ms": 236,
+        "attempts": 1,
+        "file": "43-3051.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2051.00/details/work_activities",
+        "status": 200,
+        "bytes": 42,
+        "ms": 230,
+        "attempts": 1,
+        "file": "13-2051.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00/details/work_activities",
+        "status": 200,
+        "bytes": 3364,
+        "ms": 236,
+        "attempts": 1,
+        "file": "43-3071.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00/details/work_activities",
+        "status": 200,
+        "bytes": 3334,
+        "ms": 237,
+        "attempts": 1,
+        "file": "43-3011.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/work_activities",
+        "status": 200,
+        "bytes": 3461,
+        "ms": 234,
+        "attempts": 1,
+        "file": "13-2072.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/work_activities",
+        "status": 200,
+        "bytes": 3406,
+        "ms": 237,
+        "attempts": 1,
+        "file": "13-2011.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/work_activities",
+        "status": 200,
+        "bytes": 3519,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-6014.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/work_activities",
+        "status": 200,
+        "bytes": 3445,
+        "ms": 233,
+        "attempts": 1,
+        "file": "43-9061.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9021.00/details/work_activities",
+        "status": 200,
+        "bytes": 3252,
+        "ms": 238,
+        "attempts": 1,
+        "file": "43-9021.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/work_activities",
+        "status": 200,
+        "bytes": 3331,
+        "ms": 237,
+        "attempts": 1,
+        "file": "43-6011.00.work-activities.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00/details/work_activities",
+        "status": 200,
+        "bytes": 3516,
+        "ms": 238,
+        "attempts": 1,
+        "file": "43-4171.00.work-activities.json"
+      }
+    ],
+    "pagination": [
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3271,
+        "ms": 740,
+        "attempts": 1,
+        "file": "15-1253.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3627,
+        "ms": 238,
+        "attempts": 1,
+        "file": "15-1253.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3861,
+        "ms": 236,
+        "attempts": 1,
+        "file": "15-1253.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 514,
+        "ms": 234,
+        "attempts": 1,
+        "file": "15-1253.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/technology_skills?start=11&end=20",
+        "status": 200,
+        "bytes": 10879,
+        "ms": 242,
+        "attempts": 1,
+        "file": "15-1253.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/technology_skills?start=21&end=30",
+        "status": 200,
+        "bytes": 6836,
+        "ms": 240,
+        "attempts": 1,
+        "file": "15-1253.00.tech-skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/technology_skills?start=31&end=40",
+        "status": 200,
+        "bytes": 5317,
+        "ms": 242,
+        "attempts": 1,
+        "file": "15-1253.00.tech-skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/technology_skills?start=41&end=50",
+        "status": 200,
+        "bytes": 4505,
+        "ms": 466,
+        "attempts": 1,
+        "file": "15-1253.00.tech-skills.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/technology_skills?start=51&end=60",
+        "status": 200,
+        "bytes": 3394,
+        "ms": 244,
+        "attempts": 1,
+        "file": "15-1253.00.tech-skills.p6.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/technology_skills?start=61&end=68",
+        "status": 200,
+        "bytes": 3049,
+        "ms": 245,
+        "attempts": 1,
+        "file": "15-1253.00.tech-skills.p7.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/tasks?start=11&end=20",
+        "status": 200,
+        "bytes": 2638,
+        "ms": 234,
+        "attempts": 1,
+        "file": "15-1253.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/tasks?start=21&end=30",
+        "status": 200,
+        "bytes": 2374,
+        "ms": 231,
+        "attempts": 1,
+        "file": "15-1253.00.tasks.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2834,
+        "ms": 233,
+        "attempts": 1,
+        "file": "15-1253.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2514,
+        "ms": 236,
+        "attempts": 1,
+        "file": "15-1253.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1253.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1457,
+        "ms": 240,
+        "attempts": 1,
+        "file": "15-1253.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3562,
+        "ms": 245,
+        "attempts": 1,
+        "file": "15-1254.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3398,
+        "ms": 234,
+        "attempts": 1,
+        "file": "15-1254.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3840,
+        "ms": 239,
+        "attempts": 1,
+        "file": "15-1254.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 536,
+        "ms": 244,
+        "attempts": 1,
+        "file": "15-1254.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/technology_skills?start=11&end=20",
+        "status": 200,
+        "bytes": 7401,
+        "ms": 464,
+        "attempts": 1,
+        "file": "15-1254.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/technology_skills?start=21&end=30",
+        "status": 200,
+        "bytes": 4917,
+        "ms": 463,
+        "attempts": 1,
+        "file": "15-1254.00.tech-skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/technology_skills?start=31&end=40",
+        "status": 200,
+        "bytes": 4131,
+        "ms": 237,
+        "attempts": 1,
+        "file": "15-1254.00.tech-skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/technology_skills?start=41&end=50",
+        "status": 200,
+        "bytes": 3495,
+        "ms": 237,
+        "attempts": 1,
+        "file": "15-1254.00.tech-skills.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/technology_skills?start=51&end=52",
+        "status": 200,
+        "bytes": 1071,
+        "ms": 234,
+        "attempts": 1,
+        "file": "15-1254.00.tech-skills.p6.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/tasks?start=11&end=20",
+        "status": 200,
+        "bytes": 2564,
+        "ms": 239,
+        "attempts": 1,
+        "file": "15-1254.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/tasks?start=21&end=29",
+        "status": 200,
+        "bytes": 2459,
+        "ms": 232,
+        "attempts": 1,
+        "file": "15-1254.00.tasks.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2732,
+        "ms": 236,
+        "attempts": 1,
+        "file": "15-1254.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2724,
+        "ms": 233,
+        "attempts": 1,
+        "file": "15-1254.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1254.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1400,
+        "ms": 232,
+        "attempts": 1,
+        "file": "15-1254.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3540,
+        "ms": 232,
+        "attempts": 1,
+        "file": "15-1212.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3446,
+        "ms": 233,
+        "attempts": 1,
+        "file": "15-1212.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3753,
+        "ms": 233,
+        "attempts": 1,
+        "file": "15-1212.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 536,
+        "ms": 768,
+        "attempts": 1,
+        "file": "15-1212.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/technology_skills?start=11&end=20",
+        "status": 200,
+        "bytes": 8724,
+        "ms": 929,
+        "attempts": 1,
+        "file": "15-1212.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/technology_skills?start=21&end=30",
+        "status": 200,
+        "bytes": 5472,
+        "ms": 462,
+        "attempts": 1,
+        "file": "15-1212.00.tech-skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/technology_skills?start=31&end=40",
+        "status": 200,
+        "bytes": 3554,
+        "ms": 460,
+        "attempts": 1,
+        "file": "15-1212.00.tech-skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/technology_skills?start=41&end=50",
+        "status": 200,
+        "bytes": 3710,
+        "ms": 239,
+        "attempts": 1,
+        "file": "15-1212.00.tech-skills.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/technology_skills?start=51&end=59",
+        "status": 200,
+        "bytes": 3325,
+        "ms": 237,
+        "attempts": 1,
+        "file": "15-1212.00.tech-skills.p6.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/tasks?start=11&end=11",
+        "status": 200,
+        "bytes": 404,
+        "ms": 232,
+        "attempts": 1,
+        "file": "15-1212.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2810,
+        "ms": 232,
+        "attempts": 1,
+        "file": "15-1212.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2555,
+        "ms": 237,
+        "attempts": 1,
+        "file": "15-1212.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/15-1212.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1403,
+        "ms": 232,
+        "attempts": 1,
+        "file": "15-1212.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3411,
+        "ms": 234,
+        "attempts": 1,
+        "file": "13-1111.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3395,
+        "ms": 233,
+        "attempts": 1,
+        "file": "13-1111.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3877,
+        "ms": 233,
+        "attempts": 1,
+        "file": "13-1111.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 536,
+        "ms": 234,
+        "attempts": 1,
+        "file": "13-1111.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/technology_skills?start=11&end=20",
+        "status": 200,
+        "bytes": 6997,
+        "ms": 241,
+        "attempts": 1,
+        "file": "13-1111.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/technology_skills?start=21&end=30",
+        "status": 200,
+        "bytes": 5193,
+        "ms": 237,
+        "attempts": 1,
+        "file": "13-1111.00.tech-skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/technology_skills?start=31&end=40",
+        "status": 200,
+        "bytes": 4483,
+        "ms": 240,
+        "attempts": 1,
+        "file": "13-1111.00.tech-skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/technology_skills?start=41&end=50",
+        "status": 200,
+        "bytes": 3571,
+        "ms": 237,
+        "attempts": 1,
+        "file": "13-1111.00.tech-skills.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/technology_skills?start=51&end=59",
+        "status": 200,
+        "bytes": 3327,
+        "ms": 236,
+        "attempts": 1,
+        "file": "13-1111.00.tech-skills.p6.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/tasks?start=11&end=11",
+        "status": 200,
+        "bytes": 400,
+        "ms": 231,
+        "attempts": 1,
+        "file": "13-1111.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2815,
+        "ms": 232,
+        "attempts": 1,
+        "file": "13-1111.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2698,
+        "ms": 232,
+        "attempts": 1,
+        "file": "13-1111.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1111.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1357,
+        "ms": 234,
+        "attempts": 1,
+        "file": "13-1111.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3370,
+        "ms": 244,
+        "attempts": 1,
+        "file": "13-1023.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3415,
+        "ms": 234,
+        "attempts": 1,
+        "file": "13-1023.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3796,
+        "ms": 258,
+        "attempts": 1,
+        "file": "13-1023.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 536,
+        "ms": 233,
+        "attempts": 1,
+        "file": "13-1023.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00/details/technology_skills?start=11&end=20",
+        "status": 200,
+        "bytes": 3806,
+        "ms": 241,
+        "attempts": 1,
+        "file": "13-1023.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00/details/tasks?start=11&end=19",
+        "status": 200,
+        "bytes": 2583,
+        "ms": 230,
+        "attempts": 1,
+        "file": "13-1023.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2748,
+        "ms": 239,
+        "attempts": 1,
+        "file": "13-1023.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2751,
+        "ms": 240,
+        "attempts": 1,
+        "file": "13-1023.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1023.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1338,
+        "ms": 233,
+        "attempts": 1,
+        "file": "13-1023.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3315,
+        "ms": 232,
+        "attempts": 1,
+        "file": "13-1121.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3459,
+        "ms": 232,
+        "attempts": 1,
+        "file": "13-1121.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3822,
+        "ms": 235,
+        "attempts": 1,
+        "file": "13-1121.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 537,
+        "ms": 238,
+        "attempts": 1,
+        "file": "13-1121.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/technology_skills?start=11&end=20",
+        "status": 200,
+        "bytes": 3747,
+        "ms": 250,
+        "attempts": 1,
+        "file": "13-1121.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/technology_skills?start=21&end=21",
+        "status": 200,
+        "bytes": 740,
+        "ms": 235,
+        "attempts": 1,
+        "file": "13-1121.00.tech-skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/tasks?start=11&end=20",
+        "status": 200,
+        "bytes": 2815,
+        "ms": 234,
+        "attempts": 1,
+        "file": "13-1121.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/tasks?start=21&end=21",
+        "status": 200,
+        "bytes": 402,
+        "ms": 234,
+        "attempts": 1,
+        "file": "13-1121.00.tasks.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2898,
+        "ms": 231,
+        "attempts": 1,
+        "file": "13-1121.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2747,
+        "ms": 232,
+        "attempts": 1,
+        "file": "13-1121.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-1121.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1334,
+        "ms": 235,
+        "attempts": 1,
+        "file": "13-1121.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3391,
+        "ms": 241,
+        "attempts": 1,
+        "file": "43-3031.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3441,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-3031.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3704,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-3031.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 614,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-3031.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/technology_skills?start=11&end=20",
+        "status": 200,
+        "bytes": 4439,
+        "ms": 249,
+        "attempts": 1,
+        "file": "43-3031.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/technology_skills?start=21&end=28",
+        "status": 200,
+        "bytes": 2927,
+        "ms": 240,
+        "attempts": 1,
+        "file": "43-3031.00.tech-skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/tasks?start=11&end=20",
+        "status": 200,
+        "bytes": 2676,
+        "ms": 233,
+        "attempts": 1,
+        "file": "43-3031.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/tasks?start=21&end=28",
+        "status": 200,
+        "bytes": 2154,
+        "ms": 232,
+        "attempts": 1,
+        "file": "43-3031.00.tasks.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2827,
+        "ms": 237,
+        "attempts": 1,
+        "file": "43-3031.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2799,
+        "ms": 241,
+        "attempts": 1,
+        "file": "43-3031.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3031.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1357,
+        "ms": 236,
+        "attempts": 1,
+        "file": "43-3031.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3627,
+        "ms": 618,
+        "attempts": 1,
+        "file": "43-3051.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3368,
+        "ms": 1233,
+        "attempts": 1,
+        "file": "43-3051.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3813,
+        "ms": 460,
+        "attempts": 1,
+        "file": "43-3051.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 536,
+        "ms": 235,
+        "attempts": 1,
+        "file": "43-3051.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/technology_skills?start=11&end=15",
+        "status": 200,
+        "bytes": 1932,
+        "ms": 248,
+        "attempts": 1,
+        "file": "43-3051.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/tasks?start=11&end=20",
+        "status": 200,
+        "bytes": 2603,
+        "ms": 241,
+        "attempts": 1,
+        "file": "43-3051.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/tasks?start=21&end=21",
+        "status": 200,
+        "bytes": 389,
+        "ms": 240,
+        "attempts": 1,
+        "file": "43-3051.00.tasks.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2745,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-3051.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2839,
+        "ms": 237,
+        "attempts": 1,
+        "file": "43-3051.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3051.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1333,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-3051.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2051.00/details/technology_skills?start=11&end=20",
+        "status": 200,
+        "bytes": 5704,
+        "ms": 249,
+        "attempts": 1,
+        "file": "13-2051.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2051.00/details/technology_skills?start=21&end=27",
+        "status": 200,
+        "bytes": 2640,
+        "ms": 472,
+        "attempts": 1,
+        "file": "13-2051.00.tech-skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2051.00/details/tasks?start=11&end=20",
+        "status": 200,
+        "bytes": 2697,
+        "ms": 236,
+        "attempts": 1,
+        "file": "13-2051.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2051.00/details/tasks?start=21&end=26",
+        "status": 200,
+        "bytes": 1488,
+        "ms": 232,
+        "attempts": 1,
+        "file": "13-2051.00.tasks.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3525,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-3071.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3389,
+        "ms": 236,
+        "attempts": 1,
+        "file": "43-3071.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3784,
+        "ms": 235,
+        "attempts": 1,
+        "file": "43-3071.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 537,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-3071.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00/details/tasks?start=11&end=20",
+        "status": 200,
+        "bytes": 2540,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-3071.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00/details/tasks?start=21&end=28",
+        "status": 200,
+        "bytes": 2102,
+        "ms": 232,
+        "attempts": 1,
+        "file": "43-3071.00.tasks.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2887,
+        "ms": 237,
+        "attempts": 1,
+        "file": "43-3071.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2813,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-3071.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3071.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1330,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-3071.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3529,
+        "ms": 239,
+        "attempts": 1,
+        "file": "43-3011.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3462,
+        "ms": 236,
+        "attempts": 1,
+        "file": "43-3011.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3756,
+        "ms": 236,
+        "attempts": 1,
+        "file": "43-3011.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 514,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-3011.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00/details/technology_skills?start=11&end=18",
+        "status": 200,
+        "bytes": 2980,
+        "ms": 236,
+        "attempts": 1,
+        "file": "43-3011.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00/details/tasks?start=11&end=15",
+        "status": 200,
+        "bytes": 1512,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-3011.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2830,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-3011.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2897,
+        "ms": 232,
+        "attempts": 1,
+        "file": "43-3011.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-3011.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1276,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-3011.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3349,
+        "ms": 244,
+        "attempts": 1,
+        "file": "13-2072.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3464,
+        "ms": 233,
+        "attempts": 1,
+        "file": "13-2072.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3786,
+        "ms": 239,
+        "attempts": 1,
+        "file": "13-2072.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 536,
+        "ms": 239,
+        "attempts": 1,
+        "file": "13-2072.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/technology_skills?start=11&end=18",
+        "status": 200,
+        "bytes": 3001,
+        "ms": 244,
+        "attempts": 1,
+        "file": "13-2072.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/tasks?start=11&end=20",
+        "status": 200,
+        "bytes": 2551,
+        "ms": 232,
+        "attempts": 1,
+        "file": "13-2072.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/tasks?start=21&end=30",
+        "status": 200,
+        "bytes": 2396,
+        "ms": 240,
+        "attempts": 1,
+        "file": "13-2072.00.tasks.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2717,
+        "ms": 232,
+        "attempts": 1,
+        "file": "13-2072.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2883,
+        "ms": 235,
+        "attempts": 1,
+        "file": "13-2072.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2072.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1292,
+        "ms": 237,
+        "attempts": 1,
+        "file": "13-2072.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3405,
+        "ms": 233,
+        "attempts": 1,
+        "file": "13-2011.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3455,
+        "ms": 233,
+        "attempts": 1,
+        "file": "13-2011.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3794,
+        "ms": 237,
+        "attempts": 1,
+        "file": "13-2011.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 536,
+        "ms": 234,
+        "attempts": 1,
+        "file": "13-2011.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/technology_skills?start=11&end=20",
+        "status": 200,
+        "bytes": 6358,
+        "ms": 244,
+        "attempts": 1,
+        "file": "13-2011.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/technology_skills?start=21&end=30",
+        "status": 200,
+        "bytes": 4418,
+        "ms": 237,
+        "attempts": 1,
+        "file": "13-2011.00.tech-skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/technology_skills?start=31&end=37",
+        "status": 200,
+        "bytes": 2620,
+        "ms": 236,
+        "attempts": 1,
+        "file": "13-2011.00.tech-skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/tasks?start=11&end=20",
+        "status": 200,
+        "bytes": 2829,
+        "ms": 231,
+        "attempts": 1,
+        "file": "13-2011.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/tasks?start=21&end=30",
+        "status": 200,
+        "bytes": 2888,
+        "ms": 230,
+        "attempts": 1,
+        "file": "13-2011.00.tasks.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2705,
+        "ms": 233,
+        "attempts": 1,
+        "file": "13-2011.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2846,
+        "ms": 234,
+        "attempts": 1,
+        "file": "13-2011.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/13-2011.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1300,
+        "ms": 230,
+        "attempts": 1,
+        "file": "13-2011.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3409,
+        "ms": 663,
+        "attempts": 1,
+        "file": "43-6014.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3452,
+        "ms": 1201,
+        "attempts": 1,
+        "file": "43-6014.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3682,
+        "ms": 233,
+        "attempts": 1,
+        "file": "43-6014.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 536,
+        "ms": 243,
+        "attempts": 1,
+        "file": "43-6014.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/technology_skills?start=11&end=20",
+        "status": 200,
+        "bytes": 6114,
+        "ms": 242,
+        "attempts": 1,
+        "file": "43-6014.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/technology_skills?start=21&end=30",
+        "status": 200,
+        "bytes": 4662,
+        "ms": 237,
+        "attempts": 1,
+        "file": "43-6014.00.tech-skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/technology_skills?start=31&end=40",
+        "status": 200,
+        "bytes": 3532,
+        "ms": 236,
+        "attempts": 1,
+        "file": "43-6014.00.tech-skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/technology_skills?start=41&end=48",
+        "status": 200,
+        "bytes": 2805,
+        "ms": 236,
+        "attempts": 1,
+        "file": "43-6014.00.tech-skills.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/tasks?start=11&end=20",
+        "status": 200,
+        "bytes": 2469,
+        "ms": 237,
+        "attempts": 1,
+        "file": "43-6014.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/tasks?start=21&end=30",
+        "status": 200,
+        "bytes": 2674,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-6014.00.tasks.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/tasks?start=31&end=31",
+        "status": 200,
+        "bytes": 359,
+        "ms": 245,
+        "attempts": 1,
+        "file": "43-6014.00.tasks.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2811,
+        "ms": 235,
+        "attempts": 1,
+        "file": "43-6014.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2883,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-6014.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6014.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1292,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-6014.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3436,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-9061.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3524,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-9061.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3579,
+        "ms": 233,
+        "attempts": 1,
+        "file": "43-9061.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 614,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-9061.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/technology_skills?start=11&end=20",
+        "status": 200,
+        "bytes": 3980,
+        "ms": 239,
+        "attempts": 1,
+        "file": "43-9061.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/technology_skills?start=21&end=24",
+        "status": 200,
+        "bytes": 1643,
+        "ms": 238,
+        "attempts": 1,
+        "file": "43-9061.00.tech-skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/tasks?start=11&end=20",
+        "status": 200,
+        "bytes": 2366,
+        "ms": 230,
+        "attempts": 1,
+        "file": "43-9061.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2812,
+        "ms": 231,
+        "attempts": 1,
+        "file": "43-9061.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2874,
+        "ms": 240,
+        "attempts": 1,
+        "file": "43-9061.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9061.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1330,
+        "ms": 243,
+        "attempts": 1,
+        "file": "43-9061.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9021.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3652,
+        "ms": 239,
+        "attempts": 1,
+        "file": "43-9021.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9021.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3487,
+        "ms": 255,
+        "attempts": 1,
+        "file": "43-9021.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9021.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3693,
+        "ms": 244,
+        "attempts": 1,
+        "file": "43-9021.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9021.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 515,
+        "ms": 245,
+        "attempts": 1,
+        "file": "43-9021.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9021.00/details/technology_skills?start=11&end=13",
+        "status": 200,
+        "bytes": 1352,
+        "ms": 237,
+        "attempts": 1,
+        "file": "43-9021.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9021.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2699,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-9021.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9021.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2926,
+        "ms": 235,
+        "attempts": 1,
+        "file": "43-9021.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-9021.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1278,
+        "ms": 238,
+        "attempts": 1,
+        "file": "43-9021.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3549,
+        "ms": 235,
+        "attempts": 1,
+        "file": "43-6011.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3362,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-6011.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3742,
+        "ms": 237,
+        "attempts": 1,
+        "file": "43-6011.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 614,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-6011.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/technology_skills?start=11&end=20",
+        "status": 200,
+        "bytes": 5424,
+        "ms": 242,
+        "attempts": 1,
+        "file": "43-6011.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/technology_skills?start=21&end=30",
+        "status": 200,
+        "bytes": 3733,
+        "ms": 239,
+        "attempts": 1,
+        "file": "43-6011.00.tech-skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/technology_skills?start=31&end=32",
+        "status": 200,
+        "bytes": 993,
+        "ms": 243,
+        "attempts": 1,
+        "file": "43-6011.00.tech-skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/tasks?start=11&end=20",
+        "status": 200,
+        "bytes": 2555,
+        "ms": 241,
+        "attempts": 1,
+        "file": "43-6011.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/tasks?start=21&end=23",
+        "status": 200,
+        "bytes": 910,
+        "ms": 230,
+        "attempts": 1,
+        "file": "43-6011.00.tasks.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2888,
+        "ms": 237,
+        "attempts": 1,
+        "file": "43-6011.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2782,
+        "ms": 235,
+        "attempts": 1,
+        "file": "43-6011.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-6011.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1357,
+        "ms": 235,
+        "attempts": 1,
+        "file": "43-6011.00.skills.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00/details/work_activities?start=11&end=20",
+        "status": 200,
+        "bytes": 3271,
+        "ms": 236,
+        "attempts": 1,
+        "file": "43-4171.00.work-activities.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00/details/work_activities?start=21&end=30",
+        "status": 200,
+        "bytes": 3495,
+        "ms": 236,
+        "attempts": 1,
+        "file": "43-4171.00.work-activities.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00/details/work_activities?start=31&end=40",
+        "status": 200,
+        "bytes": 3778,
+        "ms": 243,
+        "attempts": 1,
+        "file": "43-4171.00.work-activities.p4.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00/details/work_activities?start=41&end=41",
+        "status": 200,
+        "bytes": 536,
+        "ms": 240,
+        "attempts": 1,
+        "file": "43-4171.00.work-activities.p5.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00/details/technology_skills?start=11&end=18",
+        "status": 200,
+        "bytes": 2756,
+        "ms": 239,
+        "attempts": 1,
+        "file": "43-4171.00.tech-skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00/details/tasks?start=11&end=19",
+        "status": 200,
+        "bytes": 2311,
+        "ms": 232,
+        "attempts": 1,
+        "file": "43-4171.00.tasks.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00/details/skills?start=11&end=20",
+        "status": 200,
+        "bytes": 2841,
+        "ms": 234,
+        "attempts": 1,
+        "file": "43-4171.00.skills.p2.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00/details/skills?start=21&end=30",
+        "status": 200,
+        "bytes": 2898,
+        "ms": 239,
+        "attempts": 1,
+        "file": "43-4171.00.skills.p3.json"
+      },
+      {
+        "url": "https://api-v2.onetcenter.org/online/occupations/43-4171.00/details/skills?start=31&end=35",
+        "status": 200,
+        "bytes": 1276,
+        "ms": 233,
+        "attempts": 1,
+        "file": "43-4171.00.skills.p4.json"
+      }
+    ]
+  },
+  "totals": {
+    "requests": 73,
+    "status_200": 73,
+    "status_other": [],
+    "bytes_total": 452558
+  },
+  "discipline": {
+    "key_handling": "ONET_API_KEY read from .env.local by fs inside pull.mjs; sent only as X-API-Key header; never printed or written",
+    "raw_files_unedited": true,
+    "url_files": "every request URL burned into sibling .url.txt (URL only)",
+    "throttle_ms": 500,
+    "retry_policy": "one retry with 1500ms backoff, 429/5xx only"
+  },
+  "completion_pass": {
+    "script": "research/onet-enrich/paginate.mjs",
+    "timestamps_utc": "2026-11-02T07:12:02.868Z",
+    "work_activities_requests": 18,
+    "pagination_continuations": 193,
+    "totals": {
+      "requests_all_phases": 284,
+      "status_200": 284,
+      "status_other": [],
+      "bytes_total": 1063251
+    }
+  }
+}

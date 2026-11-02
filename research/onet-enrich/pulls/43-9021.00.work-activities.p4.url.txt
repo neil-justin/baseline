@@ -1,0 +1,1 @@
+https://api-v2.onetcenter.org/online/occupations/43-9021.00/details/work_activities?start=31&end=40

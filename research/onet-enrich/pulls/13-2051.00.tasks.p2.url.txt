@@ -1,0 +1,1 @@
+https://api-v2.onetcenter.org/online/occupations/13-2051.00/details/tasks?start=11&end=20
