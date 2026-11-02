@@ -2,16 +2,19 @@
 
 import { useState } from "react";
 import CountUp from "@/components/CountUp";
+import { SegRubricBar } from "@/components/instrument";
 import { rubricParts } from "@/lib/engines/rubric";
 import type { Score } from "@/lib/engines/score";
 
 /**
  * The first-viewport sample instrument — mini career index + sample readout
- * panel, ported 1:1 from prototype/index.html's #gauge. Server side derives
- * the canon sample score (beat-5 state → 40) and each row's honest fit
- * counts; this client component carries the page's only two interactions:
- * the row-select sync (fit line) and the data-sequence arm (the segmented
- * bar fills 160ms after the readout count settles, via CountUp's onDone).
+ * panel, now in the v7 register (wave 3, 2026-11-02). Server side derives the
+ * canon sample score (beat-5 state → 40) and each row's honest fit counts;
+ * this client component carries the page's only interactions:
+ * the row-select sync (fit line) and the data-sequence arm — the ScoreSequence
+ * pattern (the count-up IS the measurement; the segmented bar fills ~160ms
+ * after the count settles). Honest skin throughout: "SAMPLE STUDENT", legend
+ * values per channel, an unmeasured AR reads "—" (never a zero).
  */
 
 const PART_TAGS = ["SP", "ES", "TP", "AR", "CC"] as const;
@@ -53,13 +56,19 @@ export default function SampleGauge({
   const row = rows[sel];
   // legend values in parts order; an unmeasured AR reads "—" (never a zero)
   const vals: (number | null)[] = [score.sp, score.es, score.tp, score.ar, score.cc];
+  const legend = vals.map(
+    (v, i) =>
+      `${PART_TAGS[i]}${
+        v === null ? " —" : ` ${v}/${parts[i].pct}`
+      }`
+  );
 
   return (
-    <div className="gauge" id="gauge">
-      <div className="panel mini-index rv" data-io data-stagger="60" data-cap="300">
+    <div className="gauge">
+      <div className="card mini-card">
         <div className="mini-head">
-          <span className="label">CAREER INDEX</span>
-          <span className="label">
+          <span className="kicker">CAREER INDEX</span>
+          <span className="kicker dim">
             {rows.length} of {total} · sample rows
           </span>
         </div>
@@ -71,7 +80,7 @@ export default function SampleGauge({
             aria-pressed={i === sel}
             onClick={() => setSel(i)}
           >
-            <span>{r.name}</span>
+            <span className="who">{r.name}</span>
             <span className="fit">
               {r.x} of {r.y}
             </span>
@@ -79,17 +88,17 @@ export default function SampleGauge({
         ))}
       </div>
 
-      <div className="panel readout rv" data-io data-sequence>
+      <div className="card readout">
         <div className="readout-head">
           <div>
-            <span className="label">
-              READINESS · <b className="sample-tag">SAMPLE STUDENT</b>
+            <span className="kicker">
+              READINESS · <span className="chip c-grey">SAMPLE STUDENT</span>
             </span>
-            <div className="readout-sub">
+            <div className="readout-sub" style={{ marginTop: 6 }}>
               out of 100 · {yearLevel} · {track}
             </div>
           </div>
-          <div className="readout-score">
+          <div className="readout-score num">
             <CountUp
               to={score.total}
               dec={0}
@@ -100,24 +109,19 @@ export default function SampleGauge({
             <small>/100</small>
           </div>
         </div>
-        <div
-          className={armed ? "rubric-mini armed" : "rubric-mini"}
-          role="img"
-          aria-label={`Sample score ${score.total} of 100 — ${PART_NAMES.map(
-            (n, i) => `${n} ${vals[i] === null ? "not yet measured" : `${vals[i]} of ${parts[i].pct}`}`
-          ).join(", ")}`}
-        >
-          {parts.map((p, i) => (
-            <div key={i} className="seg" style={{ flex: p.pct }}>
-              <i style={{ ["--earn" as string]: String(p.earnedFrac) }} />
-            </div>
-          ))}
+        <div style={{ marginTop: 14 }}>
+          <SegRubricBar
+            parts={parts}
+            armed={armed}
+            height={10}
+            ariaLabel={`Sample score ${score.total} of 100 — ${PART_NAMES.map(
+              (n, i) => `${n} ${vals[i] === null ? "not yet measured" : `${vals[i]} of ${parts[i].pct}`}`
+            ).join(", ")}`}
+          />
         </div>
-        <div className="readout-legend">
-          {PART_TAGS.map((tag, i) => (
-            <span key={tag}>
-              <b>{tag}</b> {vals[i] === null ? "—" : `${vals[i]}/${parts[i].pct}`}
-            </span>
+        <div className="seglab num">
+          {legend.map((l) => (
+            <span key={l}>{l}</span>
           ))}
         </div>
         <div className="readout-fit">

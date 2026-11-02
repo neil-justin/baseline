@@ -1,25 +1,577 @@
-/* Landing page styles — ported VERBATIM from prototype/index.html <style> (2026-10-14). */
+/* ============================================================
+   DNA v7 — LANDING (the Persuade surface), v7.2 wave-3 round
+   (2026-11-02, reskin from the Index-era port per the handoff).
 
-/* The Index — final world (user-locked 2026-10-12): the earned-green system
-   laid over a drafting-sheet grid. The accent stays rare; the grid is the
-   only addition beyond the base tokens. */
-:root {
-  --ground: #F4F5F4;
-  --panel: #FFFFFF;
-  --ink: #16181A;
-  --ink-2: #515651;
-  --ink-3: #666C66;
-  --line: #DFE1DE;
-  --line-soft: #EAEBE9;
-  --accent: #0B5F45;
-  --accent-deep: #08492F;
-  --selection: #0B5F4522;
+   The (marketing) group carries NO (app) shell (no headnav, no
+   rail, no gutters-cap frame) — the landing owns its chrome: a
+   white top bar (brand mark + wordmark + Sign in + Start check)
+   and an honest footer. The `.v7` ground extension does not
+   paint marketing; `.v7land` carries its own ground (#F8F9FA)
+   and its own copy of the family tokens (lexical copy of
+   app/(app)/v7.css — single source is the shell; the two blocks
+   must never drift apart on hexes).
+
+   Register: white panels on the cool ground, 1px #DADCE0 +
+   whisper shadows, 8px radius, Roboto only (self-hosted), blue
+   #1A73E8 owns action, wash chips for state, honest computed
+   fractions (the AppGauge/ScoreSequence pattern), tabular
+   numerals, floors at 11px/4.5:1. NO entrance machinery here:
+   the Index reveal/scan/mask and count-up stats retired; the
+   only measurement motion left is the gauge's count-up +
+   armed bar (the family-ruled ScoreSequence pattern).
+   Device classes verified at 1440 + 390 (and ≤720 folds).
+   ============================================================ */
+
+@font-face {
+  font-family: "Roboto";
+  src: url("/fonts/roboto-var-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: block;
 }
-/* the drafting sheet — a faint 40px grid under the quiet-ground sections,
-   tinted from this world's ink (green-cast) */
-body {
-  background-image:
-    linear-gradient(rgba(22,24,26,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(22,24,26,0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
+
+/* ---------- tokens (lexical copy of .v7 in app/(app)/v7.css) ---------- */
+
+.v7land {
+  --v-ground: #f8f9fa;
+  --v-surface: #ffffff;
+  --v-ink: #202124;
+  --v-ink2: #5f6368;
+  --v-meta: #80868b;
+  --v-blue: #1a73e8;
+  --v-blue-deep: #1557b0;
+  --v-blue-wash: #e8f0fe;
+  --v-blue-pill: #c2e7ff;
+  --v-blue-ink: #012b53;
+  --v-green: #188038;
+  --v-green-text: #137333;
+  --v-green-wash: #e6f4ea;
+  --v-amber: #b45309;
+  --v-amber-text: #96590a;
+  --v-amber-wash: #fef7e0;
+  --v-grey-text: #3c4043;
+  --v-grey-wash: #f1f3f4;
+  --v-border: #dadce0;
+  --v-rows: #e8eaed;
+  --v-track: #e8eaed;
+  --v-shadow: 0 1px 2px rgba(60, 64, 67, 0.1);
+
+  font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  background: var(--v-ground);
+  min-height: 100dvh;
+}
+.v7land ::selection { background: var(--v-blue-wash); }
+.v7land :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
+.v7land a { color: inherit; }
+.v7land button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+/* the shared content cap (public-page gutters; the app's 1240 cap holds) */
+.v7land .cap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- shared vocabulary ---------- */
+
+.v7land .num { font-variant-numeric: tabular-nums; }
+.v7land .kicker {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7land .chip {
+  display: inline-block;
+  font: 500 11px/1.2 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.v7land .chip.c-grey { background: var(--v-grey-wash); color: var(--v-grey-text); }
+/* the copy, not icon, arrow ("↗"/"→" are text in the family) */
+.v7land .arr { font-weight: 400; opacity: 0.85; }
+
+/* CTAs — the family's 40px command button (dashboard .cta) and its
+   ghost sibling. One primary per stop: masthead + hero carry the blue
+   fill; the mid-page repeats demote to ghost (Blue Command Rule). */
+.v7land .cta,
+.v7land .cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 8px;
+  font: 500 14px/1.2 Roboto, system-ui, sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.14s ease, border-color 0.14s ease,
+    box-shadow 0.14s ease;
+}
+.v7land .cta {
+  background: var(--v-blue);
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3);
+}
+.v7land .cta:hover { background: var(--v-blue-deep); box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35); }
+.v7land .cta-ghost {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  color: var(--v-blue-deep);
+}
+.v7land .cta-ghost:hover { border-color: var(--v-blue); background: var(--v-blue-wash); }
+.v7land .cta:focus-visible,
+.v7land .cta-ghost:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
+
+/* quiet links */
+.v7land .sublink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 13px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-blue-deep);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.v7land .sublink:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* the honest full-bleed band (white, hairline top/bottom) */
+.v7land .band {
+  background: var(--v-surface);
+  border-top: 1px solid var(--v-border);
+  border-bottom: 1px solid var(--v-border);
+}
+
+/* cards */
+.v7land .card {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+}
+
+/* ---------- masthead — the landing's own white top bar ---------- */
+
+.v7land .mast {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--v-surface);
+  border-bottom: 1px solid var(--v-border);
+}
+.v7land .mast-in {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.v7land .brandline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.v7land .mark {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--v-ink);
+  border-radius: 6px;
+  position: relative;
+  flex: none;
+}
+.v7land .mark i {
+  position: absolute;
+  left: 7px;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  background: var(--v-blue);
+  border-radius: 1px;
+}
+.v7land .word { font: 500 16px/1.2 Roboto, system-ui, sans-serif; }
+.v7land .mast-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.v7land .mast-signin {
+  font: 500 13px/1.2 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  text-decoration: none;
+  padding: 7px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  transition: background-color 0.14s ease, color 0.14s ease;
+}
+.v7land .mast-signin:hover { color: var(--v-ink); background: var(--v-grey-wash); }
+
+/* ---------- first viewport — the hero ---------- */
+
+.v7land .hero { padding: 44px 0 52px; }
+.v7land .hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
+  gap: 48px;
+  align-items: start;
+}
+.v7land .hero h1 {
+  /* the family's public display size — between band-title 18 and the
+     one-per-page 46 readout; no forced line breaks (mega-line ban) */
+  font: 500 30px/1.22 Roboto, system-ui, sans-serif;
+  letter-spacing: -0.015em;
+  color: var(--v-ink);
+  text-wrap: balance;
+}
+.v7land .lede {
+  margin-top: 14px;
+  font: 400 15px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 56ch;
+  text-wrap: pretty;
+}
+.v7land .hero-ctas { margin-top: 24px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+
+/* ---------- the sample instrument (SampleGauge) ---------- */
+
+.v7land .gauge { display: grid; gap: 12px; }
+
+.v7land .mini-card { overflow: hidden; }
+.v7land .mini-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--v-rows);
+}
+.v7land .mini-head .kicker.dim { color: var(--v-ink2); }
+.v7land .mini-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  width: 100%;
+  text-align: left;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--v-rows);
+  color: var(--v-ink2);
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.v7land .mini-row:last-child { border-bottom: 0; }
+.v7land .mini-row:hover { background: #f5f8fc; color: var(--v-ink); }
+.v7land .mini-row .who { font: 500 12.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7land .mini-row .fit { font: 400 12px/1.4 Roboto, system-ui, sans-serif; font-variant-numeric: tabular-nums; }
+.v7land .mini-row[aria-pressed="true"] { background: var(--v-blue-wash); }
+.v7land .mini-row[aria-pressed="true"] .fit { color: var(--v-blue-deep); font-weight: 500; }
+
+.v7land .readout { padding: 16px 18px 18px; }
+.v7land .readout .tagline { margin-top: 7px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.v7land .readout-sub { font: 400 12px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7land .readout-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.v7land .readout-score {
+  font: 500 46px/1 Roboto, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: var(--v-ink);
+  min-width: 2ch;
+}
+.v7land .readout-score small {
+  font: 400 12px Roboto, system-ui, sans-serif;
+  color: var(--v-meta);
+}
+.v7land .readout-fit {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--v-rows);
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7land .readout-fit b { color: var(--v-ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+/* legend under the bar reuses the dashboard's seglabels register */
+.v7land .seglab { display: flex; gap: 2px; margin-top: 8px; }
+.v7land .seglab span {
+  flex: 1;
+  text-align: center;
+  font: 400 11px/1.2 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  white-space: nowrap;
+}
+/* SegRubricBar (.segbar) family color restatement — the globals Index
+   version earns its fills green; the v7 channel palette is blue/ES-green */
+.v7land .segbar { gap: 3px; }
+.v7land .segbar .seg { border-radius: 2px; background: var(--v-track); }
+.v7land .segbar .seg i { background: var(--v-blue); opacity: 1; }
+.v7land .segbar .seg:nth-child(2) i { background: var(--v-green); }
+
+/* ---------- stat band — three cited numbers ---------- */
+
+.v7land .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 1240px;
+  margin: 0 auto;
+}
+.v7land .stat { padding: 30px 28px 26px; min-width: 0; }
+.v7land .stat + .stat { border-left: 1px solid var(--v-rows); }
+.v7land .stat .n {
+  font: 500 32px/1 Roboto, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: var(--v-ink);
+}
+.v7land .stat .n sub {
+  font-size: 13.4px;
+  font-weight: 400;
+  vertical-align: baseline;
+  position: relative;
+  bottom: 0.2em;
+  margin-left: 1px;
+  color: var(--v-ink2);
+}
+.v7land .stat .q {
+  margin-top: 10px;
+  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 34ch;
+}
+.v7land .stat .src {
+  margin-top: 12px;
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+
+/* ---------- sections ---------- */
+
+.v7land .section { padding: 52px 0; }
+.v7land .section-head { max-width: 60ch; }
+.v7land .section-head h2 {
+  font: 400 22px/1.35 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  text-wrap: balance;
+}
+.v7land .section-head p { margin-top: 10px; font: 400 13.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 58ch; }
+
+/* ---------- career index preview ---------- */
+
+.v7land .idx-table { margin-top: 20px; }
+.v7land .idx-heads,
+.v7land .idx-row {
+  display: grid;
+  grid-template-columns: 1.25fr minmax(120px, 0.8fr) 76px minmax(0, 1.35fr);
+  gap: 16px;
+  align-items: center;
+  min-width: 0;
+}
+.v7land .idx-heads {
+  padding: 12px 16px 8px;
+}
+.v7land .idx-row {
+  padding: 11px 16px;
+  border-top: 1px solid var(--v-rows);
+  transition: background-color 0.12s ease;
+}
+.v7land .idx-row:last-child { border-bottom: 0; }
+.v7land .idx-row:hover { background: #f5f8fc; }
+.v7land .idx-row .career {
+  font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  min-width: 0;
+}
+.v7land .idx-row .track { font: 400 12px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7land .idx-row .skills { font: 400 12px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); font-variant-numeric: tabular-nums; }
+.v7land .idx-row .entry { font: 400 12px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7land .idx-foot {
+  margin-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.v7land .idx-foot p { font: 400 13.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 52ch; }
+.v7land .idx-foot p b { color: var(--v-ink); font-weight: 500; }
+
+/* ---------- rubric honesty band ---------- */
+
+.v7land .rub-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+  gap: 48px;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  align-items: start;
+}
+.v7land .rub-bar { display: flex; gap: 3px; margin-top: 4px; }
+.v7land .rub-seg {
+  height: 40px;
+  background: var(--v-track);
+  border-radius: 2px;
+  min-width: 0;
+}
+.v7land .rub-labels { display: flex; gap: 3px; margin-top: 12px; }
+.v7land .rub-label { min-width: 0; padding-right: 6px; }
+.v7land .rub-label .w {
+  font: 500 15px/1 Roboto, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: var(--v-ink);
+}
+.v7land .rub-label .w small {
+  font: 400 11px Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  margin-left: 1px;
+}
+.v7land .rub-label .n {
+  margin-top: 4px;
+  font: 500 12.5px/1.35 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7land .rub-label .d { margin-top: 2px; font: 400 11px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7land .rub-scale {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--v-rows);
+  padding-top: 8px;
+  font: 400 11px/1 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- work loop ---------- */
+
+.v7land .loop-grid { margin-top: 16px; padding: 0; display: grid; }
+.v7land .loop-step {
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 14px;
+  border-bottom: 1px solid var(--v-rows);
+  min-width: 0;
+}
+/* ≥721px: two cells per row, hairline rules inside (bottom row opens) */
+@media (min-width: 721px) {
+  .v7land .loop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .v7land .loop-step:nth-last-child(-n + 2) { border-bottom: 0; }
+  .v7land .loop-step:nth-child(odd) { border-right: 1px solid var(--v-rows); }
+}
+.v7land .loop-step:last-child { border-bottom: 0; }
+.v7land .loop-num {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--v-border);
+  border-radius: 50%;
+  font: 500 12px/1 Roboto, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: var(--v-ink2);
+}
+.v7land .loop-step h3 {
+  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7land .loop-step .mech {
+  margin-top: 5px;
+  font: 400 13px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 56ch;
+}
+.v7land .loop-step .beat {
+  margin-top: 8px;
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7land .loop-step .beat .chip { text-transform: uppercase; letter-spacing: 0.04em; }
+.v7land .loop-close { margin-top: 18px; }
+
+/* ---------- evidence close + honest footer ---------- */
+
+.v7land .evidence-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
+  gap: 48px;
+  padding-top: 44px;
+  padding-bottom: 36px;
+  align-items: start;
+}
+.v7land .close-title {
+  font: 400 22px/1.35 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  text-wrap: balance;
+  max-width: 18ch;
+}
+.v7land .srcs { list-style: none; }
+.v7land .srcs li {
+  padding: 10px 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: baseline;
+  font: 400 12px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7land .srcs .k { font-weight: 500; color: var(--v-ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.v7land .foot-main { padding-bottom: 30px; padding-top: 6px; }
+.v7land .foot-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.v7land .foot-colophon {
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+
+/* ---------- responsive folds ---------- */
+
+@media (max-width: 1020px) {
+  .v7land .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+  .v7land .stats-grid { grid-template-columns: 1fr; }
+  .v7land .stat { padding: 22px 24px 18px; }
+  .v7land .stat + .stat { border-left: 0; border-top: 1px solid var(--v-rows); }
+  .v7land .rub-grid { grid-template-columns: 1fr; gap: 30px; }
+  .v7land .evidence-grid { grid-template-columns: 1fr; gap: 24px; }
+}
+
+@media (max-width: 720px) {
+  .v7land .cap { padding: 0 16px; }
+  .v7land .mast-in { padding: 0 16px; gap: 10px; }
+  .v7land .mast-nav { gap: 8px; }
+  .v7land .mast-signin { padding: 7px 4px; }
+  .v7land .cta,
+  .v7land .cta-ghost { padding: 0 14px; }
+  .v7land .hero { padding: 28px 0 40px; }
+  .v7land .hero h1 { font-size: 24px; }
+  .v7land .lede { font-size: 14px; }
+  .v7land .section { padding: 36px 0; }
+  .v7land .stat .n { font-size: 26px; }
+  .v7land .idx-heads { display: none; }
+  .v7land .idx-row {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto auto;
+    row-gap: 3px;
+    align-items: baseline;
+  }
+  .v7land .idx-row .career { grid-column: 1; grid-row: 1; }
+  .v7land .idx-row .track { grid-column: 1; grid-row: 2; }
+  .v7land .idx-row .entry { grid-column: 1 / -1; grid-row: 3; }
+  .v7land .idx-row .skills { grid-column: 2; grid-row: 1 / 3; justify-self: end; }
+  .v7land .rub-seg { height: 28px; }
+  .v7land .rub-labels { flex-direction: column; gap: 12px; }
+  .v7land .loop-step { padding: 16px 16px; grid-template-columns: 26px 1fr; }
+  .v7land .evidence-grid { padding-top: 28px; }
 }

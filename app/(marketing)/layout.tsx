@@ -1,27 +1,34 @@
 import type { ReactNode } from "react";
-import { ReturnArrow } from "./ArrowMark";
 
-/** Marketing shell — the public bar (brand + quiet links + primary CTA). */
+/**
+ * Marketing shell — the landing's own chrome (v7.2 wave-3): a white top bar
+ * (brand mark with 6px blue inlay + wordmark, Sign in + Start check right)
+ * over the `.v7land` ground, no rail, no headnav. The honest footer lives in
+ * the page (evidence close). Scoped under `.v7land` in ./landing.css — the
+ * Index system in globals.css is untouched by this file.
+ */
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   return (
-    <>
-      <header className="bar">
-        <div className="bar-in">
-          <div className="brand">
-            <span className="brand-mark" aria-hidden="true"></span>
-            <span className="brand-name">Career Readiness</span>
-          </div>
-          <nav className="bar-right" aria-label="Primary">
-            <a className="link-quiet" href="/signin">
+    <div className="v7land">
+      <header className="mast">
+        <div className="mast-in">
+          <span className="brandline">
+            <span className="mark" aria-hidden="true">
+              <i></i>
+            </span>
+            <span className="word">Career Readiness</span>
+          </span>
+          <nav className="mast-nav" aria-label="Primary">
+            <a className="mast-signin" href="/signin">
               Sign in
             </a>
-            <a className="btn btn-primary" href="/signup">
-              Start check <ReturnArrow />
+            <a className="cta" href="/signup">
+              Start check <span className="arr">→</span>
             </a>
           </nav>
         </div>
       </header>
       <main id="main">{children}</main>
-    </>
+    </div>
   );
 }
