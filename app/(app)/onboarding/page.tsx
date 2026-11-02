@@ -6,7 +6,7 @@ import "./onboarding.css";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Getting started — Career Readiness",
+  title: "Getting started — Baseline",
   description:
     "Five short steps: your track, your career, a baseline, one goal, one computed starting score.",
 };

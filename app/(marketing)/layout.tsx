@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 /**
  * Marketing shell — the landing's own chrome (v7.2 wave-3): a white top bar
- * (brand mark with 6px blue inlay + wordmark, Sign in + Start check right)
+ * (brand mark with 6px blue inlay + wordmark, Sign in + Start the check right)
  * over the `.v7land` ground, no sidebar, no rail. The honest footer lives in
  * the page (evidence close). Scoped under `.v7land` in ./landing.css — the
  * Index system in globals.css is untouched by this file.
@@ -16,14 +16,14 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
             <span className="mark" aria-hidden="true">
               <i></i>
             </span>
-            <span className="word">Career Readiness</span>
+            <span className="word">Baseline</span>
           </span>
           <nav className="mast-nav" aria-label="Primary">
             <a className="mast-signin" href="/signin">
               Sign in
             </a>
             <a className="cta" href="/signup">
-              Start check <span className="arr">→</span>
+              Start the check <span className="arr">→</span>
             </a>
           </nav>
         </div>

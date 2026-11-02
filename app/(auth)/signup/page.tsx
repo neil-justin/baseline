@@ -5,7 +5,7 @@ import "./auth.css";
 import "../v7-auth.css";
 
 export const metadata: Metadata = {
-  title: "Career Readiness — start the readiness check",
+  title: "Baseline — start the readiness check",
   description: "Create your account and take the readiness check.",
 };
 
@@ -17,7 +17,7 @@ export default function SignUpPage() {
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
             <span className="brand-mark" aria-hidden="true"></span>
-            <span className="brand-name">Career Readiness</span>
+            <span className="brand-name">Baseline</span>
           </a>
         </div>
       </header>

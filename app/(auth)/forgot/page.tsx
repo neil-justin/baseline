@@ -5,8 +5,8 @@ import "./auth.css";
 import "../v7-auth.css";
 
 export const metadata: Metadata = {
-  title: "Career Readiness — reset your password",
-  description: "Request a password reset email for your Career Readiness account.",
+  title: "Baseline — reset your password",
+  description: "Request a password reset email for your Baseline account.",
 };
 
 /** Forgot-password surface (auth round 2) — same frame as sign-in/sign-up:
@@ -25,7 +25,7 @@ export default async function ForgotPage({
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
             <span className="brand-mark" aria-hidden="true"></span>
-            <span className="brand-name">Career Readiness</span>
+            <span className="brand-name">Baseline</span>
           </a>
         </div>
       </header>

@@ -12,7 +12,7 @@ export default function AdminBar() {
           <span className="brandmark" aria-hidden="true">
             <i />
           </span>
-          <span className="brandname">Career Readiness</span>
+          <span className="brandname">Baseline</span>
         </div>
         <div className="bar-user">
           {/* POST, not a GET <Link> — a prefetched GET sign-out would wipe the

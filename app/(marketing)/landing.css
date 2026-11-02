@@ -4,7 +4,7 @@
 
    The (marketing) group carries NO (app) shell (no sidebar nav, no
    rail, no gutters-cap frame) — the landing owns its chrome: a
-   white top bar (brand mark + wordmark + Sign in + Start check)
+   white top bar (brand mark + wordmark + Sign in + Start the check)
    and an honest footer. The `.v7` ground extension does not
    paint marketing; `.v7land` carries its own ground (#F8F9FA)
    and its own copy of the family tokens (lexical copy of
@@ -145,13 +145,16 @@
   border-bottom: 1px solid var(--v-border);
 }
 
-/* cards */
+/* cards — a whisper lift on hover carries the marketing cards' affordance
+   (Tier 3: box-shadow only — never layout props; color not motion) */
 .v7land .card {
   background: var(--v-surface);
   border: 1px solid var(--v-border);
   border-radius: 8px;
   box-shadow: var(--v-shadow);
+  transition: box-shadow 0.14s ease;
 }
+.v7land .card:hover { box-shadow: 0 2px 8px rgba(60, 64, 67, 0.12); }
 
 /* ---------- masthead — the landing's own white top bar ---------- */
 
@@ -264,7 +267,7 @@
   transition: background-color 0.12s ease, color 0.12s ease;
 }
 .v7land .mini-row:last-child { border-bottom: 0; }
-.v7land .mini-row:hover { background: #f5f8fc; color: var(--v-ink); }
+.v7land .mini-row:hover { background: var(--v-grey-wash); color: var(--v-ink); }
 .v7land .mini-row .who { font: 500 12.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); }
 .v7land .mini-row .fit { font: 400 12px/1.4 Roboto, system-ui, sans-serif; font-variant-numeric: tabular-nums; }
 .v7land .mini-row[aria-pressed="true"] { background: var(--v-blue-wash); }
@@ -380,7 +383,7 @@
   transition: background-color 0.12s ease;
 }
 .v7land .idx-row:last-child { border-bottom: 0; }
-.v7land .idx-row:hover { background: #f5f8fc; }
+.v7land .idx-row:hover { background: var(--v-grey-wash); }
 .v7land .idx-row .career {
   font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
@@ -497,33 +500,51 @@
 .v7land .loop-step .beat .chip { text-transform: uppercase; letter-spacing: 0.04em; }
 .v7land .loop-close { margin-top: 18px; }
 
-/* ---------- evidence close + honest footer ---------- */
+/* ---------- for counselors — the shared-record band ---------- */
 
-.v7land .evidence-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
-  gap: 48px;
-  padding-top: 44px;
-  padding-bottom: 36px;
-  align-items: start;
-}
-.v7land .close-title {
-  font: 400 22px/1.35 Roboto, system-ui, sans-serif;
-  color: var(--v-ink);
-  text-wrap: balance;
-  max-width: 18ch;
-}
-.v7land .srcs { list-style: none; }
-.v7land .srcs li {
-  padding: 10px 0;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 14px;
-  align-items: baseline;
-  font: 400 12px/1.55 Roboto, system-ui, sans-serif;
+.v7land .counsel-list { list-style: none; display: grid; gap: 14px; }
+.v7land .counsel-list li {
+  font: 400 13.5px/1.55 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
+  max-width: 58ch;
+  padding-left: 16px;
+  position: relative;
 }
-.v7land .srcs .k { font-weight: 500; color: var(--v-ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.v7land .counsel-list li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--v-blue);
+}
+.v7land .counsel-list b { color: var(--v-ink); font-weight: 500; }
+
+/* ---------- trust ribbon — plain provenance strip ---------- */
+
+.v7land .trust-row {
+  display: flex;
+  align-items: center;
+  gap: 12px 28px;
+  flex-wrap: wrap;
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+.v7land .trust-item {
+  font: 500 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  white-space: nowrap;
+}
+.v7land .foot-legal {
+  margin: 14px 0 16px;
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-meta);
+}
+
+/* the old evidence-close block (srcs/close-title) retires with the
+   rewritten footer — dead CSS emptied in one round */
 .v7land .foot-main { padding-bottom: 30px; padding-top: 6px; }
 .v7land .foot-links {
   display: flex;
@@ -544,7 +565,6 @@
   .v7land .stat { padding: 22px 24px 18px; }
   .v7land .stat + .stat { border-left: 0; border-top: 1px solid var(--v-rows); }
   .v7land .rub-grid { grid-template-columns: 1fr; gap: 30px; }
-  .v7land .evidence-grid { grid-template-columns: 1fr; gap: 24px; }
 }
 
 @media (max-width: 720px) {
@@ -573,5 +593,4 @@
   .v7land .rub-seg { height: 28px; }
   .v7land .rub-labels { flex-direction: column; gap: 12px; }
   .v7land .loop-step { padding: 16px 16px; grid-template-columns: 26px 1fr; }
-  .v7land .evidence-grid { padding-top: 28px; }
 }

@@ -5,8 +5,8 @@ import "./auth.css";
 import "../v7-auth.css";
 
 export const metadata: Metadata = {
-  title: "Career Readiness — sign in",
-  description: "Sign in to your Career Readiness account.",
+  title: "Baseline — sign in",
+  description: "Sign in to your Baseline account.",
 };
 
 /** Sign-in surface — markup ported 1:1 from prototype/signin.html, links adapted (signup.html → /signup). */
@@ -17,7 +17,7 @@ export default function SignInPage() {
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
             <span className="brand-mark" aria-hidden="true"></span>
-            <span className="brand-name">Career Readiness</span>
+            <span className="brand-name">Baseline</span>
           </a>
         </div>
       </header>

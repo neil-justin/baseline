@@ -6,8 +6,8 @@ import "./auth.css";
 import "../v7-auth.css";
 
 export const metadata: Metadata = {
-  title: "Career Readiness — set a new password",
-  description: "Choose a new password for your Career Readiness account.",
+  title: "Baseline — set a new password",
+  description: "Choose a new password for your Baseline account.",
 };
 
 export const dynamic = "force-dynamic";
@@ -32,7 +32,7 @@ export default async function ResetPage() {
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
             <span className="brand-mark" aria-hidden="true"></span>
-            <span className="brand-name">Career Readiness</span>
+            <span className="brand-name">Baseline</span>
           </a>
         </div>
       </header>

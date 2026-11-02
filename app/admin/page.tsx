@@ -230,7 +230,7 @@ export default async function AdminCohortPage() {
 
       <p className="admin-colophon">
         <span>READ-ONLY COHORT VIEW · EVERY NUMBER COMPUTED FROM REAL STATE, NOTHING PAINTED</span>
-        <span>CAREER READINESS · THESIS PROTOTYPE</span>
+        <span>BASELINE · THESIS PROTOTYPE</span>
       </p>
     </div>
   );

@@ -140,7 +140,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   const { id } = await resolveId((await searchParams).student);
   const { state } = await getStudentView(id);
   return {
-    title: `${state.name} — Career Readiness · Admin`,
+    title: `${state.name} — Baseline · Admin`,
     description:
       "Read-only admin view of one student: their score, the four rubric parts behind it, and the same honest numbers their own dashboard shows.",
   };
@@ -283,7 +283,7 @@ export default async function AdminStudentPage({
 
       <p className="admin-colophon">
         <span>READ-ONLY ADMIN VIEW · EVERY NUMBER COMPUTED FROM THE STUDENT&apos;S LIVE STATE</span>
-        <span>CAREER READINESS · THESIS PROTOTYPE</span>
+        <span>BASELINE · THESIS PROTOTYPE</span>
       </p>
     </>
   );

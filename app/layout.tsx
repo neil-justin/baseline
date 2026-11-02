@@ -3,9 +3,9 @@ import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Career Path Readiness",
+  title: "Baseline",
   description:
-    "Know exactly where you stand — a Philippines-specific career readiness instrument for SHS students.",
+    "Know exactly where you stand — a college career-readiness instrument for the Philippines: an evidence-cited score, your gaps in bars, and a ranked plan for every one.",
 };
 
 export const viewport: Viewport = {
