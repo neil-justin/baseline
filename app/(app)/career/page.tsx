@@ -1,8 +1,9 @@
 import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
-import { CAREERS, CATALOG_TOTAL, getCareer } from "@/lib/fixtures/catalog";
+import { CAREERS, getCareer } from "@/lib/fixtures/catalog";
 import { skillsMatch } from "@/lib/engines/gaps";
 import { scoreView } from "@/lib/engines/rubric";
+import { degreeGateAllows } from "@/lib/degree-gate";
 import { TRACK_LABELS, trackLabelOf } from "@/lib/fixtures/catalog";
 import type { BarSource } from "@/lib/types";
 import CareerClient from "./CareerClient";
@@ -29,7 +30,8 @@ export const dynamic = "force-dynamic";
  * provenance). Nothing here is painted.
  */
 
-/** the switch demo runs through the Software QA Analyst row (beat 6) */
+/** the switch demo runs through the Software QA Analyst row (beat 6) — its
+ *  skill map feeds the canon re-assessment screen */
 const SWITCH_TARGET = getCareer("qa")!;
 
 /** the current card keeps its hand-authored baseline copy */
@@ -43,9 +45,20 @@ function demandLine(c: (typeof CAREERS)[number]): string {
 
 function skillsSummary(c: (typeof CAREERS)[number]): string {
   const core = c.skills.filter((s) => s.tier === "core").length;
-  const tags = [...new Set(c.skills.map((s) => s.sourceTag))];
+  const tags = [...new Set(c.skills.map((s) => s.sourceTag))].map(
+    (t) => SOURCE_TAG_NAMES[t] ?? t
+  );
   return `${c.skills.length} skills on the map — ${core} core · ${c.skills.length - core} supporting · ${tags.join(" · ")}`;
 }
+
+/** human-first names for the provenance tags (codes stay receipts-only) */
+const SOURCE_TAG_NAMES: Record<string, string> = {
+  PSF: "Philippine Skills Framework",
+  PSOC: "PSOC 2012 occupation list",
+  NACE: "NACE competencies",
+  "O*NET": "O*NET",
+  TESDA: "TESDA",
+};
 
 export default async function CareerPage() {
   const profile = await requireStudent();
@@ -115,14 +128,16 @@ export default async function CareerPage() {
       what: careerWhat(c),
       why: careerWhyLine(c),
       entry: entryDisplay(c),
-      live: c.id === SWITCH_TARGET.id,
       current: c.id === career?.id,
       confirmed,
       selfReported,
-      psoc: `PSOC ${c.psocCode} · ${c.psocTitle}`,
+      psoc: `${c.psocTitle} — PSOC ${c.psocCode}`,
       majors: c.degreeMap.join(" · "),
       demand: demandLine(c),
       skillsSummary: skillsSummary(c),
+      /** degree-gate truth (user ruling 2026-11-02): the ranked "Best matches"
+       *  lens lists only roles that map to the student's program */
+      degreeAllowed: degreeGateAllows(profile.program, c.degreeMap),
     };
   });
 
@@ -136,14 +151,16 @@ export default async function CareerPage() {
   const props: CareerProps = {
     card,
     verifiedBars,
-    activeGoalTitle: activeGoal?.title ?? null,
+    activeGoal: activeGoal
+      ? { title: activeGoal.title, skill: activeGoal.skill ?? null }
+      : null,
     barsSources: Object.fromEntries(
       Object.entries(state.bars).map(([name, b]) => [name, b.source])
     ),
     roles,
-    exploreTotal: CATALOG_TOTAL,
     zeroConfirmed,
     reassess,
+    program: profile.program,
   };
 
   return <CareerClient {...props} />;

@@ -1,31 +1,22 @@
 import type { ReactNode } from "react";
-import AppBar from "@/components/AppBar";
-import { getCurrentProfile } from "@/lib/session";
-import { db } from "@/lib/db";
+import Sidebar from "@/components/Sidebar";
 import "./v7.css";
 
 export const dynamic = "force-dynamic";
 
 /**
- * DNA v7 app shell (v7.2 shell round, 2026-10-30) — the 56px top bar is the
- * desktop navigation (headnav tabs inside the bar); the .rail element rides
- * along ONLY to become the ≤720px Material bottom nav; the frame caps at
- * 1240px centered with 8px shared gutters. The avatar disc is session-honest:
- * the signed-in student's own store name initial, never a hardcoded demo
- * persona (ADR 0003).
+ * (app) shell (v7.3 sidebar round, user-ruled 2026-11-02) — the 56px header
+ * band spans the frame across the top (brand block only); navigation is the
+ * left sidebar spanning vertically (sidenav tabs, Profile pinned at its
+ * bottom edge); the .rail element rides along ONLY to become the ≤720px
+ * Material bottom nav; the frame caps at 1240px centered with 8px shared
+ * gutters. The avatar disc retired with the top bar (it duplicated the
+ * Profile tab).
  */
-export default async function AppLayout({ children }: { children: ReactNode }) {
-  const profile = await getCurrentProfile();
-
-  let initial = "";
-  if (profile?.role === "student" && profile.studentId) {
-    const state = await db.getStudentState(profile.studentId);
-    initial = state.name.charAt(0).toUpperCase();
-  }
-
+export default function AppLayout({ children }: { children: ReactNode }) {
   return (
     <div className="v7">
-      <AppBar initial={initial} />
+      <Sidebar />
       <main id="main" className="v7-main">
         {children}
       </main>

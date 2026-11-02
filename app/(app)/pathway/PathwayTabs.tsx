@@ -4,26 +4,22 @@ import { useEffect, useRef, useState } from "react";
 import TablePager from "@/components/TablePager";
 
 /**
- * Pathway tabs — MY PLAN, v7.2 Composition A (user-picked from the
- * myplan-header-variants mock, 2026-10-30): a grey tray band names the
- * surface ("My Plan") and carries the ranked path line + the stage
- * counters (drawn-circle numerals, current stage = chip + ink emphasis,
- * never a filled cell); the tabs MARRY the content card they control —
- * cardtop = the segmented tablist + the computed "X OF N DONE" kicker;
- * the forced-break mega ptitle headlines are abolished; the lead-mono
- * counter lines stay verbatim. The equalize-panels height reservation
- * (retired with this round) reserved the tallest hidden panel on the
- * wrapper — its "footer push" purpose died with the v7.1 breadcrumb-row
- * deletion, and inside the married card it read as a white void; the
- * card now sizes to the active panel's content. The ranked
- * First-30-days queue keeps the family's dense plan table (STEP /
- * RESOURCE / STATE / EFFECT / ACTION heads, wash chips, computed SP
- * effects); gaps re-break into cells/column-heads with wash chips; the
- * resources catalog keeps the typed table and honors per-row start
- * anchors. Content strings, e2e hooks and roles stay verbatim; no
- * entrance motion (DNA lock).
+ * Pathway — MY PLAN, v7.3 tab re-cut (user rulings 2026-11-02 evening):
+ * the band slims to h1 + the one ranked-path line (the stage strip DIES —
+ * its counts ride the toolbar), and the three instruments are TABS again,
+ * in the CAREERS lens-row register the user ruled for that surface: a
+ * segmented toolbar OUTSIDE the content card (queued tablist, hash
+ * deep-links #steps/#gaps/#resources restored) + the active tab's computed
+ * kicker at the toolbar's right; ONE white card below swaps the panels.
+ * All three tables share the dashboard's dense grammar (tracked heads,
+ * 10px rows, grey-wash hover, chips/bars). "Start" / "Find resources →"
+ * switch to the Resources tab, page the catalog to the mapped row FIRST
+ * (the anchor is never behind an invisible page), then scroll it into view
+ * instantly (no smooth motion — DNA lock). Copy floor: one caption per
+ * panel max; lead-mono lines are counters only. e2e hooks stay verbatim:
+ * `#panel-steps .lead-mono`, `.stagepanel .qrow .q-skill`, `.plan-table`,
+ * `.r-start`, `#stage2`. No entrance motion.
  */
-
 export interface QRow {
   rank: number;
   skill: string;
@@ -115,14 +111,6 @@ export interface ResourcesTab {
   allClosed: boolean;
 }
 
-const TABS = [
-  { id: "gaps", label: "Your gaps" },
-  { id: "steps", label: "Ranked steps" },
-  { id: "resources", label: "Resources" },
-] as const;
-type TabId = (typeof TABS)[number]["id"];
-const isTab = (v: string): v is TabId => TABS.some((t) => t.id === v);
-
 /* the pager's page size — 10 rows a page is a REAL data need: the gaps
    ledger runs to 25-row maps and the resource catalog to 28-row lists
    (36-career roster); single-page tables stay pager-free (element budget) */
@@ -141,12 +129,6 @@ function defaultElement() {
   );
 }
 
-function stageChip(c: StageBandCell) {
-  return c.now ? (
-    <span className="chip c-blue">Current</span>
-  ) : null;
-}
-
 export default function PathwayTabs({
   careerName,
   undecided,
@@ -160,32 +142,34 @@ export default function PathwayTabs({
   gaps: GapsTab;
   resources: ResourcesTab;
 }) {
+  const TABS = [
+    { id: "steps", label: "Ranked steps" },
+    { id: "gaps", label: "Your gaps" },
+    { id: "resources", label: "Resources" },
+  ] as const;
+  type TabId = (typeof TABS)[number]["id"];
+  const isTab = (v: string): v is TabId => TABS.some((t) => t.id === v);
+
+  /* the three instruments are TABS again (ruling: no scroll to reach
+     Resources) — Careers' lens-row register: toolbar OUTSIDE the card */
   const [active, setActive] = useState<TabId>("steps");
   const [seq, setSeq] = useState(0); // >0 only after a user-initiated switch
-  const [s2open, setS2open] = useState(false);
+
   const [anchor, setAnchor] = useState<string | null>(null);
   /* each paged table keeps its OWN page across tab switches — the state
      lives up here, outside the keyed tabpanels (a seq remount is the user's
      own tab click; it never re-pages). A career SWITCH re-seeds both
      tables, so both pagers land on page 1 (see the careerName effect). */
   const [gapPage, setGapPage] = useState(1);
-  const [resPage, setResPage] = useState(1);
+  const [mappedPage, setMappedPage] = useState(1);
+  const [countedPage, setCountedPage] = useState(1);
+  const [closedOpen, setClosedOpen] = useState(false);
 
   /* open tab from hash (default: ranked steps — beat 8 opens here) */
   useEffect(() => {
     const initial = (window.location.hash || "").replace("#", "");
     if (isTab(initial)) setActive(initial);
   }, []);
-
-  /* a career switch (router refresh feeds a new careerName) rebuilds the
-     ledger and the catalog — both pagers land on page 1 */
-  const careerRef = useRef(careerName);
-  useEffect(() => {
-    if (careerRef.current === careerName) return;
-    careerRef.current = careerName;
-    setGapPage(1);
-    setResPage(1);
-  }, [careerName]);
 
   const selectTab = (id: TabId, user = true) => {
     setActive(id);
@@ -194,34 +178,18 @@ export default function PathwayTabs({
     if (history.replaceState) history.replaceState(null, "", `#${id}`);
   };
 
-  const goto = (id: TabId, resTitle?: string) => {
-    setActive(id);
-    setSeq((n) => n + 1);
-    setAnchor(resTitle ?? null);
-    /* a jump lands ON the anchored row's page first, then the anchored
-       scroll runs on that commit (the effect already waits a frame) — the
-       anchor is never left behind an invisible page */
-    if (resTitle) {
-      const i = resources.rows.findIndex((r) => r.title === resTitle);
-      setResPage(i < 0 ? 1 : Math.floor(i / PAGE_SIZE) + 1);
-    }
-    if (history.replaceState) history.replaceState(null, "", `#${id}`);
-  };
+  /* a career switch (router refresh feeds a new careerName) rebuilds the
+     ledger and the catalog — all pagers land on page 1 */
+  const careerRef = useRef(careerName);
+  useEffect(() => {
+    if (careerRef.current === careerName) return;
+    careerRef.current = careerName;
+    setGapPage(1);
+    setMappedPage(1);
+    setCountedPage(1);
+  }, [careerName]);
 
-  const allGoto = (id: TabId, resTitle?: string) => goto(id, resTitle);
-
-  /* tab panel: v7 state language only — no entrance motion (DNA lock) */
-
-  const tab = (id: TabId) => ({
-    id: `tab-${id}`,
-    "aria-controls": `panel-${id}`,
-    role: "tab" as const,
-    "aria-selected": active === id,
-    tabIndex: active === id ? 0 : -1,
-    onClick: () => selectTab(id),
-  });
-
-  /* arrow-key roving focus on the tablist */
+  /* roving arrow-key focus on the toolbar tablist */
   const onTablistKey = (e: React.KeyboardEvent) => {
     const target = e.target as HTMLElement;
     const t = target.getAttribute("id")?.replace("tab-", "") ?? "";
@@ -237,10 +205,18 @@ export default function PathwayTabs({
     }
   };
 
-  /* a Start/Find-resources CTA lands on Resources with the mapped resource
-     anchored-in-nothing: goto pages the catalog to that row first (same
-     batch), then the row is scrolled into view the moment the tab commits
-     (instant — no entrance motion). */
+  const tab = (id: TabId) => ({
+    id: `tab-${id}`,
+    "aria-controls": `panel-${id}`,
+    role: "tab" as const,
+    "aria-selected": active === id,
+    tabIndex: active === id ? 0 : -1,
+    onClick: () => selectTab(id),
+  });
+
+  /* a Start/Find-resources CTA lands ON the Resources tab and pages the
+     catalog to the mapped row first (same batch); the row then scrolls
+     into view once that commit paints — instant, never smooth (DNA lock) */
   useEffect(() => {
     if (active !== "resources" || !anchor) return;
     const frame = requestAnimationFrame(() => {
@@ -251,357 +227,411 @@ export default function PathwayTabs({
     return () => cancelAnimationFrame(frame);
   }, [active, anchor, seq]);
 
+  const gotoResource = (resTitle?: string) => {
+    setActive("resources");
+    setSeq((n) => n + 1);
+    setAnchor(resTitle ?? null);
+    /* the catalog is GROUPED and PAGED: land the anchored row ON its
+       group's page first, then the anchor effect scrolls it into view */
+    if (resTitle) {
+      const inMapped = mappedSlice.findIndex((r) => r.title === resTitle);
+      const inCounted = countedSlice.findIndex((r) => r.title === resTitle);
+      if (inMapped >= 0) setMappedPage(Math.floor(inMapped / PAGE_SIZE) + 1);
+      else if (inCounted >= 0) setCountedPage(Math.floor(inCounted / PAGE_SIZE) + 1);
+      if (history.replaceState) history.replaceState(null, "", "#resources");
+    }
+  };
+
+  /* one ledger row — shared by the Open gaps table and the collapsed
+     Closed-bars group */
+  const gapRow = (row: GapRow) => (
+    <tr key={row.name} className="g-row">
+      <td>
+        <div className="g-name">{row.name}</div>
+        <div className="g-status num">
+          {row.kind === "verified" ? (
+            <>
+              Closed · <span className="ok">✓ verified quiz</span>
+              {row.transferred ? <span> · transferred</span> : null}
+            </>
+          ) : null}
+          {row.kind === "checked" ? (
+            <>
+              Closed · <span className="ok">✓✓ checked resource</span>
+            </>
+          ) : null}
+          {row.kind === "claimed" ? (
+            <>
+              Closed · <span className="unverified">self-reported</span>
+            </>
+          ) : null}
+          {row.kind === "open" ? (
+            row.openWithRes ? (
+              <>
+                Open ·{" "}
+                <button
+                  className="g-link"
+                  type="button"
+                  aria-label={`Find resources · ${row.name}`}
+                  onClick={() => gotoResource(row.resTitle ?? undefined)}
+                >
+                  Find resources →
+                </button>
+              </>
+            ) : (
+              <span className="unverified">No resource yet — ask your adviser.</span>
+            )
+          ) : null}
+        </div>
+      </td>
+      <td className="ct-state">
+        {row.kind === "verified" ? <span className="chip c-green">Verified</span> : null}
+        {row.kind === "checked" ? <span className="chip c-green">Checked</span> : null}
+        {row.kind === "claimed" ? <span className="chip c-grey hatch-chip">Self-report</span> : null}
+        {row.kind === "open" ? <span className="chip c-grey">Open</span> : null}
+      </td>
+      <td className="ct-bar">
+        <div className="g-bar">
+          <i
+            className={row.kind === "claimed" ? "claim" : undefined}
+            style={{ "--earn": row.kind === "open" ? 0 : 1 } as React.CSSProperties}
+          />
+        </div>
+      </td>
+    </tr>
+  );
+
+  /* the resource row renderer — shared by both catalog groups */
+  const resRowList = (list: ResRow[]) =>
+    list.map((r) => (
+      <div
+        key={r.title}
+        className={`res-row${anchor === r.title ? " anchored" : ""}`}
+        data-anchor={anchor === r.title ? "true" : undefined}
+      >
+        <span className="res-main">
+          <span className="r-title">
+            {r.url ? (
+              <a href={r.url} target="_blank" rel="noopener noreferrer">
+                {r.title}
+                <span className="r-ext" aria-hidden="true">
+                  ↗
+                </span>
+              </a>
+            ) : (
+              r.title
+            )}
+            {r.startHere ? <span className="r-start">Start here</span> : null}
+          </span>
+          <span className="r-prov">{r.provider}</span>
+        </span>
+        <span className="res-type">{r.type}</span>
+        <span className="res-cost">{r.cost}</span>
+        <span className="res-time">{r.time}</span>
+        <span className="res-feeds">
+          {r.feeds.map((f) => f.skill).join(" · ")}
+          {r.feeds.some((f) => f.closed) ? <span className="ok"> — ✓✓ closed</span> : null}
+          {r.route ? <span className="r-route">{r.route}</span> : null}
+        </span>
+      </div>
+    ));
+
   /* page slices — every pager number computes from the tables' own rows
      (never painted); undecided renders no tables, so the slices stay empty
-     and pager-free there */
+     and pager-free there. The gap ledger GROUPS (open first — that's the
+     actionable half; the closed bars collapse) and the resource catalog
+     GROUPS (mapped-to-open-gaps first) — pager on the open group only. */
   const gapRows = undecided ? [] : gaps.rows;
   const resRows = undecided ? [] : resources.rows;
-  const gapPageCount = Math.ceil(gapRows.length / PAGE_SIZE);
-  const resPageCount = Math.ceil(resRows.length / PAGE_SIZE);
-  const gapSlice = gapRows.slice((gapPage - 1) * PAGE_SIZE, gapPage * PAGE_SIZE);
-  const resSlice = resRows.slice((resPage - 1) * PAGE_SIZE, resPage * PAGE_SIZE);
+  const gapOpenRows = gapRows.filter((r) => r.kind === "open");
+  const gapClosedRows = gapRows.filter((r) => r.kind !== "open");
+  const gapOpenPageCount = Math.ceil(gapOpenRows.length / PAGE_SIZE);
+  const gapOpenSlice = gapOpenRows.slice((gapPage - 1) * PAGE_SIZE, gapPage * PAGE_SIZE);
+  const mappedRes = resRows.filter((r) => r.feeds.some((f) => !f.closed));
+  const countedRes = resRows.filter((r) => !r.feeds.some((f) => !f.closed));
+  const startFirst = (a: ResRow, b: ResRow) => (a.startHere === b.startHere ? 0 : a.startHere ? -1 : 1);
+  const mappedSlice = [...mappedRes].sort(startFirst);
+  const countedSlice = [...countedRes].sort(startFirst);
+  /* per-group pagination — each card pages its own table (10 rows a page,
+     the family's real-data page size) */
+  const mappedPageCount = Math.ceil(mappedSlice.length / PAGE_SIZE);
+  const countedPageCount = Math.ceil(countedSlice.length / PAGE_SIZE);
+  const mappedView = mappedSlice.slice((mappedPage - 1) * PAGE_SIZE, mappedPage * PAGE_SIZE);
+  const countedView = countedSlice.slice((countedPage - 1) * PAGE_SIZE, countedPage * PAGE_SIZE);
+  const claimedClosed = gapClosedRows.filter((r) => r.kind === "claimed").length;
 
-  const stageBand = steps.band?.length ? (
-    <div className="stageband" role="img" aria-label={steps.bandLabel}>
-      {steps.band.map((c) => (
-        <div key={c.num} className={`stagecell${c.now ? " now" : ""}`}>
-          <span className="s-num num" aria-hidden="true">
-            {c.num}
-          </span>
-          <span className="s-txt">
-            <span className="s-name">
-              {c.name}
-              {stageChip(c)}
-            </span>
-            <span className="s-count num">{c.count}</span>
-          </span>
-        </div>
-      ))}
-    </div>
-  ) : null;
+  /* the toolbar's right kicker — the ACTIVE tab's computed counter. Steps
+     has NONE: its lead-mono counter line already carries both facts (and
+     is spec-guarded — a second kicker would just duplicate it). */
+  const activeKicker = undecided
+    ? null
+    : active === "steps"
+      ? null
+      : active === "gaps"
+        ? `${gaps.openCount} OPEN`
+        : `${resRows.length} RESOURCES`;
 
   return (
     <div className="v7plan">
-      {/* grey tray band (v7.2 Composition A): names the surface + the ranked
-          path line; the stage strip stays as band furniture. NO tabs here —
-          they marry the content card. Undecided: "My Plan" only, no desc. */}
+      {/* slim grey tray band: names the surface + the ranked path line.
+          Undecided: "My Plan" only, no desc. */}
       <section className="planband" aria-label="My Plan">
         <div className="band">
           <div className="bandrow">
             <div className="who">
               <h1 className="t">My Plan</h1>
               {careerName ? (
-                <p className="m">For {careerName} — your next steps, ranked by what carries the most weight first.</p>
+                <p className="m">For {careerName} — next steps, ranked by what carries the most weight first.</p>
               ) : null}
             </div>
           </div>
-          {stageBand}
         </div>
       </section>
 
-      {/* the ONE card the tabs marry — cardtop = tablist + the steps kicker */}
-      <section className="card tabcard">
-        <div className="cardtop">
-          <div className="ptabs" role="tablist" aria-label="Pathway sections" onKeyDown={onTablistKey}>
+      {/* the lens-row toolbar OUTSIDE the card (Careers register):
+          segmented tabs + the active tab's computed kicker */}
+      {!undecided ? (
+        <div className="plan-lens">
+          <div className="ptabs" role="tablist" aria-label="My Plan sections" onKeyDown={onTablistKey}>
             {TABS.map((t) => (
               <button key={t.id} type="button" {...tab(t.id)}>
                 {t.label}
               </button>
             ))}
           </div>
-          {!undecided && active === "steps" && !steps.allClosed ? (
-            <span className="kicker num">
-              {steps.done} OF {steps.done + steps.queue.length} DONE
-            </span>
-          ) : null}
+          {activeKicker ? <span className="kicker num">{activeKicker}</span> : null}
         </div>
-        <div className="tabpanels">
-        {undecided ? (
-          <section className="tabpanel" id="panel-steps" role="tabpanel" aria-labelledby="tab-steps" hidden={active !== "steps"}>
-            {defaultElement()}
-          </section>
-        ) : null}
-
-      {/* ══════════════ TAB · RANKED STEPS (default, beat 8) ══════════════ */}
-      {!undecided ? (
-        <section
-          key={`steps-${seq}`}
-          className="tabpanel"
-          id="panel-steps"
-          role="tabpanel"
-          aria-labelledby="tab-steps"
-          hidden={active !== "steps"}
-        >
-          <p className="lead-mono num">
-            <b>{steps.closed}</b> of {steps.mapSize} skills checked <span className="sep">·</span> First 30
-            days: <b>{steps.done}</b> of {steps.done + steps.queue.length} done
-          </p>
-
-          <section className="panel-sec stagepanel">
-            <div className="head">
-              <b>First 30 days</b>
-              <span>{steps.sub}</span>
-            </div>
-
-            {steps.clearLine ? (
-              <p className="stagewide">{steps.clearLine}</p>
-            ) : (
-              <table className="plan-table">
-                <thead>
-                  <tr>
-                    <th>Step</th>
-                    <th className="ct-res">Resource</th>
-                    <th className="ct-state">State</th>
-                    <th className="ct-eff">Effect</th>
-                    <th className="ct-act">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {steps.queue.map((r) => {
-                    const res = r.res;
-                    return (
-                      <tr key={r.skill} className="qrow">
-                        <td>
-                          <div className="item">
-                            <span className="rank num" aria-hidden="true">
-                              {r.rank}
-                            </span>
-                            <span className="q-skill">{r.skill}</span>
-                          </div>
-                          <p className="q-why">{r.why}</p>
-                        </td>
-                        <td className="ct-res">
-                          {res ? (
-                            <span className="q-res">
-                              <b>{res.title}</b> — {res.cost} · {res.hrs}
-                            </span>
-                          ) : (
-                            <span className="q-nogap">No resource cataloged for this yet — your adviser can suggest one.</span>
-                          )}
-                        </td>
-                        <td className="ct-state">
-                          {r.primary ? <span className="chip c-blue">Next</span> : <span className="chip c-grey">Queued</span>}
-                        </td>
-                        <td className="eff num">
-                          SP {r.effect.from} → {r.effect.to} · +{r.effect.to - r.effect.from}
-                        </td>
-                        <td className="ct-act">
-                          {res ? (
-                            <button
-                              className={`btn ${r.primary ? "btn-primary" : "btn-ghost"}`}
-                              type="button"
-                              aria-label={`Start · ${r.skill}`}
-                              onClick={() => goto("resources", res.title)}
-                            >
-                              Start
-                            </button>
-                          ) : null}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            )}
-
-            {!steps.clearLine ? <div className="foot">{steps.qfoot}</div> : null}
-          </section>
-
-          {/* stage ② accordion + stage ③ — one ending section, the peek line closes it */}
-          <section className="panel-sec stages">
-            {steps.remain.length > 0 ? (
-              <button
-                className="stage-rowbtn"
-                type="button"
-                aria-expanded={s2open}
-                aria-controls="stage2"
-                onClick={() => setS2open((o) => !o)}
-              >
-                <span className="s-num num" aria-hidden="true">
-                  2
-                </span>
-                <span className="sr-name">Next steps</span>
-                <span className="sr-count num">{steps.remain.length} more skills waiting</span>
-                <span className="chev" aria-hidden="true" />
-              </button>
-            ) : (
-              <div className="stage-static">
-                <span className="s-num num" aria-hidden="true">
-                  2
-                </span>
-                <span className="sr-name">Next steps</span>
-                <span className="sr-count num">{steps.catchUp ?? "0 waiting"}</span>
-              </div>
-            )}
-            {steps.remain.length > 0 && s2open ? (
-              <div className="stage-expand" id="stage2">
-                <table className="plan-table">
-                  <thead>
-                    <tr>
-                      <th>Step</th>
-                      <th className="ct-state">State</th>
-                      <th className="ct-eff">Effect</th>
-                      <th className="ct-act">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {steps.remain.map((x) => {
-                      const resTitle = x.resTitle;
-                      return (
-                        <tr key={x.skill} className="xrow">
-                          <td>
-                            <div className="item">
-                              <span className="rank num" aria-hidden="true">
-                                {x.rank}
-                              </span>
-                              <span className="x-name">{x.skill}</span>
-                            </div>
-                            {!resTitle ? (
-                              <p className="x-note">No resource cataloged for this yet — your adviser can suggest one.</p>
-                            ) : null}
-                          </td>
-                          <td className="ct-state">
-                            <span className="chip c-grey">Waiting</span>
-                          </td>
-                          <td className="eff num">
-                            SP {x.effect.from} → {x.effect.to} · +{x.effect.to - x.effect.from}
-                          </td>
-                          <td className="ct-act">
-                            {resTitle ? (
-                              <button className="g-link" type="button" aria-label={`Find resources · ${x.skill}`} onClick={() => allGoto("resources", resTitle)}>
-                                Find resources →
-                              </button>
-                            ) : null}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            ) : null}
-
-            <div className="stage-static">
-              <span className="s-num num" aria-hidden="true">
-                3
-              </span>
-              <span className="sr-name">Entry-ready</span>
-              <span className="sr-count num">2 milestones</span>
-            </div>
-            {steps.peek ? <p className="stage-peek">{steps.peek}</p> : null}
-          </section>
-        </section>
       ) : null}
 
-      {/* ══════════════ TAB · YOUR GAPS ══════════════ */}
-      <section
-        key={`gaps-${seq}`}
-        className="tabpanel"
-        id="panel-gaps"
-        role="tabpanel"
-        aria-labelledby="tab-gaps"
-        hidden={active !== "gaps"}
-      >
-        {undecided ? (
-          defaultElement()
-        ) : (
-          <>
-            <p className="lead-mono num">
-              For {gaps.careerName} <span className="sep">·</span> <b>{gaps.closed}</b> of {gaps.mapSize} skills
-              checked
-            </p>
+      {/* the panels — each tab is its own card (the Resources tab is a
+          two-card stack); the tabcard shell died: it nested cards inside a
+          card, which is exactly the forced merge the user ruled out */}
+          {undecided ? (
+            <section
+              className="card tabpanel"
+              id="panel-steps"
+              role="tabpanel"
+              aria-labelledby="tab-steps"
+            >
+              {defaultElement()}
+            </section>
+          ) : (
+            <section
+              key={`steps-${seq}`}
+              className="card tabpanel"
+              id="panel-steps"
+              role="tabpanel"
+              aria-labelledby="tab-steps"
+              hidden={active !== "steps"}
+            >
+              <section className="panel-sec stagepanel">
+                <div className="head">
+                  {/* the spec-guarded counter IS the panel title (one line,
+                      both canon facts; no separate h2 head duplicates it) */}
+                  <span className="lead-mono num">
+                    <b>{steps.closed}</b> of {steps.mapSize} skills checked <span className="sep">·</span> First 30
+                    days: <b>{steps.done}</b> of {steps.done + steps.queue.length} done
+                  </span>
+                </div>
 
-            {/* badged skills ledger — cells + column heads + wash chips */}
-            <section className="panel-sec ledger">
-              <div className="head">
-                <b>{gaps.careerName} skills</b>
-                <span>{gaps.mapSize} skills, one bar each — the badge says how it was closed.</span>
-                <span className="label num">{gaps.openCount} OPEN</span>
-              </div>
-              <table className="gap-table">
-                <thead>
-                  <tr>
-                    <th>Skill</th>
-                    <th className="ct-state">State</th>
-                    <th className="ct-bar">Evidence</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {gapSlice.map((row) => (
-                    <tr key={row.name} className="g-row">
-                      <td>
-                        <div className="g-name">{row.name}</div>
-                        <div className="g-status num">
-                          {row.kind === "verified" ? (
-                            <>
-                              Closed · <span className="ok">✓ verified quiz</span>
-                              {row.transferred ? <span> · transferred</span> : null}
-                            </>
-                          ) : null}
-                          {row.kind === "checked" ? (
-                            <>
-                              Closed · <span className="ok">✓✓ checked resource</span>
-                            </>
-                          ) : null}
-                          {row.kind === "claimed" ? (
-                            <>
-                              Closed · <span className="unverified">self-reported</span>
-                            </>
-                          ) : null}
-                          {row.kind === "open" ? (
-                            row.openWithRes ? (
-                              <>
-                                Open ·{" "}
+                {steps.clearLine ? (
+                  <p className="stagewide">{steps.clearLine}</p>
+                ) : (
+                  /* ONE ranked table (user ruling 2026-11-02: the merged
+                     register — no stage digits, no accordion; the old
+                     ①②③ grouping is superseded; state chips + resource
+                     rows carry the distinction the groups used to):
+                     First-day rows (Next/Queued, resource + Start) and
+                     waiting rows (Waiting, map-or-find, Find resources)
+                     share the Step | Resource | State | Effect | Action
+                     columns */
+                  <table className="plan-table">
+                    <thead>
+                      <tr>
+                        <th>Step</th>
+                        <th className="ct-res">Resource</th>
+                        <th className="ct-state">State</th>
+                        <th className="ct-eff">Effect</th>
+                        <th className="ct-act">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {steps.queue.map((r) => {
+                        const res = r.res;
+                        return (
+                          <tr key={r.skill} className="qrow">
+                            <td>
+                              <div className="item">
+                                <span className="rank num" aria-hidden="true">
+                                  {r.rank}
+                                </span>
+                                <span className="q-skill">{r.skill}</span>
+                              </div>
+                            </td>
+                            <td className="ct-res">
+                              {res ? (
+                                <span className="q-res">
+                                  <b>{res.title}</b> — {res.cost} · {res.hrs}
+                                </span>
+                              ) : (
+                                <span className="q-nogap">Not mapped yet — ask your adviser.</span>
+                              )}
+                            </td>
+                            <td className="ct-state">
+                              {r.primary ? <span className="chip c-blue">Next</span> : <span className="chip c-grey">Queued</span>}
+                            </td>
+                            <td className="eff num">
+                              SP {r.effect.from} → {r.effect.to} · +{r.effect.to - r.effect.from}
+                            </td>
+                            <td className="ct-act">
+                              {res ? (
+                                <button
+                                  className={`btn ${r.primary ? "btn-primary" : "btn-ghost"}`}
+                                  type="button"
+                                  aria-label={`Start · ${r.skill}`}
+                                  onClick={() => gotoResource(res.title)}
+                                >
+                                  Start
+                                </button>
+                              ) : null}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      {steps.remain.map((x) => {
+                        return (
+                          <tr key={x.skill} className="qrow xrow">
+                            <td>
+                              <div className="item">
+                                <span className="rank num" aria-hidden="true">
+                                  {x.rank}
+                                </span>
+                                <span className="q-skill">{x.skill}</span>
+                              </div>
+                            </td>
+                            <td className="ct-res">
+                              {x.resTitle ? (
+                                <span className="q-res">
+                                  <b>{x.resTitle}</b>
+                                </span>
+                              ) : (
+                                <span className="q-nogap">Not mapped yet — ask your adviser.</span>
+                              )}
+                            </td>
+                            <td className="ct-state">
+                              <span className="chip c-grey">Waiting</span>
+                            </td>
+                            <td className="eff num">
+                              SP {x.effect.from} → {x.effect.to} · +{x.effect.to - x.effect.from}
+                            </td>
+                            <td className="ct-act">
+                              {x.resTitle ? (
                                 <button
                                   className="g-link"
                                   type="button"
-                                  aria-label={`Find resources · ${row.name}`}
-                                  onClick={() => goto("resources", row.resTitle ?? undefined)}
+                                  aria-label={`Find resources · ${x.skill}`}
+                                  onClick={() => gotoResource(x.resTitle ?? "")}
                                 >
                                   Find resources →
                                 </button>
-                              </>
-                            ) : (
-                              <span className="unverified">no resource cataloged for this yet — your adviser can suggest one.</span>
-                            )
-                          ) : null}
-                        </div>
-                      </td>
-                      <td className="ct-state">
-                        {row.kind === "verified" ? <span className="chip c-green">Verified</span> : null}
-                        {row.kind === "checked" ? <span className="chip c-green">Checked</span> : null}
-                        {row.kind === "claimed" ? <span className="chip c-grey hatch-chip">Self-report</span> : null}
-                        {row.kind === "open" ? <span className="chip c-grey">Open</span> : null}
-                      </td>
-                      <td className="ct-bar">
-                        <div className="g-bar">
-                          <i
-                            className={row.kind === "claimed" ? "claim" : undefined}
-                            style={{ "--earn": row.kind === "open" ? 0 : 1 } as React.CSSProperties}
-                          />
-                        </div>
-                      </td>
+                              ) : null}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                )}
+
+                {/* the one-line stage endnote — waiting count DEDUPED
+                    (user ruling 2026-11-02: the group header carried it);
+                    only the check-off note + entry-ready stay */}
+                <p className="stagefoot num">
+                  {steps.remain.length > 0 ? (
+                    <>Entry-ready: <b>2 milestones</b></>
+                  ) : (
+                    <>Caught up — clear a First 30 days step and the next skill moves up. Entry-ready: <b>2 milestones</b></>
+                  )}
+                </p>
+              </section>
+            </section>
+          )}
+
+          {/* tab 2 · Your gaps — its own card (peer of steps, not nested) */}
+          <section
+            key={`gaps-${seq}`}
+            className="card tabpanel"
+            id="panel-gaps"
+            role="tabpanel"
+            aria-labelledby="tab-gaps"
+            hidden={active !== "gaps"}
+          >
+            {/* the ledger GROUPED (user ruling: a naked skill list reads as
+                noise) — open gaps actionable-first (paged), closed bars
+                collapse into a one-row group; the per-row badge already
+                carries the evidence distinction, so no legend */}
+            <section className="panel-sec ledger">
+              <div className="head">
+                <h2>Open gaps</h2>
+              </div>
+              {gapOpenRows.length === 0 ? (
+                <p className="stagewide">Every bar is closed — your First 30 days queue and the closed list below have it all.</p>
+              ) : (
+                <table className="gap-table">
+                  <thead>
+                    <tr>
+                      <th>Skill</th>
+                      <th className="ct-state">State</th>
+                      <th className="ct-bar">Evidence</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              {/* the pager bar sits in the foot register, directly under its
-                  table (still inside the same .panel-sec); single-page
-                  ledgers stay pager-free (element budget) */}
-              {gapPageCount > 1 ? (
+                  </thead>
+                  <tbody>
+                    {gapOpenSlice.map(gapRow)}
+                  </tbody>
+                </table>
+              )}
+              {gapOpenPageCount > 1 ? (
                 <TablePager
                   showingFrom={(gapPage - 1) * PAGE_SIZE + 1}
-                  showingTo={Math.min(gapPage * PAGE_SIZE, gapRows.length)}
-                  total={gapRows.length}
+                  showingTo={Math.min(gapPage * PAGE_SIZE, gapOpenRows.length)}
+                  total={gapOpenRows.length}
                   page={gapPage}
-                  pageCount={gapPageCount}
+                  pageCount={gapOpenPageCount}
                   onPage={setGapPage}
                 />
               ) : null}
-              <div className="foot">
-                ✓ verified quiz: passed the short check · ✓✓ checked resource: finished it and passed ·
-                self-reported: your claim; a short check locks it in.
-              </div>
+            </section>
+
+            <section className="panel-sec closedgrp">
+              <button
+                className="stage-rowbtn"
+                type="button"
+                aria-expanded={closedOpen}
+                aria-controls="gaps-closed"
+                onClick={() => setClosedOpen((o) => !o)}
+              >
+                <span className="sr-name">Closed bars</span>
+                <span className="sr-count num">
+                  {gapClosedRows.length} closed{claimedClosed > 0 ? ` · ${claimedClosed} still self-reported` : ""}
+                </span>
+                <span className="chev" aria-hidden="true" />
+              </button>
+              {closedOpen ? (
+                <div className="stage-expand" id="gaps-closed">
+                  <table className="gap-table">
+                    <thead>
+                      <tr>
+                        <th>Skill</th>
+                        <th className="ct-state">State</th>
+                        <th className="ct-bar">Evidence</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {gapClosedRows.map(gapRow)}
+                    </tbody>
+                  </table>
+                </div>
+              ) : null}
             </section>
 
             {/* honest competency strip (ES — the step-③ assessment carries it) */}
@@ -624,38 +654,33 @@ export default function PathwayTabs({
                   </div>
                 </div>
               </div>
-              <div className="foot">
-                {gaps.esLine
-                  ? "NACE competencies verified by your assessment — E&I excluded by recorded choice."
-                  : "The NACE assessment hasn’t measured this yet; nothing here stalls your next step."}
-              </div>
             </section>
 
             {gaps.allClosed ? (
               <p className="gap-cta"><span className="gap-allclosed">✓ everything closed.</span></p>
             ) : null}
-          </>
-        )}
-      </section>
+          </section>
 
-      {/* ══════════════ TAB · RESOURCES ══════════════ */}
-      <section
-        key={`resources-${seq}`}
-        className="tabpanel"
-        id="panel-resources"
-        role="tabpanel"
-        aria-labelledby="tab-resources"
-        hidden={active !== "resources"}
-      >
-        {undecided ? (
-          defaultElement()
-        ) : (
-          <>
-            <p className="lead-mono num">
-              For {resources.careerName} <span className="sep">·</span> free options first
-            </p>
-
-            <section className="panel-sec rescard">
+          {/* tab 3 · Resources — the typed catalog with per-row start anchors,
+              as TWO SEPARATE CARDS (user ruling 2026-11-02: the groups read
+              better apart than stacked in one card) */}
+          <div
+            key={`resources-${seq}`}
+            className="tabpanel-stack"
+            id="panel-resources"
+            role="tabpanel"
+            aria-labelledby="tab-resources"
+            hidden={active !== "resources"}
+          >
+            {/* the catalog GROUPED (user ruling: "just a bunch of resources
+                listed there") — what maps to OPEN gap bars first, then the
+                counted rest. Un-paged (28 rows max live in two groups), so
+                a Start/Find-resources anchor is always on-screen. */}
+            <section className="card rescard">
+              <div className="head">
+                <h2>Mapped to your open gaps</h2>
+                <span className="label num">{mappedSlice.length} MAPPED</span>
+              </div>
               <div className="res-table">
                 <div className="res-row res-heads" aria-hidden="true">
                   <span className="res-main">Resource</span>
@@ -664,59 +689,48 @@ export default function PathwayTabs({
                   <span className="res-time">Time</span>
                   <span className="res-feeds">Feeds</span>
                 </div>
-
-                {resSlice.map((r) => (
-                  <div
-                    key={r.title}
-                    className={`res-row${anchor === r.title ? " anchored" : ""}`}
-                    data-anchor={anchor === r.title ? "true" : undefined}
-                  >
-                    <span className="res-main">
-                      <span className="r-title">
-                        {r.url ? (
-                          <a href={r.url} target="_blank" rel="noopener noreferrer">
-                            {r.title}
-                            <span className="r-ext" aria-hidden="true">
-                              ↗
-                            </span>
-                          </a>
-                        ) : (
-                          r.title
-                        )}
-                        {r.startHere ? <span className="r-start">Start here</span> : null}
-                      </span>
-                      <span className="r-prov">{r.provider}</span>
-                    </span>
-                    <span className="res-type">{r.type}</span>
-                    <span className="res-cost">{r.cost}</span>
-                    <span className="res-time">{r.time}</span>
-                    <span className="res-feeds">
-                      {r.feeds.map((f) => f.skill).join(" · ")}
-                      {r.feeds.some((f) => f.closed) ? <span className="ok"> — ✓✓ closed</span> : null}
-                      {r.route ? <span className="r-route">{r.route}</span> : null}
-                    </span>
-                  </div>
-                ))}
+                {resRowList(mappedView)}
               </div>
-              {/* the pager bar sits in the foot register, directly under its
-                  table (still inside the same .panel-sec); single-page
-                  catalogs stay pager-free (element budget) */}
-              {resPageCount > 1 ? (
+              {mappedPageCount > 1 ? (
                 <TablePager
-                  showingFrom={(resPage - 1) * PAGE_SIZE + 1}
-                  showingTo={Math.min(resPage * PAGE_SIZE, resRows.length)}
-                  total={resRows.length}
-                  page={resPage}
-                  pageCount={resPageCount}
-                  onPage={setResPage}
+                  showingFrom={(mappedPage - 1) * PAGE_SIZE + 1}
+                  showingTo={Math.min(mappedPage * PAGE_SIZE, mappedSlice.length)}
+                  total={mappedSlice.length}
+                  page={mappedPage}
+                  pageCount={mappedPageCount}
+                  onPage={setMappedPage}
                 />
               ) : null}
             </section>
-          </>
-        )}
-      </section>
-      </div>
-      </section>
+            <section className="card rescard">
+              <div className="head">
+                <h2>The rest of the catalog</h2>
+                <span className="label num">{countedSlice.length} COUNTED</span>
+              </div>
+              <div className="res-table">
+                {countedSlice.length > 0 ? (
+                  <div className="res-row res-heads" aria-hidden="true">
+                    <span className="res-main">Resource</span>
+                    <span className="res-type">Type</span>
+                    <span className="res-cost">Cost</span>
+                    <span className="res-time">Time</span>
+                    <span className="res-feeds">Feeds</span>
+                  </div>
+                ) : null}
+                {resRowList(countedView)}
+              </div>
+              {countedPageCount > 1 ? (
+                <TablePager
+                  showingFrom={(countedPage - 1) * PAGE_SIZE + 1}
+                  showingTo={Math.min(countedPage * PAGE_SIZE, countedSlice.length)}
+                  total={countedSlice.length}
+                  page={countedPage}
+                  pageCount={countedPageCount}
+                  onPage={setCountedPage}
+                />
+              ) : null}
+            </section>
+          </div>
     </div>
   );
 }

@@ -47,9 +47,10 @@ import type { Career, CareerTrack } from "@/lib/types";
  *  - cybersec's display name is "Security Analyst" — the anchored rung's
  *    printed name (CYB-V3, ruled 2026-10-29; supersedes the roster family
  *    label).
- *  - audit row 11 (technology row) cites the O*NET Software Skills list as an
- *    attribution placeholder: individual tool names stay UNQUOTED until the
- *    O*NET data version is pinned at enrich time (Model C, ADR 0005).
+ *  - audit row 11 (technology row) cites O*NET 31.0 · Technology Skills ·
+ *    13-2011.00 — the O*NET version pin landed 2026-11-02 (4A fill: all 37
+ *    served categories with served example tools; the Model C attribution
+ *    placeholder is resolved, ADR 0005).
  */
 
 export const TRACKS: CareerTrack[] = ["it", "business", "accounting", "office"];
@@ -771,7 +772,7 @@ export const CAREERS: Career[] = [
     skills: [
       { name: "Analyze financial information to forecast business, industry, or economic conditions for investment decisions", tier: "core", sourceTag: "O*NET", what: "Build the base DCF-driven story." },
       { name: "Monitor economic, industrial, and corporate developments", tier: "core", sourceTag: "O*NET", what: "Stay abreast across publications and sources." },
-      { name: "Employ financial models to develop solutions or assess the financial or capital impact of transactions", tier: "core", sourceTag: "O*NET", what: "Model-design work for decisions." },
+      { name: "Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions", tier: "core", sourceTag: "O*NET", what: "Model-design work for decisions." },
       { name: "Interpret data on price, yield, stability, future investment-risk trends, economic influences", tier: "core", sourceTag: "O*NET", what: "Read the market data the desk runs on." },
       { name: "Recommend investments and investment timing", tier: "core", sourceTag: "O*NET", what: "The desk's output — recommendations supportable in review." },
       { name: "Present oral or written reports on general economic trends, individual corporations, and entire industries", tier: "core", sourceTag: "O*NET", what: "The communication backbone of the analyst job." },
@@ -850,7 +851,7 @@ export const CAREERS: Career[] = [
       { name: "Submitting credit and loan applications to management with recommendations for approval or rejection; approving or rejecting within authorized limits", tier: "core", sourceTag: "PSOC", what: "Decision-support within authority (PSOC letters c–d)." },
       { name: "Keeping records of payments, and preparing routine letters requesting payment for overdue accounts and forwarding these for legal action", tier: "core", sourceTag: "PSOC", what: "KYC quality (PSOC letter e)." },
       { name: "Completing credit and loan documentation", tier: "core", sourceTag: "PSOC", what: "Documentation completeness (PSOC letter f)." },
-      { name: "Explain to customers the different types of loans and credit options (including terms)", tier: "secondary", sourceTag: "O*NET", what: "Client-facing credit conversations." },
+      { name: "Explain to customers the different types of loans and credit options that are available, as well as the terms of those services", tier: "secondary", sourceTag: "O*NET", what: "Client-facing credit conversations." },
       { name: "Confer with underwriters to resolve mortgage application problems / submit applications to credit analysts", tier: "secondary", sourceTag: "O*NET", what: "Underwriter liaison (adjacent-band pathway row)."},
       { name: "Sizing the credit portfolio (delinquent-account reports)", tier: "secondary", sourceTag: "O*NET", what: "Delinquency reporting (borders coll — kept as adjacency)." },
       { name: "Integrity/Professionalism (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Financial-services ethics." },
@@ -877,7 +878,7 @@ export const CAREERS: Career[] = [
       { name: "Resolve problems or discrepancies concerning customers' accounts", tier: "core", sourceTag: "O*NET", what: "The zero-variance discipline." },
       { name: "Receive mortgage, loan, or public utility bill payments, verifying payment dates and amounts due / process term deposits and other savings-plan transactions", tier: "core", sourceTag: "O*NET", what: "Counter-transaction breadth." },
       { name: "Customer service & special services (cards, checks ordering)", tier: "secondary", sourceTag: "O*NET", what: "Cards/checks ordering (post-office letter d) kept as printed source honesty)." },
-      { name: "Explain, promote, or sell banking products", tier: "secondary", sourceTag: "O*NET", what: "Tailored recommendations on products." },
+      { name: "Explain, promote, or sell products or services, such as travelers' checks, savings bonds, money orders, and cashier's checks, using computerized information about customers to tailor recommendations", tier: "secondary", sourceTag: "O*NET", what: "Tailored recommendations on products." },
       { name: "Front-desk service etiquette (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Branch behavior." },
       { name: "Professionalism · Teamwork (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Bank-culture fit." },
     ],
@@ -893,7 +894,7 @@ export const CAREERS: Career[] = [
     demandBlock: {
       status: "in-demand",
       source: "JobsFit LMI 2013–2020 · In-demand #22 (Auditor)",
-      note: "Also named under the IT/BPM grouping (#33). Strongest 'gap-filler honesty' case — hybrid [O*NET 13-2011.00 + PSOC 3313] with no PH competency framework covering audit. Row 11 (technology row) is the ruled ADD with its O*NET Software-Skills attribution placeholder — individual tool names stay UNQUOTED until the O*NET data version is pinned (Model C).",
+      note: "Also named under the IT/BPM grouping (#33). Strongest 'gap-filler honesty' case — hybrid [O*NET 13-2011.00 + PSOC 3313] with no PH competency framework covering audit. Row 11 (technology row) is the ruled ADD — its O*NET Software-Skills attribution placeholder was filled at the blessed version pin (O*NET 31.0 · Technology Skills · 13-2011.00; all 37 served categories with served example tools, ruling 2026-11-02).",
     },
     roleSummary: "Reconciles accounts, tests the historical record, and keeps the audit trail signed off — the workpaper craft.",
     skills: [
@@ -907,7 +908,7 @@ export const CAREERS: Career[] = [
       { name: "Compliance / tax analog & frameworks", tier: "secondary", sourceTag: "O*NET", what: "Regulatory context (PH PFRS/tax addendum later)." },
       { name: "Senior-heavy supervision tasks", tier: "secondary", sourceTag: "O*NET", what: "Not entry expectations — honesty fold-in." },
       { name: "Professional Skepticism (attitude) · Communication (Enabling)", tier: "secondary", sourceTag: "NACE", what: "Audit-culture craft (skepticism kept per ruling 2026-10-29; NACE-backed, attributed)." },
-      { name: "Audit technology fluency (accounting software / Excel family)", tier: "secondary", sourceTag: "O*NET", what: "Standard accounting software / Excel family — anchored to the O*NET Software Skills list; individual tool names print only after the O*NET data version is pinned. [O*NET version-pin placeholder — unquoted until the enrich pass]" },
+      { name: "Audit technology fluency (accounting software / Excel family)", tier: "secondary", sourceTag: "O*NET", what: "Standard accounting software / Excel family — anchored to the O*NET Software Skills list. [O*NET 31.0 · Technology Skills · 13-2011.00 — version pin landed: all 37 served categories with served example tools (4A fill, ruling 2026-11-02)]" },
     ],
   },
 

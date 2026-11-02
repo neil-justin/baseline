@@ -256,13 +256,10 @@
   margin: -1px;
 }
 
-/* dense grid rows — one template per lens */
+/* dense grid rows — one template; tabs only filter, never change columns */
 .v7career .index-table { font-variant-numeric: tabular-nums; margin-top: 0; }
 .v7career .index-table.cols-ranked {
   --cols: 44px minmax(0, 1.15fr) 168px minmax(0, 1fr) 30px;
-}
-.v7career .index-table.cols-track {
-  --cols: minmax(0, 1.05fr) 178px 74px minmax(0, 1fr) 30px;
 }
 .v7career .index-colheads {
   display: grid;
@@ -353,8 +350,6 @@
   background: var(--v-blue);
 }
 
-.v7career .cell-track { font: 400 12px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
-.v7career .cell-skills { font: 500 12px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); text-align: right; }
 .v7career .cell-entry {
   font: 400 12px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
@@ -442,7 +437,6 @@
   font: 400 11.5px/1.55 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
 }
-.v7career .explore-empty { padding: 14px 16px 16px; font-size: 12.5px; color: var(--v-ink2); border-top: 1px solid var(--v-rows); }
 .v7career .g-link {
   background: none;
   border: 0;
@@ -485,19 +479,39 @@
   box-shadow: 0 2px 10px rgba(60, 64, 67, 0.2);
   outline: none;
 }
-/* the sections' grey bands become the dialog's headers */
-.v7career .sw-dialog .band {
+/* the dialog's own header — title and body share ONE surface: no nested
+   band card, no divider line, a single padding scale */
+.v7career .sw-head { padding: 16px 20px 0; }
+.v7career .sw-head .t {
+  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
   margin: 0;
-  border: 0;
-  border-bottom: 1px solid var(--v-rows);
-  border-radius: 0;
-  box-shadow: none;
-  padding: 13px 18px;
+  color: var(--v-ink);
 }
-.v7career .sw-dialog .sw-panel { padding: 16px 20px 18px; max-width: none; }
+.v7career .sw-head .m {
+  font: 400 13px/1.45 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  margin-top: 2px;
+  max-width: 60ch;
+}
+/* width follows the flow: confirm and the gate lockout carry three short
+   rows, so they size to their content; the reset/baseline states need the
+   wider row grid */
+.v7career .sw-dialog[data-flow="confirm"],
+.v7career .sw-dialog[data-flow="locked"] { max-width: 540px; }
+.v7career .sw-dialog .sw-panel { padding: 0 20px 20px; }
+.v7career .sw-dialog .sw-panel .sw-cost { margin-top: 13px; }
 .v7career .sw-dialog .readout { margin: 14px 16px 0; }
 .v7career .sw-dialog .reassess { padding: 14px 16px 18px; }
 .v7career .sw-dialog .recover-panel { margin: 14px 16px 16px; }
+/* spawn: scrim fades while the dialog rises in from 97% — transform/opacity
+   only (the CLS contract), and the wrapper media query skips the keyframes
+   entirely for reduced-motion users */
+@media (prefers-reduced-motion: no-preference) {
+  .v7career .sw-scrim { animation: sw-scrim-in 0.15s ease-out both; }
+  .v7career .sw-dialog { animation: sw-dialog-in 0.18s cubic-bezier(0.16, 1, 0.3, 1) both; }
+}
+@keyframes sw-scrim-in { from { opacity: 0; } }
+@keyframes sw-dialog-in { from { opacity: 0; transform: translateY(6px) scale(97%); } }
 
 .v7career .sw-panel { padding: 20px 22px; max-width: 760px; }
 .v7career .sw-cost { font-size: 14px; line-height: 1.6; max-width: 60ch; }
@@ -509,6 +523,7 @@
   background: #fafbfc;
 }
 .v7career .sw-stays p { margin-top: 8px; font-size: 13px; color: var(--v-ink2); line-height: 1.6; max-width: 62ch; }
+.v7career .sw-stays .sw-goal { display: block; margin-top: 6px; }
 .v7career .sw-stays .vbadge { font-family: Roboto, system-ui, sans-serif; }
 .v7career .sw-backnote { margin-top: 12px; font-size: 12px; color: var(--v-ink2); }
 .v7career .sw-actions { margin-top: 18px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -650,7 +665,6 @@
 @media (max-width: 1020px) {
   .v7career .d-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .v7career .index-table.cols-ranked { --cols: 34px minmax(0, 1.1fr) 140px minmax(0, 1fr) 24px; }
-  .v7career .index-table.cols-track { --cols: minmax(0, 1fr) 150px 56px minmax(0, 1fr) 24px; }
   .v7career .index-detail { padding-left: 50px; }
 }
 
@@ -658,11 +672,6 @@
   .v7career .index-table.cols-ranked { --cols: 30px minmax(0, 1.2fr) 120px 24px; }
   .v7career .index-table.cols-ranked .ch-entry,
   .v7career .index-table.cols-ranked .cell-entry { display: none; } /* entry folds under the detail */
-  .v7career .index-table.cols-track { --cols: minmax(0, 1fr) 120px 24px; }
-  .v7career .index-table.cols-track .ch-entry,
-  .v7career .index-table.cols-track .cell-entry,
-  .v7career .index-table.cols-track .ch-skills,
-  .v7career .index-table.cols-track .cell-skills { display: none; }
   .v7career .index-colheads, .v7career .index-row { gap: 12px; }
 }
 
@@ -676,7 +685,8 @@
   .v7career .bcell { border-left: 1px solid var(--v-rows); padding: 2px 0 2px 14px; }
   .v7career .bcell:first-child { border-left: 0; padding-left: 0; }
   .v7career .bval { font-size: 12px; }
-  .v7career .sw-panel { padding: 16px 16px; }
+  .v7career .sw-head { padding: 15px 16px 0; }
+  .v7career .sw-panel { padding: 0 16px 16px; }
   .v7career .lens-row .kicker { margin-left: 0; flex: 1 1 100%; }
   .v7career .segbar { height: 9px; }
   .v7career .readout-score { font-size: 36px; }
@@ -693,7 +703,6 @@
 @media (max-width: 560px) {
   .v7career .index-table.cols-ranked { --cols: 26px minmax(0, 1fr) 96px 22px; }
   .v7career .rank { width: 24px; height: 24px; font-size: 11px; }
-  .v7career .index-table.cols-track { --cols: minmax(0, 1fr) 96px 22px; }
   .v7career .mbar { max-width: 84px; }
   .v7career .choice button { padding: 4px 9px; font-size: 11.5px; }
 }

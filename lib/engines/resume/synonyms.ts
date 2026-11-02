@@ -261,7 +261,7 @@ export const SKILL_SYNONYMS: Record<string, SynonymSeed> = {
   // ── Financial Analyst (fin 4.5) ───────────────────────────────────────
   "Analyze financial information to forecast business, industry, or economic conditions for investment decisions": { like: ["financial forecasting", "forecasting", "investment analysis", "financial analysis"] },
   "Monitor economic, industrial, and corporate developments": { like: ["market monitoring", "industry research", "market monitoring", "business developments"] },
-  "Employ financial models to develop solutions or assess the financial or capital impact of transactions": { like: ["financial modeling", "financial models", "dcf", "valuation"] },
+  "Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions": { like: ["financial modeling", "financial models", "dcf", "valuation"] },
   "Interpret data on price, yield, stability, future investment-risk trends, economic influences": { like: ["investment data analysis", "risk assessment", "yield analysis"] },
   "Recommend investments and investment timing": { like: ["investment recommendations", "investment proposals", "stock recommendations"] },
   "Present oral or written reports on general economic trends, individual corporations, and entire industries": { like: ["research reports", "client presentations", "presentations", "industry reports"] },

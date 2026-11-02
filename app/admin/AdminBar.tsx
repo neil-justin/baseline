@@ -16,7 +16,9 @@ export default function AdminBar() {
         </div>
         <div className="bar-user">
           {/* POST, not a GET <Link> — a prefetched GET sign-out would wipe the
-              session on visit (same footgun as the AppBar sign-out). */}
+              session on visit (e2e-caught footgun; the v7.2 student top bar
+              had the same sign-out before the v7.3 sidebar round retired
+              it). */}
           <form action="/api/auth/signout" method="post">
             <button type="submit" className="admin-signout">
               Sign out

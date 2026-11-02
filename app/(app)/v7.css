@@ -1,14 +1,17 @@
 /* ============================================================
    DNA v7 — the Google-school official console (LOCKED 2026-10-29)
-   App-shell system for every (app) surface. v7.2 shell round
-   (user-ruled 2026-10-30, from rail-margin-variants.html): the
-   56px top bar (brand mark + wordmark + icon+name headnav tabs +
-   avatar disc — no search, no bells) IS the desktop navigation;
-   the 48px icon rail RETIRES on desktop and survives solely as
-   the ≤720px Material bottom nav; the app frame caps at 1240px
-   centered with 8px shared gutters (the topbar lives inside the
-   cap, mock-verbatim). Roboto + Material Symbols are SELF-HOSTED
-   (defense venue runs offline).
+   App-shell system for every (app) surface. v7.3 sidebar round
+   (user-ruled 2026-11-02): the 56px header band spans the frame
+   ACROSS (brand mark + wordmark; no search, no bells); navigation
+   is the left sidebar spanning VERTICALLY (icon+name .sidenav tabs,
+   the Profile tab pinned at its bottom edge; the avatar disc retired
+   with the old top bar — it duplicated the Profile tab), and the
+   48px icon rail survives solely as the ≤720px Material bottom nav.
+   v7.3 width re-rule (user-ruled 2026-11-02): the shell chrome runs
+   edge-to-edge with the viewport; the CONTENT column caps at 1240px
+   centered inside the main column (see .v7-main).
+   Roboto + Material Symbols are SELF-HOSTED (defense venue runs
+   offline).
 
    Everything is scoped under `.v7` (the (app) layout root) so the
    Index system in globals.css — and the surfaces still wearing it —
@@ -58,41 +61,67 @@
 
   background: var(--v-ground);
   min-height: 100dvh;
-  /* v7.2 shared-gutter cap: the frame (topbar INSIDE it, mock-verbatim)
-     caps at 1240px, centered, 8px shared gutters — no full-bleed stretch */
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0 8px;
+  /* v7.3 re-rule (full-bleed shell, capped content; user-ruled 2026-11-02):
+     the chrome — header band + sidebar — runs edge-to-edge with the
+     viewport; the CONTENT column caps at 1240px centered inside the main
+     column so the data tables and dashboards keep honest line lengths.
+     Kills the v7.2 floating-mid-page frame at wide viewports without
+     letting tables sprawl. */
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 240px 1fr;
   grid-template-rows: 56px 1fr;
   position: relative;
   z-index: 0;
 }
 
-/* v7.2: beyond-cap margins read the cool console ground on (app) routes
-   only — the body ground is the Index-era #F4F5F4, so extend it narrowly
-   via :has; non-(app) routes (landing/auth/admin) keep their own wrappers */
+/* v7.2: routes outside the shell keep their own wrappers — the (app) shell
+   now IS the full-bleed ground (see the v7.3 re-rule above) */
 body:has(.v7) { background: #f8f9fa; }
 
-/* the shell <header> is display:contents so its children grid ARTH onto
-   .v7's rows (topbar full-width, rail column) — role restored explicitly */
-.v7-head { display: contents; }
+/* ---------- header + sidebar — the v7.3 shell chrome ---------- */
 
-/* ---------- top bar ---------- */
-
-.topbar {
+/* the horizontal header band spans the FULL frame across both columns:
+   it is now the brand block only (mark + wordmark) — nav moved to the
+   sidebar below; the bottom nav `.rail` stays OUTSIDE the sidebar aside
+   so `aside a[href=…]` / `nav[aria-label=…]` locators stay strict-mode-unique */
+.v7-head {
   grid-column: 1 / -1;
   grid-row: 1;
   display: flex;
   align-items: center;
-  gap: 14px;
   height: 56px;
   background: var(--v-surface);
   border-bottom: 1px solid var(--v-border);
   padding: 0 20px;
   position: sticky;
   top: 0;
+  z-index: 40;
+}
+.side-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 6px;
+}
+
+/* the sidebar spans VERTICALLY: the full-height nav column under the
+   header — pinned in place (sticky below the band) so the tabs read
+   alongside the content at every scroll position */
+.v7-side {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: start;
+  position: sticky;
+  top: 56px; /* the header band's height */
+  height: calc(100dvh - 56px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--v-surface);
+  border-right: 1px solid var(--v-border);
+  padding: 16px 10px;
   z-index: 40;
 }
 .brandmark {
@@ -112,36 +141,23 @@ body:has(.v7) { background: #f8f9fa; }
   background: var(--v-blue);
   border-radius: 1px;
 }
-.brand { font: 500 16px/1.2 Roboto, system-ui, sans-serif; padding: 0 6px; color: var(--v-ink); }
-/* the ONLY right-side affordance: the user avatar disc → Profile */
-.avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--v-blue);
-  color: #fff;
-  font: 500 12px Roboto, system-ui, sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: auto;
-  flex: none;
-  text-decoration: none;
+.brand {
+  font: 500 15px/1.2 Roboto, system-ui, sans-serif;
+  padding: 0 6px;
+  color: var(--v-ink);
 }
-.avatar:hover { background: var(--v-blue-deep); }
 
-/* ---------- headnav — the desktop top-bar tabs (v7.2, mock-verbatim
-   rail-margin-variants "top": flex gap 6px, items = Material icon +
-   13.5px/500 label, 7px 14px padding, 12px radius, idle ink-2; the
-   surface's own tab gets the #E8F0FE wash + #1557B0 ink; transparent
-   hover; no other affordances in the bar) ---------- */
-.headnav {
+/* ---------- sidenav — the sidebar tabs (v7.3): the could-be-topbar tabs
+   restacked vertically with the same tokens (13.5px/500 label, 12px
+   radius, ink-2 idle; the surface's own tab gets the #E8F0FE wash +
+   #1557B0 ink; transparent hover; no other affordances in the sidebar) ---------- */
+.sidenav {
   display: flex;
+  flex-direction: column;
   gap: 6px;
-  margin-left: 26px;
-  flex: 1;
+  flex: 1; /* fill the sidebar so a.tail's margin-top:auto has room to pin */
 }
-.headnav a {
+.sidenav a {
   display: flex;
   gap: 8px;
   align-items: center;
@@ -153,12 +169,39 @@ body:has(.v7) { background: #f8f9fa; }
   white-space: nowrap;
   transition: background-color 0.14s ease, color 0.14s ease;
 }
-.headnav a:hover { background: transparent; color: var(--v-ink); }
-.headnav a.on { background: var(--v-blue-wash); color: var(--v-blue-deep); }
-.headnav a.on:hover { background: var(--v-blue-wash); color: var(--v-blue-deep); }
-.headnav .ms { font-size: 18px; opacity: 0.85; }
-.headnav a.on .ms { opacity: 1; }
-.headnav a:focus-visible {
+.sidenav a:hover { background: transparent; color: var(--v-ink); }
+.sidenav a.on { background: var(--v-blue-wash); color: var(--v-blue-deep); }
+.sidenav a.on:hover { background: var(--v-blue-wash); color: var(--v-blue-deep); }
+.sidenav .ms { font-size: 18px; opacity: 0.85; }
+.sidenav a.on .ms { opacity: 1; }
+.sidenav a:focus-visible {
+  outline: 2px solid var(--v-blue);
+  outline-offset: 2px;
+}
+/* Sign out — quiet control pinned as the sidebar's BOTTOM item (user ruling
+   2026-11-02 reverses the v7.3 retirement; the Profile link is no longer
+   the tail — margin-top:auto walks THIS past the other tabs) */
+.sidenav .signout {
+  margin-top: auto;
+  padding-top: 6px;
+}
+.sidenav .signout button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: none;
+  border: 0;
+  color: var(--v-ink2);
+  font: 500 13.5px/1.2 Roboto, system-ui, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.14s ease;
+}
+.sidenav .signout button:hover { color: var(--v-ink); }
+.sidenav .signout .ms { font-size: 18px; opacity: 0.85; }
+.sidenav .signout button:focus-visible {
   outline: 2px solid var(--v-blue);
   outline-offset: 2px;
 }
@@ -183,13 +226,12 @@ body:has(.v7) { background: #f8f9fa; }
 .ms.fill { font-variation-settings: "FILL" 1, "wght" 400, "opsz" 24; }
 
 /* ---------- icon rail (desktop) — RETIRED v7.2 ----------
-   The desktop rail is out of navigation (v7.2 shell round): the top bar's
-   headnav serves desktop. The .rail ELEMENT stays in the DOM and styles
-   below feed the ≤720px Material bottom nav. */
+   The desktop rail is out of navigation: desktop nav lives in the .v7-side
+   sidebar (v7.3). The .rail ELEMENT stays in the DOM and styles below feed
+   the ≤720px Material bottom nav. */
 .rail {
   display: none;
   grid-column: 1;
-  grid-row: 2;
   width: 48px;
   padding: 8px 0;
   background: var(--v-surface);
@@ -223,23 +265,58 @@ body:has(.v7) { background: #f8f9fa; }
 .rail a.on { background: var(--v-blue-wash); color: var(--v-blue); }
 .rail a:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
 .rail .ms { font-size: 20px; }
-.rail-caption { display: none; }
+/* the rail's sign-out item: a form records the POST, the button mirrors the
+   link box exactly (display:contents hands the form's slot to the button) */
+.rail form { display: contents; }
+.rail form button {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--v-ink2);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  flex: none;
+  transition: background-color 0.14s ease;
+}
+.rail form button:hover { background: var(--v-rows); }
+.rail form button:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
+.rail .rail-caption { display: none; }
 
 .v7-main {
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 2;
   min-width: 0;
+  /* v7.3 re-rule: the content cap lives HERE, not on the shell — 1240px
+     centered, 8px shared gutters (border-box: content 1224px, the exact
+     pre-round width) so line lengths stay honest at every viewport.
+     The cap is an EXPLICIT width (min(100%, 1240px)), never max-width +
+     auto margins: auto margins on a grid item silently disable stretch,
+     so the column used to shrink to the panel's fit-content width and
+     re-center whenever a tab swap landed narrower content — a layout
+     jump on every tab switch (CLS round 2026-11-02). */
+  width: min(100%, 1240px);
+  margin: 0 auto;
+  padding: 0 8px;
+  box-sizing: border-box;
 }
 
 /* ---------- responsive: ≤720px — the Material bottom nav (the rail's
    sole surviving form, v7.2) ---------- */
 
 @media (max-width: 720px) {
-  .headnav { display: none; }
+  .v7 { grid-template-columns: 1fr; }
+  .v7-side { display: none; }
   .rail {
     display: flex;
     grid-column: 1;
-    grid-row: auto;
+    grid-row: 1;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -264,6 +341,7 @@ body:has(.v7) { background: #f8f9fa; }
     color: var(--v-ink2); /* v7.1 floor: state-bearing nav text ≥4.5:1 — meta is decorative-only */
   }
   .rail a:hover { background: transparent; }
+  .rail form button:hover { background: transparent; }
   .rail a.on { background: var(--v-blue-wash); color: var(--v-blue-deep); }
   .rail-caption {
     display: block;

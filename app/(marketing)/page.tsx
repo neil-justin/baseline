@@ -1,15 +1,39 @@
+import { redirect } from "next/navigation";
 import { CATALOG_TOTAL, getCareer, trackLabelOf } from "@/lib/fixtures/catalog";
 import type { Career } from "@/lib/types";
 import { NEIL_SEED } from "@/lib/fixtures/neil";
 import { computeScore, WEIGHTS, type Score } from "@/lib/engines/score";
 import SampleGauge, { type GaugeRow } from "./SampleGauge";
+import { db } from "@/lib/db";
+import { getCurrentProfile } from "@/lib/session";
 import "./landing.css";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Career Readiness — know exactly where you stand",
   description:
     "An evidence-cited readiness score for 36 Philippine careers — computed from what you can actually do, with a ranked path for every gap.",
 };
+
+/**
+ * Signed-in visitors never see the marketing page (user ruling 2026-11-02):
+ * staff go to /admin; students land on /onboarding until a role is picked,
+ * /dashboard after — the same rule the sign-in route applies. The check
+ * runs inside the landing component (session cookie read = dynamic render).
+ */
+async function authedRedirect(): Promise<void> {
+  const profile = await getCurrentProfile();
+  if (profile) {
+    if (profile.role === "counselor" || profile.role === "sysadmin") redirect("/admin");
+    if (profile.studentId) {
+      const state = await db.getStudentState(profile.studentId);
+      redirect(state.careerId ? "/dashboard" : "/onboarding");
+    }
+    redirect("/onboarding");
+  }
+}
+
 
 /** Track label rendered the way the index table says it. */
 function trackLabel(c: Career): string {
@@ -78,7 +102,8 @@ const RUBRIC_PCTS = [WEIGHTS.sp, WEIGHTS.es, WEIGHTS.tp, WEIGHTS.ar, WEIGHTS.cc]
  * keeps the count-up + armed-bar measurement via SampleGauge). Stats and
  * sources print verbatim — never re-worded, never invented.
  */
-export default function LandingPage() {
+export default async function LandingPage() {
+  await authedRedirect();
   const score = sampleScore();
   const gauge = gaugeRows();
 

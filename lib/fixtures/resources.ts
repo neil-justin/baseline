@@ -3889,7 +3889,7 @@ export const RESOURCES: Resource[] = [
     // free model-design standards; global standard, non-PH
     url: "https://corporatefinanceinstitute.com/resources/financial-modeling/free-financial-modeling-guide/",
     durationHours: 3,
-    skillsAddressed: ["Employ financial models to develop solutions or assess the financial or capital impact of transactions"],
+    skillsAddressed: ["Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions"],
     careerId: "fin",
   },
   {
@@ -3900,7 +3900,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://corporatefinanceinstitute.com/resources/fpa/essential-guide-breaking-into-fpa-free-ebook/",
     durationHours: 2,
-    skillsAddressed: ["Employ financial models to develop solutions or assess the financial or capital impact of transactions"],
+    skillsAddressed: ["Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions"],
     careerId: "fin",
   },
   {
@@ -4301,7 +4301,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: [
       "Interviewing applicants for personal, mortgage, student and business loans",
-      "Explain to customers the different types of loans and credit options (including terms)",
+      "Explain to customers the different types of loans and credit options that are available, as well as the terms of those services",
     ],
     creditingBody: "TESDA",
     careerId: "credit",
@@ -4316,7 +4316,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: [
       "Interviewing applicants for personal, mortgage, student and business loans",
-      "Explain to customers the different types of loans and credit options (including terms)",
+      "Explain to customers the different types of loans and credit options that are available, as well as the terms of those services",
       "Integrity/Professionalism (Enabling)",
     ],
     creditingBody: "TESDA",
@@ -4488,7 +4488,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
-    skillsAddressed: ["Customer service & special services (cards, checks ordering)", "Explain, promote, or sell banking products"],
+    skillsAddressed: ["Customer service & special services (cards, checks ordering)", "Explain, promote, or sell products or services, such as travelers' checks, savings bonds, money orders, and cashier's checks, using computerized information about customers to tailor recommendations"],
     creditingBody: "TESDA",
     careerId: "teller",
   },
@@ -4501,7 +4501,7 @@ export const RESOURCES: Resource[] = [
     // tour incl. retail-banking branch roles; non-PH framing flagged
     url: "https://corporatefinanceinstitute.com/course/careers-in-finance/",
     durationHours: 3,
-    skillsAddressed: ["Explain, promote, or sell banking products"],
+    skillsAddressed: ["Explain, promote, or sell products or services, such as travelers' checks, savings bonds, money orders, and cashier's checks, using computerized information about customers to tailor recommendations"],
     careerId: "teller",
   },
   {

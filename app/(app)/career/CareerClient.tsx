@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import TablePager from "@/components/TablePager";
 import { SegRubricBar, VBadge } from "@/components/instrument";
@@ -8,6 +8,7 @@ import { rubricParts } from "@/lib/engines/rubric";
 import { roundHalfDown, WEIGHTS, type Score } from "@/lib/engines/score";
 import { reassessDisplay, reassessWhat } from "./career-copy";
 import type { CareerProps, RoleRowData, VerifiedBarData } from "./types";
+import { degreeGateAllows } from "@/lib/degree-gate";
 
 /**
  * v7.2 Careers surface interactivity — one role list, zero sub-tabs (ruled
@@ -25,7 +26,7 @@ import type { CareerProps, RoleRowData, VerifiedBarData } from "./types";
  */
 
 type Lens = "ranked" | (typeof TRACK_CHIPS)[number];
-type Flow = "tabs" | "confirm" | "reset" | "recovered";
+type Flow = "tabs" | "locked" | "confirm" | "reset" | "recovered";
 type Rating = "yes" | "some" | "no";
 
 const TRACK_CHIPS = [
@@ -37,10 +38,22 @@ const TRACK_CHIPS = [
 ] as const;
 const LENS_CHIPS = ["Best matches for you", ...TRACK_CHIPS] as const;
 
+/* the ranked lens's user-facing label must map BACK to "ranked" — casting the
+   label as Lens left the list matching no lens value: the chip sat unpressed
+   on load and clicking it produced zero rows (the unreachable "no careers
+   indexed" message) */
+const lensForChip = (s: (typeof LENS_CHIPS)[number]): Lens =>
+  s === "Best matches for you" ? "ranked" : (s as Lens);
+
 const CANON_TARGET: { id: string; name: string } = {
   id: "qa",
   name: "Software QA Analyst",
 };
+
+/* degree-gate matching/ranking share lib/degree-gate.ts (the same rule the
+   /api/switch route enforces server-side) — the ranked lens lists only the
+   roles that map to the student's program */
+
 const LEVEL_BY_RATING: Record<Rating, "confident" | "kindof" | "notyet"> = {
   yes: "confident",
   some: "kindof",
@@ -74,6 +87,14 @@ interface RecoveredData {
   closed: number;
   transferred: string[];
   selfReported: string[];
+}
+
+/** degree-gate lockout — the target's majors don't include the student's program */
+interface LockData {
+  name: string;
+  majors: string;
+  program: string;
+  fromName: string;
 }
 
 function Arrow() {
@@ -112,17 +133,19 @@ function BarLabel(score: Score, sub: string): string {
 export default function CareerClient({
   card,
   verifiedBars,
-  activeGoalTitle,
+  activeGoal,
   barsSources,
   roles,
-  exploreTotal,
+
   zeroConfirmed,
   reassess: reassessCanon,
+  program,
 }: CareerProps) {
   const router = useRouter();
   const [lens, setLens] = useState<Lens>("ranked");
   const [openId, setOpenId] = useState<string | null>(null);
   const [flow, setFlow] = useState<Flow>("tabs");
+  const [lock, setLock] = useState<LockData | null>(null);
   const [discOpen, setDiscOpen] = useState(false);
   const [banner, setBanner] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -140,30 +163,26 @@ export default function CareerClient({
   const [reassess, setReassess] = useState(reassessCanon);
 
   /* pager — rows keep their ABSOLUTE indices (page 2 opens at rank 11, never
-     a re-numbered list). The auto-position guard covers any state where the
-     current row or the live switch target sits past page 1: the pager opens
-     ON that row's page so the beat rows land on the initially-open page.
-     Dormant when both are already on page 1 — the computed canon fixture is
-     (verified: qa sits at ranked sheet index 2, All-lens index 2). The math
-     mirrors the list's own stable b.x − a.x order; never painted. */
+     a re-numbered list). The auto-position guard covers the case where the
+     current row sits past page 1: the pager opens ON that row's page so the
+     row lands on the initially-open page. Dormant when it's on page 1. */
   const [page, setPage] = useState(() => {
     const initial = [...roles].sort((a, b) => b.x - a.x);
     const pageOf = (pred: (r: RoleRowData) => boolean) => {
       const i = initial.findIndex(pred);
       return i < 0 ? 0 : Math.floor(i / PAGE_SIZE) + 1;
     };
-    return Math.max(pageOf((r) => r.current), pageOf((r) => r.live)) || 1;
+    return pageOf((r) => r.current) || 1;
   });
 
-  /* lens/filter changes land on page 1; a detail expand/collapse never
-     re-pages. (The ref skips the mount so the auto-position guard above
-     survives first render.) */
-  const lensRef = useRef(lens);
-  useEffect(() => {
-    if (lensRef.current === lens) return;
-    lensRef.current = lens;
+  /* lens/filter changes land on page 1 IN THE SAME EVENT: resetting the page
+     from an effect fires after the browser paints, so the old page's slice
+     flashes through the new lens (short or empty body) before regrowing —
+     a cumulative layout shift on every tab click */
+  const switchLens = (next: Lens) => {
+    setLens(next);
     setPage(1);
-  }, [lens]);
+  };
 
   const [ratings, setRatings] = useState<Record<string, Rating>>(() =>
     Object.fromEntries(reassessCanon.map((r) => [r.name, DEFAULT_RATINGS[r.name] ?? "no"]))
@@ -178,92 +197,93 @@ export default function CareerClient({
     setArmed(false);
   }, [flow]);
 
+  /* the switch modal takes focus when it opens (Esc + Tab behave) */
+  useEffect(() => {
+    if (flow !== "confirm" && flow !== "locked") return;
+    document.querySelector<HTMLElement>(".sw-dialog")?.focus();
+  }, [flow]);
+
   const scrollTop = () => window.scrollTo(0, 0);
 
   // ---------- lens + the one list ----------
   /* ranked ordering reads the engine's fit numbers (server-computed
      skillsMatch), deepest overlap first, catalog order breaking ties —
-     never a painted rank */
-  const ranked = [...roles].sort((a, b) => b.x - a.x);
+     never a painted rank. The lens lists ONLY degree-mappable roles
+     (user ruling 2026-11-02): sorting runs after the degree filter. */
+  const ranked = [...roles]
+    .filter((r) => r.degreeAllowed)
+    .sort((a, b) => b.x - a.x);
   const rows: RoleRowData[] =
     lens === "ranked"
       ? ranked
       : lens === "All"
         ? roles
         : roles.filter((r) => r.trackLabel === lens);
-  const zeroResult = rows.length === 0;
-  const colsClass = lens === "ranked" ? "cols-ranked" : "cols-track";
+  /* tabs only filter rows — the table always keeps the ranked layout
+     (RANK / CAREER / SKILLS IN COMMON / ENTRY PATH) */
+  const colsClass = "cols-ranked";
 
-  /* page slice — the cardtop kicker and the pager bar both print the
+  /* page slice — the lens-row kicker and the pager bar both print the
      page-true range computed from the same rows that render */
   const sliceStart = (page - 1) * PAGE_SIZE;
   const pageRows = rows.slice(sliceStart, sliceStart + PAGE_SIZE);
   const pageCount = Math.ceil(rows.length / PAGE_SIZE);
   const showingTo = Math.min(sliceStart + PAGE_SIZE, rows.length);
 
-  const rowWhy = (r: RoleRowData) => {
-    if (r.current) return r.why;
-    if (r.x > 0) return "receipts" as const;
-    return r.what;
-  };
-
-  const matchSub = (m: RoleRowData) => {
-    if (m.x === 0) {
-      return null; // zero rows read the what-line instead (see rowWhy)
-    }
-    return (
-      <>
-        {m.confirmed.map((c, i) => (
-          <span key={c.name}>
-            {i > 0 && " "}
-            <VBadge ok>
-              {c.name} ·{c.src === "verified" ? "✓" : "✓✓"}
-            </VBadge>
-          </span>
-        ))}{" "}
-        confirmed
-        {m.selfReported.length > 0
-          ? ` · ${m.selfReported.map((n) => n.toLowerCase()).join(", ")} self-reported`
-          : ""}
-      </>
-    );
-  };
-
   // ---------- switch flow ----------
   const openConfirm = async (id: string) => {
-    // canon keeps the server-fed re-assessment rows; other roles resolve
-    // their own skill map lazily (catalog import is code-split)
-    if (id !== CANON_TARGET.id) {
-      try {
-        const { getCareer } = await import("@/lib/fixtures/catalog");
-        const t = getCareer(id);
-        if (t) {
-          setFlowTarget({ id: t.id, name: t.name });
-          const next = t.skills.map((s) => ({
-            name: s.name,
-            display: reassessDisplay(s.name),
-            what: reassessWhat(s.name, s.what),
-          }));
-          setReassess(next);
-          setRatings((prev) => {
-            const merged: Record<string, Rating> = {};
-            for (const r of next) merged[r.name] = prev[r.name] ?? DEFAULT_RATINGS[r.name] ?? "no";
-            return merged;
-          });
-        }
-      } catch {
-        return; // honest failure — nothing changes
+    // every target resolves its own catalog row (the canon one too — the
+    // degree gate and the carry filter read the full skill map + degreeMap);
+    // catalog import is code-split
+    try {
+      const { getCareer } = await import("@/lib/fixtures/catalog");
+      const t = getCareer(id);
+      if (!t) return; // unknown id — honest failure, nothing changes
+      setFlowTarget({ id: t.id, name: t.name });
+      const next = t.skills.map((s) => ({
+        name: s.name,
+        display: reassessDisplay(s.name),
+        what: reassessWhat(s.name, s.what),
+      }));
+      setReassess(next);
+      setRatings((prev) => {
+        const merged: Record<string, Rating> = {};
+        for (const r of next) merged[r.name] = prev[r.name] ?? DEFAULT_RATINGS[r.name] ?? "no";
+        return merged;
+      });
+      // degree gate (user ruling 2026-11-02): the program not being in the
+      // target's major map locks the switch; an empty program feeds no gate
+      if (!degreeGateAllows(program, t.degreeMap)) {
+        setLock({
+          name: t.name,
+          majors: t.degreeMap.join(" · "),
+          // degreeGateAllows is false here ⇒ a program string exists
+          program: program ?? "",
+          fromName: card?.name ?? "your current role",
+        });
+        setDiscOpen(false);
+        setFlow("locked");
+        scrollTop();
+        return;
       }
-    } else {
-      setFlowTarget(CANON_TARGET);
-      setReassess(reassessCanon);
+      setPreSwitch({
+        fromName: card?.name ?? "",
+        // carry-only truth (WHAT STAYS fix): list just the proven bars that
+        // actually transfer — verified AND on the target's skill map
+        verified: verifiedBars.filter((b) => t.skills.some((s) => s.name === b.name)),
+        // goal-stays truth: a training goal carries only if its linked skill
+        // sits on the target's map (milestones are career-agnostic and carry);
+        // an irrelevant goal drops out of the modal entirely
+        goal:
+          activeGoal &&
+          (!activeGoal.skill || t.skills.some((s) => s.name === activeGoal.skill))
+            ? activeGoal.title
+            : null,
+        bars: barsSources,
+      });
+    } catch {
+      return; // honest failure — nothing changes
     }
-    setPreSwitch({
-      fromName: card?.name ?? "",
-      verified: verifiedBars,
-      goal: activeGoalTitle,
-      bars: barsSources,
-    });
     setDiscOpen(false);
     setFlow("confirm");
     scrollTop();
@@ -272,7 +292,7 @@ export default function CareerClient({
   const enterSwitch = () => {
     setDiscOpen(false);
     setBanner(true);
-    setLens("All");
+    switchLens("All");
     scrollTop();
   };
 
@@ -375,7 +395,7 @@ export default function CareerClient({
     setRecovered(null);
     setFlow("tabs");
     setBanner(false);
-    setLens("ranked");
+    switchLens("ranked");
     scrollTop();
   };
 
@@ -416,173 +436,119 @@ export default function CareerClient({
       {/* ============================================================
           VIEW · Careers — default state (one list, zero sub-tabs)
           ============================================================ */}
-      <section id="career-view" hidden={flow !== "tabs"}>
-        {/* named band — instrument counters computed from state */}
+      <section id="career-view">
+        {/* named band — the tray carries the role identity (the standalone
+            current-career card is dead: user ruling 2026-11-02 — its facts
+            were half-duplicates of these band cells) + the ONE steer: the
+            gaps CTA, with the switch disclosure riding under it */}
         <header className="band">
           <div className="bandrow">
             <div className="who">
               <h1 className="t">Your career</h1>
-              <p className="m">Where you&apos;re headed. Change it whenever you want.</p>
+              {card ? (
+                <p className="m">
+                  <b>{card.name}</b> · {card.what}
+                </p>
+              ) : (
+                <p className="m">No career picked yet.</p>
+              )}
             </div>
-            <div className="bandcells">
-              {bandcell("Target role", card ? card.name : "Not picked yet")}
-              {bandcell("Skill map", card ? `${card.closed} of ${card.mapSize} on your baseline` : "—", true)}
-              {bandcell("First 30 days", card ? `${card.stageOneDone} of 3 done` : "—", true)}
+            <div className="bandside">
+              {card ? (
+                <>
+                  <a className="cta" href="/pathway">
+                    See your gaps →
+                  </a>
+                  <div className="cc-switch">
+                    <button
+                      className="quiet-toggle"
+                      type="button"
+                      aria-expanded={discOpen}
+                      aria-controls="switch-disclosure"
+                      onClick={() => setDiscOpen((o) => !o)}
+                    >
+                      Switch career
+                    </button>
+                    <div className={`disclosure ${discOpen ? "show" : ""}`} id="switch-disclosure">
+                      <p>
+                        Score and gap bars reset toward the new career — proven skills (
+                        {verifiedBars.map((b, i) => (
+                          <span key={b.name}>
+                            {i > 0 && " "}
+                            <VBadge ok>
+                              {b.name} ·{b.src === "verified" ? "✓" : "✓✓"}
+                            </VBadge>
+                          </span>
+                        ))}
+                        ) and goals stay.{" "}
+                        <button className="quiet-toggle disc-go" type="button" onClick={enterSwitch}>
+                          Browse careers to switch →
+                        </button>
+                      </p>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={() => {
+                    switchLens("All");
+                    scrollTop();
+                  }}
+                >
+                  Explore by track
+                </button>
+              )}
             </div>
           </div>
+          {card && (
+            <div className="bandcells">
+              {bandcell("Track", card.trackLabel)}
+              {bandcell("Skill map", `${card.closed} of ${card.mapSize} on your baseline`, true)}
+              {bandcell("First 30 days", `${card.stageOneDone} of 3 done`, true)}
+            </div>
+          )}
         </header>
 
-        {/* ---------- current-career card ---------- */}
-        {card ? (
-          <div className="card cc-card">
-            <div className="cc-top">
-              <div className="cc-id">
-                <span className="label">CURRENT CAREER</span>
-                <h2 className="cc-name">{card.name}</h2>
-                <p className="cc-what">{card.what}</p>
-              </div>
-              <span className="chip c-blue cc-badge">{card.trackLabel}</span>
-            </div>
-
-            <div className="cc-grid">
-              <div className="cc-why">
-                <span className="label">WHY THIS FITS YOU</span>
-                <p>{card.why}</p>
-              </div>
-              <div className="cc-facts">
-                <div className="cc-fact">
-                  <span className="label">ENTRY PATH</span>
-                  <p className="num">{card.entry}</p>
-                </div>
-                <div className="cc-fact">
-                  <span className="label">SKILL MAP</span>
-                  <p className="num">
-                    {card.closed} of {card.mapSize} skills on your baseline · First 30 days:{" "}
-                    {card.stageOneDone} of 3 done
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="cc-ctas">
-              <a className="btn btn-primary" href="/pathway">
-                See your gaps <Arrow />
-              </a>
+        {/* lens rail — OUTSIDE the card (user ruling 2026-11-02): the chips
+            are a toolbar over the list, the SHOWING kicker rides with them */}
+        <div className="lens-row">
+          <div className="ptabs" role="group" aria-label="Filter by track" id="strand-chips">
+            {LENS_CHIPS.map((s) => (
               <button
-                className="btn btn-ghost"
+                key={s}
                 type="button"
+                aria-pressed={lens === lensForChip(s)}
                 onClick={() => {
-                  setLens("All");
-                  scrollTop();
+                  switchLens(lensForChip(s));
+                  setOpenId(null);
                 }}
               >
-                Explore more careers
+                {s}
               </button>
-            </div>
-
-            <div className="cc-switch">
-              <button
-                className="quiet-toggle"
-                type="button"
-                aria-expanded={discOpen}
-                aria-controls="switch-disclosure"
-                onClick={() => setDiscOpen((o) => !o)}
-              >
-                Switch career
-              </button>
-              <div className={`disclosure ${discOpen ? "show" : ""}`} id="switch-disclosure">
-                <p>
-                  Switching resets your gap bars and your score toward the new career; it rebuilds from
-                  what you can actually do. Skills you&apos;ve already proven (
-                  {verifiedBars.map((b, i) => (
-                    <span key={b.name}>
-                      {i > 0 && " "}
-                      <VBadge ok>
-                        {b.name} ·{b.src === "verified" ? "✓" : "✓✓"}
-                      </VBadge>
-                    </span>
-                  ))}
-                  ) and your goals stay confirmed on your profile.{" "}
-                  <button className="quiet-toggle disc-go" type="button" onClick={enterSwitch}>
-                    Browse careers to switch →
-                  </button>
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
-        ) : (
-          /* undecided default (edge-case audit §2) */
-          <div className="card cc-card">
-            <div className="cc-top">
-              <div className="cc-id">
-                <span className="label">CURRENT CAREER</span>
-                <h2 className="cc-name">No career picked yet</h2>
-                <p className="cc-what">You haven&apos;t picked yet — explore by track.</p>
-              </div>
-            </div>
-            <div className="cc-ctas">
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={() => {
-                  setLens("All");
-                  scrollTop();
-                }}
-              >
-                Explore by track
-              </button>
-            </div>
-          </div>
-        )}
+          {/* the ONE tracked SHOWING line — page-true range on the paged list
+              (rows keep absolute positions); the zero-branches keep bytes */}
+          {rows.length === 0 || (zeroConfirmed && lens === "ranked") ? (
+            <span className="kicker num" id="explore-count">
+              SHOWING {rows.length} OF {rows.length} CAREERS
+            </span>
+          ) : (
+            <span className="kicker num" id="explore-count">
+              SHOWING {sliceStart + 1}–{showingTo} OF {rows.length} CAREERS
+            </span>
+          )}
+        </div>
 
         {/* ---------- the one role list (Best matches / All roles) ---------- */}
         <div className="card rolecard">
           {banner && (
             <div className="sw-banner">
-              You&apos;re browsing to switch. Look around first; nothing changes until you pick a new career
-              and confirm.
+              Browsing to switch — nothing changes until you confirm a different career.
             </div>
           )}
-
-          <div className="cardtop">
-            <div className="ptabs" role="group" aria-label="Filter by track" id="strand-chips">
-              {LENS_CHIPS.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  aria-pressed={lens === s}
-                  onClick={() => {
-                    setLens(s as Lens);
-                    setOpenId(null);
-                  }}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-            {/* the ONE tracked SHOWING line for the card — page-true range on
-                the paged list (rows keep absolute positions); the
-                zero-branches keep their bytes */}
-            {rows.length === 0 || (zeroConfirmed && lens === "ranked") ? (
-              <span className="kicker num" id="explore-count">
-                SHOWING {rows.length} OF {exploreTotal} CAREERS
-              </span>
-            ) : (
-              <span className="kicker num" id="explore-count">
-                SHOWING {sliceStart + 1}–{showingTo} OF {exploreTotal} CAREERS
-              </span>
-            )}
-          </div>
-
-          {/* lens context — one small head per lens, kept from the previous tabs */}
-          <div className="lens-head">
-            <b>{lens === "ranked" ? "Careers closest to what you know" : "Explore careers by track"}</b>
-            <span>
-              {lens === "ranked"
-                ? "Ranked by how much of each career's skill list is already on your baseline."
-                : "Every track leads somewhere real. Each listing shows what it opens up and what it takes to get in."}
-            </span>
-          </div>
 
           {zeroConfirmed && lens === "ranked" ? (
             /* zero-demonstrated default (edge-case audit §2): the compressed row */
@@ -603,28 +569,13 @@ export default function CareerClient({
                 </p>
               </div>
             </div>
-          ) : zeroResult ? (
-            <div className="match-table explore-empty">
-              No careers indexed for this track yet — try{" "}
-              <button className="g-link" type="button" onClick={() => setLens("All")}>
-                All
-              </button>{" "}
-              to see the full index.
-            </div>
           ) : (
             <>
             <div className={`index-table ${colsClass}`}>
               <div className="index-colheads" aria-hidden="true">
-                {lens === "ranked" && <span className="ch-rank">RANK</span>}
+                <span className="ch-rank">RANK</span>
                 <span className="ch-career">CAREER</span>
-                {lens === "ranked" ? (
-                  <span className="ch-fit">SKILLS IN COMMON</span>
-                ) : (
-                  <>
-                    <span className="ch-track">TRACK</span>
-                    <span className="ch-skills">SKILLS</span>
-                  </>
-                )}
+                <span className="ch-fit">SKILLS IN COMMON</span>
                 <span className="ch-entry">ENTRY PATH</span>
                 <span className="ch-exp" aria-hidden="true" />
               </div>
@@ -634,49 +585,13 @@ export default function CareerClient({
                   above keep both lenses' indices engine-true */}
               {pageRows.map((r, i) => {
                 const abs = sliceStart + i;
-                const liveRow = r.live && card?.id !== r.id;
-                if (liveRow) {
-                  return (
-                    <button
-                      key={r.id}
-                      className={`index-row row-live ${colsClass}`}
-                      type="button"
-                      onClick={() => openConfirm(r.id)}
-                    >
-                      {lens === "ranked" && <span className="rank num">{abs + 1}</span>}
-                      <span className="cell-career">
-                        <span className="c-name">
-                          {r.name} <span className="mono row-go" aria-hidden="true">→</span>
-                        </span>
-                        <span className="c-sub num">
-                          {rowWhy(r) === "receipts" ? matchSub(r) : rowWhy(r)}
-                        </span>
-                      </span>
-                      {lens === "ranked" ? (
-                        <span className="cell-fit" aria-label={`${r.x} of ${r.y} skills in common`}>
-                          <span className="fit-line num">{r.x} of {r.y}</span>
-                          <span className="mbar" aria-hidden="true">
-                            <i style={{ width: `${(r.x / r.y) * 100}%` }} />
-                          </span>
-                        </span>
-                      ) : (
-                        <>
-                          <span className="cell-track">{r.trackLabel}</span>
-                          <span className="cell-skills num">{r.y}</span>
-                        </>
-                      )}
-                      <span className="cell-entry num">{r.entry}</span>
-                      <span className="cell-exp" aria-hidden="true" />
-                    </button>
-                  );
-                }
                 return (
                   <div className="role-block" key={r.id}>
                     <div
                       className={`index-row ${colsClass}${openId === r.id ? " row-open" : ""}`}
                       onClick={() => setOpenId((cur) => (cur === r.id ? null : r.id))}
                     >
-                      {lens === "ranked" && <span className="rank num">{abs + 1}</span>}
+                      <span className="rank num">{abs + 1}</span>
                       <span className="cell-career">
                         <button
                           type="button"
@@ -691,43 +606,34 @@ export default function CareerClient({
                           {r.name}
                         </button>
                         {r.current && <span className="chip c-blue">CURRENT</span>}
-                        <span className="c-sub num">
-                          {rowWhy(r) === "receipts" ? matchSub(r) : rowWhy(r)}
+                        <span className="c-sub">
+                          {r.current ? r.why : r.what}
                         </span>
                       </span>
-                      {lens === "ranked" ? (
-                        <span className="cell-fit" aria-label={`${r.x} of ${r.y} skills in common`}>
-                          <span className={`fit-line num ${r.x === 0 ? "fit-zero" : ""}`}>
-                            {r.x} of {r.y}
-                          </span>
-                          <span className="mbar" aria-hidden="true">
-                            <i style={{ width: `${(r.x / r.y) * 100}%` }} />
-                          </span>
+                      <span className="cell-fit" aria-label={`${r.x} of ${r.y} skills in common`}>
+                        <span className={`fit-line num ${r.x === 0 ? "fit-zero" : ""}`}>
+                          {r.x} of {r.y}
                         </span>
-                      ) : (
-                        <>
-                          <span className="cell-track">{r.trackLabel}</span>
-                          <span className="cell-skills num">{r.y}</span>
-                        </>
-                      )}
+                        <span className="mbar" aria-hidden="true">
+                          <i style={{ width: `${(r.x / r.y) * 100}%` }} />
+                        </span>
+                      </span>
                       <span className="cell-entry num">{r.entry}</span>
                       <span className="cell-exp" aria-hidden="true">
                         <Chev />
                       </span>
                     </div>
 
-                    {/* role detail — catalog truth only (ruled blocks) */}
+                    {/* role detail — the registry-fact strip (v7.3 ruling):
+                        what lives in the row, skill map counts live in the
+                        fit column — the drawer keeps the three catalog
+                        receipts only */}
                     {openId === r.id && (
                       <div className="index-detail" id={`detail-${r.id}`}>
                         <div className="d-grid">
-                          <div className="d-block d-wide">
-                            <span className="label">WHAT THE JOB IS</span>
-                            <p>{r.what}</p>
-                            <p className="d-psoc num">Registered occupation — {r.psoc}</p>
-                          </div>
                           <div className="d-block">
-                            <span className="label">ENTRY PATH</span>
-                            <p>{r.entry}</p>
+                            <span className="label">REGISTERED OCCUPATION</span>
+                            <p className="num">{r.psoc}</p>
                           </div>
                           <div className="d-block">
                             <span className="label">MAJORS THAT MAP HERE</span>
@@ -736,10 +642,6 @@ export default function CareerClient({
                           <div className="d-block">
                             <span className="label">JOB MARKET</span>
                             <p>{r.demand}</p>
-                          </div>
-                          <div className="d-block">
-                            <span className="label">SKILL MAP</span>
-                            <p className="num">{r.skillsSummary}</p>
                           </div>
                         </div>
                         {!r.current && (
@@ -761,9 +663,9 @@ export default function CareerClient({
             </div>
 
             {/* the pager closes the paged list — nav-only, because the
-                cardtop's kicker carries the one tracked SHOWING line for the
-                card (the Sparing Label Rule); a single-page list stays
-                pager-free (element budget) */}
+                lens-row kicker carries the one tracked SHOWING line (the
+                Sparing Label Rule); a single-page list stays pager-free
+                (element budget) */}
             {pageCount > 1 ? (
               <TablePager
                 showRange={false}
@@ -778,54 +680,93 @@ export default function CareerClient({
             </>
           )}
 
-          {/* the matching honesty note lives on the ranked lens */}
-          {lens === "ranked" && (
-            <p className="match-note">
-              Matching uses confirmed skills only. Confirm more from <a href="/progress">Progress</a> to
-              widen this list. Skills you marked yourself during setup feed your baseline bars, but they
-              never count toward matching.
-            </p>
-          )}
         </div>
       </section>
 
       {/* ============================================================
-          SWITCH FLOW — Software Developer → Software QA Analyst (beat 6)
+          SWITCH FLOW — a MODAL over the careers page (user ruling
+          2026-11-02: "Change target role must not steer the user to a
+          different page with no way back"). confirm → dip → recovered
+          run inside one dialog; "Keep {preSwitch.fromName}" / Esc /
+          scrim close it back (confirm state only — after the commit
+          the modal follows the flow's state, never exits early).
+          The beat-6 walk (Software Developer → Software QA Analyst)
+          is unchanged otherwise.
           ============================================================ */}
+      {flow !== "tabs" && (
+        <div className="sw-modal" role="dialog" aria-modal="true" aria-label="Switch career">
+          <div
+            className="sw-scrim"
+            onClick={flow === "confirm" || flow === "locked" ? cancelSwitch : undefined}
+          />
+          <div
+            className="sw-dialog"
+            data-flow={flow}
+            tabIndex={-1}
+            onKeyDown={(e) => {
+              if (e.key === "Escape" && (flow === "confirm" || flow === "locked")) cancelSwitch();
+            }}
+          >
+            {/* state 0 · degree gate: the target isn't mapped from the
+                student's program — no switch offered */}
+            <section id="sw-locked" hidden={flow !== "locked"}>
+              {flow === "locked" && lock && (
+                <>
+                  <header className="sw-head">
+                    <h1 className="t">Can&apos;t switch to {lock.name}</h1>
+                  </header>
+                  <div className="sw-panel">
+                    <p className="sw-cost">
+                      Degree gate — <b>{lock.program}</b> isn&apos;t in the majors that map to this
+                      role, so the switch isn&apos;t offered.
+                    </p>
+                    <div className="sw-stays">
+                      <span className="label">MAJORS THAT MAP HERE</span>
+                      <p>{lock.majors}</p>
+                    </div>
+                    <div className="sw-actions">
+                      <button className="btn btn-primary" type="button" onClick={cancelSwitch}>
+                        Keep {lock.fromName}
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </section>
 
-      {/* state 1 · confirm, cost first */}
-      <section id="sw-confirm" hidden={flow !== "confirm"}>
+            {/* state 1 · confirm, cost first */}
+            <section id="sw-confirm" hidden={flow !== "confirm"}>
         {flow === "confirm" && preSwitch && (
           <>
-            <header className="band">
-              <div className="bandrow">
-                <div className="who">
-                  <h1 className="t">Switch to {flowTarget.name}?</h1>
-                </div>
-              </div>
+            <header className="sw-head">
+              <h1 className="t">Switch to {flowTarget.name}?</h1>
             </header>
-            <div className="card sw-panel">
-              <p className="sw-cost">
-                Switching to {flowTarget.name} resets skill progress and training progress toward it — your
-                score drops to its floor and rebuilds.
-              </p>
-              <div className="sw-stays">
-                <span className="label">WHAT STAYS</span>
-                <p>
-                  Skills you&apos;ve already proven (
-                  {preSwitch.verified.map((b, i) => (
-                    <span key={b.name}>
-                      {i > 0 && " "}
-                      <VBadge ok>
-                        {b.name} ·{b.src === "verified" ? "✓" : "✓✓"}
-                      </VBadge>
+            <div className="sw-panel">
+              <p className="sw-cost">Gap bars and training progress reset for the new role.</p>
+              {(preSwitch.verified.length > 0 || preSwitch.goal) && (
+                <div className="sw-stays">
+                  <span className="label">WHAT STAYS</span>
+                  {preSwitch.verified.length > 0 && (
+                    <p>
+                      Skills already proven:{" "}
+                      {preSwitch.verified.map((b, i) => (
+                        <span key={b.name}>
+                          {i > 0 && " "}
+                          <VBadge ok>
+                            {b.name} ·{b.src === "verified" ? "✓" : "✓✓"}
+                          </VBadge>
+                        </span>
+                      ))}
+                    </p>
+                  )}
+                  {preSwitch.goal && (
+                    <span className="sw-goal">
+                      Your goal &ldquo;{preSwitch.goal}&rdquo; stays active.
                     </span>
-                  ))}
-                  ) stay confirmed on your profile.{" "}
-                  {preSwitch.goal ? <>Your goal &ldquo;{preSwitch.goal}&rdquo; stays active.</> : null}
-                </p>
-              </div>
-              <p className="sw-backnote">You can switch back any time.</p>
+                  )}
+                </div>
+              )}
+              <p className="sw-backnote">Switching saves immediately — you can switch back any time.</p>
               <div className="sw-actions">
                 <button
                   className="btn btn-primary"
@@ -848,18 +789,12 @@ export default function CareerClient({
       <section id="sw-reset" hidden={flow !== "reset"}>
         {flow === "reset" && reset && preSwitch && (
           <>
-            <header className="band">
-              <div className="bandrow">
-                <div className="who">
-                  <h1 className="t">Score reset for your new career</h1>
-                  <p className="m">
-                    Your gap bars and training progress were built around {preSwitch.fromName}. Switching
-                    resets them to measure {flowTarget.name}&apos;s {reassess.length} skills instead: the score
-                    drops to its floor and rebuilds from what you can actually do. It starts measuring the
-                    right things, not punishing you.
-                  </p>
-                </div>
-              </div>
+            <header className="sw-head">
+              <h1 className="t">Score reset for your new career</h1>
+              <p className="m">
+                Gap bars and training progress were built around {preSwitch.fromName} — the switch
+                resets them toward {flowTarget.name}.
+              </p>
             </header>
 
             <div className="card readout">
@@ -956,12 +891,8 @@ export default function CareerClient({
       <section id="sw-recovered" hidden={flow !== "recovered"}>
         {flow === "recovered" && recovered && (
           <>
-            <header className="band">
-              <div className="bandrow">
-                <div className="who">
-                  <h1 className="t">Your baseline on {flowTarget.name}</h1>
-                </div>
-              </div>
+            <header className="sw-head">
+              <h1 className="t">Your baseline on {flowTarget.name}</h1>
             </header>
 
             <div className="card readout">
@@ -1072,6 +1003,9 @@ export default function CareerClient({
           </>
         )}
       </section>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

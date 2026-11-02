@@ -5,15 +5,29 @@ import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 /**
  * Profile's four-tab chrome — the v7 family Tab Strip (DEPENDS 2026-10-30
  * Round-7 re-cut): Plan · Competencies · Credentials · Account over server-
- * rendered panels. The strip rides the married content card (cardtop,
+ * rendered panels. The strip rides a slim card of its own (cardtop,
  * v7.2 Composition A idiom), arrow-key roving focus, hash deep-links
  * (default: Plan — the demo walk opens beat 9 there).
+ *
+ * PHASE-2 REVAMP (2026-11-02): the frame class is unconditional — every
+ * tab renders the floating-cards frame (`.planframe`): the wrapper drops
+ * its own card chrome, the tab strip stands alone, and the active
+ * tabpanel's content floats on the shell ground (Plan/Competencies as
+ * stacked Dashboard-register `.card` units; the tabs then on the psblock
+ * register kept one married surface via their inner `.stack` — that
+ * bridge is retired below by the Phase-4 re-cut).
  *
  * HOOKS (kept verbatim through the re-cut): `#tab-profile` → `#panel-profile`
  * carries the Credentials panel — the e2e money beat clicks the tab by its
  * legacy id and fills the presence fields inside (demo-arc / record / the
  * capture rounds). The visible LABEL is content and reads "Credentials";
  * the selectors are the contract.
+ *
+ * PHASE-3 (2026-11-02): Credentials joined the card register (its panel is
+ * real `.plancards .card` units).
+ * PHASE-4 (2026-11-02): Account joined too — three separate cards — so the
+ * inner `.stack` married-surface bridge and its ACCOUNT-ONLY stylesheet
+ * rule are retired; every tabpanel's content floats on the shell ground.
  */
 
 const TABS = [
@@ -72,10 +86,11 @@ export default function ProfileTabs({
 
   return (
     <div ref={ref}>
-      {/* the ONE card the tabs marry (v7.2 Composition A idiom): cardtop =
-          the tablist; the active tabpanel renders inside the same card as
-          flush sections — never a card inside a card */}
-      <div className="card tabcard">
+      {/* the tab chrome: a slim card of its own (cardtop), with the active
+          tabpanel floating below it on the shell ground (`.planframe` —
+          unconditional since the Phase-2 re-cut). HOOKS unchanged:
+          `#tab-profile` → `#panel-profile` is the e2e contract. */}
+      <div className="card tabcard planframe">
         <div className="cardtop">
           <div className="ptabs" role="tablist" aria-label="Profile sections" onKeyDown={onTablistKey}>
             {TABS.map((t) => (

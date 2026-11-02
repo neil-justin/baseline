@@ -335,13 +335,13 @@ export const ROW_SPECS_ACCOUNTING: RowSpecMap = {
     ],
     specRef: "role-specs/fin.md Row 2 — Monitoring developments",
   },
-  "fin::Employ financial models to develop solutions or assess the financial or capital impact of transactions": {
+  "fin::Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions": {
     descriptor: "No descriptor printed; the attributed anchor above carries the row's source text.",
     anchors: [
       "O*NET 13-2051.00 task as printed",
       "PSOC 2413 g) (verbatim): \"g) preparing plans of action for investment based on financial analyses\"",
     ],
-    specRef: "role-specs/fin.md Row 3 — Financial models",
+    specRef: "role-specs/fin.md Row 3 — Financial models (renamed row: name now the served O*NET 31.0 verbatim task, 2026-11-02 bless)",
   },
   "fin::Interpret data on price, yield, stability, future investment-risk trends, economic influences": {
     descriptor: "No descriptor printed; the attributed anchor above carries the row's source text.",
@@ -559,12 +559,12 @@ export const ROW_SPECS_ACCOUNTING: RowSpecMap = {
     ],
     specRef: "role-specs/credit.md Row 5 — Documentation (PSOC task f))",
   },
-  "credit::Explain to customers the different types of loans and credit options (including terms)": {
+  "credit::Explain to customers the different types of loans and credit options that are available, as well as the terms of those services": {
     descriptor: "No descriptor printed — O*NET-verb row; the row is the attributed task anchor above (source-verbatim), tiered per the spec.",
     anchors: [
       "O*NET 13-2072.00 task as printed · \"Work with clients to identify their financial goals and to find ways of reaching those goals.\"",
     ],
-    specRef: "role-specs/credit.md Row 6 — Customer explanation",
+    specRef: "role-specs/credit.md Row 6 — Customer explanation (renamed row: name now the served O*NET 31.0 verbatim task, 2026-11-02 bless)",
   },
   "credit::Confer with underwriters to resolve mortgage application problems / submit applications to credit analysts": {
     descriptor: "No descriptor printed — O*NET-verb row; the row is the attributed task anchor above (source-verbatim), tiered per the spec.",
@@ -642,13 +642,13 @@ export const ROW_SPECS_ACCOUNTING: RowSpecMap = {
     ],
     specRef: "role-specs/teller.md Row 6 — Service & special services",
   },
-  "teller::Explain, promote, or sell banking products": {
+  "teller::Explain, promote, or sell products or services, such as travelers' checks, savings bonds, money orders, and cashier's checks, using computerized information about customers to tailor recommendations": {
     descriptor: "No descriptor printed; the attributed anchor above carries the row's source text.",
     anchors: [
       "O*NET 43-3071.00 task as printed (\"…such as travelers' checks, savings bonds, money orders, and cashier's checks, using computerized information about customers to tailor recommendations.\")",
       "PSOC 4211 e) (verbatim): \"e) changing money from one currency to another, as requested by clients\"",
     ],
-    specRef: "role-specs/teller.md Row 7 — Explain/promote banking products",
+    specRef: "role-specs/teller.md Row 7 — Explain/promote banking products (renamed row: name now the served O*NET 31.0 verbatim task, 2026-11-02 bless)",
   },
   "teller::Front-desk service etiquette (Enabling)": {
     descriptor: "No descriptor printed — O*NET-verb row; the row is the attributed task anchor above (source-verbatim), tiered per the spec.",
@@ -746,10 +746,47 @@ export const ROW_SPECS_ACCOUNTING: RowSpecMap = {
   "audit::Audit technology fluency (accounting software / Excel family)": {
     descriptor: "No descriptor printed; the attributed anchor above carries the row's source text.",
     anchors: [
-      "Explicitly cited to O*NET: the O*NET 13-2011.00 Software Skills list (fetched this session) includes the Accounting software / Excel family. No invented IDEA claim — tool names are sourced only from the O*NET software-skill list (V-audit-4), and individual technology names are printable verbatim only after the O*NET data version is pinned.",
-      "PSOC 3313 e) (verbatim, migrated from row 10 in the anchor-fit fix): \"e) using standard computer software packages to perform accounting and related calculations\" · O*NET 13-2011.00 Software Skills list (explicit O*NET attribution — fetched 2026-10-29; \"Accounting software / Excel family\" recorded; version-pin note: pin the O*NET data version at citation time before quoting individual technology items)",
+      "Explicitly cited to O*NET: the O*NET Software Skills list includes the Accounting software / Excel family. No invented IDEA claim — tool names are sourced only from the O*NET software-skill list (V-audit-4). Version-pin landed at the 2026-11-02 bless (4A fill; supersedes the unquoted-until-pinned state): all 37 served category names verbatim, each category's FIRST 3 served example names verbatim (categories serving fewer print what they serve). Cited O*NET 31.0 · Technology Skills · 13-2011.00 — the API's Software-Skills source row there: Employer Job Postings, 2026.",
+      "PSOC 3313 e) (verbatim, migrated from row 10 in the anchor-fit fix): \"e) using standard computer software packages to perform accounting and related calculations\"",
+      "Accounting software — Intuit QuickBooks · Sage 50 Accounting · SAP Concur",
+      "Word processing software — Google Docs · Microsoft OneNote · Microsoft Word",
+      "Financial analysis software — Delphi Technology · Oracle E-Business Suite Financials · TopCAATs",
+      "Tax preparation software — ATX Total Tax Office · CCH ProSystem fx TAX · Intuit TurboTax",
+      "Enterprise resource planning ERP software — Microsoft Dynamics · Oracle PeopleSoft · SAP software",
+      "Compliance software — Intrax ProcedureNet · Sage HandiSoft HandiLedger · Tax compliance property tax management software",
+      "Data base user interface and query software — Microsoft SQL Server · Oracle Database · Structured query language SQL",
+      "Document management software — Adobe Acrobat · Document management system software · Microsoft SharePoint",
+      "Analytical or scientific software — Guidance Software EnCase Enterprise · IBM SPSS Statistics · SAS",
+      "Medical software — Epic Systems · Medical condition coding software · Medical procedure coding software",
+      "Business intelligence and data analysis software — Alteryx software · IBM Cognos Impromptu · Oracle Business Intelligence Enterprise Edition",
+      "Human resources software — ADP Workforce Now · CPSI EHR System · Human resource management software HRMS",
+      "Billing and invoicing software — Billing software · Choice Technologies PowerBill + · Client billing software",
+      "Electronic mail software — IBM Notes · Microsoft Exchange · Microsoft Outlook",
+      "Development environment software — eXtensible Business Reporting Language XBRL · Microsoft Visual Basic · Microsoft Visual Basic for Applications VBA",
+      "Office suite software — Corel WordPerfect Office Suite · Microsoft Office software · Microsoft Works",
+      "Spreadsheet software — Google Sheets · Microsoft Excel",
+      "Customer relationship management CRM software — Blackbaud The Raiser's Edge · Salesforce software",
+      "Operating system software — Microsoft Windows · UNIX",
+      "Data base management system software — Apache Solr · Teradata Database",
+      "Data base reporting software — ADP Super Report Writer · SAP Crystal Reports",
+      "Object or component oriented development software — R · Swift",
+      "Time accounting software — Payroll software · WorkForce Software EmpCenter Time and Attendance",
+      "Presentation software — Google Slides · Microsoft PowerPoint",
+      "Data mining software — Data extraction software · WizSoft WizWhy",
+      "Project management software — Microsoft Project · Oracle Primavera Enterprise Project Portfolio Management",
+      "Risk management data and analysis software — Thomson Reuters Risk Management",
+      "Enterprise system management software — IBM Power Systems software",
+      "Desktop communications software — Eko",
+      "Desktop publishing software — Microsoft Publisher",
+      "Video creation and editing software — TechSmith Camtasia",
+      "Enterprise application integration software — SAP BusinessObjects Data Integrator",
+      "Transaction server software — Tumbleweed SecureTransport",
+      "Transaction security and virus protection software — NortonLifeLock cybersecurity software",
+      "Inventory management software — Asset management software",
+      "Process mapping and design software — Microsoft Visio",
+      "Information retrieval or search software — LexisNexis",
     ],
-    specRef: "role-specs/audit.md Row 11 — Audit technology fluency (optional technology row, user ruling 2026-10-29)",
-    flags: ["row 11 technology names stand UNQUOTED until the O*NET data version is pinned at enrich time (standing rule in-file; ADR 0005 Model C)"],
+    specRef: "role-specs/audit.md Row 11 — Audit technology fluency (optional technology row, user ruling 2026-10-29; filled per the 4A bless at the O*NET 31.0 version-pin, 2026-11-02)",
+    flags: ["row 11 technology names now QUOTED from the served O*NET 31.0 Technology Skills list — version-pin landed 2026-11-02 (4A fill supersedes the standing UNQUOTED-until-pinned rule in-file; ADR 0005 Model C)"],
   },
 };

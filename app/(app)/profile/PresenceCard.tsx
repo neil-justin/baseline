@@ -13,18 +13,27 @@ import { useState } from "react";
  * A private account records the honest sub-result "resolves, content not
  * machine-verifiable" inside the stamp (recorded, never silently hidden).
  * Re-declaring replaces the LATEST stamp (latest counts).
+ *
+ * Phase-3 re-cut (2026-11-02): the component is now the unified ledger
+ * card's inset declaration SLOT (`page.tsx` renders the stamp itself as the
+ * presence .lrow with its data-presence-* hooks) — the form fields, privacy
+ * note, and status lines keep every hook/aria verbatim.
+ * Phase-4 trim (2026-11-02, same session): `verifiedAt`/`privateNote` rode
+ * the old declared-summary line and are unused by this render — dropped
+ * from the props/page call site (grep-verified: page.tsx is the sole
+ * consumer). The ledger row carries the declared entry's provenance ("Not
+ * declared yet" stays honest here when it is).
  */
 
 const PRIVATE_NOTE =
   "A private LinkedIn account is honestly recorded: the stamp still verifies the link's format and your professional email, and the record carries “resolves, content not machine-verifiable”. Nothing is scored differently.";
 
 interface Props {
-  /** the declared entry summary (from the signed-in student's own state) */
+  /** the declared entry's re-declare copy (from the signed-in student's
+   *  own state — the stamp's truth renders in the ledger row above) */
   declared: {
     linkedinUrl: string;
     email: string;
-    verifiedAt: string;
-    privateNote: boolean;
   } | null;
 }
 
@@ -63,23 +72,13 @@ export default function PresenceCard({ declared }: Props) {
 
   return (
     <div className="presence">
+      {/* the block h2 above already names it — the inner cl-label duplicate
+          retired 2026-11-02; the helper keeps the machine-verified register */}
       <div className="presence-head">
-        <p className="cl-label num">Professional presence — the fourth credential kind</p>
-        <p className="helper">
-          Declared here, verified by the machine, timestamped — distinguished from the counselor-audited
-          kinds above by its stamp. The check grades what runs offline: the link&apos;s format and your
-          professional email&apos;s format (no network look-up — the stamp is what&apos;s presented).
-        </p>
+        <p className="helper">Machine-verified at declaration — offline format checks only, no network look-up.</p>
       </div>
-      {declared ? (
-        <p className="presence-current num">
-          Declared: <span className="presence-url">{declared.linkedinUrl}</span> · {declared.email} ·{" "}
-          latest stamp {declared.verifiedAt}
-          {declared.privateNote ? " · content not machine-verifiable (private account)" : ""} — re-declaring
-          replaces it with a fresh stamp.
-        </p>
-      ) : (
-        <p className="presence-current num">Not declared yet — the presence factor stays unmeasured (grey, never painted).</p>
+      {!declared && (
+        <p className="presence-current num">Not declared yet — the presence factor stays unmeasured.</p>
       )}
       <div className="presence-fieldrow">
         <div className="presence-field">

@@ -24,10 +24,7 @@ function UndecidedDefault() {
               <span className="score-big">0</span>
               <small>of 100</small>
             </div>
-            <p className="score-line">
-              No career picked yet — the skill and training parts of your score hold at zero until it can measure
-              toward something.
-            </p>
+            <p className="score-line">No career picked yet.</p>
           </div>
           <div className="score-right">
             <div className="seg-head">
@@ -135,12 +132,11 @@ export default async function DashboardPage() {
           <div className="sub-row">
             <span className="s-name">Skill progress</span>
             <p className="s-note">
-              You hold <b className="num">{score.sp} of {WEIGHTS.sp}</b>; bars close from your claims and your checks,
-              and each bar shows which. {v.closed} of {mapSize} bars closed · {verifiedBars} verified{" "}
-              <span className="vbadge ok">
-                ·✓
-              </span>
-              .
+              <b className="num">
+                {score.sp} of {WEIGHTS.sp}
+              </b>{" "}
+              · {v.closed} of {mapSize} bars closed · {verifiedBars} verified{" "}
+              <span className="vbadge ok">·✓</span>
             </p>
           </div>
           <div className="score num">
@@ -166,9 +162,11 @@ export default async function DashboardPage() {
           <div className="sub-row">
             <span className="s-name">Employability skills</span>
             <p className="s-note">
-              You hold <b className="num">{score.es} of {WEIGHTS.es}</b> —{" "}
-              {v.esVerified} of 7 NACE competencies verified{" "}
-              <span className="vbadge ok">·✓</span>.
+              <b className="num">
+                {score.es} of {WEIGHTS.es}
+              </b>{" "}
+              · {v.esVerified} of 7 NACE competencies verified{" "}
+              <span className="vbadge ok">·✓</span>
             </p>
           </div>
           <div className="score num">
@@ -188,10 +186,13 @@ export default async function DashboardPage() {
           <div className="sub-row">
             <span className="s-name">Training progress</span>
             <p className="s-note">
-              You hold <b className="num">{score.tp} of {WEIGHTS.tp}</b>;{" "}
+              <b className="num">
+                {score.tp} of {WEIGHTS.tp}
+              </b>{" "}
+              ·{" "}
               {v.stageOne.done === 0
-                ? "your pathway just started."
-                : `First 30 days: ${v.stageOne.done} of 3 done.`}
+                ? "pathway just started"
+                : `First 30 days: ${v.stageOne.done} of 3 done`}
             </p>
           </div>
           <div className="score num">
@@ -218,16 +219,16 @@ export default async function DashboardPage() {
             <span className="s-name">Application readiness</span>
             {v.arMeasured ? (
               <p className="s-note">
-                You hold <b className="num">{score.ar} of {WEIGHTS.ar}</b>; the three factors score on their
-                own runs — resume{" "}
-                {v.arFactors.resume.earned}/{v.arFactors.resume.max} · letter{" "}
+                <b className="num">
+                  {score.ar} of {WEIGHTS.ar}
+                </b>{" "}
+                · resume {v.arFactors.resume.earned}/{v.arFactors.resume.max} · letter{" "}
                 {v.arFactors.letter.measured ? `${v.arFactors.letter.earned}/${v.arFactors.letter.max}` : "not run"} · presence{" "}
-                {v.arFactors.presence.measured ? `${v.arFactors.presence.earned}/${v.arFactors.presence.max}` : "not declared"}.
+                {v.arFactors.presence.measured ? `${v.arFactors.presence.earned}/${v.arFactors.presence.max}` : "not declared"}
               </p>
             ) : (
               <p className="s-note not-yet">
-                Not yet measured — the resume diagnostic in Prep opens this channel (resume 7 · letter 5 ·
-                presence 3).
+                Not yet measured — opens with the resume diagnostic in Prep.
               </p>
             )}
           </div>
@@ -261,10 +262,13 @@ export default async function DashboardPage() {
           <div className="sub-row">
             <span className="s-name">Career clarity</span>
             <p className="s-note">
-              You hold <b className="num">{score.cc} of {WEIGHTS.cc}</b> — Career picked{" "}
+              <b className="num">
+                {score.cc} of {WEIGHTS.cc}
+              </b>{" "}
+              · Career picked{" "}
               <span className="vbadge ok">{v.ccPicked ? "✓" : "—"}</span> · Plan started{" "}
               <span className="vbadge ok">{v.ccStarted ? "✓" : "—"}</span> · First item done:{" "}
-              {v.ccFirstDone ? "yes" : "not yet"}.
+              {v.ccFirstDone ? "yes" : "not yet"}
             </p>
           </div>
           <div className="score num">
@@ -357,19 +361,14 @@ export default async function DashboardPage() {
               })}
             </tbody>
           </table>
-          <div className="foot">
-            Every fill is an earned fraction of its channel — no painted readiness.{" "}
-            {plan.length > 3 && (
-              <>
-                The full ranked list lives in{" "}
-                <a className="foot-link" href="/pathway">
-                  My Plan
-                </a>
-                .{" "}
-              </>
-            )}
-            Effects are computed projections for this state (lib/engines/score.ts).
-          </div>
+          {plan.length > 3 && (
+            <div className="foot">
+              The full ranked list lives in{" "}
+              <a className="foot-link" href="/pathway">
+                My Plan
+              </a>
+            </div>
+          )}
         </div>
 
         <div className="card actions">
@@ -379,7 +378,7 @@ export default async function DashboardPage() {
           {!v.arMeasured && (
             <div className="row">
               <div>
-                <b>Run the resume diagnostic</b>
+                <b>Run the resume checker</b>
                 <div className="sub">first AR factor · opens the channel</div>
               </div>
               <span className="badge num">up to +{WEIGHTS.ar}</span>
@@ -390,7 +389,7 @@ export default async function DashboardPage() {
               <div>
                 <b>Finish your application materials</b>
                 <div className="sub">
-                  {[!v.arFactors.letter.measured && "cover-letter check", !v.arFactors.presence.measured && "presence declaration"]
+                  {[!v.arFactors.letter.measured && "cover-letter checker", !v.arFactors.presence.measured && "presence declaration"]
                     .filter(Boolean)
                     .join(" · ")}{" "}
                   still open
@@ -419,9 +418,6 @@ export default async function DashboardPage() {
           )}
           <div className="journey-row num">
             Where you are: <b>First 30 days</b>, {v.stageOne.done} of 3 done.
-          </div>
-          <div className="foot">
-            For the counselor, this same screen reads as cohort readiness — same numbers, more sections.
           </div>
         </div>
       </section>

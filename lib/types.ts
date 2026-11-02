@@ -104,6 +104,11 @@ export interface StudentState {
   careerId: string | null;
   /** closed gap bars for the current career's skill map, keyed by skill name */
   bars: Record<string, { source: BarSource }>;
+  /** career-agnostic record of PROVEN bars earned in ANY role (verified ·✓ /
+   *  checked ✓✓) — merges back into `bars` at re-assessment for whatever sits
+   *  on the active map, so switching roles never loses proven skills.
+   *  claimed bars never land here (self-ratings are per-role baselines). */
+  provenArchive?: Record<string, { source: "verified" | "checked" }>;
   /** ES carrier: assessment result per NACE competency name (absent key /
    *  absent field = that competency has no assessment result yet). */
   competencies?: Record<string, CompetencyStatus>;

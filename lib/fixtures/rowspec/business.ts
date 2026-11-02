@@ -749,7 +749,7 @@ export const ROW_SPECS_BUSINESS: RowSpecMap = {
     flags: ["flagged condensed row name (ruling: accepted)"],
   },
   "events::Event-records keeping (incl. financials)": {
-    descriptor: "Source-verbatim: \"Maintain records of event aspects, including financial details.\" · \"Verify accuracy of records.\"",
+    descriptor: "Source-verbatim: \"Maintain records of event aspects, including financial details.\"",
     anchors: ["[PSOC 3332] g): \"…reporting on variations to work orders\" (records family)"],
     specRef: "role-specs/events.md — Event-records keeping row",
     flags: ["flagged condensed row name (ruling: accepted)"],
@@ -762,7 +762,7 @@ export const ROW_SPECS_BUSINESS: RowSpecMap = {
     flags: ["flagged condensed row name (ruling: accepted); the permit task is US-institutional — the PH note (venue/LGU permits; no verified free resource) rides the accepted row shape (mechanical confirm at copy time)"],
   },
   "events::Bills review & payment approval": {
-    descriptor: "Source-verbatim: \"Review event bills for accuracy and approve payment.\" · \"Authorize financial actions.\"",
+    descriptor: "Source-verbatim: \"Review event bills for accuracy and approve payment.\" · \"Maintain records of event aspects, including financial details.\"",
     anchors: ["Budget-tracking family (O*NET prints; entry tier executes under finance approval)"],
     specRef: "role-specs/events.md — Bills review row",
     flags: ["flagged condensed row name (ruling: accepted)"],
@@ -780,7 +780,7 @@ export const ROW_SPECS_BUSINESS: RowSpecMap = {
     flags: ["flagged condensed row name (ruling: accepted)"],
   },
   "events::Administrative details & inquiries": {
-    descriptor: "Source-verbatim: \"Direct administrative details, such as financial operations, dissemination of promotional materials, and responses to inquiries.\" · \"Correspond with customers to answer questions or resolve complaints.\"",
+    descriptor: "Source-verbatim: \"Direct administrative details, such as financial operations, dissemination of promotional materials, and responses to inquiries.\" · \"Consult with customers to determine objectives and requirements for events, such as meetings, conferences, and conventions.\"",
     anchors: ["[PSOC 3332] b): \"responding to inquiries concerning services provided and costs for room and equipment hire, catering and related services\""],
     specRef: "role-specs/events.md — Administrative details row",
     flags: ["flagged condensed row name (ruling: accepted)"],

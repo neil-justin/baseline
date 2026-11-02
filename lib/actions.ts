@@ -47,12 +47,16 @@ export function switchCareer(state: StudentState, toId: string): ActionResult {
   const to = getCareer(toId);
   const from = getCareer(state.careerId);
   if (!to || !from || to.id === from.id) return { state, error: "invalid switch" };
-  // locked: verified skills + goals survive; bars/score reset downstream.
-  // CANON (_fixture-math.md beat 6): the dip state reads SP 0 — "0 closed bars".
-  // The carried ·✓ set re-registers at the quick re-assessment (claimAll),
-  // not at switch time; `decisions.verifiedTransferred` records what survives.
-  const transferred = Object.entries(state.bars)
-    .filter(([, v]) => v.source === "verified")
+  // locked: skills proven in ANY role survive via provenArchive; the carried
+  // ·✓ set re-registers at the quick re-assessment (claimAll), not at switch
+  // time. CANON (_fixture-math.md beat 6): the dip state reads SP 0 —
+  // "0 closed bars".
+  const proven: Record<string, { source: "verified" | "checked" }> = { ...state.provenArchive };
+  for (const [name, v] of Object.entries(state.bars)) {
+    if (v.source === "verified" || v.source === "checked") proven[name] = { source: v.source };
+  }
+  const transferred = Object.entries(proven)
+    .filter(([name, v]) => v.source === "verified")
     .map(([name]) => name)
     .filter((name) => to.skills.some((s) => s.name === name));
   const next = requeueStageOne(
@@ -60,11 +64,12 @@ export function switchCareer(state: StudentState, toId: string): ActionResult {
       ...state,
       careerId: toId,
       bars: {},
+      provenArchive: proven,
       stageOneDone: 0,
       decisions: { verifiedTransferred: transferred },
       events: [
         ...state.events,
-        { date: nowStamp(), kind: "career-switched", detail: `Switched ${from.name} → ${to.name} — verified skills and goals carried over; other bars reset.` },
+        { date: nowStamp(), kind: "career-switched", detail: `Switched ${from.name} → ${to.name} — proven skills kept in the record; rated baselines reset.` },
       ],
     },
     to
@@ -98,7 +103,21 @@ export function claimAll(state: StudentState, claims: { skill: string; level: "c
   for (const skill of state.decisions.verifiedTransferred) {
     next = { ...next, bars: { ...next.bars, [skill]: { source: "verified" as const } } };
   }
+  // provenArchive restoration (user ruling 2026-11-02: proven skills are never
+  // lost across role switches): archived verified bars on the active map are
+  // ALREADY in `decisions.verifiedTransferred` (switchCareer computes the
+  // carried set from bars ∪ archive) and re-registered above. What's left here
+  // is archived ✓✓ bars filling ABSENCES on the active map — an existing bar
+  // (claim included) stays untouched, matching submitCheck's no-override rule.
+  const archive = state.provenArchive ?? {};
   const career = getCareer(next.careerId)!;
+  let bars = { ...next.bars };
+  for (const [skill, v] of Object.entries(archive)) {
+    if (v.source !== "checked") continue;
+    if (!career.skills.some((s) => s.name === skill)) continue;
+    if (!(skill in bars)) bars[skill] = { source: "checked" as const };
+  }
+  next = { ...next, bars };
   // claims close the baseline — the last full re-rank point of onboarding
   const after = requeueStageOne({ ...next, stageOneDone: 0 }, career);
   return { state: after, note: `${claims.filter((c) => c.level === "confident").length} of ${career.skills.length} skills on your baseline` };
@@ -109,8 +128,10 @@ export function markVerified(state: StudentState, skill: string): ActionResult {
   if (!career || !career.skills.some((s) => s.name === skill)) return { state, error: "skill not on map" };
   const bars = { ...state.bars };
   bars[skill] = { source: "verified" };
+  // archive the proven fact — career-agnostic, survives a later switch
+  const provenArchive = { ...state.provenArchive, [skill]: { source: "verified" as const } };
   // re-rank DOES NOT fire on verification at cold start (beat ordering locked)
-  return { state: { ...state, bars }, note: `${skill} confirmed ·✓` };
+  return { state: { ...state, bars, provenArchive }, note: `${skill} confirmed ·✓` };
 }
 
 /**
@@ -160,7 +181,13 @@ export function applyVerifiedCredential(
     }
   }
   if (closed.length === 0) return { state, closed, queueTicks: [] };
-  let next: StudentState = { ...state, bars };
+  const provenArchive: Record<string, { source: "verified" | "checked" }> = { ...state.provenArchive };
+  for (const skill of credential.declaredSkills) {
+    // every cited skill of a VERIFIED credential is a proven fact, on or off
+    // the map — the archive lets it resurface on a role whose map includes it
+    provenArchive[skill] = { source: "verified" };
+  }
+  let next: StudentState = { ...state, bars, provenArchive };
   // stage-① progress: member of the current queue closing ticks 1 of 3
   const queue = next.stageOneQueue ?? stageOne(career, openSkills(career, next.bars)).queue;
   const queueTicks = queue.filter((q) => closed.includes(q));
@@ -259,6 +286,13 @@ export function submitCheck(state: StudentState, resourceId: string, answers: nu
     if (career.skills.some((s) => s.name === skill) && !(skill in next.bars)) {
       next.bars[skill] = { source: "checked" };
       closedNow.push(skill);
+    }
+  }
+  // archive the proven facts (✓✓) so a later role switch can restore them
+  if (closedNow.length > 0) {
+    next.provenArchive = { ...next.provenArchive };
+    for (const skill of checkResource?.skillsAddressed ?? []) {
+      if (!next.provenArchive[skill]) next.provenArchive[skill] = { source: "checked" };
     }
   }
   // stage-① progress: member of the current queue closing ticks 1 of 3

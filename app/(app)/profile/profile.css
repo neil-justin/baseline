@@ -3,24 +3,41 @@
    Round-P2 re-cut (2026-11-02). The white band register (the
    dashboard-family default, now the v7.4 sweep app-wide) names
    the surface + carries the computed
-   five-channel mini-bar; FOUR family tabs (Plan · Competencies ·
-   Credentials · Account) marry the ONE white card (cardtop =
-   tab strip + computed kicker — ProfileTabs.tsx owns that chrome).
-   Round-P2: the prow 1fr/auto rows retire app-wide on this page —
-   every public row re-cuts to the ledger-table register cloned
-   from pathway.css (.plan-table/.gap-table VALUES under .v7profile):
-   tracked 11px/500 +0.08em heads, #E8EAED row rules, #F5F8FC row
-   hover, chips in the State column, honest "—" for unmeasured.
-   The masthead + readout drop to the 22px KPI register (the 46px
-   readout scale was the named offender); paddings ride the 12px
-   family rhythm. Cool white-grey ground, white cards with 1px
-   border + whisper shadow, 8px radius; Roboto everywhere; no
-   entrance motion (DNA lock; the readout's 900ms count-up stays the
-   family's one allowed motion; the rubric-mini duplicate instrument was
-   retired 2026-11-02). Scoped under `.v7profile` (the
-   page root) — shell chrome lives in ../v7.css. Hook ids
-   (#panel-plan/#panel-profile/#tab-*) ride the markup, not the
-   stylesheet; content strings are the e2e contract.
+   five-channel mini-bar + the page's ONE filled CTA (→ /pathway);
+   FOUR family tabs (Plan · Competencies · Credentials · Account)
+   marry the tab strip (cardtop = tab strip + computed kicker —
+   ProfileTabs.tsx owns that chrome).
+   PHASE-1 REVAMP (2026-11-02): the Plan tab re-cuts to stacked
+   Dashboard-register cards (.plancards) — the married card drops
+   to the transparent .planframe on that tab so the cards float on
+   the shell ground; the Plan §-document's masthead, ticklines and
+   §4 counters are gone. head/foot/plan-table/strow/lcap VALUES are
+   cloned from dashboard.css under .v7profile (per-surface cloning
+   being the repo idiom). PHASE-2 REVAMP (2026-11-02): the
+   .planframe becomes unconditional — every tab floats on the shell
+   ground (the then-psblock-register tabs kept one married surface via
+   their inner .stack — retired by the Phase-4 sweep below) — and the
+   Competencies tab re-cuts to
+   three Dashboard-register cards (skills + provenance chips · NACE
+   assessment + retake text link · the demoted starting-levels
+   strip); ProfileReadout's .readout register retires with it.
+   PHASE-3 REVAMP (2026-11-02): the Credentials tab re-cuts to ONE
+   unified ledger card — platform check-passed rows, the presence
+   stamp, and the declared entries all ride the Dashboard-register
+   .lrow unit (icon slot · plain name · chip pushed right · 11px
+   provenance lines; VALUES cloned from dashboard.css); the TESDA
+   future row, the .p-table earned-table idiom, the .prow register,
+   the TESDA/earned 720px block folds, and the doc-p/lead-count
+   remnants die here.
+   PHASE-4 REVAMP (2026-11-02): the Account tab re-cuts to three
+   separated Dashboard-register cards (Identity · Security · Data
+   rights) — the psblock/b-head/lead-mono/src-line register, its
+   .stack married-surface bridge, and the page's last .stack all
+   retire here (grep-verified zero consumers after the sweep). Every
+   tab now floats real .card units on the shell ground. scoped
+   under `.v7profile` (the page root) — shell chrome lives in
+   ../v7.css. Hook ids (#panel-plan/#panel-profile/#tab-*) ride the
+   markup, not the stylesheet; content strings are the e2e contract.
    ============================================================ */
 
 .tabpanel[hidden] { display: none !important; }
@@ -43,7 +60,7 @@
   border-radius: 8px;
   box-shadow: var(--v-shadow);
   padding: 16px 20px;
-  margin-bottom: 14px;
+  margin-bottom: 12px; /* the family band rhythm — exactly 12px */
 }
 .v7profile .proband .bandrow {
   display: flex;
@@ -99,7 +116,119 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- the married card (v7.2 Composition A) ---------- */
+/* the band's ONE filled CTA (→ /pathway) — VALUES cloned from dashboard.css
+   .cta; everything else on the page stays links/text */
+.v7profile .cta {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 8px;
+  background: var(--v-blue);
+  color: #fff;
+  font: 500 14px Roboto, system-ui, sans-serif;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3);
+  transition: background-color 0.14s ease, box-shadow 0.14s ease;
+}
+.v7profile .cta:hover { background: var(--v-blue-deep); box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35); }
+
+/* ---------- the Plan tab's Dashboard-register cards (Phase 1) ----------
+   One compartment per card (goals · pathway stages · score trajectory);
+   head + foot idiom and dense table VALUES cloned from dashboard.css. */
+
+/* card heads: title (b) + computed subhead (span) */
+.v7profile .head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 14px 16px 10px;
+  flex-wrap: wrap;
+}
+.v7profile .head b { font: 500 14px/1.3 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7profile .head span { font: 400 11.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); } /* state-bearing → ink-2 */
+
+/* card foots — the link-out slot */
+.v7profile .foot {
+  padding: 10px 16px 14px;
+  font: 400 11px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7profile .foot-link {
+  color: var(--v-blue-deep);
+  text-decoration: none;
+}
+.v7profile .foot-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* dense table register (VALUES cloned from dashboard.css `.plan-table`) */
+.v7profile .plan-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.v7profile .plan-table th {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+  text-align: left;
+  padding: 8px 16px;
+  border-top: 1px solid var(--v-rows);
+  border-bottom: 1px solid var(--v-rows);
+}
+.v7profile .plan-table th.col-item { width: 42%; }
+.v7profile .plan-table td {
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--v-rows);
+  font-size: 13px;
+  vertical-align: middle;
+}
+.v7profile .plan-table td .item { font: 400 13px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7profile .plan-table td .sub { font: 400 11px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 1px; max-width: 60ch; }
+.v7profile .plan-table tbody tr { transition: background-color 0.12s ease; }
+.v7profile .plan-table tbody tr:hover { background: #f5f8fc; }
+.v7profile .plan-table tr:last-child td { border-bottom: 0; }
+/* chips ride the State column (the family's wash pills defined below) */
+
+/* ledger rows — the pathway stages (name 400-weight + hairline rules) */
+.v7profile .strow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--v-rows);
+}
+.v7profile .strow b { font: 400 13px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7profile .strow .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: #e8eaed;
+  border: 1px solid var(--v-border);
+  flex: none;
+}
+.v7profile .strow .dot.on { background: var(--v-blue); border-color: var(--v-blue); }
+.v7profile .strow .s-count {
+  margin-left: auto;
+  font: 400 11.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* provenance captions (dashboard `.lcap` VALUES) — the entry route + route
+   line under the stage rows; the trajectory's .prov gets its own restyle
+   further down */
+.v7profile .lcap {
+  padding: 12px 16px 14px;
+  font: 400 11px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2); /* state-bearing caption → ink-2 */
+}
+.v7profile .lcap p { margin: 0; }
+.v7profile .lcap p + p { margin-top: 3px; }
+
+/* the undecided picker's CTA slot (the .cta body placement on its card) */
+.v7profile .u-cta { padding: 4px 16px 10px; }
 
 .v7profile .card {
   background: var(--v-surface);
@@ -126,6 +255,34 @@
   color: var(--v-ink2);
   font-variant-numeric: tabular-nums;
 }
+
+/* the floating-cards frame (Phase 2): the wrapper drops its card chrome
+   unconditionally — the tab strip stands alone as a little card and the
+   active tabpanel floats on the shell ground. PHASE 4: the old psblock-
+   register married surface (the `.stack` bridge) retires — every tab
+   renders real .card units now. */
+.v7profile .card.tabcard.planframe {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.v7profile .planframe .cardtop {
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  background: #fafbfc;
+  margin-bottom: 12px;
+}
+.v7profile .planframe .tabpanel:not([hidden]) { margin-top: 12px; }
+/* PHASE 4 SWEEP: the ACCOUNT-ONLY bridge rule
+   `.planframe .tabpanel:not([hidden]) > .stack` is gone — the Account
+   panel is real .plancards .card units, so no tabpanel child .stack
+   remains (grep: page.tsx was the sole consumer). */
+.v7profile .plancards .card { margin-bottom: 12px; } /* the exact family rhythm */
+/* the row's LAST card carries no bottom margin — the frame's overflow:hidden
+   BFC keeps the card's 12px inside it, and stacked with the .pro-foot's 16px
+   margin-top it read 28px against the page foot; the foot now owns the gap */
+.v7profile .plancards .card:last-child { margin-bottom: 0; }
 
 /* tab strip — Material segmented on the grey-wash track */
 .v7profile .ptabs {
@@ -154,167 +311,60 @@
 }
 .v7profile .ptabs [role="tab"]:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 1px; }
 
-/* ---------- panel body — flush sections of the married card ---------- */
+/* ---------- panel body — swept in Phase 4 (2026-11-02): the married-card
+   section register (`.stack`, `.psblock`, `.psblock + .psblock`,
+   `.stack > .psblock:first-child`, `.lead-mono`, `.b-head`, `.b-head .helper`,
+   `.b-head .helper b`, `.src-line`) had the Account tab as its last
+   consumer; the Phase-4 re-cut moved it to the `.plancards .card`
+   register, so all of these reached zero consumers and were removed —
+   each grep-verified against every consumer BEFORE deletion (the e2e
+   `.lead-mono`/`.b-head .helper` references are the pathway/prep
+   surfaces, whose own scoped stylesheets are untouched). `.helper` as a
+   class lives on only inside `.presence-head` (rule further down) — a
+   surviving consumer, kept. ---------- */
 
-.v7profile .stack { display: block; }
-/* v7.2 P2: the 12px family rhythm — panel sections breathe 12/14 */
-.v7profile .psblock { padding: 12px 16px 14px; }
-.v7profile .psblock + .psblock { border-top: 1px solid var(--v-rows); }
-/* the readout keeps the "panel" class from the port — inside the married
-   card it renders flush (never a card inside a card) */
-.v7profile .readout.panel {
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-}
-.v7profile .readout.panel { padding: 10px 16px 14px; }
-.v7profile .stack .readout.panel + .psblock { border-top: 1px solid var(--v-rows); }
+/* ---------- the unified credential ledger (Phase 3, 2026-11-02) — one
+   register for every credential source: platform check-passed rows, the
+   machine-verified presence stamp row, and the counselor-audited declared
+   entries all ride the Dashboard-register row unit, VALUES cloned from
+   dashboard.css .lrow/.lgrid (scoped .v7profile, per-surface cloning being
+   the repo idiom): icon-slot .ms face (v7.css owns the Material font),
+   plain 400-weight name, chip pushed right (margin-left:auto), and 11px
+   provenance lines wrapping full-width. Rows carry evidence links and
+   audit notes, so the ledger reads single-column — the dashboard
+   competency ledger's 2-col grid would crowd them; the ≤560 fold law
+   holds trivially (rows wrap, nothing restructures) ---------- */
 
-.v7profile .lead-mono {
-  margin: 0;
-  padding: 10px 16px 8px;
-  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
-  border-bottom: 1px solid var(--v-rows);
-}
-.v7profile .stack > .psblock:first-child { border-top: 0; }
-
-.v7profile .b-head { padding-bottom: 12px; border-bottom: 1px solid var(--v-rows); }
-.v7profile .b-head h2 {
-  font: 500 16px/1.3 Roboto, system-ui, sans-serif;
-  margin: 0;
-  color: var(--v-ink);
-}
-.v7profile .b-head .helper { margin-top: 6px; font: 400 13px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 66ch; }
-.v7profile .b-head .helper b { color: var(--v-ink); font-weight: 500; }
-.v7profile .lead-count { margin-top: 6px; font: 400 13px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); }
-
-/* receipt / fine-print lines — state-bearing grey rides ink-2 (v7.1 floor) */
-.v7profile .src-line {
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid var(--v-rows);
-  font: 400 11px/1.65 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.01em;
-  color: var(--v-ink2);
-}
-
-/* mono register was retired with the Index world — the num class keeps
-   just the tabular-nums behavior (globals.css); text renders Roboto */
-
-/* ---------- the readout (Competencies tab opener) ---------- */
-.v7profile .readout-head {
+.v7profile .lrow {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
   flex-wrap: wrap;
-}
-.v7profile .readout-head .label {
-  display: block;
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
-}
-.v7profile .readout-sub { font: 400 11.5px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 3px; }
-/* v7.2 P2: the readout sits at the 22px KPI register — the 46px readout
-   scale was the ruled dead-space offender; the 900ms count-up remains the
-   family's one allowed motion (the rubric-mini duplicate instrument was
-   retired 2026-11-02 — the header band carries the five channels) */
-.v7profile .readout-score {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-  font-variant-numeric: tabular-nums;
-}
-.v7profile .readout-score > span:first-child,
-.v7profile .readout-score .countwrap {
-  font: 500 22px/1.1 Roboto, system-ui, sans-serif;
-  display: inline-block;
-  min-width: 2ch;
-  color: var(--v-ink);
-}
-.v7profile .readout-score small { font: 400 12px/1.1 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
-
-.v7profile .readout-fit {
-  margin-top: 6px;
-  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
-}
-.v7profile .readout-fit b { color: var(--v-ink); font-weight: 500; }
-
-/* ---------- prow rows — the declared-credential ledger (Round-P2: the
-   only prow rows left on the page; the public rows re-cut to the
-   .p-table register below). Full-bleed inside the section so the
-   #F5F8FC row hover spans the card like pathway's table rows ---------- */
-
-.v7profile .prow-list { margin-top: 4px; }
-.v7profile .prow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 3px 16px;
-  align-items: baseline;
-  padding: 12px 16px;
-  margin: 0 -16px;
+  align-items: center;
+  gap: 3px 10px;
+  padding: 10px 16px;
   border-bottom: 1px solid var(--v-rows);
   transition: background-color 0.12s ease;
 }
-.v7profile .prow:hover { background: #f5f8fc; }
-.v7profile .prow:last-child { border-bottom: 0; }
-.v7profile .prow .p-name {
-  font: 500 13px/1.45 Roboto, system-ui, sans-serif;
+.v7profile .lrow:hover { background: #f5f8fc; }
+.v7profile .lrow .ms { font-size: 16px; color: var(--v-ink2); flex: none; }
+.v7profile .lrow .ms.done { color: var(--v-green); }
+.v7profile .lrow b {
+  font: 400 13px/1.4 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
   overflow-wrap: anywhere;
 }
-.v7profile .prow .p-sub { grid-column: 1; font: 400 12px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); overflow-wrap: anywhere; }
-.v7profile .prow .p-sub .ev-link { color: var(--v-blue-deep); text-decoration: underline; text-underline-offset: 2px; }
-.v7profile .prow .p-badge { grid-row: 1; grid-column: 2; justify-self: end; text-align: right; }
-
-/* ---------- the ledger-table register (prow replacement — CSS VALUES
-   cloned from pathway.css .plan-table/.gap-table, scoped .v7profile,
-   per-surface cloning being the repo idiom) ---------- */
-
-.v7profile .p-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-variant-numeric: tabular-nums;
-  margin-top: 12px;
-}
-.v7profile .p-table th {
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--v-ink2);
-  text-align: left;
-  padding: 8px 12px 8px 0;
-  border-bottom: 1px solid var(--v-rows);
-}
-.v7profile .p-table td {
-  padding: 10px 12px 10px 0;
-  border-bottom: 1px solid var(--v-rows);
-  vertical-align: middle;
-  font: 400 12px/1.55 Roboto, system-ui, sans-serif; /* the data register */
+.v7profile .lrow .chip { margin-left: auto; }
+/* the row's provenance lines — the .lcap register (11px ink2) riding the
+   unit itself; each source line wraps full-width under the name */
+.v7profile .lrow .lsub {
+  flex-basis: 100%;
+  font: 400 11px/1.55 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   overflow-wrap: anywhere;
 }
-.v7profile .p-table td.item {
-  font: 500 13px/1.4 Roboto, system-ui, sans-serif; /* the row-title register */
-  color: var(--v-ink);
-}
-.v7profile .p-table td.item.dim { color: var(--v-ink2); } /* the honest not-earned row name */
-.v7profile .p-table tbody tr { transition: background-color 0.12s ease; }
-.v7profile .p-table tbody tr:hover { background: #f5f8fc; }
-.v7profile .p-table tr:last-child td { border-bottom: 0; }
-/* chips live in the State column; the earned-date column is tabular */
-.v7profile .p-table .ct-state { width: auto; white-space: nowrap; }
-.v7profile .p-table .ct-date { width: 96px; white-space: nowrap; }
-.v7profile .p-table .ct-levels { width: 120px; white-space: nowrap; }
-/* the honest unmeasured cell — never a painted zero */
-.v7profile .p-table .p-dash { color: var(--v-grey-text); }
+.v7profile .lrow .lsub .ev-link { color: var(--v-blue-deep); text-decoration: underline; text-underline-offset: 2px; }
+/* the audit's rejection note is the shared record — ink, not caption grey */
+.v7profile .lrow .lsub.rej-note { color: var(--v-ink); font-weight: 500; }
+.v7profile .lrow .lsub.lacts { display: flex; gap: 8px; flex-wrap: wrap; }
 
 /* the family's wash chips (dashboard clone) */
 .v7profile .chip {
@@ -338,10 +388,8 @@
   );
 }
 
-/* declared credentials */
-.v7profile .dec-block { margin-top: 10px; }
-.v7profile .dec-row .p-sub.rej-note { color: var(--v-ink); font-weight: 500; }
-.v7profile .dec-row .p-sub.dec-acts { display: flex; gap: 8px; flex-wrap: wrap; }
+/* declared credentials — the entry machinery (the rows themselves ride the
+   .lrow register above); Phase 3: rej-note/lacts moved onto it */
 .v7profile .rowbtn {
   display: inline-flex;
   align-items: center;
@@ -358,16 +406,16 @@
 .v7profile .rowbtn.armed { color: var(--v-amber-text); background: var(--v-amber-wash); border-color: var(--v-amber); }
 .v7profile .rowbtn:disabled { opacity: 0.55; }
 .v7profile .dec-entryline {
-  margin-top: 12px;
+  margin: 12px 16px;
   display: flex;
   align-items: center;
   gap: 14px;
   flex-wrap: wrap;
 }
 
-/* the declaration form — Material inputs on the white card */
+/* the declaration form — Material inputs on the unified card */
 .v7profile .dec-form {
-  margin-top: 12px;
+  margin: 12px 16px 14px;
   padding: 14px;
   border: 1px solid var(--v-border);
   border-radius: 8px;
@@ -415,11 +463,12 @@
 .v7profile .dec-skill input { accent-color: var(--v-blue); margin: 0; }
 .v7profile .dec-skillnote { margin-top: 8px; font: 400 11px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
 .v7profile .dec-ctas { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.v7profile .ev-link { color: var(--v-blue-deep); }
 
 /* ---------- presence (fourth credential kind — ticket 12) ---------- */
 
-.v7profile .presence-wrap { margin-top: 14px; }
+/* the declaration slot inside the unified card (Phase 3) — the stamp row
+   itself lives up in the .ledger; this is the entry machinery */
+.v7profile .formslot { margin: 12px 16px 14px; }
 /* v7.2 P2: the plain hairline form block — 1px #DADCE0 border, 8px radius,
    no card-in-card gloss (no shadow, no inner panel styling) */
 .v7profile .presence {
@@ -440,7 +489,6 @@
   color: var(--v-ink2);
   overflow-wrap: anywhere;
 }
-.v7profile .presence-url { color: var(--v-ink); }
 .v7profile .presence-fieldrow { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; margin-top: 10px; }
 .v7profile .presence-field { display: grid; gap: 5px; flex: 1; min-width: 220px; }
 .v7profile .presence-field .cl-label {
@@ -477,25 +525,30 @@
   font: 500 12.5px/1.55 Roboto, system-ui, sans-serif;
   color: var(--v-amber-text);
 }
-/* the presence row rides the earned ledger table (data-presence-row on the tr) */
+/* the presence stamp row rides the unified ledger (data-presence-row on
+   the .lrow — the data-presence-sub/stamp hooks are the e2e contract) */
 
-/* ---------- account (identity · password · DPA artifacts) ---------- */
+/* ---------- account (Phase 4): three separate Dashboard-register cards
+   (Identity · Security · Data rights) — page.tsx renders each card's head;
+   these are the card BODIES, breathing the family 16px gutters instead of
+   the retired .psblock panel padding ---------- */
 
-.v7profile .acct-id { margin-top: 8px; }
+.v7profile .acct-id { margin: 2px 16px 14px; }
 .v7profile .acct-id .dec-grid { margin-bottom: 12px; }
 .v7profile .acct-campus {
   margin: 8px 0 0;
   font: 400 11px/1.55 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
 }
-.v7profile .acct-pw { margin-top: 8px; display: grid; gap: 10px; max-width: 420px; }
+.v7profile .acct-pw { margin: 2px 16px 14px; display: grid; gap: 10px; max-width: 420px; }
 .v7profile .acct-pw .dec-ctas { margin-top: 2px; }
 
-/* ---------- DPA (ticket 7: export + erase as artifacts) — Round-P2: the
-   two rights as two disciplined ledger rows (detail left, action right),
-   #E8EAED row rules, 12px rhythm; DOM untouched (CSS-only placement) ---------- */
-
-.v7profile .dpa { display: grid; margin-top: 2px; }
+/* ---------- DPA data rights (ticket 7: export + erase as artifacts) —
+   Round-P2: the two rights as two disciplined ledger rows (detail left,
+   action right), #E8EAED row rules, 12px rhythm; Phase 4: the card's body
+   rides the family 16px gutters and the closing .lcap carries the cascade
+   receipt (DOM untouched — CSS-only placement) ---------- */
+.v7profile .dpa { display: grid; margin: 2px 16px 0; }
 .v7profile .dpa-line {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -555,94 +608,44 @@
 }
 .v7profile .btn-ghost:hover { border-color: var(--v-blue); background: var(--v-blue-wash); }
 .v7profile .btn-sm { padding: 6px 14px; font-size: 12.5px; }
-.v7profile .btn .arrow { font-weight: 400; opacity: 0.85; }
+/* PHASE 4 SWEEP: `.btn .arrow` is gone — its only consumer was the DPA
+   export anchor, re-cut in Phase 4 to the text-link register (grep:
+   zero `.arrow` classNames remain under .v7profile). */
 .v7profile .quiet-toggle { font: 500 12.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); background: none; border: 0; padding: 0; cursor: pointer; }
 .v7profile .quiet-toggle:hover { color: var(--v-ink); text-decoration: underline; text-underline-offset: 3px; }
-.v7profile .g-link {
-  font: 500 12px/1.4 Roboto, system-ui, sans-serif;
-  color: var(--v-blue-deep);
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  text-align: left;
-}
-.v7profile .g-link:hover { text-decoration: underline; text-underline-offset: 2px; }
 .v7profile .link-quiet { color: var(--v-blue-deep); text-decoration: none; }
 .v7profile .link-quiet:hover { text-decoration: underline; text-underline-offset: 2px; }
-.v7profile .retake-row { margin-top: 10px; }
 
-/* ---------- assessment strip (kept) + starting-levels ledger ---------- */
+/* ---------- Competencies Phase-2 register: the demoted starting-levels
+   strip — one wrapped line of name + dots units, caption-weight names so
+   the unit reads secondary next to the full cards; the dots' aria-labels
+   ("level N of 5" / the honest unrated line) stay byte-verbatim ---------- */
 
-.v7profile .assess-strip {
-  margin-top: 12px;
+.v7profile .lvl-strip {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 18px;
-  padding: 10px 14px;
-  background: var(--v-grey-wash);
-  border: 1px solid var(--v-border);
-  border-radius: 4px;
-  font: 400 11px/1.7 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  gap: 8px 18px;
+  padding: 2px 16px 14px;
+}
+.v7profile .lvl {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.v7profile .lvl-name {
+  font: 400 12px/1.4 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
 }
-.v7profile .assess-strip b { color: var(--v-ink); font-weight: 500; }
-/* starting-levels ledger — a real two-column table (v7.2 P2); the dots'
-   aria-labels ("level N of 5" / the honest unrated line) are byte-verbatim */
-.v7profile .lv-table { margin-top: 6px; }
-.v7profile .dots { display: flex; gap: 4px; flex: none; justify-content: flex-end; }
+.v7profile .dots { display: flex; gap: 4px; flex: none; }
 .v7profile .dots i { width: 10px; height: 10px; background: #e8eaed; border-radius: 2px; display: block; }
 /* starting levels are setup answers, not earned — ink, never green */
 .v7profile .dots i.on { background: var(--v-ink2); }
 
-/* ---------- plan document (masthead strip + dated sections) — Round-P2:
-   the masthead's dead second half dies: both columns carry content,
-   top-aligned, on the 12px rhythm; the score sits in the 22px KPI
-   register with its /100 companion (NOT the 46px readout scale) ---------- */
+/* ---------- Phase-1: the Plan §-document register (masthead, ticklines,
+   §-sections, stage strip, evidence counts) is gone — the Plan tab renders
+   Dashboard-register cards (see top); only the caption/label instruments
+   the other tabs still share live on here ---------- */
 
-/* the reserved-void masthead is dead (v7.2 §4: panels size per content):
-   row 1 = title block left, score block right; row 2 = the five ticklines
-   as the full-width channel strip — the Dashboard's five-channel-cell
-   register, unfilled (the Wash Rule governs state, structure stays white) */
-.v7profile .masthead {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.v7profile .m-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px 24px;
-  flex-wrap: wrap;
-}
-.v7profile .m-title { margin-top: 6px; font: 500 22px/1.3 Roboto, system-ui, sans-serif; color: var(--v-ink); }
-.v7profile .m-meta { margin-top: 5px; font: 400 13.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
-.v7profile .m-meta b { font-weight: 500; color: var(--v-ink); }
-.v7profile .m-right { flex: none; text-align: right; }
-.v7profile .m-score { margin-top: 4px; font: 500 22px/1.1 Roboto, system-ui, sans-serif; color: var(--v-ink); font-variant-numeric: tabular-nums; }
-.v7profile .m-score small { font: 400 12px/1 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-left: 3px; }
-.v7profile .m-channels {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.v7profile .m-channels .tickline {
-  margin: 0;
-  padding: 10px 14px 12px;
-  border-bottom: 0;
-  border-left: 1px solid var(--v-rows);
-  font: 400 12px/1.5 Roboto, system-ui, sans-serif; /* the data register */
-  color: var(--v-ink2);
-}
-.v7profile .m-channels .tickline:first-child { border-left: 0; }
-.v7profile .m-channels .tick-note { display: block; margin-top: 2px; font-size: 11px; line-height: 1.5; /* v7.1 floor */ }
-.v7profile .tickline b { color: var(--v-ink); font-weight: 500; }
-.v7profile .tick-note { color: var(--v-ink2); }
 .v7profile .cl-label {
   font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
   letter-spacing: 0.08em;
@@ -650,98 +653,11 @@
   color: var(--v-ink2);
 }
 
-.v7profile .doc { padding: 0 16px 14px; }
-.v7profile .doc .doc-sec { padding: 12px 0 14px; border-bottom: 1px solid var(--v-rows); }
-.v7profile .doc .doc-sec:last-child { border-bottom: 0; }
-.v7profile .doc-sec h3 {
-  font: 500 15.5px/1.3 Roboto, system-ui, sans-serif;
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  color: var(--v-ink);
-}
-/* the section numeral — drawn ink circle, the family's drawn-numeral law */
-.v7profile .sec-no {
-  width: 22px;
-  height: 22px;
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--v-border);
-  border-radius: 50%;
-  font: 500 11px/1 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
-}
-.v7profile .doc-p { margin-top: 8px; font: 400 14px/1.6 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 68ch; }
-.v7profile .doc-p b { font-weight: 500; color: var(--v-ink); }
-.v7profile .mono-line {
-  margin-top: 10px;
-  font: 500 12px/1.6 Roboto, system-ui, sans-serif;
-  color: var(--v-ink);
-  font-variant-numeric: tabular-nums;
-}
-.v7profile .doc-note { margin-top: 10px; font: 400 12px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 66ch; }
-
-/* stage strip — summary only, counts not ranked items */
-.v7profile .stages {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-top: 12px;
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.v7profile .stage { padding: 12px 16px 13px; }
-.v7profile .stage + .stage { border-left: 1px solid var(--v-rows); }
-.v7profile .stage .st-top { display: flex; align-items: center; gap: 8px; }
-.v7profile .stage .dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 2px;
-  background: #e8eaed;
-  border: 1px solid var(--v-border);
-  flex: none;
-}
-.v7profile .stage .dot.on { background: var(--v-blue); border-color: var(--v-blue); }
-.v7profile .stage .st-name { font: 500 13px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); }
-.v7profile .stage .st-count {
-  display: block;
-  margin-top: 4px;
-  font: 400 11px/1.4 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
-}
-
-/* evidence counts — the drawn-numeral register */
-.v7profile .counts {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-top: 12px;
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.v7profile .count { padding: 12px 16px 13px; }
-.v7profile .count + .count { border-left: 1px solid var(--v-rows); }
-.v7profile .count .label {
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--v-ink2);
-}
-.v7profile .count .c-val {
-  display: block;
-  margin-top: 6px;
-  font: 500 19px/1.2 Roboto, system-ui, sans-serif;
-  color: var(--v-ink);
-  font-variant-numeric: tabular-nums;
-}
+.v7profile .doc-note { margin: 10px 16px 0; font: 400 12px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 66ch; }
 
 /* trajectory — two dated points on a hairline track (earned green carries
    the computed rise; the nodes stay ink) */
-.v7profile .traj { position: relative; height: 88px; margin-top: 4px; max-width: 640px; }
+.v7profile .traj { position: relative; height: 88px; margin: 12px 16px 0; max-width: 640px; }
 .v7profile .traj .baseline {
   position: absolute;
   left: 2px;
@@ -791,7 +707,7 @@
 /* single-point state: the track reads as begun, not a long empty hairline */
 .v7profile .traj.single .baseline { width: 20%; }
 /* mobile: the same two points, stacked */
-.v7profile .traj-rows { display: none; margin-top: 14px; }
+.v7profile .traj-rows { display: none; margin: 4px 16px 0; }
 .v7profile .trow {
   display: flex;
   justify-content: space-between;
@@ -808,24 +724,14 @@
 .v7profile .trow .tv2.ok { color: var(--v-ink); }
 
 .v7profile .prov {
-  margin-top: 14px;
+  margin: 12px 16px 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 18px;
-  padding: 10px 14px;
-  background: var(--v-grey-wash);
-  border: 1px solid var(--v-border);
-  border-radius: 4px;
+  gap: 2px 16px;
   font: 400 11px/1.7 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
   color: var(--v-ink2);
 }
 .v7profile .prov .d-ok { color: var(--v-green-text); font-weight: 500; }
-
-/* closing */
-.v7profile .close-p { margin-top: 8px; font: 400 15px/1.62 Roboto, system-ui, sans-serif; color: var(--v-ink); max-width: 62ch; }
-.v7profile .close-cta { margin-top: 14px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 
 /* ---------- foot ---------- */
 
@@ -848,14 +754,6 @@
 
 /* ---------- responsive ---------- */
 
-@media (max-width: 900px) {
-  /* the channel strip folds 5 → 2: row starts lose their cell rule */
-  .v7profile .m-channels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .v7profile .m-channels .tickline:nth-child(odd) { border-left: 0; }
-  .v7profile .m-channels .tickline:nth-child(n + 3) { border-top: 1px solid var(--v-rows); }
-  .v7profile .m-channels .tickline:last-child { grid-column: 1 / -1; border-top: 1px solid var(--v-rows); }
-}
-
 @media (max-width: 720px) {
   .v7profile { padding: 10px 12px 80px; } /* the bottom nav owns 64px below */
   .v7profile .proband .band { padding: 12px 14px; }
@@ -864,49 +762,30 @@
      the bar above stays the one computed instrument (zero horizontal overflow) */
   .v7profile .bandbar .seglabels { flex-wrap: wrap; row-gap: 2px; }
   .v7profile .bandbar .seglabels span { white-space: normal; flex: 1 1 30%; }
-  /* ledger tables stack into dense blocks (pathway .plan-table values) */
-  .v7profile .p-table,
-  .v7profile .p-table tbody,
-  .v7profile .p-table tr,
-  .v7profile .p-table td {
-    display: block;
-    width: auto;
-  }
-  .v7profile .p-table thead { display: none; }
-  .v7profile .p-table tbody tr { border-bottom: 1px solid var(--v-rows); padding: 12px 0; }
-  .v7profile .p-table tbody tr:last-child { border-bottom: 0; }
-  .v7profile .p-table td { padding: 0 0 10px; border-bottom: 0; }
-  .v7profile .p-table td:last-child,
-  .v7profile .p-table tbody tr:last-child td:last-child { padding-bottom: 0; }
-  /* the two-column levels table keeps its pairing as a disciplined row */
-  .v7profile .lv-table tr { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; }
-  .v7profile .lv-table td { padding: 0; }
-  .v7profile .stages,
-  .v7profile .counts { grid-template-columns: 1fr; }
-  .v7profile .stage + .stage,
-  .v7profile .count + .count { border-left: 0; border-top: 1px solid var(--v-rows); }
+  /* Phase 3: the credentials ledger is row units now — nothing stacks;
+     the declared/presence forms collapse to one column */
   .v7profile .dec-grid,
   .v7profile .dec-grid-3 { grid-template-columns: 1fr; }
   .v7profile .ptabs { min-width: 0; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
   .v7profile .ptabs::-webkit-scrollbar { display: none; }
   .v7profile .ptabs [role="tab"] { padding: 7px 12px; font-size: 12px; }
-  .v7profile .m-channels { grid-template-columns: 1fr; }
-  .v7profile .m-channels .tickline { border-left: 0; }
-  .v7profile .m-channels .tickline:nth-child(n + 2) { border-top: 1px solid var(--v-rows); }
-  .v7profile .m-right { text-align: left; }
+  /* the band's one CTA takes the row (the Dashboard register) */
+  .v7profile .cta { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 560px) {
   /* all four tab labels fit a 390 phone — the strip stops clipping */
   .v7profile .ptabs { gap: 2px; padding: 2px; }
   .v7profile .ptabs [role="tab"] { padding: 6px 8px; font-size: 11.5px; letter-spacing: 0; }
+  /* wide tables fold by column, not restructure (the dashboard law): the
+     Since col on the goals table and the Source receipt col on the skills
+     table ride the:nth-child(3) fold */
+  .v7profile .plan-table th:nth-child(3),
+  .v7profile .plan-table td:nth-child(3) { display: none; } /* Since folds on tiny screens */
   .v7profile .traj { display: none; }
   .v7profile .traj-rows { display: block; }
-  /* stack rows on phones: name, then its badge, then the note — no squeezed
-     names, zero horizontal overflow */
-  .v7profile .prow { grid-template-columns: 1fr; gap: 3px; }
-  .v7profile .prow .p-badge { grid-row: auto; grid-column: 1; justify-self: start; }
-  .v7profile .prow .p-sub { grid-column: 1; }
+  /* Phase 3: the credential ledger's rows wrap (name · chip · provenance
+     lines) — the fold law's column-hiding has no columns left to hide */
   .v7profile .presence-field { min-width: 0; }
   /* the DPA ledger rows stack one-column (detail, then its action) */
   .v7profile .dpa-line { grid-template-columns: 1fr; }

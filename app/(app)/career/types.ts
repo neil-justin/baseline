@@ -29,8 +29,6 @@ export interface RoleRowData {
   /** why-this-fits for the CURRENT target only (hand-authored trio/fallback) */
   why: string;
   entry: string;
-  /** the one row wired to the switch flow (demo beat 6) */
-  live: boolean;
   /** the declared target row */
   current: boolean;
   /** provenance of the fit number — empty unless x > 0 */
@@ -42,8 +40,10 @@ export interface RoleRowData {
   majors: string;
   demand: string;
   skillsSummary: string;
+  /** degree-gate truth — the ranked lens lists only roles where this is true;
+   *  the gate itself lives in lib/degree-gate.ts */
+  degreeAllowed: boolean;
 }
-
 export interface ReassessRow {
   /** catalog-canonical name (what /api/claim expects) */
   name: string;
@@ -70,14 +70,20 @@ export interface CareerProps {
   card: CareerCardData | null;
   /** all proven skills on the profile (verified ·✓ / checked ·✓✓), any career */
   verifiedBars: VerifiedBarData[];
-  activeGoalTitle: string | null;
+  /** the student's one ACTIVE training goal (title · linked skill) — the
+   *  switch modal shows "goal stays" only when the skill maps onto the
+   *  target's skill list; milestone goals (no skill) always carry */
+  activeGoal: { title: string; skill: string | null } | null;
   /** pre-switch bars snapshot: Record<skill, source> — the dip's carried-exclusion basis */
   barsSources: Record<string, string>;
   /** the whole catalog as ranked rows (Best matches + All roles share it) */
   roles: RoleRowData[];
-  exploreTotal: number;
   /** zero demonstrated skills → the ranked lens renders its compressed default row */
   zeroConfirmed: boolean;
+
+  /** the signed-in student's intake program (degree-gate feed for the
+   *  switch modal — null/"" means no gate) */
+  program: string | null;
   /** the switch target's 7-skill map for the quick re-assessment screen (canon: qa) */
   reassess: ReassessRow[];
 }

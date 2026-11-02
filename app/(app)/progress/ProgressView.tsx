@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useRouter } from "next/navigation";
 import CountUp from "@/components/CountUp";
 import CheckOverlay from "./CheckOverlay";
@@ -73,8 +73,6 @@ interface Props {
   suggestion: Suggestion | null;
   checkResources: Record<string, CheckResourceLite>;
   checks: Record<string, { stem: string; options: string[]; answer: number }[]>;
-  /** the surface report line — server-rendered from state, inside the root */
-  foot: ReactNode;
 }
 
 const BADGES: Record<ClosedRow["source"], { text: string; cls: string }> = {
@@ -211,7 +209,6 @@ export default function ProgressView(props: Props) {
               <p className="band-id">
                 {props.persona} · Target: <b>{props.careerName}</b>
               </p>
-              <p className="prog-sub">What you&apos;ve finished and what it proves.</p>
               <p className="prog-ctx num">
                 You&apos;re <b>{props.score.total}%</b> ready for {props.careerName}
                 {props.nextSkill !== null && props.openSkillCount > 0 ? (
@@ -229,7 +226,6 @@ export default function ProgressView(props: Props) {
                   Jump to your goals
                 </a>
               </div>
-              <p className="prog-foot num">Every number here is computed from your record.</p>
             </div>
 
             <div className="prog-scale">
@@ -292,7 +288,7 @@ export default function ProgressView(props: Props) {
       <section className="card feed">
         <div className="head">
           <h2 className="h-title">Completed and checked</h2>
-          <span>A resource counts when its check passes, not when it&apos;s clicked. Each row is a dated event with its source.</span>
+          <span>Counts when the check passes — not when it&apos;s clicked.</span>
           {props.feedRows.length > 0 && (
             <span className="label num">
               {props.feedRows.length} PASSED
@@ -328,10 +324,10 @@ export default function ProgressView(props: Props) {
           </div>
         ))}
         {props.feedRows.length === 0 ? (
-          <p className="feed-tail">Nothing yet — your first completion lands here the moment a check passes.</p>
+          <p className="feed-tail">Nothing yet — your first passed check lands here.</p>
         ) : (
           <p className="feed-tail">
-            Nothing else is marked done yet; your next step is waiting in <a href="/pathway">Pathway</a>.
+            Next step waits in <a href="/pathway">Pathway</a>.
           </p>
         )}
       </section>
@@ -344,7 +340,7 @@ export default function ProgressView(props: Props) {
             <b>
               {props.closedCount} of {props.mapSize}
             </b>{" "}
-            {props.careerName} skills closed. Each row says which path closed it.
+            {props.careerName} skills closed
           </span>
         </div>
         <div className="closed-list">
@@ -364,13 +360,13 @@ export default function ProgressView(props: Props) {
             </div>
           ))}
           {props.closedRows.length === 0 && (
-            <p className="feed-tail">No bars closed yet — a passed check closes one live.</p>
+            <p className="feed-tail">No bars closed yet — a passed check closes one.</p>
           )}
         </div>
         {props.openSkills.length > 0 && (
           <p className="open-foot num">
-            {props.openSkillCount} of {props.mapSize} still open: {props.openSkills.join(" · ")}. The next step for each is
-            ranked in <a href="/pathway">Pathway</a>.
+            {props.openSkillCount} of {props.mapSize} still open: {props.openSkills.join(" · ")}. Next steps ranked in{" "}
+            <a href="/pathway">Pathway</a>.
           </p>
         )}
       </section>
@@ -384,14 +380,14 @@ export default function ProgressView(props: Props) {
               {props.goals.filter((g) => g.status === "completed").length} OF {props.goals.length} DONE
             </span>
           ) : (
-            <span>No goals yet — accept your suggested goal (training auto-completes) or set your own.</span>
+            <span>No goals yet — set one below.</span>
           )}
         </div>
         <div className="goals-list">
           {props.suggestion && !sugDismissed && (
             <div className="goal-suggest">
               <h3>Suggested from your biggest gap</h3>
-              <p className="n-why">{props.suggestion.title} — it&apos;s your top-ranked next step.</p>
+              <p className="n-why">{props.suggestion.title}</p>
               <p className="n-target">{props.suggestion.target}</p>
               <div className="sug-cta">
                 <button className="btn btn-ghost btn-sm" type="button" onClick={acceptSuggestion} disabled={busy}>
@@ -470,10 +466,7 @@ export default function ProgressView(props: Props) {
             );
           })}
 
-          {/* zero-goals fallback never dead-ends: the suggestion card + this entry fill it */}
-          {props.goals.length === 0 && !props.suggestion && (
-            <p className="feed-tail">No goals on your record yet — set one below.</p>
-          )}
+          {/* zero-goals state lives in the card head — the entry below finishes it */}
 
           <div className="goal-new">
             <button
@@ -526,8 +519,6 @@ export default function ProgressView(props: Props) {
           onClose={() => setOpenCheck(null)}
         />
       )}
-
-      {props.foot}
     </div>
   );
 }

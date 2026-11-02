@@ -644,18 +644,24 @@ describe("blessed conversion — rowspec traceability (provenance per row)", () 
     expect(flagged).toBeGreaterThanOrEqual(140);
   });
 
-  it("Model C placeholder — audit's technology row stays unquoted until the O*NET version pin", () => {
+  it("Model C placeholder resolved — audit's technology row carries the blessed O*NET 31.0 fill (4A, 2026-11-02)", () => {
     const row = ROW_SPECS["audit::Audit technology fluency (accounting software / Excel family)"];
     expect(row.flags?.some((f) => /version pin|UNQUOTED/i.test(f))).toBe(true);
-    // the attribution placeholder lives in the anchors (descriptor is a bare "—" — not a printed descriptor)
+    // the 31.0 pin citation rides the anchors (descriptor is a bare "—" — not a printed descriptor)
     expect(row.anchors.join(" ")).toMatch(/Software Skills/);
-    expect(row.anchors.join(" ")).toMatch(/pinned|version-pin/i);
-    // the no-invented-IDEA continuity stays recorded, and no specific tool is quoted yet
+    expect(row.anchors.join(" ")).toMatch(/version-pin/i);
+    expect(row.anchors.join(" ")).toMatch(/O\*NET 31\.0 · Technology Skills · 13-2011\.00/);
+    expect(row.anchors.join(" ")).toMatch(/Employer Job Postings, 2026/);
+    // the no-invented-IDEA continuity stays recorded; the served 37 categories print verbatim
     expect(row.anchors.join(" ")).toMatch(/No invented IDEA/);
-    expect(row.anchors.join(" ")).not.toMatch(/\bACL\b|\bAlteryx\b|Tableau|SugarCRM|CaseWare/);
-    // and the catalog `what` line itself carries the placeholder marker
+    expect(row.anchors.join(" ")).toContain("Accounting software — Intuit QuickBooks · Sage 50 Accounting · SAP Concur");
+    expect(row.anchors.join(" ")).toContain("Spreadsheet software — Google Sheets · Microsoft Excel");
+    expect(row.anchors.join(" ")).toContain("Information retrieval or search software — LexisNexis");
+    // fixture shape: 2 meta cells (citation + PSOC grounding) + the 37 served category cells
+    expect(row.anchors).toHaveLength(39);
+    // and the catalog `what` line carries the resolved version-pin marker
     const why = getCareer("audit")!.skills.find((s) => s.name === "Audit technology fluency (accounting software / Excel family)")!.what;
-    expect(why).toMatch(/placeholder|unquoted|version/i);
+    expect(why).toMatch(/version/i);
   });
 });
 

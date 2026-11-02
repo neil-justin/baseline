@@ -56,24 +56,6 @@
 
 /* the family's wash chips (dashboard clone) */
 
-/* stage numerals — CSS-drawn circles for the stages section (the band's
-   strip is dead; the tab panels keep their drawn-row numerals) */
-
-.v7plan .stage-rowbtn .s-num {
-  width: 26px;
-  height: 26px;
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--v-border);
-  border-radius: 50%;
-  font: 500 12px/1 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
-}
-/* the family's wash chips (dashboard clone) */
-
 .v7plan .chip {
   display: inline-block;
   font: 500 11px/1.2 Roboto, system-ui, sans-serif;
@@ -359,7 +341,7 @@
   transition: transform 0.2s ease;
 }
 .v7plan .stage-rowbtn[aria-expanded="true"] .chev { transform: rotate(225deg); }
-/* the one-line stage endnote (stage ②/③ counts when nothing expands) */
+/* the one-line stage endnote (the check-off note + entry-ready) */
 .v7plan .stagefoot {
   padding: 10px 16px 12px;
   margin: 0;
@@ -367,23 +349,9 @@
   color: var(--v-ink2);
   font-variant-numeric: tabular-nums;
 }
-.v7plan .stages .stage-rowbtn + .stagefoot,
-.v7plan .stages .stage-expand + .stagefoot { border-top: 1px solid var(--v-rows); }
-.v7plan .stage-rowbtn + .stage-expand { border-top: 0; }
-.v7plan .stage-expand { border-top: 1px solid var(--v-rows); border-bottom: 1px solid var(--v-rows); }
+.v7plan .stage-rowbtn + .stage-expand { border-top: 0; }.v7plan .stage-expand { border-top: 1px solid var(--v-rows); border-bottom: 1px solid var(--v-rows); }
 .v7plan .stage-expand .plan-table th { border-top: 0; }
 .v7plan .stage-expand .plan-table td { padding: 9px 16px; }
-.v7plan .x-name {
-  font: 400 13px/1.4 Roboto, system-ui, sans-serif;
-  color: var(--v-ink);
-}
-.v7plan .x-note {
-  margin-top: 4px;
-  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-grey-text);
-  max-width: 46ch;
-}
-
 /* ---------- gaps tab — badged skills ledger (cells + heads + chips) ---------- */
 
 .v7plan .gap-table {
@@ -607,8 +575,7 @@
   .v7plan .plan-table td:last-child,
   .v7plan .plan-table tbody tr:last-child td:last-child { padding-bottom: 0; }
   .v7plan .plan-table .ct-act .btn { padding: 8px 16px; }
-  .v7plan .q-nogap,
-  .v7plan .x-note { max-width: none; }
+  .v7plan .q-nogap { max-width: none; }
   /* the gaps ledger stacks: name/status → chip+bar line */
   .v7plan .gap-table,
   .v7plan .gap-table tbody,

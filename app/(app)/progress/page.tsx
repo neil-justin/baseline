@@ -55,7 +55,7 @@ function UndecidedDefault({ name }: { name: string }) {
       </section>
       <section className="card defaultcard">
         <p className="prog-sub pad">
-          No career picked yet — nothing to measure toward yet.{" "}
+          No career picked yet —{" "}
           <a className="link-sub" href="/career">
             Browse the career index →
           </a>
@@ -279,17 +279,6 @@ export default async function ProgressPage() {
   }
 
   const persona = [state.name, [state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(", ")].join(" · ");
-  const foot = (
-    <footer className="prog-colophon">
-      <div className="prog-colophon-in">
-        <span className="label">
-          CAREER READINESS · PROGRESS · {state.name.toUpperCase()},{" "}
-          {[state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(" · ")}
-        </span>
-        <span className="label">EVERY NUMBER COMPUTED · CHECKS GATE CREDIT</span>
-      </div>
-    </footer>
-  );
 
   return (
     <ProgressView
@@ -315,7 +304,6 @@ export default async function ProgressPage() {
       suggestion={suggestion}
       checkResources={checkResources}
       checks={checks}
-      foot={foot}
     />
   );
 }

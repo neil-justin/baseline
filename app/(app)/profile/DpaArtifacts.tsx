@@ -13,6 +13,11 @@ import { useState } from "react";
  *    auth user → profile → state → credentials → resume/letter runs →
  *    evidence. Serve-side erasure lands in /api/account/delete.
  * No consent rules touched here (the granular consent surface is upstream).
+ *
+ * Phase 4 (2026-11-02): presentation re-cut into the Data rights card's
+ * register — the export action renders a text link (the band's a.cta stays
+ * the page's only FILLED link-CTA), the erase keeps its quiet→armed button
+ * register and byte-verbatim confirm machinery. Actions/behavior untouched.
  */
 export default function DpaArtifacts({ studentId }: { studentId: string }) {
   const [confirmWord, setConfirmWord] = useState("");
@@ -46,16 +51,15 @@ export default function DpaArtifacts({ studentId }: { studentId: string }) {
   return (
     <div className="dpa">
       <p className="dpa-line">
-        <a className="btn btn-ghost btn-sm" href="/api/account/export">
-          Export my data — one JSON file <span className="arrow num">↵</span>
+        {/* Phase 4: text-link register — an anchor download must never read
+            as a filled link-CTA (that's the band's a.cta alone) */}
+        <a className="foot-link" href="/api/account/export">
+          Export my data — one JSON file ↵
         </a>
         <span className="dpa-src num">state · event history · credentials · resume runs · letter runs · presence — {studentId}</span>
       </p>
       <div className="dpa-erase">
-        <p className="dpa-warn">
-          Erase = the whole record: your sign-in account, your state, your credentials, and the two run
-          stores. The counselor roster loses the row — that is what erasure means.
-        </p>
+        <p className="dpa-warn">Erase removes the whole record — the counselor roster loses the row.</p>
         <div className="dpa-row">
           <input
             type="text"

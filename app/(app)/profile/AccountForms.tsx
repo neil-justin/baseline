@@ -5,7 +5,10 @@ import { PasswordFeedback } from "@/app/(auth)/PasswordFeedback";
 import "@/app/(auth)/password-feedback.css";
 
 /**
- * Profile → Account — the identity + password forms (Round 7 lock):
+ * Profile → Account — the identity + password forms (Round 7 lock), riding
+ * the Phase-4 card register (2026-11-02): each form is the BODY of its own
+ * separated Dashboard-register card (page.tsx renders the card head; this
+ * component renders the body).
  *  - Identity: email is the AUTH identity — read-only; full name, program,
  *    year level, section are editable self-service (mirrors the intake);
  *    campus is the tenant key (ticket 11) — fixed, rendered as a fixed fact.
@@ -13,6 +16,11 @@ import "@/app/(auth)/password-feedback.css";
  *    surfaces never split (one record, two views).
  *  - Password: auth-native change — POST /api/auth/password (the signed
  *    session authorizes; the NIST meter applies, shared PasswordFeedback).
+ *    Phase 4 adds a client-only CONFIRM field: the submit stays blocked
+ *    until the two entries match (and confirm is non-empty) — a
+ *    plain-language mismatch note, success/error paths unchanged; no
+ *    current-password field (the session is the authorization) and no
+ *    route change.
  */
 
 interface Identity {
@@ -155,9 +163,14 @@ export function AccountIdentity({ initial }: { initial: Identity }) {
 
 export function AccountPassword() {
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [note, setNote] = useState<string | null>(null);
+
+  /* Phase 4: client-side consistency only — the request path (session as
+     authorization, the NIST-style meter, the error map) is untouched. */
+  const mismatch = confirm.length > 0 && password !== confirm;
 
   const ERRORS: Record<string, string> = {
     password_short: "The password is shorter than 8 characters — length is the first honest bar.",
@@ -179,6 +192,7 @@ export function AccountPassword() {
       if (res.ok) {
         setNote(json?.note ?? "Password changed — your next sign-in uses it.");
         setPassword("");
+        setConfirm("");
       } else {
         setErr(ERRORS[json?.error ?? "server"] ?? "The change didn't complete — nothing changed; try again.");
       }
@@ -207,12 +221,43 @@ export function AccountPassword() {
           }}
         />
       </div>
+      {/* the client-only confirmation entry (Phase 4) — a distinct id/label,
+          the same new-password autocomplete; the meter below reads the FIRST
+          field, keeping the NIST feedback adjacent to its subject */}
+      <div className="dec-field">
+        <label className="cl-label num" htmlFor="a-pw-confirm">
+          Confirm new password
+        </label>
+        <input
+          id="a-pw-confirm"
+          type="password"
+          className="profile-input"
+          autoComplete="new-password"
+          value={confirm}
+          onChange={(e) => {
+            setConfirm(e.target.value);
+            setErr(null);
+          }}
+        />
+      </div>
       <PasswordFeedback password={password} />
+      {mismatch && (
+        <p className="presence-err" role="status" aria-live="polite">
+          Passwords don&apos;t match — retype the new password to confirm.
+        </p>
+      )}
       <p className={`${err ? "presence-err" : "presence-ok"}`} role="status" aria-live="polite">
         {err ?? note ?? ""}
       </p>
       <div className="dec-ctas">
-        <button className="btn btn-ghost btn-sm" onClick={submit} disabled={busy || password.length === 0}>
+        {/* the card's functional filled submit (btn-primary is the form
+            register; it is NOT a link-CTA — the band's a.cta stays the
+            page's only filled link) — blocked until the entries match */}
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={submit}
+          disabled={busy || password.length === 0 || confirm.length === 0 || password !== confirm}
+        >
           {busy ? "Changing…" : "Change password"}
         </button>
       </div>

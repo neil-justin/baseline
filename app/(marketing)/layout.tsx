@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 /**
  * Marketing shell — the landing's own chrome (v7.2 wave-3): a white top bar
  * (brand mark with 6px blue inlay + wordmark, Sign in + Start check right)
- * over the `.v7land` ground, no rail, no headnav. The honest footer lives in
+ * over the `.v7land` ground, no sidebar, no rail. The honest footer lives in
  * the page (evidence close). Scoped under `.v7land` in ./landing.css — the
  * Index system in globals.css is untouched by this file.
  */

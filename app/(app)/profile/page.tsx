@@ -10,7 +10,6 @@ import { INSTRUMENT } from "@/lib/fixtures/instrument";
 import { trackLabelOf } from "@/lib/fixtures/catalog";
 import { credentialStore, credentialsPersistenceNotice } from "@/lib/db/credential-store";
 import ProfileTabs from "./ProfileTabs";
-import ProfileReadout from "./ProfileReadout";
 import PresenceCard from "./PresenceCard";
 import DeclaredCredentials from "./DeclaredCredentials";
 import { AccountIdentity, AccountPassword } from "./AccountForms";
@@ -79,7 +78,7 @@ function TrajGraphic({ traj }: { traj: Trajectory }) {
         </div>
       ) : (
         <div
-          className="traj"
+          className="traj single"
           role="img"
           aria-label={`Score over time: ${a.label.toLowerCase()}, ${a.date}, ${a.value} of 100.`}
         >
@@ -112,13 +111,22 @@ function TrajGraphic({ traj }: { traj: Trajectory }) {
 /* ── page ───────────────────────────────────────────────────────────────── */
 
 /**
- * M11 Competency snapshot + Round-7 re-cut (2026-10-30 v7.2 profile sweep):
- * the surface opens with the v7 Named-Surface band (white band register) and
- * re-cuts to FOUR family tabs — Plan (the demo walk's beat-9 document,
- * default) · Competencies · Credentials · Account (the Round-7 sub-tab
- * edition). `#tab-profile` → `#panel-profile` carries Credentials (the
- * legacy hook id — the e2e money beat's selector is the contract; the
- * visible label reads "Credentials").
+ * Phase-1 revamp (2026-11-02): the surface opens with the v7 Named-Surface
+ * band (white band register + the five-channel mini-bar + the ONE filled
+ * CTA → /pathway) and rides FOUR family tabs — Plan (Dashboard-register
+ * cards; the former §-document's masthead + counters retired), Competencies
+ * (Phase-2 re-cut, same day: three Dashboard-register cards — skills with
+ * provenance chips · the NACE assessment with its retake text link · the
+ * demoted starting-levels strip; ProfileReadout retired from rendering —
+ * the band + kickers cover its role) · Credentials (Phase-3 re-cut, same
+ * day: ONE unified ledger card — platform check-passed rows, the
+ * machine-verified presence stamp, and the declared entries all ride the
+ * same Dashboard-register `.lrow` unit; the TESDA future row and the old
+ * three-stitched-card formats retire) · Account (the Round-7 sub-tab
+ * edition, reworked in Phase 4). `#tab-profile` →
+ * `#panel-profile` carries Credentials (the legacy hook id — the e2e
+ * money beat's selector is the contract; the visible label reads
+ * "Credentials").
  */
 export default async function ProfilePage() {
   const profile = await requireStudent();
@@ -128,8 +136,6 @@ export default async function ProfilePage() {
   const v = scoreView(career, state, ar);
   const traj = scoreTrajectory(state, ar);
   const asOf = fmtEventDate(state.events[state.events.length - 1]?.date);
-  const byCheck = Object.values(state.bars).filter((b) => b.source === "verified" || b.source === "checked").length;
-  const bySelf = Object.values(state.bars).filter((b) => b.source === "claimed").length;
 
   /* Competencies tab — skills rows: closed bars first (verified → checked →
      claimed), then the open remainder, so every badge traces to its source. */
@@ -141,6 +147,12 @@ export default async function ProfilePage() {
       .sort((a, b) => rank[state.bars[a].source] - rank[state.bars[b].source]),
     ...allSkills.filter((n) => !(n in state.bars)),
   ];
+  /* the head-span provenance counts — computed off the exact rows the table
+     renders (this career's map), not the whole bar store */
+  const skVerified = skillRows.filter((n) => state.bars[n]?.source === "verified").length;
+  const skChecked = skillRows.filter((n) => state.bars[n]?.source === "checked").length;
+  const skClaimed = skillRows.filter((n) => state.bars[n]?.source === "claimed").length;
+
   function skillSub(c: Career, skill: string): string | null {
     const bar = state.bars[skill];
     if (!bar) return null;
@@ -166,6 +178,9 @@ export default async function ProfilePage() {
     ...c,
     status: state.competencies?.[c.title],
   }));
+
+  /* people-strengths starting levels: how many of the 8 carry a setup answer */
+  const ratedStart = COMPETENCIES.reduce((n, { probe }) => n + (probe && state.softSkills[probe] ? 1 : 0), 0);
 
   /* Credentials — a platform resource becomes a row only when its check
      passed (M9 gate); the three declared kinds ride the credential store. */
@@ -216,15 +231,6 @@ export default async function ProfilePage() {
       : `You're at ${v.total}. Every item below is something you can start this week — your pathway already picked the first one.`;
   const switched = state.events.some((e) => e.kind === "career-switched");
 
-  /* AR presence ticker (ticket 12): the declared entry's machine-verified stamp. */
-  const presenceTicker = (() => {
-    const p = state.presence;
-    if (!p?.stamp) return "not declared";
-    if (v.arFactors.presence.measured)
-      return `${v.arFactors.presence.earned} of ${v.arFactors.presence.max} · stamped ${fmtEventDate(p.stamp.verifiedAt)}`;
-    return "declared — format check failed, not yet measured";
-  })();
-
   /* header band instrument: the five channel mini-bar (at rest — honest
      fractions render at rest per the v7 lock) reads the SAME computed sub-
      values the KPI cells carry, AR empty (never painted) while unmeasured. */
@@ -236,6 +242,11 @@ export default async function ProfilePage() {
      the same "counted" truth the Credentials tab renders per row. */
   const credentialsEarned =
     credentialRows.length + declaredRows.filter((r) => r.status === "verified").length + (presenceMeasuredNow ? 1 : 0);
+  /* the unified card's head-span counts: earned (the COUNTED truth above),
+     the entries still waiting on the counselor audit, and the audit-ruled
+     verified entries */
+  const declaredPending = declaredRows.filter((r) => r.status === "declared").length;
+  const declaredVerified = declaredRows.filter((r) => r.status === "verified").length;
 
   const identity = (
     <p className="band-id num">
@@ -246,42 +257,28 @@ export default async function ProfilePage() {
   );
 
   const competenciesPanel = (
-    <div className="stack">
-      <p className="lead-mono num">
-        Snapshot · what you have to show · every mark traces to a check, a claim, or a choice
-      </p>
-      <ProfileReadout
-        score={v.total}
-        values={score}
-        closed={v.closed}
-        mapSize={v.mapSize}
-        byCheck={byCheck}
-        bySelf={bySelf}
-        asOf={asOf}
-        careerName={career.name}
-        identityLabel={yearTrack(state)}
-        labels={["Skills", "Employability", "Training", "Application", "Direction"]}
-      />
-
-      <div className="psblock">
-        <div className="b-head">
-          <h2>Skills for this career</h2>
-          <p className="lead-count num">{v.closed} of {v.mapSize} skills closed</p>
-          <p className="helper">
-            A bar closes when you pass a check or claim a skill you already have. <b>Demonstrated means you
-            passed a check</b>; self-rating doesn&apos;t count for an employer.
-          </p>
+    <div className="plancards">
+      {/* Phase-2 re-cut (2026-11-02): three Dashboard-register cards on the
+          shell ground; the ProfileReadout retires — the header band's seg
+          bar + the tab kicker cover its role (per-channel receipts live in
+          the kickers). Data mapping unchanged, presentation only. */}
+      <div className="card">
+        <div className="head">
+          <b>Skills for this career</b>
+          <span className="num">
+            {skVerified} verified · {skChecked} checked · {skClaimed} self-reported
+          </span>
         </div>
         {v.closed === 0 ? (
-          <p className="doc-p" style={{ marginTop: 12 }}>
+          <div className="foot num">
             Nothing closed yet — your baseline bars are waiting on your first check.
-          </p>
+          </div>
         ) : (
-          <table className="p-table skills-table">
+          <table className="plan-table skills-table">
             <thead>
               <tr>
-                <th scope="col">Skill</th>
-                <th scope="col" className="ct-state">Evidence</th>
+                <th scope="col" className="col-item">Skill</th>
+                <th scope="col">Evidence</th>
                 <th scope="col">Source</th>
               </tr>
             </thead>
@@ -291,51 +288,49 @@ export default async function ProfilePage() {
                 const sub = skillSub(career, skill);
                 return (
                   <tr key={skill}>
-                    <td className="item">{skill}</td>
-                    <td className="ct-state">{bar ? skillBadge(bar.source) : <span className="p-badge chip c-grey">OPEN</span>}</td>
-                    <td>{sub ?? <span className="p-dash">—</span>}</td>
+                    <td>
+                      <div className="item">{skill}</div>
+                    </td>
+                    <td>{bar ? skillBadge(bar.source) : <span className="p-badge chip c-grey">OPEN</span>}</td>
+                    <td>
+                      <div className="sub num">{sub ?? <span className="p-dash">—</span>}</div>
+                    </td>
                   </tr>
                 );
               })}
             </tbody>
           </table>
         )}
-        <p className="src-line num">
-          Badges · ·✓ passed a verification quiz · ✓✓ passed a comprehension check · self-reported = your own
-          claim, until its check is passed
+        <p className="lcap num">
+          ·✓ passed a verification quiz · ·✓✓ passed a comprehension check · self-reported = your claim, until its check passes
         </p>
       </div>
 
-      <div className="psblock">
-        <div className="b-head">
-          <h2>Competency assessment</h2>
-          <p className="lead-count num">
+      <div className="card">
+        <div className="head">
+          <b>NACE assessment</b>
+          <span className="num">
             {state.assessment ? `Latest attempt · ${fmtEventDate(state.assessment.takenAt)}` : "Not assessed yet"}
-          </p>
-          <p className="helper">
-            The 7-competency battery (Equity &amp; Inclusion excluded, by recorded choice) grades two ways:
-            <b> ·✓ verified</b> = your self-ratings stood up to both verification checks of that competency;
-            <b> claimed</b> = your self-ratings stand alone. The composite reads the CURRENT attempt — a
-            re-take replaces it, latest attempt counts, never best-ever.
-          </p>
+          </span>
         </div>
-        <div className="assess-strip num">
-          <span>Employability · <b>{v.es} of {WEIGHTS.es}</b></span>
-          <span>{v.esVerified} of 7 NACE competencies verified ·✓ (the assessment carries this channel)</span>
+        <div className="lcap num">
+          <p>Employability · {v.es} of {WEIGHTS.es}</p>
+          <p>{v.esVerified} of 7 NACE competencies verified ·✓</p>
         </div>
-        <table className="p-table assess-table">
+        <table className="plan-table assess-table">
           <thead>
             <tr>
-              <th scope="col">Competency</th>
-              <th scope="col" className="ct-state">Status</th>
-              <th scope="col">Note</th>
+              <th scope="col" className="col-item">Competency</th>
+              <th scope="col">Status</th>
             </tr>
           </thead>
           <tbody>
             {assessed.map((c) => (
               <tr key={c.title}>
-                <td className="item">{c.title}</td>
-                <td className="ct-state">
+                <td>
+                  <div className="item">{c.title}</div>
+                </td>
+                <td>
                   {c.status === "verified" ? (
                     <span className="p-badge chip c-green">·✓ VERIFIED</span>
                   ) : c.status === "claimed" ? (
@@ -344,214 +339,165 @@ export default async function ProfilePage() {
                     <span className="p-badge chip c-grey">NOT ASSESSED YET</span>
                   )}
                 </td>
-                <td>
-                  {c.status === "verified"
-                    ? "Both verification checks of this competency passed — the ·✓ carries the channel"
-                    : c.status === "claimed"
-                      ? "Self-rated only — the competency struggled a check in this attempt (or isn't re-verified)"
-                      : "The battery didn't measure this competency yet"}
-                </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <p className="src-line num">
-          A re-take runs the full battery again (the intake&apos;s step ③) — your latest attempt replaces this one,
-          history stays readable in My Plan → Progress
-        </p>
-        <p className="retake-row">
-          <a className="g-link num" href="/onboarding">
+        <div className="foot num">
+          Latest attempt counts — a re-take replaces it, never best-ever.{" "}
+          <a className="foot-link" href="/onboarding">
             Re-take the assessment →
           </a>
-        </p>
+        </div>
       </div>
 
-      <div className="psblock">
-        <div className="b-head">
-          <h2>Starting levels with people</h2>
-          <p className="helper">Rated from your setup answers before the battery ran. They grow as the work does.</p>
+      {/* starting levels, demoted: one card, the 8 dotted levels as one
+          wrapped strip of name + dots units — caption-weight names, the
+          full-table form retired; the dots' aria-labels stay byte-verbatim */}
+      <div className="card">
+        <div className="head">
+          <b>Starting levels with people</b>
+          <span className="num">{ratedStart} of {COMPETENCIES.length} rated at setup</span>
         </div>
-        <table className="p-table lv-table">
-          <thead>
-            <tr>
-              <th scope="col">Competency</th>
-              <th scope="col" className="ct-levels">Starting level</th>
-            </tr>
-          </thead>
-          <tbody>
-            {COMPETENCIES.map(({ name, probe }) => {
-              const word = probe ? state.softSkills[probe] : undefined;
-              const level = word ? (WORD_LEVELS[word] ?? 0) : 0;
-              return (
-                <tr key={name}>
-                  <td className="item">{name}</td>
-                  <td className="ct-levels">
-                    <span
-                      className="dots"
-                      role="img"
-                      aria-label={
-                        level > 0 ? `${name}: level ${level} of 5` : `${name}: not rated yet — the full battery will measure it`
-                      }
-                    >
-                      {[1, 2, 3, 4, 5].map((d) => (
-                        <i key={d} className={d <= level ? "on" : ""} />
-                      ))}
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        <p className="src-line num">Rated from your situation answers during setup · unscored until the full battery runs</p>
+        <div className="lvl-strip">
+          {COMPETENCIES.map(({ name, probe }) => {
+            const word = probe ? state.softSkills[probe] : undefined;
+            const level = word ? (WORD_LEVELS[word] ?? 0) : 0;
+            return (
+              <span className="lvl" key={name}>
+                <span className="lvl-name">{name}</span>
+                <span
+                  className="dots num"
+                  role="img"
+                  aria-label={
+                    level > 0 ? `${name}: level ${level} of 5` : `${name}: not rated yet — the full battery will measure it`
+                  }
+                >
+                  {[1, 2, 3, 4, 5].map((d) => (
+                    <i key={d} className={d <= level ? "on" : ""} />
+                  ))}
+                </span>
+              </span>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 
+  /* Credentials tab (Phase-3 re-cut, 2026-11-02): ONE unified ledger card on
+     the shell ground — platform check-passed rows, the machine-verified
+     presence stamp row, and the declared entries all render the same
+     Dashboard-register .lrow unit (icon slot · plain name · chip pushed
+     right · an 11px provenance line where the data provides it). The TESDA
+     NC II future row retires (a placeholder for an unearned credential —
+     the ledger counts what IS counted), the old p-table/psblock trio is
+     gone, and the presence status sub with its data-presence-* hooks rides
+     the row bytes-verbatim (the e2e money beat reads the stamp + sub). */
   const credentialsPanel = (
-    <div className="stack">
-      <p className="lead-mono num">
-        Credentials · four kinds on one panel: the platform&apos;s checked trainings, your declared entries,
-        the machine-verified presence stamp
-      </p>
-      <div className="psblock">
-        <div className="b-head">
-          <h2>Credentials you&apos;ve earned</h2>
-          <p className="helper">
-            Four kinds land here: the platform&apos;s checked trainings, your declared credentials, and —
-            since the ticket-12 round — <b>professional presence</b>, declared below and verified by its
-            machine stamp.
-          </p>
+    <div className="plancards">
+      <div className="card">
+        <div className="head">
+          <b>Credentials</b>
+          <span className="num">
+            {credentialsEarned} earned · {declaredPending} declared · {declaredVerified} verified
+          </span>
         </div>
         {credentialRows.length === 0 && !presence && (
-          <p className="doc-p" style={{ marginTop: 12 }}>
+          <p className="lcap num">
             None yet — your route&apos;s first credential appears the moment its check passes.
           </p>
         )}
-        {/* v7.2 P2 re-cut: the earned ledger as one table — the presence stamp
-            row rides it with its hooks byte-verbatim, the TESDA honest future
-            row stays, and the empty state above keeps the check-passed gate */}
-        <table className="p-table earned-table">
-          <thead>
-            <tr>
-              <th scope="col">Credential</th>
-              <th scope="col">Provider · cost detail</th>
-              <th scope="col" className="ct-date">Earned</th>
-              <th scope="col" className="ct-state">State</th>
-            </tr>
-          </thead>
-          <tbody>
-            {presence && presence.stamp && (
-              <tr data-presence-row className="presence-row">
-                <td className="item">Professional presence — LinkedIn</td>
-                <td data-presence-sub>
-                  {presence.linkedinUrl} · {presence.email} ·{" "}
-                  {presence.stamp.offline ? "stamped offline — no network look-up ran" : ""}
-                  {presence.stamp.checks.linkedinUrlFormat === "fail" ? " · URL format failed" : ""}
-                  {presence.stamp.checks.professionalEmailFormat === "fail" ? " · email format failed" : ""}
-                  {presence.stamp.contentNote ? ` · ${presence.stamp.contentNote}` : ""}
-                </td>
-                <td className="num ct-date">{presenceMeasuredNow ? fmtEventDate(presence.stamp.verifiedAt) : <span className="p-dash">—</span>}</td>
-                <td className="ct-state">
-                  {presenceMeasuredNow ? (
-                    <span className="p-badge chip c-green " data-presence-stamp={`MACHINE-VERIFIED ${fmtEventDate(presence.stamp.verifiedAt).toUpperCase()}`}>
-                      MACHINE-VERIFIED · {fmtEventDate(presence.stamp.verifiedAt).toUpperCase()}
-                    </span>
-                  ) : (
-                    <span className="p-badge chip c-grey">DECLARED — FORMAT CHECK FAILED, NOT YET MEASURED</span>
-                  )}
-                </td>
-              </tr>
-            )}
-            {credentialRows.map((c, i) => (
-              <tr key={i}>
-                <td className="item">{c.title}</td>
-                <td>
-                  {c.provider ? `${c.provider} · ${c.free ? "free" : "paid"} · ` : ""}
-                  counted when its comprehension check passed
-                </td>
-                <td className="num ct-date">{c.date}</td>
-                <td className="ct-state">
-                  <span className="p-badge chip c-green">✓✓ CHECKED · {c.date.toUpperCase()}</span>
-                </td>
-              </tr>
-            ))}
-            <tr className="row-next">
-              <td className="item dim">TESDA NC II</td>
-              <td>Your route&apos;s next credential, not earned yet</td>
-              <td className="ct-date"><span className="p-dash">—</span></td>
-              <td className="ct-state">
-                <span className="p-badge chip c-grey">WHEN YOU PASS THE ASSESSMENT</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <p className="src-line num">
-          A platform credential appears here only when its check passes · counselor-audited kinds carry
-          their stamp on the entry itself
-        </p>
-      </div>
-
-      <div className="psblock">
-        <div className="b-head">
-          <h2>Your declared credentials</h2>
-          <p className="helper">
-            Certifications · internships and jobs · personal projects and organization roles — entries you
-            declare with evidence. The counselor audit rules each one: <b>Verified</b> is the shared record
-            (read-only after), <b>Needs check</b> is honest waiting, and a <b>not-accepted</b> entry shows the
-            audit&apos;s note and revises. Verified credentials close gaps like platform completions; declared
-            ones wait — nothing scores on a say-so.
-          </p>
+        <div className="ledger">
+          {/* the presence stamp row — the FOURTH kind (ticket 12); its
+              declaration form rides the inset slot below the ledger */}
+          {presence && presence.stamp && (
+            <div className="lrow" data-presence-row>
+              <span className={`ms${presenceMeasuredNow ? " done" : ""}`} aria-hidden="true">
+                {presenceMeasuredNow ? "verified" : "block"}
+              </span>
+              <b>Professional presence — LinkedIn</b>
+              {presenceMeasuredNow ? (
+                <span
+                  className="chip c-green"
+                  data-presence-stamp={`MACHINE-VERIFIED ${fmtEventDate(presence.stamp.verifiedAt).toUpperCase()}`}
+                >
+                  MACHINE-VERIFIED · {fmtEventDate(presence.stamp.verifiedAt).toUpperCase()}
+                </span>
+              ) : (
+                <span className="chip c-grey">DECLARED — FORMAT CHECK FAILED, NOT YET MEASURED</span>
+              )}
+              <span className="lsub num" data-presence-sub>
+                {presence.linkedinUrl} · {presence.email} ·{" "}
+                {presence.stamp.offline ? "stamped offline — no network look-up ran" : ""}
+                {presence.stamp.checks.linkedinUrlFormat === "fail" ? " · URL format failed" : ""}
+                {presence.stamp.checks.professionalEmailFormat === "fail" ? " · email format failed" : ""}
+                {presence.stamp.contentNote ? ` · ${presence.stamp.contentNote}` : ""}
+              </span>
+            </div>
+          )}
+          {/* platform check-passed rows (the M9 gate — a row only when its
+              comprehension check passed) */}
+          {credentialRows.map((c, i) => (
+            <div className="lrow" key={i}>
+              <span className="ms done" aria-hidden="true">
+                task_alt
+              </span>
+              <b>{c.title}</b>
+              <span className="chip c-green">✓✓ CHECKED · {c.date.toUpperCase()}</span>
+              <span className="lsub num">
+                {c.provider ? `${c.provider} · ${c.free ? "free" : "paid"} · ` : ""}
+                counted when its comprehension check passed
+              </span>
+            </div>
+          ))}
+          {/* declared entries — the counselor-audited kinds render through
+              the same .lrow register (client ledger source + entry form) */}
+          <DeclaredCredentials
+            rows={declaredRows}
+            skillVocabulary={allSkills}
+            persistence={persistence}
+          />
         </div>
-        <DeclaredCredentials
-          rows={declaredRows}
-          skillVocabulary={allSkills}
-          persistence={persistence}
-        />
-        <p className="src-line num">
-          Declared skills come from the framework vocabulary — cross-track picks stay honest; the audit rules
-          the skills when it rules the evidence
-        </p>
-      </div>
-
-      <div className="psblock">
-        <div className="b-head">
-          <h2>Professional presence</h2>
-        </div>
-        <div className="presence-wrap">
+        {/* the presence declaration — machine-verified AT declaration, an
+            inset hairline slot of the same card (re-declare replaces the
+            latest stamp). Phase 4: verifiedAt/privateNote dropped from
+            PresenceCard's props — the ledger row renders the stamp's
+            truth; only linkedinUrl/email feed the re-declare copy. */}
+        <div className="formslot">
           <PresenceCard
             declared={
               presence?.stamp
-                ? {
-                    linkedinUrl: presence.linkedinUrl,
-                    email: presence.email,
-                    verifiedAt: presence.stamp.verifiedAt,
-                    privateNote: Boolean(presence.stamp.contentNote),
-                  }
+                ? { linkedinUrl: presence.linkedinUrl, email: presence.email }
                 : null
             }
           />
         </div>
-        <p className="src-line num">
-          Presence (ticket 12) is machine-verified at declaration — the timestamped stamp, never a
-          counselor audit. It is the fourth kind and feeds Application-Readiness&apos; 3-point factor.
-        </p>
+        <div className="lcap num">
+          <p>A platform credential appears here only when its check passes.</p>
+          <p>Machine-verified presence — no counselor audit; the stamp feeds the Application-Readiness factor.</p>
+          <p>Declared skills come from the framework vocabulary — the audit rules the skills when it rules the evidence.</p>
+        </div>
       </div>
     </div>
   );
 
+  /* Account tab (Phase-4 re-cut, 2026-11-02): three separated Dashboard-
+     register cards — Identity · Security · Data rights — the same floating
+     .plancards .card units the other tabs ride. Presentation only: the same
+     forms, fields, and machinery (PATCH /api/profile · POST /api/auth/
+     password · the two DPA routes — no route or API change), the page's
+     last .stack and the psblock married-surface bridge retire with it.
+     The password card adds a client-only confirm field (submit blocked
+     until the entries match) — the session stays the authorization. */
   const accountPanel = (
-    <div className="stack">
-      <p className="lead-mono num">
-        Account · your identity, your password, and the DPA&apos;s two data-subject rights as working tools
-      </p>
-      <div className="psblock">
-        <div className="b-head">
-          <h2>Your identity</h2>
-          <p className="helper">
-            Email is the sign-in identity — it only changes with the account itself. The rest mirrors your
-            intake; the campus is the tenant key and stays fixed.
-          </p>
+    <div className="plancards">
+      <div className="card">
+        <div className="head">
+          <b>Identity</b>
+          <span className="num">
+            campus-managed fields · {profile.yearLevel || "—"} ({profile.program || "—"} · {profile.section || "—"})
+          </span>
         </div>
         <AccountIdentity
           initial={{
@@ -565,222 +511,140 @@ export default async function ProfilePage() {
         />
       </div>
 
-      <div className="psblock">
-        <div className="b-head">
-          <h2>Password</h2>
-          <p className="helper">Change it here — the same policy the sign-up enforced (length first, no breach-list reuse).</p>
+      <div className="card">
+        <div className="head">
+          <b>Security</b>
+          <span className="num">same policy sign-up enforced — length first, no breach-list reuse</span>
         </div>
         <AccountPassword />
       </div>
 
-      <div className="psblock">
-        <div className="b-head">
-          <h2>Your data — the DPA&apos;s two rights, working here</h2>
-          <p className="helper">
-            RA 10173 data-subject rights as artifacts (ticket 7 lock): one honest export of everything the
-            system holds on you, and a real erase behind an explicit confirm. Erasure removes the whole
-            record — the counselor roster loses your row; that is what erasure means.
-          </p>
+      {/* Data rights — the DPA's two rights as working tools; the export/
+          erase cascade receipt rides the card's provenance caption */}
+      <div className="card">
+        <div className="head">
+          <b>Data rights</b>
+          <span className="num">RA 10173 data-subject rights · erase removes the whole record</span>
         </div>
         <DpaArtifacts studentId={state.id} />
-        <p className="src-line num">
-          Export: profile · state · event history · credentials · resume runs · letter runs · presence ·
-          Erase: auth user → profile → state → credentials → run stores (evidence objects follow the
-          storage bucket when the credential writer ships)
-        </p>
+        <div className="lcap num">
+          <p>Export serves: profile · state · event history · credentials · resume runs · letter runs · presence</p>
+          <p>Erase order: auth user → profile → state → credentials → run stores</p>
+        </div>
       </div>
     </div>
   );
 
   const planPanel = (
-    <div className="stack">
-      <p className="lead-mono num">
-        Plan · where you&apos;re headed · summary only: the ranked steps live in your pathway
-      </p>
-      <div className="psblock masthead">
-        <div className="m-left">
-          <span className="cl-label num">Career plan · as of {asOf}</span>
-          <h2 className="m-title">Career plan — {state.name}</h2>
-          <p className="m-meta">
-            Target career: <b>{career.name}</b>
-          </p>
-          <p className="m-note">
-            The summary a panel or adviser reads: your route in dated sections, with the source under every
-            number.
-          </p>
+    <div className="plancards">
+      {/* Phase-1 revamp (2026-11-02): the masthead (identity + five ticklines)
+          and the §4 counters retire — the header band is the sole identity/
+          state surface and the tab kickers carry the counts. What's left of
+          the §1-§5 document renders as Dashboard-register cards, one
+          compartment each. Summary only — NEVER the ranked plan list. */}
+      <div className="card">
+        <div className="head">
+          <b>Goals</b>
+          <span className="num">
+            {completedGoals.length} done · {activeGoals.length} in progress
+          </span>
         </div>
-        {/* v7.2 P2 re-cut: the masthead compacts to a summary strip — 22px KPI
-            register (not the 46px readout scale), both columns content-full and
-            top-aligned; the five ticklines stay byte-verbatim */}
-        <div className="m-right">
-          <span className="cl-label num">Readiness</span>
-          <div className="m-score num">
-            {v.total}
-            <small>/100</small>
-          </div>
-          <div className="m-ticks">
-            <p className="tickline num">
-              Skills — <b>{v.sp} of {WEIGHTS.sp}</b>
-            </p>
-            <p className="tickline num">
-              Employability — <b>{v.es} of {WEIGHTS.es}</b>{" "}
-              <span className="tick-note">· {v.esVerified} of 7 NACE competencies verified ·✓</span>
-            </p>
-            <p className="tickline num">
-              Training — <b>{v.tp} of {WEIGHTS.tp}</b>
-              {v.stageOne.done > 0 && (
-                <span className="tick-note"> · {v.stageOne.done} of 3 first steps done</span>
+        {state.goals.length === 0 ? (
+          <div className="foot num">No goals yet. Your first suggested goal accepts in Pathway.</div>
+        ) : (
+          <table className="plan-table">
+            <thead>
+              <tr>
+                <th scope="col" className="col-item">Goal</th>
+                <th scope="col">State</th>
+                <th scope="col">Since</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...completedGoals, ...activeGoals.filter((g) => g.type === "training"), ...activeGoals.filter((g) => g.type !== "training")].map(
+                (g, i) => (
+                  <tr key={g.id ?? i}>
+                    <td>
+                      <div className="item">{g.title}</div>
+                    </td>
+                    <td>
+                      {g.status === "completed" ? (
+                        g.type === "training" ? (
+                          <span className="p-badge chip c-green">DONE · ✓✓</span>
+                        ) : (
+                          <span className="p-badge chip c-green">DONE</span>
+                        )
+                      ) : (
+                        <span className="p-badge chip c-grey">{g.type === "milestone" ? "NOT YET DONE" : "IN PROGRESS"}</span>
+                      )}
+                    </td>
+                    <td>
+                      <div className="sub num">
+                        {g.status === "completed"
+                          ? g.type === "training"
+                            ? `check passed ${fmtEventDate(g.completedAt)}`
+                            : `marked done ${fmtEventDate(g.completedAt)}`
+                          : g.type === "milestone"
+                            ? "outside the app — tick it off when you pass"
+                            : `accepted ${acceptedOn(g.title)}`}
+                      </div>
+                    </td>
+                  </tr>
+                )
               )}
-            </p>
-            <p className="tickline num">
-              Application readiness —{" "}
-              <b>{v.ar === null ? "not yet measured" : `${v.ar} of ${WEIGHTS.ar}`}</b>{" "}
-              <span className="tick-note">
-                · resume {v.arFactors.resume.measured ? `${v.arFactors.resume.earned} of ${v.arFactors.resume.max}` : "not run"} ·
-                letter {v.arFactors.letter.measured ? `${v.arFactors.letter.earned} of ${v.arFactors.letter.max}` : "not run"} ·
-                presence {presenceTicker}{" "}
-                — each factor measures on its own run/file
-              </span>
-            </p>
-            <p className="tickline num">
-              Career direction — <b className={v.cc === WEIGHTS.cc ? "full" : undefined}>{v.cc} of {WEIGHTS.cc}</b>
-            </p>
-          </div>
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* the route as ledger rows; §1's prose retires and its one fact (the
+          entry route) rides the caption next to the route line */}
+      <div className="card">
+        <div className="head">
+          <b>Pathway stages</b>
+          <span className="num">First 30 days · {v.stageOne.done} of 3 done</span>
+        </div>
+        <div className="strow">
+          <span className={`dot${v.stageOne.done > 0 ? " on" : ""}`} aria-hidden="true" />
+          <b>First 30 days</b>
+          <span className="s-count num">{v.stageOne.done} of 3 done</span>
+        </div>
+        <div className="strow">
+          <span className="dot" aria-hidden="true" />
+          <b>Next steps</b>
+          <span className="s-count num">opens next</span>
+        </div>
+        <div className="strow">
+          <span className="dot" aria-hidden="true" />
+          <b>Entry-ready</b>
+          <span className="s-count num">the last stage</span>
+        </div>
+        <div className="lcap num">
+          <p>Entry route · {career.entryRoute}</p>
+          <p>{routeLine}</p>
         </div>
       </div>
 
-      <div className="psblock doc">
-        <div className="doc-sec">
-          <h3>
-            <span className="sec-no num">1</span>The career
-          </h3>
-          <p className="doc-p">
-            You picked <b>{career.name}</b> after exploring the index: the work fits what you enjoy and where
-            your track points.
-          </p>
-          <p className="mono-line num">Entry route · {career.entryRoute}</p>
+      {/* the trajectory card keeps the graphic + delta + the .prov caption
+          (the e2e beat-9 selectors read .prov/.traj-rows) and closes the tab
+          with the .foot link-out; the filled CTA lives in the band */}
+      <div className="card">
+        <div className="head">
+          <b>Score trajectory</b>
+          <span className="num">{traj.points.length > 1 ? `+${traj.delta} since setup` : "one reading so far"}</span>
         </div>
-
-        <div className="doc-sec">
-          <h3>
-            <span className="sec-no num">2</span>What you&apos;re aiming at
-          </h3>
-          {state.goals.length === 0 ? (
-            <p className="doc-p">No goals yet. Your first suggested goal accepts in Pathway.</p>
-          ) : (
-            <table className="p-table goals-table">
-              <thead>
-                <tr>
-                  <th scope="col">Goal</th>
-                  <th scope="col" className="ct-state">Status</th>
-                  <th scope="col">Since</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...completedGoals, ...activeGoals.filter((g) => g.type === "training"), ...activeGoals.filter((g) => g.type !== "training")].map(
-                  (g, i) => (
-                    <tr key={g.id ?? i}>
-                      <td className="item">{g.title}</td>
-                      <td className="ct-state">
-                        {g.status === "completed" ? (
-                          g.type === "training" ? (
-                            <span className="p-badge chip c-green">DONE · ✓✓</span>
-                          ) : (
-                            <span className="p-badge chip c-green">DONE</span>
-                          )
-                        ) : (
-                          <span className="p-badge chip c-grey">{g.type === "milestone" ? "NOT YET DONE" : "IN PROGRESS"}</span>
-                        )}
-                      </td>
-                      <td>
-                        {g.status === "completed"
-                          ? g.type === "training"
-                            ? `Completed itself when its comprehension check passed · ${fmtEventDate(g.completedAt)}`
-                            : `Marked done · ${fmtEventDate(g.completedAt)}`
-                          : g.type === "milestone"
-                            ? "Happens outside the app — you tick it off when you pass"
-                            : `Stays active from your first pick · accepted ${acceptedOn(g.title)}`}
-                      </td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
-          )}
-          <p className="doc-note">Done arrives by itself when a check passes; you never tick goals off by hand.</p>
-        </div>
-
-        <div className="doc-sec">
-          <h3>
-            <span className="sec-no num">3</span>Where you are on the route
-          </h3>
-          <div className="stages">
-            <div className="stage">
-              <span className="st-top">
-                <span className="dot on" aria-hidden="true" />
-                <span className="st-name">First 30 days</span>
-              </span>
-              <span className="st-count num">{v.stageOne.done} of 3 done</span>
-            </div>
-            <div className="stage">
-              <span className="st-top">
-                <span className="dot" aria-hidden="true" />
-                <span className="st-name">Next steps</span>
-              </span>
-              <span className="st-count">opens next</span>
-            </div>
-            <div className="stage">
-              <span className="st-top">
-                <span className="dot" aria-hidden="true" />
-                <span className="st-name">Entry-ready</span>
-              </span>
-              <span className="st-count">the last stage</span>
-            </div>
-          </div>
-          <p className="mono-line num">{routeLine}</p>
-        </div>
-
-        <div className="doc-sec">
-          <h3>
-            <span className="sec-no num">4</span>What you&apos;ve already shown
-          </h3>
-          <div className="counts">
-            <div className="count">
-              <span className="label num">Skills closed</span>
-              <span className="c-val num">{v.closed} of {v.mapSize}</span>
-            </div>
-            <div className="count">
-              <span className="label num">Credentials earned</span>
-              <span className="c-val num">{credentialsEarned}</span>
-            </div>
-            <div className="count">
-              <span className="label num">First steps done</span>
-              <span className="c-val num">{v.stageOne.done} of 3</span>
-            </div>
-          </div>
-          <p className="doc-note">Same numbers as your Competencies tab: one record, two views.</p>
-        </div>
-
-        <div className="doc-sec">
-          <h3>
-            <span className="sec-no num">5</span>Your score, over time
-          </h3>
-          <TrajGraphic traj={traj} />
-          {traj.points.length === 1 && (
-            <p className="doc-note">Your next score line arrives with your first completion.</p>
-          )}
-          {switched && (
-            <p className="doc-note">You switched careers on the way: verified skills and goals carried over, gap bars reset.</p>
-          )}
-        </div>
-
-        <div className="doc-sec">
-          <p className="close-p">{closeLine}</p>
-          <div className="close-cta">
-            <a className="btn btn-primary" href="/pathway">
-              Open your pathway <span className="arrow num">↵</span>
-            </a>
-          </div>
+        <TrajGraphic traj={traj} />
+        {traj.points.length === 1 && (
+          <p className="doc-note">Your next score line arrives with your first completion.</p>
+        )}
+        {switched && (
+          <p className="doc-note">You switched careers on the way: verified skills and goals carried over, gap bars reset.</p>
+        )}
+        <div className="foot num">
+          {closeLine}{" "}
+          <a className="foot-link" href="/pathway">
+            Open your pathway →
+          </a>
         </div>
       </div>
     </div>
@@ -794,13 +658,12 @@ export default async function ProfilePage() {
             <div className="who">
               <h1>Profile</h1>
               {identity}
-              <p className="band-meta num">Readiness report · as of {asOf} · every number carries its source</p>
+              <p className="band-meta num">As of {asOf}</p>
             </div>
             <div className="band-scale">
               <div className="bandbar num" aria-hidden="true">
                 {/* the five channel mini-bar — at rest, honest fractions;
-                    the Competencies readout repeats the same computed
-                    fractions with its own aria-label */}
+                    the Competencies cards + kickers carry their own receipts */}
                 <div className="segbar">
                   {bandVals.map((val, i) => (
                     <div
@@ -821,6 +684,11 @@ export default async function ProfilePage() {
                 </div>
               </div>
             </div>
+            {/* the one filled CTA on the page — the band's do-location, the
+                Dashboard register; the Plan tab's old closing CTA retires */}
+            <a className="cta" href="/pathway">
+              Continue your plan →
+            </a>
           </div>
         </div>
       </section>
@@ -840,8 +708,7 @@ export default async function ProfilePage() {
           <footer className="pro-foot">
             <span className="label num">
               Profile report · {state.name.toUpperCase()} ·{" "}
-              {[state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(" · ")} · every number dated
-              and sourced
+              {[state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(" · ")}
             </span>
             <a className="link-quiet" href="/dashboard">
               Back to dashboard
@@ -853,28 +720,24 @@ export default async function ProfilePage() {
   );
 }
 
-/** Credentials-earned counter (Plan §4): platform-checked rows + verified
- *  declared credentials + the machine-verified presence stamp (when
- *  measured) — the same "counted" truth the Credentials tab renders per row. */
-
 /** Earlier-than-fixtures student: no career yet — honest, still dated.
- *  Every tab answers the same truth: the report opens with the career. */
+ *  Every tab answers the same truth: the report opens with the career. The
+ *  panel rides the Phase-1 card register; the one filled CTA on this state
+ *  is the /career picker (the a.cta family button, not the band). */
 function UndecidedProfile({ name }: { name: string }) {
   const undecidedPanel = (
-    <div className="stack">
-      <div className="psblock">
-        <div className="b-head">
-          <h2>Your report opens with your career</h2>
-          <p className="helper">Pick a career first — then every number here measures toward it.</p>
+    <div className="plancards">
+      <div className="card">
+        <div className="head">
+          <b>Your report opens with your career</b>
+          <span>Pick a career first — every number here measures toward it.</span>
         </div>
-        <p className="doc-p" style={{ marginTop: 12 }}>
-          Explore the index and the score, skills, and plan all find their place.
-        </p>
-        <p style={{ marginTop: 10 }}>
-          <a className="btn btn-primary" href="/career">
-            Browse the career index <span className="arrow num">↵</span>
+        <div className="u-cta">
+          <a className="cta" href="/career">
+            Browse the career index →
           </a>
-        </p>
+        </div>
+        <div className="foot num">Explore the index — the score, skills, and plan follow your pick.</div>
       </div>
     </div>
   );
@@ -886,7 +749,6 @@ function UndecidedProfile({ name }: { name: string }) {
             <div className="who">
               <h1>Profile</h1>
               <p className="band-id num">{name} · no career picked yet</p>
-              <p className="band-meta num">Readiness report · every number carries its source</p>
             </div>
           </div>
         </div>
@@ -900,7 +762,7 @@ function UndecidedProfile({ name }: { name: string }) {
         }}
         foot={
           <footer className="pro-foot">
-            <span className="label num">Profile report · every number dated and sourced</span>
+            <span className="label num">Profile report · no career picked yet</span>
             <a className="link-quiet" href="/dashboard">
               Back to dashboard
             </a>

@@ -112,6 +112,29 @@ All confirmed with code evidence (see transcript):
   that page's instrument). A per-page content draft (title / subtitle / instrument cells / CTA)
   is presented to the user for sign-off BEFORE any markup change.
 
+## Tier 2c — My Plan (Ranked steps / Gaps / Resources) restructure (queued by user 2026-11-02)
+
+New manual-QA findings; design decisions run through the grilling session (2026-11-02) before code:
+
+1. **Tab-panel header register inconsistent** — the Ranked steps panel's "title" is the
+   counter line (spec-guarded lead-mono), while Your gaps renders `h2 "Open gaps"` and Resources
+   renders section h2s ("Mapped to your open gaps" / "The rest of the catalog").
+   (Steps merged-table change is already in the working tree: one ranked table, no stage digits,
+   deduped counts.)
+2. **Zero-data groups render empty tables** — "Closed bars" (gaps) and "The rest of the catalog"
+   (Resources) render expandable+headered tables even at 0 rows; the *argument* on record for
+   separating these groups ("a naked skill list reads as noise" ruling) vs a merged/filter
+   alternative is being re-examined.
+3. **Resource suggestion algorithm rethink** — `resourceFor` is `RESOURCES.find(...)` (first
+   fixture match in array order, no ranking); the Resources tab lists ALL matching resources per
+   gap (multiple per single gap); hand-typed fixture URLs drift/redirect over time. Decisions
+   pending: one-suggested-resource-per-gap policy + explicit pick rule, link-health audit, URL
+   canonicalization.
+4. **"What you'll learn" expectation copy** — each plan/gap/resource row should tersely say what
+   the student gets from closing/undertaking it.
+
+Queue position: after Tier 2b (header content plan), before Tier 3 (animation/landing).
+
 ## Tier 3 — Design pass
 
 - **Animation (subtle, existing kit)**: `components/Reveal.tsx`, `components/CountUp.tsx`,
@@ -121,6 +144,19 @@ All confirmed with code evidence (see transcript):
   "SHS students" metadata (deprecated scope; `app/layout.tsx:6-7`), dedupe "Start check →" from 5
   occurrences to 2, align landing with the app's design tokens without losing the marketing look.
 - User reviews the landing draft at the checkpoint before final acceptance.
+
+## Tier 3.5 — Skeleton loaders (queued by user 2026-11-02, before the mobile audit)
+
+User-reported: moving between tabs feels delayed while server pages fetch (session + state +
+engines run on every navigation — some surfaces are DB/API-bound before content paints).
+
+- Route-level `loading.tsx` skeletons per `(app)` surface (dashboard, career, pathway, prep,
+  profile, progress) matching each page's stage structure (band placeholder + card rows), so the
+  perceived load is instant and the shift is structured.
+- Must respect the CLS contract (reserve the eventual layout's dimensions — no reflow on swap),
+  honor `prefers-reduced-motion`, and work at mobile breakpoints (the shell's 720px fold).
+- Architecture depends on Next 16's current loading-convention docs
+  (`node_modules/next/dist/docs/`) — consult before writing code.
 
 ## Tier 4 — Mobile audit + fix (LAST; autonomous background)
 

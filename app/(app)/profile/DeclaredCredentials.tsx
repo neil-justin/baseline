@@ -4,9 +4,17 @@ import { useMemo, useState } from "react";
 
 /**
  * Profile → Credentials — the Round-7 declared-entry flow for the three
- * counselor-audited kinds (certification · internship/job · personal
- * projects & org roles; the FOURTH kind — professional presence — declares
- * through PresenceCard's machine-verified stamp and never rides this form).
+ * counselor-audited kinds: certification · internship/job · personal
+ * projects & org roles. (The FOURTH kind — professional presence — declares
+ * through PresenceCard's machine-verified stamp and never rides this form.)
+ *
+ * Phase-3 re-cut (2026-11-02): the rows re-cut to the unified card's
+ * Dashboard-register `.lrow` unit (icon slot · plain name · chip pushed
+ * right · 11px provenance lines); the NEEDS CHECK chip rides the honest
+ * grey hatch (family law — never red); the entry buttons and the declare
+ * form keep every hook/aria verbatim. The form machinery below is
+ * UNCHANGED — the audit rules, the lifecycle, and the API calls are the
+ * same record as before.
  *
  * Lifecycle (locked, profile-college-scope.md), enforced honest on the rows:
  *   declared (pending the counselor audit — "Needs check") → the student
@@ -194,7 +202,7 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
 
   return (
     <div className="dec-block">
-      <div className="prow-list">
+      <div className="lrows">
         {sorted.map((row) => {
           const kindLabel = KIND_OPTIONS.find((k) => k.id === row.kind)?.label ?? row.kind;
           const dateRange =
@@ -205,29 +213,32 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
             ? `declared skills: ${row.declaredSkills.join(" · ")}`
             : "no skills declared with this entry";
           return (
-            <div className={`prow dec-row dec-${row.status}`} key={row.id} data-cred-row>
-              <span className="p-name">{row.title}</span>
-              {row.status === "declared" && <span className="p-badge chip c-amber">NEEDS CHECK</span>}
+            <div className={`lrow dec-row dec-${row.status}`} key={row.id} data-cred-row>
+              <span className={`ms${row.status === "verified" ? " done" : ""}`} aria-hidden="true">
+                {row.status === "verified" ? "verified" : row.status === "declared" ? "schedule" : "block"}
+              </span>
+              <b>{row.title}</b>
+              {row.status === "declared" && <span className="chip c-grey hatch-chip">NEEDS CHECK</span>}
               {row.status === "verified" && (
-                <span className="p-badge chip c-green">
+                <span className="chip c-green">
                   VERIFIED{row.verifiedAt ? ` · ${fmtStamp(row.verifiedAt).toUpperCase()}` : ""}
                 </span>
               )}
-              {row.status === "rejected" && <span className="p-badge chip c-grey">NOT ACCEPTED</span>}
-              <span className="p-sub">
+              {row.status === "rejected" && <span className="chip c-grey">NOT ACCEPTED</span>}
+              <span className="lsub num">
                 {kindLabel}
                 {row.organization ? ` — ${row.organization}` : ""}
                 {dateRange ? ` · ${dateRange}` : ""}
               </span>
-              <span className="p-sub">
+              <span className="lsub">
                 evidence: {row.evidenceUrl ? <a href={row.evidenceUrl} className="ev-link">{row.evidenceUrl}</a> : row.evidenceNote || "none attached"} ·{" "}
                 {skillLine}
               </span>
               {row.status === "rejected" && row.auditNote && (
-                <span className="p-sub rej-note num">the audit&apos;s note: “{row.auditNote}”</span>
+                <span className="lsub rej-note num">the audit&apos;s note: “{row.auditNote}”</span>
               )}
               {row.status === "declared" && (
-                <span className="p-sub dec-acts">
+                <span className="lsub lacts">
                   <button className="rowbtn" type="button" onClick={() => startEdit(row)} disabled={busy}>
                     Edit while declared
                   </button>
@@ -242,7 +253,7 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
                 </span>
               )}
               {row.status === "rejected" && (
-                <span className="p-sub dec-acts">
+                <span className="lsub lacts">
                   <button className="rowbtn" type="button" onClick={() => startEdit(row)} disabled={busy}>
                     Revise and resubmit
                   </button>
@@ -257,7 +268,7 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
                 </span>
               )}
               {row.status === "verified" && (
-                <span className="p-sub">
+                <span className="lsub num">
                   verified{row.verifiedBy ? ` by ${row.verifiedBy}` : ""}
                   {row.verifiedAt ? ` · ${fmtStamp(row.verifiedAt)}` : ""} — the audit decision is a shared record; the entry reads
                   only.
@@ -393,7 +404,7 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
           </div>
         </div>
       )}
-      {persistence && <p className="p-sub src-line num">{persistence}</p>}
+      {persistence && <p className="lcap num">{persistence}</p>}
     </div>
   );
 }

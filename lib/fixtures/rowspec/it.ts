@@ -456,7 +456,7 @@ export const ROW_SPECS_IT: RowSpecMap = {
     descriptor:
       "Condensed paraphrase of the O*NET task verb set (flagged paraphrase — O*NET prints tasks, not skill descriptors): build/maintain web code. [O*NET] 15-1254.00 \"Web Developers\", title as displayed 2026 (WEB-V2 resolved).",
     anchors: [
-      "O*NET 15-1254.00 tasks: \"Write supporting code for Web applications or Web sites.\" · \"Design, build, or maintain Web sites, using authoring or scripting languages, content creation tools, management tools, and digital media.\" · \"Write computer programming code.\" · \"Evaluate code to ensure that it is valid, is properly structured, meets industry standards, and is compatible with browsers, devices, or operating systems.\"",
+      "O*NET 15-1254.00 tasks: \"Write supporting code for Web applications or Web sites.\" · \"Design, build, or maintain Web sites, using authoring or scripting languages, content creation tools, management tools, and digital media.\" · \"Evaluate code to ensure that it is valid, is properly structured, meets industry standards, and is compatible with browsers, devices, or operating systems.\"",
     ],
     specRef: "role-specs/webdev.md — Client-side coding row",
     flags: ["constructed/paraphrase row name ACCEPTED (ruling 2026-10-29; original task text stays as the attributed anchor)"],
@@ -464,7 +464,7 @@ export const ROW_SPECS_IT: RowSpecMap = {
   "webdev::↳ task-cluster sub-row: site life-operations": {
     descriptor: "Task-cluster tier — the site life-operations O*NET verbs grouped as one row.",
     anchors: [
-      "O*NET 15-1254.00 tasks: \"Perform Web site tests according to planned schedules, or after any Web site or product revision.\" · \"Perform or direct Web site updates.\" · \"Back up files from Web sites to local directories for instant recovery in case of problems.\" · \"Renew domain name registrations.\" · \"Update website content.\" · \"Recommend and implement performance improvements.\"",
+      "O*NET 15-1254.00 tasks: \"Perform Web site tests according to planned schedules, or after any Web site or product revision.\" · \"Perform or direct Web site updates.\" · \"Back up files from Web sites to local directories for instant recovery in case of problems.\" · \"Renew domain name registrations.\" · \"Design, build, or maintain Web sites, using authoring or scripting languages, content creation tools, management tools, and digital media.\" · \"Recommend and implement performance improvements.\"",
     ],
     specRef: "role-specs/webdev.md — site life-operations task-cluster sub-row",
     flags: ["constructed row (task-cluster), ruling accepted 2026-10-29"],
@@ -473,7 +473,7 @@ export const ROW_SPECS_IT: RowSpecMap = {
     descriptor:
       "Condensed paraphrase (flagged): run the content/CMS stack behind business sites.",
     anchors: [
-      "O*NET 15-1254.00 tasks: \"Design, build, or maintain Web sites, using authoring or scripting languages, content creation tools, management tools, and digital media.\" (the \"content creation tools, management tools\" clause) · \"Update website content.\" · \"Analyze user needs to determine technical requirements.\"",
+      "O*NET 15-1254.00 tasks: \"Design, build, or maintain Web sites, using authoring or scripting languages, content creation tools, management tools, and digital media.\" (the \"content creation tools, management tools\" clause) · \"Analyze user needs to determine technical requirements.\"",
     ],
     specRef: "role-specs/webdev.md — CMS administration row",
     flags: ["constructed/paraphrase row name ACCEPTED (ruling 2026-10-29)"],
@@ -481,7 +481,7 @@ export const ROW_SPECS_IT: RowSpecMap = {
   "webdev::Responsive/UI basics + accessibility": {
     descriptor: "Condensed paraphrase (flagged): cross-device + accessible rendering.",
     anchors: [
-      "O*NET 15-1254.00 tasks: \"Incorporate technical considerations into Web site design plans, such as budgets, equipment, performance requirements, and legal issues including accessibility and privacy.\" · \"Design websites or web applications.\"",
+      "O*NET 15-1254.00 tasks: \"Incorporate technical considerations into Web site design plans, such as budgets, equipment, performance requirements, and legal issues including accessibility and privacy.\" · \"Write supporting code for Web applications or Web sites.\"",
     ],
     specRef: "role-specs/webdev.md — Responsive/UI basics + accessibility row (WEB-V4: #271 is the demand name; the role stays \"usually a CMS + front-end first job\")",
     flags: ["constructed/paraphrase row name ACCEPTED (ruling 2026-10-29)"],
@@ -489,7 +489,7 @@ export const ROW_SPECS_IT: RowSpecMap = {
   "webdev::Version control (git)": {
     descriptor: "Condensed paraphrase (flagged): team-safe code management.",
     anchors: [
-      "O*NET 15-1254.00 tasks: \"Evaluate code to ensure that it is valid, is properly structured, meets industry standards…\" · \"Recommend changes to improve computer or information systems.\"",
+      "O*NET 15-1254.00 tasks: \"Evaluate code to ensure that it is valid, is properly structured, meets industry standards, and is compatible with browsers, devices, or operating systems.\"",
     ],
     specRef: "role-specs/webdev.md — Version control (git) row",
     flags: ["constructed/paraphrase row name ACCEPTED (ruling 2026-10-29)"],
