@@ -1,0 +1,142 @@
+/* ============================================================
+   DNA v7 — AUTH SKIN (wave-4 round, 2026-11-02)
+
+   The (auth) surfaces (signin · signup · forgot · reset) skin to
+   the v7 law without touching a single hook: every page ADDS the
+   `v7auth` class to its existing .auth-body root, and this file
+   carries the world. Two mechanisms:
+
+   1. Token BLOCK — the 19 --v-* values are a lexical copy of
+      app/(app)/v7.css (shell edits must propagate; the landing's
+      .v7land is the other copy). `body:has(.v7auth)` extends the
+      cool ground the same way the (app) shell does.
+
+   2. VAR BRIDGE — the Index token NAMES that globals.css and the
+      auth forms' inline styles reference (--accent, --ink-2,
+      --mono, --radius, ...) are remapped to the v7 values here,
+      so the untouched markup (incl. the inline var() refs in the
+      SHOW/HIDE toggles) renders in the v7 palette byte-verbatim.
+      The shops' one deviation: errors read AMBER (never red, and
+      command-blue "success" would lie) — see the re-spec block.
+
+   Everything else is wholesale re-spec (globals' Index literals —
+   Archivo, green, mono, 6px radius — outranked under .v7auth).
+   Floors: min UI text 11px (the mw-feedback 10.5px meter word is
+   floored in its own file), state-bearing grey ≥4.5:1. Hooks
+   preserved: #f-email / #f-pass / #f-name / #pass-toggle / the
+   .forgot-link / .forgot-lead classes and every button name.
+   ============================================================ */
+
+.v7auth {
+  /* the 19 v7 tokens (lexical copy of .v7) */
+  --v-ground: #f8f9fa;
+  --v-surface: #ffffff;
+  --v-ink: #202124;
+  --v-ink2: #5f6368;
+  --v-meta: #80868b;
+  --v-blue: #1a73e8;
+  --v-blue-deep: #1557b0;
+  --v-blue-wash: #e8f0fe;
+  --v-blue-pill: #c2e7ff;
+  --v-blue-ink: #012b53;
+  --v-green: #188038;
+  --v-green-text: #137333;
+  --v-green-wash: #e6f4ea;
+  --v-amber: #b45309;
+  --v-amber-text: #96590a;
+  --v-amber-wash: #fef7e0;
+  --v-grey-text: #3c4043;
+  --v-grey-wash: #f1f3f4;
+  --v-border: #dadce0;
+  --v-rows: #e8eaed;
+  --v-track: #e8eaed;
+  --v-shadow: 0 1px 2px rgba(60, 64, 67, 0.1);
+
+  /* the var bridge — Index token names the untouched markup reads */
+  --accent: var(--v-blue);
+  --accent-deep: var(--v-blue-deep);
+  --selection: #e8f0fe;
+  --ink: var(--v-ink);
+  --ink-2: var(--v-ink2);
+  --ink-3: var(--v-grey-text);
+  --line: var(--v-border);
+  --line-soft: var(--v-rows);
+  --panel: var(--v-surface);
+  --ground: var(--v-ground);
+  --mono: Roboto, system-ui, sans-serif;
+  --radius: 8px;
+
+  font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  background: var(--v-ground);
+  min-height: 100dvh;
+}
+/* the Index body ground is #F4F5F4; extend the v7 ground under (auth) only */
+body:has(.v7auth) { background: #f8f9fa; }
+
+.v7auth ::selection { background: var(--v-blue-wash); }
+.v7auth :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
+.v7auth a { color: inherit; }
+.v7auth input { caret-color: var(--v-blue); }
+
+/* ---------- the 56px white top bar (the landing mast's sibling) ---------- */
+
+.v7auth .bar-in { max-width: 1240px; width: 100%; margin: 0 auto; padding: 0 24px; }
+.v7auth .bar { height: 56px; display: flex; align-items: center; border-bottom: 1px solid var(--v-border); }
+/* brand mark lifted to the family geometry (24px, 2px ink border, 6px radius;
+   the blue inlay square is the globals' ::after via the var bridge) */
+.v7auth .brand-mark {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--v-ink);
+  border-radius: 6px;
+}
+.v7auth .brand-mark::after { border-radius: 1px; }
+.v7auth .brand-name { font: 500 16px/1.2 Roboto, system-ui, sans-serif; letter-spacing: 0; }
+
+/* ---------- the auth frame ---------- */
+
+.v7auth .auth-main { padding: 44px 24px 56px; }
+.v7auth .auth-head h1 {
+  font: 500 18px/1.3 Roboto, system-ui, sans-serif; /* the family band-name register */
+  letter-spacing: 0;
+  line-height: 1.3;
+  color: var(--v-ink);
+}
+.v7auth .auth-panel form {
+  box-shadow: var(--v-shadow);
+  border-radius: 8px;
+}
+.v7auth .auth-alt { font: 400 13px/1.5 Roboto, system-ui, sans-serif; }
+.v7auth .auth-alt a { font-weight: 500; }
+.v7auth .auth-note,
+.v7auth .field-label .rule,
+.v7auth .caps-hint {
+  font-family: Roboto, system-ui, sans-serif;
+}
+
+/* ---------- fields (v7 controls at 8px radius; error = amber, never red) ---------- */
+
+.v7auth .field-err { color: var(--v-amber-text); font-weight: 500; }
+.v7auth .field.has-err input { border-color: var(--v-amber); }
+.v7auth .field-label label { font: 500 13px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+
+/* ---------- buttons — the family's 40px command register ---------- */
+
+.v7auth .btn {
+  height: 40px;
+  padding: 0 20px;
+  font-weight: 500;
+  border-radius: 8px;
+}
+.v7auth .btn .arrow { font-family: Roboto, system-ui, sans-serif; }
+.v7auth .btn-primary { box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3); }
+.v7auth .btn-primary:hover { box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35); }
+.v7auth .btn-block { margin-top: 18px; }
+
+/* honest info tray (post-validate note on /signup) — grey band structure */
+.v7auth .proto-note {
+  background: var(--v-grey-wash);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+}

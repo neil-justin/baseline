@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { BackArrow } from "../glyphs";
 import ForgotForm from "./ForgotForm";
 import "./auth.css";
+import "../v7-auth.css";
 
 export const metadata: Metadata = {
   title: "Career Readiness — reset your password",
@@ -19,7 +20,7 @@ export default async function ForgotPage({
 }) {
   const { state } = await searchParams;
   return (
-    <div className="auth-body">
+    <div className="auth-body v7auth">
       <header className="bar">
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
@@ -32,16 +33,7 @@ export default async function ForgotPage({
       <main className="auth-main" id="main">
         <div className="auth-panel">
           <div className="auth-head">
-            <h1
-              style={{
-                fontSize: "clamp(1.5rem,2.6vw,1.9rem)",
-                fontWeight: 640,
-                letterSpacing: "-0.025em",
-                lineHeight: 1.15,
-              }}
-            >
-              Reset your password.
-            </h1>
+            <h1>Reset your password.</h1>
           </div>
 
           <ForgotForm expired={state === "expired"} />

@@ -3,6 +3,7 @@ import { BackArrow } from "../glyphs";
 import { supabaseServer } from "@/lib/supabase/server";
 import ResetForm from "./ResetForm";
 import "./auth.css";
+import "../v7-auth.css";
 
 export const metadata: Metadata = {
   title: "Career Readiness — set a new password",
@@ -26,7 +27,7 @@ export default async function ResetPage() {
   const hasSession = Boolean(user);
 
   return (
-    <div className="auth-body">
+    <div className="auth-body v7auth">
       <header className="bar">
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
@@ -39,22 +40,13 @@ export default async function ResetPage() {
       <main className="auth-main" id="main">
         <div className="auth-panel">
           <div className="auth-head">
-            <h1
-              style={{
-                fontSize: "clamp(1.5rem,2.6vw,1.9rem)",
-                fontWeight: 640,
-                letterSpacing: "-0.025em",
-                lineHeight: 1.15,
-              }}
-            >
-              {hasSession ? "Set a new password." : "That link has expired."}
-            </h1>
+            <h1>{hasSession ? "Set a new password." : "That link has expired."}</h1>
           </div>
 
           {hasSession ? (
             <ResetForm />
           ) : (
-            <form noValidate onSubmit={(e) => e.preventDefault()}>
+            <form noValidate>
               <div className="field" style={{ marginTop: 0 }}>
                 <p className="reset-lead">
                   Reset links work once and only in the browser that requested them. Request a

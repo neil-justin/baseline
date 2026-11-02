@@ -2,16 +2,17 @@ import type { Metadata } from "next";
 import { ForwardArrow } from "../glyphs";
 import SignupForm from "./SignupForm";
 import "./auth.css";
+import "../v7-auth.css";
 
 export const metadata: Metadata = {
-  title: "Career Readiness — start the 5-minute check",
-  description: "Create your account and take the 5-minute readiness check.",
+  title: "Career Readiness — start the readiness check",
+  description: "Create your account and take the readiness check.",
 };
 
 /** Sign-up surface — markup ported 1:1 from prototype/signup.html, links adapted (signin.html → /signin). */
 export default function SignUpPage() {
   return (
-    <div className="auth-body">
+    <div className="auth-body v7auth">
       <header className="bar">
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
@@ -24,16 +25,7 @@ export default function SignUpPage() {
       <main className="auth-main" id="main">
         <div className="auth-panel">
           <div className="auth-head">
-            <h1
-              style={{
-                fontSize: "clamp(1.5rem,2.6vw,1.9rem)",
-                fontWeight: 640,
-                letterSpacing: "-0.025em",
-                lineHeight: 1.15,
-              }}
-            >
-              Start the check.
-            </h1>
+            <h1>Start the check.</h1>
           </div>
 
           <SignupForm />
