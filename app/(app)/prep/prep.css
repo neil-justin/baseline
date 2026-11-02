@@ -497,6 +497,11 @@
 .v7prep .card > .panel-sec + .rs-upload,
 .v7prep .card > .panel-sec + .cl-upload { border-top: 1px solid var(--v-rows); padding-top: 14px; }
 
+/* the dropzone as the card's FIRST child sits flush — no stray top rule
+   (the letter tab's empty state is exactly this) */
+.v7prep .card > .rs-upload:first-child,
+.v7prep .card > .cl-upload:first-child { border-top: 0; padding-top: 0; }
+
 .v7prep .rs-upload,
 .v7prep .cl-upload {
   margin: 14px 16px;
@@ -523,7 +528,7 @@
   background: var(--v-blue-wash);
 }
 .v7prep .dz-zone:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
-.v7prep .dz-icon { font-size: 30px; color: var(--v-blue); }
+.v7prep .dz-icon { color: var(--v-blue); display: block; }
 .v7prep .dz-head { font: 500 15px/1.35 Roboto, system-ui, sans-serif; color: var(--v-ink); }
 .v7prep .dz-sub { font: 400 12.5px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
 .v7prep .dz-busy { font: 400 13.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
@@ -542,7 +547,8 @@
 
 /* the optional employer row lives quietly under the letter's zone */
 .v7prep .cl-below { margin-top: 10px; max-width: 420px; }
-.v7prep .cl-below .cl-input { width: 100%; }
+.v7prep .cl-below label.rs-links { display: flex; align-items: center; gap: 10px; margin: 0; }
+.v7prep .cl-below .cl-input { flex: 1; width: auto; min-width: 0; }
 
 /* the resume checker's one quiet links line — 16px side gutter keeps the
    text off the card edge while the divider above stays flush */

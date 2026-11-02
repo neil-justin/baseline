@@ -91,9 +91,10 @@ export default function ResumeUpload() {
           </span>
         ) : (
           <>
-            <span className="ms dz-icon" aria-hidden="true">
-              upload_file
-            </span>
+            <svg className="dz-icon" aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 15V3m0 0L8 7m4-4l4 4" />
+              <path d="M3 15v3a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3v-3" />
+            </svg>
             <span className="dz-head">Drop your resume here</span>
             <span className="dz-sub">PDF or DOCX · it runs the moment the file lands</span>
           </>

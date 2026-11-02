@@ -94,9 +94,10 @@ export default function LetterUpload() {
           </span>
         ) : (
           <>
-            <span className="ms dz-icon" aria-hidden="true">
-              mail
-            </span>
+            <svg className="dz-icon" aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="m3.5 7 8.5 6 8.5-6" />
+            </svg>
             <span className="dz-head">Drop your cover letter here</span>
             <span className="dz-sub">TXT, PDF, or DOCX · it runs the moment the file lands</span>
           </>
