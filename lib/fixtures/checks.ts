@@ -93,6 +93,19 @@ export const PYTHON_CHECK: CheckQuestion[] = [
   },
 ];
 
+/**
+ * §6.2 join — the catalog skill name each check's question bank tests.
+ * The study→check payoff joins on this SKILL NAME (verbatim
+ * `CAREERS[].skills` terms), never on the resource id: a check links a
+ * skill, and any resource substantially mapped to that skill feeds the
+ * same check. Authored values audited against the question banks and
+ * cross-checked equal to each check resource's `skillsAddressed[0]`.
+ */
+export const CHECK_SKILL: Record<string, string> = {
+  "res-qa-testing": "Software Testing",
+  "res-python-basics": "Applications Development",
+};
+
 /** Resource id → its comprehension check. */
 export const CHECKS: Record<string, CheckQuestion[]> = {
   "res-qa-testing": TESTING_CHECK,
