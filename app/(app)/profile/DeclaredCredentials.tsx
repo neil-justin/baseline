@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 /**
  * Profile → Credentials — the Round-7 declared-entry flow for the three
@@ -27,6 +27,13 @@ import { useMemo, useState } from "react";
  * list the target career's skill map (server validates against every
  * catalog role's names, so cross-track picks stay honest). Nothing scores
  * here: verified closes gaps; declared waits, never painted.
+ *
+ * ANCHORED DISCLOSURE (2026-11-03, brief B.3): the entry button NO LONGER
+ * unmounts while the form is open — it stays mounted/visible (disabled while
+ * the form holds its slots, aria-expanded honest). Opening focuses the
+ * form's first input and scrollIntoView block:"start" (reduced-motion
+ * honored), and a compact "Close without saving" control rides a sticky
+ * top row so abandoning never needs a scroll down the tall form.
  */
 
 export interface DeclaredRow {
@@ -52,6 +59,11 @@ const KIND_OPTIONS = [
   { id: "internship", label: "Internship or job", org: "Employer (required)" },
   { id: "project", label: "Personal project or org role", org: "Organization" },
 ] as const;
+
+/** the ONE audit-rules helper line (brief B.4 copy pruning — the entry-line
+ *  and Credentials-lcap duplications died; this instance survives) */
+const SKILL_NOTE =
+  "The audit rules your declared skills — verified entries close gaps like platform completions.";
 
 const fmtDate = (iso: string | null) => {
   if (!iso) return "";
@@ -94,6 +106,18 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
   const [revoking, setRevoking] = useState<string | null>(null); // which row opened the form
 
   const kindMeta = KIND_OPTIONS.find((k) => k.id === kind)!;
+  const titleRef = useRef<HTMLInputElement>(null);
+
+  /* anchoring: opening the form focuses its first input and brings the top
+     of it to view (brief B.3) — reduced motion honored on the scroll */
+  useEffect(() => {
+    if (!open) return;
+    const el = titleRef.current;
+    if (!el) return;
+    el.focus();
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+  }, [open]);
 
   function startEdit(row: DeclaredRow) {
     setEdit(row);
@@ -279,18 +303,33 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
         })}
       </div>
 
-      {!open && (
-        <p className="dec-entryline">
-          <button className="btn btn-ghost btn-sm" type="button" onClick={startDeclare}>
-            Declare a credential
-          </button>
-          <span className="presence-earn num">declared → the counselor audit rules Verified · Needs check stays honest until then</span>
-        </p>
-      )}
+      {/* the anchored entry line — the button STAYS MOUNTED while the form
+          is open (brief B.3): visible/consistent, disabled while the form
+          holds its slots; the old `{!open && …}` unmount is gone */}
+      <p className="dec-entryline">
+        <button
+          className="btn btn-ghost btn-sm"
+          type="button"
+          aria-expanded={open}
+          onClick={startDeclare}
+          disabled={busy || open}
+        >
+          Declare a credential
+        </button>
+      </p>
 
       {open && (
         <div className="dec-form" data-cred-form>
-          <p className="cl-label num">{edit ? (revoking ? "Revise the not-accepted entry" : "Edit the declared entry") : "Declare a credential"}</p>
+          {/* the sticky top row: the form's label + the compact abandon —
+              reachable WITHOUT scrolling the tall form (brief B.3) */}
+          <div className="dec-formtop">
+            <p className="cl-label num">
+              {edit ? (revoking ? "Revise the not-accepted entry" : "Edit the declared entry") : "Declare a credential"}
+            </p>
+            <button className="dec-abandon" type="button" onClick={closeForm} disabled={busy}>
+              Close without saving
+            </button>
+          </div>
           <div className="dec-kind" role="group" aria-label="Credential kind">
             {KIND_OPTIONS.map((k) => (
               <button
@@ -312,6 +351,7 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
               </label>
               <input
                 id="c-title"
+                ref={titleRef}
                 type="text"
                 className="profile-input"
                 placeholder={kind === "internship" ? "e.g., Intern, Data team" : kind === "certification" ? "e.g., Google Data Analytics" : "e.g., Student council secretary"}
@@ -386,13 +426,12 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
                 </label>
               ))}
             </div>
-            <p className="dec-skillnote num">
-              Verified credentials close gaps like platform completions; what you declare here stays honest — the audit rules the skills when it rules the
-              evidence.
-            </p>
+            <p className="dec-skillnote num">{SKILL_NOTE}</p>
           </div>
           <p className={`${err ? "presence-err" : "presence-ok"}`} role="status" aria-live="polite">
-            {err ?? (note ?? (revoking ? "The audit's note stays on the record — submit the revision and it re-enters the queue." : "Declaring adds the row as “declared” — the counselor audit rules it next."))}
+            {/* copy pruning (brief B.4): the idle essay line is gone — the
+                status slot carries only the honest if-then state it owes */}
+            {err ?? (note ?? (revoking ? "Submit the revision and it re-enters the audit queue." : ""))}
           </p>
           <div className="dec-ctas">
             <button className="btn btn-ghost btn-sm" onClick={submit} disabled={busy || title.trim() === ""}>

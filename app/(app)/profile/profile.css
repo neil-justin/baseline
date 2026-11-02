@@ -5,8 +5,8 @@
    the surface + carries the computed
    five-channel mini-bar + the page's ONE filled CTA (→ /pathway);
    FOUR family tabs (Plan · Competencies · Credentials · Account)
-   marry the tab strip (cardtop = tab strip + computed kicker —
-   ProfileTabs.tsx owns that chrome).
+   marry the tab strip (cardtop = the tab strip — ProfileTabs.tsx owns
+   that chrome; the kickers retired 2026-11-03).
    PHASE-1 REVAMP (2026-11-02): the Plan tab re-cuts to stacked
    Dashboard-register cards (.plancards) — the married card drops
    to the transparent .planframe on that tab so the cards float on
@@ -76,13 +76,23 @@
   position: relative;
 }
 /* fills render at their computed fraction — blue in-progress channels,
-   green the verified-evidence channel (ES), empty = unmeasured */
+   green the verified-evidence channel (ES), empty = unmeasured. FILL FIX
+   (2026-11-03, Tier 2 brief A.5): globals.css's `.segbar .seg i` poses
+   `position:absolute; inset:0; transform:scaleX(0)` (the Index armed-meter
+   contract) — profile never armed it, so every fill sat invisible on the
+   track. This surface fills by explicit width instead: reset the pose and
+   the transform; page.tsx sets width = earnedFraction per channel. */
 .v7profile .bandbar .seg i {
-  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: auto;
   height: 100%;
+  transform: none;
+  transition: none;
+  display: block;
   background: var(--v-blue);
   opacity: 1;
-  transition: none;
 }
 .v7profile .bandbar .seg-green i { background: var(--v-green); }
 .v7profile .bandbar .seglabels {
@@ -102,9 +112,10 @@
 /* the band's ONE filled CTA (→ /pathway) — .v7 .cta in ../v7.css (the ONE
    definition, Tier 2b); everything else on the page stays links/text */
 
-/* ---------- the Plan tab's Dashboard-register cards (Phase 1) ----------
-   One compartment per card (goals · pathway stages · score trajectory);
-   head + foot idiom and dense table VALUES cloned from dashboard.css. */
+/* ---------- the Plan tab's Dashboard-register cards ----------
+   One compartment per card (Goals — the pathway-stages and score-trajectory
+   cards retired 2026-11-03, brief A); head + foot idiom and dense table
+   VALUES cloned from dashboard.css. */
 
 /* card heads: title (b) + computed subhead (span) */
 .v7profile .head {
@@ -159,34 +170,13 @@
 .v7profile .plan-table tr:last-child td { border-bottom: 0; }
 /* chips ride the State column (the family's wash pills defined below) */
 
-/* ledger rows — the pathway stages (name 400-weight + hairline rules) */
-.v7profile .strow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--v-rows);
-}
-.v7profile .strow b { font: 400 13px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); }
-.v7profile .strow .dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 2px;
-  background: #e8eaed;
-  border: 1px solid var(--v-border);
-  flex: none;
-}
-.v7profile .strow .dot.on { background: var(--v-blue); border-color: var(--v-blue); }
-.v7profile .strow .s-count {
-  margin-left: auto;
-  font: 400 11.5px/1.4 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
-}
+/* ledger rows — RETIRED 2026-11-03 (Tier 2 brief A.2): the .strow/.dot/
+   s-count stage-strip rules died with the "Pathway stages" card
+   (page.tsx was their sole consumer, grep-verified). */
 
-/* provenance captions (dashboard `.lcap` VALUES) — the entry route + route
-   line under the stage rows; the trajectory's .prov gets its own restyle
-   further down */
+/* provenance captions (dashboard `.lcap` VALUES) — the per-card honest
+   receipts (the trajectory's .prov was its own restyle; retired with that
+   card — brief A.1) */
 .v7profile .lcap {
   padding: 12px 16px 14px;
   font: 400 11px/1.55 Roboto, system-ui, sans-serif;
@@ -214,15 +204,11 @@
   border-bottom: 1px solid var(--v-rows);
   background: #fafbfc;
 }
-.v7profile .cardtop .kicker {
-  flex: none;
-  margin-left: auto;
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
-}
+/* the cardtop kicker rule is RETIRED (2026-11-03, brief A.4): the tab-strip
+   kickers ("0 OF 8 CLOSED" / "N COUNTED") died with their ProfileTabs prop
+   — the card heads carry the counts (grep: ProfileTabs was the only
+   .v7profile consumer of .kicker; the career/prep/pathway surfaces keep
+   their own scoped rules). */
 
 /* the floating-cards frame (Phase 2): the wrapper drops its card chrome
    unconditionally — the tab strip stands alone as a little card and the
@@ -248,8 +234,8 @@
    remains (grep: page.tsx was the sole consumer). */
 .v7profile .plancards .card { margin-bottom: 12px; } /* the exact family rhythm */
 /* the row's LAST card carries no bottom margin — the frame's overflow:hidden
-   BFC keeps the card's 12px inside it, and stacked with the .pro-foot's 16px
-   margin-top it read 28px against the page foot; the foot now owns the gap */
+   BFC keeps the card's 12px inside it (the .pro-foot gap note is moot — the
+   page footer retired 2026-11-03, brief A.3) */
 .v7profile .plancards .card:last-child { margin-bottom: 0; }
 
 /* tab strip — Material segmented on the grey-wash track */
@@ -415,6 +401,41 @@
   text-transform: uppercase;
   color: var(--v-ink2);
 }
+/* per-field inline validation errors (brief B.5 — client + mirrored API
+   detail, rendered next to the field): amber, caption-weight (family law:
+   never red) */
+.v7profile .dec-field .field-err {
+  margin: 0;
+  font: 500 11.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-amber-text);
+}
+/* the anchored declaration form's top row (brief B.3): the compact abandon
+   control rides sticky, so "Close without saving" stays reachable WITHOUT
+   scrolling the tall form; the card surface behind it keeps content sliding
+   underneath legible */
+.v7profile .dec-formtop {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: var(--v-surface);
+  padding: 0 0 6px;
+}
+.v7profile .dec-formtop .cl-label { margin: 0; }
+.v7profile .dec-abandon {
+  flex: none;
+  font: 500 12px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.v7profile .dec-abandon:hover { color: var(--v-ink); text-decoration: underline; text-underline-offset: 3px; }
 .v7profile .dec-skills { display: flex; flex-wrap: wrap; gap: 8px; }
 .v7profile .dec-skill {
   display: inline-flex;
@@ -512,26 +533,39 @@
 .v7profile .acct-pw .dec-ctas { margin-top: 2px; }
 
 /* ---------- DPA data rights (ticket 7: export + erase as artifacts) —
-   Round-P2: the two rights as two disciplined ledger rows (detail left,
-   action right), #E8EAED row rules, 12px rhythm; Phase 4: the card's body
-   rides the family 16px gutters and the closing .lcap carries the cascade
-   receipt (DOM untouched — CSS-only placement) ---------- */
+   2026-11-03 build (brief B.7 + the progressive-disclosure ruling): the
+   two rights as two disciplined rows with REAL DOM ORDER (detail line
+   first in the markup, action pushed right — the old CSS grid-area
+   reversal rules are gone). honest-visibility law: one always-visible
+   short line per destructive action (the erase warning cannot hide); the
+   EXPLANATION volume (the payload inventory · the erase-order chain)
+   collapses behind their <details> gates. ---------- */
 .v7profile .dpa { display: grid; margin: 2px 16px 0; }
 .v7profile .dpa-line {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 12px;
-  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  align-items: baseline;
+  justify-content: space-between;
   padding: 12px 0;
   border-bottom: 1px solid var(--v-rows);
 }
-.v7profile .dpa-line .dpa-src { grid-column: 1; grid-row: 1; }
-.v7profile .dpa-line a { grid-column: 2; grid-row: 1; justify-self: end; }
 .v7profile .dpa-src {
   font: 400 11px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   overflow-wrap: anywhere;
 }
+/* the explanation gates — collapsed by default, opened by click
+   (summary in the link register; the doc line below reads caption ink) */
+.v7profile .dpa-details { border-bottom: 1px solid var(--v-rows); }
+.v7profile .dpa-details summary {
+  padding: 10px 0;
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-blue-deep);
+  cursor: pointer;
+}
+.v7profile .dpa-details summary:hover { text-decoration: underline; text-underline-offset: 3px; }
+.v7profile .dpa-details .dpa-src { margin: 0 0 12px; }
 .v7profile .dpa-erase { display: grid; gap: 9px; padding: 12px 0; }
 .v7profile .dpa-warn { font: 400 13px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 66ch; }
 .v7profile .dpa-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; }
@@ -581,8 +615,10 @@
    zero `.arrow` classNames remain under .v7profile). */
 .v7profile .quiet-toggle { font: 500 12.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); background: none; border: 0; padding: 0; cursor: pointer; }
 .v7profile .quiet-toggle:hover { color: var(--v-ink); text-decoration: underline; text-underline-offset: 3px; }
-.v7profile .link-quiet { color: var(--v-blue-deep); text-decoration: none; }
-.v7profile .link-quiet:hover { text-decoration: underline; text-underline-offset: 2px; }
+/* the .link-quiet rule is RETIRED (2026-11-03, brief A.3): its only
+   .v7profile consumers were the deleted .pro-foot "Back to dashboard"
+   links (grep-verified; the prep/admin/progress surfaces carry their own
+   scoped rules). */
 
 /* ---------- Competencies Phase-2 register: the demoted starting-levels
    strip — one wrapped line of name + dots units, caption-weight names so
@@ -612,109 +648,18 @@
 /* ---------- Phase-1: the Plan §-document register (masthead, ticklines,
    §-sections, stage strip, evidence counts) is gone — the Plan tab renders
    Dashboard-register cards (see top); only the caption/label instruments
-   the other tabs still share live on here ---------- */
+   the other tabs still share live on here ----------
+   2026-11-03 (Tier 2 brief A): the .strow stage-strip rules (the "Pathway
+   stages" card) and the whole .traj/.tl/.tv/.node/.rise/.traj-rows/.trow/
+   .prov family plus .doc-note (the "Score trajectory" card) are deleted —
+   both cards retired ENTIRELY, zero replacement; each grep-verified zero
+   consumers in the profile surface before deletion. The .strow/.doc-note
+   grep receipts: page.tsx was their sole consumer; .traj-rows/.prov were
+   the demo-arc beat-9 selectors (ported to nothing — assertions deleted,
+   see demo-arc.spec.ts). ---------- */
 
 .v7profile .cl-label {
   font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--v-ink2);
-}
-
-.v7profile .doc-note { margin: 10px 16px 0; font: 400 12px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 66ch; }
-
-/* trajectory — two dated points on a hairline track (earned green carries
-   the computed rise; the nodes stay ink) */
-.v7profile .traj { position: relative; height: 88px; margin: 12px 16px 0; max-width: 640px; }
-.v7profile .traj .baseline {
-  position: absolute;
-  left: 2px;
-  bottom: 34px;
-  width: 76%;
-  height: 1px;
-  background: var(--v-border);
-}
-.v7profile .traj .rise {
-  position: absolute;
-  right: 2px;
-  bottom: 33px;
-  width: 24%;
-  height: 2px;
-  background: var(--v-green);
-}
-.v7profile .traj .node { position: absolute; width: 9px; height: 9px; bottom: 30px; }
-.v7profile .traj .node.a { left: 0; background: var(--v-ink); border-radius: 50%; }
-.v7profile .traj .node.b { right: 0; background: var(--v-green); border-radius: 50%; }
-.v7profile .traj .tl {
-  position: absolute;
-  bottom: 50px;
-  white-space: nowrap;
-  font: 400 11px/1.4 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--v-ink2);
-}
-.v7profile .traj .tl.a { left: 0; }
-.v7profile .traj .tl.b { right: 0; }
-.v7profile .traj .tv {
-  position: absolute;
-  bottom: 0;
-  font: 500 26px/1 Roboto, system-ui, sans-serif;
-  font-variant-numeric: tabular-nums;
-}
-.v7profile .traj .tv.a { left: 0; color: var(--v-ink); }
-.v7profile .traj .tv.b { right: 0; color: var(--v-ink); }
-.v7profile .traj .td {
-  position: absolute;
-  right: 11.5%;
-  bottom: 44px;
-  font: 500 11px/1 Roboto, system-ui, sans-serif;
-  color: var(--v-green-text);
-  font-variant-numeric: tabular-nums;
-}
-/* single-point state: the track reads as begun, not a long empty hairline */
-.v7profile .traj.single .baseline { width: 20%; }
-/* mobile: the same two points, stacked */
-.v7profile .traj-rows { display: none; margin: 4px 16px 0; }
-.v7profile .trow {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 16px;
-  padding: 9px 0;
-  border-bottom: 1px solid var(--v-rows);
-  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
-}
-.v7profile .trow:last-child { border-bottom: 0; }
-.v7profile .trow .tv2 { font-size: 22px; font-weight: 500; color: var(--v-ink); } /* kpi-score step */
-.v7profile .trow .tv2.ok { color: var(--v-ink); }
-
-.v7profile .prov {
-  margin: 12px 16px 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 16px;
-  font: 400 11px/1.7 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-}
-.v7profile .prov .d-ok { color: var(--v-green-text); font-weight: 500; }
-
-/* ---------- foot ---------- */
-
-.v7profile .pro-foot {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 20px;
-  flex-wrap: wrap;
-  padding: 14px 2px 40px;
-  border-top: 1px solid var(--v-border);
-  margin-top: 16px;
-}
-.v7profile .pro-foot .label {
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--v-ink2);
@@ -749,15 +694,11 @@
      table ride the:nth-child(3) fold */
   .v7profile .plan-table th:nth-child(3),
   .v7profile .plan-table td:nth-child(3) { display: none; } /* Since folds on tiny screens */
-  .v7profile .traj { display: none; }
-  .v7profile .traj-rows { display: block; }
   /* Phase 3: the credential ledger's rows wrap (name · chip · provenance
-     lines) — the fold law's column-hiding has no columns left to hide */
+     lines) — the fold law's column-hiding has no columns left to hide
+     (the .traj/.traj-rows mobile fold went with the trajectory card) */
   .v7profile .presence-field { min-width: 0; }
   /* the DPA ledger rows stack one-column (detail, then its action) */
-  .v7profile .dpa-line { grid-template-columns: 1fr; }
-  .v7profile .dpa-line .dpa-src { grid-column: 1; grid-row: auto; }
-  .v7profile .dpa-line a { grid-column: 1; grid-row: auto; justify-self: start; }
   .v7profile .dpa-row { grid-template-columns: 1fr; }
 }
 

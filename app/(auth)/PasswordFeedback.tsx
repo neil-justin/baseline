@@ -69,14 +69,19 @@ const ITEMS: Array<{ key: keyof Checklist; label: string }> = [
   { key: "noEdgeSpaces", label: "No spaces at the start or end" },
 ];
 
-/** Meter + checklist under a password field. Renders nothing until typing. */
+/**
+ * Meter + checklist under a password field. The slots are RESERVED: the
+ * block renders OUTLINE-equal at first paint (unticked checklist, unfilled
+ * meter) so the first keystroke never moves the layout downward (brief B.6
+ * — the password CLS fix). The meter itself is aria-hidden; the checklist
+ * keeps `id="pw-checklist"` mounted for aria-describedby consumers.
+ */
 export function PasswordFeedback({ password }: { password: string }) {
-  if (password.length === 0) return null;
   const strength = passwordStrength(password);
   const checks = passwordChecklist(password);
-  const filled = strength === "weak" ? 1 : strength === "fair" ? 2 : 3;
+  const filled = strength === "blank" ? 0 : strength === "weak" ? 1 : strength === "fair" ? 2 : 3;
   return (
-    <div className="pw-feedback" data-strength={strength}>
+    <div className="pw-feedback" data-strength={strength} data-empty={strength === "blank" ? "true" : undefined}>
       <div className="pw-meter" aria-hidden="true">
         {[0, 1, 2].map((i) => (
           <span key={i} className="pw-seg" style={{ opacity: i < filled ? 1 : 0.18 }} />

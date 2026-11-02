@@ -14,8 +14,9 @@ import { resetStore, settled, shot, signIn, cohortEmail, DEMO_PASSWORD, neilCred
  *   presence land in the money beat" (SHIPPED 2026-10-30: the arc asserts the
  *   letter-state 64 mid-pass, then 67 at the money state). Money state reads
  *   SP 18/25 · ES 17/30 · TP 7/20 · AR 15/15 · CC 10/10; beat-8 "5 of 7 ·
- *   First 30 days: 1 of 3 done"; trajectory 40 → 67; admin reads the same
- *   live numbers. Numbers owned by `scripts/verify-fixtures.test.ts` +
+ *   First 30 days: 1 of 3 done"; admin reads the same
+ *   live numbers. (The beat-9 trajectory/provenance selectors were deleted
+ *   with the retired Plan cards — see the Tier 2 port list at beat 9.) Numbers owned by `scripts/verify-fixtures.test.ts` +
  *   `lib/fixtures/neil.ts`.
  *
  * Demo inputs (round 9 college catalog): Computer & IT track · "No — help
@@ -506,16 +507,18 @@ test.describe.serial("demo-arc", () => {
     const bandId = ((await page.locator(".band-id").textContent()) ?? "").replace(/\s+/g, " ");
     expect(bandId).toContain("Target: Software QA Analyst");
     expect(planText).not.toContain("Test Planning"); // summary only — NEVER the ranked list
-    const trajRows = (await page.locator(".traj-rows .trow").allTextContents()).map((t) => t.replace(/\s+/g, " ").trim());
-    expect(trajRows.join(" ")).toContain("40"); // setup point — canon holds
-    soft(trajRows.join(" ")).toContain("67"); // canon end point (the full AM pass carries the live headline)
-    expect(trajRows.join(" ")).not.toContain(" 52 "); // the live reading replaced 52 — no stale point
-    expect(trajRows.join(" ")).not.toContain(" 64 "); // the full pass replaced the letter-state reading too
-    const prov = ((await page.locator(".prov").textContent()) ?? "").replace(/\s+/g, " ");
-    expect(prov).toContain("1 gap bar closed");
-    expect(prov).toContain("1 comprehension check passed");
-    soft(prov).toContain("1 training goal completed"); // canon provenance trio
-    notes.push(`beat 9 plan: trajectory [${trajRows.join(" | ")}] · provenance "${prov}" · Plan shows no ranked list ✓`);
+    /* Tier 2 build selector ports (2026-11-03 user calls: the Plan tab's
+       "Pathway stages" + "Score trajectory" cards, the page footer, and the
+       tab kickers deleted — the band's five-channel segbar is the live
+       state). Sweep result, old → new:
+       - `.traj-rows .trow` (setup/40 → 67 trajectory points) → DELETED —
+         no replacement (the card retired ENTIRELY; trajectory.ts survives
+         unused — the live numbers own the band now)
+       - `.prov` (the provenance trio) → DELETED — no replacement
+       - "0 OF 8 CLOSED"/"N COUNTED" kickers, `.pro-foot`/`Profile report`,
+         the stage rows/"First 30 days" card — not asserted in any spec; no
+         port, no new assertions. The beat-7 dashboard sub-rows (`First 30
+         days: 1 of 3 done`) are the DASHBOARD's surface — untouched. */
 
     /* ══════════ BEAT 10 · admin close ══════════ */
 

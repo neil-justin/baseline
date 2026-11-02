@@ -14,7 +14,7 @@ import PresenceCard from "./PresenceCard";
 import DeclaredCredentials from "./DeclaredCredentials";
 import { AccountIdentity, AccountPassword } from "./AccountForms";
 import DpaArtifacts from "./DpaArtifacts";
-import { scoreTrajectory, fmtEventDate, type TrajPoint, type Trajectory } from "./trajectory";
+import { fmtEventDate } from "./trajectory";
 import "./profile.css";
 
 export const dynamic = "force-dynamic";
@@ -25,9 +25,6 @@ export const dynamic = "force-dynamic";
    vocabulary; the SHS-era gradeLabel()/`grade` is gone (2026-10-30 sweep) */
 const yearTrack = (s: { yearLevel: string; track: string }) =>
   [s.yearLevel, trackLabelOf(s.track)].filter(Boolean).join(", ");
-
-const plural = (n: number, word: string, pluralWord?: string) =>
-  `${n} ${n === 1 ? word : (pluralWord ?? word + "s")}`;
 
 /* People strengths: starting levels rated honestly from state.softSkills —
    the probe answered 3 competencies; words map to levels; the other NACE
@@ -51,62 +48,10 @@ function skillBadge(source: BarSource) {
   return <span className="p-badge chip c-grey hatch-chip">SELF-REPORTED</span>;
 }
 
-/* ── trajectory graphic (Plan §5) ───────────────────────────────────────── */
-
-function TrajGraphic({ traj }: { traj: Trajectory }) {
-  const a = traj.points[0];
-  const b = traj.points[1];
-  const two = Boolean(b);
-  const labelOf = (p: TrajPoint) => `${p.label} · ${p.date}`;
-  return (
-    <>
-      {two ? (
-        <div
-          className="traj"
-          role="img"
-          aria-label={`Score over time: ${a.label.toLowerCase()}, ${a.date}, ${a.value} of 100. ${b!.label.toLowerCase()}, ${b!.date}, ${b!.value} of 100. Change: plus ${traj.delta}.`}
-        >
-          <span className="baseline" aria-hidden="true" />
-          <span className="rise" aria-hidden="true" />
-          <span className="node a" aria-hidden="true" />
-          <span className="node b" aria-hidden="true" />
-          <span className="tl a" aria-hidden="true">{labelOf(a)}</span>
-          <span className="tl b" aria-hidden="true">{labelOf(b!)}</span>
-          {traj.delta !== null && <span className="td num" aria-hidden="true">{`+${traj.delta}`}</span>}
-          <span className="tv a num" aria-hidden="true">{a.value}</span>
-          <span className="tv b num" aria-hidden="true">{b!.value}</span>
-        </div>
-      ) : (
-        <div
-          className="traj single"
-          role="img"
-          aria-label={`Score over time: ${a.label.toLowerCase()}, ${a.date}, ${a.value} of 100.`}
-        >
-          <span className="baseline" aria-hidden="true" />
-          <span className="node a" aria-hidden="true" />
-          <span className="tl a" aria-hidden="true">{labelOf(a)}</span>
-          <span className="tv a num" aria-hidden="true">{a.value}</span>
-        </div>
-      )}
-      <div className="traj-rows num">
-        {traj.points.map((p, i) => (
-          <p className="trow" key={i}>
-            <span>{`${p.label} · ${p.date}`}</span>
-            <span className={`tv2${p.ok ? " ok" : ""}`}>{p.value}</span>
-          </p>
-        ))}
-      </div>
-      {(traj.delta !== null || traj.prov.barCloses + traj.prov.checks + traj.prov.goalsCompleted > 0) && (
-        <div className="prov num">
-          {traj.delta !== null && <span className="d-ok">{`+${traj.delta} since setup`}</span>}
-          {traj.prov.barCloses > 0 && <span>{plural(traj.prov.barCloses, "gap bar", "gap bars")} closed</span>}
-          {traj.prov.checks > 0 && <span>{plural(traj.prov.checks, "comprehension check", "comprehension checks")} passed</span>}
-          {traj.prov.goalsCompleted > 0 && <span>{plural(traj.prov.goalsCompleted, "training goal")} completed</span>}
-        </div>
-      )}
-    </>
-  );
-}
+/* ── trajectory graphic (Plan §5) — RETIRED 2026-11-03 (user call):
+   the "Score trajectory" card is deleted ENTIRELY — the band's five-channel
+   segbar is the live state; the old §Tier-2 whitespace ruling is moot with
+   it (grep receipts recorded in the .lcap/pruning notes) ───────────────── */
 
 /* ── page ───────────────────────────────────────────────────────────────── */
 
@@ -127,6 +72,11 @@ function TrajGraphic({ traj }: { traj: Trajectory }) {
  * `#panel-profile` carries Credentials (the legacy hook id — the e2e
  * money beat's selector is the contract; the visible label reads
  * "Credentials").
+ *
+ * 2026-11-03 user calls: the Plan tab's "Pathway stages" and "Score
+ * trajectory" cards, the page footer (.pro-foot), and the tab-strip
+ * kickers are deleted — zero replacement (the band's five-channel segbar
+ * is the live state); demo-arc.spec.ts carries the e2e port list.
  */
 export default async function ProfilePage() {
   const profile = await requireStudent();
@@ -134,7 +84,6 @@ export default async function ProfilePage() {
   if (!career || !score) return <UndecidedProfile name={state.name} />;
 
   const v = scoreView(career, state, ar);
-  const traj = scoreTrajectory(state, ar);
   const asOf = fmtEventDate(state.events[state.events.length - 1]?.date);
 
   /* Competencies tab — skills rows: closed bars first (verified → checked →
@@ -214,22 +163,10 @@ export default async function ProfilePage() {
     return fmtEventDate(ev?.date ?? state.events[0]?.date);
   };
 
-  /* Plan §3 — pathway SUMMARY. Stage counts come from v.stageOne (the ranked
-     queue snapshot); the next milestone from the locked stage-③ rule (college
-     routes are degree routes → portfolio milestones; round 9). Never a ranked
-     item. */
-  const milestoneText = "portfolio milestones";
-  const routeLine =
-    v.stageOne.done === 0
-      ? `Route · first 30 days: 0 of 3 done · your next step is already picked in your pathway`
-      : `Route · first 30 days: ${v.stageOne.done} of 3 done · next milestone: ${milestoneText}`;
-
-  /* Plan §5 closing — hands back to the working loop; low scores never stall. */
-  const closeLine =
-    v.total >= 40
-      ? `You're at ${v.total}. Your pathway has already picked the next step; clear it and the score moves again.`
-      : `You're at ${v.total}. Every item below is something you can start this week — your pathway already picked the first one.`;
-  const switched = state.events.some((e) => e.kind === "career-switched");
+  /* Plan §3/§5 — the "Pathway stages" and "Score trajectory" cards are
+     RETIRED (2026-11-03 user calls — zero replacement, nothing folded back);
+     the routeLine/milestone counter logic and the closeLine/switched foot
+     went with them. The band's "Open your plan →" CTA is the route out. */
 
   /* header band instrument: the five channel mini-bar (at rest — honest
      fractions render at rest per the v7 lock) reads the SAME computed sub-
@@ -474,9 +411,12 @@ export default async function ProfilePage() {
           />
         </div>
         <div className="lcap num">
+          {/* Copy pruning (Tier 2 item 4, 2026-11-03): two one-sentence lines
+              only — the third ("declared skills … the audit rules it") was the
+              duplicated audit-rules instance; ONE instance survives on the
+              declaration form's skill note. */}
           <p>A platform credential appears here only when its check passes.</p>
           <p>Machine-verified presence — no counselor audit; the stamp feeds the Application-Readiness factor.</p>
-          <p>Declared skills come from the framework vocabulary — the audit rules the skills when it rules the evidence.</p>
         </div>
       </div>
     </div>
@@ -519,18 +459,18 @@ export default async function ProfilePage() {
         <AccountPassword />
       </div>
 
-      {/* Data rights — the DPA's two rights as working tools; the export/
-          erase cascade receipt rides the card's provenance caption */}
+      {/* Data rights — the DPA's two rights as working tools; the deep
+          explanations (payload inventory · erase-order chain) are gated
+          behind <details> in DpaArtifacts.tsx (2026-11-03 ruling), so the
+          card head-sub carries only the law name — "erase removes the whole
+          record" duplicated the erase warning in the body and died (the
+          erase ×2 → 1 dedupe). */}
       <div className="card">
         <div className="head">
           <b>Data rights</b>
-          <span className="num">RA 10173 data-subject rights · erase removes the whole record</span>
+          <span className="num">RA 10173 data-subject rights</span>
         </div>
-        <DpaArtifacts studentId={state.id} />
-        <div className="lcap num">
-          <p>Export serves: profile · state · event history · credentials · resume runs · letter runs · presence</p>
-          <p>Erase order: auth user → profile → state → credentials → run stores</p>
-        </div>
+        <DpaArtifacts />
       </div>
     </div>
   );
@@ -597,56 +537,14 @@ export default async function ProfilePage() {
         )}
       </div>
 
-      {/* the route as ledger rows; §1's prose retires and its one fact (the
-          entry route) rides the caption next to the route line */}
-      <div className="card">
-        <div className="head">
-          <b>Pathway stages</b>
-          <span className="num">First 30 days · {v.stageOne.done} of 3 done</span>
-        </div>
-        <div className="strow">
-          <span className={`dot${v.stageOne.done > 0 ? " on" : ""}`} aria-hidden="true" />
-          <b>First 30 days</b>
-          <span className="s-count num">{v.stageOne.done} of 3 done</span>
-        </div>
-        <div className="strow">
-          <span className="dot" aria-hidden="true" />
-          <b>Next steps</b>
-          <span className="s-count num">opens next</span>
-        </div>
-        <div className="strow">
-          <span className="dot" aria-hidden="true" />
-          <b>Entry-ready</b>
-          <span className="s-count num">the last stage</span>
-        </div>
-        <div className="lcap num">
-          <p>Entry route · {career.entryRoute}</p>
-          <p>{routeLine}</p>
-        </div>
-      </div>
-
-      {/* the trajectory card keeps the graphic + delta + the .prov caption
-          (the e2e beat-9 selectors read .prov/.traj-rows) and closes the tab
-          with the .foot link-out; the filled CTA lives in the band */}
-      <div className="card">
-        <div className="head">
-          <b>Score trajectory</b>
-          <span className="num">{traj.points.length > 1 ? `+${traj.delta} since setup` : "one reading so far"}</span>
-        </div>
-        <TrajGraphic traj={traj} />
-        {traj.points.length === 1 && (
-          <p className="doc-note">Your next score line arrives with your first completion.</p>
-        )}
-        {switched && (
-          <p className="doc-note">You switched careers on the way: verified skills and goals carried over, gap bars reset.</p>
-        )}
-        <div className="foot num">
-          {closeLine}{" "}
-          <a className="foot-link" href="/pathway">
-            Open your pathway →
-          </a>
-        </div>
-      </div>
+      {/* the "Pathway stages" and "Score trajectory" cards RETIRED
+          (2026-11-03 user calls): the stage rows + routeLine prose die with
+          their count logic, and the trajectory card ("Score trajectory" head
+          + the TrajGraphic renderer + its .lcap/doc-notes/closeLine foot with
+          the "+N since setup" kicker logic) is deleted ENTIRELY — zero
+          replacement (the band's five-channel segbar is the live state), and
+          nothing was folded back. The Goals card alone carries Plan; the
+          band's filled CTA is the route out. */}
     </div>
   );
 
@@ -663,7 +561,10 @@ export default async function ProfilePage() {
             <div className="band-scale">
               <div className="bandbar num" aria-hidden="true">
                 {/* the five channel mini-bar — at rest, honest fractions;
-                    the Competencies cards + kickers carry their own receipts */}
+                    the Competencies cards carry their own receipts. Each seg's
+                    fill width is the channel's earned FRACTION (earned/weight)
+                    — the value, not the raw points (Skills 18/25 → 72%, AR
+                    unmeasured → width 0 = track-grey). */}
                 <div className="segbar">
                   {bandVals.map((val, i) => (
                     <div
@@ -671,7 +572,7 @@ export default async function ProfilePage() {
                       className={`seg${i === 1 ? " seg-green" : ""}`}
                       style={{ flex: bandMaxes[i] }}
                     >
-                      <i style={{ width: `${(val ?? 0) * 100}%` }} />
+                      <i style={{ width: `${((val ?? 0) / bandMaxes[i]) * 100}%` }} />
                     </div>
                   ))}
                 </div>
@@ -700,21 +601,6 @@ export default async function ProfilePage() {
           profile: credentialsPanel,
           account: accountPanel,
         }}
-        kickers={{
-          competencies: `${v.closed} OF ${v.mapSize} CLOSED`,
-          profile: `${credentialsEarned} COUNTED`,
-        }}
-        foot={
-          <footer className="pro-foot">
-            <span className="label num">
-              Profile report · {state.name.toUpperCase()} ·{" "}
-              {[state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(" · ")}
-            </span>
-            <a className="link-quiet" href="/dashboard">
-              Back to dashboard
-            </a>
-          </footer>
-        }
       />
     </div>
   );
@@ -760,14 +646,6 @@ function UndecidedProfile({ name }: { name: string }) {
           profile: undecidedPanel,
           account: undecidedPanel,
         }}
-        foot={
-          <footer className="pro-foot">
-            <span className="label num">Profile report · no career picked yet</span>
-            <a className="link-quiet" href="/dashboard">
-              Back to dashboard
-            </a>
-          </footer>
-        }
       />
     </div>
   );

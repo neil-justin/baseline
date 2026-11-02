@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type FormEvent, useState } from "react";
 import { PasswordFeedback } from "@/app/(auth)/PasswordFeedback";
 import "@/app/(auth)/password-feedback.css";
 
@@ -14,13 +14,23 @@ import "@/app/(auth)/password-feedback.css";
  *    campus is the tenant key (ticket 11) — fixed, rendered as a fixed fact.
  *    PATCH /api/profile; the state carrier mirrors the name so the score
  *    surfaces never split (one record, two views).
+ *    2026-11-03 build (brief B.5 + the input-type audit): the identity form
+ *    is a real <form> (Enter submits; `required` works); the name field
+ *    carries `autoComplete="name"` + required; the year level is a
+ *    CONSTRAINED <select> (1st–5th Year / Graduate — the stored value is
+ *    mapped back in when it falls outside the canon list); per-field inline
+ *    errors render next to each field (client, plus the API's detail
+ *    mirrored onto its field); the Save sits directly under the field grid
+ *    — the card's primary action, not below the campus meta.
  *  - Password: auth-native change — POST /api/auth/password (the signed
  *    session authorizes; the NIST meter applies, shared PasswordFeedback).
  *    Phase 4 adds a client-only CONFIRM field: the submit stays blocked
  *    until the two entries match (and confirm is non-empty) — a
  *    plain-language mismatch note, success/error paths unchanged; no
  *    current-password field (the session is the authorization) and no
- *    route change.
+ *    route change (the Supabase re-auth step is FLAGGED, not built —
+ *    reported at the end per brief A.6). Both fields are true password
+ *    inputs with `autoComplete="new-password"` (2026-11-03 audit).
  */
 
 interface Identity {
@@ -32,22 +42,40 @@ interface Identity {
   campus: string;
 }
 
+/** the constrained year-level canon (brief B.5); a stored value outside it
+ *  stays selectable — it is mapped back in (kept, never silently dropped) */
+const YEAR_OPTIONS = ["1st Year", "2nd Year", "3rd Year", "4th Year", "5th Year", "Graduate"];
+const yearOptions = (stored: string | null) => {
+  const storedTrimmed = stored?.trim() ?? "";
+  return storedTrimmed && !YEAR_OPTIONS.includes(storedTrimmed) ? [storedTrimmed, ...YEAR_OPTIONS] : YEAR_OPTIONS;
+};
+
 export function AccountIdentity({ initial }: { initial: Identity }) {
   const [fullName, setFullName] = useState(initial.fullName);
   const [yearLevel, setYearLevel] = useState(initial.yearLevel ?? "");
   const [program, setProgram] = useState(initial.program ?? "");
   const [section, setSection] = useState(initial.section ?? "");
   const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
   const [note, setNote] = useState<string | null>(null);
+  const [nameErr, setNameErr] = useState<string | null>(null);
+  const [genErr, setGenErr] = useState<string | null>(null);
   const dirty =
     fullName.trim() !== initial.fullName ||
     (yearLevel.trim() || null) !== (initial.yearLevel ?? null) ||
     (program.trim() || null) !== (initial.program ?? null) ||
     (section.trim() || null) !== (initial.section ?? null);
 
+  function clearErrs() {
+    setNameErr(null);
+    setGenErr(null);
+  }
+
   async function save() {
-    setErr(null);
+    clearErrs();
+    if (fullName.trim() === "") {
+      setNameErr("Your full name can't be empty — the roster reads it.");
+      return;
+    }
     setBusy(true);
     try {
       const res = await fetch("/api/profile", {
@@ -59,104 +87,130 @@ export function AccountIdentity({ initial }: { initial: Identity }) {
       if (res.ok) {
         window.location.reload(); // server truth re-renders everywhere the name reads
       } else {
-        setErr(json?.detail ?? "The save didn't complete — nothing changed; try again.");
+        const detail = json?.detail ?? "The save didn't complete — nothing changed; try again.";
+        // the API's detail mirrors onto its field (brief B.5) …
+        if (typeof json?.detail === "string" && /name/i.test(json.detail)) {
+          setNameErr(detail);
+        } else {
+          // … anything else (storage failure, connectivity) stays card-level
+          setGenErr(detail);
+        }
       }
     } catch {
-      setErr("The save didn't complete — nothing changed; try again.");
+      setGenErr("The save didn't complete — nothing changed; try again.");
     } finally {
       setBusy(false);
     }
   }
 
+  function submit(e: FormEvent) {
+    e.preventDefault();
+    void save();
+  }
+
   return (
     <div className="acct-id">
-      <div className="dec-grid">
-        <div className="dec-field">
-          <label className="cl-label num" htmlFor="a-name">
-            Full name
-          </label>
-          <input
-            id="a-name"
-            type="text"
-            className="profile-input"
-            value={fullName}
-            maxLength={80}
-            onChange={(e) => {
-              setFullName(e.target.value);
-              setErr(null);
-            }}
-          />
+      <form onSubmit={submit}>
+        <div className="dec-grid">
+          <div className="dec-field">
+            <label className="cl-label num" htmlFor="a-name">
+              Full name
+            </label>
+            <input
+              id="a-name"
+              type="text"
+              className="profile-input"
+              autoComplete="name"
+              required
+              value={fullName}
+              maxLength={80}
+              onChange={(e) => {
+                setFullName(e.target.value);
+                clearErrs();
+              }}
+            />
+            {nameErr && (
+              <p className="field-err" role="alert">
+                {nameErr}
+              </p>
+            )}
+          </div>
+          <div className="dec-field">
+            <label className="cl-label num" htmlFor="a-email">
+              Email — the sign-in identity, read-only
+            </label>
+            <input id="a-email" type="email" className="profile-input" value={initial.email} readOnly disabled />
+          </div>
         </div>
-        <div className="dec-field">
-          <label className="cl-label num" htmlFor="a-email">
-            Email — the sign-in identity, read-only
-          </label>
-          <input id="a-email" type="email" className="profile-input" value={initial.email} readOnly disabled />
+        <div className="dec-grid dec-grid-3">
+          <div className="dec-field">
+            <label className="cl-label num" htmlFor="a-program">
+              Program
+            </label>
+            <input
+              id="a-program"
+              type="text"
+              className="profile-input"
+              placeholder="e.g., BS Information Systems"
+              value={program}
+              maxLength={80}
+              onChange={(e) => {
+                setProgram(e.target.value);
+                clearErrs();
+              }}
+            />
+          </div>
+          <div className="dec-field">
+            <label className="cl-label num" htmlFor="a-year">
+              Year level
+            </label>
+            <select
+              id="a-year"
+              className="profile-input"
+              value={yearLevel}
+              onChange={(e) => {
+                setYearLevel(e.target.value);
+                clearErrs();
+              }}
+            >
+              {!yearLevel && <option value="">Select year level</option>}
+              {yearOptions(initial.yearLevel).map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="dec-field">
+            <label className="cl-label num" htmlFor="a-section">
+              Section
+            </label>
+            <input
+              id="a-section"
+              type="text"
+              className="profile-input"
+              placeholder="e.g., IT-4A"
+              value={section}
+              maxLength={40}
+              onChange={(e) => {
+                setSection(e.target.value);
+                clearErrs();
+              }}
+            />
+          </div>
         </div>
-      </div>
-      <div className="dec-grid dec-grid-3">
-        <div className="dec-field">
-          <label className="cl-label num" htmlFor="a-program">
-            Program
-          </label>
-          <input
-            id="a-program"
-            type="text"
-            className="profile-input"
-            placeholder="e.g., BS Information Systems"
-            value={program}
-            maxLength={80}
-            onChange={(e) => {
-              setProgram(e.target.value);
-              setErr(null);
-            }}
-          />
+        {/* Save sits directly under the field grid (brief B.5) — the card's
+            primary action, not below the campus meta */}
+        <div className="dec-ctas">
+          <button className="btn btn-primary btn-sm" type="submit" disabled={busy || !dirty}>
+            {busy ? "Saving…" : "Save profile"}
+          </button>
         </div>
-        <div className="dec-field">
-          <label className="cl-label num" htmlFor="a-year">
-            Year level
-          </label>
-          <input
-            id="a-year"
-            type="text"
-            className="profile-input"
-            placeholder="e.g., 4th Year"
-            value={yearLevel}
-            maxLength={40}
-            onChange={(e) => {
-              setYearLevel(e.target.value);
-              setErr(null);
-            }}
-          />
-        </div>
-        <div className="dec-field">
-          <label className="cl-label num" htmlFor="a-section">
-            Section
-          </label>
-          <input
-            id="a-section"
-            type="text"
-            className="profile-input"
-            placeholder="e.g., IT-4A"
-            value={section}
-            maxLength={40}
-            onChange={(e) => {
-              setSection(e.target.value);
-              setErr(null);
-            }}
-          />
-        </div>
-      </div>
+      </form>
       <p className="acct-campus num">Campus — {initial.campus} · the tenant key is fixed; it identifies your school&apos;s roster.</p>
-      <p className={`${err ? "presence-err" : "presence-ok"}`} role="status" aria-live="polite">
-        {err ?? note ?? ""}
-        {!err && !note ? "The name, program, year level, and section mirror the intake — your counselor's roster reads the same record." : ""}
+      <p className={genErr ? "presence-err" : "presence-ok"} role="status" aria-live="polite">
+        {genErr ?? note ?? ""}
       </p>
-      <div className="dec-ctas">
-        <button className="btn btn-primary btn-sm" onClick={save} disabled={busy || !dirty}>
-          {busy ? "Saving…" : "Save profile"}
-        </button>
-      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 /**
  * Profile's four-tab chrome — the v7 family Tab Strip (DEPENDS 2026-10-30
@@ -28,6 +28,9 @@ import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
  * PHASE-4 (2026-11-02): Account joined too — three separate cards — so the
  * inner `.stack` married-surface bridge and its ACCOUNT-ONLY stylesheet
  * rule are retired; every tabpanel's content floats on the shell ground.
+ * 2026-11-03 user calls: the kickers prop and the page footer (`.pro-foot`,
+ * rendered as the `foot` prop) are deleted — the card heads carry the
+ * counts; this component renders the tab strip + panels only.
  */
 
 const TABS = [
@@ -42,14 +45,8 @@ const isTab = (v: string): v is TabId => TABS.some((t) => t.id === v);
 
 export default function ProfileTabs({
   panels,
-  kickers,
-  foot,
 }: {
   panels: Partial<Record<TabId, ReactNode>>;
-  /** computed instrument counters, one per tab (the cardtop kicker register,
-   *  v7.2 Composition A) — absent key = no kicker on that tab */
-  kickers?: Partial<Record<TabId, string>>;
-  foot: ReactNode;
 }) {
   const [active, setActive] = useState<TabId>("plan");
   const ref = useRef<HTMLDivElement>(null);
@@ -92,6 +89,10 @@ export default function ProfileTabs({
           `#tab-profile` → `#panel-profile` is the e2e contract. */}
       <div className="card tabcard planframe">
         <div className="cardtop">
+          {/* the kicker slots are RETIRED (2026-11-03): the Competencies
+              ("0 OF 8 CLOSED") and Credentials ("N COUNTED") kickers duplicated
+              their card heads, and Plan/Account had none — the cardtop now
+              carries the tab strip alone. */}
           <div className="ptabs" role="tablist" aria-label="Profile sections" onKeyDown={onTablistKey}>
             {TABS.map((t) => (
               <button
@@ -109,11 +110,6 @@ export default function ProfileTabs({
               </button>
             ))}
           </div>
-          {kickers?.[active] ? (
-            <span className="kicker num">
-              {kickers[active]}
-            </span>
-          ) : null}
         </div>
         {TABS.map((t) => (
           <section
@@ -129,7 +125,6 @@ export default function ProfileTabs({
           </section>
         ))}
       </div>
-      {foot && <Fragment key="foot">{foot}</Fragment>}
     </div>
   );
 }

@@ -25,8 +25,10 @@ import { useState } from "react";
  * declared yet" stays honest here when it is).
  */
 
+/* copy pruning (brief B.4): the private-account note rides ONE line — the
+   stamp's honest sub-result is the fact; nothing else carries it */
 const PRIVATE_NOTE =
-  "A private LinkedIn account is honestly recorded: the stamp still verifies the link's format and your professional email, and the record carries “resolves, content not machine-verifiable”. Nothing is scored differently.";
+  "The stamp still verifies the link's format and your professional email; the record reads “resolves, content not machine-verifiable”.";
 
 interface Props {
   /** the declared entry's re-declare copy (from the signed-in student's
@@ -130,8 +132,9 @@ export default function PresenceCard({ declared }: Props) {
         <span className="presence-earn num">+3 of the Application-Readiness channel when both format checks pass</span>
       </div>
       <p className={`${err ? "presence-err" : "presence-ok"}`} role="status" aria-live="polite">
+        {/* copy pruning (brief B.4): the idle essay is gone — the status slot
+            carries only its honest if-then state */}
         {err ?? note ?? ""}
-        {!err && !note ? "The declaration stamps at the moment you declare — a verified-at timestamp you can cite, stored offline." : ""}
       </p>
     </div>
   );
