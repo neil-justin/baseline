@@ -802,3 +802,71 @@ describe("blessed conversion — synonym seeds (integrity; engine untouched)", (
     expect(SKILL_SYNONYMS["Software Testing"].like).toContain("regression testing");
   });
 });
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Round-8 admin round — the verified-credential → gap-closure join
+   (the Round-4 lock at work: verified credentials close gaps like platform
+   completions, feeding SP + TP). Canon safety: the demo arc runs ZERO
+   counselor-audited credentials, so every canon number must stay byte-true
+   with the join present.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+import { applyVerifiedCredential } from "@/lib/actions";
+
+describe("verified-credential join (admin round, Round-4 lock)", () => {
+  const career = getCareer("swd")!;
+
+  it("closes only the cited skills that sit on the target career map — as verified bars, with the credential named in the receipt", () => {
+    const s = NEIL_SEED; // canon seed: 6 of 8 bars claimed/verified-closed
+    const onMap = career.skills.map((k) => k.name).find((n) => !(n in s.bars))!;
+    const offMap = "Advanced Data Mining Techniques"; // off-map vocabulary is real but not on swd's map
+    const join = applyVerifiedCredential(s, career, {
+      title: "OWASP secure-development certificate",
+      declaredSkills: [onMap, offMap],
+    });
+    expect(join.closed).toEqual([onMap]); // off-map closes nothing (no invented bar)
+    expect(join.state.bars[onMap]).toEqual({ source: "verified" });
+    const receipt = join.state.events.filter(
+      (e) => e.kind === "bar-closed" && e.detail.includes("verified credential: OWASP secure-development certificate")
+    );
+    expect(receipt).toHaveLength(1); // the provenance receipt names the audit
+    expect(receipt[0].source).toBe("verified");
+    // SP actually moves: the closed bar lifts the channel per the locked math
+    const spMoved = scoreFor(join.state).sp - scoreFor(s).sp;
+    expect(spMoved).toBeGreaterThan(0);
+  });
+
+  it("ticks stage-① exactly like a comprehension pass (the TP feed) — a closed queue member leaves the queue", () => {
+    const s = NEIL_SEED;
+    const open = career.skills.map((k) => k.name).find((n) => !(n in s.bars))!;
+    const queued: StudentState = { ...s, stageOneQueue: [open], stageOneDone: s.stageOneDone };
+    const join = applyVerifiedCredential(queued, career, {
+      title: "Test leave-pass",
+      declaredSkills: [open],
+    });
+    expect(join.queueTicks).toEqual([open]);
+    expect(join.state.stageOneDone).toBe(s.stageOneDone + 1);
+    expect(join.state.stageOneQueue).toEqual([]);
+  });
+
+  it("is idempotent — re-running the join on an already-verified credential closes nothing", () => {
+    const s = NEIL_SEED;
+    const onMap = career.skills.map((k) => k.name).find((n) => !(n in s.bars))!;
+    const first = applyVerifiedCredential(s, career, { title: "T", declaredSkills: [onMap] });
+    const again = applyVerifiedCredential(first.state, career, { title: "T", declaredSkills: [onMap] });
+    expect(again.closed).toEqual([]);
+    expect(again.state.bars[onMap]).toEqual(first.state.bars[onMap]);
+    expect(again.state.events).toEqual(first.state.events);
+  });
+
+  it("canon stays byte-true: no credentials in the arc means no bars move, and every canon number holds", () => {
+    const untouched = applyVerifiedCredential(NEIL_SEED, career, {
+      title: "no-op",
+      declaredSkills: [],
+    });
+    expect(untouched.closed).toEqual([]);
+    expect(untouched.state).toBe(NEIL_SEED); // identity — the arc's own state object
+    // the canon seed still scores ADR-0002's 40 (SP 19 · ES 17 · TP 0 · AR — · CC 4)
+    expect(scoreFor(NEIL_SEED).total).toBe(40);
+  });
+});

@@ -198,9 +198,26 @@ export default function Onboarding() {
     }
   }
 
-  /* ---- OB-3b-1 continue → one batch POST /api/claim ---- */
-  function selfReportContinue() {
+  /* ---- OB-3b-1 continue → the cold-start career commit, then the batch
+     POST /api/claim (order is load-bearing: claims need the target map in
+     the store — the client posts /api/career first; see that route's WHY). */
+  async function selfReportContinue() {
     if (!career) return;
+    try {
+      const cRes = await fetch("/api/career", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ careerId: career.id, track: strand }),
+      });
+      // not fatal: the canon replay hits "already set" and keeps walking —
+      // a real new student must get elsewise a 4xx surfaces at the reveal
+      // exit, so we surface rather than silently swallow.
+      if (!cRes.ok && !/already/i.test(await cRes.text().catch(() => ""))) {
+        console.warn("career commit failed", cRes.status);
+      }
+    } catch {
+      /* offline store is the demo; the walks retry claims after */
+    }
     const claims = career.skills.map((s) => ({
       skill: s.name,
       level: LEVEL_OF[sr[s.name] ?? "not"],

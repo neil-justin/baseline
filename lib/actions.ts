@@ -1,5 +1,6 @@
 import type { Resource, StudentState, Goal } from "@/lib/types";
 import type { Career } from "@/lib/types";
+import type { CredentialRow } from "@/lib/db/credential-store";
 import { getCareer } from "@/lib/fixtures/catalog";
 import { getCheck } from "@/lib/fixtures/checks";
 import { RESOURCES } from "@/lib/fixtures/resources";
@@ -110,6 +111,71 @@ export function markVerified(state: StudentState, skill: string): ActionResult {
   bars[skill] = { source: "verified" };
   // re-rank DOES NOT fire on verification at cold start (beat ordering locked)
   return { state: { ...state, bars }, note: `${skill} confirmed ·✓` };
+}
+
+/**
+ * Verified-credential → gap closure (the Round-4 lock at work, admin round
+ * 2026-10-30 — map.md 2026-10-28 credential-input ruling): a counselor-
+ * VERIFIED credential's cited skills **count as verified skills and close
+ * skill gaps like platform completions — feeding SP + TP**.
+ *
+ * This is `submitCheck`'s completion semantics wearing the credential
+ * audit's source:
+ *  - a cited skill CLOSES its gap bar (`{ source: "verified" }` ·✓) when it
+ *    sits on the student's TARGET career map and isn't closed yet (verified
+ *    bars are never downgraded — a claim/checked bar doesn't re-open);
+ *  - a closed member of the stage-① queue ticks training progress exactly
+ *    like a comprehension pass (stateOneDone + the member leaves the queue
+ *    — the next re-rank refills it canonically);
+ *  - every closure lands a `bar-closed` event naming the credential, so
+ *    both surfaces' provenance receipts trace to the audit;
+ *  - cited skills OFF the target map close nothing (no invented bar — the
+ *    store's declared vocabulary is every catalog role's skill names);
+ *  - a student without a target career closes nothing (no map to measure
+ *    against — the ruling still records; the row's skills keep waiting).
+ * Re-running the join on an already-verified credential is a no-op (idempotent).
+ */
+export interface VerifiedCredentialJoin {
+  state: StudentState;
+  /** the bars this join closed (source verified ·✓) */
+  closed: string[];
+  /** of those, members that ticked stage-① (the TP feed) */
+  queueTicks: string[];
+}
+
+export function applyVerifiedCredential(
+  state: StudentState,
+  career: Career | null,
+  credential: Pick<CredentialRow, "title" | "declaredSkills">
+): VerifiedCredentialJoin {
+  if (!career || state.careerId !== career.id || !credential.declaredSkills.length) {
+    return { state, closed: [], queueTicks: [] };
+  }
+  const bars = { ...state.bars };
+  const closed: string[] = [];
+  for (const skill of credential.declaredSkills) {
+    if (career.skills.some((s) => s.name === skill) && !(skill in bars)) {
+      bars[skill] = { source: "verified" as const };
+      closed.push(skill);
+    }
+  }
+  if (closed.length === 0) return { state, closed, queueTicks: [] };
+  let next: StudentState = { ...state, bars };
+  // stage-① progress: member of the current queue closing ticks 1 of 3
+  const queue = next.stageOneQueue ?? stageOne(career, openSkills(career, next.bars)).queue;
+  const queueTicks = queue.filter((q) => closed.includes(q));
+  next.stageOneQueue = queue.filter((q) => !closed.includes(q));
+  next.stageOneDone = next.stageOneDone + queueTicks.length;
+  next.events = [
+    ...next.events,
+    ...closed.map((skill) => ({
+      date: nowStamp(),
+      kind: "bar-closed" as const,
+      detail: `${skill} closed ·✓ — verified credential: ${credential.title}`,
+      source: "verified" as const,
+    })),
+  ];
+  return { state: next, closed, queueTicks };
 }
 
 /**

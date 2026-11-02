@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, type CSSProperties, type MouseEvent } from "react";
-import { observeReveal } from "@/lib/motion";
+import type { CSSProperties, MouseEvent } from "react";
 
 export interface RowSeg {
   /** rubric weight → flex ("pct") */
@@ -13,10 +12,16 @@ export interface RowSeg {
 }
 
 /**
- * One cohort row — ported from prototype/admin.html's `.s-row` block.
- * Client component because the whole row is the click target (the name and
- * VIEW links are the accessible paths; this is the fast path), and the row
- * carries its own reveal (`rv` → `.in`) which gates the stacked-bar fills.
+ * One cohort row (Round-8 lock: plain roster + obvious row marks, not
+ * reordering). Client component because the whole row is the click target
+ * (the name and VIEW links are the accessible paths), and the row mounts
+ * the stacked-bar fill.
+ *
+ * Row marks (visible entities the counselor reads, zero triage logic —
+ * derived only from computed state + the audit queue, page.tsx): pending
+ * credential audits · below-cohort-average score · no recorded activity.
+ * Read-only stays enforced by the ABSENCE of controls: a row navigates, it
+ * never mutates.
  */
 export default function StudentRow({
   id,
@@ -24,6 +29,9 @@ export default function StudentRow({
   sub,
   career,
   score,
+  pending,
+  belowAvg,
+  noActivity,
   segs,
   active,
   ariaLabel,
@@ -37,15 +45,18 @@ export default function StudentRow({
   career: string | null;
   /** computed integer, sub-scores already summed upstream */
   score: number;
+  /** declared credentials waiting on the counselor audit (queue-backed) */
+  pending: number;
+  /** strictly under the cohort average (a measurement fact, never a verdict) */
+  belowAvg: boolean;
+  /** the state's event log is empty — nothing done since seeding */
+  noActivity: boolean;
   segs: RowSeg[];
   active: string;
   ariaLabel: string;
   isDemo?: boolean;
 }) {
   const router = useRouter();
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => observeReveal(ref.current!) ?? undefined, []);
 
   const href = `/admin/student?student=${id}`;
 
@@ -54,19 +65,34 @@ export default function StudentRow({
     router.push(href);
   }
 
+  const marks: { label: string; tone: "amber" | "grey" }[] = [];
+  if (pending > 0) marks.push({ label: `NEEDS AUDIT · ${pending}`, tone: "amber" });
+  if (belowAvg) marks.push({ label: "BELOW AVG", tone: "grey" });
+  if (noActivity) marks.push({ label: "NO ACTIVITY YET", tone: "grey" });
+
   return (
     <div
-      ref={ref}
-      className={`s-row rv${isDemo ? " row-demo" : ""}`}
+      className={`s-row${isDemo ? " row-demo" : ""}`}
       onClick={onRowClick}
     >
       <span className="s-name">
-        <Link className="s-name-link" href={href}>
-          {name}
-        </Link>
-        {isDemo && <span className="demo-tag">DEMO</span>}
+        <span className="s-name-line">
+          <Link className="s-name-link" href={href}>
+            {name}
+          </Link>
+          {isDemo && <span className="demo-tag">DEMO</span>}
+        </span>
+        <span className="s-sub">{sub}</span>
+        {marks.length > 0 && (
+          <span className="s-marks">
+            {marks.map((m) => (
+              <span className={`chip mark-${m.tone}`} key={m.label}>
+                {m.label}
+              </span>
+            ))}
+          </span>
+        )}
       </span>
-      <span className="s-sub">{sub}</span>
       <span className="s-career">{career ?? "Still deciding"}</span>
       <span className="s-score num">{score}</span>
       <span className="cbar-cell">

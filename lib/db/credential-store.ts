@@ -67,9 +67,49 @@ export interface CredentialInput {
   declaredSkills?: string[];
 }
 
+/**
+ * The Admin round's audit ruling (Round 8 lock, 2026-10-29 admin-college-
+ * scope.md Q3a): a Counselor rules a `declared` entry → verified, or
+ * rejected with a reason. `ruledBy`/`ruledAt` ARE the audit-trail spine the
+ * locked plan names ("verified_by, verified_at, reason"): the schema's
+ * columns carry the ruling WHO + WHEN for EITHER status (a `rejected` row
+ * keeps its counselor + stamp beside the note — the row's record names who
+ * ruled, never just "someone turned it down"). The student's REJECT reason
+ * rides `auditNote` (the profile sweep's carrier — read verbatim in
+ * Profile → Credentials; null when the counselor ruled without one).
+ */
+export interface CredentialAuditRuling {
+  status: "verified" | "rejected";
+  /** the counselor's profile full_name (the shared record names who) */
+  ruledBy: string;
+  /** ruling stamp (ISO) — declared_at + ruledAt = the timestamped audit */
+  ruledAt: string;
+  /** the REJECT-with-reason line (verified rulings always clear it) */
+  auditNote?: string | null;
+}
+
+/** A row together with its owning student — the cohort audit read. */
+export interface CohortCredentialRow extends CredentialRow {
+  studentId: string;
+}
+
 export interface CredentialStore {
   /** All of the signed-in student's declared-kind rows, oldest → newest. */
   list(studentId: string): Promise<CredentialRow[]>;
+  /**
+   * Admin round: every counselor-audited row ACROSS the cohort, oldest →
+   * newest (presence-kind rows excluded here, same as list — they stamp,
+   * they never audit). The queue's student names resolve from the state
+   * store (the state seam the roster already reads).
+   */
+  listAll(): Promise<CohortCredentialRow[]>;
+  /**
+   * The admin ruling on one row: only a row still `declared` accepts it
+   * (re-ruling a recorded verdict would undercut the auditor — same guard
+   * that makes verified rows read-only on the student side). Returns the
+   * updated row, or null when the row doesn't exist / was already ruled.
+   */
+  audit(rowId: string, ruling: CredentialAuditRuling): Promise<CredentialRow | null>;
   /** Declare: a new `declared` row (the audit clock starts here). */
   declare(studentId: string, input: CredentialInput): Promise<CredentialRow>;
   /**
@@ -87,6 +127,16 @@ const isMissingTable = (e: { code?: string; message?: string }): boolean =>
   e?.code === "42P01" ||
   e?.code === "PGRST205" ||
   /does not exist|not find the table|schema cache/i.test(e?.message ?? "");
+
+/** The schema's audit_note block is one of the recorded user-pending SQL
+ * blocks (supabase/schema.sql — the two credentials blocks + the applied-
+ * schema alter note). Until it applies PostgREST answers PGRST204/42703
+ * "could not find the 'audit_note' column" — the NOTE carrier degrades;
+ * the ruling itself stays writable. */
+const isMissingColumn = (e: { code?: string; message?: string }): boolean =>
+  e?.code === "PGRST204" ||
+  e?.code === "42703" ||
+  /could not find the '.*' column|column .* does not exist/i.test(e?.message ?? "");
 
 let degradedFlag = false;
 
@@ -171,6 +221,79 @@ class PostgresCredentialStore implements CredentialStore {
     return (data as DbCredRow[]).map(toRow);
   }
 
+  async listAll(): Promise<CohortCredentialRow[]> {
+    if (degradedFlag) return jsonStore.listAll();
+    const { data, error } = await supabaseAdmin()
+      .from("credentials")
+      .select("*")
+      .neq("kind", "presence") // never counselor-audited — see list()
+      .order("created_at");
+    if (error) {
+      if (isMissingTable(error)) {
+        degradedFlag = true;
+        return jsonStore.listAll();
+      }
+      throw new Error(`credentials read failed: ${error.message}`);
+    }
+    return (data as (DbCredRow & { student_id: string })[]).map((d) => ({
+      studentId: d.student_id,
+      ...toRow(d),
+    }));
+  }
+
+  async audit(rowId: string, ruling: CredentialAuditRuling): Promise<CredentialRow | null> {
+    if (degradedFlag) return jsonStore.audit(rowId, ruling);
+    const patch = {
+      status: ruling.status,
+      verified_by: ruling.ruledBy,
+      verified_at: ruling.ruledAt,
+      // verify clears a prior reject's note (the record reads as it rules —
+      // no stale reason may sit beside a VERIFIED stamp); reject writes it
+      audit_note: ruling.status === "rejected" ? ruling.auditNote ?? null : null,
+    };
+    const { data, error } = await supabaseAdmin()
+      .from("credentials")
+      .update(patch)
+      .eq("id", rowId)
+      // the ruling guard: only a row the audit hasn't ruled on yet
+      .eq("status", "declared")
+      .neq("kind", "presence")
+      .select("*")
+      .maybeSingle();
+    console.error(`[audit-pg] row=${rowId} patchKeys=${Object.keys(patch).join(",")} err=${error?.code ?? "none"} matched=${data ? 1 : 0}`);
+    if (error) {
+      // the column predicate must eat the message BEFORE the table one —
+      // the pending-column error says "... in the schema cache", which the
+      // table predicate would otherwise matchingly swallow (found live:
+      // the ruling degraded to the row-less JSON store and answered 409)
+      if (isMissingColumn(error)) {
+        console.error(`[audit-no-col] falling back to the plain ruling for ${rowId} (${error.code ?? ""})`);
+        // the note carrier is a pending SQL block — the ruling still lands:
+        // rewrite it without the note field. The caller surfaces the degraded
+        // ruling honestly (a reject's reason cannot ride a missing column —
+        // never a silent lie; supabase/schema.sql carries the alter note).
+        const { audit_note: _omitted, ...plain } = patch;
+        const second = await supabaseAdmin()
+          .from("credentials")
+          .update(plain)
+          .eq("id", rowId)
+          .eq("status", "declared")
+          .neq("kind", "presence")
+          .select("*")
+          .maybeSingle();
+        console.error(`[audit-no-col] second write: ${second.error ? second.error.code : "ok rows=" + (second.data ? 1 : 0)}`);
+        if (second.error) throw new Error(`credentials write failed: ${second.error.message}`);
+        return second.data ? toRow(second.data as DbCredRow) : null;
+      }
+      if (isMissingTable(error)) {
+        degradedFlag = true;
+        return jsonStore.audit(rowId, ruling);
+      }
+      throw new Error(`credentials write failed: ${error.message}`);
+    }
+    return data ? toRow(data as DbCredRow) : null;
+  }
+
   async declare(studentId: string, input: CredentialInput): Promise<CredentialRow> {
     if (!this.guard()) return jsonStore.declare(studentId, input);
     const { data, error } = await supabaseAdmin()
@@ -252,6 +375,31 @@ const jsonStore = {
   async list(studentId: string): Promise<CredentialRow[]> {
     return (await readAll())[studentId] ?? [];
   },
+  async listAll(): Promise<CohortCredentialRow[]> {
+    const all = await readAll();
+    return Object.entries(all).flatMap(([studentId, rows]) =>
+      rows.map((row) => ({ studentId, ...row }))
+    );
+  },
+  async audit(rowId: string, ruling: CredentialAuditRuling): Promise<CredentialRow | null> {
+    const all = await readAll();
+    for (const rows of Object.values(all)) {
+      const i = rows.findIndex((r) => r.id === rowId && r.status === "declared" && String(r.kind) !== "presence");
+      if (i < 0) continue;
+      const next: CredentialRow = {
+        ...rows[i],
+        status: ruling.status,
+        verifiedBy: ruling.ruledBy,
+        verifiedAt: ruling.ruledAt,
+        auditNote: ruling.status === "rejected" ? ruling.auditNote ?? null : null,
+        degraded: true,
+      };
+      rows[i] = next;
+      await writeAll(all);
+      return next;
+    }
+    return null;
+  },
   async declare(studentId: string, input: CredentialInput): Promise<CredentialRow> {
     const all = await readAll();
     const row: CredentialRow = {
@@ -318,6 +466,8 @@ export const credentialStore: CredentialStore = configured
   ? new PostgresCredentialStore()
   : {
       list: jsonStore.list,
+      listAll: jsonStore.listAll,
+      audit: jsonStore.audit,
       declare: async (id, input) => {
         const r = await jsonStore.declare(id, input);
         return degradedFlag ? { ...r, degraded: true } : r;

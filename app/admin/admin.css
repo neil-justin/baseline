@@ -1,277 +1,926 @@
 /* ============================================================
-   ADMIN — read-only cohort + per-student dashboards (beat 10)
-   The Index world: dense mono tables are the native register.
-   Surface styles ported verbatim from prototype/admin.html +
-   admin-student.html <style> blocks (shared rules stated once).
-   Shared tokens come from app/globals.css.
+   ADMIN — the counselor's console (v7 law, 2026-10-30 admin round)
+   Same DNA as the (app) shell: cool white-grey ground, white
+   cards with 1px borders + whisper shadows at 8px, Roboto, and
+   the blue/green/amber/grey wash-chip command economy — dense
+   tables are this surface's native register. The pre-v7 Index
+   register (earned-green accent, drafting-sheet grid) is the
+   anti-reference (DESIGN.md Don'ts) and is retired here.
+
+   e2e hook classes preserved verbatim (styling may change, the
+   names may not): .s-row (.row-demo) · .s-career · .s-score ·
+   .cohort* · .rubric/.rseg · .ss-row · .dt-score [data-count] ·
+   .crumb · .undecided-banner · .pn-row · .admin-colophon ·
+   .admin-signout. New: the band + AuditQueue classes (.proband
+   .band* .aq-* .chip).
    ============================================================ */
 
-.app-bar-in { justify-content: space-between; }
+@font-face {
+  font-family: "Roboto";
+  src: url("/fonts/roboto-var-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: block;
+}
 
-/* Green sign-out button in the app bar (upper right). */
-.admin-signout {
-  font-family: var(--sans); font-weight: 600; font-size: 12.5px;
-  color: #fff; background: var(--accent);
-  padding: 7px 16px; border-radius: var(--radius);
+/* v7 tokens — self-contained on the admin route (it does not import
+   the (app) shell's v7.css; values mirror it exactly) */
+.v7admin {
+  --v-ground: #f8f9fa;
+  --v-surface: #ffffff;
+  --v-ink: #202124;
+  --v-ink2: #5f6368;
+  --v-meta: #80868b;
+  --v-blue: #1a73e8;
+  --v-blue-deep: #1557b0;
+  --v-blue-wash: #e8f0fe;
+  --v-green: #188038;
+  --v-green-text: #137333;
+  --v-green-wash: #e6f4ea;
+  --v-amber: #b45309;
+  --v-amber-text: #96590a;
+  --v-amber-wash: #fef7e0;
+  --v-grey-text: #3c4043;
+  --v-grey-wash: #f1f3f4;
+  --v-border: #dadce0;
+  --v-rows: #e8eaed;
+  --v-track: #e8eaed;
+  --v-shadow: 0 1px 2px rgba(60, 64, 67, 0.1);
+
+  background: var(--v-ground);
+  min-height: 100dvh;
+  color: var(--v-ink);
+  font-family: Roboto, system-ui, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.5;
+  display: flow-root;
+}
+
+/* the pre-v7 drafts-sheet grid polluted the global body from this
+   import — the superseded world dies with the file rewrite */
+.v7admin .ashell {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 8px 110px;
+}
+
+.v7admin .num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- admin app bar (56px top bar, counselor only) ---------- */
+
+.v7admin .adminbar {
+  background: var(--v-surface);
+  border-bottom: 1px solid var(--v-border);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+.v7admin .app-bar-in {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.v7admin .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--v-ink);
+}
+.v7admin .brandmark {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--v-ink);
+  border-radius: 6px;
+  position: relative;
+  flex: none;
+}
+.v7admin .brandmark i {
+  position: absolute;
+  left: 7px;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  background: var(--v-blue);
+  border-radius: 1px;
+}
+.v7admin .brandname {
+  font: 500 16px/1.2 Roboto, system-ui, sans-serif;
+}
+.v7admin .bar-in {
+  justify-content: space-between;
+  flex: 1;
+}
+.v7admin .admin-signout {
+  font: 500 13px Roboto, system-ui, sans-serif;
+  color: #fff;
+  background: var(--v-blue);
+  padding: 8px 20px;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
   text-decoration: none;
   transition: background-color 0.15s ease;
 }
-.admin-signout:hover { background: var(--accent-deep); }
-
-.ashell { max-width: 1200px; margin: 0 auto; padding: 0 32px 110px; }
-
-/* ---------- screen A scaffolding ---------- */
-
-.admin-head { max-width: 640px; margin: 40px 0 22px; }
-.admin-head h1 {
-  font-size: clamp(1.6rem, 3vw, 2.1rem);
-  font-weight: 640; letter-spacing: -0.025em; line-height: 1.12;
+.v7admin .admin-signout:hover {
+  background: var(--v-blue-deep);
 }
-.admin-head .role-line { margin-top: 8px; color: var(--ink-2); font-size: 14.5px; max-width: 52ch; }
 
-/* ---------- cohort strip ---------- */
+/* ---------- the band (Named-Surface Rule: h1 + identity + counters) ---------- */
 
-.cohort { margin-bottom: 10px; overflow: hidden; }
-.cohort-head {
-  display: flex; justify-content: space-between; align-items: center; gap: 16px;
-  padding: 10px 18px; border-bottom: 1px solid var(--line);
+.v7admin .proband {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 16px 8px 0;
 }
-.cohort-grid { display: grid; grid-template-columns: 1fr 1fr; }
-.cohort-cell { padding: 22px 18px 20px; }
-.cohort-cell + .cohort-cell { border-left: 1px solid var(--line); }
-.cohort-cell .cnum {
+.v7admin .proband .band,
+.v7admin .proband .bandrow,
+.v7admin .proband .band-counts,
+.v7admin .proband .proband,
+.v7admin .proband .who {
+  min-width: 0;
+}
+.v7admin .proband > .band {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  padding: 16px 20px 12px;
+}
+.v7admin .bandrow {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.v7admin .bandrow .who h1 {
+  font: 400 22px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0;
+}
+.v7admin .band-id {
+  margin-top: 2px;
+  max-width: 62ch;
+  color: var(--v-ink2);
+  font-size: 13px;
+}
+.v7admin .band-counts {
+  margin-left: auto;
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+.v7admin .count {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.v7admin .count .label {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7admin .count .c-val {
+  font: 500 22px/1.1 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  min-width: 2ch;
+}
+.v7admin .count .c-val small {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--v-ink2);
+  margin-left: 2px;
+}
+.v7admin .count .c-val.open {
+  color: var(--v-amber);
+}
+.v7admin .band-honesty {
   margin-top: 10px;
-  font-size: clamp(2.1rem, 3.4vw, 2.9rem);
-  font-weight: 560; line-height: 1; letter-spacing: -0.035em;
-  font-variant-numeric: tabular-nums;
-}
-.cohort-cell .cnum small {
-  font-size: 15px; font-weight: 480; color: var(--ink-3);
-  letter-spacing: 0; margin-left: 2px;
-}
-.cohort-cell .cnote { margin-top: 8px; font-size: 12.5px; color: var(--ink-2); max-width: 40ch; line-height: 1.5; }
-.cohort-honesty {
-  padding: 10px 18px; border-top: 1px solid var(--line-soft);
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; color: var(--ink-3);
+  padding-top: 9px;
+  border-top: 1px solid var(--v-rows);
+  font: 400 11.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
 }
 
-/* ---------- cohort table ---------- */
+/* ---------- shared chip economy (wash chips, never region fills) ---------- */
 
-.cohort-table { overflow: hidden; }
-.ct-head {
-  display: flex; justify-content: space-between; align-items: center; gap: 16px;
-  padding: 10px 18px; border-bottom: 1px solid var(--line);
+.v7admin .chip {
+  display: inline-block;
+  background: var(--v-grey-wash);
+  color: var(--v-grey-text);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font: 500 11px/1.5 Roboto, system-ui, sans-serif;
+  white-space: nowrap;
 }
-.ct-head .label { white-space: nowrap; }
-.ct-legend {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.03em; color: var(--ink-3);
+.v7admin .chip.c-green,
+.v7admin .chip.mark-done {
+  background: var(--v-green-wash);
+  color: var(--v-green-text);
+}
+.v7admin .chip.c-amber,
+.v7admin .chip.mark-amber {
+  background: var(--v-amber-wash);
+  color: var(--v-amber-text);
+}
+.v7admin .chip.c-grey,
+.v7admin .chip.mark-grey {
+  background: var(--v-grey-wash);
+  color: var(--v-grey-text);
+}
+.v7admin .chip.c-blue {
+  background: var(--v-blue-wash);
+  color: var(--v-blue-deep);
+}
+
+/* ---------- panels (Surface + queue + detail) ---------- */
+
+.v7admin .panel {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  margin: 14px auto 0;
+  max-width: 1240px;
+  overflow: hidden;
+}
+.v7admin .ct-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--v-rows);
+}
+.v7admin .ct-head .label,
+.v7admin .ct-label {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7admin .ct-title {
+  font: 500 16px/1.3 Roboto, system-ui, sans-serif;
+}
+.v7admin .ct-legend {
+  font: 400 11px/1.55 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.03em;
+  color: var(--v-ink2);
   text-align: right;
+  max-width: 52ch;
 }
-.ct-legend b { font-weight: 500; color: var(--ink-2); }
-.ct-colheads {
+.v7admin .ct-legend b {
+  font-weight: 500;
+  color: var(--v-ink2);
+}
+.v7admin .ct-colheads {
   display: grid;
   grid-template-columns: minmax(0, 2.3fr) minmax(0, 1.5fr) 0.7fr minmax(0, 2.5fr) 1fr 0.5fr;
-  gap: 18px; padding: 9px 18px 8px;
+  gap: 18px;
+  padding: 9px 18px 8px;
+  border-bottom: 1px solid var(--v-rows);
 }
-.s-row {
+
+/* ---------- cohort roster rows (hooks stay verbatim) ---------- */
+
+.v7admin .s-row {
   display: grid;
   grid-template-columns: minmax(0, 2.3fr) minmax(0, 1.5fr) 0.7fr minmax(0, 2.5fr) 1fr 0.5fr;
-  gap: 8px 18px; align-items: center;
-  padding: 12px 18px; border-top: 1px solid var(--line-soft);
+  gap: 8px 18px;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--v-rows);
   transition: background-color 0.12s ease;
   position: relative;
+  cursor: pointer;
 }
-.s-row:first-of-type { border-top: 1px solid var(--line); }
-.s-row:hover { background: #F7F8F7; }
-.s-row .s-name { font-size: 13.5px; font-weight: 570; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
-.s-row .s-name-link { color: inherit; text-decoration: none; }
-.s-row .s-name-link:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-.s-row { cursor: pointer; }
-.s-row .s-sub { grid-column: 1; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink-3); }
-.s-row .s-career { font-family: var(--mono); font-size: 12px; color: var(--ink-2); line-height: 1.45; }
-.s-row .s-score {
-  font-family: var(--mono); font-size: 14px; font-weight: 400;
-  font-variant-numeric: tabular-nums; text-align: right; color: var(--ink);
+.v7admin .s-row:first-of-type {
+  border-bottom: 1px solid var(--v-rows);
 }
-.s-row .s-active { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
-.s-row .s-view {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
-  color: var(--ink-2); text-decoration: none; text-align: right; white-space: nowrap;
+.v7admin .s-row:last-of-type {
+  border-bottom: 0;
 }
-.s-row .s-view:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.v7admin .s-row:hover {
+  background: #f5f8fc;
+}
+.v7admin .s-row .s-name {
+  font-size: 13.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.v7admin .s-row .s-name-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.v7admin .s-row .s-name-link {
+  color: inherit;
+  text-decoration: none;
+}
+.v7admin .s-row .s-name-link:hover {
+  color: var(--v-blue-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.v7admin .s-row .s-sub {
+  grid-column: 1;
+  display: block;
+  font: 400 11px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .s-marks {
+  display: inline-flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.v7admin .s-row .s-career {
+  font: 400 12px/1.45 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .s-row .s-score {
+  font: 400 14px/1.4 Roboto, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--v-ink);
+}
+.v7admin .s-row .s-active {
+  font: 400 12px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .s-row .s-view {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  color: var(--v-blue-deep);
+  text-decoration: none;
+  text-align: right;
+  white-space: nowrap;
+}
+.v7admin .s-row .s-view:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
 /* the demo student's row — the selected row of this table */
-.s-row.row-demo { background: var(--selection); }
-.s-row.row-demo:hover { background: var(--selection); }
-.s-row.row-demo::before {
-  content: ""; position: absolute; left: 0; top: -1px; bottom: 0;
-  width: 2px; background: var(--accent);
+.v7admin .s-row.row-demo {
+  background: var(--v-blue-wash);
 }
-.s-row.row-demo .s-score { color: var(--accent); font-weight: 500; }
-
-.demo-tag {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
-  color: var(--ink-2); border: 1px solid var(--line); border-radius: 3px;
-  padding: 0 5px; background: var(--panel); white-space: nowrap;
+.v7admin .s-row.row-demo:hover {
+  background: var(--v-blue-wash);
+}
+.v7admin .s-row.row-demo::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  bottom: 0;
+  width: 2px;
+  background: var(--v-blue);
+}
+.v7admin .s-row.row-demo .s-score {
+  color: var(--v-blue-deep);
+  font-weight: 500;
 }
 
-/* ---------- stacked rubric-proportion bars (honest fills) ---------- */
-
-.cbar { display: flex; gap: 2px; height: 8px; min-width: 0; }
-.cbar .cseg { position: relative; overflow: hidden; background: #E9EBE8; border-radius: 1px; }
-.cbar .cseg i {
-  position: absolute; inset: 0; display: block;
-  background: var(--accent); transform-origin: left center;
+.v7admin .demo-tag {
+  font: 500 11px/1.5 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.06em;
+  color: var(--v-blue-deep);
+  border: 1px solid var(--v-blue-deep);
+  border-radius: 3px;
+  padding: 0 5px;
+  background: var(--v-surface);
+  white-space: nowrap;
 }
-.cbar .cseg:nth-child(1) i { opacity: 0.8; }
-.cbar .cseg:nth-child(2) i { opacity: 0.85; }
-.cbar .cseg:nth-child(3) i { opacity: 0.95; }
-.cbar .cseg:nth-child(4) i { opacity: 1; }
 
-/* fills ride the row's own reveal: visible by default (no .js), measured
-   into place when the row enters (.in), replayable on re-entry */
-.js .cseg i { transform: scaleX(0); transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: var(--d, 0ms); }
-.js .in .cseg i { transform: scaleX(var(--earn, 0)); }
+/* ---------- stacked rubric-proportion bars (honest fills, v7 tokens) ---------- */
+
+.v7admin .cbar-cell {
+  min-width: 0;
+}
+.v7admin .cbar {
+  display: flex;
+  gap: 2px;
+  height: 8px;
+  min-width: 0;
+}
+.v7admin .cbar .cseg {
+  position: relative;
+  overflow: hidden;
+  background: var(--v-track);
+  border-radius: 1px;
+}
+.v7admin .cbar .cseg i {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: var(--v-blue);
+}
+.v7admin .cbar .cseg:nth-child(1) i {
+  opacity: 0.8;
+}
+.v7admin .cbar .cseg:nth-child(2) i {
+  opacity: 0.85;
+}
+.v7admin .cbar .cseg:nth-child(3) i {
+  opacity: 0.95;
+}
+
+.v7admin .js .cseg i {
+  transform: scaleX(0);
+  transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--d, 0ms);
+}
+.v7admin .js .in .cseg i {
+  transform: scaleX(var(--earn, 0));
+}
 @media (prefers-reduced-motion: reduce) {
-  .js .cseg i { transform: scaleX(var(--earn, 0)); transition: none; }
+  .v7admin .js .cseg i {
+    transform: scaleX(var(--earn, 0));
+    transition: none;
+  }
 }
 
-/* ---------- screen B · student detail ---------- */
+/* ---------- the Round-8 credential audit queue (the counselor's function) ---------- */
 
-.crumb {
-  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
-  margin: 26px 0 0;
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; color: var(--ink-3);
+.v7admin .queue .aq-sub {
+  margin: 3px 0 0;
+  max-width: 68ch;
+  color: var(--v-ink2);
+  font-size: 12.5px;
 }
-.crumb a { color: var(--ink-2); text-decoration: none; }
-.crumb a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-.crumb .here { color: var(--ink-3); }
-.crumb .sep { color: var(--ink-3); }
-
-/* ---------- detail panel ---------- */
-
-.detail { padding-bottom: 40px; }
-.detail-panel { margin-top: 18px; overflow: hidden; }
-.dt-head {
-  display: flex; justify-content: space-between; align-items: flex-end; gap: 24px;
-  padding: 20px 18px 18px; border-bottom: 1px solid var(--line); flex-wrap: wrap;
+.v7admin .aq-legend {
+  white-space: nowrap;
 }
-.dt-id h2 { font-size: clamp(1.5rem, 2.6vw, 1.9rem); font-weight: 640; letter-spacing: -0.025em; line-height: 1.15; }
-.dt-id .dt-meta { margin-top: 7px; font-size: 13.5px; color: var(--ink-2); }
-.dt-id .dt-meta .ro { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-3); margin-left: 10px; }
-.dt-score { text-align: right; }
-.dt-score .readout-score {
-  font-family: var(--mono); font-size: 44px; line-height: 1; font-weight: 400;
-  letter-spacing: -0.01em; font-variant-numeric: tabular-nums; margin-top: 8px;
+.v7admin .aq-legend b {
+  color: var(--v-blue-deep);
 }
-.dt-score .readout-score small { font-size: 15px; color: var(--ink-3); margin-left: 2px; }
-.dt-score .dt-samesub { margin-top: 7px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; color: var(--ink-3); }
-
-.dt-block { padding: 22px 18px 24px; }
-.dt-block + .dt-block { border-top: 1px solid var(--line-soft); }
-.dt-block h3 { font-size: 15.5px; font-weight: 620; letter-spacing: -0.015em; }
-
-/* sub-score breakdown — same bar component spec as the student readout */
-.rubric { display: flex; gap: 2px; height: 10px; margin-top: 16px; }
-.rubric .rseg { position: relative; overflow: hidden; background: #E9EBE8; border-radius: 1px; }
-.rubric .rseg i {
-  position: absolute; inset: 0; display: block;
-  background: var(--accent); transform-origin: left center;
-  transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: var(--d, 0ms);
+.v7admin .aq-empty {
+  padding: 18px;
+  color: var(--v-ink2);
+  font-size: 13px;
+  max-width: 72ch;
 }
-.rubric .rseg:nth-child(1) i { opacity: 0.8; }
-.rubric .rseg:nth-child(2) i { opacity: 0.85; }
-.rubric .rseg:nth-child(3) i { opacity: 0.95; }
-.js .rubric .rseg i { transform: scaleX(0); }
-.js .in .rubric .rseg i, .js .in.rubric .rseg i { transform: scaleX(var(--earn, 0)); }
+.v7admin .aq-row {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1.4fr) minmax(0, 1.6fr) minmax(0, 1.5fr);
+  gap: 6px 16px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--v-rows);
+  align-items: start;
+}
+.v7admin .aq-row:last-of-type {
+  border-bottom: 0;
+}
+.v7admin .aq-declared {
+  background: #fdfbf4;
+}
+.v7admin .aq-statuscell .chip {
+  min-width: 92px;
+  text-align: center;
+}
+.v7admin .aq-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.v7admin .aq-name {
+  font: 400 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7admin .aq-title {
+  font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7admin .aq-meta,
+.v7admin .aq-stamp {
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .aq-evidence {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.v7admin .aq-link {
+  color: var(--v-blue-deep);
+  text-decoration: none;
+  font: 400 12px/1.45 Roboto, system-ui, sans-serif;
+  overflow-wrap: anywhere;
+}
+.v7admin .aq-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.v7admin .aq-line {
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  overflow-wrap: anywhere;
+}
+.v7admin .aq-ruling {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.v7admin .aq-acts {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.v7admin .aq-btn {
+  font: 500 12.5px/1.4 Roboto, system-ui, sans-serif;
+  border-radius: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--v-border);
+  background: var(--v-surface);
+  color: var(--v-blue-deep);
+  cursor: pointer;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+.v7admin .aq-btn:hover {
+  background: var(--v-blue-wash);
+  border-color: var(--v-blue-deep);
+}
+.v7admin .aq-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.v7admin .aq-rejectbtn {
+  color: var(--v-amber-text);
+}
+.v7admin .aq-rejectbtn:hover {
+  background: var(--v-amber-wash);
+  border-color: var(--v-amber-text);
+}
+.v7admin .aq-rejectbtn.armed {
+  background: var(--v-amber-wash);
+  border-color: var(--v-amber-text);
+}
+.v7admin .aq-rejectform {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.v7admin .aq-note {
+  font: 400 12.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  border: 1px solid var(--v-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  min-width: 260px;
+  flex: 1;
+  background: var(--v-surface);
+}
+.v7admin .aq-note:focus-visible {
+  outline: 2px solid var(--v-blue);
+  outline-offset: 1px;
+}
+.v7admin .aq-ruled,
+.v7admin .aq-err {
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .aq-err {
+  margin: 10px 18px 14px;
+  color: var(--v-amber-text);
+}
+.v7admin .aq-rejected .aq-title {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  color: var(--v-ink2);
+}
+
+/* ---------- screen B · student detail (hooks verbatim) ---------- */
+
+.v7admin .crumb {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 26px auto 0;
+  max-width: 1240px;
+  padding: 0 8px;
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.05em;
+  color: var(--v-ink2);
+}
+.v7admin .crumb a {
+  color: var(--v-blue-deep);
+  text-decoration: none;
+}
+.v7admin .crumb a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.v7admin .crumb .here {
+  color: var(--v-ink2);
+}
+.v7admin .crumb .sep {
+  color: var(--v-ink2);
+}
+
+.v7admin .detail {
+  padding-bottom: 40px;
+}
+.v7admin .detail-panel {
+  margin-top: 14px;
+}
+.v7admin .dt-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  padding: 20px 18px 18px;
+  border-bottom: 1px solid var(--v-rows);
+  flex-wrap: wrap;
+}
+.v7admin .dt-id h2 {
+  font: 400 22px/1.3 Roboto, system-ui, sans-serif;
+}
+.v7admin .dt-id .dt-meta {
+  margin-top: 7px;
+  font-size: 13px;
+  color: var(--v-ink2);
+}
+.v7admin .dt-id .dt-meta .ro {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  color: var(--v-ink2);
+  margin-left: 10px;
+}
+.v7admin .dt-score {
+  text-align: right;
+}
+.v7admin .dt-score .readout-score {
+  font: 400 44px/1 Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  margin-top: 8px;
+}
+.v7admin .dt-score .readout-score small {
+  font-size: 15px;
+  color: var(--v-ink2);
+  margin-left: 2px;
+}
+.v7admin .dt-score .dt-samesub {
+  margin-top: 7px;
+  font: 400 11.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+
+.v7admin .dt-block {
+  padding: 22px 18px 24px;
+}
+.v7admin .dt-block + .dt-block {
+  border-top: 1px solid var(--v-rows);
+}
+.v7admin .dt-block h3 {
+  font: 500 16px/1.3 Roboto, system-ui, sans-serif;
+}
+
+.v7admin .rubric {
+  display: flex;
+  gap: 2px;
+  height: 10px;
+  margin-top: 16px;
+}
+.v7admin .rubric .rseg {
+  position: relative;
+  overflow: hidden;
+  background: var(--v-track);
+  border-radius: 1px;
+}
+.v7admin .rubric .rseg i {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: var(--v-blue);
+  transform-origin: left center;
+  transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--d, 0ms);
+}
+.v7admin .js .rubric .rseg i {
+  transform: scaleX(0);
+}
+.v7admin .js .in .rubric .rseg i {
+  transform: scaleX(var(--earn, 0));
+}
 @media (prefers-reduced-motion: reduce) {
-  .js .rubric .rseg i { transform: scaleX(var(--earn, 0)); transition: none; }
+  .v7admin .js .rubric .rseg i {
+    transform: scaleX(var(--earn, 0));
+    transition: none;
+  }
 }
 
-.ss-rows { margin-top: 6px; }
-.ss-row {
-  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px;
-  align-items: baseline; padding: 10px 0;
-  border-bottom: 1px solid var(--line-soft);
+.v7admin .ss-rows {
+  margin-top: 6px;
 }
-.ss-row:last-child { border-bottom: 0; }
-.ss-row .ss-name { font-size: 13.5px; font-weight: 550; }
-.ss-row .ss-val {
-  font-family: var(--mono); font-size: 13px; color: var(--ink);
-  font-variant-numeric: tabular-nums; white-space: nowrap;
+.v7admin .ss-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 16px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--v-rows);
 }
-.ss-row .ss-note { grid-column: 1 / -1; font-size: 12.5px; color: var(--ink-3); line-height: 1.5; }
-.ss-row .ss-note.ok { color: var(--accent); }
-.ss-row .ss-note.full { color: var(--accent); }
-.dt-context {
-  margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line-soft);
-  font-family: var(--mono); font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums;
+.v7admin .ss-row:last-child {
+  border-bottom: 0;
+}
+.v7admin .ss-row .ss-name {
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.v7admin .ss-row .ss-val {
+  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.v7admin .ss-row .ss-note {
+  grid-column: 1 / -1;
+  font-size: 12.5px;
+  color: var(--v-ink2);
+  line-height: 1.5;
+}
+.v7admin .ss-row .ss-note.ok,
+.v7admin .ss-row .ss-note.full {
+  color: var(--v-green-text);
+}
+.v7admin .dt-context {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--v-rows);
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
 }
 
-/* prev / next within the cohort (inline styles from the prototype → a class) */
-.pn-row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.pn-row .link-quiet { color: var(--ink-2); }
-
-/* ---------- undecided default state — no career yet ---------- */
-
-.undecided-banner {
-  margin: 14px 18px 0; padding: 12px 14px;
-  border: 1px solid var(--line-soft); border-radius: 4px; background: #F7F8F7;
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; line-height: 1.7;
-  text-transform: uppercase; color: var(--ink-2);
+.v7admin .pn-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 }
-.undecided-banner b { color: var(--ink); font-weight: 500; }
+.v7admin .pn-row .link-quiet {
+  color: var(--v-ink2);
+}
+
+.v7admin .undecided-banner {
+  margin: 14px 18px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--v-border);
+  border-radius: 4px;
+  background: var(--v-grey-wash);
+  font: 400 11px/1.7 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7admin .undecided-banner b {
+  color: var(--v-ink);
+  font-weight: 500;
+}
 
 /* ---------- colophon ---------- */
 
-.admin-colophon {
-  margin: 36px auto 34px; max-width: 1200px; padding: 14px 32px 0; border-top: 1px solid var(--line);
-  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; color: var(--ink-3);
-}
-
-/* The Index — final world (user-locked 2026-10-12): the earned-green system
-   laid over a drafting-sheet grid. The accent stays rare; the grid is the
-   only addition beyond the base tokens. */
-body {
-  background-image:
-    linear-gradient(rgba(22,24,26,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(22,24,26,0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
+.v7admin .admin-colophon {
+  margin: 36px auto 34px;
+  max-width: 1240px;
+  padding: 14px 8px 0;
+  border-top: 1px solid var(--v-border);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.05em;
+  color: var(--v-ink2);
 }
 
 /* ============================================================
    RESPONSIVE — re-grid rows, never squish
    ============================================================ */
 
+@media (max-width: 1020px) {
+  .v7admin .band-counts {
+    margin-left: 0;
+  }
+  .v7admin .ct-legend {
+    display: none;
+  }
+}
+
 @media (max-width: 900px) {
-  .ct-colheads, .s-row {
+  .v7admin .proband {
+    padding: 12px 0 0;
+  }
+  .v7admin .ct-colheads {
+    display: none;
+  }
+  .v7admin .ct-colheads,
+  .v7admin .s-row {
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) auto;
   }
-  .ct-colheads { display: none; }
-  .s-row { row-gap: 6px; padding: 14px 16px; grid-template-rows: auto auto auto auto auto; }
-  .s-row .s-name { grid-column: 1 / 3; grid-row: 1; }
-  .s-row .s-sub { grid-column: 1 / 3; grid-row: 2; }
-  .s-row .s-score { grid-column: 3; grid-row: 1 / 3; align-self: center; font-size: 15px; }
-  .s-row .s-career { grid-column: 1 / 2; grid-row: 3; }
-  .s-row .s-active { grid-column: 2 / 3; grid-row: 3; text-align: right; }
-  .s-row .cbar-cell { grid-column: 1 / -1; grid-row: 4; margin-top: 4px; }
-  .s-row .s-view { grid-column: 1 / -1; grid-row: 5; text-align: left; margin-top: 2px; }
-  .cohort-grid { grid-template-columns: 1fr; }
-  .cohort-cell + .cohort-cell { border-left: 0; border-top: 1px solid var(--line); }
-  .dt-head { align-items: flex-start; flex-direction: column; gap: 18px; }
-  .dt-score { text-align: left; }
+  .v7admin .s-row {
+    row-gap: 6px;
+    padding: 14px 16px;
+  }
+  .v7admin .s-row .s-name {
+    grid-column: 1 / 3;
+    grid-row: 1;
+  }
+  .v7admin .s-row .s-sub {
+    grid-column: 1 / 3;
+    grid-row: 2;
+  }
+  .v7admin .s-row .s-marks {
+    grid-column: 1 / 3;
+    grid-row: 3;
+  }
+  .v7admin .s-row .s-score {
+    grid-column: 3;
+    grid-row: 1 / 4;
+    align-self: center;
+    font-size: 15px;
+  }
+  .v7admin .s-row .s-career {
+    grid-column: 1 / 2;
+    grid-row: 4;
+  }
+  .v7admin .s-row .s-active {
+    grid-column: 2 / 3;
+    grid-row: 4;
+    text-align: right;
+  }
+  .v7admin .s-row .cbar-cell {
+    grid-column: 1 / -1;
+    grid-row: 5;
+    margin-top: 4px;
+  }
+  .v7admin .s-row .s-view {
+    grid-column: 1 / -1;
+    grid-row: 6;
+    text-align: left;
+    margin-top: 2px;
+  }
+  .v7admin .dt-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .v7admin .dt-score {
+    text-align: left;
+  }
+  .v7admin .aq-row {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+  .v7admin .aq-row > .aq-statuscell {
+    grid-column: 1 / 3;
+  }
+  .v7admin .aq-row > .aq-evidence {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+  .v7admin .aq-row > .aq-ruling {
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
 }
 
 @media (max-width: 720px) {
-  .ashell { padding: 0 20px 72px; }
-  .admin-head { margin-top: 30px; }
-  .ct-legend { display: none; }
+  .v7admin .ashell {
+    padding: 0 8px 72px;
+  }
 }
 
 @media (max-width: 480px) {
-  .ct-head { flex-direction: column; align-items: flex-start; gap: 6px; }
-  .cohort-head { flex-direction: column; align-items: flex-start; gap: 6px; }
-  .cohort-cell .cnum { font-size: 2.1rem; }
-  .dt-score .readout-score { font-size: 38px; }
+  .v7admin .ct-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .v7admin .count .c-val {
+    font-size: 20px;
+  }
+  .v7admin .dt-score .readout-score {
+    font-size: 38px;
+  }
+  .v7admin .aq-note {
+    min-width: 0;
+  }
 }
