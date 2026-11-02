@@ -408,18 +408,6 @@
   border-top: 1px solid var(--v-rows);
   border-bottom: 1px solid var(--v-rows);
 }
-.v7career .match-head {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 9px 16px;
-}
-.v7career .match-head span {
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--v-ink2);
-}
 .v7career .match-row {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -430,7 +418,6 @@
 .v7career .m-main { display: flex; align-items: baseline; gap: 10px; }
 .v7career .m-name { font-weight: 500; font-size: 13.5px; color: var(--v-ink); }
 .v7career .m-fit { font: 500 12px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); font-variant-numeric: tabular-nums; }
-.v7career .m-zero { color: var(--v-grey-text); font-weight: 400; }
 .v7career .m-sub {
   grid-column: 1 / -1;
   margin-top: 4px;

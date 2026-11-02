@@ -531,13 +531,15 @@ export default function CareerClient({
           </div>
           {/* the ONE tracked SHOWING line — page-true range on the paged list
               (rows keep absolute positions); the zero-branches keep bytes */}
-          {rows.length === 0 || (zeroConfirmed && lens === "ranked") ? (
+          {!(zeroConfirmed && lens === "ranked") && (
             <span className="kicker num" id="explore-count">
-              SHOWING {rows.length} OF {rows.length} CAREERS
-            </span>
-          ) : (
-            <span className="kicker num" id="explore-count">
-              SHOWING {sliceStart + 1}–{showingTo} OF {rows.length} CAREERS
+              {rows.length === 0 ? (
+                <>SHOWING {rows.length} OF {rows.length} CAREERS</>
+              ) : (
+                <>
+                  SHOWING {sliceStart + 1}–{showingTo} OF {rows.length} CAREERS
+                </>
+              )}
             </span>
           )}
         </div>
@@ -553,15 +555,10 @@ export default function CareerClient({
           {zeroConfirmed && lens === "ranked" ? (
             /* zero-demonstrated default (edge-case audit §2): the compressed row */
             <div className="match-table">
-              <div className="match-head label" aria-hidden="true">
-                <span>CAREER</span>
-                <span>SKILLS IN COMMON</span>
-              </div>
               <div className="match-row">
                 <div className="m-main">
                   <span className="m-name">Nothing confirmed yet</span>
                 </div>
-                <span className="m-fit num m-zero">—</span>
                 <p className="m-sub num">
                   Matching starts once a skill is confirmed — pass a check on one and this list builds
                   from it. Skills you rate yourself feed your baseline, but they never count toward
