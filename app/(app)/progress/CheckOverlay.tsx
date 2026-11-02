@@ -179,7 +179,7 @@ export default function CheckOverlay({
             </h2>
             <div className="okband r-band">
               {[
-                result.gapClosed ? `Your ${resource.skillShort} gap is closed ✓✓` : null,
+                result.gapClosed ? `Your ${resource.skillShort} gap is closed ·✓✓` : null,
                 result.goalDone ? "The goal you set is done" : null,
                 "Your readiness score updates.",
               ]

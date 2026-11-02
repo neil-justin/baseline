@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useRouter } from "next/navigation";
 import CountUp from "@/components/CountUp";
+import Reveal from "@/components/Reveal";
 import CheckOverlay from "./CheckOverlay";
 import type { CheckResourceLite } from "./types";
 import { WEIGHTS } from "@/lib/engines/score";
@@ -75,10 +76,12 @@ interface Props {
   checks: Record<string, { stem: string; options: string[]; answer: number }[]>;
 }
 
+/** Wave-2 (Q3/Q6): compact provenance canon on data rows — the long legends
+ *  stay in the explanatory captions below their tables. */
 const BADGES: Record<ClosedRow["source"], { text: string; cls: string }> = {
-  verified: { text: "·✓ verified quiz", cls: "chip c-green" },
-  checked: { text: "✓✓ checked resource", cls: "chip c-green" },
-  claimed: { text: "self-reported", cls: "chip c-grey hatch-chip" },
+  verified: { text: "Verified ·✓", cls: "chip c-green" },
+  checked: { text: "Checked ·✓✓", cls: "chip c-green" },
+  claimed: { text: "Self-reported", cls: "chip c-grey hatch-chip" },
 };
 
 function skillShortLabel(skill: string) {
@@ -285,7 +288,7 @@ export default function ProgressView(props: Props) {
       </section>
 
       {/* ── completed and checked — the dated feed ── */}
-      <section className="card feed">
+      <Reveal as="section" className="card feed">
         <div className="head">
           <h2 className="h-title">Completed and checked</h2>
           <span>Counts when the check passes — not when it&apos;s clicked.</span>
@@ -317,7 +320,7 @@ export default function ProgressView(props: Props) {
               <span className="f-pass">
                 Check passed · {row.correct} of {row.total}
               </span>
-              <span className="chip c-green">✓✓ checked resource</span>
+              <span className="chip c-green">Checked ·✓✓</span>
               <span className="f-lock">pass at 4 of 5</span>
             </div>
             <span className="f-when">{row.date}</span>
@@ -330,7 +333,7 @@ export default function ProgressView(props: Props) {
             Next step waits in <a href="/pathway">Pathway</a>.
           </p>
         )}
-      </section>
+      </Reveal>
 
       {/* ── skills you've closed — the bar ledger with its evidence paths ── */}
       <section className="card">
@@ -372,7 +375,7 @@ export default function ProgressView(props: Props) {
       </section>
 
       {/* ── your goals — the recorded commitments ── */}
-      <section className="card goals" id="goals">
+      <Reveal as="section" className="card goals" id="goals" aria-label="Your goals">
         <div className="head">
           <h2 className="h-title">Your goals</h2>
           {props.goals.length > 0 ? (
@@ -407,7 +410,7 @@ export default function ProgressView(props: Props) {
                 <div className="goal-row done" key={g.id}>
                   <div className="g-top">
                     <span className="g-title">{title}</span>
-                    {g.type === "training" && <span className="chip c-green">✓✓ checked resource</span>}
+                    {g.type === "training" && <span className="chip c-green">Checked ·✓✓</span>}
                   </div>
                   <div className="g-status num">{g.doneLine}</div>
                   {g.autoLine && <div className="g-event okband num">{g.autoLine}</div>}
@@ -429,7 +432,7 @@ export default function ProgressView(props: Props) {
                     </button>
                   </div>
                 </div>
-                <div className="g-status">{g.statusLine}</div>
+                <div className="g-status num">{g.statusLine}</div>
                 {g.check && props.checkResources[g.check.resourceId] && (
                   <div className="g-cta">
                     <button className="btn btn-ghost btn-sm" type="button" onClick={() => setOpenCheck(g.check!.resourceId)}>
@@ -509,7 +512,7 @@ export default function ProgressView(props: Props) {
             {newNote && !newOpen && <div className="g-event okband num">{newNote}</div>}
           </div>
         </div>
-      </section>
+      </Reveal>
 
       {checkResource && openCheck && (
         <CheckOverlay
