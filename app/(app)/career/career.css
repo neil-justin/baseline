@@ -1,9 +1,12 @@
 /* ============================================================
-   DNA v7 — Careers surface (v7.2 round, 2026-10-30)
-   Named band (Composition A grey tray) → current-career card →
-   the ONE role list (Best matches for you default lens + the
-   track-filtered All-roles fallback; zero sub-tabs) with the
-   ruled role-detail blocks; then the beat-6 switch flow states.
+   DNA v7 — Careers surface (v7.3 distill round, 2026-11-02 —
+   user ruling: the standalone current-career card is DEAD; the
+   band carries the role identity + the one steer, and the ONE
+   role list (Best matches for you default lens + the
+   track-filtered All-roles fallback; zero sub-tabs) is the
+   page's only body card, with the 2×2 registry-fact expansion.
+   Then the beat-6 switch flow states (QA row behaves like every
+   row — the demo enters the switch through the detail's CTA).
    Cool white-grey ground, white cards with 1px border + whisper
    shadow, 8px radius; Material wash chips for state; honest
    fractions — solid/hatched/empty per the computed truth, never
@@ -20,14 +23,14 @@
 .v7career :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
 .v7career a { color: inherit; }
 
-/* ---------- named band — the grey tray (v7.2 Composition A) ---------- */
+/* ---------- header band — the white dashboard register (v7.4 sweep) ---------- */
 
 .v7career .band {
-  background: var(--v-grey-wash);
+  background: var(--v-surface);
   border: 1px solid var(--v-border);
   border-radius: 8px;
   box-shadow: var(--v-shadow);
-  padding: 14px 18px;
+  padding: 16px 20px;
   margin-bottom: 14px;
 }
 .v7career .bandrow {
@@ -39,7 +42,7 @@
 }
 .v7career .band .who { min-width: 220px; }
 .v7career .band .who .t {
-  font: 500 18px/1.35 Roboto, system-ui, sans-serif;
+  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
   margin: 0;
   color: var(--v-ink);
 }
@@ -75,8 +78,19 @@
   border-radius: 8px;
   box-shadow: var(--v-shadow);
 }
-.v7career .cc-card { padding: 18px 20px 20px; margin-bottom: 12px; }
-.v7career .rolecard { overflow: hidden; }
+.v7career .rolecard { overflow: visible; } /* popover clearance */
+.v7career .bandside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.v7career .bandside .cc-switch { position: relative; }
+.v7career .band .bandcells {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--v-rows);
+}
 
 .v7career .label {
   font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
@@ -130,38 +144,25 @@
 .v7career .vbadge { font: 500 11px/1.2 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
 .v7career .vbadge.ok { color: var(--v-green-text); }
 
-/* ---------- current-career card ---------- */
+/* the Band CTA — the family's one blue steer (dashboard `.cta` register,
+   re-declared scoped: v7.css stays untouched) */
+.v7career .cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--v-blue);
+  color: #fff;
+  font: 500 14px/1.2 Roboto, system-ui, sans-serif;
+  padding: 9px 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3);
+  transition: background-color 0.14s ease, box-shadow 0.14s ease;
+}
+.v7career .cta:hover { background: var(--v-blue-deep); box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35); text-decoration: none; }
+.v7career .cta:active { transform: translateY(0.5px); }
 
-.v7career .cc-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.v7career .cc-name {
-  margin-top: 8px;
-  font: 500 22px/1.25 Roboto, system-ui, sans-serif;
-  letter-spacing: -0.01em;
-  color: var(--v-ink);
-}
-.v7career .cc-what { margin-top: 6px; color: var(--v-ink2); font-size: 13.5px; max-width: 62ch; }
-.v7career .cc-top .cc-badge { margin-top: 4px; }
-.v7career .cc-grid {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--v-rows);
-  display: grid;
-  grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
-  gap: 16px 28px;
-}
-.v7career .cc-why p { margin-top: 8px; font-size: 13.5px; color: var(--v-ink2); line-height: 1.55; max-width: 56ch; }
-.v7career .cc-facts { display: grid; gap: 14px; align-content: start; }
-.v7career .cc-fact p { margin-top: 6px; font-size: 13.5px; color: var(--v-ink); line-height: 1.5; }
-.v7career .cc-ctas { margin-top: 18px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-
-/* the quiet switch disclosure */
-.v7career .cc-switch { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--v-rows); }
+/* the quiet switch disclosure (band-resident) */
+.v7career .cc-switch { margin: 0; padding: 0; border: 0; }
 .v7career .quiet-toggle {
   font: 500 12.5px/1.4 Roboto, system-ui, sans-serif;
   color: var(--v-blue-deep);
@@ -173,17 +174,28 @@
 }
 .v7career .quiet-toggle:hover { color: var(--v-blue); }
 .v7career .cc-switch .disclosure { display: none; }
-.v7career .cc-switch .disclosure.show { display: block; }
+/* the switch disclosure is a POPOVER, not inline prose (user ruling
+   2026-11-02: no cumulative layout shift on toggle) */
+.v7career .cc-switch .disclosure.show {
+  display: block;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 40;
+  width: max-content;
+  max-width: 380px;
+}
 .v7career .cc-switch .disclosure p {
-  margin-top: 10px;
-  max-width: 64ch;
+  margin: 0;
+  max-width: 62ch;
   font-size: 12.5px;
   color: var(--v-ink2);
   line-height: 1.6;
   padding: 12px 14px;
-  border: 1px solid var(--v-rows);
+  border: 1px solid var(--v-border);
   border-radius: 8px;
-  background: #fafbfc;
+  background: var(--v-surface);
+  box-shadow: 0 2px 10px rgba(60, 64, 67, 0.16);
 }
 .v7career .cc-switch .disc-go { color: var(--v-blue-deep); font-weight: 500; margin-left: 2px; }
 
@@ -198,16 +210,15 @@
   line-height: 1.5;
 }
 
-.v7career .cardtop {
+/* lens rail — the toolbar ABOVE the card (outside of it, user ruling) */
+.v7career .lens-row {
   display: flex;
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--v-rows);
+  margin: 2px 2px 10px;
 }
 .v7career .kicker {
-  flex: none;
   margin-left: auto;
   font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
   letter-spacing: 0.08em;
@@ -245,19 +256,6 @@
   margin: -1px;
 }
 
-.v7career .lens-head {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  padding: 12px 16px 10px;
-  flex-wrap: wrap;
-}
-.v7career .lens-head b {
-  font: 500 14px/1.35 Roboto, system-ui, sans-serif;
-  color: var(--v-ink);
-}
-.v7career .lens-head span { font: 400 11.5px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
-
 /* dense grid rows — one template per lens */
 .v7career .index-table { font-variant-numeric: tabular-nums; margin-top: 0; }
 .v7career .index-table.cols-ranked {
@@ -271,7 +269,6 @@
   grid-template-columns: var(--cols);
   gap: 14px;
   padding: 9px 16px;
-  border-top: 1px solid var(--v-rows);
   border-bottom: 1px solid var(--v-rows);
   align-items: center;
 }
@@ -290,12 +287,12 @@
   border-bottom: 1px solid var(--v-rows);
   align-items: center;
   min-width: 0;
+  cursor: pointer; /* every row opens — the pointer must say so */
   transition: background-color 0.12s ease;
 }
 .v7career .index-table .role-block:last-of-type .index-row,
 .v7career .index-table .role-block:last-of-type .index-detail { border-bottom: 0; }
-.v7career .index-row:hover { background: #f5f8fc; }
-.v7career .row-live { cursor: pointer; text-align: left; width: 100%; border: 0; background: none; font: inherit; color: inherit; padding: 11px 16px; }
+.v7career .index-row:hover { background: var(--v-grey-wash); }
 
 .v7career .rank {
   width: 26px;
@@ -322,9 +319,8 @@
   font-variant-numeric: tabular-nums;
 }
 .v7career .row-name:hover { color: var(--v-blue-deep); }
-.v7career .c-name { font: 500 13.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); }
-.v7career .row-go { font-size: 12px; color: var(--v-ink2); margin-left: 6px; }
-.v7career .row-live:hover .row-go { color: var(--v-blue-deep); }
+/* the description answers the hover too (row-hover register: ink-2 → ink) */
+.v7career .index-row:hover .c-sub { color: var(--v-ink); }
 .v7career .c-sub {
   display: block;
   margin-top: 3px;
@@ -334,6 +330,7 @@
 }
 .v7career .c-sub .vbadge { font-family: Roboto, system-ui, sans-serif; }
 
+.v7career .cell-career .chip { margin-left: 6px; } /* CURRENT never touches the name */
 .v7career .cell-fit { min-width: 0; }
 .v7career .fit-line { font: 500 12px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); white-space: nowrap; }
 .v7career .fit-zero { color: var(--v-grey-text); font-weight: 400; }
@@ -362,10 +359,6 @@
   font: 400 12px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   min-width: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 .v7career .cell-exp { display: flex; justify-content: flex-end; }
 
@@ -384,36 +377,36 @@
 .v7career .role-block > .index-row.row-open { background: #fafbfc; }
 .v7career .role-block > .index-row.row-open .chev { transform: rotate(-135deg); margin-top: -3px; }
 
-/* role-detail blocks — catalog truth, cited */
+/* role-detail drawer — v7.3 ruling: a 4-across fact strip (the family's
+   KPI-cell grammar), not stacked rows; column-packed so no cell leaves a
+   dead corner */
 .v7career .index-detail {
-  padding: 14px 16px 16px 60px;
+  padding: 12px 16px 12px 60px;
   border-bottom: 1px solid var(--v-rows);
   background: #fafbfc;
 }
 .v7career .d-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px 28px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px 28px;
 }
-.v7career .d-block { min-width: 0; }
+.v7career .d-block { min-width: 0; align-self: start; }
 .v7career .d-block.d-wide { grid-column: 1 / -1; }
-.v7career .d-block p { margin-top: 6px; font-size: 12.5px; color: var(--v-ink); line-height: 1.55; max-width: 70ch; }
+.v7career .d-block p {
+  margin-top: 3px;
+  font-size: 12.5px;
+  color: var(--v-ink);
+  line-height: 1.45;
+}
 .v7career .d-block .label { display: block; }
-.v7career .d-psoc { color: var(--v-ink2) !important; font-size: 11.5px !important; margin-top: 4px !important; }
-.v7career .d-cta { margin-top: 14px; }
-.v7career .d-cta .btn { padding: 7px 14px; font-size: 12.5px; }
-
-/* the matching honesty note (ranked lens always carries it) */
-.v7career .match-note {
-  padding: 12px 16px 14px;
-  font-size: 12px;
-  line-height: 1.55;
-  color: var(--v-ink2);
-  max-width: 70ch;
+.v7career .d-cta {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  padding-top: 10px;
   border-top: 1px solid var(--v-rows);
 }
-.v7career .match-note a { color: var(--v-blue-deep); font-weight: 500; }
-.v7career .match-note a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.v7career .d-cta .btn { padding: 6px 14px; font-size: 12.5px; }
 
 /* zero-demonstrated compressed row (kept from the match tab) */
 .v7career .match-table {
@@ -463,7 +456,48 @@
 }
 .v7career .g-link:hover { color: var(--v-blue); }
 
-/* ---------- switch flow ---------- */
+/* ---------- switch flow — MODAL (v7.3 user ruling: never a page
+   navigation; the dialog rides over the careers page) ---------- */
+
+.v7career .sw-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+.v7career .sw-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(32, 33, 36, 0.4);
+}
+.v7career .sw-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(60, 64, 67, 0.2);
+  outline: none;
+}
+/* the sections' grey bands become the dialog's headers */
+.v7career .sw-dialog .band {
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid var(--v-rows);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 13px 18px;
+}
+.v7career .sw-dialog .sw-panel { padding: 16px 20px 18px; max-width: none; }
+.v7career .sw-dialog .readout { margin: 14px 16px 0; }
+.v7career .sw-dialog .reassess { padding: 14px 16px 18px; }
+.v7career .sw-dialog .recover-panel { margin: 14px 16px 16px; }
 
 .v7career .sw-panel { padding: 20px 22px; max-width: 760px; }
 .v7career .sw-cost { font-size: 14px; line-height: 1.6; max-width: 60ch; }
@@ -614,7 +648,7 @@
 /* ---------- responsive ---------- */
 
 @media (max-width: 1020px) {
-  .v7career .cc-grid { grid-template-columns: 1fr; gap: 16px; }
+  .v7career .d-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .v7career .index-table.cols-ranked { --cols: 34px minmax(0, 1.1fr) 140px minmax(0, 1fr) 24px; }
   .v7career .index-table.cols-track { --cols: minmax(0, 1fr) 150px 56px minmax(0, 1fr) 24px; }
   .v7career .index-detail { padding-left: 50px; }
@@ -637,15 +671,13 @@
   .v7career .band { padding: 12px 14px; }
   .v7career .bandrow { flex-direction: column; align-items: flex-start; }
   .v7career .band .who { min-width: 0; }
+  .v7career .bandside { align-items: flex-start; }
   .v7career .bandcells { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .v7career .bcell { border-left: 1px solid var(--v-rows); padding: 2px 0 2px 14px; }
   .v7career .bcell:first-child { border-left: 0; padding-left: 0; }
   .v7career .bval { font-size: 12px; }
-  .v7career .cc-card { padding: 16px 16px 16px; }
-  .v7career .cc-name { font-size: 18px; }
   .v7career .sw-panel { padding: 16px 16px; }
-  .v7career .cardtop .ptabs { order: 0; }
-  .v7career .cardtop .kicker { flex: 1 1 100%; margin-left: 0; }
+  .v7career .lens-row .kicker { margin-left: 0; flex: 1 1 100%; }
   .v7career .segbar { height: 9px; }
   .v7career .readout-score { font-size: 36px; }
   .v7career .readout-score small { font-size: 13px; }
@@ -668,10 +700,10 @@
 
 /* ---------- pager chain (Round P3) — the shared .vpager lives in ../v7.css ----------
    The paged list keeps its closing hairline: when a pager bar follows the
-   table, EVERY rendered row (incl. the live-row button) and the last row's
-   own detail keep their bottom rule — the bar itself is rule-free, so the
-   list closes with one line — and no rule bleeds through a page boundary
-   (the suppression above stays in force only on single-page lenses). */
+   table, EVERY rendered row and the last row's own detail keep their bottom
+   rule — the bar itself is rule-free, so the list closes with one line — and
+   no rule bleeds through a page boundary (the suppression above stays in
+   force only on single-page lenses). */
 .v7career .index-table:has(+ .vpager) .index-row,
 .v7career .index-table:has(+ .vpager) .role-block:last-of-type .index-detail {
   border-bottom: 1px solid var(--v-rows);

@@ -1,8 +1,8 @@
 /* ============================================================
    DNA v7 — Profile surface (/profile), v7.2 profile sweep +
    Round-P2 re-cut (2026-11-02). The white band register (the
-   dashboard-family default — the My-Plan grey tray was
-   My-Plan-ruled) names the surface + carries the computed
+   dashboard-family default, now the v7.4 sweep app-wide) names
+   the surface + carries the computed
    five-channel mini-bar; FOUR family tabs (Plan · Competencies ·
    Credentials · Account) marry the ONE white card (cardtop =
    tab strip + computed kicker — ProfileTabs.tsx owns that chrome).
@@ -15,8 +15,9 @@
    readout scale was the named offender); paddings ride the 12px
    family rhythm. Cool white-grey ground, white cards with 1px
    border + whisper shadow, 8px radius; Roboto everywhere; no
-   entrance motion (DNA lock; the rubric-mini 1.1s sweep stays the
-   family's one allowed motion). Scoped under `.v7profile` (the
+   entrance motion (DNA lock; the readout's 900ms count-up stays the
+   family's one allowed motion; the rubric-mini duplicate instrument was
+   retired 2026-11-02). Scoped under `.v7profile` (the
    page root) — shell chrome lives in ../v7.css. Hook ids
    (#panel-plan/#panel-profile/#tab-*) ride the markup, not the
    stylesheet; content strings are the e2e contract.
@@ -41,7 +42,7 @@
   border: 1px solid var(--v-border);
   border-radius: 8px;
   box-shadow: var(--v-shadow);
-  padding: 14px 18px;
+  padding: 16px 20px;
   margin-bottom: 14px;
 }
 .v7profile .proband .bandrow {
@@ -52,7 +53,7 @@
 }
 .v7profile .proband .who { min-width: 250px; }
 .v7profile .proband h1 {
-  font: 500 18px/1.35 Roboto, system-ui, sans-serif;
+  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
   margin: 0;
   color: var(--v-ink);
 }
@@ -219,9 +220,10 @@
   font-variant-numeric: tabular-nums;
 }
 .v7profile .readout-sub { font: 400 11.5px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 3px; }
-/* v7.2 P2: the readout drops to the 22px KPI register — the 46px
-   readout scale was the ruled dead-space offender; the 900ms count-up
-   + the 1.1s rubric arm (the family's one allowed motion) stay as-is */
+/* v7.2 P2: the readout sits at the 22px KPI register — the 46px readout
+   scale was the ruled dead-space offender; the 900ms count-up remains the
+   family's one allowed motion (the rubric-mini duplicate instrument was
+   retired 2026-11-02 — the header band carries the five channels) */
 .v7profile .readout-score {
   display: flex;
   align-items: baseline;
@@ -237,46 +239,6 @@
 }
 .v7profile .readout-score small { font: 400 12px/1.1 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
 
-/* rubric-mini — the honest five-segment instrument (armed sweep = the
-   family's one measurement motion; reduced-motion reads it at rest) */
-.v7profile .rubric-mini {
-  display: flex;
-  gap: 3px;
-  height: 8px;
-  margin-top: 10px;
-}
-.v7profile .rubric-mini .seg {
-  background: var(--v-track);
-  border-radius: 2px;
-  position: relative;
-  overflow: hidden;
-}
-.v7profile .rubric-mini .seg i {
-  position: absolute;
-  inset: 0;
-  background: var(--v-blue);
-  opacity: 0.35;
-  transform: scaleX(var(--earn, 0));
-  transform-origin: left center;
-  transition: transform 1.1s cubic-bezier(0.22, 0.75, 0.35, 1);
-}
-.v7profile .rubric-mini.armed .seg i { opacity: 1; }
-.v7profile .rubric-mini .seg:nth-child(2) i { background: var(--v-green); }
-
-/* legend reads one-line at desktop (wraps under 720) */
-.v7profile .readout-legend {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 4px 18px;
-  margin-top: 8px;
-}
-.v7profile .readout-legend span {
-  font: 400 11.5px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-}
-.v7profile .readout-legend b { color: var(--v-ink); font-weight: 500; }
 .v7profile .readout-fit {
   margin-top: 6px;
   font: 400 12px/1.5 Roboto, system-ui, sans-serif;
@@ -640,22 +602,45 @@
    top-aligned, on the 12px rhythm; the score sits in the 22px KPI
    register with its /100 companion (NOT the 46px readout scale) ---------- */
 
+/* the reserved-void masthead is dead (v7.2 §4: panels size per content):
+   row 1 = title block left, score block right; row 2 = the five ticklines
+   as the full-width channel strip — the Dashboard's five-channel-cell
+   register, unfilled (the Wash Rule governs state, structure stays white) */
 .v7profile .masthead {
-  display: grid;
-  grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
-  gap: 16px 32px;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.v7profile .m-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 24px;
+  flex-wrap: wrap;
 }
 .v7profile .m-title { margin-top: 6px; font: 500 22px/1.3 Roboto, system-ui, sans-serif; color: var(--v-ink); }
 .v7profile .m-meta { margin-top: 5px; font: 400 13.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
 .v7profile .m-meta b { font-weight: 500; color: var(--v-ink); }
-.v7profile .m-note { margin-top: 6px; font: 400 13px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 46ch; }
-.v7profile .m-right { border-left: 1px solid var(--v-rows); padding-left: 24px; }
+.v7profile .m-right { flex: none; text-align: right; }
 .v7profile .m-score { margin-top: 4px; font: 500 22px/1.1 Roboto, system-ui, sans-serif; color: var(--v-ink); font-variant-numeric: tabular-nums; }
 .v7profile .m-score small { font: 400 12px/1 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-left: 3px; }
-.v7profile .m-ticks { margin-top: 10px; }
-.v7profile .tickline { margin: 0; padding: 6px 0; border-bottom: 1px solid var(--v-rows); font: 400 12px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
-.v7profile .tickline:last-child { border-bottom: 0; }
+.v7profile .m-channels {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.v7profile .m-channels .tickline {
+  margin: 0;
+  padding: 10px 14px 12px;
+  border-bottom: 0;
+  border-left: 1px solid var(--v-rows);
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif; /* the data register */
+  color: var(--v-ink2);
+}
+.v7profile .m-channels .tickline:first-child { border-left: 0; }
+.v7profile .m-channels .tick-note { display: block; margin-top: 2px; font-size: 11px; line-height: 1.5; /* v7.1 floor */ }
 .v7profile .tickline b { color: var(--v-ink); font-weight: 500; }
 .v7profile .tick-note { color: var(--v-ink2); }
 .v7profile .cl-label {
@@ -756,7 +741,7 @@
 
 /* trajectory — two dated points on a hairline track (earned green carries
    the computed rise; the nodes stay ink) */
-.v7profile .traj { position: relative; height: 118px; margin-top: 20px; max-width: 640px; }
+.v7profile .traj { position: relative; height: 88px; margin-top: 4px; max-width: 640px; }
 .v7profile .traj .baseline {
   position: absolute;
   left: 2px;
@@ -778,7 +763,7 @@
 .v7profile .traj .node.b { right: 0; background: var(--v-green); border-radius: 50%; }
 .v7profile .traj .tl {
   position: absolute;
-  bottom: 66px;
+  bottom: 50px;
   white-space: nowrap;
   font: 400 11px/1.4 Roboto, system-ui, sans-serif;
   letter-spacing: 0.04em;
@@ -798,11 +783,13 @@
 .v7profile .traj .td {
   position: absolute;
   right: 11.5%;
-  bottom: 46px;
+  bottom: 44px;
   font: 500 11px/1 Roboto, system-ui, sans-serif;
   color: var(--v-green-text);
   font-variant-numeric: tabular-nums;
 }
+/* single-point state: the track reads as begun, not a long empty hairline */
+.v7profile .traj.single .baseline { width: 20%; }
 /* mobile: the same two points, stacked */
 .v7profile .traj-rows { display: none; margin-top: 14px; }
 .v7profile .trow {
@@ -862,13 +849,11 @@
 /* ---------- responsive ---------- */
 
 @media (max-width: 900px) {
-  .v7profile .masthead { grid-template-columns: 1fr; }
-  .v7profile .m-right {
-    border-left: 0;
-    padding-left: 0;
-    border-top: 1px solid var(--v-rows);
-    padding-top: 14px;
-  }
+  /* the channel strip folds 5 → 2: row starts lose their cell rule */
+  .v7profile .m-channels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .v7profile .m-channels .tickline:nth-child(odd) { border-left: 0; }
+  .v7profile .m-channels .tickline:nth-child(n + 3) { border-top: 1px solid var(--v-rows); }
+  .v7profile .m-channels .tickline:last-child { grid-column: 1 / -1; border-top: 1px solid var(--v-rows); }
 }
 
 @media (max-width: 720px) {
@@ -879,9 +864,6 @@
      the bar above stays the one computed instrument (zero horizontal overflow) */
   .v7profile .bandbar .seglabels { flex-wrap: wrap; row-gap: 2px; }
   .v7profile .bandbar .seglabels span { white-space: normal; flex: 1 1 30%; }
-  /* the readout legend wraps on small screens (one-line at desktop only) */
-  .v7profile .readout-legend { flex-wrap: wrap; gap: 4px 14px; }
-  .v7profile .readout-legend span { white-space: normal; }
   /* ledger tables stack into dense blocks (pathway .plan-table values) */
   .v7profile .p-table,
   .v7profile .p-table tbody,
@@ -905,10 +887,19 @@
   .v7profile .count + .count { border-left: 0; border-top: 1px solid var(--v-rows); }
   .v7profile .dec-grid,
   .v7profile .dec-grid-3 { grid-template-columns: 1fr; }
+  .v7profile .ptabs { min-width: 0; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .v7profile .ptabs::-webkit-scrollbar { display: none; }
   .v7profile .ptabs [role="tab"] { padding: 7px 12px; font-size: 12px; }
+  .v7profile .m-channels { grid-template-columns: 1fr; }
+  .v7profile .m-channels .tickline { border-left: 0; }
+  .v7profile .m-channels .tickline:nth-child(n + 2) { border-top: 1px solid var(--v-rows); }
+  .v7profile .m-right { text-align: left; }
 }
 
 @media (max-width: 560px) {
+  /* all four tab labels fit a 390 phone — the strip stops clipping */
+  .v7profile .ptabs { gap: 2px; padding: 2px; }
+  .v7profile .ptabs [role="tab"] { padding: 6px 8px; font-size: 11.5px; letter-spacing: 0; }
   .v7profile .traj { display: none; }
   .v7profile .traj-rows { display: block; }
   /* stack rows on phones: name, then its badge, then the note — no squeezed
@@ -922,11 +913,6 @@
   .v7profile .dpa-line .dpa-src { grid-column: 1; grid-row: auto; }
   .v7profile .dpa-line a { grid-column: 1; grid-row: auto; justify-self: start; }
   .v7profile .dpa-row { grid-template-columns: 1fr; }
-}
-
-/* reduced motion: the bar reads its earned fraction directly, no sweep */
-@media (prefers-reduced-motion: reduce) {
-  .v7profile .rubric-mini .seg i { transform: scaleX(var(--earn, 0)) !important; transition: none !important; }
 }
 
 /* the shared password meter keeps its own utilitarian stylesheet — re-anchor
