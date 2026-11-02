@@ -1,17 +1,23 @@
 /* ============================================================
-   DNA v7 — Profile surface (/profile), v7.2 profile sweep
-   (Round-7 re-cut, 2026-10-30). The white band register (the
+   DNA v7 — Profile surface (/profile), v7.2 profile sweep +
+   Round-P2 re-cut (2026-11-02). The white band register (the
    dashboard-family default — the My-Plan grey tray was
    My-Plan-ruled) names the surface + carries the computed
    five-channel mini-bar; FOUR family tabs (Plan · Competencies ·
    Credentials · Account) marry the ONE white card (cardtop =
-   the segmented tablist + the computed kicker). The Round-7
-   sub-tab re-cut rides the same density: wash chips for every
-   verdict, row-rule flush sections, drawn numerals, honest
-   presence stamps. Cool white-grey ground, white cards with
-   1px border + whisper shadow, 8px radius; Roboto everywhere;
-   no entrance motion (DNA lock). Scoped under `.v7profile`
-   (the page root) — shell chrome lives in ../v7.css. Hook ids
+   tab strip + computed kicker — ProfileTabs.tsx owns that chrome).
+   Round-P2: the prow 1fr/auto rows retire app-wide on this page —
+   every public row re-cuts to the ledger-table register cloned
+   from pathway.css (.plan-table/.gap-table VALUES under .v7profile):
+   tracked 11px/500 +0.08em heads, #E8EAED row rules, #F5F8FC row
+   hover, chips in the State column, honest "—" for unmeasured.
+   The masthead + readout drop to the 22px KPI register (the 46px
+   readout scale was the named offender); paddings ride the 12px
+   family rhythm. Cool white-grey ground, white cards with 1px
+   border + whisper shadow, 8px radius; Roboto everywhere; no
+   entrance motion (DNA lock; the rubric-mini 1.1s sweep stays the
+   family's one allowed motion). Scoped under `.v7profile` (the
+   page root) — shell chrome lives in ../v7.css. Hook ids
    (#panel-plan/#panel-profile/#tab-*) ride the markup, not the
    stylesheet; content strings are the e2e contract.
    ============================================================ */
@@ -150,7 +156,8 @@
 /* ---------- panel body — flush sections of the married card ---------- */
 
 .v7profile .stack { display: block; }
-.v7profile .psblock { padding: 16px 16px 18px; }
+/* v7.2 P2: the 12px family rhythm — panel sections breathe 12/14 */
+.v7profile .psblock { padding: 12px 16px 14px; }
 .v7profile .psblock + .psblock { border-top: 1px solid var(--v-rows); }
 /* the readout keeps the "panel" class from the port — inside the married
    card it renders flush (never a card inside a card) */
@@ -159,12 +166,12 @@
   border: 0;
   border-radius: 0;
 }
-.v7profile .readout.panel { padding: 14px 16px 16px; }
+.v7profile .readout.panel { padding: 10px 16px 14px; }
 .v7profile .stack .readout.panel + .psblock { border-top: 1px solid var(--v-rows); }
 
 .v7profile .lead-mono {
   margin: 0;
-  padding: 12px 16px 10px;
+  padding: 10px 16px 8px;
   font: 400 12px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   font-variant-numeric: tabular-nums;
@@ -212,6 +219,9 @@
   font-variant-numeric: tabular-nums;
 }
 .v7profile .readout-sub { font: 400 11.5px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 3px; }
+/* v7.2 P2: the readout drops to the 22px KPI register — the 46px
+   readout scale was the ruled dead-space offender; the 900ms count-up
+   + the 1.1s rubric arm (the family's one allowed motion) stay as-is */
 .v7profile .readout-score {
   display: flex;
   align-items: baseline;
@@ -220,13 +230,12 @@
 }
 .v7profile .readout-score > span:first-child,
 .v7profile .readout-score .countwrap {
-  font: 500 46px/1 Roboto, system-ui, sans-serif;
-  letter-spacing: -0.01em;
+  font: 500 22px/1.1 Roboto, system-ui, sans-serif;
   display: inline-block;
   min-width: 2ch;
   color: var(--v-ink);
 }
-.v7profile .readout-score small { font: 400 13px/1 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7profile .readout-score small { font: 400 12px/1.1 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
 
 /* rubric-mini — the honest five-segment instrument (armed sweep = the
    family's one measurement motion; reduced-motion reads it at rest) */
@@ -234,7 +243,7 @@
   display: flex;
   gap: 3px;
   height: 8px;
-  margin-top: 14px;
+  margin-top: 10px;
 }
 .v7profile .rubric-mini .seg {
   background: var(--v-track);
@@ -254,27 +263,32 @@
 .v7profile .rubric-mini.armed .seg i { opacity: 1; }
 .v7profile .rubric-mini .seg:nth-child(2) i { background: var(--v-green); }
 
+/* legend reads one-line at desktop (wraps under 720) */
 .v7profile .readout-legend {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px 16px;
-  margin-top: 10px;
+  flex-wrap: nowrap;
+  gap: 4px 18px;
+  margin-top: 8px;
 }
 .v7profile .readout-legend span {
   font: 400 11.5px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 .v7profile .readout-legend b { color: var(--v-ink); font-weight: 500; }
 .v7profile .readout-fit {
-  margin-top: 8px;
+  margin-top: 6px;
   font: 400 12px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   font-variant-numeric: tabular-nums;
 }
 .v7profile .readout-fit b { color: var(--v-ink); font-weight: 500; }
 
-/* ---------- prow rows (skills ledger · credentials · goals) ---------- */
+/* ---------- prow rows — the declared-credential ledger (Round-P2: the
+   only prow rows left on the page; the public rows re-cut to the
+   .p-table register below). Full-bleed inside the section so the
+   #F5F8FC row hover spans the card like pathway's table rows ---------- */
 
 .v7profile .prow-list { margin-top: 4px; }
 .v7profile .prow {
@@ -282,18 +296,63 @@
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 3px 16px;
   align-items: baseline;
-  padding: 11px 0;
+  padding: 12px 16px;
+  margin: 0 -16px;
   border-bottom: 1px solid var(--v-rows);
+  transition: background-color 0.12s ease;
 }
+.v7profile .prow:hover { background: #f5f8fc; }
 .v7profile .prow:last-child { border-bottom: 0; }
 .v7profile .prow .p-name {
-  font: 500 13.5px/1.45 Roboto, system-ui, sans-serif;
+  font: 500 13px/1.45 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
   overflow-wrap: anywhere;
 }
 .v7profile .prow .p-sub { grid-column: 1; font: 400 12px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); overflow-wrap: anywhere; }
 .v7profile .prow .p-sub .ev-link { color: var(--v-blue-deep); text-decoration: underline; text-underline-offset: 2px; }
 .v7profile .prow .p-badge { grid-row: 1; grid-column: 2; justify-self: end; text-align: right; }
+
+/* ---------- the ledger-table register (prow replacement — CSS VALUES
+   cloned from pathway.css .plan-table/.gap-table, scoped .v7profile,
+   per-surface cloning being the repo idiom) ---------- */
+
+.v7profile .p-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  margin-top: 12px;
+}
+.v7profile .p-table th {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+  text-align: left;
+  padding: 8px 12px 8px 0;
+  border-bottom: 1px solid var(--v-rows);
+}
+.v7profile .p-table td {
+  padding: 10px 12px 10px 0;
+  border-bottom: 1px solid var(--v-rows);
+  vertical-align: middle;
+  font: 400 12px/1.55 Roboto, system-ui, sans-serif; /* the data register */
+  color: var(--v-ink2);
+  overflow-wrap: anywhere;
+}
+.v7profile .p-table td.item {
+  font: 500 13px/1.4 Roboto, system-ui, sans-serif; /* the row-title register */
+  color: var(--v-ink);
+}
+.v7profile .p-table td.item.dim { color: var(--v-ink2); } /* the honest not-earned row name */
+.v7profile .p-table tbody tr { transition: background-color 0.12s ease; }
+.v7profile .p-table tbody tr:hover { background: #f5f8fc; }
+.v7profile .p-table tr:last-child td { border-bottom: 0; }
+/* chips live in the State column; the earned-date column is tabular */
+.v7profile .p-table .ct-state { width: auto; white-space: nowrap; }
+.v7profile .p-table .ct-date { width: 96px; white-space: nowrap; }
+.v7profile .p-table .ct-levels { width: 120px; white-space: nowrap; }
+/* the honest unmeasured cell — never a painted zero */
+.v7profile .p-table .p-dash { color: var(--v-grey-text); }
 
 /* the family's wash chips (dashboard clone) */
 .v7profile .chip {
@@ -399,8 +458,10 @@
 /* ---------- presence (fourth credential kind — ticket 12) ---------- */
 
 .v7profile .presence-wrap { margin-top: 14px; }
+/* v7.2 P2: the plain hairline form block — 1px #DADCE0 border, 8px radius,
+   no card-in-card gloss (no shadow, no inner panel styling) */
 .v7profile .presence {
-  padding: 14px;
+  padding: 12px 14px;
   border: 1px solid var(--v-border);
   border-radius: 8px;
 }
@@ -454,7 +515,7 @@
   font: 500 12.5px/1.55 Roboto, system-ui, sans-serif;
   color: var(--v-amber-text);
 }
-.v7profile .presence-row.prow { display: grid; }
+/* the presence row rides the earned ledger table (data-presence-row on the tr) */
 
 /* ---------- account (identity · password · DPA artifacts) ---------- */
 
@@ -468,18 +529,29 @@
 .v7profile .acct-pw { margin-top: 8px; display: grid; gap: 10px; max-width: 420px; }
 .v7profile .acct-pw .dec-ctas { margin-top: 2px; }
 
-/* ---------- DPA (ticket 7: export + erase as artifacts) ---------- */
+/* ---------- DPA (ticket 7: export + erase as artifacts) — Round-P2: the
+   two rights as two disciplined ledger rows (detail left, action right),
+   #E8EAED row rules, 12px rhythm; DOM untouched (CSS-only placement) ---------- */
 
-.v7profile .dpa { display: grid; gap: 14px; margin-top: 4px; }
-.v7profile .dpa-line { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.v7profile .dpa { display: grid; margin-top: 2px; }
+.v7profile .dpa-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--v-rows);
+}
+.v7profile .dpa-line .dpa-src { grid-column: 1; grid-row: 1; }
+.v7profile .dpa-line a { grid-column: 2; grid-row: 1; justify-self: end; }
 .v7profile .dpa-src {
   font: 400 11px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   overflow-wrap: anywhere;
 }
-.v7profile .dpa-erase { display: grid; gap: 9px; }
+.v7profile .dpa-erase { display: grid; gap: 9px; padding: 12px 0; }
 .v7profile .dpa-warn { font: 400 13px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 66ch; }
-.v7profile .dpa-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.v7profile .dpa-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; }
 .v7profile .profile-input.dpa-confirm { max-width: 230px; }
 .v7profile .dpa-erase-btn {
   background: var(--v-surface);
@@ -538,7 +610,7 @@
 .v7profile .link-quiet:hover { text-decoration: underline; text-underline-offset: 2px; }
 .v7profile .retake-row { margin-top: 10px; }
 
-/* ---------- assessment strip + competency grid ---------- */
+/* ---------- assessment strip (kept) + starting-levels ledger ---------- */
 
 .v7profile .assess-strip {
   margin-top: 12px;
@@ -555,38 +627,34 @@
   color: var(--v-ink2);
 }
 .v7profile .assess-strip b { color: var(--v-ink); font-weight: 500; }
-.v7profile .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 36px; margin-top: 6px; }
-.v7profile .comp {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 9px 0;
-  border-bottom: 1px solid var(--v-rows);
-}
-.v7profile .comp:nth-last-child(-n + 2) { border-bottom: 0; }
-.v7profile .comp .c-name { font: 500 13px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); }
-.v7profile .dots { display: flex; gap: 4px; flex: none; }
+/* starting-levels ledger — a real two-column table (v7.2 P2); the dots'
+   aria-labels ("level N of 5" / the honest unrated line) are byte-verbatim */
+.v7profile .lv-table { margin-top: 6px; }
+.v7profile .dots { display: flex; gap: 4px; flex: none; justify-content: flex-end; }
 .v7profile .dots i { width: 10px; height: 10px; background: #e8eaed; border-radius: 2px; display: block; }
 /* starting levels are setup answers, not earned — ink, never green */
 .v7profile .dots i.on { background: var(--v-ink2); }
 
-/* ---------- plan document (masthead + dated sections) ---------- */
+/* ---------- plan document (masthead strip + dated sections) — Round-P2:
+   the masthead's dead second half dies: both columns carry content,
+   top-aligned, on the 12px rhythm; the score sits in the 22px KPI
+   register with its /100 companion (NOT the 46px readout scale) ---------- */
 
 .v7profile .masthead {
   display: grid;
-  grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
-  gap: 20px 40px;
+  grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
+  gap: 16px 32px;
+  align-items: start;
 }
-.v7profile .m-title { margin-top: 8px; font: 500 22px/1.3 Roboto, system-ui, sans-serif; color: var(--v-ink); }
-.v7profile .m-meta { margin-top: 6px; font: 400 13.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7profile .m-title { margin-top: 6px; font: 500 22px/1.3 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7profile .m-meta { margin-top: 5px; font: 400 13.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
 .v7profile .m-meta b { font-weight: 500; color: var(--v-ink); }
-.v7profile .m-note { margin-top: 8px; font: 400 13px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 46ch; }
-.v7profile .m-right { border-left: 1px solid var(--v-rows); padding-left: 28px; }
-.v7profile .m-score { margin-top: 6px; font: 500 40px/1 Roboto, system-ui, sans-serif; letter-spacing: -0.01em; color: var(--v-ink); }
-.v7profile .m-score small { font-size: 14px; color: var(--v-ink2); margin-left: 2px; }
+.v7profile .m-note { margin-top: 6px; font: 400 13px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 46ch; }
+.v7profile .m-right { border-left: 1px solid var(--v-rows); padding-left: 24px; }
+.v7profile .m-score { margin-top: 4px; font: 500 22px/1.1 Roboto, system-ui, sans-serif; color: var(--v-ink); font-variant-numeric: tabular-nums; }
+.v7profile .m-score small { font: 400 12px/1 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-left: 3px; }
 .v7profile .m-ticks { margin-top: 10px; }
-.v7profile .tickline { margin: 0; padding: 7px 0; border-bottom: 1px solid var(--v-rows); font: 400 12.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7profile .tickline { margin: 0; padding: 6px 0; border-bottom: 1px solid var(--v-rows); font: 400 12px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
 .v7profile .tickline:last-child { border-bottom: 0; }
 .v7profile .tickline b { color: var(--v-ink); font-weight: 500; }
 .v7profile .tick-note { color: var(--v-ink2); }
@@ -597,8 +665,8 @@
   color: var(--v-ink2);
 }
 
-.v7profile .doc { padding: 0 16px 18px; }
-.v7profile .doc .doc-sec { padding: 16px 0 18px; border-bottom: 1px solid var(--v-rows); }
+.v7profile .doc { padding: 0 16px 14px; }
+.v7profile .doc .doc-sec { padding: 12px 0 14px; border-bottom: 1px solid var(--v-rows); }
 .v7profile .doc .doc-sec:last-child { border-bottom: 0; }
 .v7profile .doc-sec h3 {
   font: 500 15.5px/1.3 Roboto, system-ui, sans-serif;
@@ -811,9 +879,26 @@
      the bar above stays the one computed instrument (zero horizontal overflow) */
   .v7profile .bandbar .seglabels { flex-wrap: wrap; row-gap: 2px; }
   .v7profile .bandbar .seglabels span { white-space: normal; flex: 1 1 30%; }
-  .v7profile .comp-grid { grid-template-columns: 1fr; }
-  .v7profile .comp:nth-last-child(-n + 2) { border-bottom: 1px solid var(--v-rows); }
-  .v7profile .comp:last-child { border-bottom: 0; }
+  /* the readout legend wraps on small screens (one-line at desktop only) */
+  .v7profile .readout-legend { flex-wrap: wrap; gap: 4px 14px; }
+  .v7profile .readout-legend span { white-space: normal; }
+  /* ledger tables stack into dense blocks (pathway .plan-table values) */
+  .v7profile .p-table,
+  .v7profile .p-table tbody,
+  .v7profile .p-table tr,
+  .v7profile .p-table td {
+    display: block;
+    width: auto;
+  }
+  .v7profile .p-table thead { display: none; }
+  .v7profile .p-table tbody tr { border-bottom: 1px solid var(--v-rows); padding: 12px 0; }
+  .v7profile .p-table tbody tr:last-child { border-bottom: 0; }
+  .v7profile .p-table td { padding: 0 0 10px; border-bottom: 0; }
+  .v7profile .p-table td:last-child,
+  .v7profile .p-table tbody tr:last-child td:last-child { padding-bottom: 0; }
+  /* the two-column levels table keeps its pairing as a disciplined row */
+  .v7profile .lv-table tr { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; }
+  .v7profile .lv-table td { padding: 0; }
   .v7profile .stages,
   .v7profile .counts { grid-template-columns: 1fr; }
   .v7profile .stage + .stage,
@@ -832,6 +917,11 @@
   .v7profile .prow .p-badge { grid-row: auto; grid-column: 1; justify-self: start; }
   .v7profile .prow .p-sub { grid-column: 1; }
   .v7profile .presence-field { min-width: 0; }
+  /* the DPA ledger rows stack one-column (detail, then its action) */
+  .v7profile .dpa-line { grid-template-columns: 1fr; }
+  .v7profile .dpa-line .dpa-src { grid-column: 1; grid-row: auto; }
+  .v7profile .dpa-line a { grid-column: 1; grid-row: auto; justify-self: start; }
+  .v7profile .dpa-row { grid-template-columns: 1fr; }
 }
 
 /* reduced motion: the bar reads its earned fraction directly, no sweep */

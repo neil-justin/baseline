@@ -277,19 +277,28 @@ export default async function ProfilePage() {
             Nothing closed yet — your baseline bars are waiting on your first check.
           </p>
         ) : (
-          <div className="prow-list">
-            {skillRows.map((skill) => {
-              const bar = state.bars[skill];
-              const sub = skillSub(career, skill);
-              return (
-                <div className="prow" key={skill}>
-                  <span className="p-name">{skill}</span>
-                  {bar ? <>{skillBadge(bar.source)}</> : <span className="p-badge chip c-grey">OPEN</span>}
-                  {sub && <span className="p-sub">{sub}</span>}
-                </div>
-              );
-            })}
-          </div>
+          <table className="p-table skills-table">
+            <thead>
+              <tr>
+                <th scope="col">Skill</th>
+                <th scope="col" className="ct-state">Evidence</th>
+                <th scope="col">Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              {skillRows.map((skill) => {
+                const bar = state.bars[skill];
+                const sub = skillSub(career, skill);
+                return (
+                  <tr key={skill}>
+                    <td className="item">{skill}</td>
+                    <td className="ct-state">{bar ? skillBadge(bar.source) : <span className="p-badge chip c-grey">OPEN</span>}</td>
+                    <td>{sub ?? <span className="p-dash">—</span>}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         )}
         <p className="src-line num">
           Badges · ·✓ passed a verification quiz · ✓✓ passed a comprehension check · self-reported = your own
@@ -314,27 +323,38 @@ export default async function ProfilePage() {
           <span>Employability · <b>{v.es} of {WEIGHTS.es}</b></span>
           <span>{v.esVerified} of 7 NACE competencies verified ·✓ (the assessment carries this channel)</span>
         </div>
-        <div className="prow-list">
-          {assessed.map((c) => (
-            <div className="prow" key={c.title}>
-              <span className="p-name">{c.title}</span>
-              {c.status === "verified" ? (
-                <span className="p-badge chip c-green">·✓ VERIFIED</span>
-              ) : c.status === "claimed" ? (
-                <span className="p-badge chip c-grey hatch-chip">CLAIMED</span>
-              ) : (
-                <span className="p-badge chip c-grey">NOT ASSESSED YET</span>
-              )}
-              <span className="p-sub">
-                {c.status === "verified"
-                  ? "Both verification checks of this competency passed — the ·✓ carries the channel"
-                  : c.status === "claimed"
-                    ? "Self-rated only — the competency struggled a check in this attempt (or isn't re-verified)"
-                    : "The battery didn't measure this competency yet"}
-              </span>
-            </div>
-          ))}
-        </div>
+        <table className="p-table assess-table">
+          <thead>
+            <tr>
+              <th scope="col">Competency</th>
+              <th scope="col" className="ct-state">Status</th>
+              <th scope="col">Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            {assessed.map((c) => (
+              <tr key={c.title}>
+                <td className="item">{c.title}</td>
+                <td className="ct-state">
+                  {c.status === "verified" ? (
+                    <span className="p-badge chip c-green">·✓ VERIFIED</span>
+                  ) : c.status === "claimed" ? (
+                    <span className="p-badge chip c-grey hatch-chip">CLAIMED</span>
+                  ) : (
+                    <span className="p-badge chip c-grey">NOT ASSESSED YET</span>
+                  )}
+                </td>
+                <td>
+                  {c.status === "verified"
+                    ? "Both verification checks of this competency passed — the ·✓ carries the channel"
+                    : c.status === "claimed"
+                      ? "Self-rated only — the competency struggled a check in this attempt (or isn't re-verified)"
+                      : "The battery didn't measure this competency yet"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         <p className="src-line num">
           A re-take runs the full battery again (the intake&apos;s step ③) — your latest attempt replaces this one,
           history stays readable in My Plan → Progress
@@ -351,28 +371,38 @@ export default async function ProfilePage() {
           <h2>Starting levels with people</h2>
           <p className="helper">Rated from your setup answers before the battery ran. They grow as the work does.</p>
         </div>
-        <div className="comp-grid">
-          {COMPETENCIES.map(({ name, probe }) => {
-            const word = probe ? state.softSkills[probe] : undefined;
-            const level = word ? (WORD_LEVELS[word] ?? 0) : 0;
-            return (
-              <div className="comp" key={name}>
-                <span className="c-name">{name}</span>
-                <span
-                  className="dots"
-                  role="img"
-                  aria-label={
-                    level > 0 ? `${name}: level ${level} of 5` : `${name}: not rated yet — the full battery will measure it`
-                  }
-                >
-                  {[1, 2, 3, 4, 5].map((d) => (
-                    <i key={d} className={d <= level ? "on" : ""} />
-                  ))}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+        <table className="p-table lv-table">
+          <thead>
+            <tr>
+              <th scope="col">Competency</th>
+              <th scope="col" className="ct-levels">Starting level</th>
+            </tr>
+          </thead>
+          <tbody>
+            {COMPETENCIES.map(({ name, probe }) => {
+              const word = probe ? state.softSkills[probe] : undefined;
+              const level = word ? (WORD_LEVELS[word] ?? 0) : 0;
+              return (
+                <tr key={name}>
+                  <td className="item">{name}</td>
+                  <td className="ct-levels">
+                    <span
+                      className="dots"
+                      role="img"
+                      aria-label={
+                        level > 0 ? `${name}: level ${level} of 5` : `${name}: not rated yet — the full battery will measure it`
+                      }
+                    >
+                      {[1, 2, 3, 4, 5].map((d) => (
+                        <i key={d} className={d <= level ? "on" : ""} />
+                      ))}
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
         <p className="src-line num">Rated from your situation answers during setup · unscored until the full battery runs</p>
       </div>
     </div>
@@ -393,49 +423,69 @@ export default async function ProfilePage() {
             machine stamp.
           </p>
         </div>
-        {presence && presence.stamp && (
-          <div className="prow presence-row" data-presence-row>
-            <span className="p-name">Professional presence — LinkedIn</span>
-            {presenceMeasuredNow ? (
-              <span className="p-badge chip c-green " data-presence-stamp={`MACHINE-VERIFIED ${fmtEventDate(presence.stamp.verifiedAt).toUpperCase()}`}>
-                MACHINE-VERIFIED · {fmtEventDate(presence.stamp.verifiedAt).toUpperCase()}
-              </span>
-            ) : (
-              <span className="p-badge chip c-grey">DECLARED — FORMAT CHECK FAILED, NOT YET MEASURED</span>
-            )}
-            <span className="p-sub" data-presence-sub>
-              {presence.linkedinUrl} · {presence.email} ·{" "}
-              {presence.stamp.offline ? "stamped offline — no network look-up ran" : ""}
-              {presence.stamp.checks.linkedinUrlFormat === "fail" ? " · URL format failed" : ""}
-              {presence.stamp.checks.professionalEmailFormat === "fail" ? " · email format failed" : ""}
-              {presence.stamp.contentNote ? ` · ${presence.stamp.contentNote}` : ""}
-            </span>
-          </div>
-        )}
         {credentialRows.length === 0 && !presence && (
           <p className="doc-p" style={{ marginTop: 12 }}>
             None yet — your route&apos;s first credential appears the moment its check passes.
           </p>
         )}
-        <div className="prow-list">
-          {credentialRows.map((c, i) => (
-            <div className="prow" key={i}>
-              <span className="p-name">{c.title}</span>
-              <span className="p-badge chip c-green">✓✓ CHECKED · {c.date.toUpperCase()}</span>
-              <span className="p-sub">
-                {c.provider ? `${c.provider} · ${c.free ? "free" : "paid"} · ` : ""}
-                counted when its comprehension check passed
-              </span>
-            </div>
-          ))}
-          <div className="prow">
-            <span className="p-name" style={{ color: "var(--v-ink2)", fontWeight: 500 }}>
-              TESDA NC II
-            </span>
-            <span className="p-badge chip c-grey">WHEN YOU PASS THE ASSESSMENT</span>
-            <span className="p-sub">Your route&apos;s next credential, not earned yet</span>
-          </div>
-        </div>
+        {/* v7.2 P2 re-cut: the earned ledger as one table — the presence stamp
+            row rides it with its hooks byte-verbatim, the TESDA honest future
+            row stays, and the empty state above keeps the check-passed gate */}
+        <table className="p-table earned-table">
+          <thead>
+            <tr>
+              <th scope="col">Credential</th>
+              <th scope="col">Provider · cost detail</th>
+              <th scope="col" className="ct-date">Earned</th>
+              <th scope="col" className="ct-state">State</th>
+            </tr>
+          </thead>
+          <tbody>
+            {presence && presence.stamp && (
+              <tr data-presence-row className="presence-row">
+                <td className="item">Professional presence — LinkedIn</td>
+                <td data-presence-sub>
+                  {presence.linkedinUrl} · {presence.email} ·{" "}
+                  {presence.stamp.offline ? "stamped offline — no network look-up ran" : ""}
+                  {presence.stamp.checks.linkedinUrlFormat === "fail" ? " · URL format failed" : ""}
+                  {presence.stamp.checks.professionalEmailFormat === "fail" ? " · email format failed" : ""}
+                  {presence.stamp.contentNote ? ` · ${presence.stamp.contentNote}` : ""}
+                </td>
+                <td className="num ct-date">{presenceMeasuredNow ? fmtEventDate(presence.stamp.verifiedAt) : <span className="p-dash">—</span>}</td>
+                <td className="ct-state">
+                  {presenceMeasuredNow ? (
+                    <span className="p-badge chip c-green " data-presence-stamp={`MACHINE-VERIFIED ${fmtEventDate(presence.stamp.verifiedAt).toUpperCase()}`}>
+                      MACHINE-VERIFIED · {fmtEventDate(presence.stamp.verifiedAt).toUpperCase()}
+                    </span>
+                  ) : (
+                    <span className="p-badge chip c-grey">DECLARED — FORMAT CHECK FAILED, NOT YET MEASURED</span>
+                  )}
+                </td>
+              </tr>
+            )}
+            {credentialRows.map((c, i) => (
+              <tr key={i}>
+                <td className="item">{c.title}</td>
+                <td>
+                  {c.provider ? `${c.provider} · ${c.free ? "free" : "paid"} · ` : ""}
+                  counted when its comprehension check passed
+                </td>
+                <td className="num ct-date">{c.date}</td>
+                <td className="ct-state">
+                  <span className="p-badge chip c-green">✓✓ CHECKED · {c.date.toUpperCase()}</span>
+                </td>
+              </tr>
+            ))}
+            <tr className="row-next">
+              <td className="item dim">TESDA NC II</td>
+              <td>Your route&apos;s next credential, not earned yet</td>
+              <td className="ct-date"><span className="p-dash">—</span></td>
+              <td className="ct-state">
+                <span className="p-badge chip c-grey">WHEN YOU PASS THE ASSESSMENT</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <p className="src-line num">
           A platform credential appears here only when its check passes · counselor-audited kinds carry
           their stamp on the entry itself
@@ -559,8 +609,11 @@ export default async function ProfilePage() {
             number.
           </p>
         </div>
+        {/* v7.2 P2 re-cut: the masthead compacts to a summary strip — 22px KPI
+            register (not the 46px readout scale), both columns content-full and
+            top-aligned; the five ticklines stay byte-verbatim */}
         <div className="m-right">
-          <span className="cl-label num">Readiness · {v.total} of 100</span>
+          <span className="cl-label num">Readiness</span>
           <div className="m-score num">
             {v.total}
             <small>/100</small>
@@ -615,33 +668,44 @@ export default async function ProfilePage() {
           {state.goals.length === 0 ? (
             <p className="doc-p">No goals yet. Your first suggested goal accepts in Pathway.</p>
           ) : (
-            <div className="prow-list">
-              {[...completedGoals, ...activeGoals.filter((g) => g.type === "training"), ...activeGoals.filter((g) => g.type !== "training")].map(
-                (g, i) => (
-                  <div className="prow" key={g.id ?? i}>
-                    <span className="p-name">{g.title}</span>
-                    {g.status === "completed" ? (
-                      g.type === "training" ? (
-                        <span className="p-badge chip c-green">DONE · ✓✓</span>
-                      ) : (
-                        <span className="p-badge chip c-green">DONE</span>
-                      )
-                    ) : (
-                      <span className="p-badge chip c-grey">{g.type === "milestone" ? "NOT YET DONE" : "IN PROGRESS"}</span>
-                    )}
-                    <span className="p-sub">
-                      {g.status === "completed"
-                        ? g.type === "training"
-                          ? `Completed itself when its comprehension check passed · ${fmtEventDate(g.completedAt)}`
-                          : `Marked done · ${fmtEventDate(g.completedAt)}`
-                        : g.type === "milestone"
-                          ? "Happens outside the app — you tick it off when you pass"
-                          : `Stays active from your first pick · accepted ${acceptedOn(g.title)}`}
-                    </span>
-                  </div>
-                )
-              )}
-            </div>
+            <table className="p-table goals-table">
+              <thead>
+                <tr>
+                  <th scope="col">Goal</th>
+                  <th scope="col" className="ct-state">Status</th>
+                  <th scope="col">Since</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...completedGoals, ...activeGoals.filter((g) => g.type === "training"), ...activeGoals.filter((g) => g.type !== "training")].map(
+                  (g, i) => (
+                    <tr key={g.id ?? i}>
+                      <td className="item">{g.title}</td>
+                      <td className="ct-state">
+                        {g.status === "completed" ? (
+                          g.type === "training" ? (
+                            <span className="p-badge chip c-green">DONE · ✓✓</span>
+                          ) : (
+                            <span className="p-badge chip c-green">DONE</span>
+                          )
+                        ) : (
+                          <span className="p-badge chip c-grey">{g.type === "milestone" ? "NOT YET DONE" : "IN PROGRESS"}</span>
+                        )}
+                      </td>
+                      <td>
+                        {g.status === "completed"
+                          ? g.type === "training"
+                            ? `Completed itself when its comprehension check passed · ${fmtEventDate(g.completedAt)}`
+                            : `Marked done · ${fmtEventDate(g.completedAt)}`
+                          : g.type === "milestone"
+                            ? "Happens outside the app — you tick it off when you pass"
+                            : `Stays active from your first pick · accepted ${acceptedOn(g.title)}`}
+                      </td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
           )}
           <p className="doc-note">Done arrives by itself when a check passes; you never tick goals off by hand.</p>
         </div>
