@@ -4,12 +4,11 @@ import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
 import { resumeRunStore, resumePersistenceNotice, type ResumeRunSummary } from "@/lib/db/resume-run-store";
 import { letterRunStore, letterPersistenceNotice, type LetterRunSummary } from "@/lib/db/letter-run-store";
-import { EMPLOYER_SKIP_NOTE } from "@/lib/engines/air";
 import { AR_FACTORS } from "@/lib/engines/score";
 import type { ResumeFinding } from "@/lib/engines/resume/analyze";
-import { mustContainList, type MustContainItem } from "./must-contain";
 import ResumeUpload from "./ResumeUpload";
 import LetterUpload from "./LetterUpload";
+import PrepTabs from "./PrepTabs";
 import "./prep.css";
 
 export const dynamic = "force-dynamic";
@@ -17,36 +16,29 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Prep — Application Materials · Career Readiness",
   description:
-    "Feedback-only application materials diagnostics: the resume (7 of 15), the cover letter (5 of 15), and the presence declaration in Profile → Credentials (3 of 15) — each measuring on its own file.",
+    "Feedback-only application-materials checkers: the resume checker (7 of the 15-point AR channel) and the cover-letter checker (5 of 15) each measure their own file; the presence declaration lives in Profile → Credentials (3 of 15).",
 };
 
 /**
- * Prep — "Application materials" (feature #7, round 6a + ticket 12 split).
- * The system ADVISES the student's own files; it never authors, hosts, or
- * edits one. ONE diagnostic surface carrying TWO independent per-file flows
- * as TWO MARRIED CARDS (v7.1 rule 4 + v7.2 Composition A sweep, user-ruled —
- * tall cards, never tabs):
+ * Prep — "Application materials" (v7.4 minimal-tool recut, user ruling
+ * 2026-11-02 against the resume-checker UX survey). ONE surface carrying
+ * TWO sibling tool cards — each its own dropzone-first tool:
  *
- *  - Resume diagnostic (7 of 15 AR): no run → the on-ramp (format guide +
- *    must-contain table + upload); a run → the stored LATEST result (latest
- *    counts, amendment 3) + the three-factor checks tables + findings + re-run.
- *  - Cover-letter check (5 of 15 AR): independent upload (TXT/PDF/DOCX) +
- *    OPTIONAL employer field → the deterministic structural set (salutation ·
- *    employer named-or-honestly-skipped · closing ask · 250–500 words) + role
- *    alignment vs the declared Target Role, findings-only. The employer-
- *    omitted case prints the exact honesty line — "not evaluated — no
- *    employer declared" — and the denominator drops the check; never a
- *    silent fail, never a silent score.
+ *  - Resume checker (7 of 15 AR): the intake is ONE dropzone — drop or
+ *    browse, the diagnostic runs on the drop, no default prose (the format
+ *    guide + the Harvard template are one quiet links line beneath the
+ *    zone). With a run: the stored LATEST result (readout → three-factor
+ *    checks → findings → re-run zone → NEXT handoff to the letter tab).
+ *  - Cover-letter checker (5 of 15): same dropzone pattern + ONE optional
+ *    employer field beneath; structural checks + role alignment vs the
+ *    declared Target Role; employer-omitted still prints the exact honesty
+ *    line in its row — the denominator drops the check.
  *
- * The third factor (presence, 3 of 15) declares in Profile → Credentials —
- * this surface carries the pointer, not the input (ticket 12 flow). The
- * band's AR cells are computed from the same engine receipts this page
- * already reads (score.arParts). Blue Command Rule: at most ONE blue primary
- * per state — resume's guide CTA until the resume has run, then the letter's
- * run button until it has too; nothing pending → all ghost.
- * HONESTY CONTRACT: a factor without its own run renders "not yet measured"
- * (never painted); re-runs are unlimited and the LATEST run is the one that
- * counts; nothing here claims an "ATS pass".
+ * Presence is NOT a tab: it lives where it is declared (Profile →
+ * Credentials); the band's computed counter cell is its state here.
+ * HONESTY CONTRACT: a factor without its own run reads "not yet measured /
+ * —" in computed band furniture only (never painted); re-runs unlimited,
+ * the LATEST run counts; nothing claims an "ATS pass".
  */
 
 const fmtDT = (iso: string) => {
@@ -125,91 +117,29 @@ function FindingCard({ f }: { f: ResumeFinding }) {
   );
 }
 
-/* ── no-resume on-ramp (Q7a) — flush sections of married card 1 ─────────── */
+/* ── the resume checker's quiet links line — rides under the upload ─────── */
 
-function OnRamp({
-  items,
-  children,
-}: {
-  items: MustContainItem[];
-  children: ReactNode;
-}) {
+function ResumeLinks() {
   return (
-    <>
-      <section className="panel-sec">
-        <div className="b-head">
-          <h2>No resume on file yet — that&apos;s the normal start</h2>
-          <p className="helper">
-            The diagnostic reads a resume <b>you</b> wrote yourself: in Docs or Word, outside this
-            system. It never drafts, hosts, or edits one — your typing is the only typing that counts.
-          </p>
-        </div>
-        <div className="rs-ctas">
-          <a className="btn btn-primary" href="/prep/guide">
-            Start here — the format guide <span className="arrow num">↵</span>
-          </a>
-          <a className="link-quiet" href="/resume-reference.docx" download>
-            Reference template (.docx)
-          </a>
-          <a className="link-quiet" href="/resume-reference.pdf" download>
-            Reference template (.pdf)
-          </a>
-        </div>
-        <p className="rs-notyet num" role="status">
-          Resume component · <b>not yet measured</b> — the honest read until your first successful run (your
-          latest run is the one that counts; parse-failed uploads aren&apos;t runs). It earns 7 of the
-          15-point Application-Readiness channel — the letter check and the presence stamp add their own.
-        </p>
-      </section>
-
-      <section className="panel-sec">
-        <div className="b-head">
-          <h2>What your resume must contain to score</h2>
-          <p className="helper">
-            Every row comes from your own recorded progress — not a generic recipe. When these appear
-            on your resume, the first diagnostic run has something real to measure.
-          </p>
-        </div>
-        <table className="rs-list num">
-          <thead>
-            <tr>
-              <th className="ct-no">№</th>
-              <th>Must contain</th>
-              <th>Why</th>
-              <th className="ct-src">Comes from</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((it, i) => (
-              <tr className="rs-listrow" key={i}>
-                <td className="rs-list-n num">{String(i + 1).padStart(2, "0")}</td>
-                <td className="ct-what">
-                  <b>{it.label}</b>
-                </td>
-                <td className="ct-why-col">{it.note}</td>
-                <td className="rs-list-src num">{it.src}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-
-      {children}
-    </>
+    <p className="rs-links num">
+      First resume? <a href="/prep/guide">Format guide</a> ·{" "}
+      <a href="https://careerservices.fas.harvard.edu/resources/bullet-point-resume-template/" target="_blank" rel="noreferrer">
+        Harvard template ↗
+      </a>
+    </p>
   );
 }
 
-/* ── resume run result — flush sections of married card 1 ───────────────── */
+/* ── resume run result — readout → checks → findings → re-run → next ────── */
 
 function RunResult({
   run,
-  runsCount,
-  studentName,
+  next,
   children,
 }: {
   run: NonNullable<ResumeRunSummary["run"]>;
-  runsCount: number;
-  studentName: string;
+  /** the declared next step (the letter tab handoff; null when nothing remains) */
+  next?: ReactNode;
   children: ReactNode;
 }) {
   const factorChecks: { name: string; score: number; note: string; checks: { label: string; ok: boolean; note?: string }[] }[] = [
@@ -237,7 +167,7 @@ function RunResult({
       <section className="panel-sec rs-readout">
         <div className="rs-readout-top">
           <div>
-            <span className="label num">Resume diagnostic · {fmtDT(run.at)}</span>
+            <span className="label num">Resume checker · {fmtDT(run.at)}</span>
             <div className="rs-readout-sub">
               {run.fileName} · {run.kind === "pdf" ? "PDF" : "Word"} · target <b>{run.careerName}</b>
             </div>
@@ -247,17 +177,13 @@ function RunResult({
             <small>/100</small>
           </div>
         </div>
-        <p className="rs-air-note">
-          Deterministic resume component:{" "}
-          <b className="num">parse gate {run.air.parsePass} × format {run.air.formatScore} × keywords {run.air.keywordScore}</b>. Latest
-          counts — this stored run is your most recent full attempt ({runsCount} run{runsCount === 1 ? "" : "s"} recorded);
-          re-running a file replaces it, and the fresh run is the one that scores.
-          {resumePersistenceNotice() && (
-            <>
-              {" "}
-              <span className="rs-notyet">{resumePersistenceNotice()}</span>
-            </>
-          )}
+        <p className="rs-air-note num">
+          <b className="num">
+            parse {run.air.parsePass} × format {run.air.formatScore} × keywords {run.air.keywordScore}
+          </b>{" "}
+          · your latest run counts{resumePersistenceNotice() ? (
+            <span className="rs-notyet"> {resumePersistenceNotice()}</span>
+          ) : null}
         </p>
       </section>
 
@@ -294,20 +220,12 @@ function RunResult({
             </tbody>
           ))}
         </table>
-        <p className="src-line num">
-          Deterministic templates only — no LLM calls in this layer. `ATS-friendly` is a formatting
-          property, a claim about none: no outcome promise is made here.
-        </p>
       </section>
 
       <section className="panel-sec">
         <div className="b-head">
           <h2>Findings and suggestions</h2>
-          <p className="helper">
-            {run.findings.length === 0
-              ? "No fixes found in this run — the reload-and-recheck line stays: re-runs are free, and the next draft can still aim higher."
-              : "Each row traces to something in your file. Suggestions are content moves — an example bullet is a shape to follow, never text to paste, and nothing here edits or re-creates the document."}
-          </p>
+          {run.findings.length === 0 && <p className="helper">No fixes found in this run</p>}
         </div>
         <div className="rs-findings">
           {run.findings.map((f) => (
@@ -316,20 +234,22 @@ function RunResult({
         </div>
       </section>
 
+      {/* the re-run zone rides AT THE END of the results (the dropzone reappears) */}
       {children}
-      <p className="rs-foot num">{studentName.toUpperCase()} · RUN {runsCount} · LATEST {run.air.airResume} · PARSE GATE {run.air.parsePass}</p>
+
+      {next}
     </>
   );
 }
 
-/* ── the cover-letter check (ticket 12) — flush sections of married card 2 ── */
+/* ── the cover-letter checker — same shape, own file ────────────────────── */
 
 const LETTER_KINDS: Record<string, string> = { txt: "TXT", pdf: "PDF", docx: "Word" };
 
-function LetterResult({ run, runsCount, studentName, children }: {
+function LetterResult({ run, next, children }: {
   run: NonNullable<LetterRunSummary["run"]>;
-  runsCount: number;
-  studentName: string;
+  /** the declared next step (null — presence is not a Prep tab anymore) */
+  next?: ReactNode;
   children: ReactNode;
 }) {
   const rowMark = (ok: boolean | null) =>
@@ -339,7 +259,7 @@ function LetterResult({ run, runsCount, studentName, children }: {
       <section className="panel-sec cl-readout">
         <div className="cl-readout-top">
           <div>
-            <span className="label num">Cover-letter check · {fmtDT(run.at)}</span>
+            <span className="label num">Cover-letter checker · {fmtDT(run.at)}</span>
             <div className="cl-readout-sub">
               {run.fileName} · {LETTER_KINDS[run.kind] ?? run.kind.toUpperCase()} ·{run.employerDeclared ? ` employer anchor ${run.employerName}` : " no employer declared"} · target <b>{run.careerName}</b>
             </div>
@@ -349,27 +269,19 @@ function LetterResult({ run, runsCount, studentName, children }: {
             <small>/100</small>
           </div>
         </div>
-        <p className="cl-air-note">
-          Deterministic letter component,{" "}
-          <b className="num">parse gate {run.air.parsePass} × role keywords {run.air.keywordScore} × structural {run.air.structuralScore}</b> — the
-          structural denominator holds only the checks that ran ({run.checks.filter((c) => c.ok !== null).length} of 4; the
-          optional employer check is {run.employerDeclared ? "anchored and counted" : "skipped honestly, not scored"}). Your latest letter check counts — this is run {runsCount} (letter runs are independent of the resume&apos;s).
-          {letterPersistenceNotice() && (
-            <>
-              {" "}
-              <span className="cl-notyet">{letterPersistenceNotice()}</span>
-            </>
-          )}
+        <p className="cl-air-note num">
+          <b className="num">
+            parse {run.air.parsePass} × keywords {run.air.keywordScore} × structural {run.air.structuralScore}
+          </b>{" "}
+          · your latest check counts{letterPersistenceNotice() ? (
+            <span className="cl-notyet"> {letterPersistenceNotice()}</span>
+          ) : null}
         </p>
       </section>
 
       <section className="panel-sec">
         <div className="b-head">
           <h2>The checks</h2>
-          <p className="helper">
-            The locked deterministic set, in the order the reader hits them. A skipped check prints its
-            honest line and drops from the math — it is never failed into silence.
-          </p>
         </div>
         <table className="checks-table num">
           <thead>
@@ -417,20 +329,12 @@ function LetterResult({ run, runsCount, studentName, children }: {
             ))}
           </tbody>
         </table>
-        <p className="src-line num">
-          Feedback only — the system advises the letter you brought, never writes one; no LLM here, and
-          no “ATS pass” is claimed: the editor&apos;s promise to you is the next draft, not an outcome.
-        </p>
       </section>
 
       <section className="panel-sec">
         <div className="b-head">
           <h2>Findings and suggestions</h2>
-          <p className="helper">
-            {run.findings.length === 0
-              ? "No fixes found in this check — the employer field you left empty was skipped honestly, and everything else ran and passed."
-              : "Each row traces to a specific check into your own text. Suggestions are content moves — a shape to follow in YOUR words, never text to paste."}
-          </p>
+          {run.findings.length === 0 && <p className="helper">No fixes found in this check</p>}
         </div>
         <div className="rs-findings">
           {run.findings.map((f) => (
@@ -452,10 +356,10 @@ function LetterResult({ run, runsCount, studentName, children }: {
         </div>
       </section>
 
+      {/* the re-check zone rides AT THE END of the results */}
       {children}
-      <p className="rs-foot num">
-        {studentName.toUpperCase()} · LETTER RUN {runsCount} · LATEST {run.air.airLetter} · PARSE GATE {run.air.parsePass}
-      </p>
+
+      {next}
     </>
   );
 }
@@ -464,30 +368,39 @@ function LetterResult({ run, runsCount, studentName, children }: {
 
 export default async function PrepPage() {
   const profile = await requireStudent();
-  const { state, career, score } = await getStudentView(profile.studentId);
+  const { career, score } = await getStudentView(profile.studentId);
   const latestResume: ResumeRunSummary | null = career
     ? await resumeRunStore.latest(profile.studentId)
     : null;
   const latestLetter: LetterRunSummary | null = career
     ? await letterRunStore.latest(profile.studentId)
     : null;
-  const items = career ? await mustContainList(career, state) : [];
 
-  /* Blue Command Rule — at most ONE blue primary per state:
-     resume not run        → the resume's format-guide CTA carries it;
-     resume run, letter not → the letter's run button takes it;
-     both run              → nothing pending, everything stays ghost. */
   const resumeHasRun = Boolean(latestResume);
   const letterHasRun = Boolean(latestLetter);
-  const letterPrimary = resumeHasRun && !letterHasRun;
 
+  /* the letter surface's declared NEXT — forces-on-own-files honesty: the
+     results end with the sibling-tool handoff (no wizard gate). Presence is
+     NOT a step here; its state is the band cell alone. */
+  const nextLetterStep = !letterHasRun ? (
+    <a className="nextstep" href="#letter">
+      <span className="label num">NEXT</span>
+      <p>
+        <b>The cover-letter checker</b> · earns 5 of the 15-point AR channel — bring the letter you wrote yourself.
+      </p>
+    </a>
+  ) : null;
+
+  /* the two tool children — the intake surface (dropzone) is the hero, with
+     the one quiet links line under the resume's zone */
   const resumeChildren = (
-    <ResumeUpload careerName={career?.name ?? ""} />
+    <>
+      <ResumeUpload />
+      <ResumeLinks />
+    </>
   );
 
-  const letterChildren = (
-    <LetterUpload careerName={career?.name ?? ""} employerRow={EMPLOYER_SKIP_NOTE} primary={letterPrimary} />
-  );
+  const letterChildren = <LetterUpload />;
 
   /* the band's AR receipts — the same engine receipts the page already
      reads (score.arParts from getStudentView); a null score (no target
@@ -499,17 +412,34 @@ export default async function PrepPage() {
     presence: unmeasured(AR_FACTORS.presence),
   };
 
+  const resumePanel = latestResume ? (
+    <RunResult run={latestResume.run} next={nextLetterStep}>
+      {resumeChildren}
+    </RunResult>
+  ) : (
+    resumeChildren
+  );
+
+  const letterPanel = latestLetter ? (
+    <LetterResult run={latestLetter.run}>
+      {letterChildren}
+    </LetterResult>
+  ) : (
+    letterChildren
+  );
+
   return (
     <div className="v7prep">
-      {/* named band — the grey tray; the instrument counters are band furniture */}
+      {/* named band — the white dashboard register; the instrument counters
+          are band furniture; presence's cell is computed state only */}
       <header className="band">
         <div className="bandrow">
           <div className="who">
             <h1 className="t">Prep</h1>
             {career ? (
-              <p className="m">For {career.name} — the resume, the cover letter, and the presence stamp, each measuring on its own file.</p>
+              <p className="m">For {career.name} — the Resume checker and the Cover-letter checker.</p>
             ) : (
-              <p className="m">The resume, the cover letter, and the presence stamp, each measuring on its own file.</p>
+              <p className="m">The Resume checker and the Cover-letter checker.</p>
             )}
           </div>
           <div className="bandcells">
@@ -525,7 +455,7 @@ export default async function PrepPage() {
         <section className="card nc-card">
           <div className="b-head">
             <h2>Pick your target role first</h2>
-            <p className="helper">Every diagnostic measures against one target role at a time.</p>
+            <p className="helper">Every checker measures against one target role at a time.</p>
           </div>
           <p className="nc-cta">
             <a className="btn btn-primary" href="/career">
@@ -534,78 +464,13 @@ export default async function PrepPage() {
           </p>
         </section>
       ) : (
-        <>
-          {/* ── card 1 · the resume diagnostic (7 of 15) — a married card ── */}
-          <section className="card">
-            <div className="cardtop">
-              <div className="ct-id">
-                <h2>Resume diagnostic (7 of 15)</h2>
-                <p className="prep-sublabel num">
-                  Feedback only · the system advises the resume — it never authors, hosts, or edits it
-                </p>
-              </div>
-              <span className="kicker num">
-                {latestResume ? `LATEST RUN · ${latestResume.run.air.airResume}/100` : "NOT YET RUN"}
-              </span>
-            </div>
-            {latestResume ? (
-              <RunResult run={latestResume.run} runsCount={latestResume.runsCount} studentName={state.name}>
-                {resumeChildren}
-              </RunResult>
-            ) : (
-              <OnRamp items={items}>
-                {resumeChildren}
-              </OnRamp>
-            )}
-          </section>
-
-          {/* ── card 2 · the cover-letter check (5 of 15) — married card, independent flow ── */}
-          <section className="card">
-            <div className="cardtop">
-              <div className="ct-id">
-                <h2>Cover-letter check (5 of 15)</h2>
-                <p className="cl-sublabel num">
-                  Independent upload · the letter runs on its own file, separate from the resume — your latest letter check counts
-                </p>
-              </div>
-              <span className="kicker num">
-                {latestLetter ? `LATEST CHECK · ${latestLetter.run.air.airLetter}/100` : "NOT YET CHECKED"}
-              </span>
-            </div>
-            {latestLetter ? (
-              <LetterResult run={latestLetter.run} runsCount={latestLetter.runsCount} studentName={state.name}>
-                {letterChildren}
-              </LetterResult>
-            ) : (
-              <>
-                <section className="panel-sec">
-                  <div className="b-head">
-                    <h2>No letter checked yet</h2>
-                    <p className="helper">
-                      Bring the cover letter you wrote yourself (TXT, PDF, or DOCX — written outside this system, same fence as the
-                      resume). The check grades structure against your target role: <b>salutation · employer-name (optional field) ·
-                      closing ask · 250–500 words</b>.
-                    </p>
-                  </div>
-                  <p className="cl-notyet num" role="status">
-                    Letter component · <b>not yet measured</b> — the honest read until your first successful check (your latest
-                    letter check is the one that counts; unreadable uploads aren&apos;t checks). It earns 5 of the 15-point
-                    Application-Readiness channel — the resume diagnosis and the presence stamp earn their own.
-                  </p>
-                </section>
-                {letterChildren}
-              </>
-            )}
-
-            {/* the third factor lives in Profile → Credentials (ticket 12 flow) */}
-            <section className="panel-sec prep-src-sec">
-              <p className="prep-src num">
-                THIRD FACTOR · presence (3 of 15) is a declared entry, not an upload —{" "}
-                <a href="/profile#profile">Profile → Credentials</a> stamps it, machine-verified and timestamped, offline.
-              </p>
-            </section>
-          </section>
-        </>
+        <PrepTabs
+          panels={{ resume: resumePanel, letter: letterPanel }}
+          kickers={{
+            resume: latestResume ? `LATEST RUN · ${latestResume.run.air.airResume}/100` : "NOT YET RUN",
+            letter: latestLetter ? `LATEST CHECK · ${latestLetter.run.air.airLetter}/100` : "NOT YET CHECKED",
+          }}
+        />
       )}
     </div>
   );
