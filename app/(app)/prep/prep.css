@@ -1,21 +1,26 @@
 /* ============================================================
-   DNA v7 — Prep surface (/prep + /prep/guide), the v7.1/v7.2
-   sweep it never got (SWEEP DIRECTIVE, .impeccable/surfaces/prep.md).
-   A named band (v7.2 Composition A — the grey tray) carries the
-   AR channel cells — resume 7 / letter 5 / presence 3 + the
-   APPLICATION READINESS /15 readout — every number computed from
-   score.arParts (getStudentView), never painted. The two per-file
-   flows render as TWO MARRIED CARDS (user-ruled: tall, not tabs):
-   a cardtop strip (title left + computed run-status kicker right)
-   then FLUSH sections separated by #E8EAED rules — never a card
-   inside a card. The checks are REAL tables (tracked 11px
-   uppercase column heads, row rules, tabular numerals, the honest
-   "—" where a cell holds nothing); findings are row-blocks with
-   wash verdict chips (fix=blue / watch=amber / pass=green — no
-   red anywhere); the must-contain ledger is a four-column table.
-   ONE blue primary at a time (Blue Command Rule): state A = the
-   format-guide CTA, state B (resume run, letter not) = the
-   letter's upload button, state C = none.
+   DNA v7 — Prep surface (/prep + /prep/guide), the v7.4 recut.
+   A named band (the white dashboard register — v7.4 sweep)
+   carries the AR channel cells — resume 7 / letter 5 / presence
+   3 + the APPLICATION READINESS /15 readout — every number
+   computed from score.arParts (getStudentView), never painted.
+   The per-file flows render as a SUITE of two tools (v7.4
+   minimal-tool recut, user ruling 2026-11-02 after the
+   resume-checker UX survey): a `.prep-lens` segmented toolbar
+   OUTSIDE the card switches Resume checker / Cover-letter
+   checker — each tab its own card with one full tool flow (the
+   dropzone intake is the hero, auto-run on drop; the result
+   dashboard ends with the declared next-step handoff).
+   FLUSH sections separated by row rules — never a card inside a
+   card. The checks are REAL tables (tracked 11px uppercase column
+   heads, row rules, tabular numerals, the honest "—" where a cell
+   holds nothing); findings are row-blocks with wash verdict chips
+   (fix=blue / watch=amber / pass=green — no red anywhere);
+   rejection copy appears only on failure, inline in the zone
+   (amber, never red). Helper prose is dead per the copy floor —
+   the air-notes stay as the ONE caption line (factor formula +
+   "latest run counts"). The dropzone carries NO buttons — the
+   Blue-Command primaries are retired here.
    Cool white-grey ground, white cards 1px #DADCE0 + whisper
    shadow + 8px radius, Roboto 13.5px body, honest grey "—".
    Scoped under `.v7prep` off the --v-* tokens in ../v7.css —
@@ -23,8 +28,7 @@
    primary, no .shell/.panel register). /prep/guide shares this
    world (Table: STEP / RULE / WHY in the pathway plan-table
    register, drawn 26px ink-circle numerals). No entrance motion
-   (DNA lock). e2e hooks preserved byte-verbatim (rs-* / cl-* /
-   prep-sublabel set).
+   (DNA lock). e2e hooks preserved byte-verbatim (rs-* / cl-* set).
    ============================================================ */
 
 .v7prep {
@@ -37,14 +41,14 @@
 .v7prep a { color: inherit; }
 .v7prep .num { font-variant-numeric: tabular-nums; }
 
-/* ---------- named band — the grey tray (v7.2 Composition A) ---------- */
+/* ---------- named band — the white dashboard register (v7.4 sweep) ---------- */
 
 .v7prep .band {
-  background: var(--v-grey-wash);
+  background: var(--v-surface);
   border: 1px solid var(--v-border);
   border-radius: 8px;
   box-shadow: var(--v-shadow);
-  padding: 14px 18px;
+  padding: 16px 20px;
   margin-bottom: 12px;
 }
 .v7prep .bandrow {
@@ -56,7 +60,7 @@
 }
 .v7prep .who { min-width: 220px; }
 .v7prep .who .t {
-  font: 500 18px/1.35 Roboto, system-ui, sans-serif;
+  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
   margin: 0;
   color: var(--v-ink);
 }
@@ -119,7 +123,7 @@
 }
 .v7prep .chip.c-green { background: var(--v-green-wash); color: var(--v-green-text); }
 .v7prep .chip.c-grey { background: var(--v-grey-wash); color: var(--v-grey-text); }
-/* the grey tray would swallow a grey-wash chip — band state chips sit on white */
+/* the white band keeps the outlined grey chip legible — band state chips sit on surface */
 .v7prep .band .chip.c-grey {
   background: var(--v-surface);
   border: 1px solid var(--v-border);
@@ -135,28 +139,47 @@
   overflow: hidden;
   margin-bottom: 12px;
 }
-.v7prep .cardtop {
+/* ---------- the suite toolbar (v7.3 suite re-cut: the resume-checker UX
+   survey's "one tool instance, tabs" convention) — the Careers/My-Plan
+   lens-row register: segmented tabs OUTSIDE the card + the active tool's
+   computed kicker; each tab is its own card below ---------- */
+
+.v7prep .prep-lens {
   display: flex;
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--v-rows);
+  margin: 2px 2px 10px;
 }
-.v7prep .cardtop .ct-id { min-width: 0; }
-.v7prep .cardtop .ct-id h2 {
-  font: 500 16px/1.3 Roboto, system-ui, sans-serif;
-  margin: 0;
+.v7prep .ptabs {
+  display: inline-flex;
+  gap: 4px;
+  background: var(--v-grey-wash);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  padding: 3px;
+  flex-wrap: wrap;
+}
+.v7prep .ptabs button {
+  padding: 7px 14px;
+  border-radius: 6px;
+  font: 500 12.5px/1.2 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  white-space: nowrap;
+  border: 0;
+  background: none;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.v7prep .ptabs button:hover { color: var(--v-ink); }
+.v7prep .ptabs button[aria-selected="true"] {
+  background: var(--v-surface);
   color: var(--v-ink);
+  border: 1px solid var(--v-border);
+  box-shadow: var(--v-shadow);
+  margin: -1px;
 }
-.v7prep .cardtop .prep-sublabel,
-.v7prep .cardtop .cl-sublabel {
-  margin-top: 2px;
-  font-size: 11.5px; /* v7.1 floor */
-  max-width: 66ch;
-}
-.v7prep .cardtop .kicker {
-  flex: none;
+.v7prep .ptabs button:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
+.v7prep .prep-lens .kicker {
   margin-left: auto;
   font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
   letter-spacing: 0.08em;
@@ -164,14 +187,45 @@
   color: var(--v-ink2);
   font-variant-numeric: tabular-nums;
 }
+/* the v7.2 hidden-guard — .card { display:block } must not defeat hidden */
+.v7prep .tabpanel[hidden] { display: none !important; }
+/* the tool's identity line — a panel head in the label register */
+.v7prep .prep-sublabel,
+.v7prep .cl-sublabel {
+  margin: 12px 16px 0;
+  font-size: 11.5px; /* v7.1 floor */
+  color: var(--v-ink2);
+  max-width: 66ch;
+}
+.v7prep .prep-sublabel { padding: 10px 16px 0; margin: 0; }
+
+/* the declared next step — results end with the handoff (survey
+   convention, no wizard gate) */
+.v7prep .nextstep {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 12px 16px 14px;
+  border-top: 1px solid var(--v-rows);
+  text-decoration: none;
+  transition: background-color 0.12s ease;
+}
+.v7prep .nextstep:hover { background: var(--v-grey-wash); }
+.v7prep .nextstep .label {
+  flex: none;
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-blue-deep);
+}
+.v7prep .nextstep p { margin: 0; font: 400 12.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 70ch; }
+.v7prep .nextstep b { color: var(--v-ink); font-weight: 500; }
+.v7prep .nextstep:hover p b { color: var(--v-blue-deep); }
 
 /* ---------- flush sections of the married card ---------- */
 
 .v7prep .panel-sec { padding: 14px 16px 16px; }
-.v7prep .card > .panel-sec + .panel-sec,
-.v7prep .card > .rs-upload,
-.v7prep .card > .cl-upload,
-.v7prep .card > .prep-src-sec { border-top: 1px solid var(--v-rows); }
+.v7prep .card > .panel-sec + .panel-sec { border-top: 1px solid var(--v-rows); }
 .v7prep .card > .cardtop + .panel-sec { border-top: 0; }
 
 .v7prep .b-head h2 {
@@ -311,7 +365,7 @@
 .v7prep .checks-table .ct-result { width: 84px; }
 .v7prep .checks-table tbody tr:last-child td { border-bottom: 0; }
 .v7prep .checks-table tbody tr { transition: background-color 0.12s ease; }
-.v7prep .checks-table tbody tr:hover { background: #f5f8fc; }
+.v7prep .checks-table tbody tr:hover { background: var(--v-grey-wash); }
 
 /* the factor receipts ride as group rows (.rs-factor-head — hook intact) */
 .v7prep .checks-table .rs-factor-head th {
@@ -416,43 +470,6 @@
 }
 .v7prep .rs-ex-src { color: var(--v-ink2); font-size: 11px; }
 
-/* ---------- the must-contain ledger — the four-column table ---------- */
-
-.v7prep .rs-list {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 12px;
-  font-variant-numeric: tabular-nums;
-}
-.v7prep .rs-list th {
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--v-ink2);
-  text-align: left;
-  padding: 0 16px 7px 0;
-  border-bottom: 1px solid var(--v-rows);
-  white-space: nowrap;
-}
-.v7prep .rs-list td {
-  padding: 11px 16px 11px 0;
-  border-bottom: 1px solid var(--v-rows);
-  vertical-align: top;
-  min-width: 0;
-}
-.v7prep .rs-list tbody tr:last-child td { border-bottom: 0; }
-.v7prep .rs-list tbody tr { transition: background-color 0.12s ease; }
-.v7prep .rs-list tbody tr:hover { background: #f5f8fc; }
-.v7prep .rs-list .ct-no { width: 40px; }
-.v7prep .rs-list-n { color: var(--v-meta); font-size: 12px; font-weight: 500; } /* decorative numeral */
-.v7prep .ct-what b {
-  font: 500 13px/1.45 Roboto, system-ui, sans-serif;
-  color: var(--v-ink);
-}
-.v7prep .ct-why-col { font: 400 12px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
-.v7prep .rs-list-src { font: 400 11px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
-.v7prep .rs-list .ct-src { width: 200px; }
-
 /* ---------- honest lines (the not-yet register) ---------- */
 
 .v7prep .rs-notyet,
@@ -473,20 +490,8 @@
   font-weight: 500;
 }
 
-/* ---------- the run info feet ---------- */
+/* ---------- the presence pointer card ---------- */
 
-.v7prep .rs-foot {
-  display: block;
-  margin: 0;
-  padding: 10px 16px 12px;
-  border-top: 1px solid var(--v-rows);
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
-  letter-spacing: 0.06em;
-  color: var(--v-ink2);
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-.v7prep .prep-src-sec { padding: 12px 16px 14px; }
 .v7prep .prep-src {
   margin: 0;
   font: 400 11.5px/1.55 Roboto, system-ui, sans-serif;
@@ -502,59 +507,78 @@
 }
 .v7prep .prep-src a:hover { text-decoration-color: var(--v-blue); }
 
-/* ---------- the intake rows (both flows) ---------- */
+/* ---------- the dropzone intake (v7.4 recut) ---------- */
+
+.v7prep .card > .rs-upload,
+.v7prep .card > .cl-upload,
+.v7prep .card > .rs-upload + .rs-links,
+.v7prep .card > .panel-sec + .rs-upload,
+.v7prep .card > .panel-sec + .cl-upload { border-top: 1px solid var(--v-rows); padding-top: 14px; }
 
 .v7prep .rs-upload,
-.v7prep .cl-upload { padding: 14px 16px 16px; }
-.v7prep .rs-file-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.v7prep .cl-upload {
+  margin: 14px 16px;
+}
+
+.v7prep .dz-zone {
+  width: 100%;
+  border: 1.5px dashed var(--v-border);
+  border-radius: 8px;
+  background: var(--v-surface);
+  padding: 44px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  text-align: center;
+  user-select: none;
+}
+.v7prep .dz-zone:hover,
+.v7prep .dz-zone:focus-visible,
+.v7prep .dz-zone.dz-over {
+  border-color: var(--v-blue);
+  background: var(--v-blue-wash);
+}
+.v7prep .dz-zone:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
+.v7prep .dz-icon { font-size: 30px; color: var(--v-blue); }
+.v7prep .dz-head { font: 500 15px/1.35 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7prep .dz-sub { font: 400 12.5px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7prep .dz-busy { font: 400 13.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7prep .dz-err { font: 400 12.5px/1.5 Roboto, system-ui, sans-serif; max-width: 64ch; }
+
+.v7prep .rs-upload .dz-err, .v7prep .cl-upload .dz-err { color: var(--v-amber-text); font-weight: 500; }
+
+/* the hidden-but-real file input (setInputFiles-driven e2e + native browse) */
+.v7prep .dz-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* the optional employer row lives quietly under the letter's zone */
+.v7prep .cl-below { margin-top: 10px; max-width: 420px; }
+.v7prep .cl-below .cl-input { width: 100%; }
+
+/* the resume checker's one quiet links line — 16px side gutter keeps the
+   text off the card edge while the divider above stays flush */
+.v7prep .rs-links {
+  margin: 10px 0 0;
+  padding: 0 16px;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7prep .rs-links a { color: var(--v-blue-deep); text-decoration: underline; text-underline-offset: 2px; }
+
 .v7prep .rs-file {
   font: 400 12.5px/1.4 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
   max-width: 100%;
 }
-.v7prep .rs-file::file-selector-button {
-  font: 500 12.5px/1.2 Roboto, system-ui, sans-serif;
-  padding: 7px 14px;
-  margin-right: 12px;
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  background: var(--v-surface);
-  color: var(--v-blue-deep);
-  cursor: pointer;
-  transition: background-color 0.14s ease, border-color 0.14s ease;
-}
-.v7prep .rs-file::file-selector-button:hover { border-color: var(--v-blue); background: var(--v-blue-wash); }
-.v7prep .rs-file::file-selector-button:focus-visible {
-  outline: 2px solid var(--v-blue);
-  outline-offset: 2px;
-}
-.v7prep .rs-note,
-.v7prep .cl-note {
-  margin-top: 12px;
-  font: 400 12px/1.55 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  max-width: 74ch;
-}
-.v7prep .rs-note.rs-err,
-.v7prep .cl-note.cl-err {
-  color: var(--v-amber-text); /* rejection state — amber, never red */
-  font-weight: 500;
-}
 
-/* the letter intake grid */
-.v7prep .cl-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
-  gap: 12px 16px;
-  align-items: end;
-}
 .v7prep .cl-field { display: grid; gap: 5px; }
-.v7prep .cl-label {
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
-  letter-spacing: 0.05em;
-  color: var(--v-ink2);
-}
-.v7prep .cl-opt { color: var(--v-ink2); font-weight: 400; }
 .v7prep .cl-input {
   font: 400 13px/1.4 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
@@ -597,7 +621,7 @@
 }
 .v7prep .guide-table tbody tr:last-child td { border-bottom: 0; }
 .v7prep .guide-table tbody tr { transition: background-color 0.12s ease; }
-.v7prep .guide-table tbody tr:hover { background: #f5f8fc; }
+.v7prep .guide-table tbody tr:hover { background: var(--v-grey-wash); }
 .v7prep .guide-table .ct-step { width: 44px; }
 /* the drawn numeral — CSS ink circle, no glyph font (family spec) */
 .v7prep .g-num {
@@ -680,47 +704,36 @@
   .v7prep .bandcells .bcell:nth-child(2n + 1) { border-left: 0; padding-left: 0; }
   .v7prep .bandcells .bcell:nth-child(n + 3) { border-top: 1px solid var(--v-rows); }
   .v7prep .b-ar .ar-val { font-size: 20px; }
-  /* the cardtop folds two-line: title block, then the run kicker */
-  .v7prep .cardtop .kicker { flex: 1 1 100%; margin-left: 0; }
+  /* the suite toolbar folds two-line: tabs, then the run kicker */
+  .v7prep .prep-lens .kicker { flex: 1 1 100%; margin-left: 0; }
   .v7prep .panel-sec { padding: 12px 12px 14px; }
-  .v7prep .cl-row { grid-template-columns: 1fr; }
   .v7prep .cl-input { max-width: none; }
   /* stacked tables (the pathway fold): rows read as blocks over row rules */
   .v7prep .checks-table,
-  .v7prep .rs-list,
   .v7prep .guide-table,
   .v7prep .checks-table tbody,
-  .v7prep .rs-list tbody,
   .v7prep .guide-table tbody,
   .v7prep .checks-table tr,
-  .v7prep .rs-list tr,
   .v7prep .guide-table tr,
   .v7prep .checks-table th,
   .v7prep .checks-table td,
-  .v7prep .rs-list th,
-  .v7prep .rs-list td,
   .v7prep .guide-table th,
   .v7prep .guide-table td {
     display: block;
     width: auto;
   }
   .v7prep .checks-table thead,
-  .v7prep .rs-list thead,
   .v7prep .guide-table thead { display: none; }
   .v7prep .checks-table tbody tr,
-  .v7prep .rs-list tbody tr,
   .v7prep .guide-table tbody tr {
     border-bottom: 1px solid var(--v-rows);
     padding: 10px 0;
   }
   .v7prep .checks-table tbody tr:last-child,
-  .v7prep .rs-list tbody tr:last-child,
   .v7prep .guide-table tbody tr:last-child { border-bottom: 0; }
   .v7prep .checks-table td,
-  .v7prep .rs-list td,
   .v7prep .guide-table td { padding: 2px 0 10px; border-bottom: 0; }
   .v7prep .checks-table td:last-child,
-  .v7prep .rs-list td:last-child,
   .v7prep .guide-table td:last-child { padding-bottom: 0; }
   .v7prep .checks-table .rs-factor-head th { padding: 4px 0 6px; }
 }
@@ -730,6 +743,4 @@
   .v7prep .bandcells { grid-template-columns: 1fr; }
   .v7prep .bandcells .bcell { border-left: 0; padding-left: 0; }
   .v7prep .bandcells .bcell:nth-child(n + 2) { border-top: 1px solid var(--v-rows); }
-  .v7prep .rs-file-row { align-items: stretch; flex-direction: column; }
-  .v7prep .rs-list .ct-src { width: auto; }
 }
