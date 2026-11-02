@@ -236,12 +236,15 @@ test.describe.serial("demo-arc", () => {
 
     /* ══════════ BEAT 6 · honest dip 40 → 21 → 35 ══════════ */
 
-    await page.locator('header a[href="/career"]').click();
+    await page.locator('aside a[href="/career"]').click();
     await expect(page.getByRole("heading", { name: "Your career" })).toBeVisible();
     await page.locator(".cc-switch .quiet-toggle", { hasText: "Switch career" }).click();
     await page.locator(".disclosure.show .disc-go").click();
     await expect(page.locator(".sw-banner")).toBeVisible(); // browsing banner, nothing changed yet
-    await page.locator(".row-live").first().click(); // the live switch target: Software QA Analyst
+    // the QA row expands like every row now (user ruling 2026-11-02 — the
+    // row-live special case is dead); the switch enters via the detail CTA
+    await page.locator(".index-row", { hasText: "Software QA Analyst" }).first().locator(".row-name").click();
+    await page.locator(".d-cta button", { hasText: "Change target role" }).click();
 
     // cost-first confirm
     await expect(page.locator("#sw-confirm h1")).toHaveText("Switch to Software QA Analyst?");
@@ -367,27 +370,25 @@ test.describe.serial("demo-arc", () => {
     await page.goto("/prep");
     await page.waitForSelector(".rs-upload");
     await page.locator('.rs-upload input[type="file"]').setInputFiles([path.join(process.cwd(), "e2e", "fixtures", "resume-qa.pdf")]);
-    await page.getByRole("button", { name: "Run the diagnostic" }).click();
     await page.waitForLoadState("load");
     await expect(page.locator(".rs-readout")).toBeVisible({ timeout: 45_000 });
     soft((await page.locator(".rs-readout-score").first().textContent()) ?? "").toContain("100");
-    expect(page.locator(".rs-air-note")).toContainText("1 run");
+    expect(page.locator(".rs-air-note")).toContainText("your latest run counts");
     notes.push("beat 7 AM pass ①: resume-qa.pdf ran vs Software QA Analyst → AIR 100 · resume factor 7 of 7 → 59 ✓");
 
-    // ② · the cover-letter check — independent upload, employer field OMITTED
+    // ② · the cover-letter checker — independent upload, employer field OMITTED
     // (the demo's honest-skip live proof: the row prints the exact line and
     // the denominator drops it; role alignment runs vs Software QA Analyst)
+    await page.goto("/prep#letter");
+    await page.waitForSelector(".cl-upload");
     await page.locator('.cl-upload input[type="file"]').setInputFiles([path.join(process.cwd(), "e2e", "fixtures", "cover-letter-qa.txt")]);
-    await page.getByRole("button", { name: "Run the letter check" }).click();
     await page.waitForLoadState("load");
     await expect(page.locator(".cl-readout")).toBeVisible({ timeout: 45_000 });
     soft((await page.locator(".cl-readout .cl-readout-score").first().textContent()) ?? "").toContain("100");
     const employerRow = (await page.locator(".rs-check", { hasText: "Employer named" }).first().textContent())?.replace(/\s+/g, " ");
     expect(employerRow).toContain("not evaluated — no employer declared");
-    const clNote = (await page.locator(".cl-air-note").textContent())?.replace(/\s+/g, " ") ?? "";
-    expect(clNote).toContain("3 of 4");
     notes.push(
-      `beat 7 AM pass ②: canon letter ran (employer omitted) → letter 100 → +5 · row "${employerRow}" · note "${clNote}" ✓`
+      `beat 7 AM pass ②: canon letter ran (employer omitted) → letter 100 → +5 · row "${employerRow}" ✓`
     );
 
     /* ══════════ dashboard after the letter factor (canon 64) ══════════ */
@@ -469,7 +470,10 @@ test.describe.serial("demo-arc", () => {
     await page.goto("/profile");
     await expect(page.locator("#panel-plan")).toBeVisible(); // Plan is the default tab
     const planText = ((await page.locator("#panel-plan").innerText()) ?? "").replace(/\s+/g, " ");
-    expect(planText).toContain("Software QA Analyst");
+    // the target rides the header band now (Phase-1 re-cut: the §1 masthead
+    // retired — .band-id carries "… · Target: <career>")
+    const bandId = ((await page.locator(".band-id").textContent()) ?? "").replace(/\s+/g, " ");
+    expect(bandId).toContain("Target: Software QA Analyst");
     expect(planText).not.toContain("Test Planning"); // summary only — NEVER the ranked list
     const trajRows = (await page.locator(".traj-rows .trow").allTextContents()).map((t) => t.replace(/\s+/g, " ").trim());
     expect(trajRows.join(" ")).toContain("40"); // setup point — canon holds

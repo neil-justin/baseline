@@ -117,7 +117,9 @@ test("record demo arc", async ({ page }) => {
   await page.waitForTimeout(600);
   await page.click(".quiet-toggle.disc-go");
   await page.waitForTimeout(800);
-  await page.click('.index-row:has-text("Software QA Analyst")');
+  await page.click('.index-row:has-text("Software QA Analyst") .row-name');
+  await page.waitForTimeout(400);
+  await page.click('button:has-text("Change target role")'); // the row no longer jumps straight to the switch (2026-11-02)
   await page.waitForSelector('button:has-text("Switch to Software QA Analyst")', { timeout: 12000 });
   await page.click(':is(a, button):has-text("Switch to Software QA Analyst")');
   await page.waitForTimeout(2400);
@@ -167,11 +169,11 @@ test("record demo arc", async ({ page }) => {
   await page.goto("/prep");
   await page.waitForSelector(".rs-upload");
   await page.setInputFiles('.rs-upload input[type="file"]', "e2e/fixtures/resume-qa.pdf");
-  await page.click('button:has-text("Run the diagnostic")');
   await page.waitForSelector(".rs-readout", { timeout: 45_000 });
   await page.waitForTimeout(1200);
+  await page.click('.prep-lens button:has-text("Cover-letter checker")'); // switch to the letter tool
+  await page.waitForTimeout(400);
   await page.setInputFiles('.cl-upload input[type="file"]', "e2e/fixtures/cover-letter-qa.txt");
-  await page.click('button:has-text("Run the letter check")');
   await page.waitForSelector(".cl-readout", { timeout: 45_000 });
   await page.waitForTimeout(1200);
   await page.screenshot({ path: "/tmp/opencode/screenshots/record-64-letter.png" });
