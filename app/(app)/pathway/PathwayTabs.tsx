@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import TablePager from "@/components/TablePager";
 
 /**
  * Pathway tabs — MY PLAN, v7.2 Composition A (user-picked from the
@@ -122,6 +123,11 @@ const TABS = [
 type TabId = (typeof TABS)[number]["id"];
 const isTab = (v: string): v is TabId => TABS.some((t) => t.id === v);
 
+/* the pager's page size — 10 rows a page is a REAL data need: the gaps
+   ledger runs to 25-row maps and the resource catalog to 28-row lists
+   (36-career roster); single-page tables stay pager-free (element budget) */
+const PAGE_SIZE = 10;
+
 function defaultElement() {
   return (
     <div className="defaultband">
@@ -158,12 +164,28 @@ export default function PathwayTabs({
   const [seq, setSeq] = useState(0); // >0 only after a user-initiated switch
   const [s2open, setS2open] = useState(false);
   const [anchor, setAnchor] = useState<string | null>(null);
+  /* each paged table keeps its OWN page across tab switches — the state
+     lives up here, outside the keyed tabpanels (a seq remount is the user's
+     own tab click; it never re-pages). A career SWITCH re-seeds both
+     tables, so both pagers land on page 1 (see the careerName effect). */
+  const [gapPage, setGapPage] = useState(1);
+  const [resPage, setResPage] = useState(1);
 
   /* open tab from hash (default: ranked steps — beat 8 opens here) */
   useEffect(() => {
     const initial = (window.location.hash || "").replace("#", "");
     if (isTab(initial)) setActive(initial);
   }, []);
+
+  /* a career switch (router refresh feeds a new careerName) rebuilds the
+     ledger and the catalog — both pagers land on page 1 */
+  const careerRef = useRef(careerName);
+  useEffect(() => {
+    if (careerRef.current === careerName) return;
+    careerRef.current = careerName;
+    setGapPage(1);
+    setResPage(1);
+  }, [careerName]);
 
   const selectTab = (id: TabId, user = true) => {
     setActive(id);
@@ -176,6 +198,13 @@ export default function PathwayTabs({
     setActive(id);
     setSeq((n) => n + 1);
     setAnchor(resTitle ?? null);
+    /* a jump lands ON the anchored row's page first, then the anchored
+       scroll runs on that commit (the effect already waits a frame) — the
+       anchor is never left behind an invisible page */
+    if (resTitle) {
+      const i = resources.rows.findIndex((r) => r.title === resTitle);
+      setResPage(i < 0 ? 1 : Math.floor(i / PAGE_SIZE) + 1);
+    }
     if (history.replaceState) history.replaceState(null, "", `#${id}`);
   };
 
@@ -209,8 +238,9 @@ export default function PathwayTabs({
   };
 
   /* a Start/Find-resources CTA lands on Resources with the mapped resource
-     anchored-in-nothing: the row is marked, then scrolled into view the
-     moment the tab commits (instant — no entrance motion). */
+     anchored-in-nothing: goto pages the catalog to that row first (same
+     batch), then the row is scrolled into view the moment the tab commits
+     (instant — no entrance motion). */
   useEffect(() => {
     if (active !== "resources" || !anchor) return;
     const frame = requestAnimationFrame(() => {
@@ -220,6 +250,16 @@ export default function PathwayTabs({
     });
     return () => cancelAnimationFrame(frame);
   }, [active, anchor, seq]);
+
+  /* page slices — every pager number computes from the tables' own rows
+     (never painted); undecided renders no tables, so the slices stay empty
+     and pager-free there */
+  const gapRows = undecided ? [] : gaps.rows;
+  const resRows = undecided ? [] : resources.rows;
+  const gapPageCount = Math.ceil(gapRows.length / PAGE_SIZE);
+  const resPageCount = Math.ceil(resRows.length / PAGE_SIZE);
+  const gapSlice = gapRows.slice((gapPage - 1) * PAGE_SIZE, gapPage * PAGE_SIZE);
+  const resSlice = resRows.slice((resPage - 1) * PAGE_SIZE, resPage * PAGE_SIZE);
 
   const stageBand = steps.band?.length ? (
     <div className="stageband" role="img" aria-label={steps.bandLabel}>
@@ -487,7 +527,7 @@ export default function PathwayTabs({
                   </tr>
                 </thead>
                 <tbody>
-                  {gaps.rows.map((row) => (
+                  {gapSlice.map((row) => (
                     <tr key={row.name} className="g-row">
                       <td>
                         <div className="g-name">{row.name}</div>
@@ -545,6 +585,19 @@ export default function PathwayTabs({
                   ))}
                 </tbody>
               </table>
+              {/* the pager bar sits in the foot register, directly under its
+                  table (still inside the same .panel-sec); single-page
+                  ledgers stay pager-free (element budget) */}
+              {gapPageCount > 1 ? (
+                <TablePager
+                  showingFrom={(gapPage - 1) * PAGE_SIZE + 1}
+                  showingTo={Math.min(gapPage * PAGE_SIZE, gapRows.length)}
+                  total={gapRows.length}
+                  page={gapPage}
+                  pageCount={gapPageCount}
+                  onPage={setGapPage}
+                />
+              ) : null}
               <div className="foot">
                 ✓ verified quiz: passed the short check · ✓✓ checked resource: finished it and passed ·
                 self-reported: your claim; a short check locks it in.
@@ -612,7 +665,7 @@ export default function PathwayTabs({
                   <span className="res-feeds">Feeds</span>
                 </div>
 
-                {resources.rows.map((r) => (
+                {resSlice.map((r) => (
                   <div
                     key={r.title}
                     className={`res-row${anchor === r.title ? " anchored" : ""}`}
@@ -645,6 +698,19 @@ export default function PathwayTabs({
                   </div>
                 ))}
               </div>
+              {/* the pager bar sits in the foot register, directly under its
+                  table (still inside the same .panel-sec); single-page
+                  catalogs stay pager-free (element budget) */}
+              {resPageCount > 1 ? (
+                <TablePager
+                  showingFrom={(resPage - 1) * PAGE_SIZE + 1}
+                  showingTo={Math.min(resPage * PAGE_SIZE, resRows.length)}
+                  total={resRows.length}
+                  page={resPage}
+                  pageCount={resPageCount}
+                  onPage={setResPage}
+                />
+              ) : null}
             </section>
           </>
         )}

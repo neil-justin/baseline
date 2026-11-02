@@ -665,3 +665,14 @@
   .v7career .mbar { max-width: 84px; }
   .v7career .choice button { padding: 4px 9px; font-size: 11.5px; }
 }
+
+/* ---------- pager chain (Round P3) — the shared .vpager lives in ../v7.css ----------
+   The paged list keeps its closing hairline: when a pager bar follows the
+   table, EVERY rendered row (incl. the live-row button) and the last row's
+   own detail keep their bottom rule — the bar itself is rule-free, so the
+   list closes with one line — and no rule bleeds through a page boundary
+   (the suppression above stays in force only on single-page lenses). */
+.v7career .index-table:has(+ .vpager) .index-row,
+.v7career .index-table:has(+ .vpager) .role-block:last-of-type .index-detail {
+  border-bottom: 1px solid var(--v-rows);
+}

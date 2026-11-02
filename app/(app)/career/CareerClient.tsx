@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import TablePager from "@/components/TablePager";
 import { SegRubricBar, VBadge } from "@/components/instrument";
 import { rubricParts } from "@/lib/engines/rubric";
 import { roundHalfDown, WEIGHTS, type Score } from "@/lib/engines/score";
@@ -50,6 +51,9 @@ const DEFAULT_RATINGS: Record<string, Rating> = {
   "Defect management": "yes",
   "Applications Support and Enhancement": "yes",
 };
+/* the pager's page size — 10 rows a page is a REAL data need: the one-list
+   shows the whole 36-career catalog on both lenses */
+const PAGE_SIZE = 10;
 
 interface DipView {
   score: Score;
@@ -135,6 +139,32 @@ export default function CareerClient({
   const [qaGoalPosted, setQaGoalPosted] = useState(false);
   const [reassess, setReassess] = useState(reassessCanon);
 
+  /* pager — rows keep their ABSOLUTE indices (page 2 opens at rank 11, never
+     a re-numbered list). The auto-position guard covers any state where the
+     current row or the live switch target sits past page 1: the pager opens
+     ON that row's page so the beat rows land on the initially-open page.
+     Dormant when both are already on page 1 — the computed canon fixture is
+     (verified: qa sits at ranked sheet index 2, All-lens index 2). The math
+     mirrors the list's own stable b.x − a.x order; never painted. */
+  const [page, setPage] = useState(() => {
+    const initial = [...roles].sort((a, b) => b.x - a.x);
+    const pageOf = (pred: (r: RoleRowData) => boolean) => {
+      const i = initial.findIndex(pred);
+      return i < 0 ? 0 : Math.floor(i / PAGE_SIZE) + 1;
+    };
+    return Math.max(pageOf((r) => r.current), pageOf((r) => r.live)) || 1;
+  });
+
+  /* lens/filter changes land on page 1; a detail expand/collapse never
+     re-pages. (The ref skips the mount so the auto-position guard above
+     survives first render.) */
+  const lensRef = useRef(lens);
+  useEffect(() => {
+    if (lensRef.current === lens) return;
+    lensRef.current = lens;
+    setPage(1);
+  }, [lens]);
+
   const [ratings, setRatings] = useState<Record<string, Rating>>(() =>
     Object.fromEntries(reassessCanon.map((r) => [r.name, DEFAULT_RATINGS[r.name] ?? "no"]))
   );
@@ -163,6 +193,13 @@ export default function CareerClient({
         : roles.filter((r) => r.trackLabel === lens);
   const zeroResult = rows.length === 0;
   const colsClass = lens === "ranked" ? "cols-ranked" : "cols-track";
+
+  /* page slice — the cardtop kicker and the pager bar both print the
+     page-true range computed from the same rows that render */
+  const sliceStart = (page - 1) * PAGE_SIZE;
+  const pageRows = rows.slice(sliceStart, sliceStart + PAGE_SIZE);
+  const pageCount = Math.ceil(rows.length / PAGE_SIZE);
+  const showingTo = Math.min(sliceStart + PAGE_SIZE, rows.length);
 
   const rowWhy = (r: RoleRowData) => {
     if (r.current) return r.why;
@@ -523,9 +560,18 @@ export default function CareerClient({
                 </button>
               ))}
             </div>
-            <span className="kicker num" id="explore-count">
-              SHOWING {rows.length} OF {exploreTotal} CAREERS
-            </span>
+            {/* the ONE tracked SHOWING line for the card — page-true range on
+                the paged list (rows keep absolute positions); the
+                zero-branches keep their bytes */}
+            {rows.length === 0 || (zeroConfirmed && lens === "ranked") ? (
+              <span className="kicker num" id="explore-count">
+                SHOWING {rows.length} OF {exploreTotal} CAREERS
+              </span>
+            ) : (
+              <span className="kicker num" id="explore-count">
+                SHOWING {sliceStart + 1}–{showingTo} OF {exploreTotal} CAREERS
+              </span>
+            )}
           </div>
 
           {/* lens context — one small head per lens, kept from the previous tabs */}
@@ -566,6 +612,7 @@ export default function CareerClient({
               to see the full index.
             </div>
           ) : (
+            <>
             <div className={`index-table ${colsClass}`}>
               <div className="index-colheads" aria-hidden="true">
                 {lens === "ranked" && <span className="ch-rank">RANK</span>}
@@ -582,7 +629,11 @@ export default function CareerClient({
                 <span className="ch-exp" aria-hidden="true" />
               </div>
 
-              {rows.map((r, i) => {
+              {/* the page slice — `i` is the ABSOLUTE sheet index (rank prints
+                  sliceStart + i + 1, so page 2 opens at rank 11); the pagers
+                  above keep both lenses' indices engine-true */}
+              {pageRows.map((r, i) => {
+                const abs = sliceStart + i;
                 const liveRow = r.live && card?.id !== r.id;
                 if (liveRow) {
                   return (
@@ -592,7 +643,7 @@ export default function CareerClient({
                       type="button"
                       onClick={() => openConfirm(r.id)}
                     >
-                      {lens === "ranked" && <span className="rank num">{i + 1}</span>}
+                      {lens === "ranked" && <span className="rank num">{abs + 1}</span>}
                       <span className="cell-career">
                         <span className="c-name">
                           {r.name} <span className="mono row-go" aria-hidden="true">→</span>
@@ -625,7 +676,7 @@ export default function CareerClient({
                       className={`index-row ${colsClass}${openId === r.id ? " row-open" : ""}`}
                       onClick={() => setOpenId((cur) => (cur === r.id ? null : r.id))}
                     >
-                      {lens === "ranked" && <span className="rank num">{i + 1}</span>}
+                      {lens === "ranked" && <span className="rank num">{abs + 1}</span>}
                       <span className="cell-career">
                         <button
                           type="button"
@@ -708,6 +759,23 @@ export default function CareerClient({
                 );
               })}
             </div>
+
+            {/* the pager closes the paged list — nav-only, because the
+                cardtop's kicker carries the one tracked SHOWING line for the
+                card (the Sparing Label Rule); a single-page list stays
+                pager-free (element budget) */}
+            {pageCount > 1 ? (
+              <TablePager
+                showRange={false}
+                showingFrom={sliceStart + 1}
+                showingTo={showingTo}
+                total={rows.length}
+                page={page}
+                pageCount={pageCount}
+                onPage={setPage}
+              />
+            ) : null}
+            </>
           )}
 
           {/* the matching honesty note lives on the ranked lens */}

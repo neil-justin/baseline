@@ -686,3 +686,13 @@
   .v7plan .res-feeds { flex: 1 1 100%; }
   .v7plan .res-heads { display: none; }
 }
+
+/* ---------- pager chain (Round P3) — the shared .vpager lives in ../v7.css ----------
+   The gap ledger and the resource catalog keep their closing hairline when a
+   pager bar follows (the bar itself is rule-free — the list closes with the
+   one drawn line); the :last-child suppression above stays in force on
+   single-page lists. */
+.v7plan .gap-table:has(+ .vpager) tbody tr:last-child td,
+.v7plan .res-table:has(+ .vpager) .res-row:last-child {
+  border-bottom: 1px solid var(--v-rows);
+}

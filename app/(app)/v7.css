@@ -276,3 +276,79 @@ body:has(.v7) { background: #f8f9fa; }
     padding-bottom: 64px;
   }
 }
+
+/* ---------- shared table pager — .vpager (Round P3, 2026-11-02) ----------
+   One pager family for the dense data tables (the Careers one-list, the My
+   Plan gaps ledger + resources catalog): 10 rows a page is a REAL data need
+   — the catalog is 36 careers and the plan tables run to 25-/28-row
+   lists — and a pager only renders when a table actually overflows one
+   page (element budget; single-page tables stay pager-free). Selector is
+   surface-agnostic (no .v7<surface> root in the name) so any surface the
+   shell hosts can render it; the shell carries it like the shared
+   families, while each surface file keeps only its own hairline chain.
+   Tracked label register (11px/500 +0.08em, ink-2, tabular numerals, the
+   v7.1 floor); grey-wash button track on white, state-bearing grey ≥4.5:1
+   (meta stays decorative-only); disabled reads through the ground/border,
+   no opacity games. Chevrons are drawn with borders (the Material subset
+   is frozen). No top rule — the table's last drawn row rule closes the
+   list (career.css/pathway.css keep it under the bar via :has). */
+
+.vpager {
+  display: flex;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 8px 16px;
+  flex-wrap: wrap;
+}
+.vpager .vpager-range,
+.vpager .vpager-page {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.vpager .vpager-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.vpager .pbtn {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  background: var(--v-surface);
+  color: var(--v-ink2);
+  cursor: pointer;
+  transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease;
+}
+.vpager .pbtn:hover:not(:disabled) {
+  background: var(--v-grey-wash);
+  color: var(--v-ink);
+}
+.vpager .pbtn:focus-visible {
+  outline: 2px solid var(--v-blue);
+  outline-offset: 2px;
+}
+.vpager .pbtn:disabled {
+  background: var(--v-grey-wash);
+  border-color: var(--v-rows);
+  color: var(--v-ink2);
+  cursor: default;
+}
+/* the drawn chevrons — borders, no glyph font (family spec) */
+.vpager .pbtn .chev {
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+}
+.vpager .pbtn.next .chev { transform: rotate(-45deg); }
+.vpager .pbtn.prev .chev { transform: rotate(135deg); }
