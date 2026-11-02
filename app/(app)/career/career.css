@@ -211,7 +211,7 @@
   display: grid;
   grid-template-columns: var(--cols);
   gap: 14px;
-  padding: 9px 16px;
+  padding: 8px 16px; /* the Dashboard table-head register */
   border-bottom: 1px solid var(--v-rows);
   align-items: center;
 }
@@ -226,7 +226,7 @@
   display: grid;
   grid-template-columns: var(--cols);
   gap: 14px;
-  padding: 11px 16px;
+  padding: 10px 16px; /* the Dashboard table-cell register (td 10px 16px) */
   border-bottom: 1px solid var(--v-rows);
   align-items: center;
   min-width: 0;
@@ -519,7 +519,6 @@
   font: 400 12.5px/1.55 Roboto, system-ui, sans-serif; /* kills the Index mono bleed */
   color: var(--v-ink2);
 }
-.v7career .readout-fit b { color: var(--v-blue-deep); font-weight: 500; }
 
 /* re-assessment */
 .v7career .reassess { margin-top: 4px; }
@@ -591,7 +590,6 @@
 .v7career .score-from { color: var(--v-ink2); }
 .v7career .score-arrow { color: var(--v-ink2); margin: 0 6px; font-size: 26px; align-self: center; }
 .v7career .score-to { color: var(--v-blue-deep); }
-#sw-recovered .readout-fit b { color: var(--v-blue-deep); }
 
 /* ---------- responsive ---------- */
 

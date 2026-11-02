@@ -97,26 +97,9 @@ interface LockData {
   fromName: string;
 }
 
-function Arrow() {
-  return (
-    <span className="arrow">
-      <svg
-        viewBox="0 0 20 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.8}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-        width="0.8em"
-        height="0.8em"
-      >
-        <path d="M4 10h11" />
-        <path d="M11 5l5 5-5 5" />
-      </svg>
-    </span>
-  );
-}
+/** (the drawn-arrow component retired with the CTA canon port — the family's
+    "Open your plan →"/"→" arrows render as text arrows, matching the band
+    CTA and the progress/profile renders of the same string) */
 
 function Chev() {
   /* drawn chevron — borders, no glyph font (family spec) */
@@ -431,6 +414,35 @@ export default function CareerClient({
     </div>
   );
 
+  /** Careers band — the bandcells tray raised onto the Dashboard/Prep KPI
+      register (2026-11-03 user ruling): a slash fraction + the ONE 4px
+      honest bar (blue fill = earned share, green only when FULLY earned).
+      No chips — prep's notRun/·✓ semantics are factor-specific; bare text
+      cells stay bare (the track cell never carries a fake fraction). */
+  const cellBar = (
+    label: string,
+    earned: number,
+    max: number,
+    ariaNote: string
+  ) => (
+    <div className="bcell" key={label}>
+      <span className="label">{label}</span>
+      <span className="bval num">
+        {earned}/{max}
+      </span>
+      <div
+        className="kbar"
+        role="img"
+        aria-label={`${label}: ${earned} of ${max} ${ariaNote}`}
+      >
+        <i
+          className={earned >= max && max > 0 ? "solid green" : "solid"}
+          style={{ width: max > 0 ? `${Math.round((earned / max) * 100)}%` : "0" }}
+        />
+      </div>
+    </div>
+  );
+
   return (
     <div className="v7career">
       {/* ============================================================
@@ -505,8 +517,8 @@ export default function CareerClient({
           {card && (
             <div className="bandcells">
               {bandcell("Track", card.trackLabel)}
-              {bandcell("Skill map", `${card.closed} of ${card.mapSize} on your baseline`, true)}
-              {bandcell("First 30 days", `${card.stageOneDone} of 3 done`, true)}
+              {cellBar("Skill map", card.closed, card.mapSize, "closed bars")}
+              {cellBar("First 30 days", card.stageOneDone, 3, "done")}
             </div>
           )}
         </header>
@@ -609,7 +621,12 @@ export default function CareerClient({
                       </span>
                       <span className="cell-fit" aria-label={`${r.x} of ${r.y} skills in common`}>
                         <span className={`fit-line num ${r.x === 0 ? "fit-zero" : ""}`}>
-                          {r.x} of {r.y}
+                          {/* Wave-3 canon: the zero-demonstrated cell reads the
+                              honest "—" (no demonstrated skill gives this career
+                              any matching signal) — the same quiet-dash
+                              convention Prep's unmeasured band cells ride; the
+                              count itself stays the aria truth. */}
+                          {r.x === 0 ? "—" : `${r.x} of ${r.y}`}
                         </span>
                         <span className="mbar" aria-hidden="true">
                           <i style={{ width: `${(r.x / r.y) * 100}%` }} />
@@ -823,8 +840,8 @@ export default function CareerClient({
                 <span><b>CC</b> {reset.dip.score.cc}/{WEIGHTS.cc}</span>
               </div>
               <div className="readout-fit">
-                The {reset.dip.score.total} that stays is competencies and career direction: verified skills ·✓
-                and an active goal survive career-specific resets.
+                What stays is competencies and career direction: verified skills ·✓ and an active
+                goal survive career-specific resets.
               </div>
             </div>
 
@@ -923,10 +940,7 @@ export default function CareerClient({
                 <span><b>CC</b> {recovered.score.cc}/{WEIGHTS.cc}</span>
               </div>
               <div className="readout-fit">
-                <b className="num">
-                  {recovered.from} → {recovered.score.total}
-                </b>{" "}
-                · the reset measured the right things, then rebuilt on what you reported.
+                The reset measured the right things, then rebuilt on what you reported.
               </div>
             </div>
 
@@ -988,9 +1002,12 @@ export default function CareerClient({
                 </div>
               )}
               <div className="sw-actions rec-actions">
-                {/* the view's one primary is the suggested goal; the gaps stay a ghost */}
+                {/* the view's one primary is the suggested goal; the plan stays a
+                    ghost — ghost-label port (ledger tail, 2026-11-03): the CTA
+                    canon "Open your plan →" replaces the retired "See your
+                    gaps" naming */}
                 <a className="btn btn-ghost" href="/pathway">
-                  See your gaps <Arrow />
+                  Open your plan <span className="arrow">→</span>
                 </a>
                 <button className="btn btn-ghost" type="button" onClick={() => backToCareer()}>
                   Back to Career
