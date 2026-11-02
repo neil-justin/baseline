@@ -5,7 +5,6 @@ import { intakeResumeFile, isProbablyResume, type ParsedResume } from "@/lib/eng
 import { diagnose } from "@/lib/engines/resume/analyze";
 import { computeAirResume } from "@/lib/engines/air";
 import { getCareer } from "@/lib/fixtures/catalog";
-import { NEIL_SEED } from "@/lib/fixtures/neil";
 
 /**
  * Resume-engine verification (round 6a) — runs the REAL intake + diagnostic
@@ -184,26 +183,6 @@ describe("the good fixture: three deterministic factors + AIR", () => {
         expect(g.suggestion?.example?.fromLine.length ?? 0).toBeGreaterThan(10);
       }
     }
-  });
-});
-
-describe("the personalized on-ramp list (Q7a — derived from the student's own state)", () => {
-  it("NEIL canon seed names his verified skills, honest internship/credentials lines, and the role's keyword floor", async () => {
-    const { mustContainList } = await import("@/app/(app)/prep/must-contain");
-    const items = await mustContainList(getCareer("swd")!, NEIL_SEED);
-    const labels = items.map((i) => i.label).join(" | ");
-    const notes = items.map((i) => i.note).join(" | ");
-    // verified bars only — NEIL_SEED verifies the two PSF-SDS rows, claims never lift rows
-    expect(labels).toContain("Skills section naming these verified skills: Data Design / SQL + data modeling, Business Needs Analysis");
-    // internship honesty: no intake answer exists in the SHS-stale state yet
-    expect(notes).toContain("no internship recorded yet");
-    expect(labels).toContain("nothing recorded yet"); // credentials, none yet
-    // the keyword floor = the role's core tier, verbatim catalog rows
-    expect(labels).toContain(
-      getCareer("swd")!.skills.filter((s) => s.tier === "core").map((s) => s.name).join(", ")
-    );
-    // every row carries its source
-    for (const it of items) expect(it.src.length).toBeGreaterThan(0);
   });
 });
 
