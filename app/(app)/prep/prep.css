@@ -47,7 +47,6 @@
 
 .v7prep .who { min-width: 220px; }
 .v7prep .who .m { max-width: 74ch; }
-.v7prep .bval-row { display: flex; align-items: center; gap: 8px; }
 .v7prep .bval.bquiet { color: var(--v-grey-text); }
 .v7prep .label {
   font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
@@ -150,15 +149,6 @@
 /* (the tabs-row kicker retired — the verdict strip alone owns the score) */
 /* the v7.2 hidden-guard — .card { display:block } must not defeat hidden */
 .v7prep .tabpanel[hidden] { display: none !important; }
-/* the tool's identity line — a panel head in the label register */
-.v7prep .prep-sublabel,
-.v7prep .cl-sublabel {
-  margin: 12px 16px 0;
-  font-size: 11.5px; /* v7.1 floor */
-  color: var(--v-ink2);
-  max-width: 66ch;
-}
-.v7prep .prep-sublabel { padding: 10px 16px 0; margin: 0; }
 
 /* ---------- on-demand disclosures (v7.5 reorder): the result's detail
    sections collapse — the resting card is score + upload ---------- */
@@ -204,14 +194,15 @@
 }
 .v7prep .b-head .helper b { color: var(--v-ink); font-weight: 500; }
 
-/* the surface disclaimers (prep-sublabel / cl-sublabel) */
-.v7prep .prep-sublabel,
-.v7prep .cl-sublabel {
+/* the quiet disclaimer lead (the guide's one prose kicker line; the /prep
+   card renders no sublabel — the verdict strip carries the identity) */
+.v7prep .prep-sublabel {
+  padding: 10px 16px 0;
+  margin: 0 0 12px;
   font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   max-width: 70ch;
 }
-.v7prep .panel-sec > .prep-sublabel { margin: 0 0 12px; }
 
 /* ---------- buttons (the family; overrides the Index .btn in globals) ---------- */
 
@@ -241,7 +232,6 @@
   font-weight: 500;
 }
 .v7prep .btn-ghost:hover { border-color: var(--v-blue); background: var(--v-blue-wash); }
-.v7prep .btn-sm { padding: 7px 14px; font-size: 12.5px; }
 .v7prep .arrow { display: inline-flex; align-items: center; opacity: 0.85; font-family: Roboto, system-ui, sans-serif; font-weight: 400; }
 .v7prep .rs-ctas { margin-top: 14px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
 .v7prep .link-quiet {
@@ -441,35 +431,13 @@
 }
 
 /* the wash-CHIP result cells (green Pass / grey Missing·Not found·Skipped;
-   amber only on the Parse watch-class row) */
+   amber only on the Parse watch-class row) — no raw glyphs anywhere */
 .v7prep .checks-table .chip {
   padding: 2px 8px;
 }
 
-/* the marks — the honest language: green pass family, amber for a fail
-   (never red), grey "—" for the honestly-skipped row */
-.v7prep .checks-table .rs-check .mark { font-weight: 600; }
-.v7prep .checks-table .rs-check .mark.ok { color: var(--v-green-text); }
-.v7prep .checks-table .rs-check .mark.no { color: var(--v-amber-text); }
-.v7prep .checks-table .rs-check .mark.skip { color: var(--v-grey-text); font-weight: 500; }
 .v7prep .rs-check-note { color: var(--v-ink2); font-size: 12px; }
 .v7prep .cl-notyet { color: var(--v-grey-text); font-size: 12px; font-weight: 500; }
-
-/* the letter's role-anchor receipt rides as the table's first group row */
-.v7prep .checks-table .cl-role-line th {
-  padding: 14px 16px 8px 0;
-  border-bottom: 1px solid var(--v-rows);
-  font: 400 12.5px/1.6 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  text-align: left;
-}
-.v7prep .cl-role-line b { color: var(--v-ink); font-weight: 500; }
-.v7prep .cl-role-label {
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.08em;
-  color: var(--v-ink2);
-  margin-right: 2px;
-}
 
 /* the fence captions */
 .v7prep .src-line {

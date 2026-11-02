@@ -3,7 +3,7 @@ import Link from "next/link";
 import "../prep.css";
 
 export const metadata: Metadata = {
-  title: "Resume format guide — Career Readiness",
+  title: "Resume format guide — Baseline",
   description: "The curated entry-level corporate resume format: sections, order, length, and Philippine entry-level conventions — with the Harvard bullet-point template.",
 };
 

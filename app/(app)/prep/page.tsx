@@ -15,7 +15,7 @@ import "./prep.css";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Prep — Application Materials · Career Readiness",
+  title: "Prep — Application Materials · Baseline",
   description:
     "A format & evidence screen for your application materials: the resume checker (7 of the 15-point AR channel) and the cover-letter checker (5 of 15) each surface the format checks and the role's evidence names; the presence declaration lives in Profile → Credentials (3 of 15). Feedback-only — it never claims an ATS pass.",
 };
@@ -161,6 +161,7 @@ function FactorGroup({
   checks,
   missLabel,
   watchClass,
+  shareOverride,
 }: {
   name: string;
   meaning: string;
@@ -168,11 +169,24 @@ function FactorGroup({
   missLabel: string;
   /** amber miss chips for this group's watch-class rows (Parse only) */
   watchClass?: boolean;
+  /**
+   * The factor's ENGINE share when the row-count share would lie about it.
+   * Parse is the gate (lib/engines/resume/analyze.ts parseabilityFactor:
+   * score=1 whenever a run exists, failed runs never store); its watch-class
+   * row (a near-empty page) sits OUTSIDE the factor share — the same
+   * exclusion semantics the letter's honestly-skipped structural rows have.
+   * Without the override a blank page 2 prints "Parse — 50%" here under a
+   * verdict-strip Parse bar that paints 100%.
+   */
+  shareOverride?: number;
 }) {
   const evaluated = checks.filter((c) => !c.skipped);
-  const share = Math.round(
-    (evaluated.filter((c) => c.ok).length / Math.max(1, evaluated.length)) * 100
-  );
+  const share =
+    shareOverride !== undefined
+      ? Math.round(shareOverride * 100)
+      : Math.round(
+          (evaluated.filter((c) => c.ok).length / Math.max(1, evaluated.length)) * 100
+        );
   const hasNotes = checks.some((c) => c.note);
   return (
     <section className="rs-fgroup">
@@ -324,7 +338,10 @@ function RunResult({
               {run.fileName} · {run.kind === "pdf" ? "PDF" : "Word"} · target <b>{run.careerName}</b>
             </div>
           </div>
-          <div className="rs-verdict num">
+          {/* rs-readout-score stays as the e2e byte-contract hook (demo-arc +
+              resume-diagnostic assert it contains the score); the .score-big
+              carry is the Dashboard verdict register — additive, no drift */}
+          <div className="rs-verdict rs-readout-score num">
             <span className="score-big">{run.air.airResume}</span>
             <span className="c-of">/100</span>
           </div>
@@ -346,7 +363,15 @@ function RunResult({
       </section>
 
       {groups.map((g) => (
-        <FactorGroup key={g.name} name={g.name} meaning={g.meaning} checks={g.checks} missLabel={g.missLabel} watchClass={g.watchClass} />
+        <FactorGroup
+          key={g.name}
+          name={g.name}
+          meaning={g.meaning}
+          checks={g.checks}
+          missLabel={g.missLabel}
+          watchClass={g.watchClass}
+          shareOverride={g.name === "Parse" ? factorViews[0].score : undefined}
+        />
       ))}
 
       <details className="rs-disc">
@@ -408,7 +433,8 @@ function LetterResult({ run, staleFor, children }: {
               {run.fileName} · {LETTER_KINDS[run.kind] ?? run.kind.toUpperCase()} ·{run.employerDeclared ? ` employer anchor ${run.employerName}` : " no employer declared"} · target <b>{run.careerName}</b>
             </div>
           </div>
-          <div className="rs-verdict num">
+          {/* cl-readout-score: the letter side of the same e2e contract */}
+          <div className="rs-verdict cl-readout-score num">
             <span className="score-big">{run.air.airLetter}</span>
             <span className="c-of">/100</span>
           </div>
@@ -566,7 +592,7 @@ export default async function PrepPage() {
           </div>
           <p className="nc-cta">
             <a className="btn btn-primary" href="/career">
-              Browse the career index <span className="arrow num">↵</span>
+              Browse the career index <span className="arrow num">→</span>
             </a>
           </p>
         </section>
