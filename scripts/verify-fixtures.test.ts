@@ -254,7 +254,10 @@ describe("letter + presence engines (ticket 12 surface round, 2026-10-30)", () =
     });
     expect(declaredMiss.employerMentioned).toBe(false);
     expect(declaredMiss.structuralScore).toBe(3 / 4);
-    expect(declaredMiss.airLetter).toBe(75);
+    // Q17 weighted sum (prep stream, 2026-11-03 user-locked): parse 20% +
+    // keywords 40% + structural 40% → .2 + .4 + .3 = .9 → 90 (the old
+    // multiplicative product gave 75)
+    expect(declaredMiss.airLetter).toBe(90);
   });
 
   it("presence stamp: offline deterministic checks + the honest private line; malformed entries never measure", () => {
@@ -795,11 +798,16 @@ describe("blessed conversion — synonym seeds (integrity; engine untouched)", (
     expect(Object.keys(SKILL_SYNONYMS).length).toBeGreaterThanOrEqual(150);
   });
 
-  it("demo-trio seeds stay byte-intact (canon protection)", () => {
+  it("demo-trio seeds stay pinned (canon protection — §6.4 substance stems folded in by the prep stream, Q16 2026-11-03)", () => {
+    // the §6.4 canonical-phrase-gate ruling widened the swd development row
+    // with the substance stems a real resume writes — the canon list is the
+    // PREFIX; the stems extend it deliberately (prep stream owns synonyms.ts)
     expect(SKILL_SYNONYMS["Applications Development"]).toEqual({
       like: [
         "application development", "app development", "programming", "python", "java",
         "javascript", "typescript", "coding", "php", "c#", "software development",
+        "develop", "developed", "developer", "developing", "development",
+        "build", "built", "building",
       ],
     });
     expect(SKILL_SYNONYMS["ETL (extract-transform-load workflows)"]).toEqual({
@@ -874,5 +882,265 @@ describe("verified-credential join (admin round, Round-4 lock)", () => {
     expect(untouched.state).toBe(NEIL_SEED); // identity — the arc's own state object
     // the canon seed still scores ADR-0002's 40 (SP 19 · ES 17 · TP 0 · AR — · CC 4)
     expect(scoreFor(NEIL_SEED).total).toBe(40);
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   §6.1 substance re-map + Q11v2 ranking rewire (2026-11-03 overnight batch;
+   user bar: "a suggested resource must satisfy mostly/entirely the skill it
+   feeds"). One pinned census block ONLY (stream FIX):
+   1. lie inventory — the Git-handbook class can never return;
+   2. canon rails — demo pins, da 13 rows, 27 gap rows untouched;
+   3. re-map census — final mapping counts reflecting the shipped state;
+   4. pick census — the fallback winners, flagged once per covered skill;
+   5. qa check Q5 — Candidate A pinned (user-approved #19, 2026-11-03);
+   6. Q11v2 engine sort — check-linked → dedicated → free → hours → id,
+      deterministic, and `pick` is never an input (engine-side retirement).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+import { TESTING_CHECK, CHECK_SKILL as CHECK_SKILL_JOIN, getCheck } from "@/lib/fixtures/checks";
+import type { Resource } from "@/lib/types";
+import { vi } from "vitest";
+
+/* The rewire unit tests read the LIVE page module (sortResourcePool export);
+   the store/session is mocked so the fixture suite stays network-free. */
+vi.mock("@/lib/db", () => ({ getStudentView: vi.fn() }));
+vi.mock("@/lib/session", () => ({ requireStudent: vi.fn() }));
+
+describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory", () => {
+  const ADDR = (id: string): string[] => {
+    const r = RESOURCES.find((x) => x.id === id);
+    expect(r, `${id} must still exist (rows never deleted)`).toBeDefined();
+    return r!.skillsAddressed;
+  };
+
+  it("the named lie is dead: the Git handbook never feeds Applications Support and Enhancement", () => {
+    expect(ADDR("res-swd-support-doc")).toEqual([]); // Git handbook — retired
+    // and NO title with "git"/version-control content feeds the ASE skill
+    const ase = RESOURCES.filter((r) => r.skillsAddressed.includes("Applications Support and Enhancement"));
+    for (const r of ase) expect(r.title + " " + r.provider, `${r.id} must not be a Git-class feed for ASE`).not.toMatch(/\bgit\b/i);
+  });
+
+  it("the rest of the recorded lies stay cut (the regression pin set)", () => {
+    const has = (id: string, skill: string) => ADDR(id).includes(skill);
+    // Pro Git / semver do not teach breach response or needs analysis
+    expect(ADDR("res-sysadmin-progit")).toEqual([]);
+    expect(ADDR("res-sysadmin-semver")).toEqual([]);
+    expect(ADDR("res-swd-progit").includes("Applications Support and Enhancement")).toBe(false);
+    // generic tool/catalog courses never reach process skills
+    expect(has("res-purch-gcf-excel", "Price-proposal analysis")).toBe(false);
+    expect(has("res-purch-gcf-excel", "Best-value purchasing (quality/price/amount)")).toBe(false);
+    expect(has("res-purch-ms-learn", "Contract performance monitoring")).toBe(false);
+    expect(has("res-ops-gcf-excel", "Findings documentation & recommendation write-ups")).toBe(false);
+    expect(has("res-hra-top-professionalism", "Human Resources Systems Management")).toBe(false);
+    expect(has("res-audit-top-digital-literacy-cat", "Audit technology fluency (accounting software / Excel family)")).toBe(false);
+    expect(has("res-book-gcf-excel", "Operate accounting software")).toBe(false);
+    // vendor spec PDFs (PSF/TR) are provenance, not craft instruction
+    expect(ADDR("res-book-psf-gih-doc")).toEqual([]);
+    expect(ADDR("res-fas-psf-gih-doc")).toEqual([]);
+    expect(ADDR("res-audit-psf-gih-doc")).toEqual([]);
+    expect(ADDR("res-digart-tr-doc")).toEqual([]);
+    // bookkeeping does not reach payroll pay-out; comms courses do not reach
+    // interviewer/underwriter/counter-teller craft
+    expect(ADDR("res-pay-acca-intro")).toEqual([]);
+    expect(ADDR("res-teller-khan-banking")).toEqual([]);
+    expect(ADDR("res-coll-khan-banking")).toEqual([]);
+    expect(has("res-coll-dole-handbook", "Trace delinquent customers to new addresses by inquiring at post offices, telephone companies, credit bureaus, or through the questioning of neighbors")).toBe(false);
+    expect(ADDR("res-audit-ra9298")).toEqual([]);
+    expect(ADDR("res-credit-top-receiving-comms")).toEqual([]);
+    expect(ADDR("res-encode-ratatype").includes("Importing and exporting data between different database systems and softwares")).toBe(false);
+    expect(ADDR("res-clerk-ms-365")).toEqual([]); // office suites ≠ photocopying
+    expect(ADDR("res-desk-ms-365")).toEqual([]);
+    expect(ADDR("res-records-ms-365")).toEqual([]);
+    // the Learning-How-to-Learn / comms-class bundle lifts stay cut where the
+    // bundle's what line does not name the component being fed
+    expect(ADDR("res-swd-lhtl")).toEqual([]);
+    expect(ADDR("res-ba-lhtl")).toEqual([]);
+    expect(ADDR("res-ops-lhtl")).toEqual([]);
+    expect(ADDR("res-qa-openlearn-comms")).toEqual([]);
+    expect(ADDR("res-soc-google-cybersecurity")).toEqual([]);
+    expect(ADDR("res-fin-acca-mgmt")).toEqual([]);
+    expect(ADDR("res-fin-cfi-careers")).toEqual([]);
+    expect(ADDR("res-ccqa-ibm-design-thinking")).toEqual([]);
+    expect(has("res-purch-wharton-customer-analytics", "Communication · Critical Thinking · Ethics/Professionalism (Enabling)")).toBe(false);
+    // hub/catalog hubs stop carrying job-function mappings
+    expect(ADDR("res-training-ms-learn")).toEqual([]);
+    expect(ADDR("res-csr-ms-learn")).toEqual([]);
+    expect(ADDR("res-ccqa-ms-learn")).toEqual([]);
+    expect(ADDR("res-mkt-gcf")).toEqual([]);
+    expect(has("res-sales-trailhead", "After-sales Service")).toBe(false);
+    expect(has("res-sales-trailhead", "Sales Delivery + Delivery Management")).toBe(false);
+    expect(ADDR("res-events-mpi")).toEqual([]);
+  });
+});
+
+describe("§6.1 re-map census (final mapping state) + canon rails", () => {
+  it("catalog intact: 437 rows, no deletions; 536 ADDR entries remain (696 → 536)", () => {
+    expect(RESOURCES).toHaveLength(437);
+    const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
+    expect(mappings).toBe(536);
+  });
+
+  it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {
+    const pyBasics = RESOURCES.find((r) => r.id === "res-python-basics")!;
+    expect(pyBasics.skillsAddressed).toEqual(["Applications Development"]);
+    expect(CHECK_SKILL_JOIN["res-python-basics"]).toBe("Applications Development");
+    const qaTesting = RESOURCES.find((r) => r.id === "res-qa-testing")!;
+    expect(qaTesting.skillsAddressed).toEqual(["Software Testing"]);
+    expect(CHECK_SKILL_JOIN["res-qa-testing"]).toBe("Software Testing");
+    expect(getCheck("res-qa-testing")).toHaveLength(5);
+    expect(RESOURCES.filter((r) => r.careerId === "da")).toHaveLength(13);
+    const gap = RESOURCES.filter((r) => r.provider === "resource gap — unresolved");
+    expect(gap).toHaveLength(27);
+    // every ADDR entry is a real catalog skill (the linkage stays whole)
+    const allSkills = new Set(CAREERS.flatMap((c) => c.skills.map((s) => s.name)));
+    for (const r of RESOURCES) {
+      expect(r.skillsAddressed.every((s) => allSkills.has(s)), `${r.id} addresses an unknown skill`).toBe(true);
+    }
+  });
+
+  it("declared-thin census: 89 career-skill cells carry no URL row; empty ADDR rows = 73", () => {
+    const thin: string[] = [];
+    for (const c of CAREERS) {
+      for (const s of c.skills) {
+        const urlPool = RESOURCES.filter(
+          (r) => r.careerId === c.id && r.skillsAddressed.includes(s.name) && r.url
+        );
+        if (urlPool.length === 0) thin.push(`${c.id}::${s.name}`);
+      }
+    }
+    expect(thin).toHaveLength(89);
+    // thin cells never get papered over: no pick flag, no invented row
+    const thinPick = RESOURCES.filter((r) => r.pick && r.url === undefined);
+    expect(thinPick).toEqual([]);
+    expect(RESOURCES.filter((r) => r.skillsAddressed.length === 0)).toHaveLength(73);
+    // spot pins: the honest holes include these recorded ones
+    expect(thin).toContain("qa::Applications Support and Enhancement");
+    expect(thin).toContain("ba::Solution Support (UAT & hand-over)");
+    expect(thin).toContain("sysadmin::IT Asset Management"); // gap-row only
+    expect(thin).toContain("execsec::Supervision & training of clerical staff");
+  });
+});
+
+describe("pick-flag census (retired authored picks → inert fallback annotations)", () => {
+  const fallbackSort = (a: (typeof RESOURCES)[number], b: (typeof RESOURCES)[number]) => {
+    const free = Number(/free/i.test(String(b.cost))) - Number(/free/i.test(String(a.cost)));
+    if (free) return free;
+    const hrs = (a.durationHours ?? 99) - (b.durationHours ?? 99);
+    if (hrs) return hrs;
+    const prov = a.provider.localeCompare(b.provider);
+    if (prov) return prov;
+    return a.id.localeCompare(b.id);
+  };
+
+  it("208 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
+    const winnersBySkill = new Map<string, string>(); // career::skill → row id
+    const winnerRows = new Set<string>();
+    for (const c of CAREERS) {
+      for (const s of c.skills) {
+        const pool = RESOURCES.filter(
+          (r) => r.careerId === c.id && r.skillsAddressed.includes(s.name) && r.url
+        );
+        if (!pool.length) continue;
+        const w = [...pool].sort(fallbackSort)[0];
+        const key = `${c.id}::${s.name}`;
+        expect(winnersBySkill.has(key), `double winner for ${key}`).toBe(false);
+        winnersBySkill.set(key, w.id);
+        winnerRows.add(w.id);
+      }
+    }
+    const flags = RESOURCES.filter((r) => r.pick).map((r) => r.id);
+    expect(flags).toHaveLength(208);
+    expect(new Set(flags)).toEqual(winnerRows); // byte-match in BOTH directions
+    expect(winnersBySkill.get("swd::Applications Development")).toBe("res-python-basics");
+    // the canon money-shot stays flagged-adjacent: the qa fallback winner is a
+    // real testing resource (the ENGINE, not the flag, still picks res-qa-testing)
+    expect(winnersBySkill.get("qa::Software Testing")).toBe("res-qa-mdn-testing");
+    expect(flags).not.toContain("res-qa-testing"); // retired authored picks: the money-shot never rides a flag
+  });
+});
+
+describe("qa check Q5 — Candidate A (user-approved #19, 2026-11-03)", () => {
+  it("the calibration question is gone; the integration-level question tests the skill the check feeds", () => {
+    expect(TESTING_CHECK).toHaveLength(5);
+    const q5 = TESTING_CHECK[4];
+    expect(q5.answer).toBe(0);
+    expect(q5.stem).toMatch(/between its two modules/i);
+    expect(q5.stem).not.toMatch(/calibration|rubric/i);
+    expect(JSON.stringify(TESTING_CHECK.map((q) => q.stem))).not.toMatch(/calibration/i);
+    expect(q5.options[0]).toMatch(/Integration testing/);
+  });
+});
+
+describe("Q11v2 engine sort (pathway pickResource — deterministic, pick unread)", () => {
+  const loadSort = async (): Promise<(pool: Resource[], skill: string) => Resource[]> => {
+    const mod = await import("@/app/(app)/pathway/page");
+    return mod.sortResourcePool as (pool: Resource[], skill: string) => Resource[];
+  };
+  const row = (over: Partial<Resource> & { id: string }): Resource => ({
+    title: over.id,
+    provider: "prov",
+    type: "course",
+    cost: "free",
+    durationHours: 4,
+    skillsAddressed: [],
+    careerId: "qa",
+    ...over,
+  });
+
+  it("check-linked wins the canon money-shot even where a pick flag sits elsewhere", async () => {
+    const sort = await loadSort();
+    const skill = "Software Testing";
+    const pool = RESOURCES.filter(
+      (r) => r.careerId === "qa" && r.skillsAddressed.includes(skill)
+    );
+    // engine reads the pool, not the flag: the mdn pick flag sits in-pool yet loses
+    expect(CHECK_SKILL_JOIN["res-qa-testing"]).toBe(skill);
+    expect(sort(pool, skill)[0].id).toBe("res-qa-testing"); // rule (1)
+    // the pick flag sits on a DIFFERENT row and the engine ignored it
+    expect(pool.find((r) => r.pick)!.id).toBe("res-qa-mdn-testing");
+  });
+
+  it("pick is never an input: a flagged loser never beats an unflagged winner", async () => {
+    const sort = await loadSort();
+    const skill = "Test Planning";
+    // same dedicatedness (1 skill each), same freeness: fewer hours wins —
+    // even though the 4h row carries pick: true
+    const a = row({ id: "res-a-flagged", skillsAddressed: [skill], durationHours: 4, pick: true });
+    const b = row({ id: "res-b-plain", skillsAddressed: [skill], durationHours: 2 });
+    expect(sort([a, b], skill)[0].id).toBe("res-b-plain");
+    // and rule (2) dedicated beats free: a paid single-skill row outranks a
+    // flagged free multi-skill row
+    const paid = row({ id: "res-paid-dedicated", skillsAddressed: [skill], durationHours: 40, cost: { peso: 999 } });
+    const freeMulti = row({ id: "res-free-wide", skillsAddressed: [skill, "Defect management"], durationHours: 4, pick: true });
+    expect(sort([freeMulti, paid], skill)[0].id).toBe("res-paid-dedicated");
+  });
+
+  it("deterministic + non-mutating: same input → same full order; the input array is untouched", async () => {
+    const sort = await loadSort();
+    const skill = "Software Testing";
+    const pool = RESOURCES.filter(
+      (r) => r.careerId === "qa" && r.skillsAddressed.includes(skill)
+    );
+    const first = [...pool];
+    const one = sort(pool, skill).map((r) => r.id);
+    expect(pool.map((r) => r.id)).toEqual(first.map((r) => r.id)); // no in-place sort
+    const two = sort(pool, skill).map((r) => r.id);
+    expect(one).toEqual(two);
+    // full order pin: check-linked → dedicated → free → hours → id
+    expect(one[0]).toBe("res-qa-testing"); // (1) check-linked
+    expect(one[1]).toBe("res-qa-owasp-wstg"); // (2) dedicated 1 — beats mdn(2)/istqb(3)
+    expect(one[2]).toBe("res-qa-mdn-testing"); // dedicated 2, free, 4h
+    expect(one[3]).toBe("res-qa-istqb-ctfl"); // dedicated 3, 20h
+    expect(one).toHaveLength(4);
+  });
+
+  it("canon rails through the engine: swd Applications Development lands res-python-basics", async () => {
+    const sort = await loadSort();
+    const pool = RESOURCES.filter(
+      (r) => r.careerId === "swd" && r.skillsAddressed.includes("Applications Development")
+    );
+    expect(sort(pool, "Applications Development")[0].id).toBe("res-python-basics");
+    expect(CHECK_SKILL_JOIN["res-python-basics"]).toBe("Applications Development");
   });
 });

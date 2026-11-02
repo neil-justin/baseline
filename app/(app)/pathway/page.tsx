@@ -40,29 +40,48 @@ function whatFor(career: Career, skill: string): string {
 }
 
 /**
- * The one suggested resource per skill (user ruling 2026-11-02, grilling
- * session Q5): an authored `pick: true` wins; the computed rule (free tier
- * → fewer hours → provider name) fills in until flags exist — the catalog
- * is 437 rows, so pick flags land as a data pass, not a bulk edit.
- * Q11v2 rewire (check-linked → dedicated → free → hours → id) + the
- * pick-flag retirement DEFER to the signal-gated batch (2026-11-02) —
- * this engine call stays EXACTLY as-is until then.
+ * Q11v2 ranking — FULLY COMPUTED, no authored picks (user ruling 2026-11-02,
+ * banked for the signal-gated batch; built 2026-11-03 overnight): the pick
+ * rule is (1) check-linked (CHECK_SKILL join by skill name), (2) most
+ * dedicated resource (fewest other skills addressed), (3) free beats paid,
+ * (4) fewer hours — tiebreak only, (5) resource id A–Z final tiebreak.
+ * Pick-flag retirement (engine side, user ruling): the engine NEVER reads
+ * `r.pick` — the data-side flags are inert annotations, not an input.
+ */
+function sortResourcePool(pool: Resource[], skill: string): Resource[] {
+  return [...pool].sort((a, b) => {
+    // (1) check-linked — the check keyed to THIS skill feeds the payoff
+    const linked =
+      Number(CHECK_SKILL[b.id] === skill) - Number(CHECK_SKILL[a.id] === skill);
+    if (linked) return linked;
+    // (2) most dedicated — fewest other skills addressed
+    const dedicated = a.skillsAddressed.length - b.skillsAddressed.length;
+    if (dedicated) return dedicated;
+    // (3) free beats paid
+    const free =
+      Number(/free/i.test(String(b.cost))) - Number(/free/i.test(String(a.cost)));
+    if (free) return free;
+    // (4) fewer hours — tiebreak only
+    const hrs = (a.durationHours ?? 99) - (b.durationHours ?? 99);
+    if (hrs) return hrs;
+    // (5) resource id A–Z final tiebreak
+    return a.id.localeCompare(b.id);
+  });
+}
+
+/**
+ * The one suggested resource per skill (Q5/Q11v2). Pool = the career's own
+ * rows addressing the skill (unchanged filter semantics); order comes
+ * entirely from the deterministic sort above.
  */
 function pickResource(career: Career, skill: string): Resource | null {
   const pool = RESOURCES.filter(
     (r: Resource) => r.careerId === career.id && r.skillsAddressed.includes(skill)
   );
   if (pool.length === 0) return null;
-  const authored = pool.find((r: Resource) => r.pick === true);
-  if (authored) return authored;
-  return [...pool].sort((a, b) => {
-    const free = Number(/free/i.test(String(b.cost))) - Number(/free/i.test(String(a.cost)));
-    if (free) return free;
-    const hrs = (a.durationHours ?? 99) - (b.durationHours ?? 99);
-    if (hrs) return hrs;
-    return a.provider.localeCompare(b.provider);
-  })[0];
+  return sortResourcePool(pool, skill)[0];
 }
+export { sortResourcePool };
 
 /** First resource pointer per skill (typed catalog, career-scoped). */
 function resourceFor(career: Career, skill: string): Resource | null {
@@ -83,7 +102,8 @@ function provenanceFor(source: "verified" | "checked" | "claimed"): string {
  * rows keep the steps engine's ranked order (queue first, then the ranked
  * remainder) and each carries its SP projection; closed rows append after,
  * dimmed, with the closing provenance the engine emits. Presentation-only
- * build — the suggestion engine above is untouched (Q13 deferral).
+ * build — the suggestion engine above is the Q11v2 computed sort
+ * (2026-11-03; pick flags retired from the engine read).
  */
 function buildPlan(
   career: Career,

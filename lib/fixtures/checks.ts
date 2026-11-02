@@ -50,12 +50,15 @@ export const TESTING_CHECK: CheckQuestion[] = [
     answer: 0,
   },
   {
-    stem: "Which practice keeps the account's quality standard consistent across testers?",
+    // qa check Q5 swap — Candidate A, user-approved #19 (2026-11-03): the
+    // retired calibration/rubric question tested QA standards (the wrong
+    // skill); this one tests the testing-execution skill the check feeds.
+    stem: "A ticket asks you to confirm the application still imports and exports employee data correctly *between its two modules* after a database upgrade. Which test level does this work belong to?",
     options: [
-      "Calibration — comparing scores on the same cases against a shared rubric",
-      "Each tester scores by personal preference",
-      "Only testing on Fridays",
-      "Assigning the same bug to a different team each sprint",
+      "Integration testing — running workflows across module boundaries",
+      "Unit testing — checking one function's inputs and outputs",
+      "User acceptance testing — the end client signing off on real workflows",
+      "Performance testing — measuring response speed under load",
     ],
     answer: 0,
   },

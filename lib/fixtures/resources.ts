@@ -24,6 +24,19 @@ import type { Resource } from "@/lib/types";
  *    `Resource` type has no book/price-peso slot and no peso price is
  *    printed by any source; inventing one would fabricate data — the
  *    judgment call rides the report to the user).
+ *  - **§6.1 substance re-map (2026-11-03 overnight batch, user bar "a suggested
+ *    resource must satisfy mostly/entirely the skill it feeds")**: `skillsAddressed`
+ *    kept only where studying the row genuinely teaches the skill's printed
+ *    substance (rowspec `what`/anchors judge). Git-handbook-class mappings CUT
+ *    (437 rows unchanged; 696 → 536 ADDR entries; 73 rows ride empty ADDR as
+ *    catalog-only); career×skill cells with no URL row are the honest
+ *    declared-thin census (89 cells — 27 shipped gap rows untouched, NO new
+ *    gap rows paper over cuts). Statutory/portal rows keep their
+ *    keep-with-flag status; unrelated statute→craft mappings were cut. da
+ *    pool untouched (13 rows). `pick: true` flags = the retired per-skill
+ *    fallback winner (free → fewer hours → provider → id) over the URL
+ *    pool — INERT data: the Q11v2 engine sort never reads `pick` (user
+ *    retired authored picks; pathway/page.tsx cites the ruling).
  *  - **Ruled drops applied at fixture time**: sales' LinkedIn Learning
  *    entry and qa's Guru99 entry are NOT here (ruling 2026-10-29); the
  *    mkt/sales study.com citations were stripped; thin zones stay
@@ -64,6 +77,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 25,
     skillsAddressed: ["Applications Development"],
     careerId: "swd",
+    pick: true,
   },
   // canon demo row (kept; Khan CDN blocks CLI re-checks — prior-round verified)
   {
@@ -85,7 +99,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://www.atlassian.com/git/tutorials/what-is-version-control",
     durationHours: 2,
-    skillsAddressed: ["Applications Support and Enhancement"],
+    skillsAddressed: [],
     careerId: "swd",
   },
   {
@@ -98,6 +112,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Agile Software Development"],
     careerId: "swd",
+    pick: true,
   },
   {
     id: "res-swd-secure-doc",
@@ -131,7 +146,7 @@ export const RESOURCES: Resource[] = [
     // scaffolded search-route row kept (spec adds the exact IBM/MS courses below)
     url: "https://www.coursera.org/search?query=business%20analysis",
     durationHours: 3,
-    skillsAddressed: ["Business Needs Analysis"],
+    skillsAddressed: [],
     careerId: "swd",
   },
   {
@@ -146,6 +161,7 @@ export const RESOURCES: Resource[] = [
       "Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling Skills, Basic/Intermediate)",
     ],
     careerId: "swd",
+    pick: true,
   },
   // swd spec-pool additions (swd.md §Resources — all fetched 200, 2026-10-29)
   {
@@ -198,7 +214,7 @@ export const RESOURCES: Resource[] = [
     // version-control discipline the ASE map names
     url: "https://git-scm.com/book/en/v2",
     durationHours: 8,
-    skillsAddressed: ["Applications Support and Enhancement"],
+    skillsAddressed: [],
     careerId: "swd",
   },
   {
@@ -212,6 +228,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Applications Support and Enhancement"],
     careerId: "swd",
+    pick: true,
   },
   {
     id: "res-swd-mdn-learn",
@@ -283,6 +300,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Data Design / SQL + data modeling"],
     careerId: "swd",
+    pick: true,
   },
   {
     id: "res-swd-ibm-ba",
@@ -296,6 +314,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 10,
     skillsAddressed: ["Business Needs Analysis"],
     careerId: "swd",
+    pick: true,
   },
   {
     id: "res-swd-ms-ba-fundamentals",
@@ -320,6 +339,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Secure-coding practices"],
     careerId: "swd",
+    pick: true,
   },
   {
     id: "res-swd-fcc-infosec",
@@ -368,6 +388,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Linux + web deployment basics"],
     careerId: "swd",
+    pick: true,
   },
   {
     id: "res-swd-openlearn-comms",
@@ -395,9 +416,7 @@ export const RESOURCES: Resource[] = [
     // audit/preview free material; certificate paid
     url: "https://www.coursera.org/learn/learning-how-to-learn",
     durationHours: 4,
-    skillsAddressed: [
-      "Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling Skills, Basic/Intermediate)",
-    ],
+    skillsAddressed: [],
     careerId: "swd",
   },
 
@@ -427,6 +446,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Test Planning"],
     careerId: "qa",
+    pick: true,
   },
   // qa spec-pool additions (qa.md §5 — Guru99 is RULED DROPPED, never added)
   {
@@ -453,6 +473,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Software Testing", "Test Planning"],
     careerId: "qa",
+    pick: true,
   },
   {
     id: "res-qa-owasp-wstg",
@@ -474,7 +495,7 @@ export const RESOURCES: Resource[] = [
     // canonical defect terminology (defect, severity, root cause)
     url: "https://glossary.istqb.org/",
     durationHours: 2,
-    skillsAddressed: ["Defect management"],
+    skillsAddressed: [],
     careerId: "qa",
   },
   {
@@ -500,7 +521,7 @@ export const RESOURCES: Resource[] = [
     // extractable from curl; page verified reachable)
     url: "https://www.freecodecamp.org/learn/quality-assurance/",
     durationHours: 30,
-    skillsAddressed: ["Defect management", "Applications Support and Enhancement"],
+    skillsAddressed: ["Defect management"],
     creditingBody: "freeCodeCamp",
     careerId: "qa",
   },
@@ -515,6 +536,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Quality Assurance / Quality Standards"],
     careerId: "qa",
+    pick: true,
   },
   {
     id: "res-qa-atlassian-bugtracking",
@@ -526,8 +548,9 @@ export const RESOURCES: Resource[] = [
     // sub-pages bugs/bug-tracking 404 — consolidated into this root, live)
     url: "https://www.atlassian.com/agile/software-development",
     durationHours: 2,
-    skillsAddressed: ["Defect management", "Test Planning"],
+    skillsAddressed: ["Defect management"],
     careerId: "qa",
+    pick: true,
   },
   {
     id: "res-qa-ibm-ba",
@@ -540,6 +563,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 10,
     skillsAddressed: ["Business Needs Analysis"],
     careerId: "qa",
+    pick: true,
   },
   {
     id: "res-qa-google-bi",
@@ -550,7 +574,7 @@ export const RESOURCES: Resource[] = [
     // free-to-audit; ₱ paid tier = certificate
     url: "https://www.coursera.org/professional-certificates/google-business-intelligence",
     durationHours: 30,
-    skillsAddressed: ["Business Needs Analysis"],
+    skillsAddressed: [],
     careerId: "qa",
   },
   {
@@ -562,7 +586,7 @@ export const RESOURCES: Resource[] = [
     // adopted 403 verdict line (keep-with-flag) — see the swd OpenLearn row
     url: "https://www.open.edu/openlearn/money-business/effective-communication-the-workplace",
     durationHours: 3,
-    skillsAddressed: ["Business Needs Analysis", "Customer Orientation · Digital Fluency · Learning Agility · Sense Making · Problem Solving (Enabling)"],
+    skillsAddressed: [],
     careerId: "qa",
   },
   {
@@ -575,6 +599,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Customer Orientation · Digital Fluency · Learning Agility · Sense Making · Problem Solving (Enabling)"],
     careerId: "qa",
+    pick: true,
   },
 
   // == ── IT Support Engineer (roster 2.4 · id its) — kept TOP row + spec additions
@@ -619,6 +644,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "its",
+    pick: true,
   },
   {
     id: "res-its-windows-server-docs",
@@ -641,6 +667,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Infrastructure Deployment"],
     careerId: "its",
+    pick: true,
   },
   {
     id: "res-its-netacad-networking-basics",
@@ -666,6 +693,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Network Configuration", "Network Administration and Maintenance"],
     creditingBody: "Cisco Networking Academy",
     careerId: "its",
+    pick: true,
   },
   {
     id: "res-its-mitre-attack",
@@ -678,6 +706,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Cyber and Data Breach Incident Management"],
     careerId: "its",
+    pick: true,
   },
   {
     id: "res-its-atlassian-incident",
@@ -690,6 +719,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Service Level Management"],
     careerId: "its",
+    pick: true,
   },
   {
     id: "res-its-openlearn-comms",
@@ -702,6 +732,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Customer Orientation · Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)"],
     careerId: "its",
+    pick: true,
   },
 
   // == ── Business Analyst, IT (roster 2.3 · id ba) — ba.md §Resources ───────
@@ -717,6 +748,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 10,
     skillsAddressed: ["Requirements Analysis", "Business Needs Analysis"],
     careerId: "ba",
+    pick: true,
   },
   {
     id: "res-ba-coursera-guided-project",
@@ -729,8 +761,9 @@ export const RESOURCES: Resource[] = [
     // recommending (BA-V4 ruled needs-user-at-enroll)
     url: "https://www.coursera.org/projects/business-analysis-process-management",
     durationHours: 2,
-    skillsAddressed: ["Requirements Analysis", "Solution Support (UAT & hand-over)", "Process modeling (flow diagrams, use cases)"],
+    skillsAddressed: ["Requirements Analysis", "Process modeling (flow diagrams, use cases)"],
     careerId: "ba",
+    pick: true,
   },
   {
     id: "res-ba-openlearn-comms",
@@ -742,8 +775,9 @@ export const RESOURCES: Resource[] = [
     // interviews + cross-department work
     url: "https://www.open.edu/openlearn/money-business/effective-communication-the-workplace",
     durationHours: 3,
-    skillsAddressed: ["Requirements Analysis", "Team Enablement"],
+    skillsAddressed: ["Team Enablement"],
     careerId: "ba",
+    pick: true,
   },
   {
     id: "res-ba-ms-ba-fundamentals",
@@ -766,8 +800,9 @@ export const RESOURCES: Resource[] = [
     // low-fidelity prototyping/wireframing + FigJam diagram tutorials
     url: "https://www.figma.com/resource-library/",
     durationHours: 3,
-    skillsAddressed: ["Requirements Specification", "Process modeling (flow diagrams, use cases)"],
+    skillsAddressed: ["Requirements Specification"],
     careerId: "ba",
+    pick: true,
   },
   {
     id: "res-ba-atlassian-bugs",
@@ -780,7 +815,7 @@ export const RESOURCES: Resource[] = [
     // bug-tracking doc; the live root covers both
     url: "https://www.atlassian.com/agile/software-development",
     durationHours: 2,
-    skillsAddressed: ["Solution Support (UAT & hand-over)"],
+    skillsAddressed: [],
     careerId: "ba",
   },
   {
@@ -792,7 +827,7 @@ export const RESOURCES: Resource[] = [
     // "eagerness to learn from subject matter experts" behavior support
     url: "https://www.coursera.org/learn/learning-how-to-learn",
     durationHours: 4,
-    skillsAddressed: ["Collaboration · Communication · Digital Fluency · Learning Agility (Enabling)"],
+    skillsAddressed: [],
     careerId: "ba",
   },
 
@@ -817,8 +852,9 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://ubuntu.com/server/docs",
     durationHours: 2,
-    skillsAddressed: ["Systems administration (user groups, upgrades, backups)", "System Integration"],
+    skillsAddressed: ["Systems administration (user groups, upgrades, backups)"],
     careerId: "sysadmin",
+    pick: true,
   },
   {
     id: "res-sysadmin-tlcl-doc",
@@ -866,6 +902,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Network Administration and Maintenance"],
     creditingBody: "Cisco Networking Academy",
     careerId: "sysadmin",
+    pick: true,
   },
   {
     id: "res-sysadmin-google-it-support",
@@ -877,6 +914,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 60,
     skillsAddressed: ["Infrastructure Support", "↳ CWF sub-row: Resolve system-related incidents"],
     careerId: "sysadmin",
+    pick: true,
   },
   {
     id: "res-sysadmin-top-landing",
@@ -890,6 +928,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "sysadmin",
+    pick: true,
   },
   {
     id: "res-sysadmin-windows-server-docs",
@@ -901,7 +940,7 @@ export const RESOURCES: Resource[] = [
     // thin-zone backing docs — SYS-V1)
     url: "https://learn.microsoft.com/en-us/windows-server/",
     durationHours: 4,
-    skillsAddressed: ["↳ CWF sub-row: Design and develop new systems", "System Integration"],
+    skillsAddressed: [],
     careerId: "sysadmin",
   },
   {
@@ -915,6 +954,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 10,
     skillsAddressed: ["Security Administration"],
     careerId: "sysadmin",
+    pick: true,
   },
   {
     id: "res-sysadmin-owasp-cheatsheets",
@@ -925,7 +965,7 @@ export const RESOURCES: Resource[] = [
     // hardening drills behind patch/threat protection
     url: "https://cheatsheetseries.owasp.org/",
     durationHours: 4,
-    skillsAddressed: ["Security Administration"],
+    skillsAddressed: [],
     careerId: "sysadmin",
   },
   {
@@ -937,7 +977,7 @@ export const RESOURCES: Resource[] = [
     // change-accounting standard behind Configuration Tracking
     url: "https://git-scm.com/book/en/v2",
     durationHours: 8,
-    skillsAddressed: ["Configuration Tracking · Cyber-and-Data-Breach Incident Management · Business Needs Analysis"],
+    skillsAddressed: [],
     careerId: "sysadmin",
   },
   {
@@ -948,7 +988,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://semver.org/",
     durationHours: 1,
-    skillsAddressed: ["Configuration Tracking · Cyber-and-Data-Breach Incident Management · Business Needs Analysis"],
+    skillsAddressed: [],
     careerId: "sysadmin",
   },
   {
@@ -962,6 +1002,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)"],
     careerId: "sysadmin",
+    pick: true,
   },
   // SYS-V1 declared thin zones (kept declared, no forced search)
   {
@@ -1002,6 +1043,7 @@ export const RESOURCES: Resource[] = [
       "↳ CWF sub-row: Optimize database performance",
     ],
     careerId: "dba",
+    pick: true,
   },
   {
     id: "res-dba-sqlserver-docs",
@@ -1013,6 +1055,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Database Administration", "↳ CWF sub-row: Design and develop new database"],
     careerId: "dba",
+    pick: true,
   },
   {
     id: "res-dba-postgresql-docs",
@@ -1024,6 +1067,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Database Administration", "Data Engineering"],
     careerId: "dba",
+    pick: true,
   },
   {
     id: "res-dba-oracle-admin-guide",
@@ -1036,6 +1080,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 6,
     skillsAddressed: ["Database Administration", "↳ CWF sub-row: Resolve database incidents"],
     careerId: "dba",
+    pick: true,
   },
   {
     id: "res-dba-fcc-relational",
@@ -1073,6 +1118,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Data Migration"],
     careerId: "dba",
+    pick: true,
   },
   {
     id: "res-dba-owasp-db-cheatsheet",
@@ -1085,6 +1131,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Database security controls"],
     careerId: "dba",
+    pick: true,
   },
   {
     id: "res-dba-ubuntu-server-docs",
@@ -1097,6 +1144,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Infrastructure Support"],
     careerId: "dba",
+    pick: true,
   },
   {
     id: "res-dba-atlassian-incident",
@@ -1108,6 +1156,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Problem Management"],
     careerId: "dba",
+    pick: true,
   },
   {
     id: "res-dba-openlearn-comms",
@@ -1120,6 +1169,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)"],
     careerId: "dba",
+    pick: true,
   },
 
   // == ── Security Analyst (2.7 · id cybersec) ───────────────────────────────
@@ -1172,6 +1222,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Threat analysis / monitoring", "Cyber and Data Breach Incident Management"],
     careerId: "cybersec",
+    pick: true,
   },
   {
     id: "res-cybersec-fortinet",
@@ -1183,7 +1234,7 @@ export const RESOURCES: Resource[] = [
     // CYB-V5: current certificate terms re-check queued
     url: "https://www.fortinet.com/training-certification",
     durationHours: 6,
-    skillsAddressed: ["Cyber and Data Breach Incident Management"],
+    skillsAddressed: [],
     careerId: "cybersec",
   },
   {
@@ -1198,6 +1249,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Network administration & maintenance"],
     creditingBody: "Cisco Networking Academy",
     careerId: "cybersec",
+    pick: true,
   },
   {
     id: "res-cybersec-tryhackme",
@@ -1211,6 +1263,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Vulnerability assessment support (VAPT analyst track)"],
     careerId: "cybersec",
+    pick: true,
   },
   {
     id: "res-cybersec-netacad-ethical-hacker",
@@ -1236,6 +1289,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Collaboration · Communication · Problem Solving · Digital Fluency (Enabling)"],
     careerId: "cybersec",
+    pick: true,
   },
 
   // == ── Web Developer (2.8 · id webdev) ────────────────────────────────────
@@ -1262,6 +1316,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Client-side coding (HTML/CSS/JS)", "Responsive/UI basics + accessibility"],
     careerId: "webdev",
+    pick: true,
   },
   {
     id: "res-webdev-odin",
@@ -1308,6 +1363,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["CMS administration (WordPress etc.)"],
     careerId: "webdev",
+    pick: true,
   },
   {
     id: "res-webdev-w3c-wai",
@@ -1330,6 +1386,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Responsive/UI basics + accessibility"],
     careerId: "webdev",
+    pick: true,
   },
   {
     id: "res-webdev-webdev-learn",
@@ -1342,6 +1399,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["↳ task-cluster sub-row: site life-operations", "Responsive/UI basics + accessibility"],
     careerId: "webdev",
+    pick: true,
   },
   {
     id: "res-webdev-progit",
@@ -1354,6 +1412,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 8,
     skillsAddressed: ["Version control (git)"],
     careerId: "webdev",
+    pick: true,
   },
   {
     id: "res-webdev-scrum-guide",
@@ -1376,6 +1435,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Agile Software Development (when agency-run)"],
     careerId: "webdev",
+    pick: true,
   },
 
   // == ── Digital / Multimedia Artist (2.9 · id digart) ──────────────────────
@@ -1400,6 +1460,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "digart",
+    pick: true,
   },
   {
     id: "res-digart-tr-doc",
@@ -1410,14 +1471,7 @@ export const RESOURCES: Resource[] = [
     // the qualification definition itself (units + performance criteria)
     url: "https://tesda.gov.ph/Downloadables/TR%20-%20Visual%20Graphic%20Design%20NC%20III.pdf",
     durationHours: 3,
-    skillsAddressed: [
-      "DEVELOP DESIGNS FOR A LOGO (ICT216313)",
-      "DEVELOP DESIGNS FOR PRINT MEDIA (ICT216314)",
-      "DEVELOP DESIGNS FOR USER EXPERIENCE (ICT216315)",
-      "DEVELOP DESIGNS FOR USER INTERFACE (ICT216316)",
-      "DEVELOP DESIGNS FOR PRODUCT PACKAGING (ICT216317)",
-      "DESIGN BOOTH AND PRODUCT WINDOW / DISPLAY (ICT216318)",
-    ],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "digart",
   },
@@ -1437,6 +1491,7 @@ export const RESOURCES: Resource[] = [
       "Follow creative brief + brand guideline development",
     ],
     careerId: "digart",
+    pick: true,
   },
   {
     id: "res-digart-blender-manual",
@@ -1453,6 +1508,7 @@ export const RESOURCES: Resource[] = [
       "Junior 2D Animator — [PSF-DAA] (counterpart, optional — user ruling 2026-10-29 ADD)",
     ],
     careerId: "digart",
+    pick: true,
   },
   {
     id: "res-digart-canva-design-school",
@@ -1481,6 +1537,7 @@ export const RESOURCES: Resource[] = [
       "Use specialized graphic/animation tools (Adobe suite, Blender etc.)",
     ],
     careerId: "digart",
+    pick: true,
   },
   {
     id: "res-digart-openlearn-comms",
@@ -1493,6 +1550,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Client communication & revision handling"],
     careerId: "digart",
+    pick: true,
   },
   // DIG-V2: Adobe official tutorials 403 — flagged, NOT cited here.
 
@@ -1525,6 +1583,7 @@ export const RESOURCES: Resource[] = [
       "Threat Analysis and Defence · Threat Intelligence and Detection (family FSC cross-cite)",
     ],
     careerId: "soc",
+    pick: true,
   },
   {
     id: "res-soc-splunk-free",
@@ -1538,6 +1597,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 6,
     skillsAddressed: ["Monitor cyber security systems", "Maintain cyber security operations"],
     careerId: "soc",
+    pick: true,
   },
   {
     id: "res-soc-fortinet",
@@ -1549,7 +1609,7 @@ export const RESOURCES: Resource[] = [
     // re-check rides sibling CYB-V5
     url: "https://www.fortinet.com/training-certification",
     durationHours: 6,
-    skillsAddressed: ["Maintain cyber security operations"],
+    skillsAddressed: [],
     careerId: "soc",
   },
   {
@@ -1575,6 +1635,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Threat Analysis and Defence · Threat Intelligence and Detection (family FSC cross-cite)"],
     careerId: "soc",
+    pick: true,
   },
   {
     id: "res-soc-tryhackme",
@@ -1587,6 +1648,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Vulnerability scanning (VAPT-adjacent, TESDA-printed)"],
     careerId: "soc",
+    pick: true,
   },
   {
     id: "res-soc-netacad-ethical-hacker",
@@ -1613,6 +1675,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Network security understanding (network administration family)"],
     creditingBody: "Cisco Networking Academy",
     careerId: "soc",
+    pick: true,
   },
   {
     id: "res-soc-netacad-network-defense",
@@ -1636,7 +1699,7 @@ export const RESOURCES: Resource[] = [
     // 200 via CLI 2026-10-29; audit→Preview drift re-check at enrollment
     url: "https://www.coursera.org/professional-certificates/google-cybersecurity",
     durationHours: 60,
-    skillsAddressed: ["Collaboration · Communication · Problem Solving · Digital Fluency (Enabling)"],
+    skillsAddressed: [],
     careerId: "soc",
   },
   {
@@ -1650,6 +1713,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Collaboration · Communication · Problem Solving · Digital Fluency (Enabling)"],
     careerId: "soc",
+    pick: true,
   },
 
   // == ── Data Analyst, junior (E1 · id da) — COMPLETE pool, one row per skill
@@ -1667,6 +1731,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 180,
     skillsAddressed: ["Data Analytics"],
     careerId: "da",
+    pick: true,
   },
   {
     id: "res-da-viz",
@@ -1680,6 +1745,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 19,
     skillsAddressed: ["Data Visualization and Storytelling"],
     careerId: "da",
+    pick: true,
   },
   {
     id: "res-da-bna",
@@ -1693,6 +1759,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 15,
     skillsAddressed: ["Business Needs Analysis"],
     careerId: "da",
+    pick: true,
   },
   {
     id: "res-da-etl",
@@ -1705,6 +1772,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["ETL (extract-transform-load workflows)"],
     careerId: "da",
+    pick: true,
   },
   {
     id: "res-da-engineering-doc",
@@ -1717,6 +1785,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Data Engineering"],
     careerId: "da",
+    pick: true,
   },
   {
     id: "res-da-esc-doc",
@@ -1731,6 +1800,7 @@ export const RESOURCES: Resource[] = [
       "Enabling Skills & Competencies (ESC) — Collaboration, Communication, Digital Fluency, Learning Agility",
     ],
     careerId: "da",
+    pick: true,
   },
   {
     id: "res-da-appdev",
@@ -1743,6 +1813,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 27,
     skillsAddressed: ["Applications Development"],
     careerId: "da",
+    pick: true,
   },
   {
     id: "res-da-aiethics",
@@ -1755,6 +1826,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 30,
     skillsAddressed: ["Artificial Intelligence Ethics and Governance"],
     careerId: "da",
+    pick: true,
   },
   {
     id: "res-da-ethics-doc",
@@ -1767,6 +1839,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Data Ethics"],
     careerId: "da",
+    pick: true,
   },
   {
     id: "res-da-breach-doc",
@@ -1779,6 +1852,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Cyber and Data Breach Incident Management"],
     careerId: "da",
+    pick: true,
   },
   {
     id: "res-da-testing-doc",
@@ -1791,6 +1865,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Software Testing"],
     careerId: "da",
+    pick: true,
   },
   {
     id: "res-da-config-doc",
@@ -1803,6 +1878,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Configuration Tracking"],
     careerId: "da",
+    pick: true,
   },
   {
     id: "res-da-stakeholder",
@@ -1815,6 +1891,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Stakeholder Management"],
     careerId: "da",
+    pick: true,
   },
 
   // == ── Track 2 · Business & Management (hra · training · mkt · sales · csr ·
@@ -1836,6 +1913,7 @@ export const RESOURCES: Resource[] = [
       "Human Resources Systems Management",
     ],
     careerId: "hra",
+    pick: true,
   },
   {
     id: "res-hra-minnesota-hrm",
@@ -1852,6 +1930,7 @@ export const RESOURCES: Resource[] = [
       "Communication · Adaptability · Customer Orientation · Digital Fluency · Learning Agility · Self-Management (Enabling, Basic)",
     ],
     careerId: "hra",
+    pick: true,
   },
   {
     id: "res-hra-cipd-factsheets",
@@ -1864,6 +1943,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Selection Management", "Talent Capability Assessment", "Data Collection and Preparation", "Stakeholder Engagement and Management"],
     careerId: "hra",
+    pick: true,
   },
   {
     id: "res-hra-gcf-excel",
@@ -1900,6 +1980,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Data Management", "Diversity, Equity, Inclusion and Belonging Management", "Voluntary Exit Management", "Involuntary Exit Management"],
     careerId: "hra",
+    pick: true,
   },
   {
     id: "res-hra-hubspot-inbound",
@@ -1913,6 +1994,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Recruitment Channel Management", "Digital Marketing and Communication"],
     creditingBody: "HubSpot Academy",
     careerId: "hra",
+    pick: true,
   },
   {
     id: "res-hra-public-speaking",
@@ -1936,9 +2018,10 @@ export const RESOURCES: Resource[] = [
     // open inside a TOP account before citing course content (standing flag)
     url: "https://e-tesda.gov.ph/course/view.php?id=5042",
     durationHours: 2,
-    skillsAddressed: ["Human Resources Systems Management", "Communication · Adaptability · Customer Orientation · Digital Fluency · Learning Agility · Self-Management (Enabling, Basic)"],
+    skillsAddressed: ["Communication · Adaptability · Customer Orientation · Digital Fluency · Learning Agility · Self-Management (Enabling, Basic)"],
     creditingBody: "TESDA",
     careerId: "hra",
+    pick: true,
   },
   {
     id: "res-hra-top-writing",
@@ -1984,6 +2067,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 15,
     skillsAddressed: ["Learning Needs Analysis", "Learning and Development Programs Management", "Human Resources Practices Implementation"],
     careerId: "training",
+    pick: true,
   },
   {
     id: "res-training-cipd",
@@ -1995,6 +2079,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Learning Needs Analysis"],
     careerId: "training",
+    pick: true,
   },
   {
     id: "res-training-lhtl",
@@ -2004,7 +2089,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://www.coursera.org/learn/learning-how-to-learn",
     durationHours: 4,
-    skillsAddressed: ["Learning Needs Analysis", "Communication · Customer Orientation · Learning Agility · Self-Management · Problem Solving (Enabling, Basic)"],
+    skillsAddressed: ["Communication · Customer Orientation · Learning Agility · Self-Management · Problem Solving (Enabling, Basic)"],
     careerId: "training",
   },
   {
@@ -2015,7 +2100,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
-    skillsAddressed: ["Learning and Development Programs Management", "Data Management"],
+    skillsAddressed: ["Data Management"],
     careerId: "training",
   },
   {
@@ -2028,6 +2113,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Data Collection and Preparation", "Data Management"],
     careerId: "training",
+    pick: true,
   },
   {
     id: "res-training-moodle-academy",
@@ -2040,6 +2126,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Human Resources Systems Management", "Learning and Development Programs Management"],
     careerId: "training",
+    pick: true,
   },
   {
     id: "res-training-ms-learn",
@@ -2049,7 +2136,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://learn.microsoft.com/en-us/training/",
     durationHours: 4,
-    skillsAddressed: ["Human Resources Systems Management", "Data Collection and Preparation"],
+    skillsAddressed: [],
     careerId: "training",
   },
   {
@@ -2064,6 +2151,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Employee Communication", "Communication · Customer Orientation · Learning Agility · Self-Management · Problem Solving (Enabling, Basic)"],
     creditingBody: "TESDA",
     careerId: "training",
+    pick: true,
   },
   {
     id: "res-training-top-professionalism",
@@ -2077,6 +2165,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Communication · Customer Orientation · Learning Agility · Self-Management · Problem Solving (Enabling, Basic)"],
     creditingBody: "TESDA",
     careerId: "training",
+    pick: true,
   },
   {
     id: "res-training-top-bizops",
@@ -2088,7 +2177,7 @@ export const RESOURCES: Resource[] = [
     // stays declared-thin — this is the adjacent backing
     url: "https://e-tesda.gov.ph/course/view.php?id=4810",
     durationHours: 3,
-    skillsAddressed: ["Stakeholder Engagement and Management"],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "training",
   },
@@ -2135,6 +2224,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 120,
     skillsAddressed: ["Digital Marketing", "Marketing Communications Plan Development", "Media Strategy Development"],
     careerId: "mkt",
+    pick: true,
   },
   {
     id: "res-mkt-hubspot-social",
@@ -2160,6 +2250,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Content Development and Strategy", "Category Marketing · Collateral Production · Visual Collaterals Production · Content Management"],
     creditingBody: "HubSpot Academy",
     careerId: "mkt",
+    pick: true,
   },
   {
     id: "res-mkt-illinois-dmx",
@@ -2172,6 +2263,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 30,
     skillsAddressed: ["Digital Marketing", "Media Strategy Development"],
     careerId: "mkt",
+    pick: true,
   },
   {
     id: "res-mkt-wharton-customer-analytics",
@@ -2187,6 +2279,7 @@ export const RESOURCES: Resource[] = [
       "Data Analysis and Interpretation", "Data-mining and Modelling · Research and Information Synthesis",
     ],
     careerId: "mkt",
+    pick: true,
   },
   {
     id: "res-mkt-google-analytics-academy",
@@ -2197,8 +2290,9 @@ export const RESOURCES: Resource[] = [
     // free; may need a Google account; PH-accessible
     url: "https://skillshop.withgoogle.com/",
     durationHours: 4,
-    skillsAddressed: ["Digital Marketing", "Digital Fluency (ESC, Basic)"],
+    skillsAddressed: ["Digital Fluency (ESC, Basic)"],
     careerId: "mkt",
+    pick: true,
   },
   {
     id: "res-mkt-top-social-concepts",
@@ -2213,6 +2307,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "mkt",
+    pick: true,
   },
   {
     id: "res-mkt-top-social-propagating",
@@ -2241,6 +2336,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "mkt",
+    pick: true,
   },
   {
     id: "res-mkt-top-dmx-content",
@@ -2254,6 +2350,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "mkt",
+    pick: true,
   },
   {
     id: "res-mkt-top-dmx-optimizing",
@@ -2277,7 +2374,7 @@ export const RESOURCES: Resource[] = [
     // login-walled (TOP account free)
     url: "https://e-tesda.gov.ph/course/view.php?id=5043",
     durationHours: 2,
-    skillsAddressed: ["Marketing Mix Management", "Consumer Intelligence Analysis"],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "mkt",
   },
@@ -2290,7 +2387,7 @@ export const RESOURCES: Resource[] = [
     // practical tooling for calendars, trackers, media logs; free, no account
     url: "https://edu.gcfglobal.org/en/",
     durationHours: 2,
-    skillsAddressed: ["Category Marketing · Collateral Production · Visual Collaterals Production · Content Management"],
+    skillsAddressed: [],
     careerId: "mkt",
   },
   {
@@ -2345,6 +2442,7 @@ export const RESOURCES: Resource[] = [
     ],
     creditingBody: "HubSpot Academy",
     careerId: "sales",
+    pick: true,
   },
   {
     id: "res-sales-hubspot-sales-mgmt",
@@ -2371,7 +2469,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: [
       "Customer Relationship Management + Customer Relationship Management Operations",
-      "After-sales Service", "Sales Delivery + Delivery Management",
+       
     ],
     careerId: "sales",
   },
@@ -2384,8 +2482,9 @@ export const RESOURCES: Resource[] = [
     // evidence-based buyer-behavior reading; audit free, certificate paid
     url: "https://www.coursera.org/learn/wharton-customer-analytics",
     durationHours: 12,
-    skillsAddressed: ["Customer Behavior Analysis", "Communication · Collaboration · Customer Orientation · Global Perspective · Problem Solving (Enabling)"],
+    skillsAddressed: ["Customer Behavior Analysis"],
     careerId: "sales",
+    pick: true,
   },
   {
     id: "res-sales-top-customer-centricity",
@@ -2396,9 +2495,10 @@ export const RESOURCES: Resource[] = [
     // login-walled (TOP account free)
     url: "https://e-tesda.gov.ph/course/view.php?id=5043",
     durationHours: 2,
-    skillsAddressed: ["Product Advisory + Product Demonstration", "Communication · Collaboration · Customer Orientation · Global Perspective · Problem Solving (Enabling)"],
+    skillsAddressed: ["Communication · Collaboration · Customer Orientation · Global Perspective · Problem Solving (Enabling)"],
     creditingBody: "TESDA",
     careerId: "sales",
+    pick: true,
   },
   {
     id: "res-sales-rutgers-scm",
@@ -2411,6 +2511,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 30,
     skillsAddressed: ["Order Fulfilment Administration", "Sales Delivery + Delivery Management"],
     careerId: "sales",
+    pick: true,
   },
   {
     id: "res-sales-top-interpersonal",
@@ -2484,6 +2585,7 @@ export const RESOURCES: Resource[] = [
       "Customer Relationship Management", "Demonstrate ability to effectively engage customers",
     ],
     careerId: "csr",
+    pick: true,
   },
   {
     id: "res-csr-top-customer-centricity",
@@ -2494,9 +2596,10 @@ export const RESOURCES: Resource[] = [
     // login-walled (TOP account free)
     url: "https://e-tesda.gov.ph/course/view.php?id=5043",
     durationHours: 2,
-    skillsAddressed: ["Customer Service Delivery", "Customer Handling and Care", "Collaboration · Communication · Customer Orientation · Digital Fluency · Problem Solving · Global Perspective (Enabling, Basic/Intermediate)"],
+    skillsAddressed: ["Customer Handling and Care", "Collaboration · Communication · Customer Orientation · Digital Fluency · Problem Solving · Global Perspective (Enabling, Basic/Intermediate)"],
     creditingBody: "TESDA",
     careerId: "csr",
+    pick: true,
   },
   {
     id: "res-csr-british-council",
@@ -2523,6 +2626,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Communicate effectively in English for customer service"],
     careerId: "csr",
+    pick: true,
   },
   {
     id: "res-csr-top-english-business",
@@ -2547,6 +2651,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Customer Relationship Management", "Technology and Systems Application"],
     careerId: "csr",
+    pick: true,
   },
   {
     id: "res-csr-ra10173",
@@ -2560,6 +2665,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Compliance with Legal Regulations"],
     careerId: "csr",
+    pick: true,
   },
   {
     id: "res-csr-ms-learn",
@@ -2569,7 +2675,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://learn.microsoft.com/en-us/training/",
     durationHours: 4,
-    skillsAddressed: ["Technology and Systems Application"],
+    skillsAddressed: [],
     careerId: "csr",
   },
   {
@@ -2649,6 +2755,7 @@ export const RESOURCES: Resource[] = [
       "Communication · Critical Thinking · Teamwork (Enabling)",
     ],
     careerId: "opsanalyst",
+    pick: true,
   },
   {
     id: "res-ops-gcf-excel",
@@ -2659,7 +2766,7 @@ export const RESOURCES: Resource[] = [
     // data pulls, workbooks, charts for findings memos
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
-    skillsAddressed: ["Findings documentation & recommendation write-ups"],
+    skillsAddressed: [],
     careerId: "opsanalyst",
   },
   {
@@ -2671,7 +2778,7 @@ export const RESOURCES: Resource[] = [
     // documentation/diagrams tooling practice
     url: "https://learn.microsoft.com/en-us/training/",
     durationHours: 4,
-    skillsAddressed: ["Implementation support & training of revised methods"],
+    skillsAddressed: [],
     careerId: "opsanalyst",
   },
   {
@@ -2683,7 +2790,7 @@ export const RESOURCES: Resource[] = [
     // PH-built business-operations administration; login-walled (TOP account free)
     url: "https://e-tesda.gov.ph/course/view.php?id=4810",
     durationHours: 3,
-    skillsAddressed: ["Implementation support & training of revised methods", "Forms/reports review & redesign"],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "opsanalyst",
   },
@@ -2698,6 +2805,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Communication · Critical Thinking · Teamwork (Enabling)"],
     creditingBody: "TESDA",
     careerId: "opsanalyst",
+    pick: true,
   },
   {
     id: "res-ops-lhtl",
@@ -2707,7 +2815,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://www.coursera.org/learn/learning-how-to-learn",
     durationHours: 4,
-    skillsAddressed: ["Communication · Critical Thinking · Teamwork (Enabling)"],
+    skillsAddressed: [],
     careerId: "opsanalyst",
   },
   {
@@ -2742,6 +2850,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 30,
     skillsAddressed: ["Purchase order issuance & requisition review", "Records & shipment monitoring", "Supplier research & evaluation"],
     careerId: "purch",
+    pick: true,
   },
   {
     id: "res-purch-gcf-excel",
@@ -2752,7 +2861,7 @@ export const RESOURCES: Resource[] = [
     // bid comparison matrices and price analysis
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
-    skillsAddressed: ["Price-proposal analysis", "Best-value purchasing (quality/price/amount)"],
+    skillsAddressed: [],
     careerId: "purch",
   },
   {
@@ -2768,6 +2877,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Legal & policy compliance (procurement rules)"],
     careerId: "purch",
+    pick: true,
   },
   {
     id: "res-purch-philgeps",
@@ -2780,6 +2890,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 1,
     skillsAddressed: ["Supplier research & evaluation", "Market watching (supply/demand, price trends)"],
     careerId: "purch",
+    pick: true,
   },
   {
     id: "res-purch-ms-learn",
@@ -2789,7 +2900,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://learn.microsoft.com/en-us/training/",
     durationHours: 4,
-    skillsAddressed: ["Contract performance monitoring", "Product specification writing"],
+    skillsAddressed: [],
     careerId: "purch",
   },
   {
@@ -2801,7 +2912,7 @@ export const RESOURCES: Resource[] = [
     // data-driven decision method (cross-supply version of buying analytics)
     url: "https://www.coursera.org/learn/wharton-customer-analytics",
     durationHours: 12,
-    skillsAddressed: ["Communication · Critical Thinking · Ethics/Professionalism (Enabling)"],
+    skillsAddressed: [],
     careerId: "purch",
   },
   {
@@ -2816,6 +2927,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Communication · Critical Thinking · Ethics/Professionalism (Enabling)"],
     creditingBody: "TESDA",
     careerId: "purch",
+    pick: true,
   },
   {
     id: "res-purch-top-writing",
@@ -2871,8 +2983,9 @@ export const RESOURCES: Resource[] = [
     // cycles); study free, certificate purchase optional
     url: "https://alison.com/course/lean-six-sigma-white-belt",
     durationHours: 3,
-    skillsAddressed: ["Data Analytics", "Continuous Improvement", "Systems Thinking"],
+    skillsAddressed: ["Continuous Improvement", "Systems Thinking"],
     careerId: "ccqa",
+    pick: true,
   },
   {
     id: "res-ccqa-wharton-customer-analytics",
@@ -2885,6 +2998,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 12,
     skillsAddressed: ["Data Analytics", "Data Visualization", "Customer Behavior Analysis"],
     careerId: "ccqa",
+    pick: true,
   },
   {
     id: "res-ccqa-gcf-excel",
@@ -2895,8 +3009,9 @@ export const RESOURCES: Resource[] = [
     // charts, dashboards and audit trackers
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
-    skillsAddressed: ["Data Visualization", "Data Analytics"],
+    skillsAddressed: ["Data Visualization"],
     careerId: "ccqa",
+    pick: true,
   },
   {
     id: "res-ccqa-top-writing",
@@ -2906,9 +3021,10 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://e-tesda.gov.ph/course/view.php?id=5037",
     durationHours: 2,
-    skillsAddressed: ["Technical Report Writing", "Analytical Method Validation"],
+    skillsAddressed: ["Technical Report Writing"],
     creditingBody: "TESDA",
     careerId: "ccqa",
+    pick: true,
   },
   {
     id: "res-ccqa-ms-learn",
@@ -2919,7 +3035,7 @@ export const RESOURCES: Resource[] = [
     // document-systems fluency (share, version, retrieve)
     url: "https://learn.microsoft.com/en-us/training/",
     durationHours: 4,
-    skillsAddressed: ["Document Control"],
+    skillsAddressed: [],
     careerId: "ccqa",
   },
   {
@@ -2930,7 +3046,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://e-tesda.gov.ph/course/view.php?id=5043",
     durationHours: 2,
-    skillsAddressed: ["Customer Management", "Change Management · Concept Creation · Coaching and Mentoring · Conflict Resolution · Risk Management and Administration"],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "ccqa",
   },
@@ -2942,7 +3058,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://e-tesda.gov.ph/course/view.php?id=4810",
     durationHours: 3,
-    skillsAddressed: ["Continuous Improvement"],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "ccqa",
   },
@@ -2955,7 +3071,7 @@ export const RESOURCES: Resource[] = [
     // structured feedback and stakeholder-loop practice
     url: "https://www.ibm.com/design/thinking",
     durationHours: 6,
-    skillsAddressed: ["Collaboration · Communication · Creative Thinking · Critical Thinking · Customer Orientation · Digital Fluency · Problem Solving · Project Management · Research · Stakeholder Management (Enabling, I/B)"],
+    skillsAddressed: [],
     careerId: "ccqa",
   },
   {
@@ -2986,6 +3102,7 @@ export const RESOURCES: Resource[] = [
       "Event-records keeping (incl. financials)", "Event monitoring, compliance & problem resolution",
     ],
     careerId: "events",
+    pick: true,
   },
   {
     id: "res-events-alison-diploma",
@@ -3021,7 +3138,7 @@ export const RESOURCES: Resource[] = [
     // audit free, verified certificate paid (financial aid available)
     url: "https://www.coursera.org/professional-certificates/google-project-management",
     durationHours: 100,
-    skillsAddressed: ["Provider evaluation & selection; contract negotiation", "Bills review & payment approval"],
+    skillsAddressed: ["Provider evaluation & selection; contract negotiation"],
     careerId: "events",
   },
   {
@@ -3047,7 +3164,7 @@ export const RESOURCES: Resource[] = [
     // strings verified ×7 — re-verify visually before deep-linking in UI)
     url: "https://www.mpi.org/",
     durationHours: 2,
-    skillsAddressed: ["Program, agenda, budget & services planning"],
+    skillsAddressed: [],
     careerId: "events",
   },
   {
@@ -3058,7 +3175,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://e-tesda.gov.ph/course/view.php?id=5043",
     durationHours: 2,
-    skillsAddressed: ["Client objectives & requirements determination"],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "events",
   },
@@ -3085,6 +3202,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Communication · Professionalism · Teamwork (Enabling)"],
     creditingBody: "TESDA",
     careerId: "events",
+    pick: true,
   },
   {
     id: "res-events-gap-ph-permits",
@@ -3122,6 +3240,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "book",
+    pick: true,
   },
   {
     id: "res-book-top-journalizing",
@@ -3149,6 +3268,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "book",
+    pick: true,
   },
   {
     id: "res-book-top-trial-balance",
@@ -3162,6 +3282,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "book",
+    pick: true,
   },
   {
     id: "res-book-top-financial-reports",
@@ -3175,6 +3296,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "book",
+    pick: true,
   },
   {
     id: "res-book-top-internal-control",
@@ -3188,6 +3310,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "book",
+    pick: true,
   },
   {
     id: "res-book-acca-intro",
@@ -3231,6 +3354,7 @@ export const RESOURCES: Resource[] = [
       "Verify and record financial documents & records", "Operate accounting software",
     ],
     careerId: "book",
+    pick: true,
   },
   {
     id: "res-book-openstax-financial",
@@ -3243,6 +3367,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 6,
     skillsAddressed: ["Prepare financial reports (manual)", "PSOC 3313 record-to-report envelope"],
     careerId: "book",
+    pick: true,
   },
   {
     id: "res-book-openstax-managerial",
@@ -3265,7 +3390,7 @@ export const RESOURCES: Resource[] = [
     // prints the Internal Controls FSC ladder + the F&A record-to-report envelope
     url: "https://www.tesda.gov.ph/Uploads/File/Philippine%20Skills%20Framework/ICT/Philippine%20Skills%20Framework%20for%20Global%20In-House%20Center.pdf",
     durationHours: 3,
-    skillsAddressed: ["Review internal control system", "PSOC 3313 record-to-report envelope"],
+    skillsAddressed: [],
     careerId: "book",
   },
   {
@@ -3276,8 +3401,9 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
-    skillsAddressed: ["Verify and record financial documents & records", "Operate accounting software"],
+    skillsAddressed: ["Verify and record financial documents & records"],
     careerId: "book",
+    pick: true,
   },
   {
     id: "res-book-top-workplace-comms",
@@ -3302,6 +3428,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling)"],
     creditingBody: "TESDA",
     careerId: "book",
+    pick: true,
   },
   {
     id: "res-book-top-digital-literacy-cat",
@@ -3329,9 +3456,10 @@ export const RESOURCES: Resource[] = [
       "Check figures, postings, and documents for correct entry, mathematical accuracy, and proper codes",
       "Operate computers programmed with accounting software",
       "Reconcile or note and report discrepancies found in records",
-      "Receive, record, and bank cash, checks, and vouchers (petty cash / collections recording)",
+      
     ],
     careerId: "acctclerk",
+    pick: true,
   },
   {
     id: "res-acct-intuit-basics",
@@ -3365,6 +3493,7 @@ export const RESOURCES: Resource[] = [
     ],
     creditingBody: "ACCA-X",
     careerId: "acctclerk",
+    pick: true,
   },
   {
     id: "res-acct-acca-intermediate",
@@ -3377,6 +3506,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Prepare and issue account statements / bills / invoices"],
     creditingBody: "ACCA-X",
     careerId: "acctclerk",
+    pick: true,
   },
   {
     id: "res-acct-cfi-basic-excel",
@@ -3389,6 +3519,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Operate computers programmed with accounting software"],
     careerId: "acctclerk",
+    pick: true,
   },
   {
     id: "res-acct-openstax-financial",
@@ -3403,6 +3534,7 @@ export const RESOURCES: Resource[] = [
       "PSOC 4311 record-keeping envelope",
     ],
     careerId: "acctclerk",
+    pick: true,
   },
   {
     id: "res-acct-top-journalizing",
@@ -3419,6 +3551,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "acctclerk",
+    pick: true,
   },
   {
     id: "res-acct-top-posting",
@@ -3461,6 +3594,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Government forms & compliance paperwork"],
     careerId: "acctclerk",
+    pick: true,
   },
   {
     id: "res-acct-top-workplace-comms",
@@ -3485,6 +3619,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Communication · Professionalism · Critical Thinking (Enabling)"],
     creditingBody: "TESDA",
     careerId: "acctclerk",
+    pick: true,
   },
   // ── pay (4.3) — portals = labeled start-here placeholders (ruling) ──
   {
@@ -3503,6 +3638,7 @@ export const RESOURCES: Resource[] = [
       "Keep leave records",
     ],
     careerId: "pay",
+    pick: true,
   },
   {
     id: "res-pay-sss",
@@ -3538,6 +3674,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 1,
     skillsAddressed: ["Compute wages and deductions, and enter data into computers"],
     careerId: "pay",
+    pick: true,
   },
   {
     id: "res-pay-gcf-excel",
@@ -3553,6 +3690,7 @@ export const RESOURCES: Resource[] = [
       "Keep leave records",
     ],
     careerId: "pay",
+    pick: true,
   },
   {
     id: "res-pay-acca-intro",
@@ -3563,11 +3701,7 @@ export const RESOURCES: Resource[] = [
     // covers "payroll and ledger accounts"
     url: "https://www.edx.org/course/introduction-to-bookkeeping-2",
     durationHours: 30,
-    skillsAddressed: [
-      "Compute wages and deductions, and enter data into computers",
-      "Prepare and balance period-end reports, and reconcile issued payrolls to bank statements",
-      "Process and issue employee paychecks and statements of earnings and deductions",
-    ],
+    skillsAddressed: [],
     creditingBody: "ACCA-X",
     careerId: "pay",
   },
@@ -3579,7 +3713,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://www.coursera.org/learn/bookkeeping-basics",
     durationHours: 10,
-    skillsAddressed: ["Process and issue employee paychecks and statements of earnings and deductions"],
+    skillsAddressed: [],
     careerId: "pay",
   },
   {
@@ -3594,6 +3728,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 1,
     skillsAddressed: ["Prepare and file payroll tax returns / statutory paperwork"],
     careerId: "pay",
+    pick: true,
   },
   {
     id: "res-pay-ra10173",
@@ -3608,6 +3743,7 @@ export const RESOURCES: Resource[] = [
       "Records hygiene & confidentiality (RA 10173 context)",
     ],
     careerId: "pay",
+    pick: true,
   },
   {
     id: "res-pay-top-receiving-comms",
@@ -3620,6 +3756,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Provide information to employees and managers on payroll matters, tax issues, benefit plans, and collective agreement provisions"],
     creditingBody: "TESDA",
     careerId: "pay",
+    pick: true,
   },
   {
     id: "res-pay-top-workplace-comms",
@@ -3635,6 +3772,7 @@ export const RESOURCES: Resource[] = [
     ],
     creditingBody: "TESDA",
     careerId: "pay",
+    pick: true,
   },
   {
     id: "res-pay-top-digital-literacy-cat",
@@ -3660,10 +3798,7 @@ export const RESOURCES: Resource[] = [
     // can read the F&A Agent/Associate map itself (printed pp.92–93)
     url: "https://www.tesda.gov.ph/Uploads/File/Philippine%20Skills%20Framework/ICT/Philippine%20Skills%20Framework%20for%20Global%20In-House%20Center.pdf",
     durationHours: 3,
-    skillsAddressed: [
-      "Perform financial accounting and corporate reporting activities",
-      "Internal Controls",
-    ],
+    skillsAddressed: [],
     careerId: "fas",
   },
   {
@@ -3679,9 +3814,10 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: [
       "Perform financial accounting and corporate reporting activities",
       "Process business transactions and reports using information technology tools",
-      "Support strategic planning",
+      
     ],
     careerId: "fas",
+    pick: true,
   },
   {
     id: "res-fas-gcf-excel",
@@ -3696,6 +3832,7 @@ export const RESOURCES: Resource[] = [
       "Data Collection and Analysis",
     ],
     careerId: "fas",
+    pick: true,
   },
   {
     id: "res-fas-acca-intro",
@@ -3721,6 +3858,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Accounting and Tax Systems"],
     creditingBody: "ACCA-X",
     careerId: "fas",
+    pick: true,
   },
   {
     id: "res-fas-cfi-basic-excel",
@@ -3732,6 +3870,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Data Collection and Analysis"],
     careerId: "fas",
+    pick: true,
   },
   {
     id: "res-fas-cfi-ratios",
@@ -3744,6 +3883,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Financial Analysis"],
     careerId: "fas",
+    pick: true,
   },
   {
     id: "res-fas-openstax-finance",
@@ -3779,6 +3919,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 6,
     skillsAddressed: ["Internal Controls"],
     careerId: "fas",
+    pick: true,
   },
   {
     id: "res-fas-top-workplace-comms",
@@ -3790,7 +3931,7 @@ export const RESOURCES: Resource[] = [
     // foundation the Diversity row leans on
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
-    skillsAddressed: ["Diversity Awareness and Management"],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "fas",
   },
@@ -3805,6 +3946,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Sense Making · Transdisciplinary Thinking (Enabling, B/I)"],
     creditingBody: "TESDA",
     careerId: "fas",
+    pick: true,
   },
   {
     id: "res-fas-top-digital-literacy-cat",
@@ -3841,6 +3983,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Support strategic planning", "O*NET corroboration block (operating-the-GL-engine tasks)"],
     careerId: "fas",
+    pick: true,
   },
   // ── fin (4.5) ──
   {
@@ -3859,6 +4002,7 @@ export const RESOURCES: Resource[] = [
       "Advise clients on aspects of capitalization, such as amounts, sources, or timing",
     ],
     careerId: "fin",
+    pick: true,
   },
   {
     id: "res-fin-mit-ocw-finance-theory",
@@ -3908,6 +4052,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions"],
     careerId: "fin",
+    pick: true,
   },
   {
     id: "res-fin-cfi-ratios",
@@ -3917,10 +4062,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://corporatefinanceinstitute.com/resources/accounting/financial-ratios-definitive-guide/",
     durationHours: 3,
-    skillsAddressed: [
-      "Recommend investments and investment timing",
-      "Present oral or written reports on general economic trends, individual corporations, and entire industries",
-    ],
+    skillsAddressed: [],
     careerId: "fin",
   },
   {
@@ -3934,6 +4076,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Present oral or written reports on general economic trends, individual corporations, and entire industries", "Communication · Critical Thinking · Professionalism (Enabling)"],
     creditingBody: "TESDA",
     careerId: "fin",
+    pick: true,
   },
   {
     id: "res-fin-wharton-more-accounting",
@@ -3944,7 +4087,7 @@ export const RESOURCES: Resource[] = [
     // financial-statement analysis module
     url: "https://www.coursera.org/learn/wharton-financial-accounting",
     durationHours: 14,
-    skillsAddressed: ["Present oral or written reports on general economic trends, individual corporations, and entire industries"],
+    skillsAddressed: [],
     careerId: "fin",
   },
   {
@@ -3968,6 +4111,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Draw charts and graphs, using computer spreadsheets, to illustrate technical reports"],
     careerId: "fin",
+    pick: true,
   },
   {
     id: "res-fin-acca-mgmt",
@@ -3978,7 +4122,7 @@ export const RESOURCES: Resource[] = [
     // cost/management accounting basics + spreadsheet use
     url: "https://www.edx.org/course/introduction-to-management-accounting-2",
     durationHours: 30,
-    skillsAddressed: ["Communication · Critical Thinking · Professionalism (Enabling)"],
+    skillsAddressed: [],
     creditingBody: "ACCA-X",
     careerId: "fin",
   },
@@ -3991,7 +4135,7 @@ export const RESOURCES: Resource[] = [
     // free tour of finance role families; non-PH framing, flagged
     url: "https://corporatefinanceinstitute.com/course/careers-in-finance/",
     durationHours: 3,
-    skillsAddressed: ["Communication · Critical Thinking · Professionalism (Enabling)"],
+    skillsAddressed: [],
     careerId: "fin",
   },
   {
@@ -4015,10 +4159,7 @@ export const RESOURCES: Resource[] = [
     // (BSP pages blocked this session; recheck when reachable)
     url: "https://www.khanacademy.org/economics-finance-domain/core-finance/banking-and-money",
     durationHours: 3,
-    skillsAddressed: [
-      "Balance currency, coin, and checks in cash drawers at ends of shifts and calculate daily transactions, using computers, calculators, or adding machines",
-      "Enter customers' transactions into computers to record transactions and issue computer-generated receipts",
-    ],
+    skillsAddressed: [],
     careerId: "treasury",
   },
   {
@@ -4032,6 +4173,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Prepare financial documents, and calculate interest or brokerage charges and stamp duties payable"],
     careerId: "treasury",
+    pick: true,
   },
   {
     id: "res-treasury-ra8791",
@@ -4045,6 +4187,7 @@ export const RESOURCES: Resource[] = [
       "Balance currency, coin, and checks in cash drawers at ends of shifts and calculate daily transactions, using computers, calculators, or adding machines",
     ],
     careerId: "treasury",
+    pick: true,
   },
   {
     id: "res-treasury-gcf-excel",
@@ -4054,8 +4197,9 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
-    skillsAddressed: ["Reconcile records of financial transactions", "Accuracy/Professionalism (Enabling)"],
+    skillsAddressed: ["Reconcile records of financial transactions"],
     careerId: "treasury",
+    pick: true,
   },
   {
     id: "res-treasury-acca-intro",
@@ -4083,6 +4227,7 @@ export const RESOURCES: Resource[] = [
       "Maintain records of bonds, shares and other securities bought or sold on behalf of clients or employer",
     ],
     careerId: "treasury",
+    pick: true,
   },
   {
     id: "res-treasury-finance-fundamentals",
@@ -4106,7 +4251,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://corporatefinanceinstitute.com/course/careers-in-finance/",
     durationHours: 3,
-    skillsAddressed: ["Maintain records of bonds, shares and other securities bought or sold on behalf of clients or employer"],
+    skillsAddressed: [],
     careerId: "treasury",
   },
   {
@@ -4120,6 +4265,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Accuracy/Professionalism (Enabling)"],
     creditingBody: "TESDA",
     careerId: "treasury",
+    pick: true,
   },
   // ── coll (4.7) — thin collections-training zone declared; RA 3765 never a live link ──
   {
@@ -4131,10 +4277,7 @@ export const RESOURCES: Resource[] = [
     // the closest free PH anchor to call-handling craft
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
-    skillsAddressed: [
-      "Locate and notify customers of delinquent accounts by mail, telephone, or personal visits to solicit payment",
-      "Confer with customers by telephone or in person to determine reasons for overdue payments and to review the terms of sales, service, or credit contracts",
-    ],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "coll",
   },
@@ -4149,6 +4292,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Communication · Professionalism (Enabling)"],
     creditingBody: "TESDA",
     careerId: "coll",
+    pick: true,
   },
   {
     id: "res-coll-khan-banking",
@@ -4159,7 +4303,7 @@ export const RESOURCES: Resource[] = [
     // credit-side context; US framing flagged (BSP 403)
     url: "https://www.khanacademy.org/economics-finance-domain/core-finance/banking-and-money",
     durationHours: 3,
-    skillsAddressed: ["Locate and notify customers of delinquent accounts by mail, telephone, or personal visits to solicit payment"],
+    skillsAddressed: [],
     careerId: "coll",
   },
   {
@@ -4176,6 +4320,7 @@ export const RESOURCES: Resource[] = [
       "Record information about financial status of customers and status of collection efforts",
     ],
     careerId: "coll",
+    pick: true,
   },
   {
     id: "res-coll-finance-fundamentals",
@@ -4185,7 +4330,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://www.coursera.org/learn/finance-fundamentals",
     durationHours: 10,
-    skillsAddressed: ["Arrange for debt repayment or establish repayment schedules, based on customers' financial situations"],
+    skillsAddressed: [],
     careerId: "coll",
   },
   {
@@ -4200,6 +4345,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Receive payments and post amounts paid to customer accounts"],
     creditingBody: "ACCA-X",
     careerId: "coll",
+    pick: true,
   },
   {
     id: "res-coll-ra10173",
@@ -4217,6 +4363,7 @@ export const RESOURCES: Resource[] = [
       "Administrative upkeep of assigned accounts",
     ],
     careerId: "coll",
+    pick: true,
   },
   {
     id: "res-coll-dole-handbook",
@@ -4227,7 +4374,7 @@ export const RESOURCES: Resource[] = [
     // generic labor-standards context — noted as context, not collections doctrine
     url: "https://nwpc.dole.gov.ph/wp-content/uploads/2024/11/Workers-Statutory-Monetary-Benefits-Handbook-2024-Edition.pdf",
     durationHours: 3,
-    skillsAddressed: ["Trace delinquent customers to new addresses by inquiring at post offices, telephone companies, credit bureaus, or through the questioning of neighbors"],
+    skillsAddressed: [],
     careerId: "coll",
   },
   {
@@ -4264,9 +4411,10 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: [
       "Researching and evaluating loan applicant's financial status, references, credit and ability to repay the loan",
-      "Submitting credit and loan applications to management with recommendations for approval or rejection; approving or rejecting within authorized limits",
+      
     ],
     careerId: "credit",
+    pick: true,
   },
   {
     id: "res-credit-finance-fundamentals",
@@ -4278,7 +4426,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 10,
     skillsAddressed: [
       "Researching and evaluating loan applicant's financial status, references, credit and ability to repay the loan",
-      "Submitting credit and loan applications to management with recommendations for approval or rejection; approving or rejecting within authorized limits",
+      
     ],
     careerId: "credit",
   },
@@ -4293,7 +4441,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 14,
     skillsAddressed: [
       "Researching and evaluating loan applicant's financial status, references, credit and ability to repay the loan",
-      "Submitting credit and loan applications to management with recommendations for approval or rejection; approving or rejecting within authorized limits",
+      
     ],
     careerId: "credit",
   },
@@ -4305,10 +4453,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
-    skillsAddressed: [
-      "Interviewing applicants for personal, mortgage, student and business loans",
-      "Explain to customers the different types of loans and credit options that are available, as well as the terms of those services",
-    ],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "credit",
   },
@@ -4321,12 +4466,13 @@ export const RESOURCES: Resource[] = [
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
     skillsAddressed: [
-      "Interviewing applicants for personal, mortgage, student and business loans",
-      "Explain to customers the different types of loans and credit options that are available, as well as the terms of those services",
+      
+      
       "Integrity/Professionalism (Enabling)",
     ],
     creditingBody: "TESDA",
     careerId: "credit",
+    pick: true,
   },
   {
     id: "res-credit-ra8791",
@@ -4356,6 +4502,7 @@ export const RESOURCES: Resource[] = [
       "Completing credit and loan documentation",
     ],
     careerId: "credit",
+    pick: true,
   },
   {
     id: "res-credit-gcf-excel",
@@ -4380,7 +4527,7 @@ export const RESOURCES: Resource[] = [
     // payment-cycle literacy behind delinquency paperwork (honest thin otherwise)
     url: "https://www.coursera.org/learn/bookkeeping-basics",
     durationHours: 10,
-    skillsAddressed: ["Confer with underwriters to resolve mortgage application problems / submit applications to credit analysts", "Sizing the credit portfolio (delinquent-account reports)"],
+    skillsAddressed: [],
     careerId: "credit",
   },
   {
@@ -4417,11 +4564,7 @@ export const RESOURCES: Resource[] = [
     // with the PH-side statute row below
     url: "https://www.khanacademy.org/economics-finance-domain/core-finance/banking-and-money",
     durationHours: 3,
-    skillsAddressed: [
-      "Balance currency, coin, and checks in cash drawers at ends of shifts and calculate daily transactions, using computers, calculators, or adding machines",
-      "Receive checks and cash for deposit, verify amounts, and check accuracy of deposit slips",
-      "Enter customers' transactions into computers to record transactions and issue computer-generated receipts",
-    ],
+    skillsAddressed: [],
     careerId: "teller",
   },
   {
@@ -4437,6 +4580,7 @@ export const RESOURCES: Resource[] = [
       "Receive checks and cash for deposit, verify amounts, and check accuracy of deposit slips",
     ],
     careerId: "teller",
+    pick: true,
   },
   {
     id: "res-teller-acca-intro",
@@ -4446,7 +4590,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://www.edx.org/course/introduction-to-bookkeeping-2",
     durationHours: 30,
-    skillsAddressed: ["Resolve problems or discrepancies concerning customers' accounts"],
+    skillsAddressed: [],
     creditingBody: "ACCA-X",
     careerId: "teller",
   },
@@ -4459,7 +4603,7 @@ export const RESOURCES: Resource[] = [
     // teller-balance worksheets
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
-    skillsAddressed: ["Resolve problems or discrepancies concerning customers' accounts"],
+    skillsAddressed: [],
     careerId: "teller",
   },
   {
@@ -4471,7 +4615,7 @@ export const RESOURCES: Resource[] = [
     // term-deposit/interest mechanics (US framing flagged)
     url: "https://www.khanacademy.org/economics-finance-domain/core-finance/interest-basics",
     durationHours: 2,
-    skillsAddressed: ["Receive mortgage, loan, or public utility bill payments, verifying payment dates and amounts due / process term deposits and other savings-plan transactions"],
+    skillsAddressed: [],
     careerId: "teller",
   },
   {
@@ -4485,6 +4629,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 1,
     skillsAddressed: ["Receive mortgage, loan, or public utility bill payments, verifying payment dates and amounts due / process term deposits and other savings-plan transactions"],
     careerId: "teller",
+    pick: true,
   },
   {
     id: "res-teller-top-receiving-comms",
@@ -4494,7 +4639,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
-    skillsAddressed: ["Customer service & special services (cards, checks ordering)", "Explain, promote, or sell products or services, such as travelers' checks, savings bonds, money orders, and cashier's checks, using computerized information about customers to tailor recommendations"],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "teller",
   },
@@ -4507,7 +4652,7 @@ export const RESOURCES: Resource[] = [
     // tour incl. retail-banking branch roles; non-PH framing flagged
     url: "https://corporatefinanceinstitute.com/course/careers-in-finance/",
     durationHours: 3,
-    skillsAddressed: ["Explain, promote, or sell products or services, such as travelers' checks, savings bonds, money orders, and cashier's checks, using computerized information about customers to tailor recommendations"],
+    skillsAddressed: [],
     careerId: "teller",
   },
   {
@@ -4521,6 +4666,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Front-desk service etiquette (Enabling)", "Professionalism · Teamwork (Enabling)"],
     creditingBody: "TESDA",
     careerId: "teller",
+    pick: true,
   },
   {
     id: "res-teller-top-digital-literacy-cat",
@@ -4549,6 +4695,7 @@ export const RESOURCES: Resource[] = [
       "Review accounts for discrepancies and reconcile differences",
     ],
     careerId: "audit",
+    pick: true,
   },
   {
     id: "res-audit-mit-ocw-15501",
@@ -4590,7 +4737,7 @@ export const RESOURCES: Resource[] = [
     // Internal Controls FSC ladder ("control gaps" language)
     url: "https://www.tesda.gov.ph/Uploads/File/Philippine%20Skills%20Framework/ICT/Philippine%20Skills%20Framework%20for%20Global%20In-House%20Center.pdf",
     durationHours: 3,
-    skillsAddressed: ["Collect and analyze data to detect deficient controls, duplicated effort, extravagance, fraud, or non-compliance with laws, regulations, and management policies"],
+    skillsAddressed: [],
     careerId: "audit",
   },
   {
@@ -4601,7 +4748,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://corporatefinanceinstitute.com/resources/accounting/financial-ratios-definitive-guide/",
     durationHours: 3,
-    skillsAddressed: ["Collect and analyze data to detect deficient controls, duplicated effort, extravagance, fraud, or non-compliance with laws, regulations, and management policies"],
+    skillsAddressed: [],
     careerId: "audit",
   },
   {
@@ -4614,6 +4761,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 6,
     skillsAddressed: ["Collect and analyze data to detect deficient controls, duplicated effort, extravagance, fraud, or non-compliance with laws, regulations, and management policies"],
     careerId: "audit",
+    pick: true,
   },
   {
     id: "res-audit-ra9298",
@@ -4625,10 +4773,7 @@ export const RESOURCES: Resource[] = [
     // scope); lawphil is a mirror — cite the PRC/Gazette register when reachable
     url: "https://lawphil.net/statutes/repacts/ra2004/ra_9298_2004.html",
     durationHours: 2,
-    skillsAddressed: [
-      "Inspect cash on hand, notes receivable and payable, negotiable securities, and canceled checks to confirm records are accurate",
-      "Examine records and interview workers to ensure recording of transactions and compliance with laws and regulations",
-    ],
+    skillsAddressed: [],
     careerId: "audit",
   },
   {
@@ -4639,10 +4784,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://www.edx.org/course/intermediate-bookkeeping-2",
     durationHours: 30,
-    skillsAddressed: [
-      "Inspect cash on hand, notes receivable and payable, negotiable securities, and canceled checks to confirm records are accurate",
-      "Examine records and interview workers to ensure recording of transactions and compliance with laws and regulations",
-    ],
+    skillsAddressed: [],
     creditingBody: "ACCA-X",
     careerId: "audit",
   },
@@ -4658,6 +4800,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Prepare detailed reports on audit findings", "Professional Skepticism (attitude) · Communication (Enabling)"],
     creditingBody: "TESDA",
     careerId: "audit",
+    pick: true,
   },
   {
     id: "res-audit-gcf-excel",
@@ -4668,8 +4811,9 @@ export const RESOURCES: Resource[] = [
     // workpaper tables
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
-    skillsAddressed: ["Prepare detailed reports on audit findings", "Audit technology fluency (accounting software / Excel family)"],
+    skillsAddressed: ["Audit technology fluency (accounting software / Excel family)"],
     careerId: "audit",
+    pick: true,
   },
   {
     id: "res-audit-top-journalizing",
@@ -4684,6 +4828,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "audit",
+    pick: true,
   },
   {
     id: "res-audit-top-posting",
@@ -4746,6 +4891,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 1,
     skillsAddressed: ["Compliance / tax analog & frameworks"],
     careerId: "audit",
+    pick: true,
   },
   {
     id: "res-audit-top-receiving-comms",
@@ -4760,12 +4906,13 @@ export const RESOURCES: Resource[] = [
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
     skillsAddressed: [
-      "Senior-heavy supervision tasks",
+      
       "Professional Skepticism (attitude) · Communication (Enabling)",
-      "Audit technology fluency (accounting software / Excel family)",
+      
     ],
     creditingBody: "TESDA",
     careerId: "audit",
+    pick: true,
   },
   {
     id: "res-audit-top-digital-literacy-cat",
@@ -4779,11 +4926,7 @@ export const RESOURCES: Resource[] = [
     // keying enumerates rows 9–11 (row 9 = the Senior-heavy supervision fold-in)
     url: "https://e-tesda.gov.ph/course/index.php?categoryid=1310",
     durationHours: 4,
-    skillsAddressed: [
-      "Senior-heavy supervision tasks",
-      "Professional Skepticism (attitude) · Communication (Enabling)",
-      "Audit technology fluency (accounting software / Excel family)",
-    ],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "audit",
   },
@@ -4799,7 +4942,7 @@ export const RESOURCES: Resource[] = [
     // login-gated (TOP account free); e-certificate on completion
     url: "https://e-tesda.gov.ph/course/view.php?id=4716",
     durationHours: 4,
-    skillsAddressed: ["Filing systems (paper/electronic) operation", "Office equipment operation & basic troubleshooting"],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "adminassoc",
   },
@@ -4815,6 +4958,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Filing systems (paper/electronic) operation"],
     careerId: "adminassoc",
+    pick: true,
   },
   {
     id: "res-adminassoc-ads-sheets",
@@ -4829,6 +4973,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Database entry & maintenance"],
     creditingBody: "Google for Education",
     careerId: "adminassoc",
+    pick: true,
   },
   {
     id: "res-adminassoc-workspace",
@@ -4841,6 +4986,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Database entry & maintenance", "Multi-channel reception & call routing"],
     careerId: "adminassoc",
+    pick: true,
   },
   {
     id: "res-adminassoc-top-receiving-comms",
@@ -4864,7 +5010,7 @@ export const RESOURCES: Resource[] = [
     // troubleshooting/how-to for Office apps + equipment-adjacent flows
     url: "https://support.microsoft.com/en-us/office",
     durationHours: 2,
-    skillsAddressed: ["Office equipment operation & basic troubleshooting", "Meeting/coordination documentation"],
+    skillsAddressed: ["Meeting/coordination documentation"],
     careerId: "adminassoc",
   },
   {
@@ -4890,6 +5036,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 1,
     skillsAddressed: ["Meeting/coordination documentation"],
     careerId: "adminassoc",
+    pick: true,
   },
   {
     id: "res-adminassoc-top-ilo-humanskills",
@@ -4903,6 +5050,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Communication · Professionalism · Critical Thinking (Enabling)"],
     creditingBody: "TESDA × ILO",
     careerId: "adminassoc",
+    pick: true,
   },
   {
     id: "res-adminassoc-skillsbuild",
@@ -4928,6 +5076,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Recording, preparing, sorting, classifying and filing information"],
     careerId: "clerk",
+    pick: true,
   },
   {
     id: "res-clerk-top-digitallit",
@@ -4938,7 +5087,7 @@ export const RESOURCES: Resource[] = [
     // digital-filing/electronic-records basics
     url: "https://e-tesda.gov.ph/course/view.php?id=4716",
     durationHours: 4,
-    skillsAddressed: ["Recording, preparing, sorting, classifying and filing information"],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "clerk",
   },
@@ -4953,6 +5102,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 1,
     skillsAddressed: ["Sorting, opening and sending mail"],
     careerId: "clerk",
+    pick: true,
   },
   {
     id: "res-clerk-ms-365",
@@ -4963,7 +5113,7 @@ export const RESOURCES: Resource[] = [
     // printing/PDF flows for document reproduction
     url: "https://support.microsoft.com/en-us/office",
     durationHours: 2,
-    skillsAddressed: ["Photocopying and sending documents"],
+    skillsAddressed: [],
     careerId: "clerk",
   },
   {
@@ -4977,6 +5127,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Routine reports & correspondence"],
     careerId: "clerk",
+    pick: true,
   },
   {
     id: "res-clerk-top-receiving-comms",
@@ -4989,6 +5140,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Routine reports & correspondence", "Responding to enquiries (telephone/electronic) or forwarding"],
     creditingBody: "TESDA",
     careerId: "clerk",
+    pick: true,
   },
   {
     id: "res-clerk-top-intro-bookkeeping",
@@ -5003,6 +5155,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "clerk",
+    pick: true,
   },
   {
     id: "res-clerk-ratatype",
@@ -5015,6 +5168,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Transcribing information into computers, and proof-reading and correcting copy"],
     careerId: "clerk",
+    pick: true,
   },
   {
     id: "res-clerk-top-ilo-humanskills",
@@ -5027,6 +5181,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Communication · Professionalism (Enabling)"],
     creditingBody: "TESDA × ILO",
     careerId: "clerk",
+    pick: true,
   },
   {
     id: "res-clerk-skillsbuild",
@@ -5063,6 +5218,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Receiving & registering source documents for data capture", "Source-document reading & field mapping (entering from source material)"],
     creditingBody: "Google for Education",
     careerId: "encode",
+    pick: true,
   },
   {
     id: "res-encode-workspace-catalog",
@@ -5110,10 +5266,11 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: [
       "Accuracy/error detection & correction",
-      "Operating bookkeeping and calculating machines",
-      "Importing and exporting data between different database systems and softwares",
+      
+      
     ],
     careerId: "encode",
+    pick: true,
   },
   {
     id: "res-encode-sheets-organize",
@@ -5128,6 +5285,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Compilation, sorting, verification before entry"],
     creditingBody: "Google for Education",
     careerId: "encode",
+    pick: true,
   },
   {
     id: "res-encode-top-digitallit",
@@ -5138,7 +5296,7 @@ export const RESOURCES: Resource[] = [
     // backs both split rows' tool/data-movement base
     url: "https://e-tesda.gov.ph/course/view.php?id=4716",
     durationHours: 4,
-    skillsAddressed: ["Operating bookkeeping and calculating machines", "Importing and exporting data between different database systems and softwares"],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "encode",
   },
@@ -5167,6 +5325,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Confidentiality (Etiquette/Professionalism — Enabling)"],
     careerId: "encode",
+    pick: true,
   },
   // ── desk (5.5) — tourism-family honesty note rides the TOP front-office rows ──
   {
@@ -5224,6 +5383,7 @@ export const RESOURCES: Resource[] = [
     ],
     creditingBody: "TESDA",
     careerId: "desk",
+    pick: true,
   },
   {
     id: "res-desk-ads-sheets",
@@ -5237,6 +5397,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Recording information about enquiries and complaints"],
     creditingBody: "Google for Education",
     careerId: "desk",
+    pick: true,
   },
   {
     id: "res-desk-workspace",
@@ -5259,7 +5420,7 @@ export const RESOURCES: Resource[] = [
     // producing/typing forms and handouts
     url: "https://support.microsoft.com/en-us/office",
     durationHours: 2,
-    skillsAddressed: ["Issuing forms, information kits and brochures"],
+    skillsAddressed: [],
     careerId: "desk",
   },
   {
@@ -5273,6 +5434,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Communication & professionalism at the corporate front-desk (Enabling)"],
     creditingBody: "TESDA × ILO",
     careerId: "desk",
+    pick: true,
   },
   {
     id: "res-desk-skillsbuild",
@@ -5325,6 +5487,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 1,
     skillsAddressed: ["Executive schedule & calendar management", "Travel arrangements"],
     careerId: "execsec",
+    pick: true,
   },
   {
     id: "res-execsec-ms-365",
@@ -5338,6 +5501,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Correspondence & document production", "Meeting administration & minutes", "Employee time-tracking"],
     careerId: "execsec",
+    pick: true,
   },
   {
     id: "res-execsec-owl-memos",
@@ -5362,6 +5526,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 1,
     skillsAddressed: ["Meeting administration & minutes"],
     careerId: "execsec",
+    pick: true,
   },
   {
     id: "res-execsec-top-receiving-comms",
@@ -5374,6 +5539,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Information gatekeeping: calls & visitors"],
     creditingBody: "TESDA",
     careerId: "execsec",
+    pick: true,
   },
   {
     id: "res-execsec-top-front-office",
@@ -5411,8 +5577,9 @@ export const RESOURCES: Resource[] = [
     // search/draft tooling + upkeep tooling (Sheets/Drive)
     url: "https://support.google.com/a/users",
     durationHours: 2,
-    skillsAddressed: ["Research & briefing support for executives", "Office services coordination", "Travel arrangements"],
+    skillsAddressed: ["Research & briefing support for executives", "Travel arrangements"],
     careerId: "execsec",
+    pick: true,
   },
   {
     id: "res-execsec-gmail",
@@ -5425,6 +5592,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 1,
     skillsAddressed: ["Incoming-material triage & distribution"],
     careerId: "execsec",
+    pick: true,
   },
   {
     id: "res-execsec-top-intro-bookkeeping",
@@ -5439,6 +5607,7 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "execsec",
+    pick: true,
   },
   {
     id: "res-execsec-accountingcoach",
@@ -5451,6 +5620,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Payroll-information processing", "General office duties & tools"],
     careerId: "execsec",
+    pick: true,
   },
   {
     id: "res-execsec-top-journalizing",
@@ -5460,7 +5630,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     url: "https://e-tesda.gov.ph/course/view.php?id=3982",
     durationHours: 4,
-    skillsAddressed: ["Payroll-information processing"],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "execsec",
@@ -5477,6 +5647,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["General office duties & tools", "Clerical support across departments"],
     creditingBody: "TESDA",
     careerId: "execsec",
+    pick: true,
   },
   {
     id: "res-execsec-top-ilo-humanskills",
@@ -5487,13 +5658,7 @@ export const RESOURCES: Resource[] = [
     // any-row human-skills add
     url: "https://e-tesda.gov.ph/course/view.php?id=2014",
     durationHours: 2,
-    skillsAddressed: [
-      "Clerical support across departments",
-      "Administrative policy setup & interpretation",
-      "Representing executives / meeting on their behalf",
-      "Supervision & training of clerical staff",
-      "Operating-practice review",
-    ],
+    skillsAddressed: [],
     creditingBody: "TESDA × ILO",
     careerId: "execsec",
   },
@@ -5506,12 +5671,7 @@ export const RESOURCES: Resource[] = [
     // senior-heavy rows' free backing side (the book rides PURCHASE_BOOKS)
     url: "https://skillsbuild.org/",
     durationHours: 3,
-    skillsAddressed: [
-      "Administrative policy setup & interpretation",
-      "Representing executives / meeting on their behalf",
-      "Supervision & training of clerical staff",
-      "Operating-practice review",
-    ],
+    skillsAddressed: [],
     careerId: "execsec",
   },
   {
@@ -5525,6 +5685,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Records & document filing/retrieval"],
     careerId: "execsec",
+    pick: true,
   },
   // ── records (E3) — rebuilt to the blessed records.md pool (per-row linkage;
   // purchase books ride PURCHASE_BOOKS; the pre-blessing NARA lessons retire) ──
@@ -5539,6 +5700,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 3,
     skillsAddressed: ["Sort & classify materials to filing rules", "Filing into storage (drawers/cabinets/boxes)", "File retrieval on request"],
     careerId: "records",
+    pick: true,
   },
   {
     id: "res-records-top-digitallit",
@@ -5549,7 +5711,7 @@ export const RESOURCES: Resource[] = [
     // electronic-filing side + hardware-basic operation
     url: "https://e-tesda.gov.ph/course/view.php?id=4716",
     durationHours: 4,
-    skillsAddressed: ["Sort & classify materials to filing rules", "Reprographics: photocopy, scan, fax"],
+    skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "records",
   },
@@ -5565,6 +5727,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Filing log / records of materials filed & removed"],
     creditingBody: "Google for Education",
     careerId: "records",
+    pick: true,
   },
   {
     id: "res-records-workspace",
@@ -5577,6 +5740,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Filing log / records of materials filed & removed", "Front-office record & database upkeep"],
     careerId: "records",
+    pick: true,
   },
   {
     id: "res-records-workspace-catalog",
@@ -5598,7 +5762,7 @@ export const RESOURCES: Resource[] = [
     // scanning/printing/PDF-flow docs
     url: "https://support.microsoft.com/en-us/office",
     durationHours: 2,
-    skillsAddressed: ["Reprographics: photocopy, scan, fax"],
+    skillsAddressed: [],
     careerId: "records",
   },
   {
@@ -5625,6 +5789,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Telephone, switchboard & front-desk duties", "Visitor greeting & routing"],
     creditingBody: "TESDA",
     careerId: "records",
+    pick: true,
   },
   {
     id: "res-records-gcal",
@@ -5637,6 +5802,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 1,
     skillsAddressed: ["Appointment & calendar scheduling"],
     careerId: "records",
+    pick: true,
   },
   {
     id: "res-records-gmail",
@@ -5649,6 +5815,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 1,
     skillsAddressed: ["Mail & document handling"],
     careerId: "records",
+    pick: true,
   },
   {
     id: "res-records-top-workplace-comms",
@@ -5662,6 +5829,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Info & customer-service communication"],
     creditingBody: "TESDA",
     careerId: "records",
+    pick: true,
   },
   {
     id: "res-records-top-ilo-humanskills",
