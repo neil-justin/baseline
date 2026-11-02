@@ -47,7 +47,7 @@ function UndecidedDefault({ name }: { name: string }) {
         <div className="band">
           <div className="bandrow">
             <div className="who">
-              <h1>Progress</h1>
+              <h1 className="t">Progress</h1>
               <p className="band-id">{name} · no career picked yet</p>
             </div>
           </div>

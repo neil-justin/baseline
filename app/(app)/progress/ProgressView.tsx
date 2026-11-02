@@ -205,7 +205,7 @@ export default function ProgressView(props: Props) {
         <div className="band">
           <div className="bandrow">
             <div className="who">
-              <h1>Progress</h1>
+              <h1 className="t">Progress</h1>
               <p className="band-id">
                 {props.persona} · Target: <b>{props.careerName}</b>
               </p>
@@ -219,8 +219,8 @@ export default function ProgressView(props: Props) {
                 ) : null}
               </p>
               <div className="prog-ctas">
-                <a className="btn btn-primary" href="/pathway">
-                  Open Pathway <span className="arrow num">→</span>
+                <a className="cta" href="/pathway">
+                  Open your plan <span className="arrow num">→</span>
                 </a>
                 <a className="link-quiet" href="#goals">
                   Jump to your goals

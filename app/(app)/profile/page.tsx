@@ -656,7 +656,7 @@ export default async function ProfilePage() {
         <div className="band">
           <div className="bandrow">
             <div className="who">
-              <h1>Profile</h1>
+              <h1 className="t">Profile</h1>
               {identity}
               <p className="band-meta num">As of {asOf}</p>
             </div>
@@ -687,7 +687,7 @@ export default async function ProfilePage() {
             {/* the one filled CTA on the page — the band's do-location, the
                 Dashboard register; the Plan tab's old closing CTA retires */}
             <a className="cta" href="/pathway">
-              Continue your plan →
+              Open your plan →
             </a>
           </div>
         </div>
@@ -747,7 +747,7 @@ function UndecidedProfile({ name }: { name: string }) {
         <div className="band">
           <div className="bandrow">
             <div className="who">
-              <h1>Profile</h1>
+              <h1 className="t">Profile</h1>
               <p className="band-id num">{name} · no career picked yet</p>
             </div>
           </div>

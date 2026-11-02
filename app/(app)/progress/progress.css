@@ -33,36 +33,18 @@
    the `.mono` shipments (badges etc.) ride this scope's Roboto register */
 .v7prog .mono { font-family: Roboto, system-ui, sans-serif; }
 
-/* ---------- header band — the white dashboard register ---------- */
+/* ---------- header band — Tier 2b: the card lives ONCE in ../v7.css
+   (.v7 .band / .bandrow / .who .t); the flex row recipe overrides this
+   page's former two-column grid (the border-left grid trick is retired —
+   the recipe's 28px gap carries the split); only the page-specific
+   furniture stays here ---------- */
 
-.v7prog .proband { margin: 0; }
-.v7prog .proband .band {
-  background: var(--v-surface);
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  box-shadow: var(--v-shadow);
-  padding: 16px 20px;
-  margin-bottom: 12px;
-}
-/* the two-column head discipline: left prose + action, right the
-   computed readout, split by the family's inner row rule */
-.v7prog .proband .bandrow {
-  display: grid;
-  grid-template-columns: minmax(0, 54fr) minmax(0, 46fr);
-  gap: 0 36px;
-  align-items: stretch;
-}
 .v7prog .proband .who {
   min-width: 0;
   padding: 2px 0 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
-.v7prog .proband h1 {
-  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
-  margin: 0;
-  color: var(--v-ink);
 }
 .v7prog .band-id {
   font: 400 13px/1.45 Roboto, system-ui, sans-serif;
@@ -91,12 +73,12 @@
 .v7prog .link-quiet { color: var(--v-blue-deep); font: 500 13px/1.2 Roboto, system-ui, sans-serif; text-decoration: none; }
 .v7prog .link-quiet:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-/* the computed readout — the band's right instrument column */
+/* the computed readout — the band's right instrument column (Tier 2b: the
+   border-left grid trick is retired; the shared .bandrow flex gap carries
+   the two-column split) */
 
 .v7prog .prog-scale {
   min-width: 0;
-  border-left: 1px solid var(--v-rows);
-  padding-left: 32px;
   display: grid;
   gap: 12px;
   align-content: start;
@@ -467,7 +449,6 @@
   box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3);
 }
 .v7prog .btn-primary:hover { background: var(--v-blue-deep); box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35); }
-.v7prog .btn-primary .arrow { opacity: 0.9; }
 .v7prog .btn-ghost {
   background: var(--v-surface);
   border: 1px solid var(--v-border);
@@ -634,23 +615,16 @@
 
 /* ---------- responsive ---------- */
 
-@media (max-width: 1020px) {
-  .v7prog .proband .bandrow { gap: 0 24px; }
-}
-
 @media (max-width: 900px) {
-  .v7prog .proband .bandrow { grid-template-columns: 1fr; gap: 18px 0; }
+  .v7prog .proband .bandrow { flex-direction: column; align-items: stretch; gap: 18px; }
   .v7prog .proband .prog-scale {
-    border-left: 0;
     border-top: 1px solid var(--v-rows);
-    padding-left: 0;
     padding-top: 14px;
   }
 }
 
 @media (max-width: 720px) {
   .v7prog { padding: 10px 12px 80px; } /* the bottom nav owns 64px below */
-  .v7prog .proband .band { padding: 12px 14px 14px; }
   .v7prog .feed-row { grid-template-columns: 1fr; gap: 8px; }
   .v7prog .f-when { padding-top: 0; }
   .v7prog .check-in { padding: 24px 14px 48px; }
@@ -661,7 +635,7 @@
 }
 
 @media (max-width: 480px) {
-  .v7prog .prog-ctas .btn { width: 100%; justify-content: center; }
+  .v7prog .prog-ctas .cta { width: 100%; justify-content: center; }
 }
 
 /* the undecided default — a plain padded block in its card, no chrome */

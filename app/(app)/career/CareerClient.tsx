@@ -457,7 +457,7 @@ export default function CareerClient({
               {card ? (
                 <>
                   <a className="cta" href="/pathway">
-                    See your gaps →
+                    Open your plan →
                   </a>
                   <div className="cc-switch">
                     <button

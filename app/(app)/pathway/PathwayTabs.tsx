@@ -346,15 +346,18 @@ export default function PathwayTabs({
 
   return (
     <div className="v7plan">
-      {/* slim grey tray band: names the surface + the ranked path line.
-          Undecided: "My Plan" only, no desc. */}
+      {/* surface band: names the surface + the ranked path line, riding the
+          shared recipe's .band (white). The grey-tray ruling (DESIGN.md:279)
+          was user-revised to white on 2026-11-02 — see the design doc.
+          Undecided: "My Plan" only, no desc. The .plan-lens toolbar below
+          stays OUTSIDE the band. */}
       <section className="planband" aria-label="My Plan">
         <div className="band">
           <div className="bandrow">
             <div className="who">
               <h1 className="t">My Plan</h1>
               {careerName ? (
-                <p className="m">For {careerName} — next steps, ranked by what carries the most weight first.</p>
+                <p className="m">For {careerName} — your next steps, ranked by what carries the most weight first.</p>
               ) : null}
             </div>
           </div>

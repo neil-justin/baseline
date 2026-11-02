@@ -29,33 +29,13 @@
 .v7plan :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
 .v7plan a { color: inherit; }
 
-/* ---------- header band — the white dashboard register (v7.4 sweep) ---------- */
-
-.v7plan .planband { margin: 0; }
-.v7plan .planband .band {
-  background: var(--v-surface);
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  box-shadow: var(--v-shadow);
-  padding: 16px 20px 0;
-  margin-bottom: 14px;
-}
-.v7plan .planband .bandrow {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-.v7plan .planband .who .t {
-  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
-  margin: 0;
-  color: var(--v-ink);
-}
-.v7plan .planband .who .m {
-  font: 400 13px/1.45 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  margin-top: 2px;
-}
+/* ---------- header band — Tier 2b: the band card lives ONCE in ../v7.css
+   (.v7 .band + .bandrow / .who .t+.m — the grey-tray variant is retired,
+   user call 2026-11-02);
+   `.planband` dressing clones are dead — including the old
+   `padding-bottom: 0` quirk and the 14px margin drift (the recipe's
+   16px/20px + 12px rhythm applies). The .plan-lens toolbar below stays
+   OUTSIDE the band. */
 
 /* the family's wash chips (dashboard clone) */
 
@@ -438,7 +418,6 @@
 
 @media (max-width: 720px) {
   .v7plan { padding: 12px 12px 80px; }
-  .v7plan .planband .band { padding: 12px 12px 0; }
   /* the toolbar folds two-line: tabs, then the kicker */
   .v7plan .plan-lens .kicker { flex: 1 1 100%; margin-left: 0; text-align: right; }
   /* block-stacked tables re-show the folded State cell (≤920 hide) */

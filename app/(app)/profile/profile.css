@@ -51,32 +51,15 @@
 .v7profile :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
 .v7profile a { color: inherit; }
 
-/* ---------- header band — the white dashboard register ---------- */
+/* ---------- header band — Tier 2b: the card/row/who/CTA register lives
+   ONCE in ../v7.css (.v7 .band / .bandrow / .who .t / .cta); only the
+   page-specific split furniture stays here (the min-width, .band-id,
+   .band-meta, .band-scale) ---------- */
 
-.v7profile .proband { margin: 0; }
-.v7profile .proband .band {
-  background: var(--v-surface);
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  box-shadow: var(--v-shadow);
-  padding: 16px 20px;
-  margin-bottom: 12px; /* the family band rhythm — exactly 12px */
-}
-.v7profile .proband .bandrow {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
-}
 .v7profile .proband .who { min-width: 250px; }
-.v7profile .proband h1 {
-  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
-  margin: 0;
-  color: var(--v-ink);
-}
 .v7profile .band-id { font: 400 13px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 2px; }
 .v7profile .band-id b { color: var(--v-ink); font-weight: 500; }
-.v7profile .band-meta { font: 400 11.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 4px; }
+.v7profile .band-meta { font: 400 13px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 4px; }
 
 /* the five channel mini-bar — computed at rest, AR empty when unmeasured */
 .v7profile .band-scale { flex: 1; min-width: 280px; max-width: 560px; }
@@ -116,23 +99,8 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* the band's ONE filled CTA (→ /pathway) — VALUES cloned from dashboard.css
-   .cta; everything else on the page stays links/text */
-.v7profile .cta {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  height: 40px;
-  padding: 0 20px;
-  border-radius: 8px;
-  background: var(--v-blue);
-  color: #fff;
-  font: 500 14px Roboto, system-ui, sans-serif;
-  text-decoration: none;
-  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3);
-  transition: background-color 0.14s ease, box-shadow 0.14s ease;
-}
-.v7profile .cta:hover { background: var(--v-blue-deep); box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35); }
+/* the band's ONE filled CTA (→ /pathway) — .v7 .cta in ../v7.css (the ONE
+   definition, Tier 2b); everything else on the page stays links/text */
 
 /* ---------- the Plan tab's Dashboard-register cards (Phase 1) ----------
    One compartment per card (goals · pathway stages · score trajectory);
@@ -756,7 +724,6 @@
 
 @media (max-width: 720px) {
   .v7profile { padding: 10px 12px 80px; } /* the bottom nav owns 64px below */
-  .v7profile .proband .band { padding: 12px 14px; }
   .v7profile .band-scale { min-width: 0; flex-basis: 100%; }
   /* the five nowrap seglabels can't fit 390 unwrapped — labels wrap freely,
      the bar above stays the one computed instrument (zero horizontal overflow) */

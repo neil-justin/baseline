@@ -17,26 +17,32 @@ function UndecidedDefault() {
   return (
     <div className="v7dash">
       <section className="scoreband" aria-label="Your readiness score">
-        <div className="band-in">
-          <div className="score-left">
-            <span className="label">Readiness</span>
-            <div className="score-readout num">
-              <span className="score-big">0</span>
-              <small>of 100</small>
+        {/* Tier 2b: the undecided band renders through the SAME shared
+            recipe + classes as the decided path (.band + .bandrow); the
+            bespoke .band-in grid + .score-left/.score-right padding
+            blocks are dead. Content preserved. */}
+        <div className="band">
+          <div className="bandrow">
+            <div className="who">
+              <span className="label">Readiness</span>
+              <div className="score-readout num">
+                <span className="score-big">0</span>
+                <small>of 100</small>
+              </div>
+              <p className="score-line">No career picked yet.</p>
             </div>
-            <p className="score-line">No career picked yet.</p>
-          </div>
-          <div className="score-right">
-            <div className="seg-head">
-              <span className="label">Breakdown</span>
-              <span className="label num">{Object.values(WEIGHTS).join(" / ")}</span>
+            <div>
+              <div className="seg-head">
+                <span className="label">Breakdown</span>
+                <span className="label num">{Object.values(WEIGHTS).join(" / ")}</span>
+              </div>
+              <p className="score-line">
+                Pick a career to open your pathway:{" "}
+                <a className="link-sub" href="/career">
+                  browse the career index →
+                </a>
+              </p>
             </div>
-            <p className="score-line">
-              Pick a career to open your pathway:{" "}
-              <a className="link-sub" href="/career">
-                browse the career index →
-              </a>
-            </p>
           </div>
         </div>
       </section>
@@ -82,15 +88,16 @@ export default async function DashboardPage() {
       {/* ── header band: who · composite · five-channel bar · the one CTA ── */}
       <section className="scoreband" aria-label="Your readiness score">
         <div className="band">
-          <div className="who">
-            <h1 className="t">
-              {/* persona line: "Neil · 4th Year" — the state's yearLevel IS the
-                  print (the G-regex gradeLabel helper died with the SHS scope) */}
-              {state.name} · {state.yearLevel}
-            </h1>
-            <div className="m">{career.name}</div>
-          </div>
-          <ScoreSequence
+          <div className="bandrow">
+            <div className="who">
+              <h1 className="t">
+                {/* persona line: "Neil · 4th Year" — the state's yearLevel IS the
+                    print (the G-regex gradeLabel helper died with the SHS scope) */}
+                {state.name} · {state.yearLevel}
+              </h1>
+              <div className="m">{career.name}</div>
+            </div>
+            <ScoreSequence
             score={score.total}
             parts={v.parts}
             labels={[
@@ -123,6 +130,7 @@ export default async function DashboardPage() {
               Your next step →
             </a>
           )}
+          </div>
         </div>
       </section>
 

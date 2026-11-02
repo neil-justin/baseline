@@ -307,10 +307,100 @@ body:has(.v7) { background: #f8f9fa; }
   box-sizing: border-box;
 }
 
+/* ---------- the shared band recipe (Tier 2b, 2026-11-02) ----------
+   ONE implementation of the Named-Surface header band card lives here (the
+   family file); each surface's css drops its cloned band block and keeps
+   only genuinely page-specific band bits (progress's .prog-scale inner
+   readout treatment, profile's .band-scale + .band-meta, the career/prep
+   .bandcells tray folds). Values are the audit-fixes ruling (§Tier 2b),
+   canon from the dashboard register: white card, 1px border, 8px radius,
+   whisper shadow, 16px/20px padding + 12px band rhythm (the 12-vs-14
+   margin drift dies), ≤720px the 12px/14px pad. All six app bands are the
+   ONE white register (user call 2026-11-02: the DESIGN.md:279 grey-tray
+   experiment was retired — the tray modifier is deleted). `.bandrow` is the
+   one flex row (the flex-vs-grid drift dies — progress's grid variant is
+   overridden by this; pages without a .bandside read space-between as
+   neutral). The instrument cells (.bcell/.bcell-label/.bval) and the ONE
+   .cta definition ride the dashboard register. Scoped under `.v7` so the
+   Index system (globals.css), onboarding (.v7ob) and the admin console
+   (.v7admin) are untouched. */
+.v7 .band {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  padding: 16px 20px;
+  margin-bottom: 12px;
+}
+.v7 .bandrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.v7 .band .who .t {
+  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
+  margin: 0;
+  color: var(--v-ink);
+}
+.v7 .band .who .m {
+  font: 400 13px/1.45 Roboto, system-ui, sans-serif; /* the 11.5px outliers die */
+  color: var(--v-ink2);
+  margin-top: 2px;
+}
+.v7 .bcell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 2px 18px;
+  border-left: 1px solid var(--v-rows);
+  min-width: 0;
+}
+.v7 .bcell:first-child { border-left: 0; padding-left: 0; }
+.v7 .bcell .label {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7 .bval {
+  font: 500 13px/1.35 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+/* the cell tray wrapper — one definition for the career/prep bandcells */
+.v7 .bandcells {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+/* the ONE band CTA — the dashboard register (career's 9px-20px variant dies) */
+.v7 .cta {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 8px;
+  background: var(--v-blue);
+  color: #fff;
+  font: 500 14px Roboto, system-ui, sans-serif;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3);
+  transition: background-color 0.14s ease, box-shadow 0.14s ease;
+}
+.v7 .cta:hover {
+  background: var(--v-blue-deep);
+  box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35);
+}
+
 /* ---------- responsive: ≤720px — the Material bottom nav (the rail's
    sole surviving form, v7.2) ---------- */
 
 @media (max-width: 720px) {
+  .v7 .band { padding: 12px 14px; }
   .v7 { grid-template-columns: 1fr; }
   .v7-side { display: none; }
   .rail {

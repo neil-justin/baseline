@@ -108,6 +108,10 @@ All confirmed with code evidence (see transcript):
 - **Shared register, one implementation**: extract the cloned "white dashboard register" band CSS
   into a single shared recipe (kill margin 12-vs-14, subtitle 11.5-vs-13px, flex-vs-grid drift);
   restore My Plan to the DESIGN.md-ruled grey tray (Composition A, `DESIGN.md:279`).
+  **Post-build revision (2026-11-02, user call): the grey tray is RETIRED — all six bands are
+  the one shared WHITE register; DESIGN.md Composition A updated in place.** Content co-plan
+  signed (round with Q14): band CTAs unify to "Open your plan →" on careers/profile/progress;
+  "your" restored in the My Plan line.
 - **Content differences stay intentional** (Named-Surface Rule, `DESIGN.md:269`: each band carries
   that page's instrument). A per-page content draft (title / subtitle / instrument cells / CTA)
   is presented to the user for sign-off BEFORE any markup change.

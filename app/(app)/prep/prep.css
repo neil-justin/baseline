@@ -41,50 +41,14 @@
 .v7prep a { color: inherit; }
 .v7prep .num { font-variant-numeric: tabular-nums; }
 
-/* ---------- named band — the white dashboard register (v7.4 sweep) ---------- */
+/* ---------- named band — Tier 2b: the card/row/who/bcell register lives
+   ONCE in ../v7.css (.v7 .band / .bandrow / .who .t+.m / .bcell /
+   .bandcells); only the page-specific AR-cell furniture stays here ---------- */
 
-.v7prep .band {
-  background: var(--v-surface);
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  box-shadow: var(--v-shadow);
-  padding: 16px 20px;
-  margin-bottom: 12px;
-}
-.v7prep .bandrow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px 28px;
-  flex-wrap: wrap;
-}
 .v7prep .who { min-width: 220px; }
-.v7prep .who .t {
-  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
-  margin: 0;
-  color: var(--v-ink);
-}
-.v7prep .who .m {
-  font: 400 13px/1.45 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  margin-top: 2px;
-  max-width: 74ch;
-}
-.v7prep .bandcells {
-  display: flex;
-  align-items: stretch;
-  flex-wrap: wrap;
-}
-.v7prep .bcell {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  padding: 2px 18px;
-  border-left: 1px solid var(--v-rows);
-  min-width: 0;
-}
-.v7prep .bcell:first-child { border-left: 0; padding-left: 0; }
+.v7prep .who .m { max-width: 74ch; }
+.v7prep .bval-row { display: flex; align-items: center; gap: 8px; }
+.v7prep .bval.bquiet { color: var(--v-grey-text); }
 .v7prep .label {
   font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
   letter-spacing: 0.08em;
@@ -92,10 +56,6 @@
   color: var(--v-ink2);
   white-space: nowrap;
 }
-.v7prep .bval-row { display: flex; align-items: center; gap: 8px; }
-.v7prep .bval { font: 500 13px/1.35 Roboto, system-ui, sans-serif; color: var(--v-ink); }
-.v7prep .bval.num { font-variant-numeric: tabular-nums; }
-.v7prep .bquiet { color: var(--v-grey-text); }
 /* the /15 readout cell — the band's KPI register (500 22px + 12px companion) */
 .v7prep .b-ar .ar-val {
   font: 500 22px/1.1 Roboto, system-ui, sans-serif;
@@ -682,7 +642,6 @@
 
 @media (max-width: 720px) {
   .v7prep { padding: 12px 12px 80px; } /* clears the ≤720px bottom nav */
-  .v7prep .band { padding: 12px 14px; }
   .v7prep .who { min-width: 0; }
   /* band cells fold 4 → a 2×2 tray grid */
   .v7prep .bandcells {

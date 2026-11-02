@@ -23,52 +23,12 @@
 .v7career :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
 .v7career a { color: inherit; }
 
-/* ---------- header band — the white dashboard register (v7.4 sweep) ---------- */
+/* ---------- header band — Tier 2b: the card/row/who/bcell/CTA register
+   lives ONCE in ../v7.css (.v7 .band / .bandrow / .who .t+.m / .bcell /
+   .cta); only the page-specific split furniture stays here ---------- */
 
-.v7career .band {
-  background: var(--v-surface);
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  box-shadow: var(--v-shadow);
-  padding: 16px 20px;
-  margin-bottom: 14px;
-}
-.v7career .bandrow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px 28px;
-  flex-wrap: wrap;
-}
 .v7career .band .who { min-width: 220px; }
-.v7career .band .who .t {
-  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
-  margin: 0;
-  color: var(--v-ink);
-}
-.v7career .band .who .m {
-  font: 400 13px/1.45 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  margin-top: 2px;
-  max-width: 74ch;
-}
-.v7career .bandcells {
-  display: flex;
-  align-items: stretch;
-  flex-wrap: wrap;
-}
-.v7career .bcell {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 3px;
-  padding: 2px 18px;
-  border-left: 1px solid var(--v-rows);
-  min-width: 0;
-}
-.v7career .bcell:first-child { border-left: 0; padding-left: 0; }
-.v7career .bval { font: 500 13px/1.35 Roboto, system-ui, sans-serif; color: var(--v-ink); }
-.v7career .bval.num { font-variant-numeric: tabular-nums; }
+.v7career .band .who .m { max-width: 74ch; }
 
 /* ---------- cards ---------- */
 
@@ -144,22 +104,8 @@
 .v7career .vbadge { font: 500 11px/1.2 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
 .v7career .vbadge.ok { color: var(--v-green-text); }
 
-/* the Band CTA — the family's one blue steer (dashboard `.cta` register,
-   re-declared scoped: v7.css stays untouched) */
-.v7career .cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--v-blue);
-  color: #fff;
-  font: 500 14px/1.2 Roboto, system-ui, sans-serif;
-  padding: 9px 20px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3);
-  transition: background-color 0.14s ease, box-shadow 0.14s ease;
-}
-.v7career .cta:hover { background: var(--v-blue-deep); box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35); text-decoration: none; }
-.v7career .cta:active { transform: translateY(0.5px); }
+/* the Band CTA — .v7 .cta in ../v7.css (the ONE definition, Tier 2b)
+   — dashboard register: height 40px / padding 0 20px / 500 14px */
 
 /* the quiet switch disclosure (band-resident) */
 .v7career .cc-switch { margin: 0; padding: 0; border: 0; }
@@ -664,7 +610,6 @@
 
 @media (max-width: 720px) {
   .v7career { padding: 12px 12px 24px; }
-  .v7career .band { padding: 12px 14px; }
   .v7career .bandrow { flex-direction: column; align-items: flex-start; }
   .v7career .band .who { min-width: 0; }
   .v7career .bandside { align-items: flex-start; }

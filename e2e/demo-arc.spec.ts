@@ -471,6 +471,20 @@ test.describe.serial("demo-arc", () => {
          closed/verified facts read via the Plan panel instead)
        - dead-furniture assertions (accordion counts, stage endnotes) were
          deleted rather than re-invented. No new assertions. */
+    /* Tier 2b selector ports (2026-11-02 band register unification + signed
+       content). Sweep result, old → new:
+       - "See your gaps →" (careers band .cta)   → "Open your plan →" (label
+         only; the a.cta selector itself was NOT asserted in any spec)
+       - "Continue your plan →" (profile band .cta) → "Open your plan →"
+         (no spec asserted it)
+       - "Open Pathway →" (progress band .btn-primary) → "Open your plan →"
+         on a.cta (no spec asserted it)
+       - `.band .who .m` (dashboard, credential-audit) — content unchanged
+         ({career} name), no port
+       - `.band-id` (profile, beat 9), `.cc-switch .quiet-toggle`/"Switch
+         career", heading "Your career"/"Progress", `.scoreband`, `.planband`
+         wrappers — all unchanged; no port. No dead-furniture assertions
+         found to delete. */
     await page.goto("/pathway");
     const lead = ((await page.locator("#panel-plan .lead-mono").textContent()) ?? "").replace(/\s+/g, " ");
     soft(lead).toContain("5 of 7"); // canon: 5 of 7 skills checked

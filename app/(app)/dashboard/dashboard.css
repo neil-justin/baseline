@@ -18,29 +18,12 @@
 .v7dash :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
 .v7dash a { color: inherit; }
 
-/* ---------- header band card ---------- */
+/* ---------- header band card — Tier 2b: the card/row/who/CTA register
+   lives ONCE in ../v7.css (.v7 .band / .bandrow / .who .t+.m / .cta);
+   only the page-specific split furniture stays here ---------- */
 
 .v7dash .scoreband { margin: 0; }
-.v7dash .band {
-  background: var(--v-surface);
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  box-shadow: var(--v-shadow);
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  margin-bottom: 12px;
-}
 .v7dash .band .who { min-width: 190px; }
-.v7dash .band .who .t {
-  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
-  font-weight: 500;
-  font-size: 15px;
-  margin: 0;
-  color: var(--v-ink);
-}
-.v7dash .band .who .m { font: 400 11.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 2px; }
 
 .v7dash .composite { display: flex; align-items: baseline; gap: 6px; }
 .v7dash .composite .score-big {
@@ -72,22 +55,7 @@
   white-space: nowrap;
 }
 
-/* the one CTA — the plan head's do-location */
-.v7dash .cta {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  height: 40px;
-  padding: 0 20px;
-  border-radius: 8px;
-  background: var(--v-blue);
-  color: #fff;
-  font: 500 14px Roboto, system-ui, sans-serif;
-  text-decoration: none;
-  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3);
-  transition: background-color 0.14s ease, box-shadow 0.14s ease;
-}
-.v7dash .cta:hover { background: var(--v-blue-deep); box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35); }
+/* the one CTA — .v7 .cta in ../v7.css (the ONE definition, Tier 2b) */
 
 /* ---------- five channel cells ---------- */
 
@@ -272,19 +240,12 @@
 .v7dash .lrow .chip { margin-left: auto; }
 .v7dash .lcap { padding: 12px 16px 14px; font: 400 11px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); } /* v7.1: state-bearing caption → ink-2 */
 
-/* ---------- undecided default (kept from the previous band) ---------- */
+/* ---------- undecided default — Tier 2b: the band rides the SAME shared
+   recipe (.v7 .band in ../v7.css) and the same classes as the decided
+   path; only the score furniture stays here (its bespoke .band-in
+   padding block is dead — grep: page.tsx UndecidedDefault was the sole
+   consumer) ---------- */
 
-.v7dash .band-in {
-  background: var(--v-surface);
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  box-shadow: var(--v-shadow);
-  margin-bottom: 12px;
-  display: grid;
-  grid-template-columns: minmax(0, 44fr) minmax(0, 56fr);
-  gap: 44px 56px;
-  align-items: start;
-}
 .v7dash .label {
   font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
   letter-spacing: 0.08em;
@@ -298,8 +259,6 @@
   min-width: 2ch;
 }
 .v7dash .score-readout small { font: 400 13px Roboto, system-ui, sans-serif; color: var(--v-meta); margin-left: 8px; }
-.v7dash .score-left { padding: 20px; }
-.v7dash .score-right { padding: 20px 20px 20px 0; }
 .v7dash .score-line { margin-top: 16px; font: 400 13px/1.6 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 40ch; }
 .v7dash .score-line b { color: var(--v-ink); font-weight: 500; }
 .v7dash .link-sub { color: var(--v-blue-deep); text-decoration: underline; text-underline-offset: 3px; }
@@ -311,13 +270,12 @@
   .v7dash .kpis { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 1020px) {
-  .v7dash .band { flex-wrap: wrap; gap: 14px 24px; }
   .v7dash .who { min-width: 150px; }
   .v7dash .low { grid-template-columns: 1fr; }
 }
 @media (max-width: 720px) {
   .v7dash { padding: 12px 12px 24px; }
-  .v7dash .band { flex-direction: column; align-items: flex-start; padding: 16px; }
+  .v7dash .bandrow { flex-direction: column; align-items: flex-start; }
   .v7dash .who { min-width: 0; }
   .v7dash .composite-wrap { min-width: 0; }
   .v7dash .segs { max-width: none; width: 100%; }
