@@ -396,6 +396,30 @@ body:has(.v7) { background: #f8f9fa; }
   box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35);
 }
 
+/* ---------- band instrument cells — the KPI bar register (2026-11-03) ----------
+   ONE `.bcell .kbar` recipe for the band tray cells (Prep's factor cells +
+   Career's map/stage cells — user ruling, Careers band elevation): slash
+   fraction value + a 4px honest bar, blue fill = earned share, green ONLY
+   when fully earned. Byte-identical to the former prep.css scoped block;
+   the dashboard's page-local `.kpis` bars stay in dashboard.css. */
+.v7 .bcell .kbar {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 4px; /* the Dashboard KPI bar register */
+  border-radius: 2px;
+  background: var(--v-track);
+  margin: 2px 0 1px;
+}
+.v7 .bcell .kbar i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--v-blue);
+}
+.v7 .bcell .kbar i.solid.green { background: var(--v-green); }
+
 /* ---------- responsive: ≤720px — the Material bottom nav (the rail's
    sole surviving form, v7.2) ---------- */
 
@@ -520,3 +544,66 @@ body:has(.v7) { background: #f8f9fa; }
 }
 .vpager .pbtn.next .chev { transform: rotate(-45deg); }
 .vpager .pbtn.prev .chev { transform: rotate(135deg); }
+
+/* ---------- route skeletons (Tier 3.5, 2026-11-03) ----------
+   One `.skel` placeholder recipe for every (app) surface's loading.tsx.
+   The skeletons CLONE each page's committed DOM (band → decks → cards)
+   using the page's REAL structural classes, so the swap-in reserves the
+   same heights — no reflow on content arrival (CLS contract), and every
+   responsive fold (≤1180/1020/720/560) is inherited for free. The skel
+   block itself carries no layout: static grey on the rows token; a pure
+   opacity pulse armed only under prefers-reduced-motion: no-preference.
+   No spinners, no painted numbers (skeleton text = fake data — banned). */
+.v7 .skel {
+  display: block;
+  height: 12px;
+  border-radius: 4px;
+  background: var(--v-rows);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .v7 .skel { animation: skel-pulse 1.4s ease-in-out infinite; }
+}
+@keyframes skel-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+/* ---------- the band instrument register (ScoreSequence) ----------
+   Promoted from dashboard.css (Q25=a Profile band parity, 2026-11-03):
+   the composite readout + the armed five-channel bar + seglabels ride the
+   SHARED band register; byte-identical to the former .v7dash block. The
+   armed meter (globals `.armed .segbar .seg i`) is the ScoreSequence's
+   own client state; no entrance motion is added here. */
+.v7 .composite { display: flex; align-items: baseline; gap: 6px; }
+.v7 .composite .score-big {
+  font: 500 46px/1 Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  display: inline-block;
+  min-width: 2ch;
+  color: var(--v-ink);
+}
+.v7 .composite .c-of { font: 400 13px/1 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7 .composite-wrap { min-width: 236px; }
+.v7 .ratemsg { font: 400 11.5px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 2px; } /* v7.1: state-bearing grey → ink-2 ≥4.5:1 */
+.v7 .ratemsg b { color: var(--v-ink); font-weight: 500; }
+
+.v7 .segs { flex: 1; max-width: 520px; }
+.v7 .segbar { height: 8px; gap: 3px; }
+.v7 .segbar .seg { border-radius: 2px; background: var(--v-track); }
+.v7 .segbar .seg i { background: var(--v-blue); opacity: 1; }
+.v7 .segbar .seg:nth-child(2) i { background: var(--v-green); }
+.v7 .seglabels { display: flex; gap: 3px; margin-top: 8px; }
+.v7 .seglabels span {
+  flex: 1;
+  text-align: center;
+  font: 400 11px/1.2 Roboto, system-ui, sans-serif; /* v7.1 floor: ≥11px */
+  color: var(--v-ink2);
+  white-space: nowrap;
+}
+/* Q25=a fold (mirrors the dashboard's own ≤720 fold): the five channel
+   labels wrap to two rows on narrow bands instead of forcing the segbar
+   past the card edge (the 126px overflow the 390 audit caught). */
+@media (max-width: 720px) {
+  .v7 .seglabels { flex-wrap: wrap; row-gap: 6px; }
+  .v7 .seglabels span { flex: 1 1 40%; text-align: left; }
+}

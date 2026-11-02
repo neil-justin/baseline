@@ -497,16 +497,23 @@ test.describe.serial("demo-arc", () => {
     expect(lead).not.toContain("Software Testing"); // closed ·✓✓, off the context line
     notes.push(`beat 8 pathway: lead "${lead}" · open rows (ranked) ${JSON.stringify(queue)}`);
 
-    /* ══════════ BEAT 9 · profile Plan tab ══════════ */
+    /* ══════════ BEAT 9 · profile ══════════ */
 
+    /* Plan-tab retirement ports (2026-11-03 user ruling: the Goals card +
+       the Plan pill deleted — tabs collapse to Competencies | Credentials |
+       Account, default = Competencies). Sweep result, old → new:
+       - `#panel-plan` visible-at-arrival → `#panel-competencies` (the new
+         default tab; the Plan panel is GONE, not hidden)
+       - planText not-contains "Test Planning" (the retired Goals table was
+         the summary-only surface) → DELETED — no replacement (the band's
+         Target line + the Pathway Plan panel carry that truth now)
+       - `.band-id` "Target: …" — unchanged, no port
+       - `#tab-profile` → `#panel-profile` (Credentials) and `#tab-account`
+         hooks — unchanged (the legacy-id contract survives). */
     await page.goto("/profile");
-    await expect(page.locator("#panel-plan")).toBeVisible(); // Plan is the default tab
-    const planText = ((await page.locator("#panel-plan").innerText()) ?? "").replace(/\s+/g, " ");
-    // the target rides the header band now (Phase-1 re-cut: the §1 masthead
-    // retired — .band-id carries "… · Target: <career>")
+    await expect(page.locator("#panel-competencies")).toBeVisible(); // Competencies is the default tab
     const bandId = ((await page.locator(".band-id").textContent()) ?? "").replace(/\s+/g, " ");
     expect(bandId).toContain("Target: Software QA Analyst");
-    expect(planText).not.toContain("Test Planning"); // summary only — NEVER the ranked list
     /* Tier 2 build selector ports (2026-11-03 user calls: the Plan tab's
        "Pathway stages" + "Score trajectory" cards, the page footer, and the
        tab kickers deleted — the band's five-channel segbar is the live

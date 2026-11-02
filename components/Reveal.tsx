@@ -9,11 +9,15 @@ export default function Reveal({
   as: Tag = "div",
   className = "",
   delay = 0,
+  ariaLabel,
+  id,
 }: {
   children: ReactNode;
   as?: "div" | "section" | "p" | "span" | "h1" | "h2";
   className?: string;
   delay?: number;
+  ariaLabel?: string;
+  id?: string;
 }) {
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -24,7 +28,7 @@ export default function Reveal({
   }, [delay]);
   return (
     // @ts-expect-error dynamic tag
-    <Tag ref={ref} className={`rv ${className}`}>
+    <Tag ref={ref} id={id} className={`rv ${className}`} aria-label={ariaLabel}>
       {children}
     </Tag>
   );

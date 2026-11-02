@@ -8,7 +8,8 @@ import {
   ASSESSED_COMPETENCIES,
   roundHalfDown,
 } from "@/lib/engines/score";
-import ScoreSequence from "./ScoreSequence";
+import ScoreSequence from "@/components/ScoreSequence";
+import Reveal from "@/components/Reveal";
 import "./dashboard.css";
 
 export const dynamic = "force-dynamic";
@@ -297,7 +298,7 @@ export default async function DashboardPage() {
 
       {/* ── dense lower deck: ranked plan table + what moves the number ── */}
       <section className="low">
-        <div className="card">
+        <Reveal className="card">
           <div className="head">
             <b>My Plan — next items</b>
             <span>ranked · first item is your next step</span>
@@ -377,9 +378,9 @@ export default async function DashboardPage() {
               </a>
             </div>
           )}
-        </div>
+        </Reveal>
 
-        <div className="card actions">
+        <Reveal className="card actions" delay={70}>
           <div className="head">
             <b>What moves the number</b>
           </div>
@@ -427,11 +428,11 @@ export default async function DashboardPage() {
           <div className="journey-row num">
             Where you are: <b>First 30 days</b>, {v.stageOne.done} of 3 done.
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* ── competency ledger (the ES channel's receipts) ── */}
-      <section className="card ledger" aria-label="Competency ledger — Employability Skills">
+      <Reveal as="section" className="card ledger" ariaLabel="Competency ledger — Employability Skills">
         <div className="head">
           <b>Competency ledger — Employability Skills</b>
           <span className="num">
@@ -449,7 +450,7 @@ export default async function DashboardPage() {
               </span>
               <b>{name}</b>
               <span className={`chip ${st === "verified" ? "c-green" : "c-grey hatch-chip"}`}>
-                {st === "verified" ? "Verified" : "Self-report"}
+                {st === "verified" ? "Verified ·✓" : "Self-reported"}
               </span>
             </div>
           ))}
@@ -459,7 +460,7 @@ export default async function DashboardPage() {
           hatch until evidence lands. {ASSESSED_COMPETENCIES} of 8 NACE competencies carried — Equity &amp; Inclusion
           excluded by recorded choice.
         </div>
-      </section>
+      </Reveal>
     </div>
   );
 }

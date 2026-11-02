@@ -24,6 +24,9 @@ export default function Loading() {
                 <div className="bcell" key={i}>
                   <span className="skel" style={{ width: 68, height: 15 }} />
                   <div className="skel" style={{ width: 60, height: 18, marginTop: 5 }} />
+                  {/* the bcell anatomy is label → value → 4px kbar (→ chip):
+                      the bar shape reserves the KPI-cell row even pre-data */}
+                  <div className="skel" style={{ width: 60, height: 4, marginTop: 5 }} />
                 </div>
               ))}
             </div>
@@ -35,9 +38,8 @@ export default function Loading() {
             <span className="skel" style={{ width: 84, height: 30, borderRadius: 6 }} />
             <span className="skel" style={{ width: 70, height: 30, borderRadius: 6 }} />
           </div>
-          <span className="kicker num">
-            <span className="skel" style={{ width: 190, height: 15 }} />
-          </span>
+          {/* no kicker slot — the tabs-row kicker is retired (2026-11-03);
+              the verdict strip inside the arriving card owns the score */}
         </div>
 
         <section className="card tabpanel">
