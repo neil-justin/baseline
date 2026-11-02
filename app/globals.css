@@ -127,6 +127,18 @@ body {
 /* Theme the browser's own surfaces — the page is built, not assembled */
 :root { color-scheme: light; }
 html { scrollbar-color: #B9BDB8 var(--ground); }
+/* v7.2 CLS round: document height differs per route, so the classic scrollbar
+   toggles between the body:has(.v7) pages — the viewport narrows ~15px and the
+   1240px centered cap (Gutters-Cap Rule) re-centers, jerking the top bar's
+   .headnav tabs horizontally on every navigation. Reserve the gutter at html
+   level so the content box is stable across Dashboard → Careers → My Plan →
+   Prep → Profile. Applies to ALL routes (landing/auth included): they are
+   centered compositions too, so a stable centering baseline beats a per-route
+   scrollbar throb; nothing left-anchors on the gutter edge. */
+html { scrollbar-gutter: stable; }
+@supports not (scrollbar-gutter: stable) {
+  html { overflow-y: scroll; }
+}
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
