@@ -351,6 +351,8 @@ export const RESOURCES: Resource[] = [
     provider: "Linux Journey",
     type: "course",
     cost: "free",
+    // 403 to scripted fetch (audit 2026-11-02, curl + browser UA) — flagged
+    // keep-with-flag per the audit convention; browser-verify before defense
     url: "https://linuxjourney.com/",
     durationHours: 6,
     skillsAddressed: ["Linux + web deployment basics"],
@@ -520,7 +522,9 @@ export const RESOURCES: Resource[] = [
     provider: "Atlassian",
     type: "doc",
     cost: "free",
-    url: "https://www.atlassian.com/agile/software-development/bug-tracking",
+    // Atlassian reorganized the agile guide (audit 2026-11-02: the
+    // sub-pages bugs/bug-tracking 404 — consolidated into this root, live)
+    url: "https://www.atlassian.com/agile/software-development",
     durationHours: 2,
     skillsAddressed: ["Defect management", "Test Planning"],
     careerId: "qa",
@@ -772,7 +776,9 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // UAT-adjacent defect/feedback flow language
-    url: "https://www.atlassian.com/agile/software-development/bugs",
+    // 2026-11-02 audit: the /bugs sub-page 404s — same consolidation as the
+    // bug-tracking doc; the live root covers both
+    url: "https://www.atlassian.com/agile/software-development",
     durationHours: 2,
     skillsAddressed: ["Solution Support (UAT & hand-over)"],
     careerId: "ba",

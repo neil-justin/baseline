@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,14 +13,18 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-/** `.js` gates the motion layer exactly like the prototype's head script. */
+/** `.js` gates the motion layer exactly like the prototype's head script.
+ *  next/script (beforeInteractive) instead of a raw inline <script>: on
+ *  client-side navigations React re-renders the head, and raw inline
+ *  scripts are skipped during client rendering — beforeInteractive renders
+ *  it into the initial document exactly once and stays navigation-safe. */
 const jsClassScript = `document.documentElement.classList.add("js")`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: jsClassScript }} />
+        <Script id="js-bootstrap" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: jsClassScript }} />
         {/* The two faces every surface paints with first — preloaded so the
             font swap never lands after first paint (no FOUT reflow). */}
         <link

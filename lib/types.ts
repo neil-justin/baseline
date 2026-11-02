@@ -184,6 +184,11 @@ export interface Resource {
   /** verified live URL of the real (free) resource this row points to */
   url?: string;
   durationHours: number;
+  /** authored one-suggestion flag (user ruling 2026-11-02): exactly one
+   *  resource per skill should carry `pick: true`; the pathway's pick rule
+   *  honors the flag FIRST and falls back to the computed order
+   *  (free tier → fewer hours → provider) until flags exist */
+  pick?: boolean;
   skillsAddressed: string[];
   creditingBody?: string;
   countsTowardEntryPath?: boolean;

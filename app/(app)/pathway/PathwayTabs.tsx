@@ -23,6 +23,9 @@ import TablePager from "@/components/TablePager";
 export interface QRow {
   rank: number;
   skill: string;
+  /** row expectation line (grilling Q7): the skill's student-facing "what it
+   *  means" — what closing this step teaches */
+  what: string;
   /** resource pointer (first per skill) — null → no-resource default cell */
   res: { title: string; cost: string; hrs: string } | null;
   why: string;
@@ -34,6 +37,7 @@ export interface QRow {
 export interface XRow {
   rank: number;
   skill: string;
+  what: string;
   /** queued resource title for the anchored jump — null → adviser note */
   resTitle: string | null;
   effect: { from: number; to: number };
@@ -68,6 +72,7 @@ export interface StepsTab {
 
 export interface GapRow {
   name: string;
+  what: string;
   kind: "verified" | "checked" | "claimed" | "open";
   transferred: boolean;
   openWithRes: boolean;
@@ -101,7 +106,11 @@ export interface ResRow {
   cost: string;
   time: string;
   feeds: FeedCell[];
+  /** row expectation line (grilling Q7): first addressed skill's "what" */
+  what: string | null;
   route: string | null;
+  /** the one suggested resource for an open skill (grilling Q5) */
+  suggested: boolean;
   startHere: boolean;
 }
 
@@ -109,6 +118,7 @@ export interface ResourcesTab {
   careerName: string;
   rows: ResRow[];
   allClosed: boolean;
+  counts: { suggested: number; alternates: number };
 }
 
 /* the pager's page size — 10 rows a page is a REAL data need: the gaps
@@ -161,8 +171,8 @@ export default function PathwayTabs({
      own tab click; it never re-pages). A career SWITCH re-seeds both
      tables, so both pagers land on page 1 (see the careerName effect). */
   const [gapPage, setGapPage] = useState(1);
-  const [mappedPage, setMappedPage] = useState(1);
-  const [countedPage, setCountedPage] = useState(1);
+  const [suggPage, setSuggPage] = useState(1);
+  const [altPage, setAltPage] = useState(1);
   const [closedOpen, setClosedOpen] = useState(false);
 
   /* open tab from hash (default: ranked steps — beat 8 opens here) */
@@ -185,8 +195,8 @@ export default function PathwayTabs({
     if (careerRef.current === careerName) return;
     careerRef.current = careerName;
     setGapPage(1);
-    setMappedPage(1);
-    setCountedPage(1);
+    setSuggPage(1);
+    setAltPage(1);
   }, [careerName]);
 
   /* roving arrow-key focus on the toolbar tablist */
@@ -234,10 +244,10 @@ export default function PathwayTabs({
     /* the catalog is GROUPED and PAGED: land the anchored row ON its
        group's page first, then the anchor effect scrolls it into view */
     if (resTitle) {
-      const inMapped = mappedSlice.findIndex((r) => r.title === resTitle);
-      const inCounted = countedSlice.findIndex((r) => r.title === resTitle);
-      if (inMapped >= 0) setMappedPage(Math.floor(inMapped / PAGE_SIZE) + 1);
-      else if (inCounted >= 0) setCountedPage(Math.floor(inCounted / PAGE_SIZE) + 1);
+      const inSuggested = suggestedSlice.findIndex((r) => r.title === resTitle);
+      const inAlternates = alternateSlice.findIndex((r) => r.title === resTitle);
+      if (inSuggested >= 0) setSuggPage(Math.floor(inSuggested / PAGE_SIZE) + 1);
+      else if (inAlternates >= 0) setAltPage(Math.floor(inAlternates / PAGE_SIZE) + 1);
       if (history.replaceState) history.replaceState(null, "", "#resources");
     }
   };
@@ -248,6 +258,7 @@ export default function PathwayTabs({
     <tr key={row.name} className="g-row">
       <td>
         <div className="g-name">{row.name}</div>
+        {row.what ? <p className="row-what">{row.what}</p> : null}
         <div className="g-status num">
           {row.kind === "verified" ? (
             <>
@@ -301,7 +312,7 @@ export default function PathwayTabs({
     </tr>
   );
 
-  /* the resource row renderer — shared by both catalog groups */
+  /* the resource row renderer — shared by both cards (grilling Q8) */
   const resRowList = (list: ResRow[]) =>
     list.map((r) => (
       <div
@@ -323,6 +334,7 @@ export default function PathwayTabs({
             )}
             {r.startHere ? <span className="r-start">Start here</span> : null}
           </span>
+          {r.what ? <span className="row-what">{r.what}</span> : null}
           <span className="r-prov">{r.provider}</span>
         </span>
         <span className="res-type">{r.type}</span>
@@ -347,17 +359,22 @@ export default function PathwayTabs({
   const gapClosedRows = gapRows.filter((r) => r.kind !== "open");
   const gapOpenPageCount = Math.ceil(gapOpenRows.length / PAGE_SIZE);
   const gapOpenSlice = gapOpenRows.slice((gapPage - 1) * PAGE_SIZE, gapPage * PAGE_SIZE);
-  const mappedRes = resRows.filter((r) => r.feeds.some((f) => !f.closed));
-  const countedRes = resRows.filter((r) => !r.feeds.some((f) => !f.closed));
-  const startFirst = (a: ResRow, b: ResRow) => (a.startHere === b.startHere ? 0 : a.startHere ? -1 : 1);
-  const mappedSlice = [...mappedRes].sort(startFirst);
-  const countedSlice = [...countedRes].sort(startFirst);
+  /* the resources register (grilling Q5/Q8): ONE suggested resource per
+     open skill rides the "Suggested for your gaps" card; everything else in
+     the catalog (mapped-nonsuggested + not-mapped) rides "Full catalog
+     alternates". The old mapped/counted split is superseded. */
+  const suggestedSlice = resRows
+    .filter((r) => r.suggested)
+    .sort((a, b) => (a.startHere === b.startHere ? 0 : a.startHere ? -1 : 1));
+  const alternateSlice = resRows
+    .filter((r) => !r.suggested)
+    .sort((a, b) => a.title.localeCompare(b.title));
   /* per-group pagination — each card pages its own table (10 rows a page,
      the family's real-data page size) */
-  const mappedPageCount = Math.ceil(mappedSlice.length / PAGE_SIZE);
-  const countedPageCount = Math.ceil(countedSlice.length / PAGE_SIZE);
-  const mappedView = mappedSlice.slice((mappedPage - 1) * PAGE_SIZE, mappedPage * PAGE_SIZE);
-  const countedView = countedSlice.slice((countedPage - 1) * PAGE_SIZE, countedPage * PAGE_SIZE);
+  const suggestedPageCount = Math.ceil(suggestedSlice.length / PAGE_SIZE);
+  const alternatePageCount = Math.ceil(alternateSlice.length / PAGE_SIZE);
+  const suggestedView = suggestedSlice.slice((suggPage - 1) * PAGE_SIZE, suggPage * PAGE_SIZE);
+  const alternateView = alternateSlice.slice((altPage - 1) * PAGE_SIZE, altPage * PAGE_SIZE);
   const claimedClosed = gapClosedRows.filter((r) => r.kind === "claimed").length;
 
   /* the toolbar's right kicker — the ACTIVE tab's computed counter. Steps
@@ -426,8 +443,10 @@ export default function PathwayTabs({
             >
               <section className="panel-sec stagepanel">
                 <div className="head">
-                  {/* the spec-guarded counter IS the panel title (one line,
-                      both canon facts; no separate h2 head duplicates it) */}
+                  {/* head register (grilling Q1): named h2 + the counter as
+                      its num sub-line — same register the gaps/resource
+                      cards use (the counter-as-title register retired) */}
+                  <h2>Ranked steps</h2>
                   <span className="lead-mono num">
                     <b>{steps.closed}</b> of {steps.mapSize} skills checked <span className="sep">·</span> First 30
                     days: <b>{steps.done}</b> of {steps.done + steps.queue.length} done
@@ -465,7 +484,10 @@ export default function PathwayTabs({
                                 <span className="rank num" aria-hidden="true">
                                   {r.rank}
                                 </span>
-                                <span className="q-skill">{r.skill}</span>
+                                <div>
+                                  <span className="q-skill">{r.skill}</span>
+                                  {r.what ? <p className="row-what">{r.what}</p> : null}
+                                </div>
                               </div>
                             </td>
                             <td className="ct-res">
@@ -506,7 +528,10 @@ export default function PathwayTabs({
                                 <span className="rank num" aria-hidden="true">
                                   {x.rank}
                                 </span>
-                                <span className="q-skill">{x.skill}</span>
+                                <div>
+                                  <span className="q-skill">{x.skill}</span>
+                                  {x.what ? <p className="row-what">{x.what}</p> : null}
+                                </div>
                               </div>
                             </td>
                             <td className="ct-res">
@@ -602,36 +627,44 @@ export default function PathwayTabs({
               ) : null}
             </section>
 
+            {/* zero-row groups lose the furniture (grilling Q2): a plain
+                one-liner renders instead of an expandable + column heads */}
             <section className="panel-sec closedgrp">
-              <button
-                className="stage-rowbtn"
-                type="button"
-                aria-expanded={closedOpen}
-                aria-controls="gaps-closed"
-                onClick={() => setClosedOpen((o) => !o)}
-              >
-                <span className="sr-name">Closed bars</span>
-                <span className="sr-count num">
-                  {gapClosedRows.length} closed{claimedClosed > 0 ? ` · ${claimedClosed} still self-reported` : ""}
-                </span>
-                <span className="chev" aria-hidden="true" />
-              </button>
-              {closedOpen ? (
-                <div className="stage-expand" id="gaps-closed">
-                  <table className="gap-table">
-                    <thead>
-                      <tr>
-                        <th>Skill</th>
-                        <th className="ct-state">State</th>
-                        <th className="ct-bar">Evidence</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {gapClosedRows.map(gapRow)}
-                    </tbody>
-                  </table>
-                </div>
-              ) : null}
+              {gapClosedRows.length === 0 ? (
+                <p className="stagewide">Closed bars — nothing closed yet. Checks and verifications close these as you go.</p>
+              ) : (
+                <>
+                  <button
+                    className="stage-rowbtn"
+                    type="button"
+                    aria-expanded={closedOpen}
+                    aria-controls="gaps-closed"
+                    onClick={() => setClosedOpen((o) => !o)}
+                  >
+                    <span className="sr-name">Closed bars</span>
+                    <span className="sr-count num">
+                      {gapClosedRows.length} closed{claimedClosed > 0 ? ` · ${claimedClosed} still self-reported` : ""}
+                    </span>
+                    <span className="chev" aria-hidden="true" />
+                  </button>
+                  {closedOpen ? (
+                    <div className="stage-expand" id="gaps-closed">
+                      <table className="gap-table">
+                        <thead>
+                          <tr>
+                            <th>Skill</th>
+                            <th className="ct-state">State</th>
+                            <th className="ct-bar">Evidence</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {gapClosedRows.map(gapRow)}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : null}
+                </>
+              )}
             </section>
 
             {/* honest competency strip (ES — the step-③ assessment carries it) */}
@@ -672,43 +705,49 @@ export default function PathwayTabs({
             aria-labelledby="tab-resources"
             hidden={active !== "resources"}
           >
-            {/* the catalog GROUPED (user ruling: "just a bunch of resources
-                listed there") — what maps to OPEN gap bars first, then the
-                counted rest. Un-paged (28 rows max live in two groups), so
-                a Start/Find-resources anchor is always on-screen. */}
+            {/* the resources register (grilling Q5/Q8): the ONE suggested
+                resource per open gap first, then the FULL catalog
+                alternates. Zero-row groups collapse to one honest line
+                (no furniture). The anchor effect lands the row in view. */}
             <section className="card rescard">
               <div className="head">
-                <h2>Mapped to your open gaps</h2>
-                <span className="label num">{mappedSlice.length} MAPPED</span>
+                <h2>Suggested for your gaps</h2>
+                <span className="label num">{suggestedSlice.length} SUGGESTED</span>
               </div>
-              <div className="res-table">
-                <div className="res-row res-heads" aria-hidden="true">
-                  <span className="res-main">Resource</span>
-                  <span className="res-type">Type</span>
-                  <span className="res-cost">Cost</span>
-                  <span className="res-time">Time</span>
-                  <span className="res-feeds">Feeds</span>
-                </div>
-                {resRowList(mappedView)}
-              </div>
-              {mappedPageCount > 1 ? (
-                <TablePager
-                  showingFrom={(mappedPage - 1) * PAGE_SIZE + 1}
-                  showingTo={Math.min(mappedPage * PAGE_SIZE, mappedSlice.length)}
-                  total={mappedSlice.length}
-                  page={mappedPage}
-                  pageCount={mappedPageCount}
-                  onPage={setMappedPage}
-                />
-              ) : null}
+              {suggestedSlice.length > 0 ? (
+                <>
+                  <div className="res-table">
+                    <div className="res-row res-heads" aria-hidden="true">
+                      <span className="res-main">Resource</span>
+                      <span className="res-type">Type</span>
+                      <span className="res-cost">Cost</span>
+                      <span className="res-time">Time</span>
+                      <span className="res-feeds">Feeds</span>
+                    </div>
+                    {resRowList(suggestedView)}
+                  </div>
+                  {suggestedPageCount > 1 ? (
+                    <TablePager
+                      showingFrom={(suggPage - 1) * PAGE_SIZE + 1}
+                      showingTo={Math.min(suggPage * PAGE_SIZE, suggestedSlice.length)}
+                      total={suggestedSlice.length}
+                      page={suggPage}
+                      pageCount={suggestedPageCount}
+                      onPage={setSuggPage}
+                    />
+                  ) : null}
+                </>
+              ) : (
+                <p className="stagewide">Nothing suggested yet — your open gaps have no mapped resource.</p>
+              )}
             </section>
             <section className="card rescard">
               <div className="head">
-                <h2>The rest of the catalog</h2>
-                <span className="label num">{countedSlice.length} COUNTED</span>
+                <h2>Full catalog alternates</h2>
+                <span className="label num">{alternateSlice.length} ALTERNATES</span>
               </div>
-              <div className="res-table">
-                {countedSlice.length > 0 ? (
+              {alternateSlice.length > 0 ? (
+                <div className="res-table">
                   <div className="res-row res-heads" aria-hidden="true">
                     <span className="res-main">Resource</span>
                     <span className="res-type">Type</span>
@@ -716,17 +755,19 @@ export default function PathwayTabs({
                     <span className="res-time">Time</span>
                     <span className="res-feeds">Feeds</span>
                   </div>
-                ) : null}
-                {resRowList(countedView)}
-              </div>
-              {countedPageCount > 1 ? (
+                  {resRowList(alternateView)}
+                </div>
+              ) : (
+                <p className="stagewide">No alternates — the suggested list covers this role's catalog.</p>
+              )}
+              {alternateSlice.length > 0 && alternatePageCount > 1 ? (
                 <TablePager
-                  showingFrom={(countedPage - 1) * PAGE_SIZE + 1}
-                  showingTo={Math.min(countedPage * PAGE_SIZE, countedSlice.length)}
-                  total={countedSlice.length}
-                  page={countedPage}
-                  pageCount={countedPageCount}
-                  onPage={setCountedPage}
+                  showingFrom={(altPage - 1) * PAGE_SIZE + 1}
+                  showingTo={Math.min(altPage * PAGE_SIZE, alternateSlice.length)}
+                  total={alternateSlice.length}
+                  page={altPage}
+                  pageCount={alternatePageCount}
+                  onPage={setAltPage}
                 />
               ) : null}
             </section>

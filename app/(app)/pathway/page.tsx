@@ -34,14 +34,37 @@ function timeText(r: Pick<Resource, "durationHours">): string {
   return `~${r.durationHours} hrs`;
 }
 
+/** The skill's own student-facing "what it means" line (grilling Q7: the
+    row-level "what you'll learn" copy — already canon, no new authoring). */
+function whatFor(career: Career, skill: string): string {
+  return career.skills.find((s) => s.name === skill)?.what ?? "";
+}
+
+/**
+ * The one suggested resource per skill (user ruling 2026-11-02, grilling
+ * session Q5): an authored `pick: true` wins; the computed rule (free tier
+ * → fewer hours → provider name) fills in until flags exist — the catalog
+ * is 437 rows, so pick flags land as a data pass, not a bulk edit.
+ */
+function pickResource(career: Career, skill: string): Resource | null {
+  const pool = RESOURCES.filter(
+    (r: Resource) => r.careerId === career.id && r.skillsAddressed.includes(skill)
+  );
+  if (pool.length === 0) return null;
+  const authored = pool.find((r: Resource) => r.pick === true);
+  if (authored) return authored;
+  return [...pool].sort((a, b) => {
+    const free = Number(/free/i.test(String(b.cost))) - Number(/free/i.test(String(a.cost)));
+    if (free) return free;
+    const hrs = (a.durationHours ?? 99) - (b.durationHours ?? 99);
+    if (hrs) return hrs;
+    return a.provider.localeCompare(b.provider);
+  })[0];
+}
+
 /** First resource pointer per skill (typed catalog, career-scoped). */
 function resourceFor(career: Career, skill: string): Resource | null {
-  return (
-    RESOURCES.find(
-      (r: Resource) =>
-        r.careerId === career.id && r.skillsAddressed.includes(skill)
-    ) ?? null
-  );
+  return pickResource(career, skill);
 }
 
 /**
@@ -105,6 +128,7 @@ function buildSteps(
     .map((r, i) => ({
       rank: stageOneDone + queue.length + i + 1,
       skill: r.skill,
+      what: whatFor(career, r.skill),
       resTitle: resourceFor(career, r.skill)?.title ?? null,
       effect: { from: spAt(queue.length + i), to: spAt(queue.length + i + 1) },
     }));
@@ -116,6 +140,7 @@ function buildSteps(
     return {
       rank: stageOneDone + i + 1,
       skill,
+      what: whatFor(career, skill),
       res: res
         ? { title: res.title, cost: costText(res), hrs: timeText(res) }
         : null,
@@ -188,6 +213,7 @@ function buildGaps(
         : "open";
       return {
         name: s.name,
+        what: whatFor(career, s.name),
         kind,
         transferred: kind === "verified" && transferred.includes(s.name),
         openWithRes: kind === "open" && resourceFor(career, s.name) !== null,
@@ -211,10 +237,19 @@ function buildResources(
   queue: string[]
 ): ResourcesTab {
   const allClosed = openSkills(career, bars).length === 0;
+  // the one suggested resource per OPEN skill (grilling Q5): collect the
+  // picks into a set — the Suggested card lists exactly these; the FULL
+  // catalog (everything else) rides the Alternates card.
+  const openSet = new Set(openSkills(career, bars));
+  const suggested = new Set(
+    career.skills
+      .filter((s) => openSet.has(s.name))
+      .map((s) => pickResource(career, s.name)?.id)
+      .filter((x): x is string => x != null)
+  );
   const startRes = queue.length ? resourceFor(career, queue[0]) : null;
-  const rows: ResRow[] = RESOURCES.filter((r) => r.careerId === career.id).map(
+  const rows: ResRow[] = RESOURCES.filter((r: Resource) => r.careerId === career.id).map(
     (r) => {
-      const closed = r.skillsAddressed.some((s) => s in bars);
       const routeParts = [
         r.creditingBody ? `Credited by ${r.creditingBody}` : null,
         r.countsTowardEntryPath ? "counts toward entry route" : null,
@@ -227,7 +262,11 @@ function buildResources(
         cost: costText(r),
         time: timeText(r),
         feeds: r.skillsAddressed.map((s) => ({ skill: s, closed: s in bars })),
+        // expectation line (user ruling "what you'll learn"): the first
+        // addressed skill's student-facing what — terse, no new authoring
+        what: r.skillsAddressed.length ? whatFor(career, r.skillsAddressed[0]) : null,
         route: routeParts.length ? routeParts.join(" · ") : null,
+        suggested: suggested.has(r.id),
         startHere: startRes?.id === r.id,
       };
     }
@@ -236,6 +275,10 @@ function buildResources(
     careerName: career.name,
     rows,
     allClosed,
+    counts: {
+      suggested: rows.filter((r) => r.suggested).length,
+      alternates: rows.filter((r) => !r.suggested).length,
+    },
   };
 }
 

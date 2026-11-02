@@ -276,6 +276,18 @@
   font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
 }
+/* the row expectation line ("what you'll learn", grilling Q7) — the canonic
+   skill what on every row, clamped to two lines so tables stay dense */
+.v7plan .row-what {
+  margin: 2px 0 0;
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2); /* v7.1: state text → ink-2 ≥4.5:1 */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  max-width: 52ch;
+}
 /* the resource pointer — structural one-liner in its own cell */
 .v7plan .q-res {
   font: 400 12px/1.5 Roboto, system-ui, sans-serif;
