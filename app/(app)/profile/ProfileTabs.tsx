@@ -3,11 +3,16 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 /**
- * Profile's four-tab chrome — the v7 family Tab Strip (DEPENDS 2026-10-30
- * Round-7 re-cut): Plan · Competencies · Credentials · Account over server-
+ * Profile's tab chrome — the v7 family Tab Strip (DEPENDS 2026-10-30
+ * Round-7 re-cut): Competencies · Credentials · Account over server-
  * rendered panels. The strip rides a slim card of its own (cardtop,
  * v7.2 Composition A idiom), arrow-key roving focus, hash deep-links
- * (default: Plan — the demo walk opens beat 9 there).
+ * (default: Competencies).
+ *
+ * 2026-11-03 user ruling (Tier 2 close-out): the Plan tab retires — with
+ * it the TABS entry, the `plan` panel slot, and the `#tab-plan`/`#panel-plan`
+ * hooks (goals live on Progress; the ranked plan on Pathway). The demo
+ * walk's beat 9 re-ports to `#panel-competencies`.
  *
  * PHASE-2 REVAMP (2026-11-02): the frame class is unconditional — every
  * tab renders the floating-cards frame (`.planframe`): the wrapper drops
@@ -34,7 +39,6 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
  */
 
 const TABS = [
-  { id: "plan", label: "Plan" },
   { id: "competencies", label: "Competencies" },
   { id: "profile", label: "Credentials", hooks: "profile" },
   { id: "account", label: "Account" },
@@ -48,10 +52,10 @@ export default function ProfileTabs({
 }: {
   panels: Partial<Record<TabId, ReactNode>>;
 }) {
-  const [active, setActive] = useState<TabId>("plan");
+  const [active, setActive] = useState<TabId>("competencies");
   const ref = useRef<HTMLDivElement>(null);
 
-  /* hash deep-link (default: Plan — beat 9 lands here without a hash) */
+  /* hash deep-link (default: Competencies after the Plan tab retired) */
   useEffect(() => {
     const initial = (window.location.hash || "").replace("#", "");
     if (isTab(initial)) setActive(initial);

@@ -10,6 +10,7 @@ import { INSTRUMENT } from "@/lib/fixtures/instrument";
 import { trackLabelOf } from "@/lib/fixtures/catalog";
 import { credentialStore, credentialsPersistenceNotice } from "@/lib/db/credential-store";
 import ProfileTabs from "./ProfileTabs";
+import ScoreSequence from "@/components/ScoreSequence";
 import PresenceCard from "./PresenceCard";
 import DeclaredCredentials from "./DeclaredCredentials";
 import { AccountIdentity, AccountPassword } from "./AccountForms";
@@ -41,11 +42,14 @@ const COMPETENCIES: { name: string; probe?: string }[] = [
 ];
 const WORD_LEVELS: Record<string, number> = { "Room to grow": 1, Okay: 2, Strong: 3 };
 
-/* badge voices — the honest source marks */
+/* badge voices — the Q6 canon compact forms (Wave 3: the family wording
+   `Verified ·✓` / `Checked ·✓✓` / `Self-reported` now that the explanatory
+   detail rides the .lcap legend below — the old glyph-first "·✓ VERIFIED
+   QUIZ" forms duplicated it); open rows carry the OPEN chip */
 function skillBadge(source: BarSource) {
-  if (source === "verified") return <span className="p-badge chip c-green">·✓ VERIFIED QUIZ</span>;
-  if (source === "checked") return <span className="p-badge chip c-green">·✓✓ CHECKED</span>;
-  return <span className="p-badge chip c-grey hatch-chip">SELF-REPORTED</span>;
+  if (source === "verified") return <span className="chip c-green">Verified ·✓</span>;
+  if (source === "checked") return <span className="chip c-green">Checked ·✓✓</span>;
+  return <span className="chip c-grey hatch-chip">Self-reported</span>;
 }
 
 /* ── trajectory graphic (Plan §5) — RETIRED 2026-11-03 (user call):
@@ -154,25 +158,22 @@ export default async function ProfilePage() {
   const presence = state.presence ?? null;
   const presenceMeasuredNow = presenceMeasured(presence);
 
-  /* Goals, in plain words (they live on Plan §2 in the re-cut — its rows are
-     the same record; the old duplicate panel reads no more) */
-  const completedGoals = state.goals.filter((g) => g.status === "completed");
-  const activeGoals = state.goals.filter((g) => g.status === "active");
-  const acceptedOn = (title: string) => {
-    const ev = state.events.find((e) => e.kind === "goal-set" && e.detail.includes(title));
-    return fmtEventDate(ev?.date ?? state.events[0]?.date);
-  };
+  /* Plan tab RETIRED (2026-11-03 user ruling, Tier 2 close-out): the Goals
+     card (the tab's sole remaining card) is deleted; the record's goals live
+     on Progress, the ranked plan lives on Pathway/Plan, and the band's
+     filled CTA is the route out. The goal counters + acceptedOn live only
+     here no longer. */
 
   /* Plan §3/§5 — the "Pathway stages" and "Score trajectory" cards are
      RETIRED (2026-11-03 user calls — zero replacement, nothing folded back);
      the routeLine/milestone counter logic and the closeLine/switched foot
      went with them. The band's "Open your plan →" CTA is the route out. */
 
-  /* header band instrument: the five channel mini-bar (at rest — honest
-     fractions render at rest per the v7 lock) reads the SAME computed sub-
-     values the KPI cells carry, AR empty (never painted) while unmeasured. */
-  const bandVals: (number | null)[] = [v.sp, v.es, v.tp, v.ar, v.cc];
-  const bandMaxes = [WEIGHTS.sp, WEIGHTS.es, WEIGHTS.tp, WEIGHTS.ar, WEIGHTS.cc];
+  /* header band instrument: the five channel mini-bar (at rest - honest
+     fractions) is REMOVED (2026-11-03 Q25=a): the local `.band-scale`/
+     `.bandbar` mini-bar retires - the band now carries the SHARED
+     ScoreSequence (the Dashboard register), full channel words under the
+     bar per the Q23 unit-honesty ruling. */
 
   /* Credentials earned (Plan §4 counter): platform check-passed rows +
      verified declared credentials + the presence stamp when measured —
@@ -228,7 +229,7 @@ export default async function ProfilePage() {
                     <td>
                       <div className="item">{skill}</div>
                     </td>
-                    <td>{bar ? skillBadge(bar.source) : <span className="p-badge chip c-grey">OPEN</span>}</td>
+                    <td>{bar ? skillBadge(bar.source) : <span className="chip c-grey">OPEN</span>}</td>
                     <td>
                       <div className="sub num">{sub ?? <span className="p-dash">—</span>}</div>
                     </td>
@@ -269,11 +270,11 @@ export default async function ProfilePage() {
                 </td>
                 <td>
                   {c.status === "verified" ? (
-                    <span className="p-badge chip c-green">·✓ VERIFIED</span>
+                    <span className="chip c-green">Verified ·✓</span>
                   ) : c.status === "claimed" ? (
-                    <span className="p-badge chip c-grey hatch-chip">CLAIMED</span>
+                    <span className="chip c-grey hatch-chip">Self-reported</span>
                   ) : (
-                    <span className="p-badge chip c-grey">NOT ASSESSED YET</span>
+                    <span className="chip c-grey">NOT ASSESSED YET</span>
                   )}
                 </td>
               </tr>
@@ -381,7 +382,7 @@ export default async function ProfilePage() {
                 task_alt
               </span>
               <b>{c.title}</b>
-              <span className="chip c-green">✓✓ CHECKED · {c.date.toUpperCase()}</span>
+              <span className="chip c-green">Checked ·✓✓ · {c.date.toUpperCase()}</span>
               <span className="lsub num">
                 {c.provider ? `${c.provider} · ${c.free ? "free" : "paid"} · ` : ""}
                 counted when its comprehension check passed
@@ -475,79 +476,6 @@ export default async function ProfilePage() {
     </div>
   );
 
-  const planPanel = (
-    <div className="plancards">
-      {/* Phase-1 revamp (2026-11-02): the masthead (identity + five ticklines)
-          and the §4 counters retire — the header band is the sole identity/
-          state surface and the tab kickers carry the counts. What's left of
-          the §1-§5 document renders as Dashboard-register cards, one
-          compartment each. Summary only — NEVER the ranked plan list. */}
-      <div className="card">
-        <div className="head">
-          <b>Goals</b>
-          <span className="num">
-            {completedGoals.length} done · {activeGoals.length} in progress
-          </span>
-        </div>
-        {state.goals.length === 0 ? (
-          <div className="foot num">No goals yet. Your first suggested goal accepts in Pathway.</div>
-        ) : (
-          <table className="plan-table">
-            <thead>
-              <tr>
-                <th scope="col" className="col-item">Goal</th>
-                <th scope="col">State</th>
-                <th scope="col">Since</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[...completedGoals, ...activeGoals.filter((g) => g.type === "training"), ...activeGoals.filter((g) => g.type !== "training")].map(
-                (g, i) => (
-                  <tr key={g.id ?? i}>
-                    <td>
-                      <div className="item">{g.title}</div>
-                    </td>
-                    <td>
-                      {g.status === "completed" ? (
-                        g.type === "training" ? (
-                          <span className="p-badge chip c-green">DONE · ✓✓</span>
-                        ) : (
-                          <span className="p-badge chip c-green">DONE</span>
-                        )
-                      ) : (
-                        <span className="p-badge chip c-grey">{g.type === "milestone" ? "NOT YET DONE" : "IN PROGRESS"}</span>
-                      )}
-                    </td>
-                    <td>
-                      <div className="sub num">
-                        {g.status === "completed"
-                          ? g.type === "training"
-                            ? `check passed ${fmtEventDate(g.completedAt)}`
-                            : `marked done ${fmtEventDate(g.completedAt)}`
-                          : g.type === "milestone"
-                            ? "outside the app — tick it off when you pass"
-                            : `accepted ${acceptedOn(g.title)}`}
-                      </div>
-                    </td>
-                  </tr>
-                )
-              )}
-            </tbody>
-          </table>
-        )}
-      </div>
-
-      {/* the "Pathway stages" and "Score trajectory" cards RETIRED
-          (2026-11-03 user calls): the stage rows + routeLine prose die with
-          their count logic, and the trajectory card ("Score trajectory" head
-          + the TrajGraphic renderer + its .lcap/doc-notes/closeLine foot with
-          the "+N since setup" kicker logic) is deleted ENTIRELY — zero
-          replacement (the band's five-channel segbar is the live state), and
-          nothing was folded back. The Goals card alone carries Plan; the
-          band's filled CTA is the route out. */}
-    </div>
-  );
-
   return (
     <div className="v7profile">
       <section className="proband" aria-label="Profile">
@@ -558,33 +486,34 @@ export default async function ProfilePage() {
               {identity}
               <p className="band-meta num">As of {asOf}</p>
             </div>
-            <div className="band-scale">
-              <div className="bandbar num" aria-hidden="true">
-                {/* the five channel mini-bar — at rest, honest fractions;
-                    the Competencies cards carry their own receipts. Each seg's
-                    fill width is the channel's earned FRACTION (earned/weight)
-                    — the value, not the raw points (Skills 18/25 → 72%, AR
-                    unmeasured → width 0 = track-grey). */}
-                <div className="segbar">
-                  {bandVals.map((val, i) => (
-                    <div
-                      key={i}
-                      className={`seg${i === 1 ? " seg-green" : ""}`}
-                      style={{ flex: bandMaxes[i] }}
-                    >
-                      <i style={{ width: `${((val ?? 0) / bandMaxes[i]) * 100}%` }} />
-                    </div>
-                  ))}
-                </div>
-                <div className="seglabels num">
-                  {["Skills", "Employability", "Training", "Application", "Direction"].map((l, i) => (
-                    <span key={l}>
-                      {l} {bandVals[i] === null ? "—" : `${bandVals[i]}/${bandMaxes[i]}`}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
+            {/* the SHARED band instrument (Q25=a): Dashboard parity — the score
+                counts up, the five-channel bar arms after it settles, and the
+                labels carry FULL channel words with slash values (Q23
+                unit-honesty ruling — never the SP/ES/TP acronyms). AR reads
+                honest when unmeasured. */}
+            <ScoreSequence
+              score={score.total}
+              parts={v.parts}
+              labels={[
+                `Skill progress ${v.sp}/${WEIGHTS.sp}`,
+                `Employability ${v.es}/${WEIGHTS.es}`,
+                `Training ${v.tp}/${WEIGHTS.tp}`,
+                v.arMeasured ? `App readiness ${score.ar}/${WEIGHTS.ar}` : "App readiness —",
+                `Career direction ${v.cc}/${WEIGHTS.cc}`,
+              ]}
+              suffix={
+                v.ccFirstDone || v.arMeasured || v.stageOne.done > 0
+                  ? ""
+                  : " · your starting line"
+              }
+              ratemsg="Computed from your own records · NACE-aligned"
+              fine={
+                <>
+                  You&apos;re <b className="num">{score.total}%</b> ready for{" "}
+                  {career.name}; {v.closed} bars already counted.
+                </>
+              }
+            />
             {/* the one filled CTA on the page — the band's do-location, the
                 Dashboard register; the Plan tab's old closing CTA retires */}
             <a className="cta" href="/pathway">
@@ -596,7 +525,6 @@ export default async function ProfilePage() {
 
       <ProfileTabs
         panels={{
-          plan: planPanel,
           competencies: competenciesPanel,
           profile: credentialsPanel,
           account: accountPanel,
@@ -641,7 +569,6 @@ function UndecidedProfile({ name }: { name: string }) {
       </section>
       <ProfileTabs
         panels={{
-          plan: undecidedPanel,
           competencies: undecidedPanel,
           profile: undecidedPanel,
           account: undecidedPanel,

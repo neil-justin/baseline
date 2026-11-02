@@ -309,6 +309,7 @@ export function AccountPassword() {
             page's only filled link) — blocked until the entries match */}
         <button
           className="btn btn-primary btn-sm"
+          type="button"
           onClick={submit}
           disabled={busy || password.length === 0 || confirm.length === 0 || password !== confirm}
         >

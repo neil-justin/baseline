@@ -61,53 +61,10 @@
 .v7profile .band-id b { color: var(--v-ink); font-weight: 500; }
 .v7profile .band-meta { font: 400 13px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 4px; }
 
-/* the five channel mini-bar — computed at rest, AR empty when unmeasured */
-.v7profile .band-scale { flex: 1; min-width: 280px; max-width: 560px; }
-.v7profile .bandbar .segbar {
-  display: flex;
-  gap: 3px;
-  height: 8px;
-}
-.v7profile .bandbar .seg {
-  background: var(--v-track);
-  border-radius: 2px;
-  overflow: hidden;
-  display: block;
-  position: relative;
-}
-/* fills render at their computed fraction — blue in-progress channels,
-   green the verified-evidence channel (ES), empty = unmeasured. FILL FIX
-   (2026-11-03, Tier 2 brief A.5): globals.css's `.segbar .seg i` poses
-   `position:absolute; inset:0; transform:scaleX(0)` (the Index armed-meter
-   contract) — profile never armed it, so every fill sat invisible on the
-   track. This surface fills by explicit width instead: reset the pose and
-   the transform; page.tsx sets width = earnedFraction per channel. */
-.v7profile .bandbar .seg i {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: auto;
-  height: 100%;
-  transform: none;
-  transition: none;
-  display: block;
-  background: var(--v-blue);
-  opacity: 1;
-}
-.v7profile .bandbar .seg-green i { background: var(--v-green); }
-.v7profile .bandbar .seglabels {
-  display: flex;
-  gap: 3px;
-  margin-top: 6px;
-}
-.v7profile .bandbar .seglabels span {
-  flex: 1;
-  text-align: center;
-  font: 400 11px/1.2 Roboto, system-ui, sans-serif; /* v7.1 floor: state text ≥11px */
-  color: var(--v-ink2);
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-}
+/* the local manual `.band-scale`/`.bandbar` mini-bar RETIRED (2026-11-03
+   Q25=a): the band carries the SHARED ScoreSequence whose register lives
+   in ../v7.css (.v7 .composite/.segs/.segbar) — the pose-reset hack went
+   with the block. */
 
 /* the band's ONE filled CTA (→ /pathway) — .v7 .cta in ../v7.css (the ONE
    definition, Tier 2b); everything else on the page stays links/text */
@@ -466,6 +423,7 @@
   border-radius: 8px;
 }
 .v7profile .presence-head .cl-label {
+  margin: 0;
   font: 500 11px/1.4 Roboto, system-ui, sans-serif;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -578,10 +536,6 @@
 .v7profile .dpa-erase-btn:disabled { opacity: 0.45; }
 .v7profile .dpa-erase-btn.armed,
 .v7profile .dpa-erase-btn:not(:disabled):hover { color: var(--v-amber-text); border-color: var(--v-amber); background: var(--v-amber-wash); }
-.v7profile .dpa-hint {
-  font: 400 11px/1.55 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-}
 
 /* ---------- family buttons (overrides the Index .btn in globals) ---------- */
 
@@ -669,11 +623,9 @@
 
 @media (max-width: 720px) {
   .v7profile { padding: 10px 12px 80px; } /* the bottom nav owns 64px below */
-  .v7profile .band-scale { min-width: 0; flex-basis: 100%; }
-  /* the five nowrap seglabels can't fit 390 unwrapped — labels wrap freely,
-     the bar above stays the one computed instrument (zero horizontal overflow) */
-  .v7profile .bandbar .seglabels { flex-wrap: wrap; row-gap: 2px; }
-  .v7profile .bandbar .seglabels span { white-space: normal; flex: 1 1 30%; }
+  /* the five-channel labels' narrow-band wrap lives in ../v7.css (.v7
+     .seglabels — the Q25=a fold; the retired .band-scale/.bandbar rules
+     that used to sit here died with them, Wave 3 audit) */
   /* Phase 3: the credentials ledger is row units now — nothing stacks;
      the declared/presence forms collapse to one column */
   .v7profile .dec-grid,

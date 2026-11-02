@@ -74,9 +74,14 @@ export default function PresenceCard({ declared }: Props) {
 
   return (
     <div className="presence">
-      {/* the block h2 above already names it — the inner cl-label duplicate
-          retired 2026-11-02; the helper keeps the machine-verified register */}
+      {/* the presence SECTION NAME (Wave 3 minimal fix for the "two
+          instruments in one card" complaint — the ledger instrument and the
+          machine-verified presence instrument share one card; naming the
+          presence section restores the grouping without restructuring.
+          The old comment claimed "the block h2 above already names it" —
+          that h2 left with the psblock register in the Phase-4 re-cut. */}
       <div className="presence-head">
+        <p className="cl-label num">Professional presence</p>
         <p className="helper">Machine-verified at declaration — offline format checks only, no network look-up.</p>
       </div>
       {!declared && (
@@ -126,7 +131,7 @@ export default function PresenceCard({ declared }: Props) {
         {privOpen && <p className="presence-priv num">{PRIVATE_NOTE}</p>}
       </div>
       <div className="presence-ctas">
-        <button className="btn btn-primary btn-sm" onClick={submit} disabled={busy || url.trim() === "" || email.trim() === ""}>
+        <button className="btn btn-primary btn-sm" type="button" onClick={submit} disabled={busy || url.trim() === "" || email.trim() === ""}>
           {busy ? "Stamping…" : declared ? "Re-declare and stamp" : "Declare and stamp"}
         </button>
         <span className="presence-earn num">+3 of the Application-Readiness channel when both format checks pass</span>

@@ -434,7 +434,7 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
             {err ?? (note ?? (revoking ? "Submit the revision and it re-enters the audit queue." : ""))}
           </p>
           <div className="dec-ctas">
-            <button className="btn btn-ghost btn-sm" onClick={submit} disabled={busy || title.trim() === ""}>
+            <button className="btn btn-ghost btn-sm" type="button" onClick={submit} disabled={busy || title.trim() === ""}>
               {busy ? "Saving…" : revoking ? "Resubmit for the audit" : edit ? "Save the declaration" : "Declare it"}
             </button>
             <button className="btn btn-ghost btn-sm" onClick={closeForm} disabled={busy} type="button">
