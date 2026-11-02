@@ -4,7 +4,7 @@ import "../prep.css";
 
 export const metadata: Metadata = {
   title: "Resume format guide — Career Readiness",
-  description: "The curated entry-level corporate resume format: sections, order, length, and Philippine entry-level conventions.",
+  description: "The curated entry-level corporate resume format: sections, order, length, and Philippine entry-level conventions — with the Harvard bullet-point template.",
 };
 
 /**
@@ -55,12 +55,14 @@ const BULLETS = [
 ];
 
 /**
- * Prep → Resume → Guide. The diagnostic's on-ramp door (empty state routes
- * here) plus the downloadable reference template. Shared .v7prep world
+ * Prep → Resume checker → Guide — the dropzone's quiet-format-guide door
+ * plus the Harvard bullet-point template link. Shared .v7prep world
  * (prep.css): named band → one card of flush sections (the sections table is
  * a real STEP / RULE / WHY table in the pathway plan-table register, drawn
- * ink-circle numerals) → the ghost back pointer. One blue primary: the .docx
- * reference download.
+ * ink-circle numerals) → the ghost back pointer. One blue primary: the
+ * Harvard template link (external). v7.4 recut: helper prose halved — the
+ * tables and the checks stay, the sources line stays as the one provenance
+ * caption.
  */
 export default function GuidePage() {
   return (
@@ -77,14 +79,10 @@ export default function GuidePage() {
       <section className="card guide-card">
         <section className="panel-sec">
           <p className="prep-sublabel num">
-            Start here → write your resume yourself (Docs/Word, outside this system) → run the diagnostic
+            Write your resume yourself (Docs/Word, outside this system) → run the diagnostic
           </p>
           <div className="b-head">
             <h2>The standard sections, in order</h2>
-            <p className="helper">
-              Candidate-facing guidance following NACE best-practice and Philippine entry-level
-              conventions converges on this structure.
-            </p>
           </div>
           <table className="guide-table num">
             <thead>
@@ -115,7 +113,7 @@ export default function GuidePage() {
 
         <section className="panel-sec">
           <div className="b-head">
-            <h2>The five checks, so you can self-mark before the run</h2>
+            <h2>The five checks — self-mark before the run</h2>
           </div>
           <div className="rs-checks">
             {BULLETS.map((t, i) => (
@@ -127,7 +125,8 @@ export default function GuidePage() {
           <p className="src-line num">
             Sourced · NACE Job Outlook 2025 (survey) · WVU Eberly “NACE Resume Guidelines” · HBS/Accenture
             Hidden Workers 2021 · SHRM 2024 · JobStreet Philippines (vendor) · parsing literature (Yu et al.
-            2005; RecSys in HR&apos;23). No CHED/DOLE format standard exists — deliberately not cited.
+            2005; RecSys in HR&apos;23) · Harvard MCS bullet-point resume template. No CHED/DOLE format
+            standard exists — deliberately not cited.
           </p>
         </section>
 
@@ -135,8 +134,8 @@ export default function GuidePage() {
           <div className="b-head">
             <h2>Plain layout, by design</h2>
             <p className="helper">
-              ATS-friendly is a formatting property: real text, standard titles, no content inside
-              text boxes, tables set briefly, and graphics kept decorative.
+              ATS-friendly is a formatting property: real text, standard titles, no content inside text
+              boxes. Keep graphics decorative.
             </p>
           </div>
           <ul className="rs-plain num">
@@ -148,23 +147,34 @@ export default function GuidePage() {
 
         <section className="panel-sec">
           <div className="b-head">
-            <h2>Download the reference template</h2>
+            <h2>Reference template — Harvard</h2>
             <p className="helper">
-              A skeleton with placeholders for each section — a reference for your own typing, not a
-              document the system generates for you.
+              The one-page bullet-point resume template from Harvard&apos;s Mignone Center for Career
+              Success — the reference frame for the format rules above. Links open Harvard&apos;s
+              career-services site (external).
             </p>
           </div>
           <div className="rs-ctas">
-            <a className="btn btn-primary" href="/resume-reference.docx" download>
-              Reference template (.docx)
+            <a
+              className="btn btn-primary"
+              href="https://careerservices.fas.harvard.edu/resources/bullet-point-resume-template/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Harvard bullet-point resume template <span className="arrow num">↗</span>
             </a>
-            <a className="btn btn-ghost" href="/resume-reference.pdf" download>
-              Reference template (.pdf)
+            <a
+              className="link-quiet"
+              href="https://docs.google.com/document/d/1nlD4BGOyKF2vnC1Zhcbd8_jvkRRmIw-OAa-tT0MSCj0/copy"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Google Docs copy ↗
             </a>
           </div>
           <p className="g-back">
             <Link className="btn btn-ghost" href="/prep">
-              Back to the Resume Diagnostic →
+              Back to the Resume checker →
             </Link>
           </p>
         </section>
