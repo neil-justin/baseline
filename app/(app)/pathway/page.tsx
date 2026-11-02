@@ -219,7 +219,12 @@ function buildResources(
         type: r.type,
         cost: costText(r),
         time: timeText(r),
-        feeds: r.skillsAddressed.map((s) => ({ skill: s, closed: s in bars })),
+        // covers honesty (wave-3 audit): the chip rides only on the REAL bar
+        // source per skill — the boolean alone painted a union "closed" face
+        feeds: r.skillsAddressed.map((s) => {
+          const bar = bars[s];
+          return { skill: s, source: bar ? bar.source : null };
+        }),
         // expectation line (user ruling "what you'll learn"): the first
         // addressed skill's student-facing what — terse, no new authoring
         what: r.skillsAddressed.length ? whatFor(career, r.skillsAddressed[0]) : null,

@@ -19,8 +19,9 @@ import TablePager from "@/components/TablePager";
  * resource title IS the affordance. State chips use the canonical
  * provenance wording (Q6): `Verified ·✓` / `Checked ·✓✓` /
  * `Self-reported`; open = empty bar, no chip; skills whose platform has
- * no check ride the honest `noCheck` line (§6.2). The ES strip renders as
- * the table's first row (engine-fed, pinned across pages).
+ * no check ride the honest `noCheck` line (§6.2). The ES strip is
+ * REMOVED (user ruling 2026-11-02: a channel summary has no purpose on
+ * Plan — those summaries live on Dashboard/Progress/Profile NACE).
  *
  * Resources panel = unchanged two-card stack (only the head word changes:
  * Feeds → Covers skills); `.r-start` stays (e2e hook). Pagination is whole
@@ -78,7 +79,10 @@ export interface PlanTab {
 
 export interface FeedCell {
   skill: string;
-  closed: boolean;
+  /** the bar source when the skill is CLOSED on the student's map
+   *  (null = still open) — the covers column chips ride ONLY on this real
+   *  provenance (chips-only-where-honest ruling); null never chips */
+  source: "verified" | "checked" | "claimed" | null;
 }
 
 export interface ResRow {
@@ -227,8 +231,23 @@ export default function PathwayTabs({
         <span className="res-cost">{r.cost}</span>
         <span className="res-time">{r.time}</span>
         <span className="res-feeds">
-          {r.feeds.map((f) => f.skill).join(" · ")}
-          {r.feeds.some((f) => f.closed) ? <span className="ok"> — ✓✓ closed</span> : null}
+          {/* chips ride ONLY on real closed provenance (chips-only-where-honest ruling);
+              plain name = still open. The old mid-row "✓✓ closed" glyph died: it painted
+              the Checked glyph over quiz-verified closes and read as a single union fact. */}
+          <span className="f-list">
+            {r.feeds.map((f) =>
+              f.source ? (
+                <span className="f-item" key={f.skill}>
+                  <span className="f-name">{f.skill}</span>
+                  {closedChip(f.source)}
+                </span>
+              ) : (
+                <span className="f-item" key={f.skill}>
+                  <span className="f-name">{f.skill}</span>
+                </span>
+              )
+            )}
+          </span>
           {r.route ? <span className="r-route">{r.route}</span> : null}
         </span>
       </div>
@@ -279,9 +298,13 @@ export default function PathwayTabs({
           ) : (
             <span className="p-nores">No resource for this skill yet — ask your adviser.</span>
           )
-        ) : r.provenance ? (
-          <span className="p-closedprov">{r.provenance}</span>
-        ) : null}
+        ) : (
+          /* closed rows: the CLOSING resource is not carried by the data —
+             provenance said once (State chip + Effect cell) per the Q7 spec;
+             the duplicated provenance line died (wave-3 audit: the Resource
+             and Effect cells carried the identical string) */
+          <span className="p-dash">—</span>
+        )}
       </td>
       <td className="ct-state">
         <div className="g-bar">
