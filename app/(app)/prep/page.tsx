@@ -5,10 +5,7 @@ import { requireStudent } from "@/lib/session";
 import { resumeRunStore, resumePersistenceNotice, type ResumeRunSummary } from "@/lib/db/resume-run-store";
 import { letterRunStore, letterPersistenceNotice, type LetterRunSummary } from "@/lib/db/letter-run-store";
 import { AR_FACTORS, WEIGHTS } from "@/lib/engines/score";
-import {
-  RESUME_AIR_WEIGHTS,
-  LETTER_AIR_WEIGHTS,
-} from "@/lib/engines/air";
+import { RESUME_AIR_WEIGHTS, LETTER_AIR_WEIGHTS } from "@/lib/engines/air";
 import type { ResumeFinding } from "@/lib/engines/resume/analyze";
 import ResumeUpload from "./ResumeUpload";
 import LetterUpload from "./LetterUpload";
@@ -24,35 +21,39 @@ export const metadata: Metadata = {
 };
 
 /**
- * Prep — "Application materials" (§6.4/Q15 recut, user-locked 2026-11-03).
- * ONE surface carrying TWO sibling tool cards, RESULTS-FIRST for a returning
- * user and upload-first for a first run (Q15):
+ * Prep — "Application materials" (presentation rebuild, user ruling
+ * 2026-11-03: "use Dashboard as a reference — not a copy — for how the data
+ * is laid out"). The results card reads, top to bottom:
  *
- *  - Resume checker (7 of 15 AR): the diagnostic is a format & evidence
- *    screen — readout FIRST for returning users (big run score, the three
- *    factors as chips/bars — the "×" product line is gone, the honest
- *    weighted shares ride the receipts line), the factor checks LIVE-EXPANDED,
- *    findings with example bullets beneath, and the dropzone demoted to a
- *    slim "Check another version" footer affordance. First-run users keep
- *    the big upload-first dropzone.
- *  - Q19a: a stored run whose target ≠ the CURRENT career is honest history —
- *    the card stays, with the "Ran against {old role} — re-run to score"
- *    banner; the AR band cells read the run unmeasured (lib/db.ts feed).
- *  - Cover-letter checker (5 of 15): mirrors the anatomy; its checks table
- *    (e2e hook) stays a collapsed disclosure. The optional employer anchor
- *    field appears only after a letter has run.
+ *   1. VERDICT STRIP — the run label + file line and the big score
+ *      right-aligned (the Dashboard .score-big register: 46px numeral +
+ *      /100), then the three factors as a KPI-cell GRID in the Dashboard
+ *      band register (plain label · the % at the KPI-score scale · the 4px
+ *      honest bar — blue at the factor's share, green at 100% — and a ≤2
+ *      line 11px ink2 sub-line). The weighted shares ride the receipts
+ *      line ("parse 20% + format 40% + evidence 40%") — never a × product.
+ *   2. FACTOR GROUPS — Dashboard-parity grouped sections directly under the
+ *      verdict strip (the Q15 live-expansion rule, now structural): each
+ *      factor gets a mini-head row (label + share — meaning on the right)
+ *      then its checks as a REAL table (Check | Result | Note); the Note
+ *      column exists only when a row carries one. Result cells are wash
+ *      chips — green "Pass" / grey "Missing"/"Not found"; amber only for
+ *      the parse watch-class risk — never red.
+ *   3. FINDINGS fold — on demand, example bullets kept.
+ *   4. SLIM FOOTER — the bordered one-row "Check another version"
+ *      affordance (drag preserved) with the quiet links line beside it.
+ *      A NEVER-RUN tab keeps the upload-first hero dropzone.
  *
- * Presence is NOT a tab: it lives where it is declared (Profile →
- * Credentials); the band's computed counter cell is its state here.
- * Band KPI cells ride the Dashboard KPI register (Q14 addendum, signed
- * 2026-11-03): plain-name labels, ONE fraction value per cell, a 4px honest
- * bar (fill = the earned share), and the ✓ chip ONLY on a fully-earned
- * factor — the old label·7 + /7 + ✓-on-partials triple presentation and its
- * dishonest green are gone. The AR /15 cell is unchanged.
- * HONESTY CONTRACT: a factor without its own run reads "— / not yet" in
- * computed band furniture only (never painted); re-runs unlimited, the
- * LATEST run counts; nothing claims an "ATS pass" — the checkers read
- * format and named evidence, nothing deeper.
+ * The tabs-row kicker is retired — the verdict strip alone owns the score.
+ * Q19a: a stored run whose target ≠ the CURRENT career is honest history —
+ * the card stays with the "Ran against {old role} — re-run to score"
+ * banner; the AR band cells read it unmeasured (lib/db.ts feed).
+ * The cover-letter tab mirrors the anatomy; its checks table stays behind
+ * the e2e-guarded "The checks" fold (demo-arc contract) with its factor
+ * groups re-housed inside it.
+ * HONESTY CONTRACT: unchanged — nothing measured paints nothing; LATEST
+ * counts; nothing claims an "ATS pass"; the checkers read format and named
+ * evidence, nothing deeper.
  */
 
 const fmtDT = (iso: string) => {
@@ -114,21 +115,104 @@ function ArCell({ value }: { value: number | null }) {
   );
 }
 
-/* ── factor chips — the Q15 honest breakdown (bars, never a × product) ──── */
+/* ── verdict strip factor cells (Dashboard .kpi register) ───────────────── */
 
-function FactorChip({ name, score, note }: { name: string; score: number; note: string }) {
-  const pct = Math.round(score * 100);
+interface FactorView {
+  name: string;
+  score: number;
+  meaning: string;
+}
+
+function FactorCell({ f }: { f: FactorView }) {
+  const pct = Math.round(f.score * 100);
   return (
     <div className="rs-kpi">
       <p className="rs-kpi-head">
-        <span className="label">{name}</span>
+        <span className="label">{f.name}</span>
         <b className="num">{pct}%</b>
       </p>
-      <div className="kbar" role="img" aria-label={`${name} check: ${pct}% — ${note}`}>
+      <div className="kbar" role="img" aria-label={`${f.name} factor: ${pct}% — ${f.meaning}`}>
         <i className={pct === 100 ? "solid green" : "solid"} style={{ width: `${pct}%` }} />
       </div>
-      <p className="rs-kpi-note num">{note}</p>
+      <p className="rs-kpi-note">{f.meaning}</p>
     </div>
+  );
+}
+
+/* ── factor groups — Dashboard-parity sections: mini-head row (label +
+   share — meaning on the right) then the checks as a REAL ledger table
+   (Check | Result | Note). The Note column exists ONLY when a row of the
+   group actually carries a note. Result cells are wash chips: green
+   "Pass" / grey miss ("Missing" | "Not found"); amber is reserved for the
+   Parse group's watch-class risk — never red. ──────────────────────────── */
+
+interface GroupCheck {
+  label: string;
+  ok: boolean;
+  /** the honestly-skipped row (the letter's omitted employer field) — a
+   *  grey "Skipped" chip, never a miss */
+  skipped?: boolean;
+  note?: string;
+}
+
+function FactorGroup({
+  name,
+  meaning,
+  checks,
+  missLabel,
+  watchClass,
+}: {
+  name: string;
+  meaning: string;
+  checks: GroupCheck[];
+  missLabel: string;
+  /** amber miss chips for this group's watch-class rows (Parse only) */
+  watchClass?: boolean;
+}) {
+  const evaluated = checks.filter((c) => !c.skipped);
+  const share = Math.round(
+    (evaluated.filter((c) => c.ok).length / Math.max(1, evaluated.length)) * 100
+  );
+  const hasNotes = checks.some((c) => c.note);
+  return (
+    <section className="rs-fgroup">
+      <div className="rs-fg-head rs-factor-head num">
+        <span className="label">
+          {name} — <b>{share}%</b>
+        </span>
+        <span className="rs-fn">{meaning}</span>
+      </div>
+      <table className="checks-table num">
+        <thead>
+          <tr>
+            <th className="ct-check">Check</th>
+            <th className="ct-result">Result</th>
+            {hasNotes ? <th className="ct-note">Note</th> : null}
+          </tr>
+        </thead>
+        <tbody>
+          {checks.map((c, i) => (
+            <tr className="rs-check num" key={i}>
+              <td>{c.label}</td>
+              <td>
+                {c.skipped ? (
+                  <span className="chip c-grey">Skipped</span>
+                ) : (
+                  <span className={`chip ${c.ok ? "c-green" : watchClass ? "c-amber" : "c-grey"}`}>
+                    {c.ok ? "Pass" : watchClass ? "Watch" : missLabel}
+                  </span>
+                )}
+              </td>
+              {hasNotes ? (
+                <td>
+                  {c.note ? <span className="rs-check-note">{c.note}</span> : <span className="bquiet">—</span>}
+                </td>
+              ) : null}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
   );
 }
 
@@ -170,7 +254,7 @@ function FindingCard({ f }: { f: ResumeFinding }) {
   );
 }
 
-/* ── the resume checker's quiet links line — rides under the upload ─────── */
+/* ── the resume checker's quiet links line — plain text beside the footer ── */
 
 function ResumeLinks() {
   return (
@@ -183,7 +267,7 @@ function ResumeLinks() {
   );
 }
 
-/* ── resume run result — Q15 verdict-first anatomy ───────────────────────── */
+/* ── resume run result — verdict strip → factor groups → findings → footer ─ */
 
 function RunResult({
   run,
@@ -196,30 +280,40 @@ function RunResult({
   children: ReactNode;
   links: ReactNode;
 }) {
-  const factorChecks: {
-    name: string;
-    score: number;
-    note: string;
-    checks: { label: string; ok: boolean; note?: string }[];
-  }[] = [
-    { name: "Parse", score: run.parseability.score, note: "text readable as-is", checks: run.parseability.checks },
+  const factorViews: FactorView[] = [
+    { name: "Parse", score: run.parseability.score, meaning: "text readable as-is, every page carries content" },
     {
       name: "Format",
       score: run.format.score,
-      note: `sections a screen reader expects${run.flags.onepageEstimated ? " (one-page estimate)" : ""}`,
-      checks: run.format.checks,
+      meaning: `the sections screeners expect${run.flags.onepageEstimated ? " (one-page estimate)" : ""}`,
     },
     {
       name: "Evidence",
       score: run.keywords.score,
-      note: `the role's core skills named in the file — vs ${run.careerName}`,
-      checks: run.keywords.checks,
+      meaning: `the role's core skills named in the file — vs ${run.careerName}`,
     },
   ];
-  const allGreen = factorChecks.every((f) => f.score === 1);
-  const factorPct = Math.round(
-    (factorChecks.reduce((sum, f) => sum + f.score, 0) / factorChecks.length) * 100
-  );
+  const groups: { name: string; meaning: string; checks: GroupCheck[]; missLabel: string; watchClass?: boolean }[] = [
+    {
+      name: "Parse",
+      meaning: "what the file gives the reader",
+      checks: run.parseability.checks,
+      missLabel: "Not readable",
+      watchClass: true,
+    },
+    {
+      name: "Format",
+      meaning: `section conformance${run.flags.onepageEstimated ? " — one page estimated from length" : ""}`,
+      checks: run.format.checks,
+      missLabel: "Missing",
+    },
+    {
+      name: "Evidence",
+      meaning: `core skills of ${run.careerName} found in the file`,
+      checks: run.keywords.checks,
+      missLabel: "Not found",
+    },
+  ];
   return (
     <>
       <section className="panel-sec rs-readout">
@@ -230,15 +324,15 @@ function RunResult({
               {run.fileName} · {run.kind === "pdf" ? "PDF" : "Word"} · target <b>{run.careerName}</b>
             </div>
           </div>
-          <div className="rs-readout-score num">
-            {run.air.airResume}
-            <small>/100</small>
+          <div className="rs-verdict num">
+            <span className="score-big">{run.air.airResume}</span>
+            <span className="c-of">/100</span>
           </div>
         </div>
         {staleFor ? <StaleBanner oldCareer={staleFor} kind="run" /> : null}
         <div className="rs-kpis">
-          {factorChecks.map((f) => (
-            <FactorChip key={f.name} name={f.name} score={f.score} note={f.note} />
+          {factorViews.map((f) => (
+            <FactorCell key={f.name} f={f} />
           ))}
         </div>
         <p className="rs-air-note num">
@@ -251,42 +345,9 @@ function RunResult({
         </p>
       </section>
 
-      {/* Q15: the factor checks expand LIVE — the verdict card opens on the
-          rows themselves; examples live in the findings fold below */}
-      <details className="rs-disc" open>
-        <summary className="num">
-          The three factors — {allGreen ? "all green" : `${factorPct}% overall`}
-        </summary>
-        <table className="checks-table num">
-          <thead>
-            <tr>
-              <th className="ct-check">Check</th>
-              <th className="ct-result">Result</th>
-              <th>Note</th>
-            </tr>
-          </thead>
-          {factorChecks.map((f) => (
-            <tbody key={f.name}>
-              <tr className="rs-factor-head num">
-                <th colSpan={3} scope="colgroup">
-                  {f.name} — <b>{Math.round(f.score * 100)}%</b> <span className="rs-fn">{f.note}</span>
-                </th>
-              </tr>
-              {f.checks.map((c, i) => (
-                <tr className="rs-check num" key={i}>
-                  <td>{c.label}</td>
-                  <td>
-                    <span className={`mark ${c.ok ? "ok" : "no"}`}>{c.ok ? "✓" : "✕"}</span>
-                  </td>
-                  <td>
-                    {c.note ? <span className="rs-check-note">{c.note}</span> : <span className="bquiet">—</span>}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          ))}
-        </table>
-      </details>
+      {groups.map((g) => (
+        <FactorGroup key={g.name} name={g.name} meaning={g.meaning} checks={g.checks} missLabel={g.missLabel} watchClass={g.watchClass} />
+      ))}
 
       <details className="rs-disc">
         <summary className="num">
@@ -299,8 +360,8 @@ function RunResult({
         </div>
       </details>
 
-      {/* Q15: the dropzone DEMOTES to a slim footer affordance — drop or
-          browse, same engine, one line under the verdict card */}
+      {/* Q15: the slim one-row footer affordance (drag preserved); the quiet
+          links line rides beside it */}
       <div className="rs-footer">
         {children}
         {links}
@@ -309,8 +370,8 @@ function RunResult({
   );
 }
 
-/* ── the cover-letter checker — mirrors the anatomy; its checks table
-   (e2e hook .rs-disc summary "The checks") stays a collapsed fold ───────── */
+/* ── the cover-letter checker — same anatomy; its factor groups live
+   behind the e2e-guarded "The checks" fold (demo-arc contract) ──────────── */
 
 const LETTER_KINDS: Record<string, string> = { txt: "TXT", pdf: "PDF", docx: "Word" };
 
@@ -319,15 +380,24 @@ function LetterResult({ run, staleFor, children }: {
   staleFor: string | null;
   children: ReactNode;
 }) {
-  const rowMark = (ok: boolean | null) =>
-    ok === true ? "✓" : ok === false ? "✕" : "—";
   const allRan = run.checks.every((c) => c.ok !== null);
   const checkCount = run.checks.filter((c) => c.ok !== null).length;
-  const factorChips = [
-    { name: "Parse", score: run.air.parsePass, note: "text readable as-is" },
-    { name: "Evidence", score: run.air.keywordScore, note: `the role's core skills named — vs ${run.careerName}` },
-    { name: "Structure", score: run.air.structuralScore, note: "salutation · ask · word band · employer" },
+  const factorViews: FactorView[] = [
+    { name: "Parse", score: run.air.parsePass, meaning: "text readable as-is" },
+    { name: "Evidence", score: run.air.keywordScore, meaning: `the role's core skills named — vs ${run.careerName}` },
+    { name: "Structure", score: run.air.structuralScore, meaning: "salutation · ask · word band · employer" },
   ];
+
+  const evidence: GroupCheck[] = run.keywords.map((k) => ({ label: k.label, ok: k.ok === true }));
+  const structure: GroupCheck[] = run.checks.map((c) => ({
+    label: c.label,
+    ok: c.ok === true,
+    // the honestly-skipped row (employer omitted) is NEVER a miss — it
+    // prints the exact honesty line as its note (EMPLOYER_SKIP_NOTE contract)
+    ...(c.ok === null ? { skipped: true } : {}),
+    ...(c.note ? { note: c.note } : {}),
+  }));
+
   return (
     <>
       <section className="panel-sec cl-readout">
@@ -338,15 +408,15 @@ function LetterResult({ run, staleFor, children }: {
               {run.fileName} · {LETTER_KINDS[run.kind] ?? run.kind.toUpperCase()} ·{run.employerDeclared ? ` employer anchor ${run.employerName}` : " no employer declared"} · target <b>{run.careerName}</b>
             </div>
           </div>
-          <div className="cl-readout-score num">
-            {run.air.airLetter}
-            <small>/100</small>
+          <div className="rs-verdict num">
+            <span className="score-big">{run.air.airLetter}</span>
+            <span className="c-of">/100</span>
           </div>
         </div>
         {staleFor ? <StaleBanner oldCareer={staleFor} kind="check" /> : null}
         <div className="rs-kpis">
-          {factorChips.map((f) => (
-            <FactorChip key={f.name} name={f.name} score={f.score} note={f.note} />
+          {factorViews.map((f) => (
+            <FactorCell key={f.name} f={f} />
           ))}
         </div>
         <p className="cl-air-note num">
@@ -367,52 +437,13 @@ function LetterResult({ run, staleFor, children }: {
         <summary className="num">
           The checks — {allRan ? "all ran" : `${checkCount} of ${run.checks.length} ran`}
         </summary>
-        <table className="checks-table num">
-          <thead>
-            <tr>
-              <th className="ct-check">Check</th>
-              <th className="ct-result">Result</th>
-              <th>Note</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="cl-role-line num">
-              <th colSpan={3} scope="colgroup">
-                <span className="cl-role-label num">ROLE ALIGNMENT</span> — {run.keywords.filter((k) => k.ok).length} of {run.keywords.length} core skills of <b>{run.careerName}</b> found in the text · the Role anchor is always the declared Target Role
-              </th>
-            </tr>
-            {run.keywords.map((c, i) => (
-              <tr className="rs-check num" key={`kw-${i}`}>
-                <td>{c.label}</td>
-                <td>
-                  <span className={`mark ${c.ok ? "ok" : "no"}`}>{c.ok ? "✓" : "✕"}</span>
-                </td>
-                <td>
-                  <span className="bquiet">—</span>
-                </td>
-              </tr>
-            ))}
-            {run.checks.map((c, i) => (
-              <tr className="rs-check num" key={`st-${i}`}>
-                <td>{c.label}</td>
-                <td>
-                  <span className={`mark ${c.ok === null ? "skip" : c.ok ? "ok" : "no"}`}>{rowMark(c.ok)}</span>
-                </td>
-                <td>
-                  {c.note ? (
-                    c.ok === null && c.label === "Employer named" ? (
-                      <span className="cl-notyet">{c.note}</span>
-                    ) : (
-                      <span className="rs-check-note">{c.note}</span>
-                    )
-                  ) : (
-                    <span className="bquiet">—</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <FactorGroup
+          name="Evidence"
+          meaning={`core skills of ${run.careerName} found in the letter · the role anchor is always the declared Target Role`}
+          checks={evidence}
+          missLabel="Not found"
+        />
+        <FactorGroup name="Structure" meaning="the four structural checks" checks={structure} missLabel="Missing" />
       </details>
 
       <details className="rs-disc">
@@ -468,15 +499,15 @@ export default async function PrepPage() {
 
   /* first-run tab panels keep the upload-first flow (Q15): the dropzone is
      the hero, the quiet links line beneath. A returning user's panel renders
-     results-first with the dropzone as the slim footer affordance. */
-  const resumeChildren = (
+     results-first with the slim footer affordance. */
+  const resumeFirstRun = (
     <>
       <ResumeUpload />
       <ResumeLinks />
     </>
   );
 
-  const letterChildren = <LetterUpload showEmployer={Boolean(latestLetter)} />;
+  const letterFirstRun = <LetterUpload showEmployer={Boolean(latestLetter)} />;
 
   /* the band's AR receipts — the same engine receipts the page already
      reads (score.arParts from getStudentView); a null score (no target
@@ -493,7 +524,7 @@ export default async function PrepPage() {
       <ResumeUpload slim />
     </RunResult>
   ) : (
-    resumeChildren
+    resumeFirstRun
   );
 
   const letterPanel = latestLetter ? (
@@ -501,7 +532,7 @@ export default async function PrepPage() {
       <LetterUpload showEmployer slim />
     </LetterResult>
   ) : (
-    letterChildren
+    letterFirstRun
   );
 
   return (
@@ -540,21 +571,7 @@ export default async function PrepPage() {
           </p>
         </section>
       ) : (
-        <PrepTabs
-          panels={{ resume: resumePanel, letter: letterPanel }}
-          kickers={{
-            resume: latestResume
-              ? resumeStaleFor
-                ? "PREVIOUS TARGET RUN"
-                : `LATEST RUN · ${latestResume.run.air.airResume}/100`
-              : "NOT YET RUN",
-            letter: latestLetter
-              ? letterStaleFor
-                ? "PREVIOUS TARGET CHECK"
-                : `LATEST CHECK · ${latestLetter.run.air.airLetter}/100`
-              : "NOT YET CHECKED",
-          }}
-        />
+        <PrepTabs panels={{ resume: resumePanel, letter: letterPanel }} />
       )}
     </div>
   );

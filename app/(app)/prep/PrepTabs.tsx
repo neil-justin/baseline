@@ -4,14 +4,16 @@ import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
 /**
- * Prep — the two application-materials tools as a SUITE (v7.4 recut, user
- * ruling 2026-11-02): the `.prep-lens` segmented toolbar OUTSIDE the card
- * switches the active tool — Resume checker / Cover-letter checker — and each
- * tab is its own v7 card carrying one full tool flow (dropzone intake →
- * result dashboard). Presence is NOT a tab: the declaring/stamping factor
- * lives in Profile → Credentials; the named band's computed counter cell
- * carries its state. Sequence is DECLARED via in-content handoff links
- * (#letter hashchange; the factors measure on their own files, no wizard).
+ * Prep — the two application-materials tools as a SUITE (v7.4 recut; the
+ * presentation rebuild 2026-11-03 retires the tabs-row kicker — the verdict
+ * strip inside each card alone owns the run score, so the toolbar is just
+ * the segmented tablist). The `.prep-lens` toolbar OUTSIDE the card switches
+ * the active tool — Resume checker / Cover-letter checker — and each tab is
+ * its own v7 card carrying one full tool flow (results-first verdict strip →
+ * factor groups → findings, or the first-run dropzone hero). Presence is NOT
+ * a tab: it lives in Profile → Credentials. Sequence is DECLARED via
+ * in-content handoff links (#letter hashchange; the factors measure on their
+ * own files, no wizard).
  *
  * Deep-links #resume/#letter + a hashchange listener; the roving tablist
  * keyboard pattern is the family's (Careers/My Plan register). The
@@ -27,10 +29,8 @@ const isTab = (v: string): v is TabId => TABS.some((t) => t.id === v);
 
 export default function PrepTabs({
   panels,
-  kickers,
 }: {
   panels: { resume: ReactNode; letter: ReactNode };
-  kickers: { resume: string | null; letter: string | null };
 }) {
   const [active, setActive] = useState<TabId>("resume");
   const [seq, setSeq] = useState(0); // >0 only after a user-initiated switch
@@ -81,7 +81,7 @@ export default function PrepTabs({
 
   return (
     <>
-      {/* the lens-row toolbar OUTSIDE the card + the active tool's kicker */}
+      {/* the lens-row toolbar OUTSIDE the card — tabs only, no kicker */}
       <div className="prep-lens">
         <div className="ptabs" role="tablist" aria-label="Application materials tools" onKeyDown={onTablistKey}>
           {TABS.map((t) => (
@@ -90,7 +90,6 @@ export default function PrepTabs({
             </button>
           ))}
         </div>
-        {kickers[active] ? <span className="kicker num">{kickers[active]}</span> : null}
       </div>
 
       {(TABS.map((t) => t.id) as TabId[]).map((id) => (

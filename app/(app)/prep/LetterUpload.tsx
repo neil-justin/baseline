@@ -48,6 +48,7 @@ export default function LetterUpload({
   const [err, setErr] = useState<string | null>(null);
   const [drag, setDrag] = useState(false);
   const head = slim ? "Check another version" : "Drop your cover letter here";
+  const sub = slim ? "TXT, PDF, or DOCX · drop or browse" : "TXT, PDF, or DOCX · the check runs the moment the file lands";
 
   async function check(files: FileList | null) {
     if (!files || files.length === 0) return;
@@ -111,7 +112,7 @@ export default function LetterUpload({
               <path d="m3.5 7 8.5 6 8.5-6" />
             </svg>
             <span className="dz-head">{head}</span>
-            <span className="dz-sub">TXT, PDF, or DOCX · the check runs the moment the file lands</span>
+            <span className="dz-sub">{sub}</span>
           </>
         )}
       </div>

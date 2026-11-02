@@ -36,6 +36,7 @@ export default function ResumeUpload({ slim = false }: { slim?: boolean }) {
   const [err, setErr] = useState<string | null>(null);
   const [drag, setDrag] = useState(false);
   const head = slim ? "Check another version" : "Drop your resume here";
+  const sub = slim ? "PDF or DOCX · drop or browse" : "PDF or DOCX · the format & evidence check runs the moment the file lands";
 
   async function run(files: FileList | null) {
     if (!files || files.length === 0) return;
@@ -98,7 +99,7 @@ export default function ResumeUpload({ slim = false }: { slim?: boolean }) {
               <path d="M3 15v3a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3v-3" />
             </svg>
             <span className="dz-head">{head}</span>
-            <span className="dz-sub">PDF or DOCX · the check runs the moment the file lands</span>
+            <span className="dz-sub">{sub}</span>
           </>
         )}
       </div>
