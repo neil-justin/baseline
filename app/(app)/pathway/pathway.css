@@ -1,19 +1,22 @@
 /* ============================================================
-   DNA v7 — My Plan surface (/pathway), v7.3 tab re-cut (user
-   rulings 2026-11-02 evening: the band slims to h1 + the ranked-
-   path line — the stage strip DIES, its counts ride the toolbar —
-   and the tabs RETURN in the Careers lens-row register: a
-   segmented toolbar OUTSIDE the one white content card, with the
-   active tab's computed kicker at its right. All three tables
-   share the dashboard's dense grammar: tracked uppercase heads,
-   10px rows, grey-wash hover, chips + honest bars. Deep links
-   #steps/#gaps/#resources restore; Start / Find-resources jumps
-   land on the Resources tab, page the catalog first, then scroll
-   the mapped row into view instantly (no smooth motion — DNA lock).
-   Cool white-grey ground, white cards with 1px border + whisper
-   shadow, 8px radius; wash chips for state; honest fractions —
-   solid/hatched/empty per the computed truth, never red. Scoped
-   under `.v7plan` (the page root); shell chrome lives in ../v7.css.
+   DNA v7 — My Plan surface (/pathway), Tier 2d tab merge (user
+   rulings 2026-11-02, decisions log §Tier 2d: Steps + Gaps
+   collapse into ONE Plan tab; the surface is two tabs —
+   Plan | Resources — in the Careers lens-row register: a
+   segmented toolbar OUTSIDE the cards, with the active tab's
+   computed kicker at its right. The Plan panel is ONE ranked
+   table over the whole skill universe: open rows first in the
+   steps engine's ranked order, closed rows dimmed after
+   (.closed-row), columns Skill | Resource | State | Effect,
+   canonical provenance chips (Q6) + the honest noCheck line
+   (§6.2), whole-table pager. The ES strip is the table's first
+   row. Resources keeps its two-card stack (head word: Covers
+   skills). Deep links #plan/#resources; legacy #steps/#gaps
+   hashes read as #plan. Cool white-grey ground, white cards
+   with 1px border + whisper shadow, 8px radius; wash chips for
+   state; honest fractions — solid/hatched/empty per the
+   computed truth, never red. Scoped under `.v7plan` (the page
+   root); shell chrome lives in ../v7.css.
    No entrance motion (DNA lock).
    ============================================================ */
 
@@ -66,7 +69,6 @@
 }
 .v7plan .chip.c-blue { background: var(--v-blue-wash); color: var(--v-blue-deep); }
 .v7plan .chip.c-green { background: var(--v-green-wash); color: var(--v-green-text); }
-.v7plan .chip.c-amber { background: var(--v-amber-wash); color: var(--v-amber-text); }
 .v7plan .chip.c-grey { background: var(--v-grey-wash); color: var(--v-grey-text); }
 /* the self-report hatch — quiet 45° stripes over the grey wash */
 .v7plan .chip.hatch-chip {
@@ -145,7 +147,6 @@
   font-variant-numeric: tabular-nums;
 }
 .v7plan .lead-mono b { color: var(--v-ink); font-weight: 500; }
-.v7plan .lead-mono .sep { color: var(--v-meta); margin: 0 6px; }
 
 /* flush sections of the sibling cards — the cards' former tab-panel bodies */
 .v7plan .panel-sec + .panel-sec { border-top: 1px solid var(--v-rows); }
@@ -188,13 +189,8 @@
   text-transform: uppercase;
   color: var(--v-ink2);
 }
-.v7plan .foot {
-  padding: 10px 16px 14px;
-  font: 400 11px/1.55 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-}
 
-/* ---------- buttons (queue CTAs; overrides the Index .btn in globals) ---------- */
+/* ---------- buttons (decided-surface CTA) ---------- */
 
 .v7plan .btn {
   display: inline-flex;
@@ -213,15 +209,8 @@
   box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3);
 }
 .v7plan .btn-primary:hover { background: var(--v-blue-deep); box-shadow: 0 2px 6px rgba(26, 115, 232, 0.35); }
-.v7plan .btn-ghost {
-  background: var(--v-surface);
-  border: 1px solid var(--v-border);
-  color: var(--v-blue-deep);
-  font-weight: 500;
-}
-.v7plan .btn-ghost:hover { border-color: var(--v-blue); background: var(--v-blue-wash); }
 
-/* ---------- dense plan table — STEP / RESOURCE / STATE / EFFECT / ACTION ---------- */
+/* ---------- dense plan table — SKILL / RESOURCE / STATE / EFFECT ---------- */
 
 .v7plan .plan-table {
   width: 100%;
@@ -248,35 +237,22 @@
 .v7plan .plan-table tbody tr { transition: background-color 0.12s ease; }
 .v7plan .plan-table tbody tr:hover { background: var(--v-grey-wash); }
 .v7plan .plan-table tr:last-child td { border-bottom: 0; }
-.v7plan .plan-table .ct-res { width: 24%; }
-.v7plan .plan-table .ct-state { width: 9%; }
-.v7plan .plan-table .ct-eff { width: 13%; }
-.v7plan .plan-table .ct-act { width: 108px; }
+.v7plan .plan-table .ct-res { width: 30%; }
+.v7plan .plan-table .ct-state { width: 14%; }
+.v7plan .plan-table .ct-eff { width: 18%; }
 
-/* ranked-row furniture — drawn numerals, never bare digits */
-.v7plan .plan-table .item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.v7plan .plan-table .rank {
-  width: 26px;
-  height: 26px;
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--v-border);
-  border-radius: 50%;
-  font: 500 12px/1 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
-}
-.v7plan .plan-table .q-skill {
+/* the closed rows ride AFTER the open ranked rows (merge ruling) — dimmed,
+   quiet, not hidden: reduced ink + no hover tint */
+.v7plan .plan-table tr.closed-row { color: var(--v-ink2); }
+.v7plan .plan-table tr.closed-row .p-skill { color: var(--v-ink2); }
+.v7plan .plan-table tr.closed-row:hover { background: transparent; }
+
+/* the skill cell — name + its canon what ("what you'll learn", Q7) */
+.v7plan .plan-table .p-skill {
   font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
 }
-/* the row expectation line ("what you'll learn", grilling Q7) — the canonic
+/* the row expectation line — the canon
    skill what on every row, clamped to two lines so tables stay dense */
 .v7plan .row-what {
   margin: 2px 0 0;
@@ -288,26 +264,51 @@
   overflow: hidden;
   max-width: 52ch;
 }
-/* the resource pointer — structural one-liner in its own cell */
-.v7plan .q-res {
-  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
+/* the resource pointer — the pick title IS the affordance (Q7) */
+.v7plan .plan-table .p-reslink {
+  font: 500 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  text-decoration: none;
 }
-.v7plan .q-res b { font-weight: 500; color: var(--v-ink); }
-.v7plan .q-nogap {
+.v7plan .plan-table .p-reslink:hover { text-decoration: underline; text-underline-offset: 3px; }
+.v7plan .plan-table .p-reslink:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; border-radius: 2px; }
+.v7plan .plan-table .p-restitle { font: 500 12.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7plan .plan-table .p-resmeta { font: 400 11.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); font-variant-numeric: tabular-nums; }
+.v7plan .plan-table .p-resline .r-ext { margin-left: 4px; font-size: 11px; color: var(--v-meta); }
+/* the honest no-resource line (Q7) */
+.v7plan .plan-table .p-nores {
   font: 400 11px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-grey-text);
+  color: var(--v-ink2);
   max-width: 38ch;
 }
+/* the closing-resource/provenance line on a closed row — plain text, only
+   when the data carries it (never invented) */
+.v7plan .plan-table .p-closedprov {
+  font: 400 11.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+/* the empty-Effect dash (unmapped open rows / the ES strip) */
+.v7plan .plan-table .p-dash { color: var(--v-meta); }
+/* the Effect provenance on closed rows — closing provenance (+ transfer) */
+.v7plan .plan-table .eff-prov {
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+/* the honest micro-line (§6.2): open row whose platform has no check —
+   INSIDE the State cell, under the empty bar. No red, no fake urgency. */
+.v7plan .plan-table .no-check {
+  display: block;
+  margin-top: 3px;
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+/* (the ES strip and its 4px blue bar were REMOVED 2026-11-02 — user ruling:
+   a channel summary has no purpose on Plan; those summaries live on
+   Dashboard/Progress/Profile NACE.) */
+.v7plan .plan-table .ct-state .g-bar { margin-top: 4px; }
 .v7plan .plan-table .eff {
   font: 500 12px/1.4 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
-  white-space: nowrap;
-}
-.v7plan .plan-table .ct-act .btn {
-  padding: 7px 14px;
-  font-size: 12.5px;
   white-space: nowrap;
 }
 .v7plan .stagewide {
@@ -318,99 +319,16 @@
 }
 .v7plan .stagewide b { color: var(--v-ink); font-weight: 500; }
 
-/* ---------- stage accordion (② rows while they wait; also the
-   Closed-bars group row) + the one-line stage endnote ---------- */
-
-.v7plan .stage-rowbtn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 13px 16px;
-  text-align: left;
-  background: none;
-  border: 0;
-  transition: background-color 0.12s ease;
-}
-.v7plan .stage-rowbtn:hover { background: var(--v-grey-wash); }
-.v7plan .stage-rowbtn .sr-name {
-  font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
-  color: var(--v-ink);
-}
-.v7plan .stage-rowbtn .sr-count {
-  font: 400 11.5px/1.4 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2); /* v7.1: state text → ink-2 ≥4.5:1 */
-  font-variant-numeric: tabular-nums;
-}
-/* chevron drawn with borders — no glyph font */
-.v7plan .stage-rowbtn .chev {
-  width: 9px;
-  height: 9px;
-  flex: none;
-  border-right: 2px solid var(--v-ink2);
-  border-bottom: 2px solid var(--v-ink2);
-  margin-left: auto;
-  transition: transform 0.2s ease;
-}
-.v7plan .stage-rowbtn[aria-expanded="true"] .chev { transform: rotate(225deg); }
-/* the one-line stage endnote (the check-off note + entry-ready) */
-.v7plan .stagefoot {
-  padding: 10px 16px 12px;
-  margin: 0;
-  font: 400 11.5px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
-}
-.v7plan .stage-rowbtn + .stage-expand { border-top: 0; }.v7plan .stage-expand { border-top: 1px solid var(--v-rows); border-bottom: 1px solid var(--v-rows); }
-.v7plan .stage-expand .plan-table th { border-top: 0; }
-.v7plan .stage-expand .plan-table td { padding: 9px 16px; }
-/* ---------- gaps tab — badged skills ledger (cells + heads + chips) ---------- */
-
-.v7plan .gap-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-variant-numeric: tabular-nums;
-  border-top: 1px solid var(--v-rows);
-}
-.v7plan .gap-table th {
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor */
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--v-ink2);
-  text-align: left;
-  padding: 8px 16px;
-  border-bottom: 1px solid var(--v-rows);
-}
-.v7plan .gap-table td {
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--v-rows);
-  vertical-align: middle;
-}
-.v7plan .gap-table tr:last-child td { border-bottom: 0; }
-.v7plan .gap-table .ct-state { width: 118px; }
-.v7plan .gap-table .ct-bar { width: 150px; }
-.v7plan .gap-table tbody tr { transition: background-color 0.12s ease; }
-.v7plan .gap-table tbody tr:hover { background: var(--v-grey-wash); }
-.v7plan .g-row .g-name {
-  font: 400 13px/1.4 Roboto, system-ui, sans-serif;
-  color: var(--v-ink);
-}
-.v7plan .g-status {
-  margin-top: 3px;
-  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
-}
-.v7plan .g-status .ok { color: var(--v-green-text); font-weight: 500; }
-.v7plan .g-status .unverified { color: var(--v-grey-text); }
+/* ---------- honest ledger cells — name, status, evidence bar ----------
+   (.g-name/.g-status died with the gaps table + ES strip, 2026-11-02) */
 /* the honest bar lives INSIDE its cell frame — 8px ledger track */
-.v7plan .g-row .g-bar {
+.v7plan .g-bar {
   height: 8px;
   border-radius: 2px;
   background: var(--v-track);
   overflow: hidden;
 }
-.v7plan .g-row .g-bar i {
+.v7plan .g-bar i {
   display: block;
   height: 100%;
   width: 100%;
@@ -419,51 +337,12 @@
   transform-origin: left;
 }
 /* honest fills: evidence-closed solid green, self-report hatched blue, open empty */
-.v7plan .g-row .g-bar i.claim {
+.v7plan .g-bar i.claim {
   background: repeating-linear-gradient(
     45deg,
     rgba(26, 115, 232, 0.16) 0 2px,
     transparent 2px 5px
   );
-}
-.v7plan .g-link {
-  font: 500 12px/1.4 Roboto, system-ui, sans-serif;
-  color: var(--v-blue-deep);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-color: rgba(26, 115, 232, 0.35);
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-}
-.v7plan .g-link:hover { color: var(--v-blue); text-decoration-color: var(--v-blue); }
-
-/* the ES strip on the same ledger footing */
-.v7plan .softpanel .g-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 118px 150px;
-  gap: 0;
-  align-items: center;
-  padding: 12px 16px;
-}
-.v7plan .softpanel .g-row .g-name { font: 500 13px/1.4 Roboto, system-ui, sans-serif; }
-/* column lines match the ledger's td geometry exactly (no grid gap) */
-.v7plan .softpanel .g-row .es-state { padding-left: 16px; }
-.v7plan .softpanel .g-row .ct-bar { padding: 0 16px; }
-/* the ES strip's fill is engine-measured — blue channel fill; unmeasured stays empty */
-.v7plan .softpanel .g-row .ct-bar .g-bar { height: 4px; }
-.v7plan .softpanel .g-row .g-bar i { background: var(--v-blue); }
-.v7plan .gap-cta {
-  margin: 14px 2px 0;
-  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-}
-.v7plan .gap-cta b { font-weight: 500; color: var(--v-ink); }
-.v7plan .gap-allclosed {
-  font: 500 12px/1.4 Roboto, system-ui, sans-serif;
-  color: var(--v-green-text);
-  font-weight: 500;
 }
 
 /* ---------- resources tab — typed catalog table ---------- */
@@ -536,14 +415,9 @@
 .v7plan .res-main a.r-title:hover { text-decoration: underline; text-underline-offset: 3px; }
 .v7plan .res-main a.r-title:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; border-radius: 2px; }
 .v7plan .res-main .r-ext { margin-left: 4px; font-size: 11px; color: var(--v-meta); }
-/* the anchored-in row from a Start CTA — the row-hover tint held at rest
-   (a resting highlight of the mapped resource; cleared by any tab switch) */
-.v7plan .res-row.anchored {
-  background: var(--v-grey-wash);
-}
 
 /* ---------- undecided default (edge-case audit §2.35) — a plain padded
-    block INSIDE the steps card now (no card-in-card chrome) */
+    block INSIDE the plan card now (no card-in-card chrome) */
 
 .v7plan .card .defaultband {
   margin: 0;
@@ -557,9 +431,6 @@
 
 /* ---------- responsive ---------- */
 
-@media (max-width: 1020px) {
-  .v7plan .plan-table .ct-res { width: 30%; }
-}
 /* State folds on tablets — the chips duplicate the scan the rows already carry */
 @media (max-width: 920px) {
   .v7plan .plan-table .ct-state { display: none; }
@@ -572,7 +443,7 @@
   .v7plan .plan-lens .kicker { flex: 1 1 100%; margin-left: 0; text-align: right; }
   /* block-stacked tables re-show the folded State cell (≤920 hide) */
   .v7plan .plan-table .ct-state { display: block; }
-  /* queue + remains tables stack into dense blocks */
+  /* the plan table stacks into dense blocks (4-column merge layout) */
   .v7plan .plan-table,
   .v7plan .plan-table tbody,
   .v7plan .plan-table tr,
@@ -586,22 +457,7 @@
   .v7plan .plan-table td { padding: 0 0 10px; border-bottom: 0; }
   .v7plan .plan-table td:last-child,
   .v7plan .plan-table tbody tr:last-child td:last-child { padding-bottom: 0; }
-  .v7plan .plan-table .ct-act .btn { padding: 8px 16px; }
-  .v7plan .q-nogap { max-width: none; }
-  /* the gaps ledger stacks: name/status → chip+bar line */
-  .v7plan .gap-table,
-  .v7plan .gap-table tbody,
-  .v7plan .gap-table tr,
-  .v7plan .gap-table td {
-    display: block;
-    width: auto;
-  }
-  .v7plan .gap-table thead { display: none; }
-  .v7plan .gap-table tbody tr { border-bottom: 1px solid var(--v-rows); padding: 12px 12px; }
-  .v7plan .gap-table tbody tr:last-child { border-bottom: 0; }
-  .v7plan .gap-table td { padding: 0 0 10px; border-bottom: 0; }
-  .v7plan .gap-table td:last-child { padding-bottom: 0; }
-  .v7plan .softpanel .gap-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .v7plan .plan-table .p-nores { max-width: none; }
   /* resources rows wrap */
   .v7plan .res-row { flex-wrap: wrap; gap: 4px 16px; padding: 11px 12px; }
   .v7plan .res-main { width: 100%; }
@@ -611,11 +467,11 @@
 }
 
 /* ---------- pager chain (Round P3) — the shared .vpager lives in ../v7.css ----------
-   The gap ledger and the resource catalog keep their closing hairline when a
-   pager bar follows (the bar itself is rule-free — the list closes with the
-   one drawn line); the :last-child suppression above stays in force on
-   single-page lists. */
-.v7plan .gap-table:has(+ .vpager) tbody tr:last-child td,
+   The merged plan table and the resource catalog keep their closing hairline
+   when a pager bar follows (the bar itself is rule-free — the list closes
+   with the one drawn line); the :last-child suppression above stays in force
+   on single-page lists. */
+.v7plan .plan-table:has(+ .vpager) tbody tr:last-child td,
 .v7plan .res-table:has(+ .vpager) .res-row:last-child {
   border-bottom: 1px solid var(--v-rows);
 }

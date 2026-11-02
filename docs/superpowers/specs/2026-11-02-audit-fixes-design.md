@@ -137,6 +137,56 @@ Queue position: after Tier 2b (header content plan), before Tier 3 (animation/la
 
 ## Tier 2d — Tab presentation consistency (user-prioritized, re-ordered 2026-11-02 late)
 
+### Decisions log — grilling rounds 1–4, 2026-11-02 (user-locked)
+
+- **Merge**: Steps + Gaps collapse into ONE plan tab; the surface becomes 2 tabs — **Plan |
+  Resources**. "Closed bars" accordion dies (reverses the earlier "naked list reads as noise"
+  ruling; noise now handled by dimming + chips + pagination). User rationale: the same skill
+  rendered twice in two shapes is the root of the inconsistency.
+- **Plan table columns** (user's own spec, Q7): **Skill** (name + its canon `what` line —
+  "what to expect to learn from acquiring this skill") | **Resource** (pick title = the link,
+  "· free · 4h"; honest "No resource for this skill yet — ask your adviser." when unmapped;
+  closed rows show the closing resource when known) | **State** (assessment status:
+  `Verified ·✓` / `Checked ·✓✓` / `Self-reported`; open = empty bar, no chip) | **Effect**
+  ("SP {from} → {to} · +Δ" while open; closing provenance when closed). No Rank numerals, no
+  Action column (user ruled both "meaningless"); ordering carries priority, the resource title
+  is the affordance.
+- **Pagination**: whole merged table, `PAGE_SIZE 10` pager, open rows first, closed rows dimmed
+  after (user Q8).
+- **Canonical provenance wording (Q6)**: compact forms on data rows — `Verified ·✓` /
+  `Checked ·✓✓` / `Self-reported` / `Open` — everywhere "applicable to all" (user Q3 widened
+  scope: profile Competencies/skills table, career rows, progress, dashboard, too; wave 2 after
+  the pathway checkpoint). Long explanatory legend copy stays only where it does explanatory
+  work (profile `.lcap`).
+- **Suggestion ranking (Q11v2)** — SPECIFIED as fully computed (no authored picks):
+  1. check-linked (`CHECK_SKILL` join) → 2. most dedicated (fewest other skills addressed) →
+  3. free beats paid → 4. fewer hours (tiebreak only) → 5. resource id A–Z final tiebreak.
+  **Final ruling (Q13): the rewire itself defers** — only presentation builds now; the Plan UI
+  runs on the CURRENT 2c algorithm (authored pick → free → hours → provider) until the
+  signal-gated batch lands the rewire + pick-flag retirement. Revised ranking spec above is
+  banked for that batch. (User rejected hours as a QUALITY factor — hence tiebreak-only slot.)
+- **Coverage honesty (Q9, user re-explained + agreed)**: a resource→skill mapping survives
+  only if "studying this genuinely teaches you this skill" (kills Git-handbook-class lies);
+  100% coverage is NOT required (user: almost impossible); the check/assessment — never the
+  resource — decides whether a skill counts as learned. Background stream §6.1 runs re-mapping
+  on exactly this bar. Sub-concept granularity ("covers N of M") = named post-defense
+  deepening, not now.
+- **Study→check payoff (§6.2, user a+c)**: Phase 1 = engine prefers check-linked resources;
+  skills with no check get the honest "No platform check yet" chip; battery authoring is later
+  work. Stream already landed: `CHECK_SKILL` join map in `lib/fixtures/checks.ts` (2/2 join
+  guard holds; canon `swd` path check-linked via `res-python-basics`; 7 other `swd` skills chip
+  honestly; 369 of 373 career×skill cells have no check name on-map — chip is their correct
+  face).
+- **qa check Q5 (user 10=a)**: the "calibration across testers" question tests the wrong skill
+  (QA standards, not Software Testing); replaced with a testing-execution question (draft A
+  approved pending user wording check).
+- **Provenance chain (user question)**: skill `what` lines are verbatim from the blessed role
+  specs (PSF/TESDA/O*NET/ESCO/NACE/PSOC source tags per row; O*NET verbatim task anchors live
+  in the rowspec layer — judge coverage against those).
+- **Build process (user Q2)**: built directly in live components; user reviews at URL per fix.
+- e2e guard classes (`.qrow`, `#panel-steps .lead-mono`, `.r-start`, stale `#stage2` comment)
+  migrate deliberately with a port list in the same change.
+
 User finding (§6.3 of `handoff/handoff-2026-11-02-audit-session.md`): Ranked steps / Your gaps /
 Resources render the same skill universe with roughly different design/structure. Goal: ONE
 consistent design across the three tabs. This becomes the PRIORITY design item; the resource
@@ -173,6 +223,18 @@ Playwright-driven manual-QA pass at 390px / 768px / 1024px viewports over landin
 (sign-in/sign-up/forgot) → all `(app)` pages. Audit element appearance, section structure, font
 sizes, tap targets, spacing. Apply fixes, then re-verify. Known gaps from investigation: auth
 surfaces have zero media queries; only the app shell was ever audited beyond the landing.
+
+### Queue standing order (user-locked 2026-11-02)
+
+**Algorithmic/data passes are QUEUED, not interleaved**: they execute in background only on the
+user's explicit signal, alongside the Tier 4 manual-QA audit (last task). Immediately deferred
+to that signal-gated batch:
+- §6.1 substance re-map pass (in-flight run stopped + reverted; its method notes + lie-mappings
+  inventory are banked in its session report for the re-run).
+- §6.2 remaining content piece: the `qa` check Q5 replacement (Candidate A wording pending user
+  wording approval — goes in with the batch).
+- Pick-flag retirement (data-side deletion of the 10 flags; the engine-side ignore is part of
+  the Tier 2d build).
 
 ## Verification strategy
 

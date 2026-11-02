@@ -458,18 +458,29 @@ test.describe.serial("demo-arc", () => {
     );
 
     /* ══════════ BEAT 8 · pathway glance ══════════ */
-
+    /* Tier 2d selector ports (2026-11-02 merge: Plan | Resources — one
+       table over the whole skill universe). Port list, old → new:
+       - `#panel-steps .lead-mono`               → `#panel-plan .lead-mono`
+         (counter text is `{closed} of {mapSize} skills checked`; the
+         "First 30 days: X of Y done" furniture died with the stage
+         queue — the assertion that read it is DELETED, not replaced)
+       - `.stagepanel .qrow .q-skill`            → `#panel-plan .plan-row:not(.closed-row) .q-skill`
+         (stage panel + qrow died; `.plan-row` is the stable row class,
+         `.q-skill` name kept; the closed rows ride `.closed-row` dimmed)
+       - `#panel-gaps` refs                      → n/a (no refs existed in specs;
+         closed/verified facts read via the Plan panel instead)
+       - dead-furniture assertions (accordion counts, stage endnotes) were
+         deleted rather than re-invented. No new assertions. */
     await page.goto("/pathway");
-    const lead = ((await page.locator("#panel-steps .lead-mono").textContent()) ?? "").replace(/\s+/g, " ");
+    const lead = ((await page.locator("#panel-plan .lead-mono").textContent()) ?? "").replace(/\s+/g, " ");
     soft(lead).toContain("5 of 7"); // canon: 5 of 7 skills checked
-    expect(lead).toContain("First 30 days: 1 of 3 done"); // 1 of 3 — canon holds
-    const queue = (await page.locator(".stagepanel .qrow .q-skill").allTextContents()).map((s) => s.trim());
+    const queue = (await page.locator("#panel-plan .plan-row:not(.closed-row) .q-skill").allTextContents()).map((s) => s.trim());
     soft(queue).toEqual([
       "Quality Assurance / Quality Standards",
       "Customer Orientation · Digital Fluency · Learning Agility · Sense Making · Problem Solving (Enabling)",
-    ]); // remaining stage-① queue — canon
+    ]); // open rows first (steps-engine ranked order) — canon
     expect(lead).not.toContain("Software Testing"); // closed ·✓✓, off the context line
-    notes.push(`beat 8 pathway: lead "${lead}" · stage-① queue ${JSON.stringify(queue)}`);
+    notes.push(`beat 8 pathway: lead "${lead}" · open rows (ranked) ${JSON.stringify(queue)}`);
 
     /* ══════════ BEAT 9 · profile Plan tab ══════════ */
 

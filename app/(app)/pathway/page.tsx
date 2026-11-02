@@ -4,27 +4,26 @@ import { openSkills, rankOpenSkills, stageOne } from "@/lib/engines/gaps";
 import { scoreView } from "@/lib/engines/rubric";
 import { roundHalfDown, WEIGHTS } from "@/lib/engines/score";
 import type { BarSource, Career, Resource } from "@/lib/types";
+import { CHECK_SKILL } from "@/lib/fixtures/checks";
 import { RESOURCES } from "@/lib/fixtures/resources";
 import PathwayTabs, {
-  type GapsTab,
-  type QRow,
+  type PlanRow,
+  type PlanTab,
   type ResRow,
   type ResourcesTab,
-  type StepsTab,
-  type XRow,
 } from "./PathwayTabs";
 import "./pathway.css";
 
 export const dynamic = "force-dynamic";
 
 /**
- * M7 Pathway — MY PLAN re-cut to the dashboard DNA (v7.1, user-ruled
- * 2026-10-29): header band naming the surface with computed stage
- * counters, the ranked First-30-days queue as the family's dense plan
- * table, and wash chips + drawn-circle numerals throughout. Engine
- * semantics untouched: queue from `gaps.ts` (openSkills → rankOpenSkills
- * → seeded stageOneQueue), rationale bank with structured template
- * fallbacks; never paints thesis names, "AI", or gamified language.
+ * M7 Pathway — MY PLAN, Tier 2d merge (user-ruled 2026-11-02, decisions
+ * log §Tier 2d): Steps + Gaps collapse into one Plan dataset — every
+ * career skill is ONE row, open rows keep the steps engine's ranked order,
+ * closed rows append after (provenance carried per row). Engine semantics
+ * untouched: queue from `gaps.ts` (openSkills → rankOpenSkills → seeded
+ * stageOneQueue); SP projection restates the dashboard plan-table formula;
+ * never paints thesis names, "AI", or gamified language.
  */
 
 function costText(r: Pick<Resource, "cost">): string {
@@ -45,6 +44,9 @@ function whatFor(career: Career, skill: string): string {
  * session Q5): an authored `pick: true` wins; the computed rule (free tier
  * → fewer hours → provider name) fills in until flags exist — the catalog
  * is 437 rows, so pick flags land as a data pass, not a bulk edit.
+ * Q11v2 rewire (check-linked → dedicated → free → hours → id) + the
+ * pick-flag retirement DEFER to the signal-gated batch (2026-11-02) —
+ * this engine call stays EXACTLY as-is until then.
  */
 function pickResource(career: Career, skill: string): Resource | null {
   const pool = RESOURCES.filter(
@@ -67,88 +69,88 @@ function resourceFor(career: Career, skill: string): Resource | null {
   return pickResource(career, skill);
 }
 
+/** Closing-provenance wording (canonical forms, decisions log Q6). */
+function provenanceFor(source: "verified" | "checked" | "claimed"): string {
+  return source === "verified"
+    ? "Closed via quiz"
+    : source === "checked"
+      ? "Closed via checked resource"
+      : "Self-reported";
+}
+
 /**
- * Rationale lines — hand-authored in the m7 plan's style where canon copy
- * exists (citations restricted to the locked bank); every other skill takes
- * the LLM-down template-fallback style. Order stays deterministic either
- * way. Dry-down ruling 2026-10-29: a rationale answers WHY this skill sits
- * where it does — the resource pointer is the table's own structural
- * RESOURCE column, so rationale rows never restate title/cost/hours.
+ * THE Plan dataset (Tier 2d merge): every career skill = one row. Open
+ * rows keep the steps engine's ranked order (queue first, then the ranked
+ * remainder) and each carries its SP projection; closed rows append after,
+ * dimmed, with the closing provenance the engine emits. Presentation-only
+ * build — the suggestion engine above is untouched (Q13 deferral).
  */
-const RATIONALE: Record<string, string> = {
-  "da|Spreadsheets":
-    "Spreadsheets are where every Data Analyst's dataset lands first — organize and compute there before charts follow.",
-  "da|Data cleaning":
-    "Data Analysts spend more time cleaning data than charting it — messy columns break every step after.",
-  "da|Basic statistics":
-    "Analytical thinking is the top skill employers named for 2025 (69%, WEF Future of Jobs 2025). Basic statistics is where you build it.",
-  "da|Dashboards (Power BI)":
-    "Dashboards turn finished analysis into what hiring managers actually read.",
-  "da|Chart interpretation":
-    "Reading what a chart actually says is how analysis turns into a decision — analytical thinking is the top skill employers named for 2025 (69%, WEF Future of Jobs 2025), and this is where a Data Analyst builds it.",
-  "da|Report writing":
-    "A Data Analyst's findings land in a written report — employers named written communication at 72% on resumes (Job Outlook 2026 employer survey).",
-};
-
-function rationaleFor(career: Career, skill: string, rank: number): string {
-  const authored = RATIONALE[`${career.id}|${skill}`];
-  if (authored) return authored;
-  return `${skill} is still open for ${career.name} — ranked ${rank} in this queue.`;
-}
-
-/** Stage-③ peek — degree routes lead with the entry route's first moves. */
-function stageThreePeek(career: Career): string | null {
-  if (career.id === "da") {
-    return "Starts with: a small analysis portfolio · then the Google Data Analytics certificate.";
-  }
-  return "Starts with: an entry portfolio · then your entry credential.";
-}
-
-function buildSteps(
+function buildPlan(
   career: Career,
   bars: Record<string, { source: BarSource }>,
-  stageOneDone: number,
+  closed: number,
   stageOneQueue: string[] | undefined,
-  closed: number
-): StepsTab {
+  transferred: string[]
+): PlanTab {
   const open = openSkills(career, bars);
   const ranked = rankOpenSkills(career, open);
   const seeded = (stageOneQueue ?? []).filter((s) => open.includes(s));
-  const queue = seeded.length ? seeded : stageOne(career, open).queue;
+  /* the steps engine's own ranked order: the persisted stage-① queue
+     first when one exists, the engine's stage-one pick otherwise, then
+     the ranked remainder — never a re-rank here */
+  const stageQueue = seeded.length ? seeded : stageOne(career, open).queue;
+  const openOrder = [
+    ...stageQueue,
+    ...ranked.filter((r) => !stageQueue.includes(r.skill)).map((r) => r.skill),
+  ];
   const mapSize = career.skills.length;
+  const allClosed = open.length === 0;
 
-  /* EFFECT-on-rows (user-ruled, dashboard parity): each row's SP projection
-     assumes the ranked rows above it close first — the dashboard plan-table
-     formula verbatim (roundHalfDown over WEIGHTS.sp × closed ÷ mapSize).
-     No new engine math; the numbers restate lib/engines projections. */
+  /* EFFECT-on-rows (user-ruled, dashboard parity): each open row's SP
+     projection assumes the ranked rows above it close first — the
+     dashboard plan-table formula verbatim (roundHalfDown over WEIGHTS.sp
+     × closed ÷ mapSize). No new engine math; the numbers restate lib/
+     engines projections. */
   const spAt = (n: number) => roundHalfDown((WEIGHTS.sp * (closed + n)) / mapSize);
 
-  const remain: XRow[] = ranked
-    .filter((r) => !queue.includes(r.skill))
-    .map((r, i) => ({
-      rank: stageOneDone + queue.length + i + 1,
-      skill: r.skill,
-      what: whatFor(career, r.skill),
-      resTitle: resourceFor(career, r.skill)?.title ?? null,
-      effect: { from: spAt(queue.length + i), to: spAt(queue.length + i + 1) },
-    }));
-  const allClosed = open.length === 0;
-  const closedCount = Object.keys(bars).length;
-
-  const queueRows: QRow[] = queue.map((skill, i) => {
+  /* open rows: ranked order (above), each with its SP projection slot */
+  const openRows: PlanRow[] = openOrder.map((skill, i) => {
     const res = resourceFor(career, skill);
+    const hasCheck = res != null && CHECK_SKILL[res.id] === skill;
     return {
-      rank: stageOneDone + i + 1,
       skill,
       what: whatFor(career, skill),
-      res: res
-        ? { title: res.title, cost: costText(res), hrs: timeText(res) }
-        : null,
-      why: rationaleFor(career, skill, stageOneDone + i + 1),
-      primary: i === 0,
+      open: true,
+      kind: "open",
+      transferred: false,
       effect: { from: spAt(i), to: spAt(i + 1) },
+      provenance: null,
+      suggestion: res
+        ? { title: res.title, cost: costText(res), hrs: timeText(res), url: res.url ?? null }
+        : null,
+      hasCheck,
+      noCheck: !hasCheck,
     };
   });
+
+  /* closed rows append after, catalog order (stable read across pages) */
+  const closedRows: PlanRow[] = career.skills
+    .filter((s) => s.name in bars)
+    .map((s) => {
+      const source = bars[s.name].source;
+      return {
+        skill: s.name,
+        what: whatFor(career, s.name),
+        open: false,
+        kind: source,
+        transferred: source === "verified" && transferred.includes(s.name),
+        effect: null,
+        provenance: provenanceFor(source),
+        suggestion: null,
+        hasCheck: false,
+        noCheck: false,
+      };
+    });
 
   const clearLine = allClosed
     ? `All ${mapSize} of ${mapSize} skills checked — nothing open right now. Your next moves are the Entry-ready milestones below${
@@ -158,76 +160,12 @@ function buildSteps(
       }`
     : null;
 
-  /* counters read what is displayed: the queue IS the stage's open slots */
-  const stageSlots = stageOneDone + queue.length;
-  const band1 = allClosed ? "clear" : `${stageSlots} open`;
-  const band2 = `${remain.length} waiting`;
-  const band = [
-    { num: "1", name: "First 30 days", count: band1, now: !allClosed },
-    { num: "2", name: "Next steps", count: band2, now: false },
-    { num: "3", name: "Entry-ready", count: "2 milestones", now: false },
-  ];
-
   return {
-    closed: closedCount,
+    closed,
     mapSize,
-    done: stageOneDone,
-    band,
-    bandLabel: `Three stages: First 30 days, ${stageSlots} — current. Next steps, ${band2}. Entry-ready, 2 milestones.`,
     allClosed,
-    sub: allClosed
-      ? "nothing to check off — entry-ready milestones are left."
-      : `the next ${queue.length} to check off${
-          stageOneDone === 0 ? " — your pathway just started." : "."
-        }`,
     clearLine,
-    queue: queueRows,
-    qfoot:
-      "When skills carry the same weight, free resources made for the Philippines come first.",
-    remain,
-    catchUp:
-      remain.length === 0 && !allClosed
-        ? "you're caught up — check off a First 30 days step and the next skill moves up"
-        : null,
-    peek: stageThreePeek(career),
-  };
-}
-
-function buildGaps(
-  career: Career,
-  bars: Record<string, { source: BarSource }>,
-  transferred: string[],
-  queue: string[],
-  es: { measured: boolean; earned: number; max: number; verified: number } | null
-): GapsTab {
-  const allClosed = openSkills(career, bars).length === 0;
-  return {
-    careerName: career.name,
-    closed: Object.keys(bars).length,
-    mapSize: career.skills.length,
-    openCount: openSkills(career, bars).length,
-    rows: career.skills.map((s) => {
-      const bar = bars[s.name];
-      const kind: "verified" | "checked" | "claimed" | "open" = bar
-        ? bar.source
-        : "open";
-      return {
-        name: s.name,
-        what: whatFor(career, s.name),
-        kind,
-        transferred: kind === "verified" && transferred.includes(s.name),
-        openWithRes: kind === "open" && resourceFor(career, s.name) !== null,
-        resTitle:
-          kind === "open"
-            ? resourceFor(career, s.name)?.title ?? null
-            : null,
-      };
-    }),
-    allClosed,
-    esLine: es?.measured
-      ? `${es.earned} of ${es.max} · ${es.verified} of 7 NACE competencies verified ·✓`
-      : undefined,
-    esEarn: es?.measured ? es.earned / es.max : 0,
+    rows: [...openRows, ...closedRows],
   };
 }
 
@@ -272,13 +210,8 @@ function buildResources(
     }
   );
   return {
-    careerName: career.name,
     rows,
     allClosed,
-    counts: {
-      suggested: rows.filter((r) => r.suggested).length,
-      alternates: rows.filter((r) => !r.suggested).length,
-    },
   };
 }
 
@@ -292,8 +225,7 @@ export default async function PathwayPage() {
       <PathwayTabs
         careerName={null}
         undecided
-        steps={{} as StepsTab}
-        gaps={{} as GapsTab}
+        plan={{} as PlanTab}
         resources={{} as ResourcesTab}
       />
     );
@@ -305,24 +237,21 @@ export default async function PathwayPage() {
   // ES strip — engine-fed (traceable, never a recomputation here); the
   // dashboard view's ar input rides along so this surface reads the SAME
   // computed receipts (AR itself is not rendered on this surface — it
-  // belongs to Dashboard/Prep).
+  // belongs to Dashboard/Prep; the ES summary lives on Dashboard/Progress/
+  // Profile NACE and is deliberately NOT shown on Plan — user ruling 2026-11-02).
   const v = scoreView(career, state, ar);
-  const esMeasured = Object.keys(state.competencies ?? {}).length > 0;
-  const es = esMeasured
-    ? {
-        measured: true,
-        earned: v.es,
-        max: WEIGHTS.es,
-        verified: Object.values(state.competencies ?? {}).filter((x) => x === "verified").length,
-      }
-    : null;
 
   return (
     <PathwayTabs
       careerName={career.name}
       undecided={false}
-      steps={buildSteps(career, state.bars, state.stageOneDone, state.stageOneQueue, v.closed)}
-      gaps={buildGaps(career, state.bars, state.decisions.verifiedTransferred, queue, es)}
+      plan={buildPlan(
+        career,
+        state.bars,
+        v.closed,
+        state.stageOneQueue,
+        state.decisions.verifiedTransferred
+      )}
       resources={buildResources(career, state.bars, queue)}
     />
   );
