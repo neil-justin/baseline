@@ -108,14 +108,25 @@ export async function getStudentView(id: string) {
   // Amendment 3 (2026-10-29, user-ruled): the factor reads the LATEST full
   // attempt's own AIR — the stored run — never the best-struck `bestAir`
   // history: re-running a worse file drops points (latest counts).
-  const resume = latest ? { measured: true, latestAir: latest.run.air.airResume } : null;
+  // Q19a (2026-11-03, user-locked): a run whose target ≠ the student's
+  // CURRENT career is history — it stays displayed on Prep as history, but
+  // the AR feed measures only runs against the current target. The store
+  // keeps ONE run per student, so there is no older current-career run to
+  // fall back to; absent one, the resume part reads unmeasured (never a
+  // stale painted number from the wrong role).
+  const resumeStale = latest !== null && latest.run.careerId !== s.careerId;
+  const resume = latest && !resumeStale ? { measured: true, latestAir: latest.run.air.airResume } : null;
   // the letter factor joins with the Prep check surface (ticket 12; shipped
   // 2026-10-30): the store keeps ONE check per student — its own airLetter IS
-  // the checkScore; re-running the letter replaces it (latest counts)
+  // the checkScore; re-running the letter replaces it (latest counts). Q19a:
+  // same stale-target rule — a letter checked against an old target is
+  // history, not part of the current role's AR.
   const latestLetter = await letterRunStore.latest(id);
-  const letter: ArInput["letter"] = latestLetter
-    ? { measured: true, checkScore: latestLetter.run.air.airLetter }
-    : null;
+  const letterStale = latestLetter !== null && latestLetter.run.careerId !== s.careerId;
+  const letter: ArInput["letter"] =
+    latestLetter && !letterStale
+      ? { measured: true, checkScore: latestLetter.run.air.airLetter }
+      : null;
   const presence = presenceMeasured(s.presence) ? { measured: true } : null;
   const ar: ArInput | null =
     resume || letter || presence

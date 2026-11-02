@@ -11,7 +11,13 @@
  *                       closing ask · 250–500 words
  *   keyword alignment — the declared Target Role's CORE-tier skills found in
  *                       the letter text (same matcher as the resume run,
- *                       lib/engines/resume/analyze.ts keywordMatch)
+ *                       lib/engines/resume/analyze.ts keywordMatch —
+ *                       document-wide as befits a letter: no section
+ *                       anatomy, nothing outside the file counts)
+ *
+ * Q17 (2026-11-03, user-locked): the letter factor is a weighted sum —
+ * parse 20% + keywords 40% + structural 40% (LETTER_AIR_WEIGHTS,
+ * lib/engines/air.ts).
  *
  * THE HONESTY CONTRACT (user ruling 2026-10-29, ticket 12):
  *  - a check skipped honestly is rendered "not evaluated — no employer

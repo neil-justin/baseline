@@ -71,21 +71,22 @@ test.describe.serial("resume-diagnostic", () => {
     await expect(page.locator(".rs-readout")).toBeVisible({ timeout: 45_000 });
     await expect(page.locator(".rs-readout-score")).toContainText("100");
 
-    // the re-run dropzone rides at the TOP (no scrolling to try another file)
+    // the re-run dropzone (Q15: demoted to the slim "Check another version"
+    // footer affordance on the results-first card) — still visible
     await expect(page.locator(".rs-upload .dz-zone").first()).toBeVisible();
+    await expect(page.locator(".rs-upload .dz-zone").first()).toContainText("Check another version");
 
-    // three deterministic factors, all checks green — behind their collapsed
-    // on-demand disclosure (open it to read the rows)
-    await page.locator(".rs-disc summary", { hasText: "The three factors" }).click();
-    await expect(page.locator(".rs-factor-head").first()).toContainText("Parseability — 100%");
-    await expect(page.locator(".rs-factor-head", { hasText: "Format conformance" })).toContainText("100%");
-    await expect(page.locator(".rs-factor-head", { hasText: "Keyword alignment" })).toContainText("100%");
+    // three deterministic factors, all checks green — LIVE-EXPANDED on the
+    // results-first card (Q15): the rows read straight off, no fold to open
+    await expect(page.locator(".rs-factor-head").first()).toContainText("Parse — 100%");
+    await expect(page.locator(".rs-factor-head", { hasText: "Format" })).toContainText("100%");
+    await expect(page.locator(".rs-factor-head", { hasText: "Evidence" })).toContainText("100%");
     await expect(page.locator(".rs-check", { hasText: "One page" })).toBeVisible();
     // keyword ledger names the role's core-tier skills
     await expect(page.locator(".rs-check", { hasText: "SQL" })).toBeVisible();
 
-    // AIR provenance line: parse × format × keywords (1 × 1 × 1)
-    await expect(page.locator(".rs-air-note")).toContainText("parse 1 × format 1 × keywords 1", { timeout: 45_000 });
+    // AIR provenance line (Q17 weighted sum): the honest shares, never a × product
+    await expect(page.locator(".rs-air-note")).toContainText("parse 20% + format 40% + evidence 40%", { timeout: 45_000 });
     await expect(page.locator(".rs-air-note")).toContainText("your latest run counts");
     // feedback honesty: no fixes needed → the collapsed findings summary says so
     await expect(page.locator(".rs-disc summary", { hasText: "Findings" })).toContainText("no fixes found");

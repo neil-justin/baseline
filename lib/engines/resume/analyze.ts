@@ -24,6 +24,7 @@
 
 import type { ParsedResume, ResumeKind } from "./parse";
 import { synonymsForSkill } from "./synonyms";
+import { collapseWs, headKinds, mapRegions, type ResumeRegions } from "./sections";
 import { computeAirResume, type AirResume } from "@/lib/engines/air";
 import type { Career, SkillSpec } from "@/lib/types";
 
@@ -93,10 +94,8 @@ export interface ResumeDiagnosticRun {
   engine: "deterministic-templates";
 }
 
-/* ── detection primitives ────────────────────────────────────────────────── */
-
-const SECTION_RE =
-  /\b(education|experience|employment|work history|internship|ojt|skills|competencies|projects|certifications?|volunteer|objective|summary|profile|qualifications|activities|leadership)\b/;
+/* ── detection primitives — the section-alias canon (lib/engines/resume/
+   sections.ts, §6.4) ─────────────────────────────────────────────────────── */
 
 interface Detection {
   lines: string[];
@@ -108,25 +107,14 @@ interface Detection {
   hasSkills: boolean;
   bulletCount: number;
   quantifiedBullets: number;
+  /** the section-kinds canon + the section-scoped match regions */
+  regions: ResumeRegions;
 }
 
 function detect(p: ParsedResume): Detection {
   const lines = p.text.split("\n").map((l) => l.trim());
   const lowerLines = lines.map((l) => l.toLowerCase());
-
-  // A section head is a SHORT line that opens (or is) a section word —
-  // "experienced in Java" mid-sentence must not read as an Experience head.
-  const heads = new Set<string>();
-  lines.forEach((l) => {
-    if (l.length === 0 || l.length > 42) return;
-    const m = SECTION_RE.exec(l.toLowerCase());
-    if (!m) return;
-    // head form: starts with the word ("Experience — 2024") or is a short
-    // titled line containing it ("Work Experience")
-    if (l.toLowerCase().startsWith(m[1]) || (l.length <= 30 && SECTION_RE.test(l) && (l.includes(" ") || l.length <= 18))) {
-      heads.add(m[1]);
-    }
-  });
+  const regions = mapRegions(lines);
 
   const headText = p.text.slice(0, 400);
   const hasContact = /@/.test(headText) || /\+63|(^|[^0-9])09\d{2}[\s-]?\d{3}[\s-]?\d{4}/.test(headText);
@@ -140,34 +128,68 @@ function detect(p: ParsedResume): Detection {
     lines: lines.filter((l) => l.length > 0),
     lowerLines,
     hasContact,
-    sections: [...heads],
-    hasExperience: heads.has("experience") || heads.has("employment") || heads.has("work history"),
-    hasEducation: heads.has("education"),
-    hasSkills: heads.has("skills") || heads.has("competencies"),
+    sections: regions.sectionLabels,
+    // the section canon decides — "INTERNSHIP EXPERIENCE" / "EMPLOYMENT
+    // HISTORY" / "SKILLS & EXPERIENCE" all read as their kinds
+    hasExperience: regions.kinds.has("experience"),
+    hasEducation: regions.kinds.has("education"),
+    hasSkills: regions.kinds.has("skills"),
     bulletCount,
     quantifiedBullets,
+    regions,
   };
 }
 
-/* ── keyword matching (role core tier × synonym seed) ────────────────────── */
+/* ── keyword matching (role core tier × synonym seed, section-scoped) ────── */
 
 function phraseRegExp(phrase: string): RegExp {
   const esc = phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return new RegExp(`(^|[^a-z0-9])${esc}([^a-z0-9]|$)`, "i");
 }
 
-export function keywordMatch(career: Career, lower: string) {
+/** Core-tier keyword match over ONE collapsed text (whitespace-tolerant: a
+ *  phrase wrapped by the extractor across lines still matches — \n ≈ space). */
+export function matchCoreSkills(career: Career, textLower: string) {
+  const text = collapseWs(textLower);
   const core = career.skills.filter((s: SkillSpec) => s.tier === "core");
   const matched: string[] = [];
   const missing: string[] = [];
   for (const spec of core) {
-    if (synonymsForSkill(spec.name).like.some((ph) => ph && phraseRegExp(ph).test(lower))) {
+    if (synonymsForSkill(spec.name).like.some((ph) => ph && phraseRegExp(ph).test(text))) {
       matched.push(spec.name);
     } else {
       missing.push(spec.name);
     }
   }
   return { core, matched, missing };
+}
+
+/**
+ * Document-wide keyword match (the letter checker's call — a letter has no
+ * section anatomy, so any in-document phrase counts as evidence).
+ */
+export function keywordMatch(career: Career, lower: string) {
+  const { core, matched, missing } = matchCoreSkills(career, lower);
+  return { core, matched, missing };
+}
+
+/**
+ * SECTION-SCOPED match for resumes (§6.4 ruling, 2026-11-03): the pass rule
+ * keeps both harms out —
+ *   no false positive: a core skill whose ONLY in-document mention sits in
+ *   the Objective/Summary/Profile pitch (a role claim, not demonstrated
+ *   skill) does NOT count — returned in `pitchOnly` and named honestly in
+ *   the check row;
+ *   no phrase-gate blindness: a skill matched ONLY by its Skills-section
+ *   list still passes (a bare skills row is valid evidence); matches in
+ *   experience bullets, projects, education, certifications — anywhere in
+ *   the body — count too. Nothing outside the document counts.
+ */
+export function scopedKeywordMatch(career: Career, regions: Pick<ResumeRegions, "bodyText" | "objectiveText">) {
+  const body = matchCoreSkills(career, regions.bodyText);
+  const objectiveMatched = new Set(matchCoreSkills(career, regions.objectiveText).matched);
+  const pitchOnly = body.missing.filter((name) => objectiveMatched.has(name)).sort();
+  return { core: body.core, matched: body.matched, missing: body.missing, pitchOnly };
 }
 
 /* ── own-content anchor for example bullets (never invented) ────────────── */
@@ -237,14 +259,18 @@ function formatFactor(p: ParsedResume, d: Detection): { result: FactorResult; fl
   };
 }
 
-function keywordFactor(career: Career, lower: string): FactorResult {
-  const { core, matched } = keywordMatch(career, lower);
+function keywordFactor(res: ReturnType<typeof scopedKeywordMatch>): FactorResult {
   return {
     factor: "keywords",
-    score: core.length === 0 ? 0 : matched.length / core.length,
-    checks: core.map((spec) => ({
-      label: `${spec.name}${matched.includes(spec.name) ? "" : " — not found"}`,
-      ok: matched.includes(spec.name),
+    score: res.core.length === 0 ? 0 : res.matched.length / res.core.length,
+    checks: res.core.map((spec) => ({
+      label: `${spec.name}${res.matched.includes(spec.name) ? "" : " — not found"}`,
+      ok: res.matched.includes(spec.name),
+      // honest demotion note: the skill was named only in the pitch, never
+      // where it was used or demonstrated
+      ...(res.pitchOnly.includes(spec.name)
+        ? { note: "named only in your objective/summary — a pitch is not evidence" }
+        : {}),
     })),
   };
 }
@@ -306,10 +332,16 @@ function moveFinding(key: MoveKey, note?: string): ResumeFinding {
   };
 }
 
-function keywordGapFindings(career: Career, d: Detection, missing: string[]): ResumeFinding[] {
+function keywordGapFindings(
+  career: Career,
+  d: Detection,
+  missing: string[],
+  pitchOnly: string[]
+): ResumeFinding[] {
   const anchor = ownAnchorLine(d);
   return missing.map((skill, i) => {
     const spec = career.skills.find((s) => s.name === skill);
+    const pitched = pitchOnly.includes(skill);
     const example: ExampleBullet | undefined = anchor
       ? {
           label: "example",
@@ -323,10 +355,16 @@ function keywordGapFindings(career: Career, d: Detection, missing: string[]): Re
       factor: "keywords" as const,
       level: "fix" as const,
       title: `“${skill}” doesn't appear for this role`,
-      detail: spec ? `Screening tools match this skill's words against the role's requirements — ${spec.what}.` : "",
+      detail: spec
+        ? pitched
+          ? `You name this skill only in your objective/summary — that's a claim about yourself, not evidence. ${spec.what}`
+          : `Screening tools match this skill's words against the role's requirements — ${spec.what}.`
+        : "",
       skill,
       suggestion: {
-        move: "Name it in your Skills section, and add it to the experience entries where you actually used it.",
+        move: pitched
+          ? "It's only a pitch line right now — name it in your Skills section, and in the entries where you actually used it."
+          : "Name it in your Skills section, and add it to the experience entries where you actually used it.",
         ...(example ? { example } : {}),
       },
     };
@@ -347,7 +385,10 @@ export function diagnose(ctx: RunContext): ResumeDiagnosticRun {
   const d = detect(parsed);
   const parseability = parseabilityFactor(parsed);
   const { result: format, flags } = formatFactor(parsed, d);
-  const keywords = keywordFactor(career, parsed.lower);
+  // one SECTION-SCOPED match (body vs objective pitch) — the same result
+  // feeds the factor AND the findings (no second scan)
+  const kw = scopedKeywordMatch(career, d.regions);
+  const keywords = keywordFactor(kw);
 
   const air = computeAirResume({
     parsePass: true,
@@ -365,7 +406,7 @@ export function diagnose(ctx: RunContext): ResumeDiagnosticRun {
   }
   if (d.bulletCount >= 3 && d.quantifiedBullets === 0) findings.push(moveFinding("bulletsQuantified"));
   if (d.bulletCount < 3) findings.push(moveFinding("bulletsFew"));
-  findings.push(...keywordGapFindings(career, d, keywordMatch(career, parsed.lower).missing));
+  findings.push(...keywordGapFindings(career, d, kw.missing, kw.pitchOnly));
 
   for (const c of parseability.checks) {
     if (!c.ok) {

@@ -3,15 +3,16 @@
 import { useRef, useState } from "react";
 
 /**
- * The resume checker's intake (v7.4 minimal-tool recut, user ruling
- * 2026-11-02): ONE large dropzone. A file landing here — dragged or
- * browsed — POSTs immediately to /api/resume/diagnose; on a successful run
- * the page re-renders the stored result (full reload: the result is
- * server-rendered from the store, force-dynamic; a document load re-renders
- * honestly every time). NO default prose, no run button. Rejections show
- * the locked reason inline (aria-live, .rs-err — e2e contract) and persist
- * nothing; the busy state renders inside the zone. NO editing surface
- * exists — no paste box, nothing authored INSIDE the system (hard fence).
+ * The resume checker's intake (v7.4 recut; Q15 slim affordance 2026-11-03):
+ * ONE dropzone. A file landing here — dragged or browsed — POSTs immediately
+ * to /api/resume/diagnose; on a successful run the page re-renders the stored
+ * result (full reload: the result is server-rendered from the store,
+ * force-dynamic; a document load re-renders honestly every time). Default
+ * variant = the upload-first hero (a first run). `slim` = Q15's demoted
+ * "Check another version" footer affordance on the results-first card —
+ * same hooks/classes/aria contract byte-kept (.rs-upload .dz-zone), only
+ * the head copy and the footprint change. NO editing surface exists — no
+ * paste box, nothing authored INSIDE the system (hard fence).
  */
 
 const REJECT_COPY: Record<string, string> = {
@@ -29,11 +30,12 @@ const REJECT_COPY: Record<string, string> = {
   parse_error: "This file's structure couldn't be read — try exporting the resume again.",
 };
 
-export default function ResumeUpload() {
+export default function ResumeUpload({ slim = false }: { slim?: boolean }) {
   const fileInput = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [drag, setDrag] = useState(false);
+  const head = slim ? "Check another version" : "Drop your resume here";
 
   async function run(files: FileList | null) {
     if (!files || files.length === 0) return;
@@ -63,7 +65,7 @@ export default function ResumeUpload() {
       <div
         role="button"
         tabIndex={busy ? -1 : 0}
-        className={`dz-zone${drag ? " dz-over" : ""}`}
+        className={`dz-zone${slim ? " dz-slim" : ""}${drag ? " dz-over" : ""}`}
         onClick={() => !busy && fileInput.current?.click()}
         onKeyDown={(e) => {
           if (!busy && (e.key === "Enter" || e.key === " ")) {
@@ -95,8 +97,8 @@ export default function ResumeUpload() {
               <path d="M12 15V3m0 0L8 7m4-4l4 4" />
               <path d="M3 15v3a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3v-3" />
             </svg>
-            <span className="dz-head">Drop your resume here</span>
-            <span className="dz-sub">PDF or DOCX · it runs the moment the file lands</span>
+            <span className="dz-head">{head}</span>
+            <span className="dz-sub">PDF or DOCX · the check runs the moment the file lands</span>
           </>
         )}
       </div>

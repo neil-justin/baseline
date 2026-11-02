@@ -79,7 +79,7 @@ export default function GuidePage() {
       <section className="card guide-card">
         <section className="panel-sec">
           <p className="prep-sublabel num">
-            Write your resume yourself (Docs/Word, outside this system) → run the diagnostic
+            Write your resume yourself (Docs/Word, outside this system) → the format &amp; evidence check reads it back
           </p>
           <div className="b-head">
             <h2>The standard sections, in order</h2>

@@ -9,8 +9,11 @@
  * so the demo trio's seeds are re-checked against those maps and the
  * newly-converted roles' core rows are seeded below. Every `like` phrase is
  * derived from the row's own name or its source-printed descriptor/task text
- * in the spec files (role-specs/*.md → lib/fixtures/rowspec/*) — nothing
- * invented. Unseeded roles fall back to matching the bare skill name
+ * in the spec files (role-specs/*.md → lib/fixtures/rowspec/*). §6.4 ADDS
+ * substance stems (Q16, 2026-11-03 user-locked): lowercase stems for the
+ * human-readable maintenance vocabulary a real resume writes around the demo
+ * trio / qa / da / its core rows — still nothing invented beyond the row's
+ * own domain. Unseeded roles fall back to matching the bare skill name
  * (word-boundary, lowercase — see synonymsForSkill).
  */
 
@@ -25,10 +28,23 @@ export const SKILL_SYNONYMS: Record<string, SynonymSeed> = {
     like: [
       "application development", "app development", "programming", "python", "java",
       "javascript", "typescript", "coding", "php", "c#", "software development",
+      // §6.4 substance stems (Q16, 2026-11-03): human-readable development
+      // evidence, not the canonical row name alone
+      "develop", "developed", "developer", "developing", "development",
+      "build", "built", "building",
     ],
   },
   "Applications Support and Enhancement": {
-    like: ["support and enhancement", "application support", "maintenance", "extending applications", "troubleshooting", "bug fixes", "fixing bugs", "enhancement requests"],
+    like: [
+      "support and enhancement", "application support", "maintenance", "extending applications", "troubleshooting", "bug fixes", "fixing bugs", "enhancement requests",
+      // §6.4 substance stems (Q16): the maintenance vocabulary a real intern
+      // resume actually writes — "assisted in the maintenance of production
+      // applications", "reproducing and patching defects", "upkeep"
+      "maintain", "maintained", "maintaining", "enhance", "enhanced", "enhancing",
+      "enhancement", "enhancements", "patch", "patched", "patching", "hotfix",
+      "hotfixes", "support tickets", "support ticket", "reproduce", "reproduced",
+      "reproducing", "upkeep", "production support", "software updates",
+    ],
   },
   "Agile Software Development": {
     like: ["agile", "scrum", "sprint", "standup", "iterative development"],
@@ -37,15 +53,28 @@ export const SKILL_SYNONYMS: Record<string, SynonymSeed> = {
     like: ["sql", "data modeling", "database design", "mysql", "postgresql", "schema", "database queries", "queries"],
   },
   "Secure-coding practices": {
-    like: ["secure coding", "secure-coding", "input validation", "authentication", "access control", "owasp", "security practices"],
+    like: [
+      "secure coding", "secure-coding", "input validation", "authentication", "access control", "owasp", "security practices",
+      // §6.4 substance stems (Q16): what a resume actually SAYS when the
+      // work was secure-coding — "encrypted stored user passwords",
+      // "sanitized database queries to prevent injection attacks"
+      "hash", "hashing", "hashed", "salt", "salted", "salting", "password hashing",
+      "encrypt", "encrypted", "encrypting", "encryption", "encrypted stored user passwords",
+      "sanitize", "sanitized", "sanitizing", "sanitisation", "sanitising", "parameterized queries",
+      "escape", "escaping", "injection", "injection attacks", "sql injection", "xss", "csrf",
+      "defensive coding", "threat model", "threat modeling", "code review", "code reviews",
+    ],
   },
 
   // ── Data Analyst (da) — core tier per current roster ────────────────────
   "Data Analytics": {
-    like: ["data analysis", "analytics", "spreadsheets", "excel", "google sheets", "pivot tables", "cleaned data", "data cleaning"],
+    like: [
+      "data analysis", "analytics", "spreadsheets", "excel", "google sheets", "pivot tables", "cleaned data", "data cleaning",
+      "analyzed", "analysed", "analyzing", "data insights", "analyze data",
+    ],
   },
   "Data Visualization and Storytelling": {
-    like: ["data visualization", "dashboards", "power bi", "charts", "dashboard", "tableau", "storytelling"],
+    like: ["data visualization", "dashboards", "power bi", "charts", "dashboard", "tableau", "storytelling", "visualizations", "graphs"],
   },
   "ETL (extract-transform-load workflows)": {
     like: ["etl", "extract-transform-load", "data pipeline", "data transformation"],
@@ -53,16 +82,25 @@ export const SKILL_SYNONYMS: Record<string, SynonymSeed> = {
 
   // ── IT Support Technician (its) — core tier per current roster ─────────
   "Infrastructure Support": {
-    like: ["infrastructure", "desktop support", "hardware repair", "hardware troubleshooting", "printer", "pc repair", "computer repair"],
+    like: [
+      "infrastructure", "desktop support", "hardware repair", "hardware troubleshooting", "printer", "pc repair", "computer repair",
+      "it support", "technical support", "helpdesk", "help desk", "support tickets", "closed tickets", "troubleshoot",
+    ],
   },
   "Infrastructure Deployment": {
-    like: ["deployment", "os installation", "operating system installation", "system setup", "image deployment", "provisioning"],
+    like: [
+      "deployment", "os installation", "operating system installation", "system setup", "image deployment", "provisioning",
+      "installed", "installing", "deployed", "disk imaging",
+    ],
   },
   "Network Administration and Maintenance": {
-    like: ["network administration", "network maintenance", "lan", "directory", "user accounts"],
+    like: ["network administration", "network maintenance", "lan", "directory", "user accounts", "active directory", "dns", "user groups", "backups"],
   },
   "Network Configuration": {
-    like: ["network configuration", "network setup", "router", "switch", "cabling", "wifi setup", "network cables", "ip"],
+    like: [
+      "network configuration", "network setup", "router", "switch", "cabling", "wifi setup", "network cables", "ip",
+      "configured", "configure", "configuring", "access point", "access points", "lan setup",
+    ],
   },
 
   // ── Software QA Analyst (qa) — core tier per current roster ────────────
@@ -70,16 +108,27 @@ export const SKILL_SYNONYMS: Record<string, SynonymSeed> = {
   // makes the money beat's Application Materials pass run against THIS map —
   // the seeds follow the catalog round's rows (the file's own TODO rule).
   "Software Testing": {
-    like: ["software testing", "test cases", "test execution", "test automation", "manual testing", "regression testing", "uat", "system testing"],
+    like: [
+      "software testing", "test cases", "test execution", "test automation", "manual testing",
+      "regression testing", "uat", "system testing", "tested", "tester", "testing cycles",
+      "unit tests", "test suites",
+    ],
   },
   "Test Planning": {
-    like: ["test planning", "test plan", "test scenarios", "test cases", "test data", "testable conditions"],
+    like: ["test planning", "test plan", "test scenarios", "test cases", "test data", "testable conditions", "test designs", "test scripts"],
   },
   "Defect management": {
-    like: ["defect management", "defect tracking", "bug tracking", "bug reports", "log defects", "defect reports"],
+    like: [
+      "defect management", "defect tracking", "bug tracking", "bug reports", "log defects", "defect reports",
+      // §6.4 stems: the bug board / ticketing vocabulary
+      "defect", "defects", "logged defects", "bug board", "bug fix", "bug fixes", "issue tracker", "jira",
+    ],
   },
   "Quality Assurance / Quality Standards": {
-    like: ["quality assurance", "quality standards", "quality gates", "release readiness", "coverage metrics"],
+    like: [
+      "quality assurance", "quality standards", "quality gates", "release readiness", "coverage metrics",
+      "quality control", "sqa", "quality checks",
+    ],
   },
 
   // ── Business Analyst, IT (ba 2.3 — core rows incl. the ruled Team-Enablement

@@ -1,17 +1,21 @@
 /**
  * Application-Readiness factor engines (ADR 0002 amendment 2 — ticket 12,
- * 2026-10-29). The locked 15-point AR channel splits THREE per-file factors
- * that each measure independently — unmeasured factors contribute nothing and
- * never paint (score.ts carries the arithmetic; this file owns the factor
- * engines and their honest check records):
+ * 2026-10-29; Q17 weighted-sum re-lock 2026-11-03). The locked 15-point AR
+ * channel splits THREE per-file factors that each measure independently —
+ * unmeasured factors contribute nothing and never paint (score.ts carries
+ * the arithmetic; this file owns the factor engines and their honest check
+ * records):
  *
- *   Resume    7 — parse-pass gate × format-conformance × keyword-coverage
- *               (`computeAirResume` — the round-6a diagnostic, unchanged;
- *               `lib/db/resume-run-store.ts` keeps the latest run — the
- *               score's selection is the LATEST full attempt, amendment 3
- *               2026-10-29: latest counts; unlimited re-runs).
- *   Letter    5 — parse-pass gate × keyword-role alignment vs the declared
- *               Target Role's core map × the structural set (salutation ·
+ *   Resume    7 — parse-pass gate + a WEIGHTED SUM of format-conformance +
+ *               keyword-coverage (`computeAirResume` — Q17, 2026-11-03
+ *               user-locked: parse 20% + format 40% + keywords 40% replaces
+ *               the multiplicative product that punished one weak factor
+ *               disproportionately; `lib/db/resume-run-store.ts` keeps the
+ *               latest run — the score's selection is the LATEST full
+ *               attempt, amendment 3 2026-10-29: latest counts).
+ *   Letter    5 — parse-pass gate + the same weighted shape (Q17 inherits
+ *               on the letter's factors: parse 20% + keywords 40% +
+ *               structural 40%) × the structural set (salutation ·
  *               employer named · closing ask · 250–500 words). The employer
  *               check is OPTIONAL: when the student typed no employer it is
  *               honestly skipped — "not evaluated — no employer declared" —
@@ -34,6 +38,12 @@ import type { PresenceDeclaration } from "@/lib/types";
 
 /* ── the resume factor (7) ───────────────────────────────────────────────── */
 
+/** Q17 weighted-sum shares (2026-11-03 user-locked; sums to 1) — the surface
+ *  prints these honestly ("parse 20% + format 40% + keywords 40%"). */
+export const RESUME_AIR_WEIGHTS = { parse: 0.2, format: 0.4, keywords: 0.4 } as const;
+/** Q17 letter shares — "parse 20% + keywords 40% + structural 40%". */
+export const LETTER_AIR_WEIGHTS = { parse: 0.2, keywords: 0.4, structural: 0.4 } as const;
+
 export interface AirResumeInput {
   /** false = the run never parsed a resume (parse-failed runs don't count) */
   parsePass: boolean;
@@ -44,11 +54,12 @@ export interface AirResumeInput {
 }
 
 export interface AirResume {
-  /** 0 (gate closed) · 1 (parsed) — rolls up as ×1 in the product */
+  /** 0 (gate closed) · 1 (parsed) — the weighted sum's parse share */
   parsePass: 0 | 1;
   formatScore: number; // 0–1, half-down rounded to 3 decimals
   keywordScore: number; // 0–1, half-down rounded to 3 decimals
-  /** parsePass × formatScore × keywordScore, 0–100 for readouts; feeds 7 of the 15 AR points */
+  /** Q17 weighted sum (parse 20% + format 40% + keywords 40%), 0–100 for
+   *  readouts; feeds 7 of the 15 AR points */
   airResume: number;
 }
 
@@ -66,7 +77,15 @@ export function computeAirResume(input: AirResumeInput): AirResume {
   const parsePass: 0 | 1 = input.parsePass ? 1 : 0;
   const formatScore = frac(input.formatScore);
   const keywordScore = frac(Math.min(1, input.keywordScore));
-  const airResume = parsePass === 0 ? 0 : roundHalfDown(100 * parsePass * formatScore * keywordScore);
+  const airResume =
+    parsePass === 0
+      ? 0
+      : roundHalfDown(
+          100 *
+            (RESUME_AIR_WEIGHTS.parse * parsePass +
+              RESUME_AIR_WEIGHTS.format * formatScore +
+              RESUME_AIR_WEIGHTS.keywords * keywordScore)
+        );
   return { parsePass, formatScore, keywordScore, airResume };
 }
 
@@ -101,7 +120,8 @@ export interface AirLetter {
   employerEvaluated: boolean;
   /** fraction over the EVALUABLE structural checks only */
   structuralScore: number;
-  /** parsePass × keywordScore × structuralScore × 100 — feeds 5 of the 15 AR points */
+  /** Q17 weighted sum (parse 20% + keywords 40% + structural 40%), 0–100 —
+   *  feeds 5 of the 15 AR points */
   airLetter: number;
 }
 
@@ -130,7 +150,14 @@ export function computeLetterCheck(input: AirLetterInput): AirLetter {
     evaluated.length === 0 ? 1 : evaluated.filter((c) => c.ok === true).length / evaluated.length;
 
   const airLetter =
-    parsePass === 0 ? 0 : roundHalfDown(100 * parsePass * keywordScore * structuralScore);
+    parsePass === 0
+      ? 0
+      : roundHalfDown(
+          100 *
+            (LETTER_AIR_WEIGHTS.parse * parsePass +
+              LETTER_AIR_WEIGHTS.keywords * keywordScore +
+              LETTER_AIR_WEIGHTS.structural * structuralScore)
+        );
 
   return {
     parsePass,

@@ -168,7 +168,9 @@ describe("the good fixture: three deterministic factors + AIR", () => {
       const run = diagnose({ career: SWD, parsed: r, fileName: "t.pdf", at: "2026-10-29T00:00:00Z" });
       expect(run.format.checks.every((c) => c.ok)).toBe(true);
       expect(run.keywords.score).toBe(0);
-      expect(run.air.airResume).toBe(0);
+      // Q17 weighted sum: parse 20% + format 40% + keywords 0% → 60, not the
+      // old product's 0 — one weak factor no longer nukes the whole readout
+      expect(run.air.airResume).toBe(60);
       // every core-tier gap carries a suggestion: move + labeled example
       const gaps = run.findings.filter((f) => f.skill);
       expect(gaps.length).toBe(5);
@@ -191,9 +193,16 @@ describe("AIR formula (standalone engine, lib/engines/air.ts)", () => {
     const a = computeAirResume({ parsePass: false, formatScore: 1, keywordScore: 1 });
     expect(a).toEqual({ parsePass: 0, formatScore: 1, keywordScore: 1, airResume: 0 });
   });
-  it("product of the three parts, half-down rounding", () => {
-    expect(computeAirResume({ parsePass: true, formatScore: 0.8, keywordScore: 0.75 }).airResume).toBe(60);
-    expect(computeAirResume({ parsePass: true, formatScore: 0.5, keywordScore: 0.5 }).airResume).toBe(25);
+  it("Q17 weighted sum: parse .2 + format .4 + keywords .4, half-down rounding", () => {
+    // .2 + .4*.8 + .4*.75 = .82 → 82 (the old product gave 60)
+    expect(computeAirResume({ parsePass: true, formatScore: 0.8, keywordScore: 0.75 }).airResume).toBe(82);
+    // .2 + .2 + .2 = .6 → 60 (the old product gave 25)
+    expect(computeAirResume({ parsePass: true, formatScore: 0.5, keywordScore: 0.5 }).airResume).toBe(60);
+    // all green stays 100
+    expect(computeAirResume({ parsePass: true, formatScore: 1, keywordScore: 1 }).airResume).toBe(100);
+    // a keyword-only failure keeps the earned parse+format share (the honest
+    // split the product formula refused to pay)
+    expect(computeAirResume({ parsePass: true, formatScore: 1, keywordScore: 0 }).airResume).toBe(60);
   });
   it("deterministic: same input, same run", () => {
     const x = computeAirResume({ parsePass: true, formatScore: 2 / 5, keywordScore: 1 / 3 });

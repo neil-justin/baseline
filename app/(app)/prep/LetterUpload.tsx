@@ -3,19 +3,21 @@
 import { useRef, useState } from "react";
 
 /**
- * The cover-letter checker's intake (v7.4 minimal-tool recut): the SAME
- * dropzone pattern as the resume — one file (TXT/PDF/DOCX) lands and the
- * check runs immediately. The OPTIONAL employer anchor sits as one small
- * field BENEATH the zone — and only renders once the letter has run
- * (showEmployer; user ruling 2026-11-02: the idle screen stays a pure
- * dropzone). Fill it before dropping to anchor the employer check on the
- * re-run, or leave it empty — the omitted case skips its check honestly
- * and prints the exact line in the results. POST to
+ * The cover-letter checker's intake (v7.4 recut; Q15 slim affordance
+ * 2026-11-03): the SAME dropzone pattern as the resume — one file
+ * (TXT/PDF/DOCX) lands and the check runs immediately. The OPTIONAL employer
+ * anchor sits as one small field BENEATH the zone — and only renders once
+ * the letter has run (showEmployer; user ruling 2026-11-02: the idle screen
+ * stays a pure dropzone). Fill it before dropping to anchor the employer
+ * check on the re-run, or leave it empty — the omitted case skips its check
+ * honestly and prints the exact line in the results. POST to
  * /api/cover-letter/check; on success the page reloads (the server page
  * re-renders the stored run). Rejections show the locked reason inline
- * (aria-live, .cl-err — e2e contract) and persist nothing. NO authoring
- * surface exists — no paste box, no generated letter, nothing edited
- * inside the system (the same hard fence as the resume round).
+ * (aria-live, .cl-err — e2e contract) and persist nothing. `slim` = the Q15
+ * demoted "Check another version" footer affordance on a results-first
+ * card (hooks/classes byte-kept). NO authoring surface exists — no paste
+ * box, no generated letter, nothing edited inside the system (the same
+ * hard fence as the resume round).
  */
 
 const REJECT_COPY: Record<string, string> = {
@@ -33,12 +35,19 @@ const REJECT_COPY: Record<string, string> = {
   format_check_failed: "The format checks didn't pass. Nothing was saved or scored.",
 };
 
-export default function LetterUpload({ showEmployer = false }: { showEmployer?: boolean }) {
+export default function LetterUpload({
+  showEmployer = false,
+  slim = false,
+}: {
+  showEmployer?: boolean;
+  slim?: boolean;
+}) {
   const fileInput = useRef<HTMLInputElement>(null);
   const [employer, setEmployer] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [drag, setDrag] = useState(false);
+  const head = slim ? "Check another version" : "Drop your cover letter here";
 
   async function check(files: FileList | null) {
     if (!files || files.length === 0) return;
@@ -69,7 +78,7 @@ export default function LetterUpload({ showEmployer = false }: { showEmployer?: 
       <div
         role="button"
         tabIndex={busy ? -1 : 0}
-        className={`dz-zone${drag ? " dz-over" : ""}`}
+        className={`dz-zone${slim ? " dz-slim" : ""}${drag ? " dz-over" : ""}`}
         onClick={() => !busy && fileInput.current?.click()}
         onKeyDown={(e) => {
           if (!busy && (e.key === "Enter" || e.key === " ")) {
@@ -101,8 +110,8 @@ export default function LetterUpload({ showEmployer = false }: { showEmployer?: 
               <rect x="3" y="5" width="18" height="14" rx="2" />
               <path d="m3.5 7 8.5 6 8.5-6" />
             </svg>
-            <span className="dz-head">Drop your cover letter here</span>
-            <span className="dz-sub">TXT, PDF, or DOCX · it runs the moment the file lands</span>
+            <span className="dz-head">{head}</span>
+            <span className="dz-sub">TXT, PDF, or DOCX · the check runs the moment the file lands</span>
           </>
         )}
       </div>

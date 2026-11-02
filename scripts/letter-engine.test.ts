@@ -67,7 +67,8 @@ describe("canon demo letter (ticket-12 money beat: +5 → 64)", () => {
     expect(run.employerDeclared).toBe(true);
     expect(run.air.employerMentioned).toBe(false); // runs, fails — never skipped
     expect(run.air.structuralScore).toBe(0.75); // 3 of 4 evaluable
-    expect(run.air.airLetter).toBe(75); // half-down letter factor: 3.75 → 4 of 5
+    // Q17 weighted sum: .2 + .4*1 + .4*.75 = .9 → 90 (the old product gave 75)
+    expect(run.air.airLetter).toBe(90); // half-down letter factor: 4.5 → 4 of 5
     expect(run.findings.some((f) => f.id === "lf-employer-miss")).toBe(true);
   });
 

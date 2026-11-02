@@ -83,7 +83,11 @@ export interface ArFactorPart {
 /** The split's THREE per-factor receipts (ticket 12). */
 export type ArParts = { resume: ArFactorPart; letter: ArFactorPart; presence: ArFactorPart };
 
-/** What each AR factor's persistence reports — a factor absent/null = unmeasured. */
+/** What each AR factor's persistence reports — a factor absent/null = unmeasured.
+ *  Q19a (2026-11-03, user-locked): a stored run whose target ≠ the student's
+ *  CURRENT career is excluded from the feed — lib/db.ts's getStudentView
+ *  reports the part unmeasured (the run stays Prep history; NO stale number
+ *  from the wrong role ever paints). */
 export interface ArInput {
   resume?: { measured: boolean; /** the LATEST full attempt's airResume, 0–100 (air.ts product; amendment 3 — latest counts) */ latestAir?: number } | null;
   letter?: { measured: boolean; /** the LATEST letter check's airLetter, 0–100 (per-file latest counts — each AM store keeps its own latest attempt) */ checkScore?: number } | null;

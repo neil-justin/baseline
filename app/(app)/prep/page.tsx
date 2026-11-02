@@ -4,7 +4,11 @@ import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
 import { resumeRunStore, resumePersistenceNotice, type ResumeRunSummary } from "@/lib/db/resume-run-store";
 import { letterRunStore, letterPersistenceNotice, type LetterRunSummary } from "@/lib/db/letter-run-store";
-import { AR_FACTORS } from "@/lib/engines/score";
+import { AR_FACTORS, WEIGHTS } from "@/lib/engines/score";
+import {
+  RESUME_AIR_WEIGHTS,
+  LETTER_AIR_WEIGHTS,
+} from "@/lib/engines/air";
 import type { ResumeFinding } from "@/lib/engines/resume/analyze";
 import ResumeUpload from "./ResumeUpload";
 import LetterUpload from "./LetterUpload";
@@ -16,31 +20,39 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Prep — Application Materials · Career Readiness",
   description:
-    "Feedback-only application-materials checkers: the resume checker (7 of the 15-point AR channel) and the cover-letter checker (5 of 15) each measure their own file; the presence declaration lives in Profile → Credentials (3 of 15).",
+    "A format & evidence screen for your application materials: the resume checker (7 of the 15-point AR channel) and the cover-letter checker (5 of 15) each surface the format checks and the role's evidence names; the presence declaration lives in Profile → Credentials (3 of 15). Feedback-only — it never claims an ATS pass.",
 };
 
 /**
- * Prep — "Application materials" (v7.4 minimal-tool recut, user rulings
- * 2026-11-02). ONE surface carrying TWO sibling tool cards — each its own
- * dropzone-first tool:
+ * Prep — "Application materials" (§6.4/Q15 recut, user-locked 2026-11-03).
+ * ONE surface carrying TWO sibling tool cards, RESULTS-FIRST for a returning
+ * user and upload-first for a first run (Q15):
  *
- *  - Resume checker (7 of 15 AR): the intake is ONE dropzone — drop or
- *    browse, the diagnostic runs on the drop, no default prose (the format
- *    guide + the Harvard template are one quiet links line beneath the
- *    zone). With a run: the compact readout FIRST, the re-run dropzone
- *    directly beneath it (no scrolling to try another file), then the
- *    three-factor checks and the findings as COLLAPSED on-demand
- *    disclosures. No NEXT pointer — the labels are the tabs.
- *  - Cover-letter checker (5 of 15): same pattern. The optional employer
- *    anchor field appears ONLY once a letter has run (idle = pure
- *    dropzone); a typed employer runs the employer check on the re-drop;
- *    omitted still prints the exact honesty line in its row.
+ *  - Resume checker (7 of 15 AR): the diagnostic is a format & evidence
+ *    screen — readout FIRST for returning users (big run score, the three
+ *    factors as chips/bars — the "×" product line is gone, the honest
+ *    weighted shares ride the receipts line), the factor checks LIVE-EXPANDED,
+ *    findings with example bullets beneath, and the dropzone demoted to a
+ *    slim "Check another version" footer affordance. First-run users keep
+ *    the big upload-first dropzone.
+ *  - Q19a: a stored run whose target ≠ the CURRENT career is honest history —
+ *    the card stays, with the "Ran against {old role} — re-run to score"
+ *    banner; the AR band cells read the run unmeasured (lib/db.ts feed).
+ *  - Cover-letter checker (5 of 15): mirrors the anatomy; its checks table
+ *    (e2e hook) stays a collapsed disclosure. The optional employer anchor
+ *    field appears only after a letter has run.
  *
  * Presence is NOT a tab: it lives where it is declared (Profile →
  * Credentials); the band's computed counter cell is its state here.
- * HONESTY CONTRACT: a factor without its own run reads "not yet measured /
- * —" in computed band furniture only (never painted); re-runs unlimited,
- * the LATEST run counts; nothing claims an "ATS pass".
+ * Band KPI cells ride the Dashboard KPI register (Q14 addendum, signed
+ * 2026-11-03): plain-name labels, ONE fraction value per cell, a 4px honest
+ * bar (fill = the earned share), and the ✓ chip ONLY on a fully-earned
+ * factor — the old label·7 + /7 + ✓-on-partials triple presentation and its
+ * dishonest green are gone. The AR /15 cell is unchanged.
+ * HONESTY CONTRACT: a factor without its own run reads "— / not yet" in
+ * computed band furniture only (never painted); re-runs unlimited, the
+ * LATEST run counts; nothing claims an "ATS pass" — the checkers read
+ * format and named evidence, nothing deeper.
  */
 
 const fmtDT = (iso: string) => {
@@ -48,26 +60,38 @@ const fmtDT = (iso: string) => {
   return `${d.toLocaleString("en-US", { month: "short" })} ${d.getDate()} · ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 };
 
-/* ── the band's AR channel cells — computed, never painted ──────────────── */
+/* ── the band's AR channel cells — the Dashboard KPI register ───────────── */
 
 type PartView = { measured: boolean; earned: number; max: number };
 
 function BandCell({ name, part, notRun }: { name: string; part: PartView; notRun: string }) {
+  const full = part.measured && part.earned === part.max;
+  const pct = (n: number) => `${Math.round((n / part.max) * 100)}%`;
   return (
     <div className="bcell">
-      <span className="label">
-        {name} · {part.max}
+      <span className="label">{name}</span>
+      <span className={`bval num${part.measured ? "" : " bquiet"}`}>
+        {part.measured ? `${part.earned}/${part.max}` : "—"}
       </span>
-      <span className="bval-row">
-        <span className={`bval num${part.measured ? "" : " bquiet"}`}>
-          {part.measured ? `${part.earned}/${part.max}` : "—"}
-        </span>
-        {part.measured ? (
+      <div
+        className="kbar"
+        role="img"
+        aria-label={
+          part.measured ? `${name}: ${part.earned} of ${part.max} earned` : `${name}: ${notRun.toLowerCase()}`
+        }
+      >
+        <i
+          className={full ? "solid green" : "solid"}
+          style={{ width: part.measured ? pct(part.earned) : "0" }}
+        />
+      </div>
+      {part.measured ? (
+        full ? (
           <span className="chip c-green">·✓</span>
-        ) : (
-          <span className="chip c-grey">{notRun}</span>
-        )}
-      </span>
+        ) : null /* a partial factor carries nothing but its honest fraction+bar */
+      ) : (
+        <span className="chip c-grey">{notRun}</span>
+      )}
     </div>
   );
 }
@@ -82,11 +106,38 @@ function ArCell({ value }: { value: number | null }) {
         ) : (
           <>
             {value}
-            <small>/15</small>
+            <small>/{WEIGHTS.ar}</small>
           </>
         )}
       </span>
     </div>
+  );
+}
+
+/* ── factor chips — the Q15 honest breakdown (bars, never a × product) ──── */
+
+function FactorChip({ name, score, note }: { name: string; score: number; note: string }) {
+  const pct = Math.round(score * 100);
+  return (
+    <div className="rs-kpi">
+      <p className="rs-kpi-head">
+        <span className="label">{name}</span>
+        <b className="num">{pct}%</b>
+      </p>
+      <div className="kbar" role="img" aria-label={`${name} check: ${pct}% — ${note}`}>
+        <i className={pct === 100 ? "solid green" : "solid"} style={{ width: `${pct}%` }} />
+      </div>
+      <p className="rs-kpi-note num">{note}</p>
+    </div>
+  );
+}
+
+function StaleBanner({ oldCareer, kind }: { oldCareer: string; kind: string }) {
+  return (
+    <p className="rs-stale num" role="status">
+      Ran against {oldCareer} — re-run to score. This {kind} is history for your current
+      target role; the score above shows what the check found then.
+    </p>
   );
 }
 
@@ -132,32 +183,36 @@ function ResumeLinks() {
   );
 }
 
-/* ── resume run result — readout → re-run zone → on-demand detail ───────── */
+/* ── resume run result — Q15 verdict-first anatomy ───────────────────────── */
 
 function RunResult({
   run,
+  staleFor,
   children,
+  links,
 }: {
   run: NonNullable<ResumeRunSummary["run"]>;
+  staleFor: string | null;
   children: ReactNode;
+  links: ReactNode;
 }) {
-  const factorChecks: { name: string; score: number; note: string; checks: { label: string; ok: boolean; note?: string }[] }[] = [
+  const factorChecks: {
+    name: string;
+    score: number;
+    note: string;
+    checks: { label: string; ok: boolean; note?: string }[];
+  }[] = [
+    { name: "Parse", score: run.parseability.score, note: "text readable as-is", checks: run.parseability.checks },
     {
-      name: "Parseability",
-      score: run.parseability.score,
-      note: "text present and extractable, per-page sanity",
-      checks: run.parseability.checks,
-    },
-    {
-      name: "Format conformance",
+      name: "Format",
       score: run.format.score,
-      note: `vs the guide${run.flags.onepageEstimated ? " (layout-independent estimate)" : ""}`,
+      note: `sections a screen reader expects${run.flags.onepageEstimated ? " (one-page estimate)" : ""}`,
       checks: run.format.checks,
     },
     {
-      name: "Keyword alignment",
+      name: "Evidence",
       score: run.keywords.score,
-      note: `core-tier skills of ${run.careerName} found in the text`,
+      note: `the role's core skills named in the file — vs ${run.careerName}`,
       checks: run.keywords.checks,
     },
   ];
@@ -180,9 +235,15 @@ function RunResult({
             <small>/100</small>
           </div>
         </div>
+        {staleFor ? <StaleBanner oldCareer={staleFor} kind="run" /> : null}
+        <div className="rs-kpis">
+          {factorChecks.map((f) => (
+            <FactorChip key={f.name} name={f.name} score={f.score} note={f.note} />
+          ))}
+        </div>
         <p className="rs-air-note num">
           <b className="num">
-            parse {run.air.parsePass} × format {run.air.formatScore} × keywords {run.air.keywordScore}
+            parse {Math.round(RESUME_AIR_WEIGHTS.parse * 100)}% + format {Math.round(RESUME_AIR_WEIGHTS.format * 100)}% + evidence {Math.round(RESUME_AIR_WEIGHTS.keywords * 100)}%
           </b>{" "}
           · your latest run counts{resumePersistenceNotice() ? (
             <span className="rs-notyet"> {resumePersistenceNotice()}</span>
@@ -190,13 +251,9 @@ function RunResult({
         </p>
       </section>
 
-      {/* the re-run zone rides DIRECTLY under the readout — no scrolling to
-          try another file (user ruling 2026-11-02) */}
-      {children}
-
-      {/* on-demand detail (collapsed): the tool's resting state is
-          score + upload; the tables open a click away */}
-      <details className="rs-disc">
+      {/* Q15: the factor checks expand LIVE — the verdict card opens on the
+          rows themselves; examples live in the findings fold below */}
+      <details className="rs-disc" open>
         <summary className="num">
           The three factors — {allGreen ? "all green" : `${factorPct}% overall`}
         </summary>
@@ -241,22 +298,36 @@ function RunResult({
           ))}
         </div>
       </details>
+
+      {/* Q15: the dropzone DEMOTES to a slim footer affordance — drop or
+          browse, same engine, one line under the verdict card */}
+      <div className="rs-footer">
+        {children}
+        {links}
+      </div>
     </>
   );
 }
 
-/* ── the cover-letter checker — same shape, own file ────────────────────── */
+/* ── the cover-letter checker — mirrors the anatomy; its checks table
+   (e2e hook .rs-disc summary "The checks") stays a collapsed fold ───────── */
 
 const LETTER_KINDS: Record<string, string> = { txt: "TXT", pdf: "PDF", docx: "Word" };
 
-function LetterResult({ run, children }: {
+function LetterResult({ run, staleFor, children }: {
   run: NonNullable<LetterRunSummary["run"]>;
+  staleFor: string | null;
   children: ReactNode;
 }) {
   const rowMark = (ok: boolean | null) =>
     ok === true ? "✓" : ok === false ? "✕" : "—";
   const allRan = run.checks.every((c) => c.ok !== null);
   const checkCount = run.checks.filter((c) => c.ok !== null).length;
+  const factorChips = [
+    { name: "Parse", score: run.air.parsePass, note: "text readable as-is" },
+    { name: "Evidence", score: run.air.keywordScore, note: `the role's core skills named — vs ${run.careerName}` },
+    { name: "Structure", score: run.air.structuralScore, note: "salutation · ask · word band · employer" },
+  ];
   return (
     <>
       <section className="panel-sec cl-readout">
@@ -272,9 +343,15 @@ function LetterResult({ run, children }: {
             <small>/100</small>
           </div>
         </div>
+        {staleFor ? <StaleBanner oldCareer={staleFor} kind="check" /> : null}
+        <div className="rs-kpis">
+          {factorChips.map((f) => (
+            <FactorChip key={f.name} name={f.name} score={f.score} note={f.note} />
+          ))}
+        </div>
         <p className="cl-air-note num">
           <b className="num">
-            parse {run.air.parsePass} × keywords {run.air.keywordScore} × structural {run.air.structuralScore}
+            parse {Math.round(LETTER_AIR_WEIGHTS.parse * 100)}% + evidence {Math.round(LETTER_AIR_WEIGHTS.keywords * 100)}% + structure {Math.round(LETTER_AIR_WEIGHTS.structural * 100)}%
           </b>{" "}
           · your latest check counts{letterPersistenceNotice() ? (
             <span className="cl-notyet"> {letterPersistenceNotice()}</span>
@@ -282,11 +359,10 @@ function LetterResult({ run, children }: {
         </p>
       </section>
 
-      {/* the re-check zone rides DIRECTLY under the readout; the optional
+      {/* the re-check zone rides directly under the readout; the optional
           employer field lives here (only visible once a letter has run) */}
       {children}
 
-      {/* on-demand detail (collapsed) */}
       <details className="rs-disc">
         <summary className="num">
           The checks — {allRan ? "all ran" : `${checkCount} of ${run.checks.length} ran`}
@@ -378,14 +454,21 @@ export default async function PrepPage() {
     ? await letterRunStore.latest(profile.studentId)
     : null;
 
-  const resumeHasRun = Boolean(latestResume);
-  const letterHasRun = Boolean(latestLetter);
+  // Q19a honesty at the SURFACE: a stored run against an old target stays
+  // displayed as history (no content destruction) and carries the honest
+  // re-run banner; the AR band cells already read it unmeasured (lib/db.ts)
+  const resumeStaleFor =
+    latestResume && career && latestResume.run.careerId !== career.id
+      ? latestResume.run.careerName
+      : null;
+  const letterStaleFor =
+    latestLetter && career && latestLetter.run.careerId !== career.id
+      ? latestLetter.run.careerName
+      : null;
 
-  /* the two tool children — the intake surface (dropzone) is the hero, with
-     the one quiet links line under the resume's zone. The letter's optional
-     employer field APPEARS ONLY AFTER the first letter check (user ruling
-     2026-11-02: the idle screen stays a pure dropzone; from the result view
-     a typed employer anchors the re-run) */
+  /* first-run tab panels keep the upload-first flow (Q15): the dropzone is
+     the hero, the quiet links line beneath. A returning user's panel renders
+     results-first with the dropzone as the slim footer affordance. */
   const resumeChildren = (
     <>
       <ResumeUpload />
@@ -393,7 +476,7 @@ export default async function PrepPage() {
     </>
   );
 
-  const letterChildren = <LetterUpload showEmployer={letterHasRun} />;
+  const letterChildren = <LetterUpload showEmployer={Boolean(latestLetter)} />;
 
   /* the band's AR receipts — the same engine receipts the page already
      reads (score.arParts from getStudentView); a null score (no target
@@ -406,16 +489,16 @@ export default async function PrepPage() {
   };
 
   const resumePanel = latestResume ? (
-    <RunResult run={latestResume.run}>
-      {resumeChildren}
+    <RunResult run={latestResume.run} staleFor={resumeStaleFor} links={<ResumeLinks />}>
+      <ResumeUpload slim />
     </RunResult>
   ) : (
     resumeChildren
   );
 
   const letterPanel = latestLetter ? (
-    <LetterResult run={latestLetter.run}>
-      {letterChildren}
+    <LetterResult run={latestLetter.run} staleFor={letterStaleFor}>
+      <LetterUpload showEmployer slim />
     </LetterResult>
   ) : (
     letterChildren
@@ -430,9 +513,9 @@ export default async function PrepPage() {
           <div className="who">
             <h1 className="t">Prep</h1>
             {career ? (
-              <p className="m">For {career.name} — the Resume checker and the Cover-letter checker.</p>
+              <p className="m">For {career.name} — a format &amp; evidence screen for your resume and cover letter.</p>
             ) : (
-              <p className="m">The Resume checker and the Cover-letter checker.</p>
+              <p className="m">A format &amp; evidence screen for your resume and cover letter.</p>
             )}
           </div>
           <div className="bandcells">
@@ -448,7 +531,7 @@ export default async function PrepPage() {
         <section className="card nc-card">
           <div className="b-head">
             <h2>Pick your target role first</h2>
-            <p className="helper">Every checker measures against one target role at a time.</p>
+            <p className="helper">Every checker measures its format checks and evidence names against one target role.</p>
           </div>
           <p className="nc-cta">
             <a className="btn btn-primary" href="/career">
@@ -460,8 +543,16 @@ export default async function PrepPage() {
         <PrepTabs
           panels={{ resume: resumePanel, letter: letterPanel }}
           kickers={{
-            resume: latestResume ? `LATEST RUN · ${latestResume.run.air.airResume}/100` : "NOT YET RUN",
-            letter: latestLetter ? `LATEST CHECK · ${latestLetter.run.air.airLetter}/100` : "NOT YET CHECKED",
+            resume: latestResume
+              ? resumeStaleFor
+                ? "PREVIOUS TARGET RUN"
+                : `LATEST RUN · ${latestResume.run.air.airResume}/100`
+              : "NOT YET RUN",
+            letter: latestLetter
+              ? letterStaleFor
+                ? "PREVIOUS TARGET CHECK"
+                : `LATEST CHECK · ${latestLetter.run.air.airLetter}/100`
+              : "NOT YET CHECKED",
           }}
         />
       )}
