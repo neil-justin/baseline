@@ -21,7 +21,7 @@ export const dynamic = "force-dynamic";
  * ruling 2026-11-03). An already-provisioned user asking to pick again
  * answers 409 already_provisioned + their roster dest (a counselor's
  * re-open of an approved request would strip the decision stamps — guarded).
- * Errors: not_signed_in | bad_role | already_provisioned | note_required | server
+ * Errors: not_signed_in | bad_role | already_provisioned | email_taken | note_required | server
  */
 export async function POST(req: Request) {
   try {
