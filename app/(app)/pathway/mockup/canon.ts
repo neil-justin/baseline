@@ -1,15 +1,20 @@
 /**
  * canon.ts — the CANONICAL path model (post-defense rethink, user-ruled
  * 2026-11-03: "My Plan is not a gap report" — the page shows ONE FIXED path
- * per career (the regulated minimum to enter the role) and the student's
+ * per career (the entire role skill map) and the student's
  * evidence state overlays it; the path never re-sorts).This module is the
  * mock seam: three content-structure variants share one canonical builder,
  * all spine-formatted by the d-variant components.
  *
- * Placement rules are DETERMINISTIC from catalog facts (user ruling: the
- * minimum = the REGULATED layer — sourceTag TESDA/PSF; everything else is
- * recommended/optional by tier). Copy is DRAFT (collaboration rule —
- * non-authoritative until the user signs off the frame wording).
+ * Placement rules are DETERMINISTIC from catalog facts — §3 of the design
+ * doc, the O*NET-as-law ruling (user-ruled 2026-11-03, "O*NET everything —
+ * Option 1"): required = THE ENTIRE ROLE SKILL MAP for every career; the
+ * "regulated = TESDA/PSF sourceTag" gate is retired. `sourceTag` demotes
+ * to provenance metadata (stays on rows/props — no data changes, no
+ * renames). The TESDA/PSF facts remain relevant only through resources
+ * (creditingBody, NC-type proof → the gate/entry milestones).
+ * Copy is DRAFT (collaboration rule — non-authoritative until the user
+ * signs off the frame wording).
  */
 import type { PlanRow, PlanTab, ResourcesTab } from "../PathwayTabs";
 import { pickSuggestion } from "./suggest";
@@ -31,8 +36,10 @@ export interface PathNode {
   what: string | null;
   sourceTag: string | null;
   tier: Spec["tier"] | null;
-  /** regulated-floor node — true on skills (all floor skills are required)
-      and gate milestones; recommended/optional = false, entry = false */
+  /** O*NET-as-law (2026-11-03): true on EVERY skill node — required =
+      the whole role map; there is no recommended/optional concept to be
+      false on. Gate milestones keep required = kind === "gate"; entry
+      milestones stay false. */
   required: boolean;
   /** solid vs quiet lane treatment: core-tier within its own section */
   emphasis: boolean;
@@ -78,11 +85,15 @@ export interface CanonSection {
   total: number;
 }
 
-/* === canonical section copy — DRAFT, user-reviews before any real wave === */
+/* === canonical section copy — DRAFT, user-reviews before any real wave ===
+   O*NET-as-law register (§3, user-ruled 2026-11-03): the floor IS the whole
+   map; recommended/optional are retired as placement concepts but their
+   section shape stays (the d1/d3 sibling variants and CanonProps keep
+   compiling — D2 reads only the floor). */
 const SECTION_COPY: Record<SectionId, { title: string; blurb: string }> = {
   floor: {
     title: "The Floor",
-    blurb: "The regulated minimum: skills mandated for this role by PSF or TESDA. Every node here is required.",
+    blurb: "The whole role skill map — every skill this role requires, whatever its provenance. Every node here is required.",
   },
   gate: {
     title: "Get your proof",
@@ -90,11 +101,11 @@ const SECTION_COPY: Record<SectionId, { title: string; blurb: string }> = {
   },
   recommended: {
     title: "Recommended by industry",
-    blurb: "Core-tier skills from labor-market sources (O*NET, ESCO) — what job posts ask for, not mandated.",
+    blurb: "Retired section (O*NET-as-law, 2026-11-03): placement no longer splits by source — the whole map sits on the floor. Always empty.",
   },
   optional: {
     title: "Optional breadth",
-    blurb: "Secondary-tier extras from non-regulated sources — skippable without losing the floor.",
+    blurb: "Retired section (O*NET-as-law, 2026-11-03): there is no non-required tier of skills. Always empty.",
   },
   entry: {
     title: "Enter the role",
@@ -143,8 +154,8 @@ const UNITS_DA: { title: string; blurb: string; skills: string[] }[] = [
 ];
 
 const FALLBACK_UNIT = {
-  title: "Regulated competencies",
-  blurb: "The floor's full regulated set, in framework order.",
+  title: "Role competencies",
+  blurb: "The floor's full required set — the whole role map, in framework order.",
 };
 
 export interface CanonUnit {
@@ -159,14 +170,12 @@ export interface CanonUnit {
 export interface CanonProps {
   closedCount: number;
   totalSkills: number;
-  /** count of map skill rows that carry NO sourceTag bookkeeping (honest
+  /** count of map skill rows that resolve to NO canonical node (honest
       accounting line; null when 0) */
   offPathNote: string | null;
   sections: CanonSection[];
   units: CanonUnit[];
 }
-
-const REGULATED = new Set(["TESDA", "PSF"]);
 
 export function buildCanon(specs: Spec[], plan: PlanTab, resources: ResourcesTab): CanonProps {
   const rows = plan.rows;
@@ -190,9 +199,10 @@ export function buildCanon(specs: Spec[], plan: PlanTab, resources: ResourcesTab
       what: row.what,
       sourceTag: spec.sourceTag,
       tier: spec.tier,
-      /** governed placement: regulated-source skills are the required
-          floor; non-regulated ones are recommended/optional, never required */
-      required: REGULATED.has(spec.sourceTag),
+      /** O*NET-as-law (2026-11-03): every skill on the map is required —
+          required = the whole role map; sourceTag rides along as provenance
+          metadata only */
+      required: true,
       emphasis: spec.tier === "core",
       state: row.kind,
       effect: row.effect,
@@ -243,10 +253,11 @@ export function buildCanon(specs: Spec[], plan: PlanTab, resources: ResourcesTab
     };
   };
 
-  /* the ORDER LAW: core before secondary inside each source bucket, stable
-     catalog order otherwise (framework-document order carries the day) */
-  const reg = specs.filter((s) => REGULATED.has(s.sourceTag));
-  const unreg = specs.filter((s) => !REGULATED.has(s.sourceTag));
+  /* the ORDER LAW as re-ruled (§3 O*NET-as-law, 2026-11-03): ONE bucket —
+     the whole role map IS the floor; core before secondary, stable catalog
+     order otherwise (framework-document order carries the day). The old
+     regulated/unregulated split is retired; recommended/optional sections
+     emit EMPTY (shape kept for the sibling variants' contract). */
   const order = (list: Spec[], key: (s: Spec) => boolean) =>
     list
       .map((s, i) => ({ s, i }))
@@ -255,13 +266,9 @@ export function buildCanon(specs: Spec[], plan: PlanTab, resources: ResourcesTab
       )
       .map(({ s }) => s);
 
-  const floorSpecs = order(reg, (s) => s.tier === "core");
-  const recSpecs = order(unreg, (s) => s.tier === "core");
-  const optSpecs = order(unreg, (s) => s.tier === "secondary");
+  const floorSpecs = order(specs, (s) => s.tier === "core");
 
   const floorNodes = floorSpecs.map(skillNode).filter((n): n is PathNode => n !== null);
-  const recNodes = recSpecs.map(skillNode).filter((n): n is PathNode => n !== null);
-  const optNodes = optSpecs.map(skillNode).filter((n): n is PathNode => n !== null);
 
   const gateNodes = resources.rows
     .filter((r) => /(^|\b)(cert|nc)\b/i.test(r.type) && r.feeds.length > 0)
@@ -282,12 +289,12 @@ export function buildCanon(specs: Spec[], plan: PlanTab, resources: ResourcesTab
   };
 
   /* THE CANONICAL POINTER: the first open skill node in walk order
-     (floor → recommended → optional) — engine closure moves it */
-  let placed = false;
-  for (const n of [...floorNodes, ...recNodes, ...optNodes]) {
-    if (n.state === "open" && !placed) {
+     (the floor IS the whole map — the retired sections are empty) —
+     engine closure moves it */
+  for (const n of floorNodes) {
+    if (n.state === "open") {
       n.startHere = true;
-      placed = true;
+      break;
     }
   }
 
@@ -295,8 +302,10 @@ export function buildCanon(specs: Spec[], plan: PlanTab, resources: ResourcesTab
     [
       { id: "floor" as SectionId, nodes: floorNodes },
       { id: "gate" as SectionId, nodes: gateNodes },
-      { id: "recommended" as SectionId, nodes: recNodes },
-      { id: "optional" as SectionId, nodes: optNodes },
+      /* retired sections (O*NET-as-law, 2026-11-03): emitted EMPTY — the
+         shape stays so the d1/d3 sibling variants and CanonProps compile */
+      { id: "recommended" as SectionId, nodes: [] as PathNode[] },
+      { id: "optional" as SectionId, nodes: [] as PathNode[] },
       { id: "entry" as SectionId, nodes: entryNodes },
     ] as const
   ).map(({ id, nodes }) => ({
