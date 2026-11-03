@@ -48,6 +48,7 @@ import { signIn } from "./helpers";
  */
 
 const stamp = Date.now().toString(36);
+// fallback matches fresh-account.spec.ts (helpers.cohortEmail uses campus.test — SEED_COHORT_DOMAIN governs in practice)
 const domain = process.env.SEED_COHORT_DOMAIN || "aisat.test";
 const studentEmail = `google.student.${stamp}@${domain}`;
 const applicantEmail = `google.counselor.${stamp}@${domain}`;
@@ -105,6 +106,7 @@ test.describe.serial("google flow gates", () => {
       throw new Error(`makeGateSession: signup answered ${apiRes.status()} for ${email}`);
     }
     // the form navigates to the fresh student's dest — the session is live
+    // one-shot barrier: the destructive server-side row-strip below must not run mid-navigation
     await page.waitForURL(/\/onboarding$/, { timeout: 30_000 });
 
     const a = await admin();
@@ -122,9 +124,27 @@ test.describe.serial("google flow gates", () => {
     if (profile?.student_id) await a.from("student_state").delete().eq("student_id", profile.student_id);
     if (profile?.id) await a.from("profiles").delete().eq("id", profile.id);
     await a.from("counselor_requests").delete().eq("email", email);
-    const { data: list } = await a.auth.admin.listUsers({ page: 1, perPage: 2000 });
-    for (const u of list?.users ?? []) if (u.email === email) await a.auth.admin.deleteUser(u.id);
+    // the profiles row IS the auth user id — delete directly, mirroring
+    // fresh-account's purgeTrialAccount; the listUsers scan stays only as
+    // the fallback for a profile-less fixture email
+    if (profile?.id) {
+      await a.auth.admin.deleteUser(profile.id);
+    } else {
+      // single page, no pagination loop — fixture emails are a handful by
+      // construction; a failed listing must NOT silently strand residue
+      const { data: list, error } = await a.auth.admin.listUsers({ page: 1, perPage: 2000 });
+      if (error) throw new Error(`purgeUser(${email}): listUsers failed: ${error.message}`);
+      for (const u of list?.users ?? []) if (u.email === email) await a.auth.admin.deleteUser(u.id);
+    }
   }
+
+  // afterAll sweeps the SAME three emails (purgeUser is idempotent): a
+  // mid-block failure evicts the subsequent tests — including the end-of-block
+  // cleanup test — so the afterAll hook is the guarantee, the cleanup test is
+  // the pass signal. If a purge throws here, the residue is surfaced, not hidden.
+  test.afterAll(async () => {
+    for (const email of [studentEmail, applicantEmail, probeEmail]) await purgeUser(email);
+  });
 
   test("picker: student pick provisions like the password form", async ({ page }) => {
     test.setTimeout(90_000);
@@ -159,7 +179,7 @@ test.describe.serial("google flow gates", () => {
       .select("student_id")
       .eq("student_id", profile!.student_id)
       .maybeSingle();
-    expect(state?.student_id).toBe(profile!.student_id);
+    expect(state).not.toBeNull();
   });
 
   test("picker: counselor pick records a pending application — zero access", async ({ page }) => {
@@ -285,8 +305,10 @@ test.describe.serial("google flow gates", () => {
     await page.goto("/dashboard");
     await expect(page).toHaveURL(/\/welcome$/);
     await expect(page.locator("#welcome-picker")).toBeVisible();
-    // the surface itself offers no sysadmin affordance (decision 3, ADR 0006)
-    await expect(page.getByText(/sysadmin/i)).toHaveCount(0);
+    // the surface's own copy offers no "System Admin" affordance (decision 3,
+    // ADR 0006) — /sysadmin/i would assert against vocabulary the app never
+    // renders; the app's token is the two-word "System Admin"
+    await expect(page.getByText(/system admin/i)).toHaveCount(0);
 
     const res = await page.request.post("/api/auth/provision", { data: { role: "sysadmin" } });
     expect(res.status()).toBe(400);
@@ -295,6 +317,18 @@ test.describe.serial("google flow gates", () => {
 
   test("cleanup: purge every fixture the block created", async () => {
     test.setTimeout(90_000);
-    for (const email of [studentEmail, applicantEmail, probeEmail]) await purgeUser(email);
+    // per-email try/catch: one bad email must not strand the other two —
+    // sweep everything FIRST, then rethrow the combined failures
+    const failures: string[] = [];
+    for (const email of [studentEmail, applicantEmail, probeEmail]) {
+      try {
+        await purgeUser(email);
+      } catch (err) {
+        failures.push(`${email}: ${err instanceof Error ? err.message : String(err)}`);
+      }
+    }
+    if (failures.length > 0) {
+      throw new Error(`cleanup purge failed (residue left): ${failures.join("; ")}`);
+    }
   });
 });
