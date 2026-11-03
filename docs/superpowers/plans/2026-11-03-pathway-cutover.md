@@ -189,30 +189,30 @@ export function pickMaterial(career: Career, skill: string): MaterialPick {
 
 ---
 
-## Wave B — Fixture audit for the demo slice + learnNote seeds
+## Wave B — FULL-ROSTER fixture audit (user bar, 2026-11-03: "all roles should have a suggested resource for their skills; suggestions must be taught pages; must actually satisfy the skill")
 
-Scope rule from the user's session rulings: taught-only, self-serve; demo-first is the pragmatic execution of "the audit wave" — full-roster audits continue post-defense. Demo slice = careers `da, qa, book, swd, its` (the walkthroughs the user did + `DEMO_SUGGESTION_ORDER`).
+**Definition of done = a coverage test that stays green forever after:**
 
-### Task B1: Audit fields for the demo-slice pools
-
+### Task B0: The coverage gate
 **Files:**
-- Modify: `lib/fixtures/resources.ts` (rows with `careerId: "da" | "qa" | "book" | "swd" | "its"`)
+- Test: `scripts/verify-coverage.test.ts`
 
-- [ ] **Step 1: Apply the classifications from the committed mock audit**
+- [ ] **Step 1: Write the acceptance test** — iterate `CAREERS` × `career.skills`; for each skill run `pickMaterial(career, skill)` and assert: `resource != null`, `resource.form === "taught"`, `access ∈ {direct, account, exam-paid}`, `learnNotes[skill]` non-empty. The test prints the failing set as a work queue (career → skill → reason: unvetted | no-claim | not-taught | not-self-serve | no-learn-line). Run: `npx vitest run scripts/verify-coverage.test.ts` → **expected RED initially** (that red list IS the audit work queue).
 
-`app/(app)/pathway/mockup/access.ts` (committed at `d419266`) carries the draft classifications for `res-da-*`, `res-qa-*`, `res-book-*` — copy them verbatim onto the fixture rows (add `access:` and `form:` next to the existing fields). For `swd`/`its` rows: draft them the same way from each row's audit comments (fixture-comments carry "fetched LIVE" facts: e.g. Coursera rows `exam-paid`, open docs `direct`, TAU root/homepages `landing`, Moodle-style TOP modules `account`, TESDA PDF hubs `reference`). Mark genuinely ambiguous rows `form: "landing"` (fail-closed: ineligible beats invented eligibility).
-Values reference, as law:
-`direct|account|exam-paid|paidUni` and `"taught"|"reference"|"landing"` — see Task A1 comment block.
+### Task B1: Audit + fill, per career until the gate is green
+**Files:**
+- Modify: `lib/fixtures/resources.ts` (+ occasionally `lib/fixtures/checks.ts` when a found resource pairs a platform check)
+- Modify: `lib/types.ts` (only if Task A1 left a gap)
 
-- [ ] **Step 2: Seed learnNotes from the committed LEARN_LINES**
+Per career (start with the demo slice `da, qa, book, swd, its`, then the remaining 31):
 
-Copy every `LEARN_LINES` entry (keyed `resourceId::skillName`) onto the corresponding fixture row's `learnNotes` map (key: the bare skill name). For demo-slice winners WITHOUT a learn line in the mock map, draft one from the row's own fixture audit comment (the content basis already verified live) — mark the file-comment near the row `learn draft — user review pending`.
+- [ ] **Step 1: Classify existing claims** — apply `access` + `form` from each row's fixture audit comments (the "fetched LIVE" facts). Landing/reference rows stay in data but can never win (the picker gates them); the coverage test only counts taught wins.
+- [ ] **Step 2: Fill the holes** — for every skill the test flags with `no-claim`/`not-taught`: find a real, taught, self-serve resource (web search + live fetch to verify 200 + content is teachable, not a landing page); add the row (`id` per the fixture convention, `access`, `form: "taught"`, `skillsAddressed: [skill]`, `creditingBody` when one exists, `url` deep-linked). Every new row carries a fixture-comment citing the live check (repo tradition).
+- [ ] **Step 3: Author the learn line** — `learnNotes[skill]` per claim, drafted from the resource's actual content, user-reviewable (mark `learn draft — user review pending` in the row comment when drafted by an agent).
+- [ ] **Step 4: Gate check** — `npx vitest run scripts/verify-coverage.test.ts` → the career's red list shrinks to zero before moving to the next career.
+- [ ] **Step 5: Commit per career batch** — `feat(fixtures): resource audit — <career(s)> (taught-only, self-serve, learn lines)`.
 
-- [ ] **Step 3: Typecheck + full vitest** — `npx tsc --noEmit && npx vitest run` → green (fixtures are typed data).
-
-- [ ] **Step 4: Commit** — `git add lib/fixtures/resources.ts lib/types.ts && git commit -m "feat(fixtures): demo-slice access/form audit + learnNotes seeds (taught-only, self-serve law)"`
-
-**Explicitly NOT done in this wave (law stands, just later):** deleting non-taught rows roster-wide; auditing the remaining 31 pools (the walk renders their honest "audit pending" states — spec §5).
+**Honesty valve:** if a skill genuinely has NO taught self-serve resource on the open web, the row that satisfies the bar cannot exist — the test stays red for it and the fixture comment marks `adviser-only skill` — the user rules on each such case individually (they are the content owner). The plan does not fabricate.
 
 ---
 
