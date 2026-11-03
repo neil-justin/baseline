@@ -105,3 +105,27 @@ create table if not exists public.letter_runs (
   updated_at timestamptz not null default now()
 );
 alter table public.letter_runs enable row level security;
+
+-- ── Counselor applications (Google round, ADR 0006) ─────────────────────
+-- A first-time Google sign-in that declares "counselor" records ONE row per
+-- auth user. Access is granted ONLY when a System Admin approves — which
+-- flips status, stamps who decided, and writes the profiles row + the auth
+-- user's app_metadata role. The row is the audit artifact; it is never
+-- deleted (approved/rejected rows stay for the trail).
+create table if not exists public.counselor_requests (
+  user_id      uuid primary key references auth.users(id) on delete cascade,
+  email        text not null,
+  full_name    text not null,
+  -- the applicant's own framing: who they advise, which section/campus —
+  -- evidence the approving System Admin examines; never validated blindly
+  note         text not null,
+  status       text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  requested_at timestamptz not null default now(),
+  decided_at   timestamptz,
+  decided_by   text
+);
+alter table public.counselor_requests enable row level security;
+
+-- Migration note (Google round, 2026-11-03): for an already-applied schema
+-- this table adds via the SQL editor with the create-block above verbatim
+-- (idempotent) — playwright e2e treats a missing table as skip condition.
