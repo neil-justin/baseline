@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "verify:fixtures": "vitest run scripts/verify-fixtures.test.ts",
-    "audit:links": "node scripts/audit-links.mjs",
-    "e2e": "playwright test"
+    "audit:links": "node scripts/audit-links.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

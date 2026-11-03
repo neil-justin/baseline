@@ -1,87 +1,148 @@
 import { describe, it, expect } from "vitest";
-import { CAREERS } from "@/lib/fixtures/catalog";
-import { buildPreview } from "@/app/(app)/pathway/mockup/preview";
+import { CAREERS, getCareer } from "@/lib/fixtures/catalog";
+import { buildWalk } from "@/lib/engines/walk";
+import { roundHalfDown, WEIGHTS } from "@/lib/engines/score";
+import type { BarSource } from "@/lib/types";
 
 /**
  * Canon regression — §3 O*NET-as-law (user-ruled 2026-11-03, "O*NET
- * everything — Option 1"): the canonical walk's required set is THE ENTIRE
- * ROLE SKILL MAP for every career. The "regulated = TESDA/PSF sourceTag"
- * gate is retired; sourceTag demotes to provenance metadata.
+ * everything — Option 1"). This suite re-homes onto `lib/engines/walk.ts`
+ * after the Wave-D cutover: the mockup seam (canon.ts/preview.ts) retired
+ * WITH the mock — the walk engine is the law's graduate and this suite now
+ * pins THE SHIPPED MECHANISM. The mock's gate/entry section shapes retired
+ * with the categories (categories demolished, user ruling 2026-11-03);
+ * credential/entry facts live off the walk surface (the fixtures suite
+ * still asserts the cert/NC/route resource census).
  *
- * What this pins, for EVERY career (36):
- *   1. floor section non-empty — the floor IS the whole map, never empty;
- *   2. floor total === career.skills.length — nothing demoted off the walk;
- *   3. gate/entry sections derive without throwing (resource-based, not
- *      sourceTag-based — cert/NC-typed resources and entry-route rows);
- *   4. every floor skill node carries required = true;
- *   5. recommended/optional emit EMPTY (retired, shape kept for the
- *      d1/d3 sibling variants' contract).
+ * What this pins, for EVERY career (36), an EMPTY-MAP-FREE walk:
+ *   1. the walk is the WHOLE role skill map — nodes.length === skills.length;
+ *      never empty (the law has no gaps, nothing demoted);
+ *   2. the ORDER law (canon.ts's order() mirrored): core tier first, then
+ *      stable catalog order — no secondary→core re-entry down the walk;
+ *   3. the OVERLAY law: every node state ∈ {verified, checked, claimed,
+ *      open}, from the bars (provenance metadata speaks through resources,
+ *      never through placement);
+ *   4. the POINTER law: startHere = exactly ONE node — the FIRST OPEN node
+ *      in walk order (all-closed maps pin no pointer);
+ *   5. the SP projection register: the first open node's slot opens at
+ *      roundHalfDown(WEIGHTS.sp × closed ÷ mapSize) — the dashboard formula
+ *      verbatim.
  *
- * A coverage table (role → floor size) prints to stdout for the user's
- * reading. Empty maps are NOT acceptable anywhere — the law has no gaps.
+ * A coverage table (role → walk size) prints to stdout for the user's
+ * reading. Empty maps are NOT acceptable anywhere.
  */
+
+/** empty-evidence overlay: no bars at all — every node overlays open */
+const emptyBars: Record<string, { source: BarSource }> = {};
 
 describe("O*NET-as-law canon regression (§3, user-ruled 2026-11-03) — all 36 careers", () => {
   const rows = CAREERS.map((career) => {
-    const preview = buildPreview(career.id, new Map());
-    expect(preview, `${career.id} (${career.name}) built no preview`).not.toBeNull();
-    const { careerName, props } = preview!;
-    const floor = props.sections.find((s) => s.id === "floor");
-    const gate = props.sections.find((s) => s.id === "gate");
-    const entry = props.sections.find((s) => s.id === "entry");
-    const recommended = props.sections.find((s) => s.id === "recommended");
-    const optional = props.sections.find((s) => s.id === "optional");
+    const walk = buildWalk(career, emptyBars, []);
 
-    /* 1 — the floor IS the whole map: never empty */
-    expect(floor, `${careerName}: no floor section`).toBeDefined();
-    expect(floor!.nodes.length, `${careerName}: empty floor`).toBeGreaterThan(0);
-
-    /* 2 — nothing demoted: floor total === the career's full skill map */
-    expect(floor!.total, `${careerName}: floor (${floor!.total}) ≠ map (${career.skills.length})`).toBe(career.skills.length);
-
-    /* 3 — gate + entry derive without throwing (sections exist; empty is
-        honest where a role holds no cert-typed resources) */
-    expect(gate, `${careerName}: gate section missing`).toBeDefined();
-    expect(entry, `${careerName}: entry section missing`).toBeDefined();
-    expect(Array.isArray(gate!.nodes), `${careerName}: gate nodes not an array`).toBe(true);
-    expect(Array.isArray(entry!.nodes), `${careerName}: entry nodes not an array`).toBe(true);
-    for (const n of [...gate!.nodes, ...entry!.nodes]) {
-      expect(n.kind === "gate" || n.kind === "entry").toBe(true);
-      expect(n.required, `${careerName}: ${n.label} required mismatch`).toBe(n.kind === "gate");
+    /* 1 — the walk IS the whole map: nothing demoted, never empty */
+    expect(walk.nodes.length, `${career.name}: empty walk`).toBeGreaterThan(0);
+    expect(
+      walk.nodes.length,
+      `${career.name}: walk (${walk.nodes.length}) ≠ map (${career.skills.length})`
+    ).toBe(career.skills.length);
+    expect(
+      walk.total,
+      `${career.name}: reported total ≠ skill-map size`
+    ).toBe(career.skills.length);
+    /* byte-faithful spell: the walk carries every skill NAME, exactly once */
+    const names = new Set(walk.nodes.map((n) => n.skill));
+    expect(names.size, `${career.name}: duplicate skill node on the walk`).toBe(
+      career.skills.length
+    );
+    for (const s of career.skills) {
+      expect(names.has(s.name), `${career.name}: missing ${s.name}`).toBe(true);
     }
 
-    /* 4 — O*NET-as-law on every skill node: required = true */
-    for (const n of floor!.nodes) {
-      expect(n.kind, `${careerName}: non-skill node in floor`).toBe("skill");
-      expect(n.required, `${careerName}: ${n.label} not required (demoted by old sourceTag gate?)`).toBe(true);
+    /* 2 — the ORDER law: core tier first, then catalog order */
+    let seenSecondary = false;
+    for (const n of walk.nodes) {
+      const tier = career.skills.find((s) => s.name === n.skill)!.tier;
+      if (tier === "secondary") seenSecondary = true;
+      expect(
+        seenSecondary && tier === "core",
+        `${career.name}: ${n.skill} re-enters CORE after a secondary row`
+      ).toBe(false);
+    }
+    /* catalog-stable inside each tier */
+    for (const tier of ["core", "secondary"] as const) {
+      const inTier = career.skills.filter((s) => s.tier === tier).map((s) => s.name);
+      const onWalk = walk.nodes.filter((n) => n.core === (tier === "core")).map((n) => n.skill);
+      expect(onWalk).toEqual(inTier);
     }
 
-    /* 5 — the retired sections emit empty (shape kept for the contract) */
-    expect(recommended!.nodes, `${careerName}: recommended not empty`).toEqual([]);
-    expect(optional!.nodes, `${careerName}: optional not empty`).toEqual([]);
+    /* 3 — the OVERLAY law: engine states only (claimed stays hatched, never
+        a bar of a different hand); empty bars → everything open */
+    for (const n of walk.nodes) {
+      expect(
+        ["verified", "checked", "claimed", "open"].includes(n.state),
+        `${career.name}: ${n.skill} carries an impossible state ${n.state}`
+      ).toBe(true);
+      expect(n.state, `${career.name}: empty evidence must overlay OPEN`).toBe("open");
+    }
 
-    const gateSize = gate!.nodes.length;
-    const entrySize = entry!.nodes.length;
-    return { name: careerName, floor: floor!.total, gate: gateSize, entry: entrySize };
+    /* 4 — the POINTER law (all-open map here): exactly one startHere,
+        on the FIRST node in walk order */
+    const starters = walk.nodes.filter((n) => n.startHere);
+    expect(starters, `${career.name}: startHere not singular`).toHaveLength(1);
+    expect(
+      starters[0].skill,
+      `${career.name}: startHere is not the first open node`
+    ).toBe(walk.nodes[0].skill);
+
+    /* 5 — the SP projection register: slot 0 opens at the closed count's SP */
+    expect(
+      walk.nodes[0].effect?.from,
+      `${career.name}: SP slot-0 register off the dashboard formula`
+    ).toBe(roundHalfDown((WEIGHTS.sp * 0) / career.skills.length));
+
+    /* the pointer moves WITH closure — overlay on a half-closed map */
+    const half = buildWalk(
+      career,
+      Object.fromEntries(
+        career.skills.slice(0, Math.ceil(career.skills.length / 3)).map((s) => [
+          s.name,
+          { source: "verified" as const },
+        ])
+      ),
+      []
+    );
+    const firstOpen = half.nodes.find((n) => n.state === "open")!;
+    expect(
+      half.nodes.filter((n) => n.startHere),
+      `${career.name}: closure did not move the pointer to a single node`
+    ).toHaveLength(1);
+    expect(
+      half.nodes.find((n) => n.startHere)!.skill,
+      `${career.name}: pointer is not on the first OPEN node`
+    ).toBe(firstOpen.skill);
+
+    return { name: career.name, floor: walk.total };
   });
 
-  it("the coverage table — role name → floor size (gate/entry sizes alongside)", () => {
+  it("the coverage table — role name → walk size", () => {
     const width = Math.max(...rows.map((r) => r.name.length));
     const lines = [
       "",
       "────────────────────────────────────────────────────────",
-      " O*NET-as-law canon — floor coverage (36 roles)",
+      " O*NET-as-law canon — walk coverage (36 roles)",
       "────────────────────────────────────────────────────────",
-      ` ${"ROLE".padEnd(width)}  FLOOR  GATE  ENTRY`,
+      ` ${"ROLE".padEnd(width)}  WALK`,
       "────────────────────────────────────────────────────────",
-      ...rows.map(
-        (r) =>
-          ` ${r.name.padEnd(width)}  ${String(r.floor).padStart(5)}  ${String(r.gate).padStart(4)}  ${String(r.entry).padStart(5)}`
-      ),
+      ...rows.map((r) => ` ${r.name.padEnd(width)}  ${String(r.floor).padStart(5)}`),
       "────────────────────────────────────────────────────────",
-      ` total skill rows on the floor: ${rows.reduce((a, r) => a + r.floor, 0)}`,
+      ` total skill rows on the walk: ${rows.reduce((a, r) => a + r.floor, 0)}`,
       "────────────────────────────────────────────────────────",
     ];
     console.log(lines.join("\n"));
+  });
+
+  it("the law has no gaps — no career in the roster builds an empty map", () => {
+    expect(getCareer("da")!.skills.length, "demo career lost its map").toBeGreaterThan(0);
+    expect(CAREERS.length).toBe(36);
   });
 });
