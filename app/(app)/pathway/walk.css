@@ -13,11 +13,11 @@
    earned circle borders), amber = the local working-on marker,
    grey = unmeasured/self-report hatch. No region washes; no red;
    no animations/transitions (DNA lock). Every numeral is tabular.
-   Scoped under .v7mock-d2; canonical hexes are restated as local
+   Scoped under .v7plan; canonical hexes are restated as local
    tokens so the mock never depends on unscoped globals.
    ============================================================ */
 
-.v7mock-d2 {
+.v7plan {
   --vd2-green-wash: #e6f4ea;
   --vd2-green-text: #137333;
   --vd2-grey-wash: #f1f3f4;
@@ -32,24 +32,24 @@
   font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
   color: var(--mk-ink);
 }
-.v7mock-d2 ::selection {
+.v7plan ::selection {
   background: #e8f0fe;
 }
-.v7mock-d2 :focus-visible {
+.v7plan :focus-visible {
   outline: 2px solid var(--mk-action);
   outline-offset: 2px;
 }
-.v7mock-d2 a {
+.v7plan a {
   color: inherit;
 }
 /* the tabular rule — every number-bearing register */
-.v7mock-d2 .num {
+.v7plan .num {
   font-variant-numeric: tabular-nums;
 }
 
 /* ---------- surface head (band-card register) ---------- */
 
-.v7mock-d2 .vd2-band {
+.v7plan .vd2-band {
   background: #fff;
   border: 1px solid var(--mk-line);
   border-radius: 8px;
@@ -57,31 +57,31 @@
   padding: 16px 20px;
   margin-bottom: 20px;
 }
-.v7mock-d2 .vd2-bandrow {
+.v7plan .vd2-bandrow {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 6px 16px;
   flex-wrap: wrap;
 }
-.v7mock-d2 .vd2-band h2 {
+.v7plan .vd2-band h2 {
   margin: 0;
   font: 400 22px/1.4 Roboto, system-ui, sans-serif;
   color: var(--mk-ink);
 }
 /* the lead-mono fact counter (PathwayTabs Plan-head register, 13px) */
-.v7mock-d2 .vd2-lead {
+.v7plan .vd2-lead {
   font: 400 13px/1.5 Roboto, system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
   color: var(--mk-ink2);
   white-space: nowrap;
 }
-.v7mock-d2 .vd2-lead b {
+.v7plan .vd2-lead b {
   color: var(--mk-ink);
   font-weight: 500;
 }
 /* the standing canonical-reading line (12px ink2, one per fact) */
-.v7mock-d2 .vd2-standing {
+.v7plan .vd2-standing {
   margin: 8px 0 0;
   font: 400 12px/1.5 Roboto, system-ui, sans-serif;
   color: var(--mk-ink2);
@@ -89,23 +89,23 @@
 
 /* ---------- THE SPINE (rows own their line segments) ---------- */
 
-.v7mock-d2 .vd2-map {
+.v7plan .vd2-map {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.v7mock-d2 .vd2-caprow,
-.v7mock-d2 .vd2-head,
-.v7mock-d2 .vd2-row {
+.v7plan .vd2-caprow,
+.v7plan .vd2-head,
+.v7plan .vd2-row {
   position: relative;
   padding: 0 0 8px var(--vd2-indent);
 }
 /* one 2px hairline segment per row (top → row end); rows tile, so the
    segments read as ONE continuous spine — and keep running through the
    8px gaps between the cards */
-.v7mock-d2 .vd2-caprow::before,
-.v7mock-d2 .vd2-head::before,
-.v7mock-d2 .vd2-row::before {
+.v7plan .vd2-caprow::before,
+.v7plan .vd2-head::before,
+.v7plan .vd2-row::before {
   content: "";
   position: absolute;
   left: calc(var(--vd2-spine-x) - 1px);
@@ -115,24 +115,24 @@
   background: var(--mk-line);
 }
 /* the spine starts at the first caption's top (the band above is pain) */
-.v7mock-d2 .vd2-map > .vd2-caprow:first-child::before {
+.v7plan .vd2-map > .vd2-caprow:first-child::before {
   top: 0;
 }
 /* the terminal row ends its segment at the node circle's center */
-.v7mock-d2 .vd2-row.vd2-end::before {
+.v7plan .vd2-row.vd2-end::before {
   top: 0;
   bottom: auto;
   height: calc(var(--vd2-node) / 2);
 }
 /* an empty final region terminates at its head card (absence is
    visible; the line ends at the card that says so) */
-.v7mock-d2 .vd2-head.vd2-end {
+.v7plan .vd2-head.vd2-end {
   padding-bottom: 0;
 }
 
 /* the region node circle — white, centered on the spine, top-aligned
    with its card; the region-local number lives inside */
-.v7mock-d2 .vd2-cir {
+.v7plan .vd2-cir {
   position: absolute;
   left: calc(var(--vd2-spine-x) - var(--vd2-node) / 2);
   top: 0;
@@ -152,12 +152,12 @@
 }
 /* earned = the ONLY green border (verified/checked closes; claimed
    stays grey — the hatch chip carries self-report honestly) */
-.v7mock-d2 .vd2-cir.vd2-cir-earned {
+.v7plan .vd2-cir.vd2-cir-earned {
   border-color: var(--mk-green);
 }
 
 /* region caption — the numeral + canon title, tracked uppercase ink2 */
-.v7mock-d2 .vd2-cap {
+.v7plan .vd2-cap {
   display: inline-block;
   font: 500 11px/1.4 Roboto, system-ui, sans-serif;
   letter-spacing: 0.08em;
@@ -167,47 +167,47 @@
 
 /* ---------- region cards (v7 card recipe values) ---------- */
 
-.v7mock-d2 .vd2-hcard,
-.v7mock-d2 .vd2-ncard {
+.v7plan .vd2-hcard,
+.v7plan .vd2-ncard {
   background: #fff;
   border: 1px solid var(--mk-line);
   border-radius: 8px;
   box-shadow: var(--vd2-shadow);
 }
-.v7mock-d2 .vd2-hcard {
+.v7plan .vd2-hcard {
   padding: 14px 18px 16px;
 }
-.v7mock-d2 .vd2-ncard {
+.v7plan .vd2-ncard {
   padding: 12px 16px 14px;
 }
 
-.v7mock-d2 .vd2-hhead {
+.v7plan .vd2-hhead {
   display: flex;
   align-items: baseline;
   gap: 4px 12px;
   flex-wrap: wrap;
 }
-.v7mock-d2 .vd2-hhead h3 {
+.v7plan .vd2-hhead h3 {
   margin: 0;
   font: 500 15px/1.35 Roboto, system-ui, sans-serif;
   color: var(--mk-ink);
 }
 /* the computed region counter — tracked label register, context ink */
-.v7mock-d2 .vd2-count {
+.v7plan .vd2-count {
   margin-left: auto;
   font: 500 12px/1.4 Roboto, system-ui, sans-serif;
   letter-spacing: 0.08em;
   color: var(--mk-ink2);
   white-space: nowrap;
 }
-.v7mock-d2 .vd2-blurb {
+.v7plan .vd2-blurb {
   margin: 6px 0 0;
   font: 400 13px/1.5 Roboto, system-ui, sans-serif;
   color: var(--mk-ink2);
 }
 /* the honest empty-region line — quiet row inside the region card;
    absence stays visible (it is the point of the region reading) */
-.v7mock-d2 .vd2-empty {
+.v7plan .vd2-empty {
   margin: 10px 0 0;
   padding-top: 10px;
   border-top: 1px solid var(--vd2-rule);
@@ -217,7 +217,7 @@
 
 /* ---------- skill checkpoint rows ---------- */
 
-.v7mock-d2 .vd2-item {
+.v7plan .vd2-item {
   display: grid;
   grid-template-columns: minmax(104px, auto) minmax(0, 1fr) auto;
   column-gap: 14px;
@@ -226,13 +226,13 @@
 }
 
 /* glyph column: closed = provenance chip; open = the working-on ring */
-.v7mock-d2 .vd2-glyph {
+.v7plan .vd2-glyph {
   display: flex;
   align-items: center;
   min-height: 20px;
   padding-top: 2px;
 }
-.v7mock-d2 .vd2-chip {
+.v7plan .vd2-chip {
   display: inline-block;
   font: 500 11px/1.2 Roboto, system-ui, sans-serif;
   letter-spacing: 0.04em;
@@ -240,11 +240,11 @@
   padding: 3px 8px;
   white-space: nowrap;
 }
-.v7mock-d2 .vd2-chip-green {
+.v7plan .vd2-chip-green {
   background: var(--vd2-green-wash);
   color: var(--vd2-green-text);
 }
-.v7mock-d2 .vd2-chip-hatch {
+.v7plan .vd2-chip-hatch {
   background: var(--vd2-grey-wash);
   color: var(--vd2-grey-text);
   /* the self-report hatch — quiet 45° stripes over the grey wash
@@ -256,7 +256,7 @@
   );
 }
 /* the working-on toggle — hollow grey ring, transparent fill */
-.v7mock-d2 .vd2-ring {
+.v7plan .vd2-ring {
   appearance: none;
   position: relative;
   width: 18px;
@@ -269,11 +269,11 @@
   cursor: pointer;
   align-self: center;
 }
-.v7mock-d2 .vd2-ring[aria-pressed="true"] {
+.v7plan .vd2-ring[aria-pressed="true"] {
   border-color: var(--mk-amber);
 }
 /* pressed: the small amber DOT appears inside — never a checkmark */
-.v7mock-d2 .vd2-ring[aria-pressed="true"]::after {
+.v7plan .vd2-ring[aria-pressed="true"]::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -284,19 +284,19 @@
   background: var(--mk-amber);
 }
 
-.v7mock-d2 .vd2-skillrow {
+.v7plan .vd2-skillrow {
   display: flex;
   align-items: baseline;
   gap: 4px 8px;
   flex-wrap: wrap;
 }
-.v7mock-d2 .vd2-skill {
+.v7plan .vd2-skill {
   font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
   color: var(--mk-ink);
 }
 /* the core-tier emphasis marker — one quiet tracked tag in ink2 (the
    regulated floor rides source strength, not color) */
-.v7mock-d2 .vd2-core {
+.v7plan .vd2-core {
   font: 500 11px/1.4 Roboto, system-ui, sans-serif;
   letter-spacing: 0.06em;
   color: var(--mk-ink2);
@@ -304,7 +304,7 @@
 }
 /* the working-on marker chip — amber BORDER only (borders are the
    marker's register; it never reads as a verified state) */
-.v7mock-d2 .vd2-working {
+.v7plan .vd2-working {
   font: 500 11px/1.2 Roboto, system-ui, sans-serif;
   letter-spacing: 0.04em;
   color: var(--mk-amber);
@@ -315,45 +315,45 @@
 }
 /* Start here — small blue TEXT label (action register = next action),
    no fill (restrained ruling; the path's pointer) */
-.v7mock-d2 .vd2-start {
+.v7plan .vd2-start {
   font: 500 11.5px/1.4 Roboto, system-ui, sans-serif;
   color: var(--mk-action);
   white-space: nowrap;
 }
-.v7mock-d2 .vd2-what {
+.v7plan .vd2-what {
   display: block;
   font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
   color: var(--mk-ink2);
 }
 /* the open row's ONE suggested resource — honest link register */
-.v7mock-d2 .vd2-res {
+.v7plan .vd2-res {
   display: block;
   font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
   color: var(--mk-ink2);
   margin-top: 2px;
 }
-.v7mock-d2 .vd2-reslink {
+.v7plan .vd2-reslink {
   font-weight: 500;
   color: var(--mk-ink);
   text-decoration: none;
 }
-.v7mock-d2 a.vd2-reslink:hover,
-.v7mock-d2 a.vd2-mlink:hover {
+.v7plan a.vd2-reslink:hover,
+.v7plan a.vd2-mlink:hover {
   text-decoration: underline;
 }
-.v7mock-d2 .vd2-restitle {
+.v7plan .vd2-restitle {
   font-weight: 500;
   color: var(--mk-ink);
 }
-.v7mock-d2 .vd2-resmeta {
+.v7plan .vd2-resmeta {
   font-variant-numeric: tabular-nums;
 }
-.v7mock-d2 .vd2-ext {
+.v7plan .vd2-ext {
   font-size: 11px;
   color: var(--mk-ink2);
   margin-left: 2px;
 }
-.v7mock-d2 .vd2-nores {
+.v7plan .vd2-nores {
   display: block;
   font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
   color: var(--mk-ink2);
@@ -361,7 +361,7 @@
 }
 
 /* the career-preview control (mock chrome — never ships) */
-.v7mock-d2 .vd2-preview {
+.v7plan .vd2-preview {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -369,13 +369,13 @@
   padding-top: 8px;
   border-top: 1px solid var(--mk-line);
 }
-.v7mock-d2 .vd2-previewlabel {
+.v7plan .vd2-previewlabel {
   font: 500 11px/1.4 Roboto, system-ui, sans-serif;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: var(--mk-ink2);
 }
-.v7mock-d2 .vd2-preview select {
+.v7plan .vd2-preview select {
   font: 400 12.5px/1.4 Roboto, system-ui, sans-serif;
   color: var(--mk-ink);
   padding: 2px 6px;
@@ -385,7 +385,7 @@
   max-width: 260px;
 }
 /* §6.2 honest micro-line (state-bearing grey = ink2, ≥ floor) */
-.v7mock-d2 .vd2-nocheck {
+.v7plan .vd2-nocheck {
   display: block;
   font: 400 11px/1.4 Roboto, system-ui, sans-serif;
   color: var(--mk-ink2);
@@ -395,7 +395,7 @@
 /* ── the student-facing lane (user ruling: the audit lane doesn't render)
    learn line = the authored per-claim sentence, why this resource teaches
    the skill — the PRIMARY resource line after the title/meta */
-.v7mock-d2 .vd2-learn {
+.v7plan .vd2-learn {
   display: block;
   font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
   color: var(--mk-ink);
@@ -403,7 +403,7 @@
 }
 /* the SP projection register — the personal overlay, visually
    detached (ink2-lean); digits stay plain (blue never paints them) */
-.v7mock-d2 .vd2-eff {
+.v7plan .vd2-eff {
   justify-self: end;
   font: 400 12px/1.5 Roboto, system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
@@ -414,21 +414,21 @@
 
 /* ---------- milestone rows (gate/entry) ---------- */
 
-.v7mock-d2 .vd2-mile {
+.v7plan .vd2-mile {
   display: block;
 }
 /* the milestone label is the one affordance — link when the catalog
    has a verified url, plain text otherwise (honest either way) */
-.v7mock-d2 .vd2-mlabel {
+.v7plan .vd2-mlabel {
   display: block;
   font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
   color: var(--mk-ink);
 }
-.v7mock-d2 .vd2-mlink {
+.v7plan .vd2-mlink {
   text-decoration: none;
 }
 /* the typed receipt line — provider · type · cost · time, verbatim */
-.v7mock-d2 .vd2-mmeta {
+.v7plan .vd2-mmeta {
   display: block;
   margin-top: 2px;
   font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
@@ -437,29 +437,29 @@
 }
 /* the covered floor skills — each rides its REAL chip only where
    genuinely closed; open names stay plain (no chip, no tick) */
-.v7mock-d2 .vd2-covers {
+.v7plan .vd2-covers {
   margin-top: 10px;
 }
-.v7mock-d2 .vd2-covlabel {
+.v7plan .vd2-covlabel {
   display: block;
   font: 500 11px/1.4 Roboto, system-ui, sans-serif;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--mk-ink2);
 }
-.v7mock-d2 .vd2-covers ul {
+.v7plan .vd2-covers ul {
   list-style: none;
   margin: 2px 0 0;
   padding: 0;
 }
-.v7mock-d2 .vd2-cov {
+.v7plan .vd2-cov {
   display: flex;
   align-items: baseline;
   gap: 4px 8px;
   flex-wrap: wrap;
   padding: 3px 0;
 }
-.v7mock-d2 .vd2-covname {
+.v7plan .vd2-covname {
   font: 400 13px/1.5 Roboto, system-ui, sans-serif;
   color: var(--mk-ink);
 }
@@ -467,33 +467,33 @@
 /* ---------- ≤720px — spine hugs the left edge ---------- */
 
 @media (max-width: 720px) {
-  .v7mock-d2 {
+  .v7plan {
     --vd2-spine-x: 14px;
     --vd2-node: 26px;
     --vd2-indent: 40px;
   }
-  .v7mock-d2 .vd2-band {
+  .v7plan .vd2-band {
     padding: 14px 16px;
     margin-bottom: 16px;
   }
-  .v7mock-d2 .vd2-band h2 {
+  .v7plan .vd2-band h2 {
     font-size: 19px;
   }
   /* captions wrap OK at this width — the spine stays continuous */
-  .v7mock-d2 .vd2-hcard,
-  .v7mock-d2 .vd2-ncard {
+  .v7plan .vd2-hcard,
+  .v7plan .vd2-ncard {
     padding: 12px 12px 14px;
   }
   /* the effect register folds under the row body — honest layout kept */
-  .v7mock-d2 .vd2-item {
+  .v7plan .vd2-item {
     grid-template-columns: minmax(84px, auto) minmax(0, 1fr);
   }
-  .v7mock-d2 .vd2-eff {
+  .v7plan .vd2-eff {
     grid-column: 2;
     justify-self: start;
     padding-top: 0;
   }
-  .v7mock-d2 .vd2-cir {
+  .v7plan .vd2-cir {
     font-size: 11px;
   }
 }
@@ -511,7 +511,7 @@
       (pathway.css `.v7plan .lead-mono` loads later at 12px).
    ============================================================ */
 
-.v7mock-d2 {
+.v7plan {
   --mk-line: #dadce0;
   --mk-ink: #202124;
   --mk-ink2: #5f6368;
@@ -520,13 +520,13 @@
   --mk-amber: #b45309;
   --mk-ground: #f8f9fa;
 }
-.v7mock-d2 .vd2-lead.lead-mono {
+.v7plan .vd2-lead.lead-mono {
   font: 400 13px/1.5 Roboto, system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
   color: var(--mk-ink2);
   white-space: nowrap;
 }
-.v7mock-d2 .vd2-lead.lead-mono b {
+.v7plan .vd2-lead.lead-mono b {
   color: var(--mk-ink);
   font-weight: 500;
 }
