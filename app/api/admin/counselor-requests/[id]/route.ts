@@ -54,17 +54,24 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     }
 
     if (request.status === "pending" && action === "reject") {
-      // one statement writes status + BOTH stamps — the schema's strict
-      // check (pending ⇔ no stamps; decided ⇔ both) is satisfied atomically
-      const { error } = await admin
+      // stamp-first observable reject (mirror of approve's RPC form): the
+      // update carries its own pending predicate, so an approve committing
+      // between this route's read and its write can never be overwritten —
+      // a zero-row update IS the "already decided" answer
+      const { data: rejectedRows, error } = await admin
         .from("counselor_requests")
         .update({
           status: "rejected",
           decided_at: new Date().toISOString(),
           decided_by: profile.email,
         })
-        .eq("user_id", id);
+        .eq("user_id", id)
+        .eq("status", "pending")
+        .select("user_id");
       if (error) return NextResponse.json({ error: "server" }, { status: 500 });
+      if (!rejectedRows || rejectedRows.length === 0) {
+        return NextResponse.json({ error: "already_decided" }, { status: 409 });
+      }
       return NextResponse.json({ status: "rejected" });
     }
 
