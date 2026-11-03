@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ForwardArrow } from "../glyphs";
+import GoogleAuth from "../GoogleAuth";
 import SignupForm from "./SignupForm";
 import "./auth.css";
 import "../v7-auth.css";
@@ -29,6 +30,8 @@ export default function SignUpPage() {
           </div>
 
           <SignupForm />
+
+          <GoogleAuth />
 
           <p className="auth-alt">
             Already have an account?{" "}

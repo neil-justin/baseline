@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BackArrow } from "../glyphs";
+import GoogleAuth from "../GoogleAuth";
 import SignInForm from "./SignInForm";
 import "./auth.css";
 import "../v7-auth.css";
@@ -9,8 +10,19 @@ export const metadata: Metadata = {
   description: "Sign in to your Baseline account.",
 };
 
-/** Sign-in surface — markup ported 1:1 from prototype/signin.html, links adapted (signup.html → /signup). */
-export default function SignInPage() {
+/**
+ * Sign-in surface — markup ported 1:1 from prototype/signin.html. Google
+ * round: the OAuth button under the credential form, and the honest notice
+ * when a Google consent was denied/expired (state=google from
+ * /auth/confirm's via=google branch — DISTINCT from the recovery error,
+ * which never lands here).
+ */
+export default async function SignInPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ state?: string }>;
+}) {
+  const { state } = await searchParams;
   return (
     <div className="auth-body v7auth">
       <header className="bar">
@@ -28,7 +40,16 @@ export default function SignInPage() {
             <h1>Sign in.</h1>
           </div>
 
+          {state === "google" && (
+            <div className="field-err" role="status" style={{ display: "block", marginBottom: 14 }}>
+              The Google sign-in didn&apos;t complete — consent was closed or it
+              expired. Try it again from the button below.
+            </div>
+          )}
+
           <SignInForm />
+
+          <GoogleAuth />
 
           <p className="auth-alt">
             New here?{" "}
