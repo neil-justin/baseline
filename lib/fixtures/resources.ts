@@ -3258,7 +3258,22 @@ export const RESOURCES: Resource[] = [
 
   // == ── Track 2 · Business & Management (hra · training · mkt · sales · csr ·
   // opsanalyst · purch · ccqa · events) — blessed role-spec pools ───────────
-  // ── hra (3.1) ──
+  // == ── hra (3.1) ──
+  // Wave B audit (2026-11-03, batch 2): access/form per-row (Alison →
+  // account; Coursera audit → exam-paid; HubSpot Academy → account; TOP
+  // Moodle modules → account; CIPD/statute/support-hubs → reference or
+  // landing). Three census-thin taught claims filled user-ruled (all
+  // fetched LIVE 2026-11-03): Performance Management via the verified
+  // Starweaver course, HR Analytics via the verified Wharton
+  // People-Analytics course, Stakeholder Engagement via the verified
+  // STARWEAVER stakeholder course (per-role duplicates), plus the
+  // Employee-Communication attach on the TOP writing module. Adviser-only
+  // reds remain, honest, never papered over: Talent-Capability-Assessment
+  // and DE&IB (declared gaps stand), Employee Mobility / HR-Practices
+  // Implementation / Skills-Framework Adoption (no taught claim verified —
+  // adviser ruling pending). Learn lines drafted from the resources'
+  // actual content (learn draft — user review pending).
+  // Coverage: 15/20 vetted.
   {
     id: "res-hra-alison-diploma-hr",
     title: "Diploma in Human Resources (HR)",
@@ -3267,6 +3282,8 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // covers recruit, select, records (Official Alison page verified 200);
     // study free, certificate purchase optional
+    // audit (2026-11-03): Alison study-free course page → account. The HR
+    // fundamentals winner for the recruit/select/onboard/records/exit cells.
     url: "https://alison.com/course/diploma-in-human-resources-hr",
     durationHours: 6,
     skillsAddressed: [
@@ -3274,8 +3291,28 @@ export const RESOURCES: Resource[] = [
       "Job Analysis and Evaluation", "Voluntary Exit Management", "Involuntary Exit Management",
       "Human Resources Systems Management",
     ],
+    creditingBody: "Alison",
     careerId: "hra",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Recruitment Channel Management":
+        "The diploma's recruiting modules run the hire funnel — job analysis feeds the posting, sourcing through the right channels, then screening — the recruitment craft this cell prints.",
+      "Selection Management":
+        "Structured screening and interview practice: comparing candidates against the job's requirements, the selection checklist the cell prints.",
+      "Onboarding":
+        "The employee-records modules include the new-hire induction pieces — setting up the record, orienting the employee, documenting the start.",
+      "Job Analysis and Evaluation":
+        "Covers analyzing and evaluating jobs — duties, requirements and worth — the job-analysis groundwork this cell prints.",
+      "Voluntary Exit Management":
+        "Resignations and the documented exit: notice handling, clearance, records close-out — the voluntary-exit flow the cell prints.",
+      "Involuntary Exit Management":
+        "Terminations handled by procedure: the warning/discipline trail and the documented separation an employer can defend.",
+      "Human Resources Systems Management":
+        "Maintaining employee records and the HR information the department runs on — the systems-management habit this cell prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-hra-minnesota-hrm",
@@ -3284,6 +3321,9 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // audit free; certificate paid (financial aid exists; audit-vs-preview re-checked at enroll)
+    // audit (2026-11-03): specialization page = program landing (courses
+    // live behind it) → landing/exam-paid. The Performance Management cell
+    // rides the verified Starweaver course below instead.
     url: "https://www.coursera.org/specializations/human-resource-management",
     durationHours: 15,
     skillsAddressed: [
@@ -3292,7 +3332,83 @@ export const RESOURCES: Resource[] = [
       "Communication · Adaptability · Customer Orientation · Digital Fluency · Learning Agility · Self-Management (Enabling, Basic)",
     ],
     careerId: "hra",
+    form: "landing",
+    access: "exam-paid",
+  },
+  {
+    id: "res-hra-starweaver-perf",
+    title: "Managing Employee Performance (STARWEAVER)",
+    provider: "Coursera (STARWEAVER)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the
+    // Performance cell had only the landing-grade specialization. Per-role
+    // duplicate of the verified STARWEAVER course ("Enroll for free",
+    // 4.7★ 2.8K reviews — Performance Management, performance appraisal,
+    // constructive feedback, goal setting): the run-the-review-cycle craft
+    // the cell prints. ₱ paid tier: certificate.
+    url: "https://www.coursera.org/learn/managing-employee-performance",
+    durationHours: 5,
+    skillsAddressed: ["Performance Management"],
+    creditingBody: "STARWEAVER",
+    careerId: "hra",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Performance Management":
+        "Teaches the review cycle hands-on: goal setting, the appraisal conversation, and constructive feedback that changes behavior — managing employee performance in the room.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-hra-wharton-people-analytics",
+    title: "People Analytics (Wharton)",
+    provider: "Coursera (Wharton)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the HR
+    // analytics cell had no URL row. Per-role duplicate of the verified
+    // Wharton course ("Enroll for free" ×3; "People analytics is a
+    // data-driven approach to managing people at work", 4 modules): the
+    // measure-and-manage-by-data craft this cell prints. ₱ paid tier.
+    url: "https://www.coursera.org/learn/wharton-people-analytics",
+    durationHours: 12,
+    skillsAddressed: ["Human Resources Analytics and Insights"],
+    creditingBody: "Wharton",
+    careerId: "hra",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Human Resources Analytics and Insights":
+        "Wharton's people-analytics course teaches managing people by data — staffing, evaluation and performance read through data, and what analytics legitimately can and cannot claim about people.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-hra-stakeholder",
+    title: "Stakeholder Management (STARWEAVER)",
+    provider: "Coursera (STARWEAVER)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the
+    // stakeholder cell had only reference-grade factsheets. Per-role
+    // duplicate of the verified STARWEAVER course (pool convention; also in
+    // the da pool): identify stakeholders, map needs/expectations, plan the
+    // engagement cadence. ₱ paid tier.
+    url: "https://www.coursera.org/learn/stakeholder-management",
+    durationHours: 5,
+    skillsAddressed: ["Stakeholder Engagement and Management"],
+    creditingBody: "STARWEAVER",
+    careerId: "hra",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Stakeholder Engagement and Management":
+        "Four lessons: identify who needs to know, map expectations, plan the collaboration and reporting cadence — the engagement loop this cell prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-hra-cipd-factsheets",
@@ -3301,11 +3417,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // free evidence-based factsheets: recruitment, assessment, turnover
+    // audit (2026-11-03): factsheet library = readable reference
     url: "https://www.cipd.org/uk/knowledge/factsheets/",
     durationHours: 2,
     skillsAddressed: ["Selection Management", "Talent Capability Assessment", "Data Collection and Preparation", "Stakeholder Engagement and Management"],
     careerId: "hra",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-hra-gcf-excel",
@@ -3314,10 +3433,21 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // completely free, browser-based, no account
+    // audit (2026-11-03): GCF's lesson series with hands-on practice →
+    // taught/direct. Data Management + Data Collection winner.
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: ["Data Management", "Data Collection and Preparation"],
     careerId: "hra",
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Data Management":
+        "Workbooks, rows and formulas taught hands-on — the spreadsheet hygiene an HR assistant's records ride on.",
+      "Data Collection and Preparation":
+        "The series shows collecting entries into a structured sheet: tables, sorting and cleanup before anyone reports on the data.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-hra-ms-excel",
@@ -3325,10 +3455,13 @@ export const RESOURCES: Resource[] = [
     provider: "Microsoft Support",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): support help-hub index = landing
     url: "https://support.microsoft.com/en-us/excel",
     durationHours: 2,
     skillsAddressed: ["Data Management", "Data Collection and Preparation"],
     careerId: "hra",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-hra-ra10173",
@@ -3338,11 +3471,14 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // statute text (200); privacy.gov.ph 403 this session — lawphil carries
     // the working legal anchor (standing re-check)
+    // audit (2026-11-03): statute text = reference
     url: "https://lawphil.net/statutes/repacts/ra2012/ra_10173_2012.html",
     durationHours: 2,
     skillsAddressed: ["Data Management", "Diversity, Equity, Inclusion and Belonging Management", "Voluntary Exit Management", "Involuntary Exit Management"],
     careerId: "hra",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-hra-hubspot-inbound",
@@ -3351,12 +3487,21 @@ export const RESOURCES: Resource[] = [
     type: "cert",
     cost: "free",
     // fully free incl. certificate; page verified w/ course title + search mirror
+    // audit (2026-11-03): HubSpot Academy course (free signup → account);
+    // taught. Digital-Marketing-and-Communication winner.
     url: "https://academy.hubspot.com/courses/inbound",
     durationHours: 4,
     skillsAddressed: ["Recruitment Channel Management", "Digital Marketing and Communication"],
     creditingBody: "HubSpot Academy",
     careerId: "hra",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Digital Marketing and Communication":
+        "The inbound framework taught as craft: how content attracts the right people, the buyer's journey, and the messaging spins that carry it — employer-brand marketing for HR teams.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-hra-public-speaking",
@@ -3365,10 +3510,13 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // audit free; certificate paid
+    // audit (2026-11-03): audit route → exam-paid
     url: "https://www.coursera.org/learn/public-speaking",
     durationHours: 12,
     skillsAddressed: ["Communication · Adaptability · Customer Orientation · Digital Fluency · Learning Agility · Self-Management (Enabling, Basic)"],
     careerId: "hra",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-hra-top-professionalism",
@@ -3378,12 +3526,21 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // HTTP 200 but login-walled; title verified via TOP search/category pages;
     // open inside a TOP account before citing course content (standing flag)
+    // audit (2026-11-03): TOP Moodle module → account (login-walled verified
+    // LIVE this pass; module pages redirect to the TOP login). ESC winner.
     url: "https://e-tesda.gov.ph/course/view.php?id=5042",
     durationHours: 2,
     skillsAddressed: ["Communication · Adaptability · Customer Orientation · Digital Fluency · Learning Agility · Self-Management (Enabling, Basic)"],
     creditingBody: "TESDA",
     careerId: "hra",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Communication · Adaptability · Customer Orientation · Digital Fluency · Learning Agility · Self-Management (Enabling, Basic)":
+        "The Job-Ready professionalism module drills the workplace basics the bundle names — presenting well, adapting to the office's norms, managing one's own work.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-hra-top-writing",
@@ -3392,11 +3549,25 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-walled (TOP account free); verified via TOP search page
+    // audit (2026-11-03): TOP Moodle module → account. Carries the
+    // Employee-Communication attach + ESC (the professionalism row is the
+    // ESC winner).
     url: "https://e-tesda.gov.ph/course/view.php?id=5037",
     durationHours: 2,
-    skillsAddressed: ["Communication · Adaptability · Customer Orientation · Digital Fluency · Learning Agility · Self-Management (Enabling, Basic)"],
+    skillsAddressed: [
+      "Communication · Adaptability · Customer Orientation · Digital Fluency · Learning Agility · Self-Management (Enabling, Basic)",
+      "Employee Communication Management",
+    ],
     creditingBody: "TESDA",
     careerId: "hra",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Employee Communication Management":
+        "The writing module drills the workplace-communication pieces — memos, announcements and reports written for internal audiences — the employee-communication flow this cell prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-hra-gap-interview",
@@ -3419,17 +3590,108 @@ export const RESOURCES: Resource[] = [
     careerId: "hra",
   },
   // ── training (3.2) ──
+  // Wave B audit (2026-11-03, batch 2): access/form per-row. Census-thin
+  // fills (all fetched LIVE 2026-11-03, user-ruled): the verified HRCI
+  // "Learning and Development" course carries Learning Needs Analysis +
+  // L&D-Programs Management; the verified STARWEAVER performance and
+  // stakeholder courses arrive as per-role duplicates. The GCF Excel row
+  // picks up the data-collection attach. Adviser-only reds remain, honest:
+  // Onboarding / Voluntary+Involuntary Exit / Skills-Framework Adoption /
+  // HR-Practices Implementation (no taught claim verified), HR Analytics
+  // (declared gap stands), and HR Systems Management (Moodle Academy 403 —
+  // ungraded, fail-closed). Coverage: 8/15 vetted.
   {
     id: "res-training-minnesota-hrm",
     title: "Human Resource Management: HR for People Managers Specialization",
     provider: "Coursera (University of Minnesota)",
     type: "course",
     cost: "free",
+    // audit free; certificate paid
+    // audit (2026-11-03): specialization page = program landing →
+    // landing/exam-paid (fail-closed; courses live behind it)
     url: "https://www.coursera.org/specializations/human-resource-management",
     durationHours: 15,
     skillsAddressed: ["Learning Needs Analysis", "Learning and Development Programs Management", "Human Resources Practices Implementation"],
     careerId: "training",
     pick: true,
+    form: "landing",
+    access: "exam-paid",
+  },
+  {
+    id: "res-training-hrci-lnd",
+    title: "Learning and Development (HRCI)",
+    provider: "Coursera (HRCI)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the
+    // learning-cells had only landing/reference claims. New row for HRCI's
+    // taught L&D course ("Enroll for free", Beginner, 4.8★ 881 reviews —
+    // training programs, employee training, needs assessment, program
+    // evaluation): analysis-to-program craft this family prints. ₱ paid
+    // tier: certificate.
+    url: "https://www.coursera.org/learn/learning-and-development",
+    durationHours: 8,
+    skillsAddressed: ["Learning Needs Analysis", "Learning and Development Programs Management"],
+    creditingBody: "HRCI",
+    careerId: "training",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Learning Needs Analysis":
+        "Teaches needs assessment directly — surfacing what the organization's people actually need to learn before any program is built — the analysis step this cell prints.",
+      "Learning and Development Programs Management":
+        "Runs the L&D program layer: building and running training programs, evaluating them, and closing the loop with employee training that sticks.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-training-starweaver-perf",
+    title: "Managing Employee Performance (STARWEAVER)",
+    provider: "Coursera (STARWEAVER)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the
+    // performance cell had no URL row. Per-role duplicate of the verified
+    // STARWEAVER course (pool convention; also carries the hra cell).
+    // ₱ paid tier: certificate.
+    url: "https://www.coursera.org/learn/managing-employee-performance",
+    durationHours: 5,
+    skillsAddressed: ["Performance Management"],
+    creditingBody: "STARWEAVER",
+    careerId: "training",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Performance Management":
+        "Goal setting, the appraisal conversation and constructive feedback — the cycle a training coordinator supports, taught hands-on.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-training-stakeholder",
+    title: "Stakeholder Management (STARWEAVER)",
+    provider: "Coursera (STARWEAVER)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the
+    // stakeholder cell was a declared gap (venue/vendor practice). Per-role
+    // duplicate of the verified STARWEAVER course — the
+    // identify-map-engage loop, the stakeholder craft that survives the
+    // venue/vendor coordination work. ₱ paid tier: certificate.
+    url: "https://www.coursera.org/learn/stakeholder-management",
+    durationHours: 5,
+    skillsAddressed: ["Stakeholder Engagement and Management"],
+    creditingBody: "STARWEAVER",
+    careerId: "training",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Stakeholder Engagement and Management":
+        "Identify the actors who must be kept in the loop, map their expectations, and plan the engagement cadence — the coordination shape the venue/vendor work runs inside.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-training-cipd",
@@ -3437,11 +3699,14 @@ export const RESOURCES: Resource[] = [
     provider: "CIPD (UK HR professional body)",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): factsheet library = readable reference
     url: "https://www.cipd.org/uk/knowledge/factsheets/",
     durationHours: 2,
     skillsAddressed: ["Learning Needs Analysis"],
     careerId: "training",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-training-lhtl",
@@ -3449,10 +3714,13 @@ export const RESOURCES: Resource[] = [
     provider: "Coursera (McMaster & University of Ottawa)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03): audit route → exam-paid
     url: "https://www.coursera.org/learn/learning-how-to-learn",
     durationHours: 4,
     skillsAddressed: ["Communication · Customer Orientation · Learning Agility · Self-Management · Problem Solving (Enabling, Basic)"],
     careerId: "training",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-training-gcf-excel",
@@ -3460,10 +3728,22 @@ export const RESOURCES: Resource[] = [
     provider: "GCFGlobal",
     type: "course",
     cost: "free",
+    // completely free, browser-based, no account
+    // audit (2026-11-03): GCF lesson series with hands-on practice →
+    // taught/direct. Carries the data-collection attach.
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
-    skillsAddressed: ["Data Management"],
+    skillsAddressed: ["Data Management", "Data Collection and Preparation"],
     careerId: "training",
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Data Management":
+        "Workbooks and formulas taught hands-on — the tracker hygiene training records and budgets ride on.",
+      "Data Collection and Preparation":
+        "Collecting entries into structured, sortable sheets — the gathering-and-cleanup step before any training report.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-training-ms-excel",
@@ -3471,11 +3751,14 @@ export const RESOURCES: Resource[] = [
     provider: "Microsoft Support",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): support help-hub index = landing
     url: "https://support.microsoft.com/en-us/excel",
     durationHours: 2,
     skillsAddressed: ["Data Collection and Preparation", "Data Management"],
     careerId: "training",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-training-moodle-academy",
@@ -3484,6 +3767,8 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // 200; the Moodle docs site was 403 this session — Academy used (flagged, not silent)
+    // Wave B (2026-11-03): moodle.academy 403 to this environment this
+    // pass — UNGRADED (fail-closed); the learn.microsoft hub grades landing.
     url: "https://moodle.academy/",
     durationHours: 4,
     skillsAddressed: ["Human Resources Systems Management", "Learning and Development Programs Management"],
@@ -3496,10 +3781,13 @@ export const RESOURCES: Resource[] = [
     provider: "Microsoft Learn",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): training catalog root = landing
     url: "https://learn.microsoft.com/en-us/training/",
     durationHours: 4,
     skillsAddressed: [],
     careerId: "training",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-training-top-writing",
@@ -3508,12 +3796,21 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-walled (TOP account free); verified via TOP search page
+    // audit (2026-11-03): TOP Moodle module → account (login-walled verified
+    // LIVE this pass). Employee Communication winner.
     url: "https://e-tesda.gov.ph/course/view.php?id=5037",
     durationHours: 2,
     skillsAddressed: ["Employee Communication", "Communication · Customer Orientation · Learning Agility · Self-Management · Problem Solving (Enabling, Basic)"],
     creditingBody: "TESDA",
     careerId: "training",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Employee Communication":
+        "The writing module drills memos, announcements and reports written for internal audiences — the employee-communication flow this cell prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-training-top-professionalism",
@@ -3522,12 +3819,21 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-walled (TOP account free)
+    // audit (2026-11-03): TOP Moodle module → account. ESC winner (id A–Z
+    // over the writing row — both credited TESDA).
     url: "https://e-tesda.gov.ph/course/view.php?id=5042",
     durationHours: 2,
     skillsAddressed: ["Communication · Customer Orientation · Learning Agility · Self-Management · Problem Solving (Enabling, Basic)"],
     creditingBody: "TESDA",
     careerId: "training",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Communication · Customer Orientation · Learning Agility · Self-Management · Problem Solving (Enabling, Basic)":
+        "The Job-Ready professionalism module drills the workplace basics the bundle names — presenting well, adapting to norms, managing one's own work.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-training-top-bizops",
@@ -3537,11 +3843,14 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // login-walled (TOP account free); the venue/vendor-contracting zone
     // stays declared-thin — this is the adjacent backing
+    // audit (2026-11-03): TOP Moodle module → account (ADDR-catalog-only)
     url: "https://e-tesda.gov.ph/course/view.php?id=4810",
     durationHours: 3,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "training",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-training-gap-venue-vendor",
@@ -3574,19 +3883,48 @@ export const RESOURCES: Resource[] = [
     careerId: "training",
   },
   // ── mkt (3.3) — study.com citations stripped; thin zones declared ──
+  // Wave B audit (2026-11-03, batch 2): access/form per-row (HubSpot
+  // Academy → account; Coursera audit → exam-paid; TOP Moodle modules →
+  // account; Skillshop root + GCF topics root + the Illinois
+  // specialization → landing fail-closed). The grow.google cert page was
+  // RE-POINTed to the taught course-1 page (fetched LIVE). Census-thin
+  // fills, all user-ruled: the verified IE "Marketing Mix Fundamentals"
+  // course carries the mix / distribution-channels / brand-bundle cells;
+  // the TOP Interpersonal module (per-role duplicate) carries the
+  // Communication+CSC collaboration ESC cells; customer orientation
+  // attaches to the TOP centricity module. Declared-thin gap rows stay
+  // declared — adviser-only. Learn lines drafted from the resources'
+  // actual content (learn draft — user review pending).
+  // Coverage: 19/25 vetted — five honest reds stay (adviser-only): the
+  // Business-Environment and Consumer-Intelligence no-claims, the
+  // Demand-Analysis-family bundle, and the two declared-thin gap bundles.
   {
     id: "res-mkt-google-dmx",
-    title: "Google Digital Marketing & E-commerce Certificate",
+    title: "Foundations of Digital Marketing and E-commerce (Google, cert course 1)",
     provider: "Google (grow.google / Coursera)",
     type: "cert",
     cost: "free",
-    // audit gives course access free on Coursera; verified certificate paid
-    // (financial aid available)
-    url: "https://grow.google/certificates/digital-marketing-ecommerce",
-    durationHours: 120,
+    // fetched LIVE 2026-11-03 (RE-POINTED, Wave B batch 2): the old URL was
+    // the grow.google certificate landing. The suggested slot must open
+    // teachable content, so this row now points at the cert's taught
+    // course 1 ("Foundations of Digital Marketing and E-commerce", "Enroll
+    // for free" verified — the digital-marketing and e-commerce landscape,
+    // who the audiences are, and the channel/portfolio fundamentals).
+    // Id/ADDR unchanged; audit route free, ₱ certificate tier.
+    url: "https://www.coursera.org/learn/foundations-of-digital-marketing-and-e-commerce",
+    durationHours: 20,
     skillsAddressed: ["Digital Marketing", "Marketing Communications Plan Development", "Media Strategy Development"],
     careerId: "mkt",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Marketing Communications Plan Development":
+        "The course lays the channel-and-message groundwork: how digital marketing channels differ, who a campaign reaches, and how the pieces assemble into a coherent plan.",
+      "Media Strategy Development":
+        "Teaches picking among channels and tactics for a market goal — where to spend, on what audiences, and how the funnel stages map to media choices.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-mkt-hubspot-social",
@@ -3595,11 +3933,14 @@ export const RESOURCES: Resource[] = [
     type: "cert",
     cost: "free",
     // completely free incl. certificate (title confirmed on page)
+    // audit (2026-11-03): HubSpot Academy course (free signup → account).
     url: "https://academy.hubspot.com/courses/social-media",
     durationHours: 6,
     skillsAddressed: ["Social Media Marketing", "Trend Forecasting"],
     creditingBody: "HubSpot Academy",
     careerId: "mkt",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-mkt-hubspot-content",
@@ -3607,12 +3948,21 @@ export const RESOURCES: Resource[] = [
     provider: "HubSpot Academy",
     type: "cert",
     cost: "free",
+    // audit (2026-11-03): HubSpot Academy course (free signup → account).
+    // Collateral-family winner (only claim).
     url: "https://academy.hubspot.com/courses/content-marketing",
     durationHours: 6,
     skillsAddressed: ["Content Development and Strategy", "Category Marketing · Collateral Production · Visual Collaterals Production · Content Management"],
     creditingBody: "HubSpot Academy",
     careerId: "mkt",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Category Marketing · Collateral Production · Visual Collaterals Production · Content Management":
+        "The content-marketing curriculum plans and produces the pieces — the story framework, the collateral an asset pack needs, and the content calendar that manages it all.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-mkt-illinois-dmx",
@@ -3621,11 +3971,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // audit free per course; certificate paid (financial aid)
+    // audit (2026-11-03): specialization page = program landing →
+    // landing/exam-paid
     url: "https://www.coursera.org/specializations/digital-marketing",
     durationHours: 30,
     skillsAddressed: ["Digital Marketing", "Media Strategy Development"],
     careerId: "mkt",
-    pick: true,
+    form: "landing",
+    access: "exam-paid",
   },
   {
     id: "res-mkt-wharton-customer-analytics",
@@ -3634,6 +3987,8 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // audit free; certificate paid
+    // audit (2026-11-03): Coursera course page → audit route free, cert
+    // paid → exam-paid; taught. Market-intelligence family winner.
     url: "https://www.coursera.org/learn/wharton-customer-analytics",
     durationHours: 12,
     skillsAddressed: [
@@ -3642,6 +3997,21 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "mkt",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Market Intelligence":
+        "Teaches reading customers and markets from data — what people choose and why — the intelligence base a marketer acts on.",
+      "Market Profiling":
+        "Profiling exercises separate audiences by what they do and value — the customer-segment read this cell prints.",
+      "Market Trend Analysis":
+        "The course reads demand patterns and behavior shifts from real data — spotting the trend lines inside messy market signals.",
+      "Data Analysis and Interpretation":
+        "Hands-on analytics framing: turning raw purchase/behavior data into interpreted findings a marketing decision can rest on.",
+      "Data-mining and Modelling · Research and Information Synthesis":
+        "The modelling module digs patterns out of large datasets and pairs them with research synthesis — the mining-discipline the bundle prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-mkt-google-analytics-academy",
@@ -3650,11 +4020,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // free; may need a Google account; PH-accessible
+    // audit (2026-11-03): skillshop root = the platform home (courses live
+    // behind it) → landing/account
     url: "https://skillshop.withgoogle.com/",
     durationHours: 4,
     skillsAddressed: ["Digital Fluency (ESC, Basic)"],
     careerId: "mkt",
-    pick: true,
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-mkt-top-social-concepts",
@@ -3663,13 +4036,31 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-walled (TOP account free); titles verified via TOP search page
+    // audit (2026-11-03): TOP Moodle module → account (login-walled
+    // verified LIVE this pass). Social-marketing + ESC winner (id A–Z +
+    // countsTowardEntryPath).
     url: "https://e-tesda.gov.ph/course/view.php?id=4069",
     durationHours: 2,
-    skillsAddressed: ["Social Media Marketing", "Trend Forecasting"],
+    skillsAddressed: [
+      "Social Media Marketing",
+      "Trend Forecasting",
+      "Digital Fluency (ESC, Basic)",
+    ],
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "mkt",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Social Media Marketing":
+        "The TESDA module develops social-media concepts against a campaign target — platforms, formats and the message fit — social marketing in the PH-running convention.",
+      "Trend Forecasting":
+        "Concept development here starts from what audiences currently respond to — reading the platform's live styles and forecasting the next concept fit.",
+      "Digital Fluency (ESC, Basic)":
+        "Working a real content pipeline end to end in digital tools — brief to posted concept — the digital-fluency basics the ESC layer prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-mkt-top-social-propagating",
@@ -3678,12 +4069,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-walled (TOP account free)
+    // audit (2026-11-03): TOP Moodle module → account
     url: "https://e-tesda.gov.ph/course/view.php?id=4070",
     durationHours: 2,
     skillsAddressed: ["Social Media Marketing"],
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "mkt",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-mkt-top-dmx-funnel",
@@ -3692,6 +4086,8 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-walled (TOP account free)
+    // audit (2026-11-03): TOP Moodle module → account. Digital Marketing +
+    // E-commerce winner (id A–Z over the optimizing row — both credited).
     url: "https://e-tesda.gov.ph/course/view.php?id=4748",
     durationHours: 2,
     skillsAddressed: ["Digital Marketing", "E-Commerce Campaign Management"],
@@ -3699,6 +4095,15 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "mkt",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Digital Marketing":
+        "Designs the funnel a digital campaign runs on — stages, channels and the message hand-offs — digital marketing taught on the TESDA competency.",
+      "E-Commerce Campaign Management":
+        "The funnel module carries the e-commerce campaign layer: driving buyers through the stages to a conversion, the campaign management this cell prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-mkt-top-dmx-content",
@@ -3706,6 +4111,9 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // login-walled (TOP account free)
+    // audit (2026-11-03): TOP Moodle module → account. Content Dev+Strategy
+    // winner (countsTowardEntryPath + credited TESDA beats the HubSpot row).
     url: "https://e-tesda.gov.ph/course/view.php?id=4750",
     durationHours: 2,
     skillsAddressed: ["Digital Marketing", "Content Development and Strategy"],
@@ -3713,6 +4121,13 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "mkt",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Content Development and Strategy":
+        "Creating the campaign's content in line with the funnel strategy: what to make, for which stage and audience — the develop-plan loop this cell prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-mkt-top-dmx-optimizing",
@@ -3720,12 +4135,16 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // login-walled (TOP account free)
+    // audit (2026-11-03): TOP Moodle module → account
     url: "https://e-tesda.gov.ph/course/view.php?id=4751",
     durationHours: 2,
     skillsAddressed: ["Digital Marketing", "E-Commerce Campaign Management"],
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "mkt",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-mkt-top-customer-centricity",
@@ -3734,11 +4153,20 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-walled (TOP account free)
+    // audit (2026-11-03): TOP Moodle module → account (ADDR-catalog-only)
     url: "https://e-tesda.gov.ph/course/view.php?id=5043",
     durationHours: 2,
-    skillsAddressed: [],
+    skillsAddressed: ["Customer Orientation (ESC, Basic)"],
     creditingBody: "TESDA",
     careerId: "mkt",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Customer Orientation (ESC, Basic)":
+        "The Job-Ready customer-centricity module puts the customer at the center of every work decision — the orientation behavior the ESC cell prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-mkt-gcf",
@@ -3747,10 +4175,80 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // practical tooling for calendars, trackers, media logs; free, no account
+    // audit (2026-11-03): gcf topics root = an all-topics index → landing
     url: "https://edu.gcfglobal.org/en/",
     durationHours: 2,
     skillsAddressed: [],
     careerId: "mkt",
+    form: "landing",
+    access: "direct",
+  },
+  {
+    id: "res-mkt-ie-marketing-mix",
+    title: "Marketing Mix Fundamentals (IE Business School)",
+    provider: "Coursera (IE Business School)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the
+    // Marketing-Mix / distribution-channels / brand-bundle cells had no
+    // taught claims (the study.com strips left them thin). New row for
+    // IE's taught course ("Enroll for free" ×3; canonical /learn/marketing-mix;
+    // skills decoded from the page: Marketing Mix via the title,
+    // Marketing Channel / Integrated Marketing Communications /
+    // Communication Planning, and Brand Strategy · Branding · Brand
+    // Management with Media Planning) — the 4-P craft this family prints.
+    // ₱ paid tier: shareable certificate.
+    url: "https://www.coursera.org/learn/marketing-mix",
+    durationHours: 6,
+    skillsAddressed: [
+      "Marketing Mix Management",
+      "Communications within Distribution Channels",
+      "Brand Campaign Management · Brand Guideline Development · Brand Marketing · Brand Portfolio Management",
+    ],
+    creditingBody: "IE Business School",
+    careerId: "mkt",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Marketing Mix Management":
+        "The course is the marketing mix taught: product, price, placement and promotion decisions worked together — the 4-P management this cell prints.",
+      "Communications within Distribution Channels":
+        "Channel and communication-planning modules show how messages travel through the distribution stack — IMC planned across a channel's partners.",
+      "Brand Campaign Management · Brand Guideline Development · Brand Marketing · Brand Portfolio Management":
+        "Brand-strategy and brand-management modules cover building the brand's identity, setting its rules, and running campaigns under it — the brand-family bundle taught.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-mkt-top-interpersonal",
+    title: "TOP — Interpersonal Skills (Job Ready)",
+    provider: "TESDA Online Program (TOP)",
+    type: "course",
+    cost: "free",
+    // login-walled (TOP account free); title verified via TOP search pages
+    // (standing flag, same class as the Job-Ready siblings)
+    // audit (2026-11-03): TOP Moodle module → account (login-walled verified
+    // LIVE this pass). Per-role duplicate of the sales pool's module —
+    // carries the communication + collaboration ESC-layer cells.
+    url: "https://e-tesda.gov.ph/course/view.php?id=5040",
+    durationHours: 2,
+    skillsAddressed: [
+      "Communication (ESC-layer, printed in the Primary block)",
+      "Collaboration (ESC, Basic)",
+    ],
+    creditingBody: "TESDA",
+    careerId: "mkt",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Communication (ESC-layer, printed in the Primary block)":
+        "The Job-Ready interpersonal module drills workplace talking and listening — the communication layer this ESC cell prints.",
+      "Collaboration (ESC, Basic)":
+        "Working with others in the module's team exercises — the collaboration basics the ESC cell prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-mkt-gap-proposal",
