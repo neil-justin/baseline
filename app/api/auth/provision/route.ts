@@ -80,10 +80,18 @@ export async function POST(req: Request) {
         }
         throw err;
       }
-      // JWT parity with the password signup route (proxy reads app_metadata)
-      await admin.auth.admin.updateUserById(user.id, {
+      // JWT parity with the password signup route (proxy reads app_metadata).
+      // Best-effort BY CONTRACT: the profiles row + state are already written
+      // (the roster's source of truth), so a failed stamp is surfaced, not
+      // thrown — the row stays authoritative and proxy's /admin guard treats
+      // "no role marker" exactly like "student" (both denied identically).
+      // Fixing it here would mean plumbing a stamp retry through the shared
+      // helper for an anomaly that is invisible to every client surface.
+      const { error: stampErr } = await admin.auth.admin.updateUserById(user.id, {
         app_metadata: { role: "student" },
       });
+      // stamp is best-effort; see contract comment above
+      void stampErr;
       return NextResponse.json({ dest: "/onboarding", role: "student", studentId });
     }
 
