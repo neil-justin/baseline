@@ -222,7 +222,7 @@
   display: grid;
   grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
   gap: 48px;
-  align-items: start;
+  align-items: center;
 }
 .v7land .hero h1 {
   /* the family's public display size — between band-title 18 and the
@@ -316,40 +316,80 @@
 .v7land .segbar .seg i { background: var(--v-blue); opacity: 1; }
 .v7land .segbar .seg:nth-child(2) i { background: var(--v-green); }
 
-/* ---------- stat band — three cited numbers ---------- */
+/* ---------- the platform statement + icon facts (revamp 2026-11-03) ---------- */
 
-.v7land .stats-grid {
+.v7land .facts {
+  margin-top: 24px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  max-width: 1240px;
-  margin: 0 auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
 }
-.v7land .stat { padding: 30px 28px 26px; min-width: 0; }
-.v7land .stat + .stat { border-left: 1px solid var(--v-rows); }
-.v7land .stat .n {
-  font: 500 32px/1 Roboto, system-ui, sans-serif;
-  font-variant-numeric: tabular-nums;
+.v7land .fact {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 18px 20px;
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+}
+.v7land .fact .ic {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: var(--v-blue);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  margin-top: 2px;
+}
+.v7land .fact b {
+  font: 500 14px/1.35 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
 }
-.v7land .stat .n sub {
-  font-size: 13.4px;
-  font-weight: 400;
-  vertical-align: baseline;
-  position: relative;
-  bottom: 0.2em;
-  margin-left: 1px;
+.v7land .fact p {
+  margin-top: 4px;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
 }
-.v7land .stat .q {
+
+/* ---------- feature blocks — real screenshots, alternating rows ---------- */
+
+.v7land .feat {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+  gap: 40px;
+  align-items: center;
+}
+/* flipped rows read right-to-left: text on the right */
+.v7land .feat.flip .feat-copy { order: 2; }
+.v7land .feat.flip .shot-frame { order: 1; }
+.v7land .feat-copy h3 {
+  font: 500 20px/1.3 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  text-wrap: balance;
+}
+.v7land .feat-copy p {
   margin-top: 10px;
-  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
+  font: 400 13.5px/1.6 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
-  max-width: 34ch;
+  max-width: 52ch;
 }
-.v7land .stat .src {
-  margin-top: 12px;
-  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
+.v7land .shot-frame {
+  margin: 0;
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(60, 64, 67, 0.12);
+  overflow: hidden;
+}
+.v7land .shot-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 /* ---------- sections ---------- */
@@ -363,47 +403,7 @@
 }
 .v7land .section-head p { margin-top: 10px; font: 400 13.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 58ch; }
 
-/* ---------- career index preview ---------- */
-
-.v7land .idx-table { margin-top: 20px; }
-.v7land .idx-heads,
-.v7land .idx-row {
-  display: grid;
-  grid-template-columns: 1.25fr minmax(120px, 0.8fr) 76px minmax(0, 1.35fr);
-  gap: 16px;
-  align-items: center;
-  min-width: 0;
-}
-.v7land .idx-heads {
-  padding: 12px 16px 8px;
-}
-.v7land .idx-row {
-  padding: 11px 16px;
-  border-top: 1px solid var(--v-rows);
-  transition: background-color 0.12s ease;
-}
-.v7land .idx-row:last-child { border-bottom: 0; }
-.v7land .idx-row:hover { background: var(--v-grey-wash); }
-.v7land .idx-row .career {
-  font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
-  color: var(--v-ink);
-  min-width: 0;
-}
-.v7land .idx-row .track { font: 400 12px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
-.v7land .idx-row .skills { font: 400 12px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); font-variant-numeric: tabular-nums; }
-.v7land .idx-row .entry { font: 400 12px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
-.v7land .idx-foot {
-  margin-top: 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-.v7land .idx-foot p { font: 400 13.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 52ch; }
-.v7land .idx-foot p b { color: var(--v-ink); font-weight: 500; }
-
-/* ---------- rubric honesty band ---------- */
+/* ---------- rubric honesty band (grid survives; the counselors band uses it) ---------- */
 
 .v7land .rub-grid {
   display: grid;
@@ -412,41 +412,6 @@
   padding-top: 48px;
   padding-bottom: 48px;
   align-items: start;
-}
-.v7land .rub-bar { display: flex; gap: 3px; margin-top: 4px; }
-.v7land .rub-seg {
-  height: 40px;
-  background: var(--v-track);
-  border-radius: 2px;
-  min-width: 0;
-}
-.v7land .rub-labels { display: flex; gap: 3px; margin-top: 12px; }
-.v7land .rub-label { min-width: 0; padding-right: 6px; }
-.v7land .rub-label .w {
-  font: 500 15px/1 Roboto, system-ui, sans-serif;
-  font-variant-numeric: tabular-nums;
-  color: var(--v-ink);
-}
-.v7land .rub-label .w small {
-  font: 400 11px Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  margin-left: 1px;
-}
-.v7land .rub-label .n {
-  margin-top: 4px;
-  font: 500 12.5px/1.35 Roboto, system-ui, sans-serif;
-  color: var(--v-ink);
-}
-.v7land .rub-label .d { margin-top: 2px; font: 400 11px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
-.v7land .rub-scale {
-  margin-top: 14px;
-  display: flex;
-  justify-content: space-between;
-  border-top: 1px solid var(--v-rows);
-  padding-top: 8px;
-  font: 400 11px/1 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  font-variant-numeric: tabular-nums;
 }
 
 /* ---------- work loop ---------- */
@@ -561,9 +526,11 @@
 
 @media (max-width: 1020px) {
   .v7land .hero-grid { grid-template-columns: 1fr; gap: 36px; }
-  .v7land .stats-grid { grid-template-columns: 1fr; }
-  .v7land .stat { padding: 22px 24px 18px; }
-  .v7land .stat + .stat { border-left: 0; border-top: 1px solid var(--v-rows); }
+  .v7land .facts { grid-template-columns: 1fr; }
+  .v7land .feat { grid-template-columns: 1fr; gap: 18px; }
+  /* fold order: copy first, then its screenshot — both row directions */
+  .v7land .feat.flip .feat-copy { order: 1; }
+  .v7land .feat.flip .shot-frame { order: 2; }
   .v7land .rub-grid { grid-template-columns: 1fr; gap: 30px; }
 }
 
@@ -593,4 +560,124 @@
   .v7land .rub-seg { height: 28px; }
   .v7land .rub-labels { flex-direction: column; gap: 12px; }
   .v7land .loop-step { padding: 16px 16px; grid-template-columns: 26px 1fr; }
+}
+
+/* ---------- hero photograph (revamp 2026-11-03) ---------- */
+
+.v7land .hero-photo {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--v-border);
+  box-shadow: var(--v-shadow);
+  display: block;
+}
+/* ≤1020px the grid folds to one column — cap the photo's height so the
+   hero doesn't push the stats band off the first viewport on mobile.
+   object-fit crops the overflow instead of squashing it; biased high
+   (caps-in-air stay in frame). */
+@media (max-width: 1020px) {
+  .v7land .hero-photo {
+    max-height: 380px;
+    object-fit: cover;
+    object-position: 50% 18%;
+  }
+}
+
+/* ---------- how-it-works step instruments (revamp 2026-11-03) ---------- */
+
+.v7land .loop-viz {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.v7land .chip.v-ok { background: var(--v-green-wash); color: var(--v-green-text); }
+.v7land .chip.v-check { background: var(--v-blue-wash); color: var(--v-blue-deep); }
+/* the claimed chip carries the family's hatch — a claim never closes alone */
+.v7land .chip.v-claim {
+  background: var(--v-grey-wash);
+  color: var(--v-grey-text);
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(60, 64, 67, 0.09) 0 2px,
+    transparent 2px 5px
+  );
+}
+.v7land .loop-viz.bars {
+  display: grid;
+  gap: 6px;
+  max-width: 340px;
+}
+.v7land .vbar {
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+.v7land .vbar .vlab {
+  font: 400 11px/1.3 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  white-space: nowrap;
+}
+.v7land .vbar .vtrack {
+  height: 8px;
+  background: var(--v-track);
+  border-radius: 2px;
+  display: block;
+  overflow: hidden;
+}
+.v7land .vbar .vtrack em {
+  display: block;
+  height: 100%;
+  background: var(--v-blue);
+  border-radius: 2px;
+}
+/* the page's one gif-like motion: the channel bars fill as the card
+   reveals (.rv.in from lib/motion). Inline width is the target; the
+   pre-reveal rule pins it to 0. Reduced motion renders instantly —
+   the app's motion contract (lib/motion.ts) adds .in without delay. */
+.v7land .rv .vbar .vtrack em {
+  transition: width 0.5s ease 0.15s;
+}
+.v7land .rv:not(.in) .vbar .vtrack em {
+  width: 0 !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .v7land .rv .vbar .vtrack em { transition: none; }
+}
+
+/* ---------- FAQ — plain details/summary, hairline rows ---------- */
+
+.v7land .faq-list {
+  margin-top: 20px;
+  max-width: 760px;
+  border-top: 1px solid var(--v-rows);
+}
+.v7land .faq-item { border-bottom: 1px solid var(--v-rows); }
+.v7land .faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px 0;
+  font: 500 14px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7land .faq-item summary::-webkit-details-marker { display: none; }
+.v7land .faq-item summary::after {
+  content: "+";
+  font: 400 18px/1 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  flex: none;
+}
+.v7land .faq-item[open] summary::after { content: "–"; }
+.v7land .faq-item summary:hover { color: var(--v-blue-deep); }
+.v7land .faq-item p {
+  padding: 0 24px 16px 0;
+  font: 400 13px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 62ch;
 }
