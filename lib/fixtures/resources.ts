@@ -5502,10 +5502,23 @@ export const RESOURCES: Resource[] = [
   // LSS White Belt arrives as a per-role dup (fetched LIVE; DMAIC/waste/
   // improvement cycles) for the process-study-scoping leg. The findings-memo
   // leg re-homes on the TOP writing module (workplace documents attach; the
-  // §6.1 pin keeps GCF from carrying it). Honest reds KEPT (searched, no taught
-  // page verified): On-site observation
-  // & interviewing (the SkillsBuild move left no open taught page) and the four
-  // no-claim O*NET/PSOC tasks. Coverage: 5/10 vetted.
+  // §6.1 pin keeps GCF from carrying it).
+  // Wave E hunt (2026-11-03/04, user-delegated): four taught fills land —
+  // U Amsterdam's Qualitative Research Methods (dedicated participant-
+  // observation + qualitative-interviewing modules; fetched LIVE), Alison's
+  // Training of Trainers — Training Design (printed "Create a learner-friendly
+  // training site and instructional manual" outcome), Coursera (Adobe)
+  // Document Design (organizing/formatting documents + professional review
+  // cycles + multichannel formatting), Alison's Introduction to Electronic
+  // Document Management (document lifecycle, classification/indexing,
+  // compliance and access control + the printed assess-organisational-needs
+  // implementation step). One cell stays red on purpose, adjudicated
+  // Wave E 2026-11-03 (statute-anchored):
+  //   · "PSOC 2421 corroboration block (lettered task a)" — the verbatim PSOC
+  //     lettered-task cell corroborates the roster extraction itself (no O*NET
+  //     counterpart); no taught page can teach a corroboration block.
+  //     Adviser-owned.
+  // Coverage: 9/10 vetted.
   {
     id: "res-ops-wharton-customer-analytics",
     title: "Customer Analytics (Wharton)",
@@ -5663,6 +5676,105 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
+    id: "res-ops-qual-research",
+    title: "Qualitative Research Methods (U Amsterdam)",
+    provider: "Coursera (U Amsterdam)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): the observation-
+    // and-interview craft in course form — a dedicated Observation module
+    // (participant observation: being inside the work flow, observational
+    // focus, field notes, fieldwork organisation) and a Qualitative
+    // Interviewing module (probing tactics, rapport). "Enroll for free" →
+    // audit; certificate paid.
+    url: "https://www.coursera.org/learn/qualitative-methods",
+    durationHours: 28,
+    skillsAddressed: ["On-site observation & interviewing"],
+    careerId: "opsanalyst",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "On-site observation & interviewing":
+        "The participant-observation module teaches watching work happen and recording it honestly (focus, field notes, interpretation), and the interviewing module drills probing questions that draw out what people actually do rather than what they report.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-ops-tott-design",
+    title: "Training of Trainers — Training Design",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): the printed
+    // outcome "Create a learner-friendly training site and instructional
+    // manual" plus adult-learning principles and instructional strategies —
+    // the manuals-and-training leg for revised forms/reports/procedures.
+    // Certificate optional (paid); study free/account.
+    url: "https://alison.com/course/training-of-trainers-training-design",
+    durationHours: 4,
+    skillsAddressed: ["Implementation support & training of revised methods"],
+    careerId: "opsanalyst",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Implementation support & training of revised methods":
+        "The design module teaches turning a method into an instructional manual and a learner-friendly training site around adult-learning principles — the rolling-revised-methods-out craft.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-ops-adobe-document-design",
+    title: "Document Design (Adobe)",
+    provider: "Coursera (Adobe)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): organizing,
+    // formatting and managing documents to professional standards; Module 2
+    // runs professional review cycles (design-review quizzes, version and
+    // feedback handling) and optimizes documents for multichannel campaigns —
+    // the format/distribution legs of the forms/reports review; the purpose
+    // review stays human judgment (course is Acrobat-centric). "Enroll for
+    // free" → audit; certificate paid.
+    url: "https://www.coursera.org/learn/document-design",
+    durationHours: 22,
+    skillsAddressed: ["Forms/reports review & redesign"],
+    careerId: "opsanalyst",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Forms/reports review & redesign":
+        "The workflow module runs professional review cycles — versions, feedback, optimization through to a production-ready redesign — and prints the formatting/distribution leg (multichannel, quality, accessibility); judging what the document is FOR stays with the analyst.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-ops-edm",
+    title: "Introduction to Electronic Document Management",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): printed outcomes —
+    // the stages of the document lifecycle, classification/indexing/metadata
+    // for efficient storage and retrieval, compliance with EDM standards and
+    // regulations, access-control components, and "assessing organisational
+    // needs and requirements for EDM implementation" — the
+    // filing/protection/retrieval program-support craft in course form.
+    url: "https://alison.com/course/introduction-to-electronic-document-management",
+    durationHours: 3,
+    skillsAddressed: ["Records-management program design"],
+    careerId: "opsanalyst",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Records-management program design":
+        "The course teaches the filing/protection/retrieval components of a records program (lifecycle stages, classification and indexing, compliance, access control) plus the printed assess-organisational-needs step — program design support, with the org-wide policy itself adviser-owned.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
     id: "res-ops-lhtl",
     title: "Learning How to Learn",
     provider: "Coursera (McMaster & U Ottawa)",
@@ -5706,12 +5818,21 @@ export const RESOURCES: Resource[] = [
   // "IRR of RA 9184 | GPPB-TSO"); PhilGEPS RE-POINTED to the canonical bare
   // domain (301 verified). IRR + RA 9184 caveat = reference (readable law
   // text, no teaching flow). PhilGEPS = the labeled start-here portal →
-  // landing. TOP modules graded account. Honest reds KEPT (searched, no
-  // taught page verified): Price-proposal analysis (the sourcing course prints
-  // no price-analysis module — a reviewer's note says contracts/negotiation
-  // are outside it), Legal & policy compliance (RA 9184 text is reference;
-  // CIPS paid), Contract performance monitoring, Product specification
-  // writing, Market watching. Coverage: 5/10 vetted.
+  // landing. TOP modules graded account.
+  // Wave E hunt (2026-11-03/04, user-delegated): five taught fills land on
+  // the 2026 procurement shelf — Coursera's TCO course (comparative TCO/NPV
+  // models built over supplier bids → data-driven award recommendation),
+  // EDUCBA's Procurement-Bidding-and-Contract Analysis (bid types, process
+  // steps, prequalification requirements, bid documentation, financial/legal
+  // safeguards), the Procurement-Negotiation-and-Contract-Execution course
+  // (checklist cross-checks of contract terms against quotations; negotiation
+  // levers and structured notes), the From-Specs-to-POs module (anatomy of a
+  // specification sheet, spec→PO transcription and verification), and the
+  // Market-Scan module (structured market scans over the professional
+  // sourcing ecosystem, screening criteria, documented long-lists). All
+  // fetched LIVE ("Enroll for free" → audit; certificate paid). The IRR +
+  // PhilGEPS rows keep their keep-with-flag / start-here rulings; the four
+  // declared gap rows stay shipped. Coverage: 10/10 vetted.
   {
     id: "res-purch-rutgers-scm",
     title: "Supply Chain Management Specialization (Rutgers)",
@@ -5912,6 +6033,128 @@ export const RESOURCES: Resource[] = [
     access: "account",
   },
   {
+    id: "res-purch-tco",
+    title: "Evaluate Total Costs for Optimal Procurement",
+    provider: "Coursera (Professionals in the Industry)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): the price-
+    // analysis craft literally printed — comparative TCO models built over
+    // supplier proposals, NPV across the competing bids, interpreting the
+    // model "Beyond the Lowest Number", and the final award-memo
+    // recommendation. "Enroll for free" → audit; certificate paid.
+    url: "https://www.coursera.org/learn/evaluate-total-costs-for-optimal-procurement",
+    durationHours: 3,
+    skillsAddressed: ["Price-proposal analysis"],
+    careerId: "purch",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Price-proposal analysis":
+        "The course teaches reading supplier proposals for their full cost structure (drivers beyond the price tag) and comparing competing bids with TCO/NPV models to land on a defensible, data-driven price judgment.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-purch-educba-bidding",
+    title: "Procurement, Bidding and Contract Analysis (EDUCBA)",
+    provider: "Coursera (EDUCBA)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): the bidding-side
+    // procedural rules in course form — types of bids, bidding-process steps,
+    // prequalification requirements, bid documentation, proposal evaluation,
+    // and the financial/legal safeguards (bank guarantees, Incoterms,
+    // liquidated damages, Force Majeure); contract administration best
+    // practices in Module 2. "Enroll for free" → audit; certificate paid.
+    url: "https://www.coursera.org/learn/procurement-bidding-contract-analysis",
+    durationHours: 5,
+    skillsAddressed: ["Legal & policy compliance (procurement rules)"],
+    careerId: "purch",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Legal & policy compliance (procurement rules)":
+        "The bidding modules teach the process rules a buyer follows — prequalification, bid documentation, submission discipline — and the safeguards module teaches the clauses (Incoterms, liquidated damages, Force Majeure) that keep the paper enforceable; PH-specific RA 9184 rules stay with the reference rows.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-purch-contract-execution",
+    title: "Procurement, Negotiation and Contract Execution",
+    provider: "Coursera (Professionals from the Industry)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): "the
+    // documentation and control practices that maintain traceability",
+    // checklists to validate contract terms against quotations (Module 6's
+    // Contract Compliance Checklist), and the negotiation-levers/note-taking
+    // module — the monitor-compliance + vendor-negotiation pair. "Enroll for
+    // free" → audit; certificate paid.
+    url: "https://www.coursera.org/learn/procurement-negotiation-and-contract-execution",
+    durationHours: 12,
+    skillsAddressed: ["Contract performance monitoring"],
+    careerId: "purch",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Contract performance monitoring":
+        "Module 6's contract-compliance checklist teaches cross-checking the signed terms against the quotation (price, delivery, warranty) — the monitor-the-deal discipline; the negotiation module's structured note template covers the vendor-negotiation half.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-purch-specs-to-pos",
+    title: "Procurement: From Specs to POs",
+    provider: "Coursera (Professionals in the Industry)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): the printed
+    // "Anatomy of a Specification and a Purchase Order" lesson plus the
+    // spec→PO transcription and create-and-verify workflow — the
+    // review/transcribe side of working with product specifications
+    // (authoring technical content from first principles is beyond the
+    // course). "Enroll for free" → audit; certificate paid.
+    url: "https://www.coursera.org/learn/procurement-from-specs-to-pos",
+    durationHours: 2,
+    skillsAddressed: ["Product specification writing"],
+    careerId: "purch",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Product specification writing":
+        "The course teaches the anatomy of a specification sheet and how a PO must carry it exactly — the review/transcribe half of the spec task; authoring deep technical content from first principles has no verified taught page.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-purch-market-scan",
+    title: "Apply Market-Scan for Top Suppliers",
+    provider: "Coursera (Professionals in the Industry)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): the market-watch
+    // method — structured scans of the professional sourcing ecosystem
+    // (industrial directories like Thomasnet, B2B marketplaces, trade
+    // databases/associations), scoping documents (cost targets, lead times),
+    // screening criteria, and a documented, triangulated supplier long-list.
+    // "Enroll for free" → audit; certificate paid.
+    url: "https://www.coursera.org/learn/apply-market-scan-for-top-suppliers",
+    durationHours: 2,
+    skillsAddressed: ["Market watching (supply/demand, price trends)"],
+    careerId: "purch",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Market watching (supply/demand, price trends)":
+        "The market-scan modules teach the repeatable market-intelligence loop — scoping, source triangulation, screening criteria and a documented long-list — the pattern a watch routine turns into supplier-market snapshots; live PH price feeds stay with the PhilGEPS start-here portal.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
     id: "res-purch-gap-negotiation",
     title: "Negotiation practice — declared thin (no free verified negotiation course)",
     provider: "resource gap — unresolved",
@@ -5948,11 +6191,34 @@ export const RESOURCES: Resource[] = [
   // taught/exam-paid (fetched LIVE "Enroll for free"); GCF Excel = the verified
   // lesson series → taught/direct. TOP writing graded account (search mirror).
   // The calibration gap row HONEST for the rubric-design/calibration craft
-  // (no taught page verified). Honest reds KEPT (searched, no taught page
-  // verified): Document Control, Analytical Method Validation, and the
-  // Change/Coaching/Risk bundle — the STARWEAVER stakeholder dup covers only
-  // its change/conflict legs, so it does NOT paper the five-FSC bundle.
-  // Coverage: 7/11 vetted.
+  // (no taught page verified).
+  // Wave E hunt (2026-11-03/04, user-delegated): the Document Control cell
+  // fills with a per-role dup of Alison's Introduction to Electronic Document
+  // Management (fetched LIVE — lifecycle stages, classification/indexing/
+  // metadata, compliance with standards, access control and versioning: the
+  // record/store/track trio in course form). Three cells stay red on
+  // purpose, adjudicated Wave E 2026-11-03 (searched Coursera, Alison, edX,
+  // lab-metrology providers, TESDA TOP; no taught self-serve page exists for
+  // these rows):
+  //   · Analytical Method Validation — the literal FSC is a laboratory-
+  //     metrology concept; every taught page found is a paid course (NMI
+  //     AU$758, ANAB US$690, LGC £1850) or the U-Tartu LC-MS MOOC
+  //     (cohort-windowed Dec 2026–Feb 2027; LC-MS instrument chemistry) —
+  //     not the QA scoring-method craft the flagged paraphrase prints.
+  //     Adviser-owned.
+  //   · Change Management · Concept Creation · Coaching and Mentoring ·
+  //     Conflict Resolution · Risk Management and Administration — five
+  //     printed FSCs carried as ONE row; no single taught page claims all
+  //     five legs (Alison's Understanding Change Management teaches
+  //     change/conflict-resolution/crisis-risk legs only; coaching lives on
+  //     its own course; Concept Creation has no free taught page). Adviser-
+  //     owned — the STARWEAVER stakeholder dup covers only its
+  //     change/conflict legs and stays on Customer Management.
+  //   · the Collaboration · Communication · … ten-FSC (Enabling, I/B)
+  //     bundle — the printed coaching-conversation/analysis stage layer; no
+  //     single taught page teaches the printed set, and comms-class bundle
+  //     lifts are the recorded lie class (§6.1). Adviser-owned.
+  // Coverage: 8/11 vetted.
   {
     id: "res-ccqa-lss-white-belt",
     title: "Lean Six Sigma: White Belt",
@@ -6141,6 +6407,31 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
+    id: "res-ccqa-edm",
+    title: "Introduction to Electronic Document Management",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E per-role dup fill, user-delegated): the
+    // audit-documentation discipline in course form — document lifecycle
+    // stages and versioning, classification/indexing/metadata for retrieval,
+    // compliance with EDM standards and regulations, access-control
+    // permissioning. Duplicate of the verified opsanalyst row; per-role
+    // convention. Certificate optional (paid); study free/account.
+    url: "https://alison.com/course/introduction-to-electronic-document-management",
+    durationHours: 3,
+    skillsAddressed: ["Document Control"],
+    careerId: "ccqa",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Document Control":
+        "The course drills the handling discipline an audit trail needs — lifecycle stages and versioning, classification and metadata for store-and-retrieve, compliance with standards, and access-control permissioning on the files.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
     id: "res-ccqa-gap-calibration",
     title: "Call-scoring rubric design / calibration facilitation — the honest hole",
     provider: "resource gap — unresolved",
@@ -6163,9 +6454,16 @@ export const RESOURCES: Resource[] = [
   // wins the shared cell anyway). MPI root + TOP rows graded landing/account
   // fail-closed. ATTACHES (outcomes-verified): post-event evaluation +
   // administrative details ride alison-corporate; marketing/publicizing rides
-  // the Diploma. Honest red KEPT: Bills review & payment approval (the
-  // variance-analysis leg is monitoring, not bill approval; no taught page
-  // verified). Coverage: 12/13 vetted.
+  // the Diploma. Wave E hunt (2026-11-03/04, user-delegated): the Bills
+  // review & payment approval cell fills with Coursera's Procurement Workflow
+  // and Invoice Approval (fetched LIVE) — printed "master the three-way match
+  // to validate and approve invoices, ensuring alignment between purchase
+  // orders, receipts, and bills", forensically comparing the documents for
+  // price/quantity/item discrepancies, and the approve/reject/escalate
+  // decision with finance-side communication on a mismatched bill. The course
+  // lives in AP-procurement land; the per-role dup row is named for the
+  // event's payables task, and the event's own budget-variance read still
+  // rides alison-corporate. Coverage: 13/13 vetted.
   {
     id: "res-events-alison-corporate",
     title: "Corporate Event Planning Essentials",
@@ -6369,6 +6667,31 @@ export const RESOURCES: Resource[] = [
         "The Job-Ready self-presentation module drills presenting well and teamwork with vendors and venue staff — the client/hotel coordination behavior.",
     },
     // learn draft — user review pending
+  },
+  {
+    id: "res-events-invoice-approval",
+    title: "Procurement Workflow and Invoice Approval",
+    provider: "Coursera (Professionals in the Industry)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E per-role dup fill, user-delegated): the
+    // bill-approval craft literally printed — "master the three-way match to
+    // validate and approve invoices, ensuring alignment between purchase
+    // orders, receipts, and bills"; forensic comparison for price/quantity/
+    // item discrepancies; the approve/reject/escalate call and resolution
+    // documentation. "Enroll for free" → audit; certificate paid.
+    url: "https://www.coursera.org/learn/procurement-workflow-and-invoice-approval",
+    durationHours: 2,
+    skillsAddressed: ["Bills review & payment approval"],
+    careerId: "events",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Bills review & payment approval":
+        "The course teaches the three-way match — checking each bill against the PO and what actually arrived — and the approve/hold-to-escalate decision with the documented finance hand-off; the event's own budget-variance analysis still rides alison-corporate.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-events-gap-ph-permits",

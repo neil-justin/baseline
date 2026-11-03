@@ -977,10 +977,10 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
 });
 
 describe("§6.1 re-map census (final mapping state) + canon rails", () => {
-  it("catalog intact: no rows deleted (437 → 473 → 483 → 496, Wave B/Wave E fills all additive); 639 ADDR entries", () => {
-    expect(RESOURCES).toHaveLength(503); // batch 3 + 4 + Wave E (sysadmin 1 · digart 4 · hra 4 · training 4) + Wave E (mkt 4 · sales 2 · csr 1)
+  it("catalog intact: no rows deleted (437 → 473 → 483 → 496 → 503, Wave B/Wave E fills all additive); 650 ADDR entries", () => {
+    expect(RESOURCES).toHaveLength(514); // 503 + 11 Wave E four-career fills (opsanalyst 4 · purch 5 · ccqa dup 1 · events dup 1)
     const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
-    expect(mappings).toBe(639); // 632 + 7 Wave E new-row claims (mkt 4 · sales 2 · csr 1)
+    expect(mappings).toBe(650); // 639 + 11 Wave E new-row claims (1 claim each: ops 4 · purch 5 · ccqa 1 · events 1)
   });
 
   it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {
@@ -1017,8 +1017,12 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
     // cell is listed in the batch commit body) → 46 (Wave E mkt/sales/csr:
     // mkt Business-Environment / Consumer-Intelligence / Demand-Analysis
     // bundle / Events-proposals-platforms bundle, sales Supplier
-    // Performance-Sourcing bundle)
-    expect(thin).toHaveLength(46);
+    // Performance-Sourcing bundle) → 38 (Wave E four-career fills: opsanalyst
+    // Implementation-support/Forms-review/Records-program, purch Price-
+    // proposal/Contract-monitoring/Spec-writing, ccqa Document Control,
+    // events Bills-review — the remaining 8 thin cells are the adjudicated
+    // or declared-thin cells listed in the batch commit body)
+    expect(thin).toHaveLength(38);
     // thin cells never get papered over: no pick flag, no invented row
     const thinPick = RESOURCES.filter((r) => r.pick && r.url === undefined);
     expect(thinPick).toEqual([]);
@@ -1043,7 +1047,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
     return a.id.localeCompare(b.id);
   };
 
-  it("244 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
+  it("252 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
     const winnersBySkill = new Map<string, string>(); // career::skill → row id
     const winnerRows = new Set<string>();
     for (const c of CAREERS) {
@@ -1060,7 +1064,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
       }
     }
     const flags = RESOURCES.filter((r) => r.pick).map((r) => r.id);
-    expect(flags).toHaveLength(244); // 239 (Wave E prior) − 2 retired (res-sales-rutgers-scm superseded by the MS-learn sales-orders module; res-csr-ra10173 superseded by the Ask Lex data-privacy course) + 7 Wave E mkt/sales/csr winners
+    expect(flags).toHaveLength(252); // 244 (Wave E prior) + 8 new winners ( Wave E four-career fills: ops tott-design/adobe-document-design/ops-edm · purch tco/contract-execution/specs-to-pos · ccqa-edm · events-invoice-approval; qual-research, educba-bidding and market-scan lose their cell's fallbackSort to the shorter/earlier rows)
     expect(new Set(flags)).toEqual(winnerRows); // byte-match in BOTH directions
     expect(winnersBySkill.get("swd::Applications Development")).toBe("res-python-basics");
     // the canon money-shot stays flagged-adjacent: the qa fallback winner is a
