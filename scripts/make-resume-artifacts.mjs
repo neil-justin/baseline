@@ -5,17 +5,17 @@
  *
  *   public/resume-reference.pdf / .docx
  *       the downloadable reference template (format guide on-ramp)
- *   e2e/fixtures/resume-good.pdf / .docx
- *       synthetic small resumes — the e2e upload fixtures (real files)
- *   e2e/fixtures/resume-irrelevant.pdf
+ *   scripts/fixtures/resume-good.pdf / .docx
+ *       synthetic small resumes — the vitest upload fixture artifacts (real files)
+ *   scripts/fixtures/resume-irrelevant.pdf
  *       parses fine, doesn't read as a resume (rejection: not_resume)
- *   e2e/fixtures/resume-empty.pdf
+ *   scripts/fixtures/resume-empty.pdf
  *       a page with nothing on it (rejection: empty)
- *   e2e/fixtures/resume-scanned.pdf
+ *   scripts/fixtures/resume-scanned.pdf
  *       image-only page — NO OCR path (rejection: scanned)
- *   e2e/fixtures/resume-mismatch.pdf
+ *   scripts/fixtures/resume-mismatch.pdf
  *       DOCX bytes carrying a .pdf name (re-accepted by CONTENT sniffing)
- *   e2e/fixtures/resume-oversize.pdf
+ *   scripts/fixtures/resume-oversize.pdf
  *       valid PDF > 5 MB (rejection: oversize — enforced before parse)
  *
  * The PDFs are hand-built (catalog/pages/font/text objects); the DOCXes are
@@ -333,20 +333,20 @@ const makeOversize = () => {
 
 /* ── write everything ───────────────────────────────────────────────────── */
 
-mkdirSync(path.join(ROOT, "e2e", "fixtures"), { recursive: true });
+mkdirSync(path.join(ROOT, "fixtures"), { recursive: true });
 mkdirSync(path.join(ROOT, "public"), { recursive: true });
 
 writeFileSync(path.join(ROOT, "public", "resume-reference.pdf"), makePdf({ lines: TEMPLATE_LINES }));
 writeFileSync(path.join(ROOT, "public", "resume-reference.docx"), makeDocx(TEMPLATE_LINES));
-writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-good.pdf"), makePdf({ lines: GOOD_LINES }));
-writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-good.docx"), makeDocx(GOOD_LINES));
+writeFileSync(path.join(ROOT, "fixtures", "resume-good.pdf"), makePdf({ lines: GOOD_LINES }));
+writeFileSync(path.join(ROOT, "fixtures", "resume-good.docx"), makeDocx(GOOD_LINES));
 // the demo's QA-targeted application-materials pass (ticket 12 recut)
-writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-qa.pdf"), makePdf({ lines: GOOD_QA_LINES }));
-writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-irrelevant.pdf"), makePdf({ lines: IRRELEVANT_LINES }));
-writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-empty.pdf"), makePdf({ lines: [] }));
-writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-scanned.pdf"), makePdf({ imageOnly: true }));
+writeFileSync(path.join(ROOT, "fixtures", "resume-qa.pdf"), makePdf({ lines: GOOD_QA_LINES }));
+writeFileSync(path.join(ROOT, "fixtures", "resume-irrelevant.pdf"), makePdf({ lines: IRRELEVANT_LINES }));
+writeFileSync(path.join(ROOT, "fixtures", "resume-empty.pdf"), makePdf({ lines: [] }));
+writeFileSync(path.join(ROOT, "fixtures", "resume-scanned.pdf"), makePdf({ imageOnly: true }));
 // DOCX bytes under a .pdf name — the content sniff accepts it anyway
-writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-mismatch.pdf"), makeDocx(GOOD_LINES));
-writeFileSync(path.join(ROOT, "e2e", "fixtures", "resume-oversize.pdf"), makeOversize());
+writeFileSync(path.join(ROOT, "fixtures", "resume-mismatch.pdf"), makeDocx(GOOD_LINES));
+writeFileSync(path.join(ROOT, "fixtures", "resume-oversize.pdf"), makeOversize());
 
-console.log("resume artifacts written: public/resume-reference.{pdf,docx} + 7 e2e fixtures");
+console.log("resume artifacts written: public/resume-reference.{pdf,docx} + 7 artifact fixtures");

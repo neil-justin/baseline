@@ -7,7 +7,7 @@ import { getCareer } from "@/lib/fixtures/catalog";
 /**
  * Letter-engine verification (ticket-12 Prep pass, 2026-10-30) — runs the
  * REAL intake + runLetterCheck over the canon demo letter
- * (e2e/fixtures/cover-letter-qa.txt) and pins:
+ * (scripts/fixtures/cover-letter-qa.txt) and pins:
  *   - the canon letter passes all EVALUABLE checks (employer omitted → the
  *     honest skip row printed verbatim; letter factor 5 of 5 → +5 → 64)
  *   - the denominator honesty: a declared-but-unnamed employer RUNS and fails
@@ -17,7 +17,7 @@ import { getCareer } from "@/lib/fixtures/catalog";
  * Run: npx vitest run scripts/letter-engine.test.ts
  */
 
-const FIX = (n: string) => path.join(__dirname, "..", "e2e", "fixtures", n);
+const FIX = (n: string) => path.join(__dirname, "fixtures", n);
 const QA = getCareer("qa")!;
 
 describe("canon demo letter (ticket-12 money beat: +5 → 64)", () => {

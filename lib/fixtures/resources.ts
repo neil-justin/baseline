@@ -4126,6 +4126,15 @@ export const RESOURCES: Resource[] = [
     learnNotes: {
       "Content Development and Strategy":
         "Creating the campaign's content in line with the funnel strategy: what to make, for which stage and audience — the develop-plan loop this cell prints.",
+      // learn draft — user review pending (cutover loose fill 2026-11-03):
+      // the batch-3 roster missed its learn line — this row is the
+      // Digital Marketing WINNER (credited TOP module + countsTowardEntryPath,
+      // id A–Z over the funnel/optimizing dups) with no entry for the cell
+      // it wins. The module page is login-walled (fetched LIVE this pass →
+      // TESDA sign-in) — drafted in the funnel-note register from the
+      // module title and its audit note, per the Wave B authoring tradition.
+      "Digital Marketing":
+        "Creates the digital campaign's content piece — what to make, on which channel, for which audience — digital marketing practiced on the TESDA competency.",
     },
     // learn draft — user review pending
   },

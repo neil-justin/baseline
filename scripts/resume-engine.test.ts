@@ -13,7 +13,7 @@ import { getCareer } from "@/lib/fixtures/catalog";
  * formula, and the suggestion fences.
  */
 
-const FIX = (n: string) => path.join(__dirname, "..", "e2e", "fixtures", n);
+const FIX = (n: string) => path.join(__dirname, "fixtures", n);
 const fixture = (n: string) => readFileSync(FIX(n));
 
 async function intake(
