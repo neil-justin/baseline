@@ -9,13 +9,17 @@ import { createBrowserClient } from "@supabase/ssr";
  * links use), which hands to /auth/google for the dest decision. The
  * provider's keys live in the Supabase dashboard ONLY — nothing new in
  * package.json, nothing env-shaped beyond the public URL/anon key pair the
- * app already configures.
+ * app already configures. NEXT_PUBLIC_* values are build-time-inlined, so
+ * an unconfigured build renders the button disabled with an honest title
+ * instead of swallowing clicks.
  */
 export default function GoogleAuth() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const ready = Boolean(url && anon);
+
   async function signInWithGoogle() {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!url || !anon) return; // no Supabase env — the button renders but must no-op honestly
+    if (!url || !anon) return;
     const supabase = createBrowserClient(url, anon);
     await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -29,7 +33,13 @@ export default function GoogleAuth() {
   return (
     <>
       <p className="auth-or" aria-hidden="true">— or —</p>
-      <button type="button" className="btn btn-block" onClick={signInWithGoogle}>
+      <button
+        type="button"
+        className="btn btn-block"
+        disabled={!ready}
+        title={ready ? undefined : "Google sign-in isn't configured in this deployment."}
+        onClick={signInWithGoogle}
+      >
         Continue with Google
       </button>
     </>
