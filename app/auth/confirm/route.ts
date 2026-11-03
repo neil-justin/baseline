@@ -27,8 +27,13 @@ export async function GET(req: Request) {
     if (!error) return NextResponse.redirect(`${origin}${next}`);
   }
   if (viaGoogle) {
-    // drop any half-established session so the shell never fakes logged-in,
-    // then the sign-in page carries the honest notice
+    // Landing failed: clear cookies rather than strand a session the
+    // exchange may or may not have established — signOut's cookie removal
+    // runs even if the API call errors (auth-js removes the local session
+    // on its error path), so the shell never stays signed-in-looking.
+    // Honest tradeoff: back-nav from /auth/google (code already consumed)
+    // also lands here and destroys a VALID session — the user signs in
+    // again; safe-direction failure, never a fake success.
     const supabase = await supabaseServer();
     try {
       await supabase.auth.signOut();

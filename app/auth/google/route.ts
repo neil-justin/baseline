@@ -7,11 +7,18 @@ export const dynamic = "force-dynamic";
 
 /**
  * GET /auth/google — the OAuth round's landing probe (ADR 0006). The PKCE
- * exchange has already happened in /auth/confirm (via=google). Destination
- * follows the ONE rule the roster owns: staff → /admin; student with
- * a career → /dashboard; fresh → /onboarding. A verified session with NO
- * profiles row is a first-time identity → /welcome (the role picker). No
- * session (consent denied/bounced) → /signin?state=google for the notice.
+ * exchange has already happened in /auth/confirm (via=google). Destination:
+ * staff → /admin; student with a career → /dashboard; fresh → /onboarding.
+ * A verified session with NO profiles row is a first-time identity →
+ * /welcome (the role picker). No session (consent denied/bounced) →
+ * /signin?state=google for the notice.
+ *
+ * DEBT (Task 8): the dest ladder here is copied inline on purpose — the
+ * Task-8 sweep rewrites this file's tail onto lib/session.ts destFor, which
+ * unifies the one divergence from that helper (a student row without a
+ * student_id: this copy lands /admin, destFor lands /onboarding — unreachable
+ * from the profiles table either way). Until then, read destFor for the
+ * SHORT rule, not this file.
  */
 export async function GET(req: Request) {
   const origin = new URL(req.url).origin;
