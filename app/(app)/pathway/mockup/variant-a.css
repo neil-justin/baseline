@@ -1,0 +1,433 @@
+/* ============================================================
+   Variant A — vertical spine timeline (post-defense My Plan
+   pathway mockup, user-ruled 2026-11-03). ONE continuous 2px
+   #DADCE0 spine carries numbered stage nodes (32px white
+   circles, 2px border; green border only per the honest
+   stage-progress rule — fully-closed stage or stage holding
+   materials — else grey); stage cards ride below/right of the
+   node in the v7 card register (white, 1px border, 8px radius,
+   whisper shadow). Color canon shared with the mock: blue =
+   action (Start-here labels, focus), green = verified/earned
+   (provenance chips, done-node borders), amber = the local
+   working-on marker, grey = unmeasured/self-report hatch.
+   No washes as region fills; no red; no animations/transitions
+   (DNA lock). Every numeral is tabular. Scoped under
+   .v7mock-a; canonical hexes are restated as local tokens so
+   the mock never depends on unscoped globals.
+   ============================================================ */
+
+.v7mock-a {
+  --vsp-green-wash: #e6f4ea;
+  --vsp-green-text: #137333;
+  --vsp-grey-wash: #f1f3f4;
+  --vsp-grey-text: #3c4043;
+  --vsp-rule: #e8eaed;
+  --vsp-shadow: 0 1px 2px rgba(60, 64, 67, 0.1);
+  /* spine geometry: line x, node diameter, card indent */
+  --vsp-spine-x: 22px;
+  --vsp-node: 32px;
+  --vsp-indent: 64px;
+
+  font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+}
+.v7mock-a ::selection {
+  background: #e8f0fe;
+}
+.v7mock-a :focus-visible {
+  outline: 2px solid var(--mk-action);
+  outline-offset: 2px;
+}
+.v7mock-a a {
+  color: inherit;
+}
+/* the tabular rule — every number-bearing register */
+.v7mock-a .num {
+  font-variant-numeric: tabular-nums;
+}
+/* visually hidden (the node reads "Stage 1" to AT, shows "1") */
+.v7mock-a .vsp-vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- surface head (band-card register) ---------- */
+
+.v7mock-a .vsp-band {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 16px;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid var(--mk-line);
+  border-radius: 8px;
+  box-shadow: var(--vsp-shadow);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+.v7mock-a .vsp-band h2 {
+  margin: 0;
+  font: 400 22px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+}
+/* the lead-mono fact counter (PathwayTabs Plan-head register, 13px) */
+.v7mock-a .vsp-lead {
+  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: var(--mk-ink2);
+  white-space: nowrap;
+}
+.v7mock-a .vsp-lead b {
+  color: var(--mk-ink);
+  font-weight: 500;
+}
+
+/* ---------- THE SPINE ---------- */
+
+.v7mock-a .vsp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.v7mock-a .vsp-row {
+  position: relative;
+  padding: 0 0 24px var(--vsp-indent);
+}
+.v7mock-a .vsp-row:last-child {
+  padding-bottom: 0;
+}
+/* one 2px hairline segment per row (top → row end); the last row ends
+   at its node's center — together the segments read as ONE continuous
+   spine from the head to the final node */
+.v7mock-a .vsp-row::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--vsp-spine-x) - 1px);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--mk-line);
+}
+.v7mock-a .vsp-row:last-child::before {
+  bottom: auto;
+  height: calc(var(--vsp-node) / 2);
+}
+
+/* stage node — white circle centered on the spine, stage number only */
+.v7mock-a .vsp-node {
+  position: absolute;
+  left: calc(var(--vsp-spine-x) - var(--vsp-node) / 2);
+  top: 0;
+  z-index: 1;
+  width: var(--vsp-node);
+  height: var(--vsp-node);
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--mk-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 500 12px/1 Roboto, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: var(--mk-ink);
+}
+/* stage progress, honestly: fully-closed or materials-holding stage */
+.v7mock-a .vsp-row.vsp-done .vsp-node {
+  border-color: var(--mk-green);
+}
+
+/* ---------- stage card (v7 card recipe values) ---------- */
+
+.v7mock-a .vsp-card {
+  margin-top: calc(var(--vsp-node) + 12px);
+  background: #fff;
+  border: 1px solid var(--mk-line);
+  border-radius: 8px;
+  box-shadow: var(--vsp-shadow);
+  padding: 16px 18px;
+}
+.v7mock-a .vsp-head {
+  display: flex;
+  align-items: baseline;
+  gap: 4px 12px;
+  flex-wrap: wrap;
+}
+.v7mock-a .vsp-head h3 {
+  margin: 0;
+  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+}
+/* the computed stage counter — tracked label register, context ink
+   (③④ read as N MATERIALS, never as "done") */
+.v7mock-a .vsp-count {
+  margin-left: auto;
+  font: 500 12px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  color: var(--mk-ink2);
+  white-space: nowrap;
+}
+.v7mock-a .vsp-blurb {
+  margin: 6px 0 0;
+  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+
+/* ---------- skill checkpoints ---------- */
+
+.v7mock-a .vsp-items {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+}
+.v7mock-a .vsp-item {
+  display: grid;
+  grid-template-columns: minmax(104px, auto) minmax(0, 1fr) auto;
+  column-gap: 14px;
+  row-gap: 3px;
+  padding: 11px 0;
+  align-items: start;
+}
+.v7mock-a .vsp-item + .vsp-item {
+  border-top: 1px solid var(--vsp-rule);
+}
+
+/* glyph column: closed = provenance chip; open = the working-on ring */
+.v7mock-a .vsp-glyph {
+  display: flex;
+  align-items: center;
+  min-height: 20px;
+  padding-top: 2px;
+}
+.v7mock-a .vsp-chip {
+  display: inline-block;
+  font: 500 11px/1.2 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.v7mock-a .vsp-chip-green {
+  background: var(--vsp-green-wash);
+  color: var(--vsp-green-text);
+}
+.v7mock-a .vsp-chip-grey {
+  background: var(--vsp-grey-wash);
+  color: var(--vsp-grey-text);
+}
+/* the self-report hatch — quiet 45° stripes over the grey wash
+   (the ONLY gradient in this variant) */
+.v7mock-a .vsp-chip-grey {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(60, 64, 67, 0.09) 0 2px,
+    transparent 2px 5px
+  );
+}
+/* the working-on toggle — hollow grey ring, transparent fill */
+.v7mock-a .vsp-ring {
+  appearance: none;
+  position: relative;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--mk-ink2);
+  background: transparent;
+  cursor: pointer;
+  align-self: center;
+}
+.v7mock-a .vsp-ring[aria-pressed="true"] {
+  border-color: var(--mk-amber);
+}
+/* pressed: the small amber DOT appears inside — never a checkmark */
+.v7mock-a .vsp-ring[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mk-amber);
+}
+
+.v7mock-a .vsp-skillrow {
+  display: flex;
+  align-items: baseline;
+  gap: 4px 8px;
+  flex-wrap: wrap;
+}
+.v7mock-a .vsp-skill {
+  font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+}
+/* the working-on marker chip — amber BORDER only (borders are the
+   marker's register; it never reads as a verified state) */
+.v7mock-a .vsp-working {
+  font: 500 11px/1.2 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  color: var(--mk-amber);
+  border: 1px solid var(--mk-amber);
+  border-radius: 4px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+/* Start here — small blue TEXT label (action register = next action),
+   no fill (restrained ruling; the path's pointer) */
+.v7mock-a .vsp-start {
+  font: 500 11.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--mk-action);
+  white-space: nowrap;
+}
+.v7mock-a .vsp-what {
+  display: block;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+/* the open row's ONE suggested resource — honest link register */
+.v7mock-a .vsp-res {
+  display: block;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+  margin-top: 2px;
+}
+.v7mock-a .vsp-reslink {
+  font-weight: 500;
+  color: var(--mk-ink);
+  text-decoration: none;
+}
+.v7mock-a a.vsp-reslink:hover,
+.v7mock-a a.vsp-matlink:hover {
+  text-decoration: underline;
+}
+.v7mock-a .vsp-restitle {
+  font-weight: 500;
+  color: var(--mk-ink);
+}
+.v7mock-a .vsp-resmeta {
+  font-variant-numeric: tabular-nums;
+}
+.v7mock-a .vsp-ext {
+  font-size: 11px;
+  color: var(--mk-ink2);
+  margin-left: 2px;
+}
+.v7mock-a .vsp-nores {
+  display: block;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+  margin-top: 2px;
+}
+/* §6.2 honest micro-line (state-bearing grey = ink2, ≥ floor) */
+.v7mock-a .vsp-nocheck {
+  display: block;
+  font: 400 11px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+  margin-top: 2px;
+}
+/* the SP projection register — digits stay ink (blue is reserved for
+   explicit affordances) */
+.v7mock-a .vsp-eff {
+  justify-self: end;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: var(--mk-ink);
+  white-space: nowrap;
+  padding-top: 2px;
+}
+
+/* ---------- stage materials ---------- */
+
+.v7mock-a .vsp-mats {
+  margin-top: 4px;
+}
+/* only when BOTH lists ride the card does the submenu separate */
+.v7mock-a .vsp-items + .vsp-mats {
+  margin-top: 14px;
+  border-top: 1px solid var(--vsp-rule);
+  padding-top: 12px;
+}
+.v7mock-a .vsp-matlabel {
+  display: block;
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mk-ink2);
+}
+.v7mock-a .vsp-mats ul {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+}
+.v7mock-a .vsp-mat {
+  padding: 8px 0;
+}
+.v7mock-a .vsp-mat + .vsp-mat {
+  border-top: 1px solid var(--vsp-rule);
+}
+.v7mock-a .vsp-matrow {
+  display: flex;
+  align-items: baseline;
+  gap: 4px 8px;
+  flex-wrap: wrap;
+}
+.v7mock-a .vsp-matlink,
+.v7mock-a .vsp-mattitle {
+  font: 500 13px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+  text-decoration: none;
+}
+.v7mock-a .vsp-matmeta {
+  display: block;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+.v7mock-a .vsp-covers {
+  display: block;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+.v7mock-a .vsp-route {
+  display: block;
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+
+/* ---------- ≤720px — spine hugs the left edge ---------- */
+
+@media (max-width: 720px) {
+  .v7mock-a {
+    --vsp-spine-x: 14px;
+    --vsp-node: 28px;
+    --vsp-indent: 50px;
+  }
+  .v7mock-a .vsp-band {
+    padding: 14px 16px;
+    margin-bottom: 18px;
+  }
+  .v7mock-a .vsp-band h2 {
+    font-size: 19px;
+  }
+  .v7mock-a .vsp-row {
+    padding-bottom: 16px;
+  }
+  /* the effect register folds under the row body — honest layout kept */
+  .v7mock-a .vsp-item {
+    grid-template-columns: minmax(84px, auto) minmax(0, 1fr);
+  }
+  .v7mock-a .vsp-eff {
+    grid-column: 2;
+    justify-self: start;
+    padding-top: 0;
+  }
+  .v7mock-a .vsp-card {
+    padding: 14px;
+  }
+}

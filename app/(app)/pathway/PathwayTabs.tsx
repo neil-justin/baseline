@@ -2,6 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import TablePager from "@/components/TablePager";
+import MockupMount, { type MockVariant } from "./mockup/MockupMount";
+
+/** catalog facts for the canonical mockup builders (canon.ts): tier +
+    sourceTag per map skill, projected once server-side */
+export interface SpecLite {
+  name: string;
+  tier: "core" | "secondary";
+  sourceTag: string;
+}
 
 /**
  * Pathway — MY PLAN, Tier 2d tab merge (user-ruled 2026-11-02, decisions
@@ -86,6 +95,8 @@ export interface FeedCell {
 }
 
 export interface ResRow {
+  /** resource id — the mockup's access audit + check-tiers key on it */
+  id: string;
   title: string;
   provider: string;
   url: string | null;
@@ -126,11 +137,15 @@ function defaultElement() {
 
 export default function PathwayTabs({
   careerName,
+  track,
+  specs,
   undecided,
   plan,
   resources,
 }: {
   careerName: string | null;
+  track: string | null;
+  specs: SpecLite[];
   undecided: boolean;
   plan: PlanTab;
   resources: ResourcesTab;
@@ -162,6 +177,21 @@ export default function PathwayTabs({
     const initial = (window.location.hash || "").replace("#", "");
     const mapped = initial === "steps" || initial === "gaps" ? "plan" : initial;
     if (isTab(mapped)) setActive(mapped);
+  }, []);
+
+  /* the mockup mount (post-defense exploration, user-ruled 2026-11-03):
+     #mockup / #mockup-b / #mockup-c summon the Mini-LMS design mockups;
+     #plan / #resources restore the defended tabs. Presentation-only —
+     the panels, engines, fixtures and e2e hooks stay untouched. */
+  const [mockup, setMockup] = useState<MockVariant | null>(null);
+  useEffect(() => {
+    const parse = () => {
+      const m = (window.location.hash || "").match(/^#mockup(?:-(b|c|d1|d2|d3))?$/);
+      setMockup(m ? ((m[1] ?? "a") as MockVariant) : null);
+    };
+    parse();
+    window.addEventListener("hashchange", parse);
+    return () => window.removeEventListener("hashchange", parse);
   }, []);
 
   const selectTab = (id: TabId, user = true) => {
@@ -387,9 +417,23 @@ export default function PathwayTabs({
         </div>
       </section>
 
+      {/* the mockup mount rides ABOVE the defended panels: the toolbar and
+          the two tabpanels hold the engine/e2e surface and stay live the
+          moment the hash leaves #mockup* */}
+      {!undecided && mockup ? (
+        <MockupMount
+          careerName={careerName ?? ""}
+          track={track}
+          specs={specs}
+          plan={plan}
+          resources={resources}
+          variant={mockup}
+        />
+      ) : null}
+
       {/* the lens-row toolbar OUTSIDE the card (Careers register):
           segmented tabs + the active tab's computed kicker */}
-      {!undecided ? (
+      {!undecided && !mockup ? (
         <div className="plan-lens">
           <div className="ptabs" role="tablist" aria-label="My Plan sections" onKeyDown={onTablistKey}>
             {TABS.map((t) => (
@@ -404,7 +448,7 @@ export default function PathwayTabs({
 
       {/* the panels — Plan is ONE card holding the whole skill universe;
           the Resources tab is a two-card stack */}
-      {undecided ? (
+      {undecided && !mockup ? (
         <section
           className="card tabpanel"
           id="panel-plan"
@@ -413,7 +457,7 @@ export default function PathwayTabs({
         >
           {defaultElement()}
         </section>
-      ) : (
+      ) : !mockup ? (
         <section
           key={`plan-${seq}`}
           className="card tabpanel"
@@ -465,12 +509,13 @@ export default function PathwayTabs({
             ) : null}
           </section>
         </section>
-      )}
+      ) : null}
 
       {/* tab 2 · Resources — the typed catalog with the Start-here chip,
           as TWO SEPARATE CARDS (user ruling 2026-11-02: the groups read
           better apart than stacked in one card); only the head word
           changed this wave: Feeds → Covers skills */}
+      {mockup ? null : (
       <div
         key={`resources-${seq}`}
         className="tabpanel-stack"
@@ -542,6 +587,7 @@ export default function PathwayTabs({
           ) : null}
         </section>
       </div>
+      )}
     </div>
   );
 }

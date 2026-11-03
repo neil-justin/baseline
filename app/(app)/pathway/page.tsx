@@ -213,6 +213,7 @@ function buildResources(
         r.countsTowardEntryPath ? "counts toward entry route" : null,
       ].filter(Boolean);
       return {
+        id: r.id,
         title: r.title,
         provider: r.provider,
         url: r.url ?? null,
@@ -249,6 +250,8 @@ export default async function PathwayPage() {
     return (
       <PathwayTabs
         careerName={null}
+        track={null}
+        specs={[]}
         undecided
         plan={{} as PlanTab}
         resources={{} as ResourcesTab}
@@ -269,6 +272,8 @@ export default async function PathwayPage() {
   return (
     <PathwayTabs
       careerName={career.name}
+      track={career.track}
+      specs={career.skills.map((s) => ({ name: s.name, tier: s.tier, sourceTag: s.sourceTag }))}
       undecided={false}
       plan={buildPlan(
         career,

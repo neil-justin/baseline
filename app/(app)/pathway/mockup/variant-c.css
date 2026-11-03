@@ -1,0 +1,482 @@
+/* ============================================================
+   Mockup C — LMS rail (left units nav + stage content), the
+   most literally course-like of the three. Post-defense
+   mockup, user-ruled 2026-11-03. Every selector sits under
+   .v7mock-c; canonical v7 hexes ride the .v7mock vars
+   (--mk-line/--mk-ink/--mk-ink2/--mk-action/--mk-green/
+   --mk-amber/--mk-ground, mockup.css). Design law: cool grey
+   ground, white cards, 1px #DADCE0 + 8px radius + whisper
+   shadow, Roboto, 13.5px/1.5 body, 12px labels, tabular
+   numerals, blue = action/selection ONLY, green = verified/
+   earned ONLY, amber = working ONLY, grey = unmeasured, no
+   red, no entrance motion, NO transitions-anything.
+   The rail lives INSIDE the content column (the shell's own
+   left sidebar keeps its 240px) — it is a contents console,
+   not a web-app sidebar.
+   ============================================================ */
+
+.v7mock-c {
+  --mkc-shadow: 0 1px 2px rgba(60, 64, 67, 0.1);
+  color: var(--mk-ink);
+  font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
+}
+
+/* every numeral in this variant is tabular */
+.v7mock-c .num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ---------- surface head (over the rail+content grid) ---------- */
+.v7mock-c-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px 28px;
+  flex-wrap: wrap;
+  padding: 2px 2px 12px;
+}
+.v7mock-c-head h2 {
+  margin: 0;
+  font: 500 16px/1.35 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+}
+/* the lead-mono counter — the Plan head register (grey fact line) */
+.v7mock-c-counter {
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+.v7mock-c-counter b {
+  color: var(--mk-ink);
+  font-weight: 500;
+}
+
+/* ---------- the two-column grid: 240px contents rail + flexible content ---------- */
+.v7mock-c-grid {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start; /* the rail tracks its own content, never full-height */
+}
+
+/* ---------- the contents rail — a white card, sticky under the shell header ---------- */
+.v7mock-c-rail {
+  position: sticky;
+  /* 16px clearance + the 56px sticky shell header band above the scroll area */
+  top: 72px;
+  background: #fff;
+  border: 1px solid var(--mk-line);
+  border-radius: 8px;
+  box-shadow: var(--mkc-shadow);
+  padding: 12px;
+  box-sizing: border-box;
+  align-self: start;
+  min-width: 0;
+}
+.v7mock-c-rail-label {
+  display: block;
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mk-ink2);
+  padding: 2px 10px 6px;
+}
+
+/* one unit entry = number + title + receipt line (a real button: it
+   switches the content column — plain swap, no transition) */
+.v7mock-c-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+.v7mock-c-entry:hover { background: #f1f3f4; }
+/* selection = 2px action-blue inset border + blue title (affordance blue) */
+.v7mock-c-entry.on { box-shadow: inset 2px 0 0 var(--mk-action); }
+.v7mock-c-entry:focus-visible {
+  outline: 2px solid var(--mk-action);
+  outline-offset: 2px;
+}
+.v7mock-c-no {
+  flex: none;
+  width: 16px;
+  font: 500 13px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+.v7mock-c-entry.on .v7mock-c-no { color: var(--mk-action); }
+.v7mock-c-unit {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.v7mock-c-unit-title {
+  font: 500 13px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+}
+.v7mock-c-entry.on .v7mock-c-unit-title { color: var(--mk-action); }
+/* the 12px grey receipt line — the count numeral may take green ONLY
+   when the stage is fully closed (skill stages) or holds ≥1 material
+   (credential/entry stages); otherwise the whole line stays grey */
+.v7mock-c-unit-receipt {
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+.v7mock-c-unit-receipt b {
+  font-weight: 500;
+  color: var(--mk-ink2);
+}
+.v7mock-c-unit-receipt b.done { color: var(--mk-green); }
+
+/* the rail's full-path momentum footer — hairline + one tabular receipt
+   (green ONLY when every skill across the path is closed; grey otherwise) */
+.v7mock-c-rail-foot {
+  margin-top: 10px;
+  padding: 10px 10px 2px;
+  border-top: 1px solid var(--mk-line);
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+.v7mock-c-rail-foot b {
+  font-weight: 500;
+  color: var(--mk-ink);
+}
+.v7mock-c-rail-foot b.all { color: var(--mk-green); }
+
+/* ---------- the stage content card ---------- */
+.v7mock-c-card {
+  background: #fff;
+  border: 1px solid var(--mk-line);
+  border-radius: 8px;
+  box-shadow: var(--mkc-shadow);
+  padding: 16px 20px;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.v7mock-c-cardhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px 28px;
+  flex-wrap: wrap;
+}
+.v7mock-c-cardhead h3 {
+  margin: 0;
+  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+}
+/* the right-aligned tracked counter — grey on head, canon-quiet */
+.v7mock-c-cardcount {
+  font: 500 12px/1.5 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mk-ink2);
+  white-space: nowrap;
+}
+.v7mock-c-blurb {
+  margin: 4px 0 0;
+  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+
+/* ---------- skill checkpoints (stages ①②) — course-sheet rows ----------
+   Real quiet rows: 1px bordered, 6px radius, scannable; soft-grid
+   register (ring/chip | main | SP) with no fills and no motion. */
+.v7mock-c-items {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.v7mock-c-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px 12px;
+  align-items: start;
+  border: 1px solid var(--mk-line);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+/* the working-on ring — a REAL button (aria-pressed), hollow grey idle,
+   amber border + amber dot when marked; NOT a checkmark, never touches
+   chips/bars/counters/SP */
+.v7mock-c-ring {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: 2px solid var(--mk-line);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.v7mock-c-ring:hover { border-color: var(--mk-ink2); }
+.v7mock-c-ring.working { border-color: var(--mk-amber); }
+.v7mock-c-ring:focus-visible {
+  outline: 2px solid var(--mk-action);
+  outline-offset: 2px;
+}
+.v7mock-c-ring::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: transparent;
+}
+.v7mock-c-ring.working::after { background: var(--mk-amber); }
+/* closed items own the chip slot instead (not toggleable) */
+.v7mock-c-chip {
+  flex: none;
+  display: inline-block;
+  margin-top: 1px;
+  font: 500 11px/1.2 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.v7mock-c-chip.verified,
+.v7mock-c-chip.checked {
+  background: #e6f4ea;
+  color: #137333;
+}
+/* the self-report hatch — grey wash + quiet 45° stripes, never green/red */
+.v7mock-c-chip.claimed {
+  background-color: #f1f3f4;
+  color: #3c4043;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(60, 64, 67, 0.09) 0 2px,
+    transparent 2px 5px
+  );
+}
+
+.v7mock-c-item-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.v7mock-c-item-name-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.v7mock-c-item-name {
+  font: 500 13.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+}
+.v7mock-c-item-what {
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+/* the one suggested resource, inline after the what line: title link +
+   ↗ + `· cost · ~hrs` (URL-less titles read plain — catalog honesty) */
+.v7mock-c-suggestion {
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+.v7mock-c-suggestion a {
+  color: var(--mk-action);
+  text-decoration: none;
+  font-weight: 500;
+}
+.v7mock-c-suggestion a:hover { text-decoration: underline; }
+.v7mock-c-suggestion a:focus-visible {
+  outline: 2px solid var(--mk-action);
+  outline-offset: 2px;
+}
+/* the honest no-resource line */
+.v7mock-c-nores {
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+/* the §6.2 honest micro-note under open rows with no platform check */
+.v7mock-c-nocheck {
+  font: 400 11.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+/* the path's pointer — small blue text label, no fill */
+.v7mock-c-start {
+  font: 500 11.5px/1.2 Roboto, system-ui, sans-serif;
+  color: var(--mk-action);
+  white-space: nowrap;
+}
+/* the working-on mark chip — tiny amber-bordered, never a fill */
+.v7mock-c-working {
+  font: 500 11px/1.2 Roboto, system-ui, sans-serif;
+  color: var(--mk-amber);
+  border: 1px solid var(--mk-amber);
+  border-radius: 4px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+/* right register — the SP projection receipt (tabular; digits ink) */
+.v7mock-c-eff {
+  margin-top: 2px;
+  font: 500 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+  white-space: nowrap;
+}
+.v7mock-c-eff b {
+  color: var(--mk-ink);
+  font-weight: 500;
+}
+
+/* ---------- MATERIALS submenu ---------- */
+.v7mock-c-matslop {
+  margin-top: 16px;
+}
+.v7mock-c-mats-label {
+  display: block;
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mk-ink2);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--mk-line);
+}
+.v7mock-c-mats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.v7mock-c-mat {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--mk-line);
+}
+.v7mock-c-mat:last-child { border-bottom: 0; }
+.v7mock-c-mat-title-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.v7mock-c-mat-title {
+  font: 500 13.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+  min-width: 0;
+}
+.v7mock-c-mat-title a {
+  color: var(--mk-action);
+  text-decoration: none;
+}
+.v7mock-c-mat-title a:hover { text-decoration: underline; }
+.v7mock-c-mat-title a:focus-visible {
+  outline: 2px solid var(--mk-action);
+  outline-offset: 2px;
+}
+.v7mock-c-ext {
+  display: inline-block;
+  margin-left: 3px;
+  color: var(--mk-ink2);
+  font-size: 11px;
+}
+.v7mock-c-mat a .v7mock-c-ext { color: var(--mk-action); }
+/* the typed receipt line — cost/time carry numerals (tabular via parent) */
+.v7mock-c-mat-meta {
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+.v7mock-c-mat-covers {
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+.v7mock-c-mat-route {
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+
+/* ---------- the quiet continue affordance ----------
+   Text-only next-unit line in the action-blue register; a plain
+   button styled like a link switching the rail selection (local
+   state only). Reads as "where to go next", never as progress. */
+.v7mock-c-next {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--mk-line);
+}
+.v7mock-c-next button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font: 500 13px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-action);
+  text-decoration: none;
+}
+.v7mock-c-next button:hover { text-decoration: underline; }
+.v7mock-c-next button:focus-visible {
+  outline: 2px solid var(--mk-action);
+  outline-offset: 2px;
+}
+
+/* ---------- ≤720px: the rail folds into a horizontal chip row ----------
+   Deterministic fold: the whole rail card becomes a wrapping chip row
+   ABOVE the content card — number + short title only (receipts, the
+   CONTENTS label and the momentum footer all drop; the surface head
+   counter already carries the N of M fact). Content card full width,
+   no horizontal page scroll. */
+@media (max-width: 720px) {
+  .v7mock-c-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .v7mock-c-rail {
+    position: static;
+    top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+  }
+  .v7mock-c-rail-label {
+    flex: 1 1 100%;
+    padding: 2px 4px 4px;
+  }
+  .v7mock-c-entry {
+    width: auto;
+    flex: 0 1 auto;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border: 1px solid var(--mk-line);
+    border-radius: 999px;
+    background: none;
+  }
+  .v7mock-c-entry:hover { background: #f1f3f4; }
+  .v7mock-c-entry.on {
+    box-shadow: none;
+    border-color: var(--mk-action);
+  }
+  .v7mock-c-no { width: auto; font-size: 12px; }
+  .v7mock-c-unit { display: contents; }
+  .v7mock-c-unit-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+  .v7mock-c-unit-receipt { display: none; }
+  .v7mock-c-rail-foot { display: none; }
+  .v7mock-c-card { padding: 14px; }
+}

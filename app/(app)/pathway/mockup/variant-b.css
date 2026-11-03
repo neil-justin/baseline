@@ -1,0 +1,367 @@
+/* Variant B — "Central spine, alternating cards" — post-defense mockup,
+   user-ruled 2026-11-03. Drama lives in COMPOSITION only: one 2px hairline
+   spine down the center, stage cards alternating left/right with connector
+   ticks into numbered nodes — never in color or motion (DESIGN.md law: no
+   animations/transitions, no red, no region washes; the only gradient in
+   this file is the grey self-report hatch). Every selector scopes under
+   .v7mock-b; the v7 hexes are restated here so the mock never depends on
+   unscoped globals (the same frame mockup.css uses). */
+
+.v7mock-b {
+  /* variant-owned tokens — the text variants are the DESIGN.md family's
+     ≥4.5:1 text faces of green/blue/amber on white */
+  --vb-green-wash: #e6f4ea;
+  --vb-green-text: #137333;
+  --vb-blue-text: #1557b0;
+  --vb-amber-text: #96590a;
+  --vb-grey-wash: #f1f3f4;
+  --vb-grey-text: #3c4043;
+  --vb-rows: #e8eaed;
+  --vb-meta: #80868b;
+  color: var(--mk-ink);
+  font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
+}
+.v7mock-b ::selection { background: #e8f0fe; }
+.v7mock-b :focus-visible { outline: 2px solid var(--mk-action); outline-offset: 2px; }
+.v7mock-b a { color: inherit; }
+
+/* ---------- centered surface head (this layout is symmetric) ---------- */
+
+.vb-head {
+  max-width: 640px;
+  margin: 2px auto 24px;
+  text-align: center;
+}
+.vb-head h2 {
+  margin: 0;
+  font: 500 16px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+}
+.vb-lead {
+  margin: 3px 0 0;
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+  font-variant-numeric: tabular-nums;
+}
+.vb-lead b { color: var(--mk-ink); font-weight: 500; }
+
+/* ---------- THE SPINE + alternating map ---------- */
+
+.vb-map { position: relative; }
+
+/* one continuous 2px hairline through the column center, running flush
+   between the first/last node centers (nodes sit at each row's top:
+   pad 14 + half node 16) */
+.vb-spine {
+  position: absolute;
+  top: 30px;
+  bottom: 30px;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--mk-line);
+}
+
+.vb-row {
+  position: relative;
+  padding: 14px 0;
+}
+/* the connector tick: card's inner edge → the spine (the node's white
+   fill masks the hairline joint at 50%) */
+.vb-row::before {
+  content: "";
+  position: absolute;
+  top: 29px;
+  height: 2px;
+  background: var(--mk-line);
+}
+.vb-side-l::before { left: 44%; width: 6%; }
+.vb-side-r::before { left: 50%; width: 6%; }
+
+/* the numbered stage node — 32px white circle ON the spine, top-aligned
+   with its card; verified green ONLY on the honest closed truth */
+.vb-node {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 32px;
+  box-sizing: border-box;
+  border: 2px solid var(--mk-line);
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 500 12px/1 Roboto, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: var(--mk-ink);
+}
+.vb-node-done { border-color: var(--mk-green); }
+
+/* the alternating stage cards — ~44% each side of the spine */
+.vb-card {
+  width: 44%;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid var(--mk-line);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.1);
+  padding: 14px 16px 16px;
+}
+.vb-side-l .vb-card { margin-right: auto; }
+.vb-side-r .vb-card { margin-left: auto; }
+
+/* ---------- stage card ---------- */
+
+.vb-cardhead {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.vb-cardhead h3 {
+  margin: 0;
+  min-width: 0;
+  font: 500 14px/1.3 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+}
+/* the one tracked counter per card — computed, never painted */
+.vb-count {
+  margin-left: auto;
+  font: 500 12px/1.3 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mk-ink2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.vb-blurb {
+  margin: 4px 0 0;
+  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+
+/* ---------- skill checkpoints ---------- */
+
+.vb-items { margin-top: 10px; }
+.vb-item {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding: 10px 0 9px;
+  border-top: 1px solid var(--vb-rows);
+}
+.vb-item:first-child { border-top: 0; }
+.vb-item-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.vb-reg {
+  flex: none;
+  margin-left: auto;
+  padding-left: 12px;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.vb-dash { color: var(--mk-ink2); }
+
+.vb-skillrow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.vb-skill {
+  font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+}
+/* closed rows read quieter — the state itself rides the chip */
+.vb-item-closed .vb-skill { color: var(--mk-ink2); }
+.vb-what {
+  margin: 2px 0 0;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+/* the suggested-resource inline line — plain text, no URL, no link paint */
+.vb-res {
+  margin: 3px 0 0;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+  font-variant-numeric: tabular-nums;
+}
+.vb-restitle {
+  font-weight: 500;
+  color: var(--mk-ink);
+}
+.vb-resmeta { white-space: nowrap; }
+.vb-ext {
+  margin-left: 3px;
+  font-size: 11px;
+  color: var(--vb-meta);
+}
+/* the honest no-resource line (Q7 register) */
+.vb-nores {
+  margin: 3px 0 0;
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+/* the honest micro-note (§6.2): open row whose platform has no check */
+.vb-nocheck {
+  margin: 3px 0 0;
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+
+/* the working-on target — hollow grey ring; pressed = amber ring + amber
+   dot (an intent marker, NEVER a checkmark — the ✓ glyph canon is
+   reserved for evidence) */
+.vb-ring {
+  position: relative;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  border: 2px solid var(--mk-line);
+  border-radius: 50%;
+  background: #fff;
+  padding: 0;
+  cursor: pointer;
+  align-self: center;
+}
+.vb-ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: transparent;
+}
+.vb-ring:hover { border-color: var(--mk-ink2); }
+.vb-ring[aria-pressed="true"],
+.vb-ring[aria-pressed="true"]:hover { border-color: var(--mk-amber); }
+.vb-ring[aria-pressed="true"]::after { background: var(--mk-amber); }
+
+/* the bordered working chip — amber stroke, no wash fill */
+.vb-working {
+  border: 1px solid var(--mk-amber);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--vb-amber-text);
+  font: 500 11px/1.2 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+/* the path's pointer — the action register in blue TEXT (blue = action
+   and nothing else; the ≥4.5:1 blue-deep face, no fill) */
+.vb-start {
+  color: var(--vb-blue-text);
+  font: 500 11px/1.2 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* the repainted provenance chips (Q6 wording, verbatim) */
+.vb-chip {
+  display: inline-block;
+  font: 500 11px/1.2 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.vb-chip-green {
+  background: var(--vb-green-wash);
+  color: var(--vb-green-text);
+}
+.vb-chip-hatch {
+  background: var(--vb-grey-wash);
+  color: var(--vb-grey-text);
+  /* the self-report hatch — the file's ONLY gradient, per canon */
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(60, 64, 67, 0.09) 0 2px,
+    transparent 2px 5px
+  );
+}
+
+/* ---------- materials submenu (every stage; no progress claims) ---------- */
+
+.vb-mats {
+  border-top: 1px solid var(--vb-rows);
+  margin-top: 12px;
+  padding-top: 10px;
+}
+.vb-mats-label {
+  display: block;
+  margin-bottom: 4px;
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mk-ink2);
+}
+.vb-mat {
+  display: block;
+  padding: 7px 0;
+}
+.vb-mat-title {
+  display: block;
+  font: 500 13px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink);
+}
+/* the typed link title is the affordance — blue rides it */
+.vb-mat-title a {
+  color: var(--vb-blue-text);
+  text-decoration: none;
+}
+.vb-mat-title a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.vb-mat-name { color: var(--mk-ink); }
+.vb-mat-meta {
+  display: block;
+  margin-top: 2px;
+  font: 400 12.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+  font-variant-numeric: tabular-nums;
+}
+.vb-mat-covers {
+  display: block;
+  margin-top: 2px;
+  font: 400 12.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+.vb-mat-route {
+  display: block;
+  margin-top: 2px;
+  font: 400 12px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--mk-ink2);
+}
+
+/* ---------- the ≤860px fold: alternation collapses, spine hugs the left
+   edge (line center at 16px), every card full-width right of it ----------
+   Deterministic, clean: same padding rhythm, no horizontal scroll at
+   320px. */
+
+@media (max-width: 860px) {
+  .vb-spine { left: 15px; margin-left: 0; }
+  .vb-node { left: 0; transform: none; }
+  .vb-side-l::before,
+  .vb-side-r::before { left: 18px; width: 30px; }
+  .vb-side-l .vb-card,
+  .vb-side-r .vb-card {
+    width: auto;
+    margin-left: 48px;
+    margin-right: 0;
+  }
+}
+
+/* ≤720px — the Material bottom-nav fold: no extra geometry needed (the
+   folded map above already holds), just quieter whitespace */
+@media (max-width: 720px) {
+  .vb-head { margin-bottom: 18px; }
+  .vb-card { padding: 12px 12px 14px; }
+}
