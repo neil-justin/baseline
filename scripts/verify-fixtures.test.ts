@@ -978,9 +978,9 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
 
 describe("§6.1 re-map census (final mapping state) + canon rails", () => {
   it("catalog intact: no rows deleted (437 → 473 → 483, Wave B batch 3 + 4 fill all additive); 617 ADDR entries", () => {
-    expect(RESOURCES).toHaveLength(483); // +14 verified taught rows in batch 3 (sales 6 · purch 2 · opsanalyst 1 · ccqa 1 · pay 1 · fas 2 · fin 1), +10 in batch 4 (coll 1 · credit 0 · teller 1 · audit 1 · adminassoc 1 · clerk 1 · records 1 · encode 1 · execsec 3; 459 after batch 2)
+    expect(RESOURCES).toHaveLength(488); // batch 3 + 4 + Wave E (sysadmin 1 · digart 4); 483 after batch 4
     const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
-    expect(mappings).toBe(617); // 600 (batch 3) + 19 (new-row claims) + 1 (outcomes-verified attach: encode Excel-CSV import on the re-pointed ms row) − 3 (§6.1-class misfit cuts, all in the credit pool: Wharton Fundamentals ratio-research claim, GCF-Excel payment-letters + loan-documentation claims)
+    expect(mappings).toBe(622); // 617 (batch 4) + 1 (sysadmin wsperf) + 4 (digart new-row claims)
   });
 
   it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {
@@ -1010,13 +1010,10 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
         if (urlPool.length === 0) thin.push(`${c.id}::${s.name}`);
       }
     }
-    // 63 (batch 3) → 58: Wave B batch 4 covers five thin cells with verified
-    // taught claims — coll Locate-and-notify (the Alison AR course),
-    // adminassoc Office-equipment (Alison Admin-Assistant Training), encode
-    // Import/export (the Excel CSV-import how-to) + Store-completed-docs
-    // (Alison EDM), teller Customer-service (the Alison CS dup). Every
-    // remaining thin cell is listed in the batch commit body.
-    expect(thin).toHaveLength(58);
+    // 63 (batch 3) → 58 (batch 4) → 57 (Wave E: the sysadmin Optimize-perf
+    // cell gains the MS Learn module row; every remaining thin cell is listed
+    // in the batch commit body)
+    expect(thin).toHaveLength(57);
     // thin cells never get papered over: no pick flag, no invented row
     const thinPick = RESOURCES.filter((r) => r.pick && r.url === undefined);
     expect(thinPick).toEqual([]);
@@ -1058,7 +1055,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
       }
     }
     const flags = RESOURCES.filter((r) => r.pick).map((r) => r.id);
-    expect(flags).toHaveLength(231); // 228 (batch 3) → 231 (Wave B batch 4 recalc: 10 new rows carry the flag; stale winners dropped as the taught fills/re-points moved the fallback winners; byte-matched to the data)
+    expect(flags).toHaveLength(234); // 231 (batch 4) + 3 (Wave E: sysadmin ms-learn-wsperf + digart packaging/visual-me/anim winners; the tools cell keeps figma and the animator cell drops blender-manual, both byte-matched to the data)
     expect(new Set(flags)).toEqual(winnerRows); // byte-match in BOTH directions
     expect(winnersBySkill.get("swd::Applications Development")).toBe("res-python-basics");
     // the canon money-shot stays flagged-adjacent: the qa fallback winner is a

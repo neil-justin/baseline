@@ -1448,6 +1448,10 @@ export const RESOURCES: Resource[] = [
     // services, directory services, disaster recovery + a systems-consultation
     // final project). Id unchanged; ₱ paid tier: shareable certificate
     // (audit/financial-aid route free).
+  // Wave E recap below (hunt 2026-11-03): 9/12 vetted — the Optimize-systems-
+  // performance no-claim fills with the MS Learn Windows-Server-perf module;
+  // ITAM / System Integration / the 3-family bundle adjudicated (see Wave E
+  // block below).
     url: "https://www.coursera.org/learn/system-administration-it-infrastructure-services",
     durationHours: 25,
     skillsAddressed: [
@@ -1484,6 +1488,29 @@ export const RESOURCES: Resource[] = [
     pick: true,
     form: "landing", // the constituency root — the Moodle modules live behind it
     access: "account",
+  },
+  {
+    id: "res-sysadmin-ms-learn-wsperf",
+    title: "Monitor Windows Server performance (module)",
+    provider: "Microsoft Learn",
+    type: "doc",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (sysadmin Wave E hunt): module page, HTTP 200 —
+    // teaches Performance Monitor counters/baselines and capacity planning,
+    // i.e. the optimization/metrics CWF bullets. The Optimize-systems-
+    // performance cell had NO claim row (no-claim red) — this row fills it.
+    url: "https://learn.microsoft.com/en-us/training/modules/monitor-windows-server-performance/",
+    durationHours: 2,
+    skillsAddressed: ["↳ CWF sub-row: Optimize systems performance"],
+    careerId: "sysadmin",
+    pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "↳ CWF sub-row: Optimize systems performance":
+        "You take Performance Monitor readings — CPU, memory, disk and network counters — build a baseline, and use what the numbers show to size upgrades and carry out the optimisation the CWF prints.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sysadmin-windows-server-docs",
@@ -1617,9 +1644,25 @@ export const RESOURCES: Resource[] = [
     },
     // learn draft — user review pending
   },
-  // SYS-V1 declared thin zones (kept declared, no forced search — re-checked
-  // 2026-11-03 batch 2: no dedicated free taught page verified for ITAM or
-  // System Integration; both gap rows stand. adviser-only).
+  // sysadmin Wave E hunt (2026-11-03, user-delegated): 
+  //  · "↳ CWF sub-row: Optimize systems performance" — FILLED with the MS
+  //    Learn Monitor-Windows-Server-performance module (fetched LIVE
+  //    2026-11-03): perf Monitor/metrics/baselines/capacity planning teach
+  //    the CWF bullets ("carry out optimisation…", "track key operational
+  //    metrics, performance, utilization, throughput and capacity").
+  //  · "IT Asset Management" — re-hunted (edX/ServiceNow subject hub, MS Learn,
+  //    classcentral, Coursera audit list): every teachable-looking hit is a
+  //    vendor product/marketing page, a certificate-syllabus blurb, or a
+  //    LinkedIn-Learning row (ruled drop) — no taught self-serve page exists,
+  //    adjudicated Wave E (SYS-V1 declared thin stands).
+  //  · "System Integration" — re-hunted (edX integration subject search):
+  //    taught audit matches are energy/robotics scale, not IT-systems craft —
+  //    no taught self-serve page exists, adjudicated Wave E (gap rows stand).
+  //  · "Configuration Tracking · Cyber-and-Data-Breach Incident Management ·
+  //    Business Needs Analysis" — constructed 3-family bundle: no single
+  //    taught page satisfies all three families — adjudicated Wave E.
+  // Coverage: 9/12 vetted (the three above stay honestly red).
+  // SYS-V1 declared thin zones (kept declared — ITAM/System Integration gap)
   {
     id: "res-sysadmin-gap-itam",
     title: "IT Asset Management — dedicated free course",
@@ -2203,6 +2246,10 @@ export const RESOURCES: Resource[] = [
   // up the accessibility cell's taught leg (its curriculum includes the
   // accessibility projects). Learn lines drafted from the resources'
   // actual content (learn draft — user review pending).
+  // Wave E recap (2026-11-03): the site life-operations cell re-hunted
+  // (edX/Alison/GCF sweep) — every maintenance-course hit is a service
+  // brochure or a senior/career-marketing snippet; no taught self-serve page
+  // covers the six O*NET verbs — adjudicated Wave E.
   // Coverage: 5/6 vetted.
   {
     id: "res-webdev-fcc-rwd",
@@ -2472,7 +2519,16 @@ export const RESOURCES: Resource[] = [
   // pass — Packaging, Booth/Display, the tools row and the 2D-Animator
   // counterpart have no free taught page verified; Adobe tutorials stay
   // 403 per DIG-V2). Learn lines drafted from the resources' actual
-  // content (learn draft — user review pending). Coverage: 6/10 vetted.
+  // content (learn draft — user review pending).
+  // Wave E recap (2026-11-03, user-delegated hunt): all four adviser-only
+  // reds FILLED with verified taught rows — Coursera's packaging-design
+  // course (HTTP 200, "Enroll for free", 4 modules), Alison Visual
+  // Merchandising Essentials (HTTP 200, 3 h, window/display design),
+  // Alison's beginner Photoshop diploma (HTTP 200, 15 h, layers/tools),
+  // Alison Principles of Animation (HTTP 200, 3 h, timing/frames). The
+  // TOP category landing row keeps its landing grade (module pages sit
+  // behind the TOP login); Adobe tutorials stay 403 per DIG-V2.
+  // Coverage: 10/10 vetted.
   {
     id: "res-digart-tesda-vgd-elearning",
     title: "Visual Graphic Design NC III e-learning (7 free modules)",
@@ -2500,6 +2556,100 @@ export const RESOURCES: Resource[] = [
     pick: true,
     form: "landing",
     access: "account",
+  },
+  {
+    id: "res-digart-coursera-packaging",
+    title: "Packaging Design: Redesign a Product for a Brand from A to Z",
+    provider: "Coursera",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave E hunt): course page HTTP 200,
+    // "Enroll for free" (audit route; ₱ certificate) — 4 modules
+    // (Foundations of Packaging Design, Conceptual Development and
+    // Research, Digital Execution, presentation). The packaging unit had
+    // only the TOP landing as claim — this row carries it taught.
+    url: "https://www.coursera.org/learn/packaging-design-redesign-a-product-for-a-brand-from-a-to-z",
+    durationHours: 4,
+    skillsAddressed: ["DEVELOP DESIGNS FOR PRODUCT PACKAGING (ICT216317)"],
+    careerId: "digart",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "DEVELOP DESIGNS FOR PRODUCT PACKAGING (ICT216317)":
+        "You take a product from brand brief to finished packaging — concept development, layout and a Photoshop mock-up of the package — the packaging-design craft the ICT216317 unit prints.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-digart-alison-visual-me",
+    title: "Visual Merchandising Essentials",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave E hunt): course page HTTP 200,
+    // 3 printed hours, free to study (optional Alison certificate paid).
+    // The booth/window-display unit (ICT216318) had only the TOP landing
+    // as claim — this row carries it taught.
+    url: "https://alison.com/course/visual-merchandising-essentials",
+    durationHours: 3,
+    skillsAddressed: ["DESIGN BOOTH AND PRODUCT WINDOW / DISPLAY (ICT216318)"],
+    careerId: "digart",
+    pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "DESIGN BOOTH AND PRODUCT WINDOW / DISPLAY (ICT216318)":
+        "You learn how product displays win customers — window exhibits, booth and in-store display composition planned with the merchandising design principles the unit prints.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-digart-alison-photoshop",
+    title: "Diploma in a Beginner's Guide to Photoshop",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave E hunt): course page HTTP 200,
+    // 15 printed hours, free to study (optional Alison certificate paid).
+    // The tools row's only vettable claims were an ungraded bot-walled Canva
+    // row and the reference-grade Blender manual — this row carries the
+    // design-software craft taught (Adobe Photoshop is on the TR tool list).
+    url: "https://alison.com/course/diploma-in-a-beginner-s-guide-to-photoshop",
+    durationHours: 15,
+    skillsAddressed: ["Use specialized graphic/animation tools (Adobe suite, Blender etc.)"],
+    careerId: "digart",
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Use specialized graphic/animation tools (Adobe suite, Blender etc.)":
+        "You get hands-on in Photoshop — the interface, layers, selections and editing tools a graphic artist runs designs through — the design-software knowledge the TR tool list names.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-digart-alison-anim",
+    title: "Principles of Animation",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave E hunt): course page HTTP 200,
+    // 3 printed hours, free to study (optional Alison certificate paid).
+    // The Junior-2D-Animator counterpart row's only claim was the
+    // reference-grade Blender manual — this row carries the animation craft
+    // taught (the PSF-DAA pipeline family starts at 2D animation baselines).
+    url: "https://alison.com/course/principles-of-animation",
+    durationHours: 3,
+    skillsAddressed: ["Junior 2D Animator — [PSF-DAA] (counterpart, optional — user ruling 2026-10-29 ADD)"],
+    careerId: "digart",
+    pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Junior 2D Animator — [PSF-DAA] (counterpart, optional — user ruling 2026-10-29 ADD)":
+        "You learn the animation principles 2D work is built on — timing, spacing and frame-by-frame motion applied to a moving character — the animation-line craft the counterpart role covers.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-digart-tr-doc",
@@ -2561,7 +2711,6 @@ export const RESOURCES: Resource[] = [
       "Junior 2D Animator — [PSF-DAA] (counterpart, optional — user ruling 2026-10-29 ADD)",
     ],
     careerId: "digart",
-    pick: true,
     form: "reference",
     access: "direct",
   },
