@@ -129,12 +129,17 @@ create table if not exists public.counselor_requests (
   -- "oldest pending first" stays truthful after a rejection round-trip
   requested_at timestamptz not null default now(),
   status       text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
-  -- decision stamps ride status (the check pins it: a pending row has NO
-  -- stamps; decided rows carry BOTH — a decision with no decider or date
-  -- cannot be written, closing the audit-artifact claim's last gap)
+  -- decision stamps ride status (the check pins both sides STRICTLY: a
+  -- pending row carries NO stamps; an approved/rejected row carries BOTH —
+  -- a decision with no decider or date cannot be written, closing the
+  -- audit-artifact claim's last gap)
   decided_at   timestamptz,
   decided_by   text,
-  check ((status = 'pending') = (decided_at is null and decided_by is null))
+  check (
+    (status = 'pending' and decided_at is null and decided_by is null)
+    or
+    (status in ('approved', 'rejected') and decided_at is not null and decided_by is not null)
+  )
 );
 alter table public.counselor_requests enable row level security;
 
