@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin, supabaseServer } from "@/lib/supabase/server";
-import { db } from "@/lib/db";
-import { newStudentState } from "@/lib/session";
+import { provisionStudent } from "@/lib/auth/provision";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -63,30 +62,11 @@ export async function POST(req: Request) {
     }
     const user = created.user;
 
-    // student_id derives from the email prefix, deduped with -2/-3… suffixes
-    const base = email.split("@")[0].replace(/[^a-z0-9-]/g, "") || "student";
-    let studentId = base;
-    for (let n = 2; ; n++) {
-      const { data: taken } = await admin
-        .from("profiles")
-        .select("id")
-        .eq("student_id", studentId)
-        .maybeSingle();
-      if (!taken) break;
-      studentId = `${base}-${n}`;
-    }
-
-    const { error: profErr } = await admin.from("profiles").insert({
-      id: user.id,
+    const studentId = await provisionStudent({
+      userId: user.id,
       email,
-      full_name: name,
-      role: "student",
-      student_id: studentId,
-      campus: "demo-campus",
+      fullName: name,
     });
-    if (profErr) return NextResponse.json({ error: "server" }, { status: 500 });
-
-    await db.saveStudentState(studentId, newStudentState(studentId, name));
 
     const supabase = await supabaseServer();
     const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
