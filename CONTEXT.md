@@ -100,6 +100,14 @@ _Avoid_: school (vague), university (presumes size)
 The site-operator role held by the study team — manages accounts, seeds demo data, and maintains site health. Distinct from the Counselor; invisible to students.
 _Avoid_: admin (unqualified), developer account
 
+**Counselor Application**:
+A first-time Google identity's recorded declaration that Counselor authority is sought over cohort audits. The privilege is granted by a named System Admin from the admin queue (rows carry decided_by/decided_at — the trail survives the void). Before approval the identity holds zero access.
+_Avoid_: self-registration (staff are provisioned, never self-registered)
+
+**Role Picker**:
+The state machine at /welcome for a session-without-profile: student declares and activates in place; counselor declares and waits (pending). Rejected applications re-enter pending with a corrected note — upsert, one row per user, no history.
+_Avoid_: self-declared role (role never comes from the pick alone)
+
 **Credential**:
 An externally earned, evidence-carrying entry a Student declares (Profile → Credentials): a certification, an internship/job, or a personal project/org role. Entries declare skills from the framework vocabulary across all four discipline tracks; with evidence attached, a Credential is auditable by a Counselor, and once verified it counts as a verified skill and closes gaps like a platform completion does.
 _Avoid_: achievement, qualification, badge (gamified connotation)
