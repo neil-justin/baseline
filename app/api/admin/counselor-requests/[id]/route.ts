@@ -9,13 +9,16 @@ export const dynamic = "force-dynamic";
  * PATCH /api/admin/counselor-requests/[id] — the ONE place a counselor
  * privilege is granted (ADR 0006). Sysadmin session required (role from the
  * session, never the body). id = the applicant's auth user id.
- *   approve → profiles row created (role counselor, campus demo-campus —
- *             section/campus edits remain the seed/dashboard's manual job,
- *             same as today) + app_metadata.role counselor (proxy.ts) +
- *             request row stamped approved/decided_by (the audit trail).
+ *   approve → approve_counselor() RPC — ONE TRANSACTION (profiles row + the
+ *             approval stamp commit together or not at all; idempotent,
+ *             on-conflict-do-nothing) — then app_metadata.role counselor
+ *             (proxy.ts) as the second step. A failed second step answers
+ *             500; re-clicking heals: the RPC skips for an already-approved
+ *             row and the stamp write retries. No torn state can wedge.
+ *             (User ruling 2026-11-03: "this looks like a transaction".)
  *   reject  → request row stamped rejected/decided_by. NO grant, and the
  *             applicant may resubmit from /welcome (upsert flips pending).
- * Errors: unauthorized | forbidden | not_found | already_has_account | server
+ * Errors: unauthorized | forbidden | bad_json | bad_input | not_found | server
  */
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const profile = await getCurrentProfile();
@@ -41,11 +44,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       .select("email, full_name, note, status")
       .eq("user_id", id)
       .maybeSingle();
-    if (!request || request.status !== "pending") {
+    if (!request || (request.status !== "pending" && request.status !== "approved")) {
+      // "approved" re-entry = a prior attempt committed the transaction but
+      // failed the JWT stamp below; this skip + re-stamp is the healing path
       return NextResponse.json({ error: "not_found" }, { status: 404 });
     }
 
-    if (action === "reject") {
+    if (request.status === "pending" && action === "reject") {
       // one statement writes status + BOTH stamps — the schema's strict
       // check (pending ⇔ no stamps; decided ⇔ both) is satisfied atomically
       const { error } = await admin
@@ -60,45 +65,27 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       return NextResponse.json({ status: "rejected" });
     }
 
-    // approve — one profiles row must not already exist (roster email with a
-    // separate account is the dashboard's manual path, not this queue's)
-    const { data: existing } = await admin
-      .from("profiles")
-      .select("id")
-      .eq("id", id)
-      .maybeSingle();
-    if (existing) return NextResponse.json({ error: "already_has_account" }, { status: 409 });
+    // approve — ONE RPC call, ONE transaction: profiles row + approval stamp
+    // commit together or not at all; idempotent so healing re-clicks can
+    // never double-grant (on-conflict-do-nothing + pending-only stamp)
+    if (request.status === "pending") {
+      const { error: rpcErr } = await admin.rpc("approve_counselor", {
+        p_user_id: id,
+        p_email: request.email,
+        p_full_name: request.full_name,
+        p_decided_by: profile.email,
+      });
+      if (rpcErr) return NextResponse.json({ error: "server" }, { status: 500 });
+    }
 
-    const { error: profErr } = await admin.from("profiles").insert({
-      id,
-      email: request.email,
-      full_name: request.full_name,
-      role: "counselor",
-      student_id: null,
-      campus: "demo-campus",
-    });
-    if (profErr) return NextResponse.json({ error: "server" }, { status: 500 });
-
-    // the JWT role too (proxy.ts reads app_metadata) — same-parity rule the
-    // signup route establishes for students. Best-effort BY CONTRACT: the
-    // profiles row is written (the roster's source of truth), and proxy's
-    // /admin guard reads getUser() server-side which hydrates fresh
-    // app_metadata on the next request regardless.
+    // the JWT role is the /admin admit ticket (proxy.ts reads app_metadata) —
+    // NOT voided on this surface: a failed stamp answers 500; re-clicking
+    // re-enters with request.status already "approved", skips the RPC, and
+    // THIS write retries to completion
     const { error: metaErr } = await admin.auth.admin.updateUserById(id, {
       app_metadata: { role: "counselor" },
     });
-    void metaErr; // documented best-effort; see contract comment above
-
-    // same single-statement stamp rule as the reject branch above
-    const { error: stampErr } = await admin
-      .from("counselor_requests")
-      .update({
-        status: "approved",
-        decided_at: new Date().toISOString(),
-        decided_by: profile.email,
-      })
-      .eq("user_id", id);
-    if (stampErr) return NextResponse.json({ error: "server" }, { status: 500 });
+    if (metaErr) return NextResponse.json({ error: "server" }, { status: 500 });
 
     return NextResponse.json({ status: "approved" });
   } catch {

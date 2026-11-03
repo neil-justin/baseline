@@ -33,12 +33,10 @@ export default function ApproveRow({ row }: { row: RequestRow }) {
         body: JSON.stringify({ action }),
       });
       if (!res.ok) {
-        const data = (await res.json().catch(() => null)) as { error?: string } | null;
-        setErr(
-          data?.error === "already_has_account"
-            ? "That email already has a roster account — handle in the dashboard instead."
-            : "The decision didn't record. Try again."
-        );
+        // healing-retry: a re-click always completes — the grant RPC is
+        // idempotent (on-conflict-do-nothing) and a failed JWT-stamp retry
+        // re-enters as its own step; "try again" is an actionable truth
+        setErr("The decision didn't record. Try again.");
         return;
       }
       router.refresh();

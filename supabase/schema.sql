@@ -143,9 +143,40 @@ create table if not exists public.counselor_requests (
 );
 alter table public.counselor_requests enable row level security;
 
+-- The grant RPC (review round 1 user ruling: "this looks like a transaction").
+-- One call, ONE transaction: the counselor's profiles row and the approval
+-- stamp commit together or not at all — half-granted rows become impossible
+-- at the DB level. Idempotent by design so the app's healing-retry path can
+-- safely re-invoke: the insert no-ops when the row exists, the stamp update
+-- only moves pending → approved. SECURITY DEFINER: runs at the definer's
+-- privilege; search_path pinned per Supabase convention. NOTE: the JWT
+-- marker (app_metadata) is Supabase Auth's surface, NOT this transaction's —
+-- the route stamps it after the RPC, with healing-retry semantics.
+create or replace function public.approve_counselor (
+  p_user_id    uuid,
+  p_email      text,
+  p_full_name  text,
+  p_decided_by text
+) returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.profiles (id, email, full_name, role, student_id, campus)
+  values (p_user_id, p_email, p_full_name, 'counselor', null, 'demo-campus')
+  on conflict (id) do nothing;
+
+  update public.counselor_requests
+  set status = 'approved', decided_at = now(), decided_by = p_decided_by
+  where user_id = p_user_id and status = 'pending';
+end;
+$$;
+
 -- Migration note (Google round, 2026-11-03): for an already-applied schema,
 -- the create-block above applies verbatim (idempotent) — playwright e2e
--- treats a missing table as skip condition. If a PRE-strict version of this
+-- treats a missing table as skip condition. approve_counselor() re-applies
+-- as CREATE OR REPLACE (idempotent). If a PRE-strict version of this
 -- table was already applied (any block without the two-sided stamps check),
 -- re-create the invariant explicitly:
 --   alter table public.counselor_requests drop constraint if exists counselor_requests_check;
