@@ -977,10 +977,10 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
 });
 
 describe("§6.1 re-map census (final mapping state) + canon rails", () => {
-  it("catalog intact: no rows deleted (437 → 473 → 483, Wave B batch 3 + 4 fill all additive); 617 ADDR entries", () => {
-    expect(RESOURCES).toHaveLength(491); // batch 3 + 4 + Wave E (sysadmin 1 · digart 4 · hra 3); 483 after batch 4
+  it("catalog intact: no rows deleted (437 → 473 → 483 → 496, Wave B/Wave E fills all additive); 639 ADDR entries", () => {
+    expect(RESOURCES).toHaveLength(503); // batch 3 + 4 + Wave E (sysadmin 1 · digart 4 · hra 4 · training 4) + Wave E (mkt 4 · sales 2 · csr 1)
     const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
-    expect(mappings).toBe(625); // 617 (batch 4) + 6 Wave E new-row claims (sysadmin 1 · digart 4 · hra 3)
+    expect(mappings).toBe(639); // 632 + 7 Wave E new-row claims (mkt 4 · sales 2 · csr 1)
   });
 
   it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {
@@ -1001,7 +1001,7 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
     }
   });
 
-  it("declared-thin census: 58 career-skill cells carry no URL row; empty ADDR rows = 75", () => {    const thin: string[] = [];
+  it("declared-thin census: 46 career-skill cells carry no URL row; empty ADDR rows = 75", () => {    const thin: string[] = [];
     for (const c of CAREERS) {
       for (const s of c.skills) {
         const urlPool = RESOURCES.filter(
@@ -1010,11 +1010,15 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
         if (urlPool.length === 0) thin.push(`${c.id}::${s.name}`);
       }
     }
-    // 63 (batch 3) → 58 (batch 4) → 56 (Wave E: sysadmin Optimize-perf gains
-    // the MS Learn module row; hra HR-Practices gains the Minnesota
-    // recruiting course — every remaining thin cell is listed in the batch
-    // commit body)
-    expect(thin).toHaveLength(56);
+    // 63 (batch 3) → 58 (batch 4) → 51 (Wave E fills: sysadmin Optimize-perf
+    // (MS Learn module), hra HR-Practices (Minnesota recruiting) + Employee
+    // Mobility (EDUCBA movement), training Onboarding + both Exit cells
+    // (Minnesota/EDUCBA) + HR-Analytics (Wharton dup) — every remaining thin
+    // cell is listed in the batch commit body) → 46 (Wave E mkt/sales/csr:
+    // mkt Business-Environment / Consumer-Intelligence / Demand-Analysis
+    // bundle / Events-proposals-platforms bundle, sales Supplier
+    // Performance-Sourcing bundle)
+    expect(thin).toHaveLength(46);
     // thin cells never get papered over: no pick flag, no invented row
     const thinPick = RESOURCES.filter((r) => r.pick && r.url === undefined);
     expect(thinPick).toEqual([]);
@@ -1039,7 +1043,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
     return a.id.localeCompare(b.id);
   };
 
-  it("231 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
+  it("244 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
     const winnersBySkill = new Map<string, string>(); // career::skill → row id
     const winnerRows = new Set<string>();
     for (const c of CAREERS) {
@@ -1056,7 +1060,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
       }
     }
     const flags = RESOURCES.filter((r) => r.pick).map((r) => r.id);
-    expect(flags).toHaveLength(235); // 231 (batch 4) + 4 (Wave E: sysadmin ms-learn-wsperf · digart packaging/visual-me/anim · hra minnesota-recruit; byte-matched to the data)
+    expect(flags).toHaveLength(244); // 239 (Wave E prior) − 2 retired (res-sales-rutgers-scm superseded by the MS-learn sales-orders module; res-csr-ra10173 superseded by the Ask Lex data-privacy course) + 7 Wave E mkt/sales/csr winners
     expect(new Set(flags)).toEqual(winnerRows); // byte-match in BOTH directions
     expect(winnersBySkill.get("swd::Applications Development")).toBe("res-python-basics");
     // the canon money-shot stays flagged-adjacent: the qa fallback winner is a
