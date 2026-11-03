@@ -28,7 +28,7 @@
 import { CHECK_SKILL } from "@/lib/fixtures/checks";
 import { pickMaterial } from "@/lib/engines/suggestions";
 import { roundHalfDown, WEIGHTS } from "@/lib/engines/score";
-import type { BarSource, Career, Resource } from "@/lib/types";
+import type { AccessState, BarSource, Career, Resource } from "@/lib/types";
 
 export interface WalkNode {
   skill: string;
@@ -44,6 +44,9 @@ export interface WalkNode {
     hrs: string;
     url: string | null;
     learn: string | null;
+    /** the winner's takeability fact — folded into the meta register as
+     *  one word (spec §6; the audit lane does not render) */
+    access: AccessState | null;
   } | null;
   hasCheck: boolean;
   /** honest micro-line flag (§6.2): open row whose material has no
@@ -111,6 +114,7 @@ export function buildWalk(
             hrs: `~${res.durationHours} hrs`,
             url: res.url ?? null,
             learn: pick.learn,
+            access: pick.access,
           }
         : null,
       hasCheck,
