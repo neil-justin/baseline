@@ -8,7 +8,9 @@ import { useRouter } from "next/navigation";
  * "approve" } → the API writes the profiles row + app_metadata role and
  * marks the request approved; Reject records the same trail with no grant.
  * The list re-reads on completion (router.refresh) — no client-side state
- * mirrors the server's single source of truth.
+ * mirrors the server's single source of truth. On an approve whose SMTP
+ * send didn't ride (mailStatus ≠ "sent"), the row holds a status banner
+ * for 6s of reading time BEFORE the refresh unmounts the row.
  */
 export interface RequestRow {
   userId: string;
@@ -22,10 +24,15 @@ export default function ApproveRow({ row }: { row: RequestRow }) {
   const router = useRouter();
   const [acting, setActing] = useState<"approve" | "reject" | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [mailNote, setMailNote] = useState<string | null>(null);
 
   async function decide(action: "approve" | "reject") {
     setActing(action);
     setErr(null);
+    // clear at entry: on a retry click the PREVIOUS banner would otherwise
+    // linger through the new attempt (the 409 arm navigates via refresh
+    // anyway — entry is the safe place)
+    setMailNote(null);
     try {
       const res = await fetch(`/api/admin/counselor-requests/${row.userId}`, {
         method: "PATCH",
@@ -42,6 +49,18 @@ export default function ApproveRow({ row }: { row: RequestRow }) {
         }
         setErr("The decision didn't record. Try again.");
         return;
+      }
+      const data = (await res.json().catch(() => null)) as { status?: string; mailStatus?: string } | null;
+      if (action === "approve" && data?.mailStatus && data.mailStatus !== "sent") {
+        setMailNote(
+          data.mailStatus === "skipped_no_config"
+            ? "Approved — mail config is off, so no email went out. Let them know by other means."
+            : "Approved — but the SMTP send failed, so no email reached them. Let them know by other means."
+        );
+        // 6s reading time BEFORE the refresh unmounts the row — the banner is
+        // the approving human's work item; the server truth (row gone from the
+        // pending list) lands one screen-beat later, correct the whole time.
+        await new Promise((r) => setTimeout(r, 6000));
       }
       router.refresh();
     } catch {
@@ -63,6 +82,21 @@ export default function ApproveRow({ row }: { row: RequestRow }) {
           <strong className="crq-name">{row.fullName}</strong> · {row.email} · requested {stamp}
         </span>
         <p className="crq-note">{row.note}</p>
+        {mailNote && (
+          // status note (not an alert) — same shape as .crq-err but ink, not
+          // amber (approve SUCCEEDED; only the courtesy email didn't ride)
+          <div
+            role="status"
+            style={{
+              display: "block",
+              margin: "6px 0 0",
+              font: "400 12px/1.5 Roboto, system-ui, sans-serif",
+              color: "var(--v-ink)",
+            }}
+          >
+            {mailNote}
+          </div>
+        )}
         {err && (
           <div className="crq-err" role="alert">
             {err}

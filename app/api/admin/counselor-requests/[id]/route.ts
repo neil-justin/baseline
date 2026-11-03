@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentProfile } from "@/lib/session";
+import { sendCounselorApproved } from "@/lib/mail";
 import { supabaseAdmin } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
@@ -21,7 +22,13 @@ export const dynamic = "force-dynamic";
  *   reject  → request row stamped rejected/decided_by. NO grant, and the
  *             applicant may resubmit from /welcome (upsert flips pending).
  * Errors: unauthorized | forbidden | bad_json | bad_input | not_found |
- *         already_decided | server
+ *         already_decided | server. On a 200 approve, mailStatus rides
+ *         along (sent | skipped_no_config | failed — never a failure
+ *         marker): the best-effort SMTP send runs only AFTER every
+ *         grant-side write succeeded. A lost/failed response's re-click
+ *         lands past the RPC (already approved) and re-runs ONLY the JWT
+ *         stamp + send — so the email is at-least-once semantics by
+ *         design, not exactly-once.
  */
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const profile = await getCurrentProfile();
@@ -109,7 +116,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     });
     if (metaErr) return NextResponse.json({ error: "server" }, { status: 500 });
 
-    return NextResponse.json({ status: "approved" });
+    // best-effort notification AFTER every grant-side write succeeded —
+    // SMTP failure can never un- or half-grant (lib/mail.ts contract).
+    // Healing-retry note: a lost/failed response's re-click lands past the
+    // RPC (already approved) and re-runs ONLY this stamp — so the email is
+    // "at least once" semantics by design, not "exactly once".
+    const mailStatus = await sendCounselorApproved(request.email, request.full_name);
+    return NextResponse.json({ status: "approved", mailStatus });
   } catch {
     return NextResponse.json({ error: "server" }, { status: 500 });
   }
