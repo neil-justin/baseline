@@ -1,8 +1,7 @@
 import { redirect } from "next/navigation";
 import { CATALOG_TOTAL } from "@/lib/fixtures/catalog";
 import Reveal from "@/components/Reveal";
-import { db } from "@/lib/db";
-import { getCurrentProfile } from "@/lib/session";
+import { destFor, getCurrentProfile, getSignedInUser } from "@/lib/session";
 import "./landing.css";
 
 export const dynamic = "force-dynamic";
@@ -15,20 +14,21 @@ export const metadata = {
 
 /**
  * Signed-in visitors never see the marketing page (user ruling 2026-11-02):
- * staff go to /admin; students land on /onboarding until a role is picked,
- * /dashboard after — the same rule the sign-in route applies. The check
- * runs inside the landing component (session cookie read = dynamic render).
+ * destination rides lib/session destFor (swept there in Task 8) — staff to
+ * /admin; students land on /onboarding until a role is picked, /dashboard
+ * after — the same rule the sign-in route applies. A signed-in identity
+ * with NO profile row is a first-time Google applicant → /welcome. The
+ * check runs inside the landing component (session cookie read = dynamic).
  */
 async function authedRedirect(): Promise<void> {
   const profile = await getCurrentProfile();
   if (profile) {
-    if (profile.role === "counselor" || profile.role === "sysadmin") redirect("/admin");
-    if (profile.studentId) {
-      const state = await db.getStudentState(profile.studentId);
-      redirect(state.careerId ? "/dashboard" : "/onboarding");
-    }
-    redirect("/onboarding");
+    // the one destination rule, swept onto destFor (Task 8)
+    redirect(await destFor({ role: profile.role, studentId: profile.studentId }));
   }
+  // signed-in but never provisioned (first Google identity) → the picker,
+  // NOT the marketing page (signed-in visitors never see it — user ruling)
+  if (await getSignedInUser()) redirect("/welcome");
 }
 
 /**
