@@ -975,10 +975,10 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
 });
 
 describe("§6.1 re-map census (final mapping state) + canon rails", () => {
-  it("catalog intact: 437 rows, no deletions; 537 ADDR entries remain (696 → 536 → 537 Wave B batch 2)", () => {
-    expect(RESOURCES).toHaveLength(437);
+  it("catalog intact: no rows deleted (437 → 445 Wave B batch 2 fills are additive); 551 ADDR entries", () => {
+    expect(RESOURCES).toHaveLength(445); // +8 verified taught rows (2 ba · 1 sysadmin · 5 dba; 437 baseline)
     const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
-    expect(mappings).toBe(537); // +1: qa::ASE claim attached via the res-qa-google-bi re-point (user-ruled 2026-11-03)
+    expect(mappings).toBe(551); // 537 + 14 (UAT claim · Visio claim · ba ESC attach · design-CWF attach · SLO claim · 4×IBM DBA · Meta · IBM vuln · Google dup · postmortem · FCC migration)
   });
 
   it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {
@@ -999,7 +999,7 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
     }
   });
 
-  it("declared-thin census: 88 career-skill cells carry no URL row; empty ADDR rows = 72", () => {
+  it("declared-thin census: 84 career-skill cells carry no URL row; empty ADDR rows = 72", () => {
     const thin: string[] = [];
     for (const c of CAREERS) {
       for (const s of c.skills) {
@@ -1009,13 +1009,12 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
         if (urlPool.length === 0) thin.push(`${c.id}::${s.name}`);
       }
     }
-    expect(thin).toHaveLength(88); // was 89 — qa::ASE filled via the res-qa-google-bi re-point (user-ruled 2026-11-03)
+    expect(thin).toHaveLength(84); // 89 → 88 (qa::ASE) → 84 (ba::UAT, ba::ESC attach, sysadmin::design-CWF, sysadmin::SLA — Wave B batch 2)
     // thin cells never get papered over: no pick flag, no invented row
     const thinPick = RESOURCES.filter((r) => r.pick && r.url === undefined);
     expect(thinPick).toEqual([]);
     expect(RESOURCES.filter((r) => r.skillsAddressed.length === 0)).toHaveLength(72);
     // spot pins: the honest holes include these recorded ones
-    expect(thin).toContain("ba::Solution Support (UAT & hand-over)");
     expect(thin).toContain("sysadmin::IT Asset Management"); // gap-row only
     expect(thin).toContain("execsec::Supervision & training of clerical staff");
   });
@@ -1032,7 +1031,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
     return a.id.localeCompare(b.id);
   };
 
-  it("209 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
+  it("211 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
     const winnersBySkill = new Map<string, string>(); // career::skill → row id
     const winnerRows = new Set<string>();
     for (const c of CAREERS) {
@@ -1049,7 +1048,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
       }
     }
     const flags = RESOURCES.filter((r) => r.pick).map((r) => r.id);
-    expect(flags).toHaveLength(209); // 208 → 209: the filled qa::ASE cell gained its winner flag (Wave B batch 2)
+    expect(flags).toHaveLength(211); // 208 → 209 (qa::ASE) → 211 (Wave B batch 2: ba::UAT + sysadmin::SLA fallback winners flagged; dba winners unchanged — see the row edits)
     expect(new Set(flags)).toEqual(winnerRows); // byte-match in BOTH directions
     expect(winnersBySkill.get("swd::Applications Development")).toBe("res-python-basics");
     // the canon money-shot stays flagged-adjacent: the qa fallback winner is a

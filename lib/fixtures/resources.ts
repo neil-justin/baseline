@@ -1101,6 +1101,15 @@ export const RESOURCES: Resource[] = [
   },
 
   // == ── Business Analyst, IT (roster 2.3 · id ba) — ba.md §Resources ───────
+  // Wave B audit (2026-11-03, batch 2): access/form per-row; two census-thin
+  // cells filled user-ruled — the UAT cell via a new Microsoft taught-course
+  // row (fetched LIVE), the flow-diagrams cell via a new Microsoft Visio
+  // taught-course row (fetched LIVE). The Coursera guided project stays
+  // UNGRADED: the project venue rides Coursera Plus (BA-V4 ruled
+  // needs-user-at-enroll — no verified self-serve access fact this pass, so
+  // the picker guards it; the taught course rows carry the cells instead).
+  // Learn lines drafted from each resource's actual content (learn draft —
+  // user review pending). Coverage: 7/7 vetted.
   {
     id: "res-ba-ibm-intro-ba",
     title: "Introduction to Business Analysis",
@@ -1109,11 +1118,23 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // BABOK-aligned free-audit intro (elicitation, stakeholder engagement,
     // gap analysis); backs the printed L3 cell ("Elicit and analyze …")
+    // audit (2026-11-03): Coursera course page → audit route free, cert paid
+    // → exam-paid; taught. Requirements Analysis + Business Needs Analysis
+    // winner (the guided-project row stays ungraded — see block comment).
     url: "https://www.coursera.org/learn/introduction-to-business-analysis",
     durationHours: 10,
     skillsAddressed: ["Requirements Analysis", "Business Needs Analysis"],
     careerId: "ba",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Requirements Analysis":
+        "Elicits requirements from stakeholders hands-on — interviews, gap analysis and turning a business problem into a documented requirement set, the elicit-and-analyze loop this skill prints.",
+      "Business Needs Analysis":
+        "Scopes the business problem before any solution: stakeholder needs, priorities and the information gathering the printed cell runs.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-ba-coursera-guided-project",
@@ -1121,10 +1142,15 @@ export const RESOURCES: Resource[] = [
     provider: "Coursera",
     type: "course",
     cost: "free",
-    // 2-hour hands-on process-analysis drill; guided projects sit inside
-    // Coursera's paid plan by default — verify the free-entry state before
-    // recommending (BA-V4 ruled needs-user-at-enroll)
+    // 2-hour hands-on process-analysis drill (Lucidchart); guided projects
+    // sit inside Coursera's paid plan by default — verify the free-entry
+    // state before recommending (BA-V4 ruled needs-user-at-enroll)
+    // Wave B (2026-11-03): re-verified the project page LIVE (200; Lucidchart
+    // steps, "Included with Coursera Plus") — but no self-serve access fact
+    // could be verified at this URL, so the row stays UNGRADED (fail-closed);
+    // the taught Visio course row carries the Process-modeling cell instead.
     url: "https://www.coursera.org/projects/business-analysis-process-management",
+    // NOTE: last-known-good URL; project page verified LIVE 2026-11-03.
     durationHours: 2,
     skillsAddressed: ["Requirements Analysis", "Process modeling (flow diagrams, use cases)"],
     careerId: "ba",
@@ -1138,11 +1164,25 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // adopted 403 verdict line (keep-with-flag); drilled stakeholder
     // interviews + cross-department work
+    // audit (2026-11-03, mockup draft): course page open in browser →
+    // taught/direct (curl 403 — the keep-with-flag line)
     url: "https://www.open.edu/openlearn/money-business/effective-communication-the-workplace",
     durationHours: 3,
-    skillsAddressed: ["Team Enablement"],
+    skillsAddressed: [
+      "Team Enablement",
+      "Collaboration · Communication · Digital Fluency · Learning Agility (Enabling)",
+    ],
     careerId: "ba",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Team Enablement":
+        "Workplace communication drills: running team conversations, briefing across departments and keeping a team's information flowing — the enable-interface work this catalog row prints.",
+      "Collaboration · Communication · Digital Fluency · Learning Agility (Enabling)":
+        "The free course's practical communication activities train the collaboration/communication halves of the bundle and model learning-from-feedback — the enabling behaviors the row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-ba-ms-ba-fundamentals",
@@ -1151,10 +1191,20 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // requirements → documentation → communication
+    // audit (2026-11-03): Coursera course page → audit route free, cert paid
+    // → exam-paid; taught. Requirements Specification winner (the Figma
+    // resource-library URL is an article index = landing; see row).
     url: "https://www.coursera.org/learn/business-analysis-fundamentals",
     durationHours: 10,
     skillsAddressed: ["Requirements Specification"],
     careerId: "ba",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Requirements Specification":
+        "Teaches turning elicited needs into written requirement documents and communicating them downstream — the specify-and-document flow this catalog row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-ba-figma",
@@ -1163,11 +1213,68 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // low-fidelity prototyping/wireframing + FigJam diagram tutorials
+    // audit (2026-11-03): fetched LIVE — "Resource Library — How-To & Best
+    // Practice Articles": an article INDEX at this URL = landing (the
+    // individual articles/tutorials open one click deeper; fail-closed)
     url: "https://www.figma.com/resource-library/",
     durationHours: 3,
     skillsAddressed: ["Requirements Specification"],
     careerId: "ba",
     pick: true,
+    form: "landing",
+    access: "direct",
+  },
+  {
+    id: "res-ba-ms-testing-fund",
+    title: "Software Testing Fundamentals and Methodologies (Microsoft)",
+    provider: "Microsoft (Coursera)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the UAT
+    // cell was census-thin (no URL row claimed it — verified-fixtures spot
+    // pin). New row for the taught Microsoft course page ("Enroll for
+    // free", 10 modules): honors the UAT craft this skill prints — module 8
+    // defines acceptance criteria and executes acceptance tests against a
+    // live mock app, module 9 demos passing/failing tests to business
+    // stakeholders at the sprint review (the hand-over demo), and the QA/QC
+    // vs UAT distinction opens the course. ₱ paid tier: shareable
+    // certificate (audit/financial-aid route is the free tier).
+    url: "https://www.coursera.org/learn/software-testing-fundamentals-and-methodologies",
+    durationHours: 8,
+    skillsAddressed: ["Solution Support (UAT & hand-over)"],
+    careerId: "ba",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Solution Support (UAT & hand-over)":
+        "You write acceptance criteria, run acceptance tests on a live app, then demo passing (and failing) tests to business stakeholders in the sprint review — running UAT and handing the software over to its users, which this skill prints.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-ba-visio",
+    title: "Data and Business Process Modeling with Microsoft Visio",
+    provider: "Microsoft (Coursera)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the
+    // flow-diagrams cell had only the ungraded guided-project claim. New row
+    // for the taught Microsoft Visio course ("Enroll for free", Beginner,
+    // 3-4 weeks): business process modeling, data modeling and process flow
+    // diagrams (DFDs) drawn in Visio hands-on — the flow-diagram modeling
+    // this catalog row prints. ₱ paid tier: shareable certificate.
+    url: "https://www.coursera.org/learn/data-and-business-process-modeling-with-microsoft-visio",
+    durationHours: 8,
+    skillsAddressed: ["Process modeling (flow diagrams, use cases)"],
+    careerId: "ba",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Process modeling (flow diagrams, use cases)":
+        "Draws the organization's processes as Visio flow diagrams and data-flow models hands-on — how work flows between actors, broken into steps a diagram reader can trace.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-ba-atlassian-bugs",
@@ -1182,6 +1289,8 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: [],
     careerId: "ba",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-ba-lhtl",
@@ -1190,13 +1299,33 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // "eagerness to learn from subject matter experts" behavior support
+    // audit (2026-11-03): audit route → exam-paid (ADDR retired — catalog-only)
     url: "https://www.coursera.org/learn/learning-how-to-learn",
     durationHours: 4,
     skillsAddressed: [],
     careerId: "ba",
+    form: "taught",
+    access: "exam-paid",
   },
 
   // == ── Network / Systems Administrator (2.5 · id sysadmin) ────────────────
+  // Wave B audit (2026-11-03, batch 2): access/form per-row. The Google IT
+  // Support prof-cert row was RE-POINTED to the taught course-3 page
+  // (verified LIVE) so the suggested slot opens teachable content, and the
+  // taught SRE SLO chapter arrives as a per-role duplicate row (pool
+  // convention) to carry the SLA CWF cell. Adviser-only reds remain, honest,
+  // never papered over (searched the open catalog this pass):
+  //  · "↳ CWF sub-row: Optimize systems performance" — no taught self-serve
+  //    page verified (Coursera's dedicated courses ride paid tiers /
+  //    guided-project venues); stays no-claim, flagged adviser-only.
+  //  · "IT Asset Management" / "System Integration" — SYS-V1 declared thin;
+  //    re-searched this pass, no dedicated free taught page verified — gap
+  //    rows stand.
+  //  · "Configuration Tracking · Cyber-and-Data-Breach Incident Management ·
+  //    Business Needs Analysis" — constructed 3-family bundle; a single
+  //    taught page satisfying all three families was not verified — no row
+  //    exists, adviser-only ruling pending.
+  // Coverage: 8/12 vetted (the four above stay honestly red).
   {
     id: "res-sysadmin-edx-linux",
     title: "Introduction to Linux (The Linux Foundation)",
@@ -1204,6 +1333,10 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // free canonical Linux-systems foundations; verified certificate paid
+    // Wave B (2026-11-03): the edX fetch this pass returned the SPA shell
+    // without course content verifiable at this URL — NOT GRADED
+    // (fail-closed; the LFS101x audit facts need a browser check before the
+    // she can carry the slot. The Book row below carries the cell.)
     url: "https://www.edx.org/learn/linux/the-linux-foundation-introduction-to-linux",
     durationHours: 60,
     skillsAddressed: ["Systems administration (user groups, upgrades, backups)"],
@@ -1215,11 +1348,14 @@ export const RESOURCES: Resource[] = [
     provider: "Canonical",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): docs hub index = reference (vendor docs)
     url: "https://ubuntu.com/server/docs",
     durationHours: 2,
     skillsAddressed: ["Systems administration (user groups, upgrades, backups)"],
     careerId: "sysadmin",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-sysadmin-tlcl-doc",
@@ -1228,10 +1364,22 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // free text; print = purchase (labeled)
+    // audit (2026-11-03): the book itself = taught (content-shape ruling:
+    // "course, tutorial, book"); open access. Systems-administration winner:
+    // the book teaches user/group management, package upgrades, file
+    // systems, processes and the systems-administration craft the CWF list
+    // prints.
     url: "http://linuxcommand.org/tlcl.php",
     durationHours: 8,
     skillsAddressed: ["Systems administration (user groups, upgrades, backups)"],
     careerId: "sysadmin",
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Systems administration (user groups, upgrades, backups)":
+        "The book walks the sysadmin day job at the command line — managing users and groups, installing and upgrading packages, handling permissions, processes and backups from the shell.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-sysadmin-linux-journey",
@@ -1239,6 +1387,9 @@ export const RESOURCES: Resource[] = [
     provider: "Linux Journey",
     type: "course",
     cost: "free",
+    // 403 to scripted fetch (audit 2026-11-02) — site-wide bot-wall verdict
+    // carried from the swd sibling (same domain); NOT GRADED this pass
+    // (fail-closed). URL NOT dead per the prior browser verdict.
     url: "https://linuxjourney.com/",
     durationHours: 6,
     skillsAddressed: ["Systems administration (user groups, upgrades, backups)"],
@@ -1250,11 +1401,15 @@ export const RESOURCES: Resource[] = [
     provider: "Cisco Networking Academy",
     type: "course",
     cost: "free",
+    // audit (2026-11-03): Cisco NetAcad self-paced course page (free signup
+    // → account; verified title fetch LIVE)
     url: "https://www.netacad.com/courses/networking-basics",
     durationHours: 22,
     skillsAddressed: ["Network Administration and Maintenance"],
     creditingBody: "Cisco Networking Academy",
     careerId: "sysadmin",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-sysadmin-netacad-addressing",
@@ -1262,24 +1417,57 @@ export const RESOURCES: Resource[] = [
     provider: "Cisco Networking Academy",
     type: "course",
     cost: "free",
+    // audit (2026-11-03): Cisco NetAcad self-paced course page (free signup
+    // → account Network-administration winner (id A–Z over the Basics
+    // row — both credited and taught).
     url: "https://www.netacad.com/courses/network-addressing-and-basic-troubleshooting",
     durationHours: 20,
     skillsAddressed: ["Network Administration and Maintenance"],
     creditingBody: "Cisco Networking Academy",
     careerId: "sysadmin",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Network Administration and Maintenance":
+        "You plan IP addressing schemes, configure hosts on a LAN, and run the connectivity checks and fixes an administrator maintains on a live network.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-sysadmin-google-it-support",
-    title: "Google IT Support Professional Certificate",
-    provider: "Google (Coursera)",
-    type: "cert",
+    title: "System Administration and IT Infrastructure Services (Google)",
+    provider: "Coursera (Google)",
+    type: "course",
     cost: "free",
-    url: "https://www.coursera.org/professional-certificates/google-it-support",
-    durationHours: 60,
-    skillsAddressed: ["Infrastructure Support", "↳ CWF sub-row: Resolve system-related incidents"],
+    // fetched LIVE 2026-11-03 (RE-POINTED, Wave B batch 2): the old URL was
+    // the Google IT Support prof-cert landing. The suggested slot must open
+    // teachable content, so this row now points at the taught cert course 3
+    // (fetched LIVE 2026-11-03: "Enroll for free", 6 modules — system admin
+    // roles, provisioning, routine maintenance, network/infrastructure
+    // services, directory services, disaster recovery + a systems-consultation
+    // final project). Id unchanged; ₱ paid tier: shareable certificate
+    // (audit/financial-aid route free).
+    url: "https://www.coursera.org/learn/system-administration-it-infrastructure-services",
+    durationHours: 25,
+    skillsAddressed: [
+      "Infrastructure Support",
+      "↳ CWF sub-row: Resolve system-related incidents",
+      "↳ CWF sub-row: Design and develop new systems",
+    ],
     careerId: "sysadmin",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Infrastructure Support":
+        "Covers the infrastructure services an organization's users run on — provisioning, server platforms, directory services and keeping those services up and recoverable.",
+      "↳ CWF sub-row: Resolve system-related incidents":
+        "Troubleshooting and escalation run through the whole course — identify issues, work the fix, escalate unresolved ones — the incident loop the CWF prints.",
+      "↳ CWF sub-row: Design and develop new systems":
+        "The final project has you assess three organizations' infrastructure and design the systems recommendations that make services available to users — new-systems support work.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-sysadmin-top-landing",
@@ -1294,6 +1482,8 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "sysadmin",
     pick: true,
+    form: "landing", // the constituency root — the Moodle modules live behind it
+    access: "account",
   },
   {
     id: "res-sysadmin-windows-server-docs",
@@ -1303,10 +1493,13 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // directory/service integration context (the ITAM/System-Integration
     // thin-zone backing docs — SYS-V1)
+    // audit (2026-11-03): vendor docs hub = reference
     url: "https://learn.microsoft.com/en-us/windows-server/",
     durationHours: 4,
     skillsAddressed: [],
     careerId: "sysadmin",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-sysadmin-ms-learn-ad-ds",
@@ -1315,11 +1508,48 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // access-control administration (users/groups/GPO)
+    // audit (2026-11-03): fetched LIVE — MS Learn learning path, 5 modules
+    // (AD DS intro to cert services) with units/labs, open access → taught
+    // (a structured learning flow, not the docs hub). Security-administration
+    // winner.
     url: "https://learn.microsoft.com/en-us/training/paths/active-directory-domain-services",
     durationHours: 10,
     skillsAddressed: ["Security Administration"],
     careerId: "sysadmin",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Security Administration":
+        "A guided path on administering access controls — users, groups and group policy in Active Directory, and the certificate-services permissions around them — the authorization/access-control craft this skill prints.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-sysadmin-sre-slo",
+    title: "Service Level Objectives (Google SRE book, Ch. 4)",
+    provider: "Google",
+    type: "doc",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the SLA CWF
+    // cell had no catalog row. Per-role duplicate of the qa pool's verified
+    // SLO chapter (pool convention: identical provider pages appear as
+    // separate rows). The chapter teaches exactly the CWF bullets — assist
+    // developing service-level objectives/targets, the metrics a team tracks,
+    // and the control loop that turns SLI/SLO misses into service
+    // improvements.
+    url: "https://sre.google/sre-book/service-level-objectives/",
+    durationHours: 2,
+    skillsAddressed: ["↳ CWF sub-row: Oversee service level agreements and service improvements"],
+    careerId: "sysadmin",
+    pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "↳ CWF sub-row: Oversee service level agreements and service improvements":
+        "Teaches writing SLO targets, selecting the metrics that measure them, and using the error budget as the control loop for recurring-incident reviews and service improvements.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-sysadmin-owasp-cheatsheets",
@@ -1328,10 +1558,13 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // hardening drills behind patch/threat protection
+    // audit (2026-11-03): readable drills/answers = reference
     url: "https://cheatsheetseries.owasp.org/",
     durationHours: 4,
     skillsAddressed: [],
     careerId: "sysadmin",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-sysadmin-progit",
@@ -1340,10 +1573,13 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // change-accounting standard behind Configuration Tracking
+    // audit (2026-11-03): free book (taught per the content-shape ruling); open access
     url: "https://git-scm.com/book/en/v2",
     durationHours: 8,
     skillsAddressed: [],
     careerId: "sysadmin",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-sysadmin-semver",
@@ -1351,10 +1587,13 @@ export const RESOURCES: Resource[] = [
     provider: "semver.org",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): spec text = reference, open access
     url: "https://semver.org/",
     durationHours: 1,
     skillsAddressed: [],
     careerId: "sysadmin",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-sysadmin-openlearn-comms",
@@ -1363,13 +1602,24 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // adopted 403 verdict line (keep-with-flag)
+    // audit (2026-11-03, mockup draft): course page open in browser →
+    // taught/direct (curl 403 — the keep-with-flag line)
     url: "https://www.open.edu/openlearn/money-business/effective-communication-the-workplace",
     durationHours: 3,
     skillsAddressed: ["Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)"],
     careerId: "sysadmin",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)":
+        "Practical team-communication activities — running conversations, briefing colleagues, working around the group's rhythm — the enabling behaviors the bundle prints.",
+    },
+    // learn draft — user review pending
   },
-  // SYS-V1 declared thin zones (kept declared, no forced search)
+  // SYS-V1 declared thin zones (kept declared, no forced search — re-checked
+  // 2026-11-03 batch 2: no dedicated free taught page verified for ITAM or
+  // System Integration; both gap rows stand. adviser-only).
   {
     id: "res-sysadmin-gap-itam",
     title: "IT Asset Management — dedicated free course",
@@ -1392,6 +1642,52 @@ export const RESOURCES: Resource[] = [
   },
 
   // == ── Database Administrator (2.6 · id dba) ──────────────────────────────
+  // Wave B audit (2026-11-03, batch 2): access/form per-row (the vendor/PDF
+  // docs grade reference and stay unvettable by contract; learn lines on the
+  // taught winners). FIVE census-thin taught claims filled user-ruled — new
+  // rows for the verified taught pages (IBM DBA · IBM DB-vulnerabilities ·
+  // Meta DB structures · the per-role SRE postmortem chapter · the per-role
+  // Google systems course), and the ETL leg of the FCC relational program
+  // carries Data Migration. Learn lines drafted from the resources' actual
+  // content (learn draft — user review pending). Coverage: 11/11 vetted.
+  {
+    id: "res-dba-ibm-db-admin",
+    title: "Relational Database Administration (DBA) (IBM)",
+    provider: "IBM (Coursera)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the four
+    // dbadmin cells had only reference-grade vendor/PDF rows. New row for
+    // IBM's taught DBA course ("Enroll for free", 5 modules): database
+    // management tasks day-to-day, backup/restore procedures, user/roles
+    // administration, monitoring and optimization (baselines, slow queries,
+    // indexes), and connectivity/login/configuration troubleshooting with
+    // automated alerts — the administration craft this family prints.
+    // ₱ paid tier: shareable certificate (audit/financial-aid free).
+    url: "https://www.coursera.org/learn/relational-database-administration",
+    durationHours: 21,
+    skillsAddressed: [
+      "Database Administration",
+      "↳ CWF sub-row: Oversee database administration",
+      "↳ CWF sub-row: Optimize database performance",
+      "↳ CWF sub-row: Resolve database incidents",
+    ],
+    creditingBody: "IBM",
+    careerId: "dba",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Database Administration":
+        "Runs the DBA day job end to end: configuring servers and schemas, managing user roles, backing up and restoring databases across MySQL/PostgreSQL/DB2.",
+      "↳ CWF sub-row: Oversee database administration":
+        "Hands-on labs on backup policies and restore drills, user groups and password administration — the oversight craft the CWF prints.",
+      "↳ CWF sub-row: Optimize database performance":
+        "The monitoring module sets baselines and metrics, tracks RAM/disk usage and connections, then works indexes and slow queries to bring performance back.",
+      "↳ CWF sub-row: Resolve database incidents":
+        "A troubleshooting module for connectivity, login and configuration failures — diagnose, fix, and automate the alerting around them.",
+    },
+    // learn draft — user review pending
+  },
   {
     id: "res-dba-mysql-refman",
     title: "MySQL 8.0 Reference Manual (official PDF)",
@@ -1400,6 +1696,8 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // DBA-V1: dev.mysql.com/doc pages 403 to scripted fetch (public in
     // browsers) — this verified official PDF is the cited substitute
+    // audit (2026-11-03): reference manual = readable text, no teaching
+    // flow → reference
     url: "https://downloads.mysql.com/docs/refman-8.0-en.pdf",
     durationHours: 6,
     skillsAddressed: [
@@ -1409,6 +1707,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "dba",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-dba-sqlserver-docs",
@@ -1416,11 +1716,39 @@ export const RESOURCES: Resource[] = [
     provider: "Microsoft Learn",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): vendor docs hub = reference
     url: "https://learn.microsoft.com/en-us/sql/sql-server/",
     durationHours: 4,
     skillsAddressed: ["Database Administration", "↳ CWF sub-row: Design and develop new database"],
     careerId: "dba",
     pick: true,
+    form: "reference",
+    access: "direct",
+  },
+  {
+    id: "res-dba-meta-db-structures",
+    title: "Database Structures and Management with MySQL (Meta)",
+    provider: "Meta (Coursera)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the
+    // design-and-develop CWF cell had only a reference-grade vendor row.
+    // New row for Meta's taught MySQL course ("Enroll for free", 4
+    // modules): build and modify relational databases with SQL hands-on —
+    // schemas, keys, constraints, ALTER/COPY TABLE, stored procedures, and
+    // a normalization project. ₱ paid tier: shareable certificate.
+    url: "https://www.coursera.org/learn/database-structures-and-management-with-mysql",
+    durationHours: 12,
+    skillsAddressed: ["↳ CWF sub-row: Design and develop new database"],
+    creditingBody: "Meta",
+    careerId: "dba",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "↳ CWF sub-row: Design and develop new database":
+        "Builds a new database in MySQL from the ground up — schemas and tables, primary/foreign-key relationships, constraints, views and stored procedures, ending in a normalization project — the design-and-develop CWF work, hands-on.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-dba-postgresql-docs",
@@ -1428,11 +1756,15 @@ export const RESOURCES: Resource[] = [
     provider: "PostgreSQL Global Development Group",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): docs hub index = reference (the Part I tutorial
+    // variant in the da pool is the taught companion)
     url: "https://www.postgresql.org/docs/",
     durationHours: 4,
     skillsAddressed: ["Database Administration", "Data Engineering"],
     careerId: "dba",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-dba-oracle-admin-guide",
@@ -1441,11 +1773,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // scripted backup/automation + SI-organization procedures
+    // audit (2026-11-03): vendor admin guide = readable reference
     url: "https://docs.oracle.com/en/database/oracle/oracle-database/19/admin/",
     durationHours: 6,
     skillsAddressed: ["Database Administration", "↳ CWF sub-row: Resolve database incidents"],
     careerId: "dba",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-dba-fcc-relational",
@@ -1454,11 +1789,23 @@ export const RESOURCES: Resource[] = [
     type: "cert",
     cost: "free",
     // Bash/PostgreSQL/ETL production-grade intro drills; fully free
+    // audit (2026-11-03): FCC hands-on projects; free signup → account.
+    // Data Engineering + Data Migration winner (the import/export ETL
+    // drills are the migration craft; see learn line).
     url: "https://www.freecodecamp.org/learn/relational-database/",
     durationHours: 45,
-    skillsAddressed: ["Data Engineering"],
+    skillsAddressed: ["Data Engineering", "Data Migration"],
     creditingBody: "freeCodeCamp",
     careerId: "dba",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Data Engineering":
+        "Projects set up the database backbone itself — Bash and PostgreSQL tooling on real containers, building the pipelines a junior data engineer ships.",
+      "Data Migration":
+        "The program's extract-transform-load drills move real records between systems and formats — writing the import/export scripts that get data across cleanly, the migration craft this row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-dba-mongodb-manual",
@@ -1467,10 +1814,13 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // import/export and migration tooling (the overview names MongoDB)
+    // audit (2026-11-03): vendor manual = reference
     url: "https://www.mongodb.com/docs/manual/",
     durationHours: 4,
     skillsAddressed: ["Data Migration"],
     careerId: "dba",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-dba-mariadb-docs",
@@ -1479,11 +1829,40 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // cross-engine migrate/upgrade guides common in PH SME stacks
+    // audit (2026-11-03): vendor docs = reference
     url: "https://mariadb.com/kb/en/documentation/",
     durationHours: 4,
     skillsAddressed: ["Data Migration"],
     careerId: "dba",
     pick: true,
+    form: "reference",
+    access: "direct",
+  },
+  {
+    id: "res-dba-ibm-db-vuln",
+    title: "Database Essentials and Vulnerabilities (IBM)",
+    provider: "IBM (Coursera)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the
+    // security-controls cell had only the reference-grade OWASP cheat
+    // sheet. New row for IBM's taught database-security course ("Enroll for
+    // free", 5 modules): securing databases in practice — user profiles,
+    // password policies, privileges and roles, protection techniques
+    // (injection vulnerability analysis, encryption/hashing/masking), and
+    // the audit models a DBA implements. ₱ paid tier: certificate.
+    url: "https://www.coursera.org/learn/database-essentials-and-vulnerabilities",
+    durationHours: 15,
+    skillsAddressed: ["Database security controls"],
+    creditingBody: "IBM",
+    careerId: "dba",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Database security controls":
+        "Teaches the controls directly: user profiles and password policies, privilege/role setup, injection vulnerability testing, encryption-heavy protection techniques, and the security/auditing models built in hands-on labs.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-dba-owasp-db-cheatsheet",
@@ -1492,11 +1871,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // privileges/permissions guidance mirrors the security CWF
+    // audit (2026-11-03): cheat sheet = readable reference
     url: "https://cheatsheetseries.owasp.org/cheatsheets/Database_Security_Cheat_Sheet.html",
     durationHours: 3,
     skillsAddressed: ["Database security controls"],
     careerId: "dba",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-dba-ubuntu-server-docs",
@@ -1505,11 +1887,64 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // host-level OS context ("understand where the database lives")
+    // audit (2026-11-03): docs hub index = reference
     url: "https://ubuntu.com/server/docs",
     durationHours: 2,
     skillsAddressed: ["Infrastructure Support"],
     careerId: "dba",
     pick: true,
+    form: "reference",
+    access: "direct",
+  },
+  {
+    id: "res-dba-google-sysadmin",
+    title: "System Administration and IT Infrastructure Services (Google)",
+    provider: "Coursera (Google)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the
+    // Infrastructure Support cell had only the reference-grade Ubuntu docs
+    // row. Per-role duplicate of the sysadmin pool's taught Google course
+    // (pool convention): teaches the infrastructure services an
+    // organization runs on — hosting servers, backups, recovery and where
+    // the system work the database lives on happens hands-on.
+    url: "https://www.coursera.org/learn/system-administration-it-infrastructure-services",
+    durationHours: 25,
+    skillsAddressed: ["Infrastructure Support"],
+    creditingBody: "Google",
+    careerId: "dba",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Infrastructure Support":
+        "Holds the host machinery steady around the database's home: server setup, directory and backup services, and the disaster-recovery plan the instances depend on.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-dba-sre-postmortem",
+    title: "Postmortem Culture: Learning from Failure (Google SRE book, Ch. 15)",
+    provider: "Google",
+    type: "doc",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled; curl 200):
+    // the Problem Management cell had only the reference-grade Atlassian
+    // guide. Per-role duplicate row of the verified SRE chapter
+    // (pool convention): teaches the blameless postmortem discipline —
+    // investigating failures, isolating the root cause, and writing the
+    // fix-back-and-prevent plan — the problem-management craft (analyze
+    // recurring incidents → root cause → resolution) the row prints.
+    url: "https://sre.google/sre-book/postmortem-culture/",
+    durationHours: 2,
+    skillsAddressed: ["Problem Management"],
+    careerId: "dba",
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Problem Management":
+        "Teaches how problems get solved for good: gather the incident timeline, run the blameless RCA over the failure sequence, then ship and track the corrective actions that keep the problem class from recurring.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-dba-atlassian-incident",
@@ -1517,11 +1952,14 @@ export const RESOURCES: Resource[] = [
     provider: "Atlassian",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): guide hub = reference
     url: "https://www.atlassian.com/incident-management",
     durationHours: 2,
     skillsAddressed: ["Problem Management"],
     careerId: "dba",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-dba-openlearn-comms",
@@ -1530,11 +1968,20 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // adopted 403 verdict line (keep-with-flag); standby-rotation comms
+    // audit (2026-11-03, mockup draft): course page open in browser →
+    // taught/direct (curl 403 — the keep-with-flag line)
     url: "https://www.open.edu/openlearn/money-business/effective-communication-the-workplace",
     durationHours: 3,
     skillsAddressed: ["Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)"],
     careerId: "dba",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)":
+        "Workplace communication practice — briefing across the on-call rotation, explaining technical state to non-technical colleagues — the enabling behaviors the bundle prints.",
+    },
+    // learn draft — user review pending
   },
 
   // == ── Security Analyst (2.7 · id cybersec) ───────────────────────────────
