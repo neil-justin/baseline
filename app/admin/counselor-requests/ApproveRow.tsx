@@ -33,9 +33,13 @@ export default function ApproveRow({ row }: { row: RequestRow }) {
         body: JSON.stringify({ action }),
       });
       if (!res.ok) {
-        // healing-retry: a re-click always completes — the grant RPC is
-        // idempotent (on-conflict-do-nothing) and a failed JWT-stamp retry
-        // re-enters as its own step; "try again" is an actionable truth
+        if (res.status === 409) {
+          // already_decided (another admin ruled, or this decision landed in
+          // an earlier lost response): the truthful action is a refresh, not
+          // an error — the list re-reads and shows the decided state
+          router.refresh();
+          return;
+        }
         setErr("The decision didn't record. Try again.");
         return;
       }

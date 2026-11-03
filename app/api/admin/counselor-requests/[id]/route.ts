@@ -11,14 +11,17 @@ export const dynamic = "force-dynamic";
  * session, never the body). id = the applicant's auth user id.
  *   approve → approve_counselor() RPC — ONE TRANSACTION (profiles row + the
  *             approval stamp commit together or not at all; idempotent,
- *             on-conflict-do-nothing) — then app_metadata.role counselor
+ *             on-conflict-do-nothing; STAMP-FIRST OBSERVABLE — the RPC
+ *             answers 'not_pending' when the row left pending under us →
+ *             already_decided) — then app_metadata.role counselor
  *             (proxy.ts) as the second step. A failed second step answers
  *             500; re-clicking heals: the RPC skips for an already-approved
  *             row and the stamp write retries. No torn state can wedge.
  *             (User ruling 2026-11-03: "this looks like a transaction".)
  *   reject  → request row stamped rejected/decided_by. NO grant, and the
  *             applicant may resubmit from /welcome (upsert flips pending).
- * Errors: unauthorized | forbidden | bad_json | bad_input | not_found | server
+ * Errors: unauthorized | forbidden | bad_json | bad_input | not_found |
+ *         already_decided | server
  */
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const profile = await getCurrentProfile();
@@ -66,16 +69,28 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     }
 
     // approve — ONE RPC call, ONE transaction: profiles row + approval stamp
-    // commit together or not at all; idempotent so healing re-clicks can
-    // never double-grant (on-conflict-do-nothing + pending-only stamp)
+    // commit together or not at all. Stamp-first observable: 'not_pending'
+    // means another admin's decision landed first — the row left the pending
+    // set under us and the decided facts (theirs) stand. Healing re-entry
+    // (status already "approved" after a lost response) never reaches here.
     if (request.status === "pending") {
-      const { error: rpcErr } = await admin.rpc("approve_counselor", {
+      const { data: rpcStatus, error: rpcErr } = await admin.rpc("approve_counselor", {
         p_user_id: id,
         p_email: request.email,
         p_full_name: request.full_name,
         p_decided_by: profile.email,
       });
       if (rpcErr) return NextResponse.json({ error: "server" }, { status: 500 });
+      if (rpcStatus !== "approved") {
+        return NextResponse.json({ error: "already_decided" }, { status: 409 });
+      }
+    }
+
+    // stale-reject guard (review round 2): a stale reject click on an
+    // already-approved row must never re-issue the JWT marker (an auth write
+    // armed by a decision nobody made) — the row's decided facts stand
+    if (request.status === "approved" && action === "reject") {
+      return NextResponse.json({ error: "already_decided" }, { status: 409 });
     }
 
     // the JWT role is the /admin admit ticket (proxy.ts reads app_metadata) —
