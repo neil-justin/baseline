@@ -46,6 +46,11 @@ export async function sendCounselorApproved(to: string, fullName: string): Promi
       host: env.host,
       port: env.port,
       secure: env.port === 465, // TLS-on-connect; other ports go STARTTLS per SMTP
+      requireTLS: env.port !== 465, // harden the 587/STARTTLS branch against opportunistic plaintext relays
+      // deadlines: a misconfigured/blackholed SMTP host must never stall the approve response (defaults are minutes — this is a courtesy-email, not the grant)
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 15_000,
       auth: { user: env.user, pass: env.pass },
     });
     await transport.sendMail({
@@ -58,7 +63,10 @@ export async function sendCounselorApproved(to: string, fullName: string): Promi
         `If this wasn't you, ignore this email — no reply is read at this address.`,
     });
     return "sent";
-  } catch {
+  } catch (err) {
+    // diagnosable in the log, never thrown (no secrets: the pass/env are
+    // not part of nodemailer's error messages)
+    console.error("sendCounselorApproved failed:", err);
     return mailStatus("error");
   }
 }

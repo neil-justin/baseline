@@ -25,10 +25,11 @@ export const dynamic = "force-dynamic";
  *         already_decided | server. On a 200 approve, mailStatus rides
  *         along (sent | skipped_no_config | failed — never a failure
  *         marker): the best-effort SMTP send runs only AFTER every
- *         grant-side write succeeded. A lost/failed response's re-click
- *         lands past the RPC (already approved) and re-runs ONLY the JWT
- *         stamp + send — so the email is at-least-once semantics by
- *         design, not exactly-once.
+ *         grant-side write succeeded. Any approved-status re-entry re-runs
+ *         the send (a lost/failed response's re-click, a second admin's
+ *         stale-DOM click after the first admin's commit — every re-entry
+ *         path) — the email is at-least-once semantics by design, not
+ *         exactly-once.
  */
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const profile = await getCurrentProfile();
@@ -118,9 +119,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
     // best-effort notification AFTER every grant-side write succeeded —
     // SMTP failure can never un- or half-grant (lib/mail.ts contract).
-    // Healing-retry note: a lost/failed response's re-click lands past the
-    // RPC (already approved) and re-runs ONLY this stamp — so the email is
-    // "at least once" semantics by design, not "exactly once".
+    // At-least-once note: any approved-status re-entry re-runs the send
+    // (a lost/failed response's re-click, a second admin's stale-DOM click
+    // after the first admin's commit — every re-entry path) — the email is
+    // at-least-once semantics by design, not exactly-once.
     const mailStatus = await sendCounselorApproved(request.email, request.full_name);
     return NextResponse.json({ status: "approved", mailStatus });
   } catch {
