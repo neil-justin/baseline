@@ -153,7 +153,7 @@ export default async function AdminCohortPage() {
 
   return (
     <div className="v7admin">
-      <AdminBar />
+      <AdminBar role={profile.role} />
       <main id="main" className="ashell">
         {/* the v7 named-surface band + instrument counters */}
         <section className="proband" aria-label="Admin console">

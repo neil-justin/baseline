@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { supabaseAdmin, supabaseServer } from "@/lib/supabase/server";
+import { db } from "@/lib/db";
 
 /**
  * Identity layer (ADR 0003) — who is signed in, per request.
@@ -54,7 +55,13 @@ export async function getCurrentProfile(): Promise<Profile | null> {
 /** Server-page gate: a signed-in student, else the sign-in page. */
 export async function requireStudent(): Promise<Profile & { studentId: string }> {
   const profile = await getCurrentProfile();
-  if (!profile || profile.role !== "student" || !profile.studentId) redirect("/signin");
+  if (!profile) {
+    // signed in but never provisioned (first Google identity) → the picker,
+    // NOT /signin — /signin's own dest probe would answer no_account about
+    // a session we know is good (Google round, ADR 0006)
+    redirect((await getSignedInUser()) ? "/welcome" : "/signin");
+  }
+  if (profile.role !== "student" || !profile.studentId) redirect("/signin");
   // the guard above proved studentId is set (redirect() never returns)
   return profile as Profile & { studentId: string };
 }
@@ -62,7 +69,10 @@ export async function requireStudent(): Promise<Profile & { studentId: string }>
 /** Server-page gate: the Admin surface is for Counselors + System Admins. */
 export async function requireStaff(): Promise<Profile> {
   const profile = await getCurrentProfile();
-  if (!profile || (profile.role !== "counselor" && profile.role !== "sysadmin")) redirect("/signin");
+  if (!profile) {
+    redirect((await getSignedInUser()) ? "/welcome" : "/signin");
+  }
+  if (profile.role !== "counselor" && profile.role !== "sysadmin") redirect("/signin");
   return profile;
 }
 
@@ -101,4 +111,57 @@ export function newStudentState(id: string, fullName: string) {
     decisions: { verifiedTransferred: [] },
     events: [],
   };
+}
+
+// ── Google round (ADR 0006) helpers ────────────────────────────────────
+
+/** The one destination rule, extracted from signin/route.ts and the landing
+ *  page (they duplicated it verbatim — this is now the citation): staff →
+ *  /admin; student with a picked career → /dashboard; else → /onboarding. */
+export async function destFor(profile: {
+  role: Role;
+  studentId: string | null;
+}): Promise<string> {
+  if (profile.role === "counselor" || profile.role === "sysadmin") return "/admin";
+  if (profile.studentId) {
+    const state = await db.getStudentState(profile.studentId);
+    return state.careerId ? "/dashboard" : "/onboarding";
+  }
+  return "/onboarding";
+}
+
+/** The raw signed-in identity, WITHOUT requiring a profiles row — the Google
+ *  path's gate signal: a session that auth.getUser() verifies but has no
+ *  profile is exactly a first-time identity waiting at /welcome. */
+export interface SignedInUser {
+  id: string;
+  email: string;
+  fullName: string;
+}
+
+export async function getSignedInUser(): Promise<SignedInUser | null> {
+  const supabase = await supabaseServer();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user?.email) return null;
+  const meta = user.user_metadata as { full_name?: string; name?: string } | null;
+  return {
+    id: user.id,
+    email: user.email,
+    fullName: meta?.full_name ?? meta?.name ?? user.email.split("@")[0],
+  };
+}
+
+/** The signed-in user's counselor application row (welcome-page state). */
+export async function getCounselorRequest(
+  userId: string,
+): Promise<{ status: string; fullName: string; note: string } | null> {
+  const { data, error } = await supabaseAdmin()
+    .from("counselor_requests")
+    .select("status, full_name, note")
+    .eq("user_id", userId)
+    .maybeSingle();
+  if (error || !data) return null;
+  return { status: data.status, fullName: data.full_name, note: data.note };
 }

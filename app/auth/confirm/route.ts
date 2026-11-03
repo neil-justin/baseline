@@ -5,23 +5,42 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * GET /auth/confirm?code=…&next=/reset — the recovery link's landing route
- * (auth round 2). Supabase Auth emails carry a PKCE `code`; exchanging it
- * here (route handlers can always write cookies — see supabaseServer)
- * establishes the real signed session cookies, then the user continues to
- * `next` (default /reset) to set the new password. A missing/used/expired
- * code lands on /forgot?state=expired with the honest "request a new link"
- * state — never a fake success.
+ * GET /auth/confirm?code=…&next=/reset — the PKCE exchange landing route.
+ * Two callers, one exchange:
+ *   - recovery links (auth round 2): `next` defaults /reset; a missing/used/
+ *     expired code lands on /forgot?state=expired with the honest "request a
+ *     new link" state — never a fake success.
+ *   - Google OAuth (round, ADR 0006): `via=google&next=/auth/google`; the
+ *     same exchange establishes the session, then /auth/google decides dest
+ *     by the roster. A denied/expired consent lands on /signin?state=google —
+ *     NOT the recovery error (that would read as a broken reset email).
  */
 export async function GET(req: Request) {
   const { searchParams, origin } = new URL(req.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/reset";
+  const viaGoogle = searchParams.get("via") === "google";
+  const next = searchParams.get("next") ?? (viaGoogle ? "/auth/google" : "/reset");
 
   if (code && next.startsWith("/")) {
     const supabase = await supabaseServer();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) return NextResponse.redirect(`${origin}${next}`);
+  }
+  if (viaGoogle) {
+    // Landing failed: clear cookies rather than strand a session the
+    // exchange may or may not have established — signOut's cookie removal
+    // runs even if the API call errors (auth-js removes the local session
+    // on its error path), so the shell never stays signed-in-looking.
+    // Honest tradeoff: back-nav from /auth/google (code already consumed)
+    // also lands here and destroys a VALID session — the user signs in
+    // again; safe-direction failure, never a fake success.
+    const supabase = await supabaseServer();
+    try {
+      await supabase.auth.signOut();
+    } catch {
+      /* sign-out is best-effort at this point — the redirect is the message */
+    }
+    return NextResponse.redirect(`${origin}/signin?state=google`);
   }
   return NextResponse.redirect(`${origin}/forgot?state=expired`);
 }

@@ -605,6 +605,51 @@
   color: var(--v-ink2);
 }
 
+/* ---------- counselor-requests queue (Google round, ADR 0006) ----------
+   Same shelf as the audit queue: a panel of dense rows — applicant
+   transcript left, the two ruling actions right. Buttons reuse the aq-btn
+   family (the audit ruling register); only the row geometry is new. */
+
+.v7admin .crq-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px 16px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--v-rows);
+  flex-wrap: wrap;
+}
+.v7admin .crq-row:last-of-type {
+  border-bottom: 0;
+}
+.v7admin .crq-id {
+  min-width: 0;
+}
+.v7admin .crq-meta {
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .crq-meta .crq-name {
+  font-weight: 500;
+  color: var(--v-ink);
+}
+.v7admin .crq-note {
+  margin: 4px 0 0;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  max-width: 68ch;
+}
+.v7admin .crq-acts {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.v7admin .crq-err {
+  margin: 6px 0 0;
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-amber-text);
+}
+
 /* ---------- screen B · student detail (hooks verbatim) ---------- */
 
 .v7admin .crumb {

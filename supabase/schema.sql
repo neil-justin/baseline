@@ -105,3 +105,103 @@ create table if not exists public.letter_runs (
   updated_at timestamptz not null default now()
 );
 alter table public.letter_runs enable row level security;
+
+-- ── Counselor applications (Google round, ADR 0006) ─────────────────────
+-- A first-time Google sign-in that declares "counselor" records ONE row per
+-- auth user. Access is granted ONLY when a System Admin approves — which
+-- flips status, stamps who decided, and writes the profiles row + the auth
+-- user's app_metadata role.
+--
+-- Trail honesty (review round 1, 2026-11-03): LAST-DECISION-ONLY — a
+-- resubmission re-opens the same row (pending re-stamps requested_at to
+-- the fresh apply moment) and OVERWRITES the previous decision's stamps;
+-- deleting the auth user cascades the row (same as every sibling table).
+-- The row is the artifact for the CURRENT fact, not a resubmit history.
+create table if not exists public.counselor_requests (
+  user_id      uuid primary key references auth.users(id) on delete cascade,
+  email        text not null,
+  full_name    text not null,
+  -- the applicant's own framing: who they advise, which section/campus —
+  -- evidence the approving System Admin examines; never validated blindly
+  note         text not null,
+  -- re-stamped by the intake route on EVERY submission (fresh or resubmit):
+  -- requested_at = the current application moment, so the queue's
+  -- "oldest pending first" stays truthful after a rejection round-trip
+  requested_at timestamptz not null default now(),
+  status       text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  -- decision stamps ride status (the check pins both sides STRICTLY: a
+  -- pending row carries NO stamps; an approved/rejected row carries BOTH —
+  -- a decision with no decider or date cannot be written, closing the
+  -- audit-artifact claim's last gap)
+  decided_at   timestamptz,
+  decided_by   text,
+  check (
+    (status = 'pending' and decided_at is null and decided_by is null)
+    or
+    (status in ('approved', 'rejected') and decided_at is not null and decided_by is not null)
+  )
+);
+alter table public.counselor_requests enable row level security;
+
+-- The grant RPC (review round 1 user ruling: "this looks like a transaction").
+-- One call, ONE transaction: the counselor's profiles row and the approval
+-- stamp commit together or not at all — half-granted rows become impossible
+-- at the DB level. STAMP-FIRST OBSERVABLE (review round 2): the stamp update
+-- fires first and its match count is the verdict — a row that left pending
+-- (another admin decided, or a stale call) answers 'not_pending' and grants
+-- NOTHING; a matched row grants and answers 'approved'. Idempotent by design
+-- so the app's healing-retry path can safely re-enter: the insert no-ops
+-- when the row exists, the stamp update only moves pending → approved.
+-- SECURITY DEFINER: runs at the definer's privilege; search_path pinned per
+-- Supabase convention. NOTE: the JWT marker (app_metadata) is Supabase
+-- Auth's surface, NOT this transaction's — the route stamps it after the
+-- RPC, with healing-retry semantics.
+create or replace function public.approve_counselor (
+  p_user_id    uuid,
+  p_email      text,
+  p_full_name  text,
+  p_decided_by text
+) returns text
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  -- stamp-first observability (review round 2): if the row stopped being
+  -- pending between the route's read and this call (another admin decided,
+  -- or capability raced), the UPDATE matches 0 rows — observable "! pending"
+  -- — and the insert must NOT fire. The stamp-first form makes every
+  -- concurrent/stale interleaving converge to a truthful answer.
+  update public.counselor_requests
+     set status = 'approved', decided_at = now(), decided_by = p_decided_by
+   where user_id = p_user_id and status = 'pending';
+  if not found then return 'not_pending'; end if;
+
+  insert into public.profiles (id, email, full_name, role, student_id, campus)
+  values (p_user_id, p_email, p_full_name, 'counselor', null, 'demo-campus')
+  on conflict (id) do nothing;
+
+  return 'approved';
+end;
+$$;
+
+-- SECURITY DEFINER punches through the deny-all RLS the tables rely on
+-- (definer ≠ invoker), and Postgres grants EXECUTE to PUBLIC by default —
+-- with the anon key exposed via PostgREST that would be self-service
+-- privilege escalation. Lock the RPC to the service role only (review
+-- round 2, Critical): the app's routes call it exclusively via
+-- supabaseAdmin(); anon/authenticated keep nothing.
+revoke execute on function public.approve_counselor(uuid, text, text, text) from public;
+grant  execute on function public.approve_counselor(uuid, text, text, text) to service_role;
+
+-- Migration note (Google round, 2026-11-03): for an already-applied schema,
+-- the create-block above applies verbatim (idempotent) — playwright e2e
+-- treats a missing table as skip condition. approve_counselor() re-applies
+-- as CREATE OR REPLACE (idempotent — the RPC's revoke/grant re-run fine
+-- too). If a PRE-strict version of this
+-- table was already applied (any block without the two-sided stamps check),
+-- re-create the invariant explicitly:
+--   alter table public.counselor_requests drop constraint if exists counselor_requests_check;
+--   alter table public.counselor_requests add constraint counselor_requests_check
+--     check ((status = 'pending' and decided_at is null and decided_by is null)
+--            or (status in ('approved', 'rejected') and decided_at is not null and decided_by is not null));
