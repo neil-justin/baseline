@@ -62,7 +62,7 @@ No runtime third-party fetching. Fixtures remain the curated, human-verified cat
 ## 9. What the real wave touches (and doesn't)
 
 - Engine: replace `sortResourcePool`; add `access` (and learn-line claim data) to `Resource`; keep evidence model, SP math, mock realm retired after parity.
-- Surface: `PathwayTabs` Plan/Resources tabs → the D2 walk as THE My Plan surface (hash gates removed post-migration). Resources tab content folds into rows; alternates live behind the node's material (details on demand — choice at implementation).
+- Surface: `PathwayTabs` Plan/Resources tabs → the D2 walk as THE My Plan surface (hash gates removed post-migration). Resources tab content folds into rows; alternates live behind the node's material (details on demand — choice at implementation). **User-ruled 2026-11-03: the D2 walk REPLACES the Plan/Resources tabs — the old surface retire when the flip lands, this is the ratified end-state, not an option.**
 - Mock files under `app/(app)/pathway/mockup/*` are scaffolding: canon/suggest/access/preview graduate; variants a/b/c/d1/d3 get deleted.
 - Not touched: engines beyond §8, scoring, mobile-bottom-nav law, DESIGN.md color/dna rules (spine CSS obeys them).
 
