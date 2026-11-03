@@ -580,14 +580,14 @@ export const RESOURCES: Resource[] = [
   // Wave B audit (2026-11-03): access/form copied verbatim from the D2
   // mockup access draft (user-ruled 2026-11-03); learn lines drafted from
   // each resource's actual content (learn draft — user review pending).
-  // Coverage reds that stay (honest, not papered over):
-  //  · "Quality Assurance / Quality Standards" — unvetted BY DESIGN: the
-  //    Wave A regression pin prints the unvetted wait-state here; the user
-  //    rules on each candidate (adviser-only skill for now).
-  //  · "Applications Support and Enhancement" — no catalog row claims it:
-  //    census-thin per the §6.1 ruling (verify-fixtures pins qa::ASE as an
-  //    honest thin cell); filling requires a catalog-add decision (user
-  //    ruling pending) — coverage test stays red, never a fabricated row.
+  // Wave B batch 2 (2026-11-03, user-ruled re-points): the two census pins
+  // are RESOLVED —
+  //  · "Quality Assurance / Quality Standards" — res-qa-sre-books re-pointed
+  //    to the taught SLO chapter of the free SRE book (deep-link, verified
+  //    LIVE 2026-11-03); the cell now resolves to a taught suggestion.
+  //  · "Applications Support and Enhancement" — the census-thin cell is
+  //    filled via the res-qa-google-bi re-point (no new row; census pins
+  //    recalc'd in verify-fixtures per the sanctioned delta).
   {
     id: "res-qa-testing",
     title: "Setting a foundation for successful test automation",
@@ -733,19 +733,30 @@ export const RESOURCES: Resource[] = [
   },
   {
     id: "res-qa-sre-books",
-    title: "Google SRE books (free web editions)",
+    title: "Service Level Objectives (Google SRE book, Ch. 4)",
     provider: "Google",
     type: "doc",
     cost: "free",
-    // free chapters on quality metrics/SLOs, monitoring, postmortem practice
-    // audit (2026-11-03, mockup draft): books index — chapters live behind it
-    url: "https://sre.google/books/",
-    durationHours: 4,
+    // fetched LIVE 2026-11-03 (RE-POINTED, Wave B batch 2 user-ruled): the
+    // old URL was the books INDEX (landing — chapters live behind it). The
+    // suggested slot must open teachable content, so this row now points at
+    // the free book's Chapter 4 deep-link — the quality-standards chapter
+    // (fetched LIVE 2026-11-03: full teaching text — SLIs/SLOs/SLAs, metric
+    // modeling, error budgets and the release-rollout control loop they
+    // gate; the quality-metrics release-readiness discipline this skill
+    // prints). Id/ADDR unchanged.
+    url: "https://sre.google/sre-book/service-level-objectives/",
+    durationHours: 2,
     skillsAddressed: ["Quality Assurance / Quality Standards"],
     careerId: "qa",
     pick: true,
-    form: "landing",
+    form: "taught",
     access: "direct",
+    learnNotes: {
+      "Quality Assurance / Quality Standards":
+        "The SRE book's quality chapter teaches standards as measured objectives — define SLIs and SLO targets, budget the misses, and let the error budget gate what ships — quality criteria you can write and track rather than hope for.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-qa-atlassian-bugtracking",
@@ -787,18 +798,33 @@ export const RESOURCES: Resource[] = [
   },
   {
     id: "res-qa-google-bi",
-    title: "Google Business Intelligence Professional Certificate",
+    title: "Technical Support Fundamentals (Google)",
     provider: "Coursera (Google)",
-    type: "cert",
+    type: "course",
     cost: "free",
-    // free-to-audit; ₱ paid tier = certificate
-    // audit (2026-11-03, mockup draft): prof-cert landing; ₱ tier = certificate
-    url: "https://www.coursera.org/professional-certificates/google-business-intelligence",
-    durationHours: 30,
-    skillsAddressed: [],
+    // fetched LIVE 2026-11-03 (RE-POINTED, Wave B batch 2 user-ruled): the
+    // old row was the Google-BI prof-cert landing (ADDR-catalog-only; fetched
+    // LIVE 2026-10-29) and the ASE cell below was census-thin (no URL row
+    // claimed it). The user bar (all skills get taught suggestions) rulings
+    // land the fill via this re-point — no new row. New target: Google's
+    // taught "Technical Support Fundamentals" (fetched LIVE 2026-11-03:
+    // "Enroll for free", 6 modules incl. Software — installing/updating/
+    // removing applications — and Troubleshooting with help-desk scenarios;
+    // the install/maintain/troubleshoot loop the ASE cells print). ₱ paid
+    // tier: shareable certificate (audit/financial-aid route is the free
+    // tier). Same Google provider; id unchanged.
+    url: "https://www.coursera.org/learn/technical-support-fundamentals",
+    durationHours: 20,
+    skillsAddressed: ["Applications Support and Enhancement"],
     careerId: "qa",
-    form: "landing",
+    pick: true, // recalc'd fallback winner for the filled qa::ASE cell (census keeps 1 flag/cell)
+    form: "taught",
     access: "exam-paid",
+    learnNotes: {
+      "Applications Support and Enhancement":
+        "Google's support course walks the IT-support day job hands-on: installing, updating and removing software across systems, then troubleshooting real help-desk tickets with the user's context in hand — the application-problem loop this row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-qa-openlearn-comms",
