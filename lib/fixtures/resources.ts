@@ -3427,11 +3427,13 @@ export const RESOURCES: Resource[] = [
   // Capability Assessment cell fills with Coursera's SAGE Talent Management
   // (HTTP 200, 14 modules incl. Talent Assessment Tools), and the
   // HR-Practices-Implementation no-claim fills with Minnesota's
-  // Recruiting-Hiring-Onboarding course (HTTP 200, 20 h). Employee Mobility
-  // (transfers/promotions/redeployment records) and Skills Framework
-  // Adoption (promoting + logging framework adoption) re-hunted: no taught
-  // self-serve page exists for either — adjudicated Wave E.
-  // Coverage: 18/20 vetted.
+  // Recruiting-Hiring-Onboarding course (HTTP 200, 20 h). The Employee
+  // Mobility adjudication is LIFTED the same pass — EDUCBA's Employee
+  // Movement course (HTTP 200) teaches the promotions/transfers/redeployment
+  // records craft (hra duplicate below). Skills Framework Adoption
+  // (promoting + logging framework adoption) re-hunted: no taught
+  // self-serve page exists — adjudicated Wave E.
+  // Coverage: 19/20 vetted.
   {
     id: "res-hra-alison-diploma-hr",
     title: "Diploma in Human Resources (HR)",
@@ -3750,6 +3752,30 @@ export const RESOURCES: Resource[] = [
     // learn line — authored 2026-11-03, user-delegated
   },
   {
+    id: "res-hra-educba-movement",
+    title: "Employee Movement in HR Management",
+    provider: "Coursera (EDUCBA)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave E hunt, hra addendum): the
+    // Employee-Mobility cell's adjudication is LIFTED the same pass —
+    // EDUCBA's course teaches the internal moves the row prints. HTTP 200,
+    // "Enroll for free"; promotions, transfers and separation processes.
+    url: "https://www.coursera.org/learn/employee-movement-hr-management",
+    durationHours: 6,
+    skillsAddressed: ["Employee Mobility Management"],
+    creditingBody: "EDUCBA",
+    careerId: "hra",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Employee Mobility Management":
+        "Teaches administering internal movement — promotions, transfers and redeployment worked through their processes and records — the internal-move craft this cell prints.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
     id: "res-hra-coursera-talent-mgmt",
     title: "Talent Management",
     provider: "Coursera",
@@ -3828,6 +3854,19 @@ export const RESOURCES: Resource[] = [
   // HR-Practices Implementation (no taught claim verified), HR Analytics
   // (declared gap stands), and HR Systems Management (Moodle Academy 403 —
   // ungraded, fail-closed). Coverage: 8/15 vetted.
+  // Wave E recap (2026-11-03, user-delegated hunt): Onboarding + both Exit
+  // cells fill via Minnesota's taught onboarding course (per-role duplicate;
+  // the CWF anchor for all three rows is the same "assist in the
+  // implementation of onboarding and offboarding" bullet) and EDUCBA's
+  // Employee Movement course (separations: layoffs/dismissal/retrenchment/
+  // VRS — fetched LIVE, HTTP 200); HR-Practices fills with the Minnesota
+  // recruiting course (per-role duplicate); HR Systems fills with the
+  // Coursera LMS-administration course (HTTP 200, 8 printed hours —
+  // enrollments, catalogs, reports keep the Moodle Academy row honest while
+  // it sits ungraded); HR Analytics fills with the Wharton people-analytics
+  // per-role duplicate. Skills-Framework Adoption re-hunted: no taught
+  // self-serve page exists — adjudicated Wave E.
+  // Coverage: 14/15 vetted.
   {
     id: "res-training-minnesota-hrm",
     title: "Human Resource Management: HR for People Managers Specialization",
@@ -4109,6 +4148,115 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     skillsAddressed: ["Human Resources Analytics and Insights"],
     careerId: "training",
+  },
+  {
+    id: "res-training-minnesota-recruit",
+    title: "Recruiting, Hiring, and Onboarding Employees",
+    provider: "Coursera (University of Minnesota)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave E hunt): per-role duplicate of the
+    // hra pool's verified course (pool convention). The onboarding cell AND
+    // the exit cells share one CWF anchor — "Assist in the implementation of
+    // onboarding and offboarding" — and Minnesota's course teaches running
+    // the onboarding implementation the anchor prints.
+    url: "https://www.coursera.org/learn/recruiting-hiring-onboarding-employees",
+    durationHours: 20,
+    skillsAddressed: [
+      "Onboarding",
+      "Human Resources Practices Implementation",
+    ],
+    creditingBody: "University of Minnesota",
+    careerId: "training",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Onboarding":
+        "The course teaches the onboarding implementation end to end — pre-boarding, the first days, and the onboarding steps that integrate a new hire — the assist-and-implement work this cell prints.",
+      "Human Resources Practices Implementation":
+        "Recruitment through onboarding taught inside hiring rules — offer letters and standardized templates — applying the people practices correctly as the anchor prints.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-training-educba-movement",
+    title: "Employee Movement in HR Management",
+    provider: "Coursera (EDUCBA)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave E hunt): course page HTTP 200,
+    // "Enroll for free" — promotions, transfers, and separation processes
+    // taught (separation methods incl. layoffs, dismissal, retrenchment and
+    // VRS). Carries both exit cells: the CWF anchor for both is the same
+    // "assist in the implementation of onboarding and offboarding" bullet,
+    // and the separations leg is taught here.
+    url: "https://www.coursera.org/learn/employee-movement-hr-management",
+    durationHours: 6,
+    skillsAddressed: [
+      "Voluntary Exit Management",
+      "Involuntary Exit Management",
+    ],
+    creditingBody: "EDUCBA",
+    careerId: "training",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Voluntary Exit Management":
+        "Teaches how exits run as process — resignation and voluntary-separation modes handled with the paperwork and compliance an offboarding support role assists around.",
+      "Involuntary Exit Management":
+        "The employer-initiated separation methods — layoffs, dismissal, retrenchment — taught as processes an HR support role assists in implementing.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-training-lms-training",
+    title: "Learning Management System Training",
+    provider: "Coursera",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave E hunt): course page HTTP 200,
+    // "Enroll for free", printed 8 hours — LMS administration taught via
+    // a real LMS: system setup, course creation, managing courses and
+    // enrollments, and building reports/dashboards. The HR-Systems cell
+    // (LMS administration per the CWF anchor) had only Moodle Academy's
+    // bot-walled page as vettable claim.
+    url: "https://www.coursera.org/learn/learning-management-system-training",
+    durationHours: 8,
+    skillsAddressed: ["Human Resources Systems Management"],
+    careerId: "training",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Human Resources Systems Management":
+        "You administer an LMS hands-on — setting up the system, managing courses and enrollments, and building the participation reports the CWF's maintain-the-LMS bullet prints.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-training-wharton-people-analytics",
+    title: "People Analytics (Wharton)",
+    provider: "Coursera (Wharton)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave E hunt): per-role duplicate of the hra
+    // pool's verified Wharton course (pool convention) — the analytics cell
+    // had only the declared OD-survey gap row. "Enroll for free" ×3,
+    // data-driven people management, 4 modules. ₱ paid tier.
+    url: "https://www.coursera.org/learn/wharton-people-analytics",
+    durationHours: 12,
+    skillsAddressed: ["Human Resources Analytics and Insights"],
+    creditingBody: "Wharton",
+    careerId: "training",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Human Resources Analytics and Insights":
+        "Wharton's people-analytics course teaches managing people by data — staffing, evaluation and performance read through metrics — the business-insight read this cell prints.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
   },
   // ── mkt (3.3) — study.com citations stripped; thin zones declared ──
   // Wave B audit (2026-11-03, batch 2): access/form per-row (HubSpot
