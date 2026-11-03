@@ -110,8 +110,13 @@ alter table public.letter_runs enable row level security;
 -- A first-time Google sign-in that declares "counselor" records ONE row per
 -- auth user. Access is granted ONLY when a System Admin approves — which
 -- flips status, stamps who decided, and writes the profiles row + the auth
--- user's app_metadata role. The row is the audit artifact; it is never
--- deleted (approved/rejected rows stay for the trail).
+-- user's app_metadata role.
+--
+-- Trail honesty (review round 1, 2026-11-03): LAST-DECISION-ONLY — a
+-- resubmission re-opens the same row (pending re-stamps requested_at to
+-- the fresh apply moment) and OVERWRITES the previous decision's stamps;
+-- deleting the auth user cascades the row (same as every sibling table).
+-- The row is the artifact for the CURRENT fact, not a resubmit history.
 create table if not exists public.counselor_requests (
   user_id      uuid primary key references auth.users(id) on delete cascade,
   email        text not null,
@@ -119,13 +124,20 @@ create table if not exists public.counselor_requests (
   -- the applicant's own framing: who they advise, which section/campus —
   -- evidence the approving System Admin examines; never validated blindly
   note         text not null,
-  status       text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  -- re-stamped by the intake route on EVERY submission (fresh or resubmit):
+  -- requested_at = the current application moment, so the queue's
+  -- "oldest pending first" stays truthful after a rejection round-trip
   requested_at timestamptz not null default now(),
+  status       text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  -- decision stamps ride status (the check pins it: a pending row has NO
+  -- stamps; decided rows carry BOTH — a decision with no decider or date
+  -- cannot be written, closing the audit-artifact claim's last gap)
   decided_at   timestamptz,
-  decided_by   text
+  decided_by   text,
+  check ((status = 'pending') = (decided_at is null and decided_by is null))
 );
 alter table public.counselor_requests enable row level security;
 
 -- Migration note (Google round, 2026-11-03): for an already-applied schema
--- this table adds via the SQL editor with the create-block above verbatim
--- (idempotent) — playwright e2e treats a missing table as skip condition.
+-- the create-block above applies verbatim (idempotent) — playwright e2e
+-- treats a missing table as skip condition.
