@@ -93,6 +93,10 @@ export function kickPort(): Promise<void> {
  */
 export async function signIn(page: Page, email: string, password: string) {
   await page.goto("/signin");
+  // hydration barrier (google-flow round): the sign-in form is a client
+  // component on a streamed page — a pre-hydration click submits as an inert
+  // DOM event and the POST never fires
+  await page.waitForLoadState("networkidle");
   await page.locator("#f-email").fill(email);
   await page.locator("#f-pass").fill(password);
   await page.getByRole("button", { name: "Sign in" }).click();
