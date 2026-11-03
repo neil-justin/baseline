@@ -6,11 +6,12 @@ import { useRef, useState } from "react";
  * The cover-letter checker's intake (v7.4 recut; Q15 slim affordance
  * 2026-11-03): the SAME dropzone pattern as the resume — one file
  * (TXT/PDF/DOCX) lands and the check runs immediately. The OPTIONAL employer
- * anchor sits as one small field BENEATH the zone — and only renders once
- * the letter has run (showEmployer; user ruling 2026-11-02: the idle screen
- * stays a pure dropzone). Fill it before dropping to anchor the employer
- * check on the re-run, or leave it empty — the omitted case skips its check
- * honestly and prints the exact line in the results. POST to
+ * anchor sits as a labelled field ABOVE the zone — and only renders once the
+ * letter has run (showEmployer; user ruling 2026-11-02: the idle screen stays
+ * a pure dropzone; placement above the zone ruled 2026-11-03, R9). Fill it
+ * before dropping to anchor the employer check on the re-run, or leave it
+ * empty — the omitted case skips its check honestly and prints the exact line
+ * in the Structure card. POST to
  * /api/cover-letter/check; on success the page reloads (the server page
  * re-renders the stored run). Rejections show the locked reason inline
  * (aria-live, .cl-err — e2e contract) and persist nothing. `slim` = the Q15
@@ -76,6 +77,30 @@ export default function LetterUpload({
 
   return (
     <section className="cl-upload dropzone" aria-label="Run the cover-letter checker">
+      {/* R9 (user ruling 2026-11-03): the optional employer anchor rides
+          ABOVE the zone as a labelled field with its honesty line — fill it
+          before dropping to anchor the re-run, or leave it empty and the
+          omitted case skips its check honestly (the exact line prints in the
+          Structure card). Idle screens still render no field. */}
+      {showEmployer ? (
+        <div className="cl-employer">
+          <label className="cl-employer-label num" htmlFor="cl-employer">
+            Employer <span>optional</span>
+          </label>
+          <input
+            type="text"
+            id="cl-employer"
+            className="cl-input"
+            value={employer}
+            maxLength={120}
+            placeholder="A company name runs its own check."
+            onChange={(e) => setEmployer(e.target.value)}
+          />
+          <p className="cl-employer-hint">
+            Leave empty if you&rsquo;re applying generally — the employer check then skips honestly.
+          </p>
+        </div>
+      ) : null}
       <div
         role="button"
         tabIndex={busy ? -1 : 0}
@@ -126,23 +151,6 @@ export default function LetterUpload({
           e.target.value = "";
         }}
       />
-      {showEmployer ? (
-        <div className="cl-field cl-below">
-          <label className="rs-links num" htmlFor="cl-employer">
-            Employer{" "}
-            <input
-              type="text"
-              id="cl-employer"
-              className="cl-input"
-              value={employer}
-              maxLength={120}
-              aria-label="Employer (optional)"
-              placeholder="Optional — a company name runs its own check. Leave empty if you're applying generally."
-              onChange={(e) => setEmployer(e.target.value)}
-            />
-          </label>
-        </div>
-      ) : null}
     </section>
   );
 }

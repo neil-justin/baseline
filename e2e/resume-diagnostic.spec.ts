@@ -76,11 +76,12 @@ test.describe.serial("resume-diagnostic", () => {
     await expect(page.locator(".rs-upload .dz-zone").first()).toBeVisible();
     await expect(page.locator(".rs-upload .dz-zone").first()).toContainText("Check another version");
 
-    // three deterministic factors, all checks green — LIVE-EXPANDED on the
-    // results-first card (Q15): the rows read straight off, no fold to open
-    await expect(page.locator(".rs-factor-head").first()).toContainText("Parse — 100%");
-    await expect(page.locator(".rs-factor-head", { hasText: "Format" })).toContainText("100%");
-    await expect(page.locator(".rs-factor-head", { hasText: "Evidence" })).toContainText("100%");
+    // three deterministic factors, each its OWN card (R5) — label on the
+    // left, the share on the right, rows read straight off, no fold to open
+    await expect(page.locator(".rs-factor-head", { hasText: "Parse" })).toContainText("Parse");
+    await expect(page.locator(".rs-factor-head", { hasText: "Parse" }).locator(".rs-fg-score")).toContainText("100%");
+    await expect(page.locator(".rs-factor-head", { hasText: "Format" }).locator(".rs-fg-score")).toContainText("100%");
+    await expect(page.locator(".rs-factor-head", { hasText: "Evidence" }).locator(".rs-fg-score")).toContainText("100%");
     await expect(page.locator(".rs-check", { hasText: "One page" })).toBeVisible();
     // keyword ledger names the role's core-tier skills
     await expect(page.locator(".rs-check", { hasText: "SQL" })).toBeVisible();

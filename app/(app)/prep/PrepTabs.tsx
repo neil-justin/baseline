@@ -5,12 +5,12 @@ import type { ReactNode } from "react";
 
 /**
  * Prep — the two application-materials tools as a SUITE (v7.4 recut; the
- * presentation rebuild 2026-11-03 retires the tabs-row kicker — the verdict
- * strip inside each card alone owns the run score, so the toolbar is just
- * the segmented tablist). The `.prep-lens` toolbar OUTSIDE the card switches
- * the active tool — Resume checker / Cover-letter checker — and each tab is
- * its own v7 card carrying one full tool flow (results-first verdict strip →
- * factor groups → findings, or the first-run dropzone hero). Presence is NOT
+ * presentation rebuild 2026-11-03 retires the tabs-row kicker — the readout
+ * card inside each panel alone owns the run score, so the toolbar is just
+ * the segmented tablist). The `.prep-lens` toolbar OUTSIDE the cards switches
+ * the active tool — Resume checker / Cover-letter checker — and each panel is
+ * a STACK of independent v7 cards (readout → one card per factor → findings →
+ * re-run), never one card wrapping the lot. Presence is NOT
  * a tab: it lives in Profile → Credentials. Sequence is DECLARED via
  * in-content handoff links (#letter hashchange; the factors measure on their
  * own files, no wizard).
@@ -95,7 +95,7 @@ export default function PrepTabs({
       {(TABS.map((t) => t.id) as TabId[]).map((id) => (
         <section
           key={`${id}-${seq}`}
-          className="card tabpanel"
+          className="tabpanel prep-stack"
           id={`panel-${id}`}
           role="tabpanel"
           aria-labelledby={`tab-${id}`}

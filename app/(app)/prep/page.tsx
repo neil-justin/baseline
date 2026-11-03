@@ -23,34 +23,33 @@ export const metadata: Metadata = {
 /**
  * Prep — "Application materials" (presentation rebuild, user ruling
  * 2026-11-03: "use Dashboard as a reference — not a copy — for how the data
- * is laid out"). The results card reads, top to bottom:
+ * is laid out"; second recut the same day: every section its OWN card).
+ * The page reads, top to bottom:
  *
- *   1. VERDICT STRIP — the run label + file line and the big score
- *      right-aligned (the Dashboard .score-big register: 46px numeral +
- *      /100), then the three factors as a KPI-cell GRID in the Dashboard
- *      band register (plain label · the % at the KPI-score scale · the 4px
- *      honest bar — blue at the factor's share, green at 100% — and a ≤2
- *      line 11px ink2 sub-line). The weighted shares ride the receipts
- *      line ("parse 20% + format 40% + evidence 40%") — never a × product.
- *   2. FACTOR GROUPS — Dashboard-parity grouped sections directly under the
- *      verdict strip (the Q15 live-expansion rule, now structural): each
- *      factor gets a mini-head row (label + share — meaning on the right)
- *      then its checks as a REAL table (Check | Result | Note); the Note
- *      column exists only when a row carries one. Result cells are wash
- *      chips — green "Pass" / grey "Missing"/"Not found"; amber only for
- *      the parse watch-class risk — never red.
- *   3. FINDINGS fold — on demand, example bullets kept.
- *   4. SLIM FOOTER — the bordered one-row "Check another version"
- *      affordance (drag preserved) with the quiet links line beside it.
- *      A NEVER-RUN tab keeps the upload-first hero dropzone.
+ *   1. NAMED BAND — Prep + target on the left, application readiness /15 as
+ *      the composite on the right (the slot Dashboard gives 36/100).
+ *   2. CHANNEL CARDS — Resume · Letter · Presence as one KPI card each
+ *      (Dashboard `.kpis` geometry): name → fraction → 4px honest bar →
+ *      wash chip → one-line receipt.
+ *   3. TOOLBAR — `.prep-lens` segmented tabs (Resume checker /
+ *      Cover-letter checker), outside any card.
+ *   4. READOUT CARD — run label + file line, the big /100 score, the
+ *      weighted receipts line.
+ *   5. FACTOR CARDS — one card per factor: label + share, the honest bar,
+ *      the meaning line, then its checks as a REAL table (Check | Result |
+ *      Note). The Note column exists only when a row carries one. Result
+ *      cells are wash chips — green "Pass" / grey "Missing"/"Not found";
+ *      amber only for the parse watch-class risk — never red.
+ *   6. FINDINGS CARD — a fold, on demand, example bullets kept.
+ *   7. RE-RUN CARD — the full-width "Check another version" zone; the
+ *      letter's optional employer anchor rides ABOVE it (R9); the quiet
+ *      "First resume?" links line is centred beneath (R8).
  *
- * The tabs-row kicker is retired — the verdict strip alone owns the score.
+ * A NEVER-RUN tab keeps the upload-first hero card. No card nests inside
+ * another card anywhere on the page.
  * Q19a: a stored run whose target ≠ the CURRENT career is honest history —
  * the card stays with the "Ran against {old role} — re-run to score"
- * banner; the AR band cells read it unmeasured (lib/db.ts feed).
- * The cover-letter tab mirrors the anatomy; its checks table stays behind
- * the e2e-guarded "The checks" fold (demo-arc contract) with its factor
- * groups re-housed inside it.
+ * banner; the channel cards read it unmeasured (lib/db.ts feed).
  * HONESTY CONTRACT: unchanged — nothing measured paints nothing; LATEST
  * counts; nothing claims an "ATS pass"; the checkers read format and named
  * evidence, nothing deeper.
@@ -61,18 +60,37 @@ const fmtDT = (iso: string) => {
   return `${d.toLocaleString("en-US", { month: "short" })} ${d.getDate()} · ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 };
 
-/* ── the band's AR channel cells — the Dashboard KPI register ───────────── */
+/* ── the channel cards — the Dashboard KPI register, one card per channel
+   (R3/R4, user ruling 2026-11-03: each channel reads as its own card, never
+   a cell packed into the band) ─────────────────────────────────────────── */
 
 type PartView = { measured: boolean; earned: number; max: number };
 
-function BandCell({ name, part, notRun }: { name: string; part: PartView; notRun: string }) {
+function ChannelCard({
+  name,
+  part,
+  notRun,
+  note,
+}: {
+  name: string;
+  part: PartView;
+  notRun: string;
+  note: string;
+}) {
   const full = part.measured && part.earned === part.max;
   const pct = (n: number) => `${Math.round((n / part.max) * 100)}%`;
   return (
-    <div className="bcell">
-      <span className="label">{name}</span>
-      <span className={`bval num${part.measured ? "" : " bquiet"}`}>
-        {part.measured ? `${part.earned}/${part.max}` : "—"}
+    <div className="prep-kpi">
+      <span className="k-name">{name}</span>
+      <span className={`k-score num${part.measured ? "" : " bquiet"}`}>
+        {part.measured ? (
+          <>
+            {part.earned}
+            <small>/{part.max}</small>
+          </>
+        ) : (
+          "—"
+        )}
       </span>
       <div
         className="kbar"
@@ -88,59 +106,40 @@ function BandCell({ name, part, notRun }: { name: string; part: PartView; notRun
       </div>
       {part.measured ? (
         full ? (
-          <span className="chip c-green">·✓</span>
-        ) : null /* a partial factor carries nothing but its honest fraction+bar */
+          <span className="chip c-green">Complete</span>
+        ) : (
+          <span className="chip c-blue">{part.max - part.earned} to close</span>
+        )
       ) : (
         <span className="chip c-grey">{notRun}</span>
       )}
+      <p className="k-note">{note}</p>
     </div>
   );
 }
 
-function ArCell({ value }: { value: number | null }) {
+/* ── factor card head (R5) ──────────────────────────────────────────────── */
+/* ── the factor card head (R5): label + share, the 4px honest bar, then the
+   one-line meaning. The old readout-wide KPI strip died with R5 — a factor
+   card owns its own number and bar. ─────────────────────────────────────── */
+
+function FactorHead({ name, share, meaning }: { name: string; share: number; meaning: string }) {
   return (
-    <div className="bcell b-ar">
-      <span className="label">Application readiness</span>
-      <span className={`ar-val num${value === null ? " bquiet" : ""}`}>
-        {value === null ? (
-          "—"
-        ) : (
-          <>
-            {value}
-            <small>/{WEIGHTS.ar}</small>
-          </>
-        )}
-      </span>
-    </div>
-  );
-}
-
-/* ── verdict strip factor cells (Dashboard .kpi register) ───────────────── */
-
-interface FactorView {
-  name: string;
-  score: number;
-  meaning: string;
-}
-
-function FactorCell({ f }: { f: FactorView }) {
-  const pct = Math.round(f.score * 100);
-  return (
-    <div className="rs-kpi">
-      <p className="rs-kpi-head">
-        <span className="label">{f.name}</span>
-        <b className="num">{pct}%</b>
-      </p>
-      <div className="kbar" role="img" aria-label={`${f.name} factor: ${pct}% — ${f.meaning}`}>
-        <i className={pct === 100 ? "solid green" : "solid"} style={{ width: `${pct}%` }} />
+    <>
+      <div className="rs-fg-head rs-factor-head num">
+        <span className="label">{name}</span>
+        <b className="rs-fg-score num">{share}%</b>
       </div>
-      <p className="rs-kpi-note">{f.meaning}</p>
-    </div>
+      <div className="kbar" role="img" aria-label={`${name} factor: ${share}% — ${meaning}`}>
+        <i className={share === 100 ? "solid green" : "solid"} style={{ width: `${share}%` }} />
+      </div>
+      <p className="rs-fn">{meaning}</p>
+    </>
   );
 }
 
-/* ── factor groups — Dashboard-parity sections: mini-head row (label +
-   share — meaning on the right) then the checks as a REAL ledger table
+/* ── factor groups — one CARD per factor (R5): head row (label + share), the
+   honest bar, the meaning line, then the checks as a REAL ledger table
    (Check | Result | Note). The Note column exists ONLY when a row of the
    group actually carries a note. Result cells are wash chips: green
    "Pass" / grey miss ("Missing" | "Not found"); amber is reserved for the
@@ -189,13 +188,8 @@ function FactorGroup({
         );
   const hasNotes = checks.some((c) => c.note);
   return (
-    <section className="rs-fgroup">
-      <div className="rs-fg-head rs-factor-head num">
-        <span className="label">
-          {name} — <b>{share}%</b>
-        </span>
-        <span className="rs-fn">{meaning}</span>
-      </div>
+    <section className="card rs-fgroup">
+      <FactorHead name={name} share={share} meaning={meaning} />
       <table className="checks-table num">
         <thead>
           <tr>
@@ -294,19 +288,6 @@ function RunResult({
   children: ReactNode;
   links: ReactNode;
 }) {
-  const factorViews: FactorView[] = [
-    { name: "Parse", score: run.parseability.score, meaning: "text readable as-is, every page carries content" },
-    {
-      name: "Format",
-      score: run.format.score,
-      meaning: `the sections screeners expect${run.flags.onepageEstimated ? " (one-page estimate)" : ""}`,
-    },
-    {
-      name: "Evidence",
-      score: run.keywords.score,
-      meaning: `the role's core skills named in the file — vs ${run.careerName}`,
-    },
-  ];
   const groups: { name: string; meaning: string; checks: GroupCheck[]; missLabel: string; watchClass?: boolean }[] = [
     {
       name: "Parse",
@@ -330,7 +311,7 @@ function RunResult({
   ];
   return (
     <>
-      <section className="panel-sec rs-readout">
+      <section className="panel-sec rs-readout card">
         <div className="rs-readout-top">
           <div>
             <span className="label num">Resume checker · {fmtDT(run.at)}</span>
@@ -347,11 +328,6 @@ function RunResult({
           </div>
         </div>
         {staleFor ? <StaleBanner oldCareer={staleFor} kind="run" /> : null}
-        <div className="rs-kpis">
-          {factorViews.map((f) => (
-            <FactorCell key={f.name} f={f} />
-          ))}
-        </div>
         <p className="rs-air-note num">
           <b className="num">
             parse {Math.round(RESUME_AIR_WEIGHTS.parse * 100)}% + format {Math.round(RESUME_AIR_WEIGHTS.format * 100)}% + evidence {Math.round(RESUME_AIR_WEIGHTS.keywords * 100)}%
@@ -370,33 +346,36 @@ function RunResult({
           checks={g.checks}
           missLabel={g.missLabel}
           watchClass={g.watchClass}
-          shareOverride={g.name === "Parse" ? factorViews[0].score : undefined}
+          shareOverride={g.name === "Parse" ? run.parseability.score : undefined}
         />
       ))}
 
-      <details className="rs-disc">
-        <summary className="num">
-          Findings — {run.findings.length === 0 ? "no fixes found" : `${run.findings.length} to review`}
-        </summary>
-        <div className="rs-findings">
-          {run.findings.map((f) => (
-            <FindingCard key={f.id} f={f} />
-          ))}
-        </div>
-      </details>
+      <section className="card">
+        <details className="rs-disc">
+          <summary className="num">
+            Findings — {run.findings.length === 0 ? "no fixes found" : `${run.findings.length} to review`}
+          </summary>
+          <div className="rs-findings">
+            {run.findings.map((f) => (
+              <FindingCard key={f.id} f={f} />
+            ))}
+          </div>
+        </details>
+      </section>
 
-      {/* Q15: the slim one-row footer affordance (drag preserved); the quiet
-          links line rides beside it */}
-      <div className="rs-footer">
+      {/* R7/R8: the re-run affordance gets its own full-width card; the quiet
+          links line is centred beneath the zone */}
+      <section className="card prep-rerun">
         {children}
         {links}
-      </div>
+      </section>
     </>
   );
 }
 
-/* ── the cover-letter checker — same anatomy; its factor groups live
-   behind the e2e-guarded "The checks" fold (demo-arc contract) ──────────── */
+/* ── the cover-letter checker — same card anatomy (R11: the letter's
+   Evidence + Structure checks are surfaced as their own cards; the old
+   e2e-guarded "The checks" fold is gone) ────────────────────────────────── */
 
 const LETTER_KINDS: Record<string, string> = { txt: "TXT", pdf: "PDF", docx: "Word" };
 
@@ -405,14 +384,6 @@ function LetterResult({ run, staleFor, children }: {
   staleFor: string | null;
   children: ReactNode;
 }) {
-  const allRan = run.checks.every((c) => c.ok !== null);
-  const checkCount = run.checks.filter((c) => c.ok !== null).length;
-  const factorViews: FactorView[] = [
-    { name: "Parse", score: run.air.parsePass, meaning: "text readable as-is" },
-    { name: "Evidence", score: run.air.keywordScore, meaning: `the role's core skills named — vs ${run.careerName}` },
-    { name: "Structure", score: run.air.structuralScore, meaning: "salutation · ask · word band · employer" },
-  ];
-
   const evidence: GroupCheck[] = run.keywords.map((k) => ({ label: k.label, ok: k.ok === true }));
   const structure: GroupCheck[] = run.checks.map((c) => ({
     label: c.label,
@@ -425,7 +396,7 @@ function LetterResult({ run, staleFor, children }: {
 
   return (
     <>
-      <section className="panel-sec cl-readout">
+      <section className="panel-sec cl-readout card">
         <div className="cl-readout-top">
           <div>
             <span className="label num">Cover-letter checker · {fmtDT(run.at)}</span>
@@ -440,11 +411,6 @@ function LetterResult({ run, staleFor, children }: {
           </div>
         </div>
         {staleFor ? <StaleBanner oldCareer={staleFor} kind="check" /> : null}
-        <div className="rs-kpis">
-          {factorViews.map((f) => (
-            <FactorCell key={f.name} f={f} />
-          ))}
-        </div>
         <p className="cl-air-note num">
           <b className="num">
             parse {Math.round(LETTER_AIR_WEIGHTS.parse * 100)}% + evidence {Math.round(LETTER_AIR_WEIGHTS.keywords * 100)}% + structure {Math.round(LETTER_AIR_WEIGHTS.structural * 100)}%
@@ -455,46 +421,53 @@ function LetterResult({ run, staleFor, children }: {
         </p>
       </section>
 
-      {/* the re-check zone rides directly under the readout; the optional
-          employer field lives here (only visible once a letter has run) */}
-      {children}
-
-      <details className="rs-disc">
-        <summary className="num">
-          The checks — {allRan ? "all ran" : `${checkCount} of ${run.checks.length} ran`}
-        </summary>
-        <FactorGroup
-          name="Evidence"
-          meaning={`core skills of ${run.careerName} found in the letter · the role anchor is always the declared Target Role`}
-          checks={evidence}
-          missLabel="Not found"
+      {/* the letter's Parse gate has no check table of its own — a small card
+          carries its score, bar and meaning so every factor reads the same */}
+      <section className="card rs-fgroup rs-fgroup-plain">
+        <FactorHead
+          name="Parse"
+          share={Math.round(run.air.parsePass * 100)}
+          meaning="text readable as-is"
         />
-        <FactorGroup name="Structure" meaning="the four structural checks" checks={structure} missLabel="Missing" />
-      </details>
+      </section>
 
-      <details className="rs-disc">
-        <summary className="num">
-          Findings — {run.findings.length === 0 ? "no fixes found" : `${run.findings.length} to review`}
-        </summary>
-        <div className="rs-findings">
-          {run.findings.map((f) => (
-            <div className="rs-finding" key={f.id}>
-              <p className="rs-f-title">
-                <span className={`rs-level rs-${f.level}`}>{f.level === "fix" ? "fix" : f.level === "watch" ? "watch" : "pass"}</span>
-              </p>
-              <p className="rs-f-head">{f.title}</p>
-              <p className="rs-f-detail">{f.detail}</p>
-              {f.suggestion && (
-                <div className="rs-suggest">
-                  <p className="rs-move">
-                    <b>The move</b> · {f.suggestion.move}
-                  </p>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </details>
+      <FactorGroup
+        name="Evidence"
+        meaning={`core skills of ${run.careerName} found in the letter · the role anchor is always the declared Target Role`}
+        checks={evidence}
+        missLabel="Not found"
+      />
+      <FactorGroup name="Structure" meaning="the four structural checks" checks={structure} missLabel="Missing" />
+
+      <section className="card">
+        <details className="rs-disc">
+          <summary className="num">
+            Findings — {run.findings.length === 0 ? "no fixes found" : `${run.findings.length} to review`}
+          </summary>
+          <div className="rs-findings">
+            {run.findings.map((f) => (
+              <div className="rs-finding" key={f.id}>
+                <p className="rs-f-title">
+                  <span className={`rs-level rs-${f.level}`}>{f.level === "fix" ? "fix" : f.level === "watch" ? "watch" : "pass"}</span>
+                </p>
+                <p className="rs-f-head">{f.title}</p>
+                <p className="rs-f-detail">{f.detail}</p>
+                {f.suggestion && (
+                  <div className="rs-suggest">
+                    <p className="rs-move">
+                      <b>The move</b> · {f.suggestion.move}
+                    </p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </details>
+      </section>
+
+      {/* R7/R9: the employer anchor rides ABOVE the zone in the re-run card
+          (supersedes the 2026-11-02 "below the zone" ruling) */}
+      <section className="card prep-rerun">{children}</section>
     </>
   );
 }
@@ -525,25 +498,51 @@ export default async function PrepPage() {
 
   /* first-run tab panels keep the upload-first flow (Q15): the dropzone is
      the hero, the quiet links line beneath. A returning user's panel renders
-     results-first with the slim footer affordance. */
+     results-first with the re-run card at the bottom. */
   const resumeFirstRun = (
-    <>
+    <section className="card prep-intake">
       <ResumeUpload />
       <ResumeLinks />
-    </>
+    </section>
   );
 
-  const letterFirstRun = <LetterUpload showEmployer={Boolean(latestLetter)} />;
+  const letterFirstRun = (
+    <section className="card prep-intake">
+      <LetterUpload showEmployer={Boolean(latestLetter)} />
+    </section>
+  );
 
   /* the band's AR receipts — the same engine receipts the page already
      reads (score.arParts from getStudentView); a null score (no target
-     role) renders the honest "—" in every cell, never a painted zero */
+     role) renders the honest "—" in the band, never a painted zero */
   const unmeasured = (max: number): PartView => ({ measured: false, earned: 0, max });
   const parts = score?.arParts ?? {
     resume: unmeasured(AR_FACTORS.resume),
     letter: unmeasured(AR_FACTORS.letter),
     presence: unmeasured(AR_FACTORS.presence),
   };
+
+  /* channel-card notes (R4) — receipts, not verdicts. A channel that does
+     not COUNT for the current target never borrows its old run's receipts:
+     it says so, and points at the re-run. */
+  const tally = (checks: { ok: boolean }[]) =>
+    `${checks.filter((c) => c.ok).length}/${checks.length}`;
+  const resumeNote = parts.resume.measured && latestResume
+    ? `parse ${tally(latestResume.run.parseability.checks)} · format ${tally(latestResume.run.format.checks)} · evidence ${tally(latestResume.run.keywords.checks)}`
+    : latestResume
+      ? "re-run for this target to count"
+      : "resume checker still open";
+  const letterEvaluated = latestLetter?.run.checks.filter((c) => c.ok !== null) ?? [];
+  const letterNote = parts.letter.measured && latestLetter
+    ? `evidence ${latestLetter.run.keywords.filter((k) => k.ok).length}/${latestLetter.run.keywords.length} · structure ${letterEvaluated.filter((c) => c.ok).length}/${letterEvaluated.length}`
+    : latestLetter
+      ? "re-check for this target to count"
+      : "cover-letter checker still open";
+  const presenceNote = !parts.presence.measured
+    ? "declare credentials in Profile"
+    : parts.presence.earned === parts.presence.max
+      ? "all three presence checks passed"
+      : `${parts.presence.earned} of ${parts.presence.max} declared`;
 
   const resumePanel = latestResume ? (
     <RunResult run={latestResume.run} staleFor={resumeStaleFor} links={<ResumeLinks />}>
@@ -562,9 +561,9 @@ export default async function PrepPage() {
   );
 
   return (
-    <div className="v7prep">
-      {/* named band — the white dashboard register; the instrument counters
-          are band furniture; presence's cell is computed state only */}
+    <div className="v7prep prep-surface">
+      {/* named band — the white dashboard register. The composite slot that
+          Dashboard gives 36/100 carries application readiness here. */}
       <header className="band">
         <div className="bandrow">
           <div className="who">
@@ -575,11 +574,12 @@ export default async function PrepPage() {
               <p className="m">A format &amp; evidence screen for your resume and cover letter.</p>
             )}
           </div>
-          <div className="bandcells">
-            <BandCell name="Resume" part={parts.resume} notRun="NOT YET RUN" />
-            <BandCell name="Letter" part={parts.letter} notRun="NOT YET CHECKED" />
-            <BandCell name="Presence" part={parts.presence} notRun="NOT DECLARED" />
-            <ArCell value={score?.ar ?? null} />
+          <div className="composite-wrap prep-readiness">
+            <div className="composite">
+              <span className="score-big num">{score?.ar ?? "—"}</span>
+              {score ? <span className="c-of">/{WEIGHTS.ar}</span> : null}
+            </div>
+            <div className="ratemsg">application readiness</div>
           </div>
         </div>
       </header>
@@ -597,7 +597,16 @@ export default async function PrepPage() {
           </p>
         </section>
       ) : (
-        <PrepTabs panels={{ resume: resumePanel, letter: letterPanel }} />
+        <>
+          {/* one card per channel (R3) — the Dashboard KPI grid */}
+          <section className="prep-kpis" aria-label="Prep channels">
+            <ChannelCard name="Resume" part={parts.resume} notRun="NOT YET RUN" note={resumeNote} />
+            <ChannelCard name="Letter" part={parts.letter} notRun="NOT YET CHECKED" note={letterNote} />
+            <ChannelCard name="Presence" part={parts.presence} notRun="NOT DECLARED" note={presenceNote} />
+          </section>
+
+          <PrepTabs panels={{ resume: resumePanel, letter: letterPanel }} />
+        </>
       )}
     </div>
   );

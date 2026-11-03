@@ -247,9 +247,9 @@ test.describe.serial("demo-arc", () => {
     await page.locator(".index-row", { hasText: "Software QA Analyst" }).first().locator(".row-name").click();
     await page.locator(".d-cta button", { hasText: "Change target role" }).click();
 
-    // cost-first confirm
+    // cost-first confirm — the copy lives in CareerClient.tsx (9ecb02f recut)
     await expect(page.locator("#sw-confirm h1")).toHaveText("Switch to Software QA Analyst?");
-    await expect(page.locator(".sw-cost")).toContainText("resets skill progress and training progress");
+    await expect(page.locator(".sw-cost")).toContainText("Gap bars and training progress reset for the new role");
     await page.locator(".sw-actions .btn-primary").click(); // Switch to Software QA Analyst
 
     // honest dip — the readout says exactly what the switch costs (canon 21)
@@ -261,7 +261,10 @@ test.describe.serial("demo-arc", () => {
     expect(dipLegend).toContain("Training 0/20");
     expect(dipLegend).toContain("Application readiness —"); // unmeasured channel — no stale zero
     expect(dipLegend).toContain("Career direction 4/10");
-    await expect(page.locator("#sw-reset .readout-fit")).toContainText("The 21 that stays is competencies and career direction");
+    // copy lives in CareerClient.tsx (9ecb02f recut)
+    await expect(page.locator("#sw-reset .readout-fit")).toContainText(
+      "verified skills ·✓ and an active goal survive career-specific resets"
+    );
     await shot(page, "arc-21.png");
     notes.push("beat 6 dip: reset readout 21/100 · SP 0/25 ES 17/30 TP 0/20 AR — CC 4/10 · arc-21.png ✓");
 
@@ -341,7 +344,7 @@ test.describe.serial("demo-arc", () => {
     }
     await expect(overlay.locator(".r-head")).toContainText("You passed — 5 of 5");
     const passBand = ((await overlay.locator(".r-band").textContent()) ?? "").replace(/\s+/g, " ");
-    expect(passBand).toContain("software testing gap is closed ✓✓");
+    expect(passBand).toContain("software testing gap is closed ·✓✓");
     expect(passBand).toContain("The goal you set is done");
     await shot(page, "arc-check-pass.png");
     notes.push(`beat 7 check: overlay pass band "${passBand}" · arc-check-pass.png ✓`);
@@ -391,9 +394,8 @@ test.describe.serial("demo-arc", () => {
     // the collapsed checks — clicks can land on the stale doc
     await expect(page.locator(".cl-readout-sub")).toContainText("cover-letter-qa.txt", { timeout: 45_000 });
     soft((await page.locator(".cl-readout .cl-readout-score").first().textContent()) ?? "").toContain("100");
-    // the employer honesty row lives behind the collapsed checks disclosure —
-    // open it, then read the exact skip line
-    await page.locator(".rs-disc summary", { hasText: "The checks" }).click();
+    // the employer honesty row is surfaced in the Structure card (R11,
+    // 2026-11-03: the "The checks" fold is gone) — read the exact skip line
     const employerRow = (await page.locator(".rs-check", { hasText: "Employer named" }).first().textContent())?.replace(/\s+/g, " ");
     expect(employerRow).toContain("not evaluated — no employer declared");
     notes.push(

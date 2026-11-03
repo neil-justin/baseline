@@ -1,26 +1,23 @@
 /* ============================================================
-   DNA v7 — Prep surface (/prep + /prep/guide), the v7.4 recut.
-   A named band (the white dashboard register — v7.4 sweep)
-   carries the AR channel cells — resume 7 / letter 5 / presence
-   3 + the APPLICATION READINESS /15 readout — every number
-   computed from score.arParts (getStudentView), never painted.
-   The per-file flows render as a SUITE of two tools (v7.4
-   minimal-tool recut, user ruling 2026-11-02 after the
-   resume-checker UX survey): a `.prep-lens` segmented toolbar
-   OUTSIDE the card switches Resume checker / Cover-letter
-   checker — each tab its own card with one full tool flow (the
-   dropzone intake is the hero, auto-run on drop; the result
-   dashboard ends with the declared next-step handoff).
-   FLUSH sections separated by row rules — never a card inside a
-   card. The checks are REAL tables (tracked 11px uppercase column
-   heads, row rules, tabular numerals, the honest "—" where a cell
-   holds nothing); findings are row-blocks with wash verdict chips
-   (fix=blue / watch=amber / pass=green — no red anywhere);
-   rejection copy appears only on failure, inline in the zone
-   (amber, never red). Helper prose is dead per the copy floor —
-   the air-notes stay as the ONE caption line (factor formula +
-   "latest run counts"). The dropzone carries NO buttons — the
-   Blue-Command primaries are retired here.
+   DNA v7 — Prep surface (/prep + /prep/guide), the per-section recut.
+   The page is a STACK OF CARDS, Dashboard-style — never a card
+   inside a card:
+     1. named band — Prep + target left, application readiness /15
+        as the composite right (the Dashboard 36/100 slot);
+     2. `.prep-kpis` — Resume · Letter · Presence, one KPI card each;
+     3. `.prep-lens` segmented toolbar (outside every card);
+     4. readout card → one card per factor → findings card →
+        full-width re-run card.
+   Every number is computed from score.arParts (getStudentView) or
+   the stored run, never painted. The checks are REAL tables
+   (tracked 11px uppercase column heads, row rules, tabular
+   numerals, the honest "—" where a cell holds nothing); findings
+   are row-blocks with wash verdict chips (fix=blue / watch=amber /
+   pass=green — no red anywhere); rejection copy appears only on
+   failure, inline in the zone (amber, never red). Helper prose is
+   dead per the copy floor — the air-note stays as the ONE caption
+   line (factor formula + "latest run counts"). The dropzone carries
+   NO buttons — the Blue-Command primaries are retired here.
    Cool white-grey ground, white cards 1px #DADCE0 + whisper
    shadow + 8px radius, Roboto 13.5px body, honest grey "—".
    Scoped under `.v7prep` off the --v-* tokens in ../v7.css —
@@ -36,6 +33,12 @@
   color: var(--v-ink);
   padding: 12px 16px 24px;
 }
+/* R1 (user ruling 2026-11-03): the checker surface caps at 860px — the
+   960px run still read stretched. The guide page keeps the full width. */
+.v7prep.prep-surface {
+  max-width: 860px;
+  margin: 0 auto;
+}
 .v7prep ::selection { background: var(--v-blue-wash); }
 .v7prep :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
 .v7prep a { color: inherit; }
@@ -47,7 +50,6 @@
 
 .v7prep .who { min-width: 220px; }
 .v7prep .who .m { max-width: 74ch; }
-.v7prep .bval.bquiet { color: var(--v-grey-text); }
 .v7prep .label {
   font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
   letter-spacing: 0.08em;
@@ -55,30 +57,84 @@
   color: var(--v-ink2);
   white-space: nowrap;
 }
-/* the /15 readout cell — the band's KPI register (500 22px + 12px companion) */
-.v7prep .b-ar .ar-val {
-  font: 500 22px/1.1 Roboto, system-ui, sans-serif;
+
+/* ---------- the band composite — application readiness in the slot
+   Dashboard gives 36/100 (R2, user ruling 2026-11-03) ---------- */
+
+.v7prep .prep-readiness {
+  min-width: 0;
+  text-align: right;
+}
+.v7prep .prep-readiness .composite { justify-content: flex-end; }
+.v7prep .prep-readiness .score-big {
+  min-width: 2ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.v7prep .prep-readiness .ratemsg { margin-top: 4px; }
+
+/* ---------- channel KPI cards (R3/R4) — one card per channel, the
+   Dashboard `.kpis` geometry: 12px grid gap, 14px 16px 16px padding,
+   8px radius, name → fraction → 4px honest bar → wash chip → note ---------- */
+
+.v7prep .prep-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.v7prep .prep-kpi {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+.v7prep .prep-kpi .k-name {
+  font: 500 13.5px/1.3 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7prep .prep-kpi .k-score {
+  font: 500 22px/1.1 Roboto, system-ui, sans-serif; /* the Dashboard .kpi .score register */
   color: var(--v-ink);
   letter-spacing: -0.01em;
+  margin-top: 6px;
   font-variant-numeric: tabular-nums;
-  display: inline-flex;
-  align-items: baseline;
 }
-.v7prep .b-ar .ar-val small {
+.v7prep .prep-kpi .k-score small {
   font: 400 12px/1 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   margin-left: 2px;
 }
+.v7prep .prep-kpi .k-score.bquiet { color: var(--v-grey-text); }
+.v7prep .prep-kpi .kbar {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--v-track);
+  margin: 10px 0 12px;
+}
+.v7prep .prep-kpi .kbar i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--v-blue);
+}
+.v7prep .prep-kpi .kbar i.solid.green { background: var(--v-green); }
+.v7prep .prep-kpi .k-note {
+  margin: 8px 0 0;
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
 
-/* ---------- band KPI cells — the Dashboard KPI register (Q14 addendum,
-   signed 2026-11-03): plain-name label, ONE fraction, a 4px honest bar
-   (fill = the earned share, green only when fully earned), ✓ chip ONLY on
-   a fully-earned factor. The old label·7 + green-on-partials die. ---------- */
-
-/* the .bcell .kbar block was PROMOTED to ../v7.css (byte-identical —
-   Careers band elevation factoring, 2026-11-03); prep inherits the shared rule */
-
-/* wash chips (band state + verdict chips) */
+/* wash chips (card state + verdict chips) */
 
 .v7prep .chip {
   display: inline-block;
@@ -89,12 +145,8 @@
   white-space: nowrap;
 }
 .v7prep .chip.c-green { background: var(--v-green-wash); color: var(--v-green-text); }
+.v7prep .chip.c-blue { background: var(--v-blue-wash); color: var(--v-blue-deep); }
 .v7prep .chip.c-grey { background: var(--v-grey-wash); color: var(--v-grey-text); }
-/* the white band keeps the outlined grey chip legible — band state chips sit on surface */
-.v7prep .band .chip.c-grey {
-  background: var(--v-surface);
-  border: 1px solid var(--v-border);
-}
 
 /* ---------- cards — the married register ---------- */
 
@@ -106,6 +158,14 @@
   overflow: hidden;
   margin-bottom: 12px;
 }
+
+/* the tab panel is a STACK of independent cards (R3/R5) — the grid gap owns
+   the rhythm, so a card inside the stack drops its own bottom margin */
+.v7prep .prep-stack {
+  display: grid;
+  gap: 12px;
+}
+.v7prep .prep-stack > .card { margin-bottom: 0; }
 /* ---------- the suite toolbar (v7.3 suite re-cut: the resume-checker UX
    survey's "one tool instance, tabs" convention) — the Careers/My-Plan
    lens-row register: segmented tabs OUTSIDE the card + the active tool's
@@ -116,7 +176,7 @@
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
-  margin: 2px 2px 10px;
+  margin: 2px 2px 12px;
 }
 .v7prep .ptabs {
   display: inline-flex;
@@ -150,11 +210,9 @@
 /* the v7.2 hidden-guard — .card { display:block } must not defeat hidden */
 .v7prep .tabpanel[hidden] { display: none !important; }
 
-/* ---------- on-demand disclosures (v7.5 reorder): the result's detail
-   sections collapse — the resting card is score + upload ---------- */
+/* ---------- on-demand disclosures — the Findings card is the only fold
+   left on the page; every factor is a card of its own now ---------- */
 .v7prep .rs-disc { padding: 0 16px 12px; }
-.v7prep .card > .rs-disc,
-.v7prep .card > .rs-disc + .rs-disc { border-top: 1px solid var(--v-rows); }
 .v7prep .rs-disc > summary {
   cursor: pointer;
   list-style: none;
@@ -179,7 +237,6 @@
 /* ---------- flush sections of the married card ---------- */
 
 .v7prep .panel-sec { padding: 14px 16px 16px; }
-.v7prep .card > .panel-sec + .panel-sec { border-top: 1px solid var(--v-rows); }
 
 .v7prep .b-head h2 {
   font: 500 16px/1.3 Roboto, system-ui, sans-serif;
@@ -243,11 +300,10 @@
 }
 .v7prep .link-quiet:hover { color: var(--v-blue); text-decoration-color: var(--v-blue); }
 
-/* ---------- the run readout — the VERDICT STRIP (Dashboard .score-big
-   register): big right-aligned numeral + /100, then the three factors as a
-   KPI-CELL GRID in the Dashboard band register (plain label · % at the
-   .kpi .score scale · the 4px honest bar — blue at the share, green at
-   100% · a ≤2-line 11px ink2 sub-line). Never a × product. ---------- */
+/* ---------- the run readout — its own card: run label, file line, the big
+   /100 score (Dashboard .score-big register) and the weighted receipts line.
+   The three-factor KPI strip that used to ride here is gone — each factor
+   card owns its own number and bar (R5). ---------- */
 
 .v7prep .rs-verdict {
   display: inline-flex;
@@ -265,55 +321,6 @@
 .v7prep .rs-verdict .c-of {
   font: 400 13px/1 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
-}
-
-.v7prep .rs-kpis {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 14px;
-}
-.v7prep .rs-kpi {
-  min-width: 0;
-}
-.v7prep .rs-kpi .rs-kpi-head {
-  margin: 0;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
-}
-.v7prep .rs-kpi .rs-kpi-head b {
-  font: 500 22px/1.1 Roboto, system-ui, sans-serif; /* the Dashboard .kpi .score register */
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
-  color: var(--v-ink);
-}
-.v7prep .rs-kpi .kbar {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 4px; /* the shared honest 4px bar */
-  border-radius: 2px;
-  background: var(--v-track);
-  margin: 6px 0 5px;
-}
-.v7prep .rs-kpi .kbar i {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  background: var(--v-blue);
-}
-.v7prep .rs-kpi .kbar i.solid.green { background: var(--v-green); }
-.v7prep .rs-kpi .rs-kpi-note {
-  margin: 0;
-  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 /* Q19a: the honest stale-target banner — the run stays displayed as
@@ -403,32 +410,50 @@
 .v7prep .checks-table tbody tr { transition: background-color 0.12s ease; }
 .v7prep .checks-table tbody tr:hover { background: var(--v-grey-wash); }
 
-/* the factor GROUPS — Dashboard-parity grouped sections: the mini-head
-   row (label + share, meaning on the right) then the checks as a REAL
-   ledger table. `rs-` hooks (.rs-factor-head / .rs-check / .rs-fn) intact */
-.v7prep .card > .rs-fgroup { border-top: 1px solid var(--v-rows); }
-.v7prep .rs-fgroup { padding: 12px 16px 14px; }
-.v7prep .rs-disc .rs-fgroup { padding: 0 0 14px; border-top: 0; }
-.v7prep .rs-disc .rs-fgroup + .rs-fgroup { padding-top: 14px; }
+/* the factor CARDS (R5) — one card per factor: head row (label + share), the
+   4px honest bar, the meaning line, then the checks as a REAL ledger table.
+   `rs-` hooks (.rs-factor-head / .rs-fg-score / .rs-fn / .rs-check) intact */
+.v7prep .rs-fgroup { padding: 14px 16px 16px; }
 .v7prep .rs-fg-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  padding: 0 16px 0 0;
 }
-.v7prep .rs-disc .rs-fg-head { padding-right: 0; }
-.v7prep .rs-fg-head .label b {
-  font: 500 14px/1.3 Roboto, system-ui, sans-serif;
+.v7prep .rs-fg-score {
+  font: 500 22px/1.1 Roboto, system-ui, sans-serif; /* the Dashboard .kpi .score register */
   color: var(--v-ink);
-  letter-spacing: 0;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
 }
-.v7prep .rs-fg-head .rs-fn {
-  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+.v7prep .rs-fgroup .kbar {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 4px; /* the shared honest 4px bar */
+  border-radius: 2px;
+  background: var(--v-track);
+  margin: 8px 0 0;
+}
+.v7prep .rs-fgroup .kbar i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--v-blue);
+}
+.v7prep .rs-fgroup .kbar i.solid.green { background: var(--v-green); }
+.v7prep .rs-fn {
+  margin: 6px 0 0;
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
-  max-width: 52ch;
+  max-width: 76ch;
 }
+/* the table sits flush with the card's content edge */
+.v7prep .rs-fgroup .checks-table .ct-check { width: auto; }
+.v7prep .rs-fgroup .checks-table th:last-child,
+.v7prep .rs-fgroup .checks-table td:last-child { padding-right: 0; }
 
 /* the wash-CHIP result cells (green Pass / grey Missing·Not found·Skipped;
    amber only on the Parse watch-class row) — no raw glyphs anywhere */
@@ -450,6 +475,11 @@
 /* ---------- findings — row blocks with wash verdict chips ---------- */
 
 .v7prep .rs-findings { margin-top: 6px; }
+/* the Findings card spans the card width now — the old 70ch reading caps
+   left a ragged right edge on a 860px surface (user feedback 2026-11-03) */
+.v7prep .rs-findings .rs-f-detail,
+.v7prep .rs-findings .rs-move,
+.v7prep .rs-findings .rs-example { max-width: none; }
 .v7prep .rs-finding {
   padding: 12px 0 14px;
   border-bottom: 1px solid var(--v-rows);
@@ -525,67 +555,47 @@
   font-weight: 500;
 }
 
-/* ---------- the dropzone intake (v7.4 recut; Q15 slim footer) ---------- */
+/* ---------- the dropzone intake (R7/R8/R9 recut) ---------- */
 
-/* Q15/presentation rebuild: on a results-first card the dropzone demotes to
-   a SLIM one-row bordered affordance ("Check another version", ~40px) with
-   the quiet links line beside it — same .dz-zone hook/e2e contract; drag
-   and browse preserved. Full hero only in the never-run state. */
-.v7prep .card > .rs-footer {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-  border-top: 1px solid var(--v-rows);
-  padding: 12px 16px;
-}
-.v7prep .rs-footer .rs-upload,
-.v7prep .rs-footer .cl-upload {
-  margin: 0;
-  flex: 1 1 auto;
-  min-width: 250px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.v7prep .rs-footer .rs-upload .dz-zone,
-.v7prep .rs-footer .cl-upload .dz-zone { flex: 1; width: auto; }
-.v7prep .rs-footer .rs-links {
-  margin: 0;
+/* The re-run card owns the bottom of a results-first panel: the letter's
+   optional employer field ABOVE a full-width zone, the resume's quiet links
+   line CENTRED beneath it. Same .dz-zone hook/e2e contract; drag and browse
+   preserved. The never-run state keeps the hero dropzone in its own card. */
+.v7prep .prep-rerun { padding: 16px; }
+.v7prep .prep-rerun .rs-upload,
+.v7prep .prep-rerun .cl-upload { margin: 0; }
+.v7prep .prep-rerun .dz-zone { width: 100%; }
+.v7prep .prep-rerun .rs-links {
+  margin: 14px 0 0;
   padding: 0;
-  flex: none;
+  text-align: center;
 }
+
+/* the never-run hero card — the dropzone is the whole point */
+.v7prep .prep-intake { padding-bottom: 16px; }
+.v7prep .prep-intake .rs-links { text-align: center; }
 
 .v7prep .dz-zone.dz-slim {
-  padding: 8px 14px;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+  padding: 16px 20px;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  /* the two labels read as a centred stack inside the box (user ruling
+     2026-11-03: "center the text inside") */
+  justify-content: center;
   align-items: center;
-  gap: 10px;
-  text-align: left;
+  gap: 6px;
+  text-align: center;
 }
 .v7prep .dz-zone.dz-slim .dz-icon,
 .v7prep .dz-zone.dz-slim svg.dz-icon {
   width: 16px;
   height: 16px;
   flex: none;
-  margin: 0;
+  margin: 0 0 2px;
 }
-.v7prep .dz-zone.dz-slim .dz-head { font-size: 13px; font-weight: 500; white-space: nowrap; }
-.v7prep .dz-zone.dz-slim .dz-sub { font-size: 12px; margin: 0; }
-.v7prep .dz-zone.dz-slim .dz-err { text-align: left; }
-
-.v7prep .card > .rs-upload,
-.v7prep .card > .cl-upload,
-.v7prep .card > .rs-upload + .rs-links,
-.v7prep .card > .panel-sec + .rs-upload,
-.v7prep .card > .panel-sec + .cl-upload { border-top: 1px solid var(--v-rows); padding-top: 14px; }
-
-/* the dropzone as the card's FIRST child sits flush — no stray top rule
-   (the letter tab's empty state is exactly this) */
-.v7prep .card > .rs-upload:first-child,
-.v7prep .card > .cl-upload:first-child { border-top: 0; padding-top: 0; }
+.v7prep .dz-zone.dz-slim .dz-head { font: 500 14px/1.3 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7prep .dz-zone.dz-slim .dz-sub { font: 400 12px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin: 0; max-width: 60ch; }
+.v7prep .dz-zone.dz-slim .dz-err { text-align: center; }
 
 .v7prep .rs-upload,
 .v7prep .cl-upload {
@@ -630,10 +640,32 @@
   overflow: hidden;
 }
 
-/* the optional employer row lives quietly under the letter's zone */
-.v7prep .cl-below { margin-top: 10px; max-width: 420px; }
-.v7prep .cl-below label.rs-links { display: flex; align-items: center; gap: 10px; margin: 0; }
-.v7prep .cl-below .cl-input { flex: 1; width: auto; min-width: 0; }
+/* R9 — the optional employer anchor rides ABOVE the letter's zone as a
+   labelled field with its honesty line */
+.v7prep .cl-employer {
+  display: grid;
+  gap: 6px;
+  max-width: 460px;
+  margin: 0 0 16px;
+}
+.v7prep .cl-employer-label {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7prep .cl-employer-label span {
+  font: 400 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.v7prep .cl-employer .cl-input { max-width: 420px; width: 100%; }
+.v7prep .cl-employer-hint {
+  margin: 0;
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 52ch;
+}
 
 /* the resume checker's one quiet links line — 16px side gutter keeps the
    text off the card edge while the divider above stays flush */
@@ -765,22 +797,12 @@
 @media (max-width: 720px) {
   .v7prep { padding: 12px 12px 80px; } /* clears the ≤720px bottom nav */
   .v7prep .who { min-width: 0; }
-  /* band cells fold 4 → a 2×2 tray grid */
-  .v7prep .bandcells {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .v7prep .bandcells .bcell { border-left: 1px solid var(--v-rows); padding: 8px 0 8px 14px; }
-  .v7prep .bandcells .bcell:first-child { border-left: 0; padding-left: 0; }
-  .v7prep .bandcells .bcell:nth-child(2n + 1) { border-left: 0; padding-left: 0; }
-  .v7prep .bandcells .bcell:nth-child(n + 3) { border-top: 1px solid var(--v-rows); }
-  .v7prep .b-ar .ar-val { font-size: 20px; }
-  /* the verdict strip folds: the KPI cell grid stacks; the slim footer
-     row wraps its links line under the zone */
-  .v7prep .rs-kpis { grid-template-columns: 1fr; gap: 12px; }
-  .v7prep .rs-footer { padding: 10px 12px; }
+  /* the band composite wraps under the title and keeps its right edge */
+  .v7prep .prep-readiness { width: 100%; }
+  /* channel cards fold 3 → 2 → 1 */
+  .v7prep .prep-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .v7prep .panel-sec { padding: 12px 12px 14px; }
+  .v7prep .prep-rerun { padding: 12px; }
   .v7prep .cl-input { max-width: none; }
   /* stacked tables (the pathway fold): rows read as blocks over row rules */
   .v7prep .checks-table,
@@ -809,14 +831,12 @@
   .v7prep .guide-table td { padding: 2px 0 10px; border-bottom: 0; }
   .v7prep .checks-table td:last-child,
   .v7prep .guide-table td:last-child { padding-bottom: 0; }
-  /* the factor-group head wraps its meaning under the label on small screens */
-  .v7prep .rs-fg-head { padding-right: 0; }
-  .v7prep .rs-fg-head .rs-fn { max-width: none; }
+  /* the factor card head keeps its share on the right; the meaning is
+     already its own line under the bar */
+  .v7prep .rs-fn { max-width: none; }
 }
 
 @media (max-width: 560px) {
-  /* the tray folds to a single column of honest cells */
-  .v7prep .bandcells { grid-template-columns: 1fr; }
-  .v7prep .bandcells .bcell { border-left: 0; padding-left: 0; }
-  .v7prep .bandcells .bcell:nth-child(n + 2) { border-top: 1px solid var(--v-rows); }
+  /* the channel cards fold to a single column */
+  .v7prep .prep-kpis { grid-template-columns: 1fr; }
 }
