@@ -756,8 +756,10 @@ describe("blessed conversion — resource pools (status-respecting, no drops)", 
     expectPortal(/PS-PhilGEPS/, "res-purch-philgeps");
     const ra9184 = RESOURCES.find((r) => r.id === "res-purch-ra9184-irr")!;
     expect(ra9184).toBeDefined();
-    // the ruled caveat wording lives with the resource it belongs to
-    expect(ra9184.url).toBe("https://www.gppb.gov.ph/laws/RA-9184/");
+    // the ruled caveat wording lives with the resource it belongs to — the
+    // batch-3 re-point (2026-11-03) moves the URL onto GPPB's canonical IRR
+    // page (the old /laws/RA-9184/ path 301s there; verified LIVE)
+    expect(ra9184.url).toBe("https://www.gppb.gov.ph/ra-9184-and-2016-revised-irr/");
     // no row ever cites an eFPS tutorial/deep page
     for (const r of RESOURCES) {
       expect(r.url ?? "").not.toMatch(/efps\b/i);
@@ -975,10 +977,10 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
 });
 
 describe("§6.1 re-map census (final mapping state) + canon rails", () => {
-  it("catalog intact: no rows deleted (437 → 459, Wave B batch 2 fills all additive); 577 ADDR entries", () => {
-    expect(RESOURCES).toHaveLength(459); // +22 verified taught rows in batch 2 (ba 2 · sysadmin 1 · dba 5 · cybersec 1 · soc 1 · webdev 2 · digart 2 · hra 3 · training 3 · mkt 2; 437 baseline; qa re-point-only)
+  it("catalog intact: no rows deleted (437 → 473, Wave B batch 3 fills all additive); 600 ADDR entries", () => {
+    expect(RESOURCES).toHaveLength(473); // +14 verified taught rows in batch 3 (sales 6 · purch 2 · opsanalyst 1 · ccqa 1 · pay 1 · fas 2 · fin 1; 459 after batch 2)
     const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
-    expect(mappings).toBe(577); // 537 + 40 (fills + attaches incl. the ESC/communication attaches; qa +1 in the earlier ruling commit)
+    expect(mappings).toBe(600); // 577 (batch 2) + 21 (new-row claims) + 4 (outcomes-verified attaches: csr Technology, ops findings-memo, events ×3) − 2 (§6.1-class misfit cuts: Wharton ratio claim, CFI draw-charts claim)
   });
 
   it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {
@@ -999,8 +1001,7 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
     }
   });
 
-  it("declared-thin census: 74 career-skill cells carry no URL row; empty ADDR rows = 71", () => {
-    const thin: string[] = [];
+  it("declared-thin census: 63 career-skill cells carry no URL row; empty ADDR rows = 73", () => {    const thin: string[] = [];
     for (const c of CAREERS) {
       for (const s of c.skills) {
         const urlPool = RESOURCES.filter(
@@ -1009,15 +1010,20 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
         if (urlPool.length === 0) thin.push(`${c.id}::${s.name}`);
       }
     }
-    // 89 → 88 (qa::ASE) → 84 (ba::UAT + ba::ESC attach + sysadmin design/SLA
-    // CWFs) → 80 (hra comms/analytics, training perf/stakeholder/data-collection
-    // attaches) → 74 (mkt: mix/channels/brand bundle, the two ESC-layer
-    // cells, customer orientation, digital fluency — Wave B batch 2)
-    expect(thin).toHaveLength(74);
+    // 74 (batch 2) → 63: Wave B batch 3 covers eleven thin cells with verified
+    // taught claims — sales ×5 (After-sales, CX, Retail, Stakeholder and the
+    // contract/vendor leg via the verified Alison courses + STARWEAVER dup),
+    // events ×3 by outcomes-verified attaches (post-event evaluation,
+    // marketing/publicizing, admin details), purch Best-value (the sourcing
+    // course's supplier-evaluation leg), pay's pay-out cell (the ADP payroll
+    // cycle) and ccqa Customer-management (the per-role stakeholder dup).
+    // Every remaining thin cell is listed in the batch commit body.
+    expect(thin).toHaveLength(63);
     // thin cells never get papered over: no pick flag, no invented row
     const thinPick = RESOURCES.filter((r) => r.pick && r.url === undefined);
     expect(thinPick).toEqual([]);
-    expect(RESOURCES.filter((r) => r.skillsAddressed.length === 0)).toHaveLength(71); // 72 → 71 (the mkt TOP centricity row claims the customer-orientation cell)
+    // empty-ADDR catalog-only rows grow by the two misfit cuts (71 → 73)
+    expect(RESOURCES.filter((r) => r.skillsAddressed.length === 0)).toHaveLength(73);
     // spot pins: the honest holes include these recorded ones
     expect(thin).toContain("sysadmin::IT Asset Management"); // gap-row only
     expect(thin).toContain("execsec::Supervision & training of clerical staff");
@@ -1035,7 +1041,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
     return a.id.localeCompare(b.id);
   };
 
-  it("217 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
+  it("228 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
     const winnersBySkill = new Map<string, string>(); // career::skill → row id
     const winnerRows = new Set<string>();
     for (const c of CAREERS) {
@@ -1052,7 +1058,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
       }
     }
     const flags = RESOURCES.filter((r) => r.pick).map((r) => r.id);
-    expect(flags).toHaveLength(217); // 208 → 209 (qa::ASE) → … → 217 (Wave B batch 2 fallback-winner churn across the audited careers; recalc'd, see the row edits)
+    expect(flags).toHaveLength(228); // 217 (batch 2) → 228 (Wave B batch 3: 14 new taught winners flagged, 4 stale flags dropped — the IBM/Trailhead landings, the §6.1-cut CFI row and the rutgers specialization landing; recalc'd from the data)
     expect(new Set(flags)).toEqual(winnerRows); // byte-match in BOTH directions
     expect(winnersBySkill.get("swd::Applications Development")).toBe("res-python-basics");
     // the canon money-shot stays flagged-adjacent: the qa fallback winner is a

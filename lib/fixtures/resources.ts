@@ -4282,6 +4282,22 @@ export const RESOURCES: Resource[] = [
   },
   // ── sales (3.4) — LinkedIn Learning entry REMOVED (ruled DROPPED; paid path
   // noted in copy only); study.com citations stripped ──
+  // Wave B audit (2026-11-03, batch 3): access/form per-row from each row's own
+  // fetched-LIVE facts. HubSpot graded taught/account (course title + free-cert
+  // standing re-verified via the HubSpot training hub this pass; SPA grade-page).
+  // Rutgers specialization page graded landing/exam-paid (fail-closed — the
+  // taught courses live behind it; batch-2 specialization-page convention). Five
+  // new taught rows fill the holes the audit found (all fetched LIVE 2026-11-03,
+  // user-ruled contents per the course pages' printed outcomes): Supply Chain
+  // Logistics (delivery leg), STARWEAVER Stakeholder Management (per-role dup of
+  // the verified row), Alison Retail Management (retail-environment outcome), Alison
+  // Customer Experience Design, Alison Customer Service Skills (after-sales leg),
+  // Alison Sales and Negotiation Skills (bargaining leg, scoped). Honest reds KEPT
+  // (searched, no taught page verified): Product Advisory + Product Demonstration,
+  // Order Fulfilment Administration (the paperwork chain), the co-marketing
+  // Design-concept bundle, the Supplier Performance/Buying bundle. Coverage:
+  // 13/17 vetted. Learn lines drafted from the course pages — learn draft, user
+  // review pending.
   {
     id: "res-sales-hubspot-inbound-sales",
     title: "Inbound Sales Certification Course (HubSpot Academy)",
@@ -4293,6 +4309,10 @@ export const RESOURCES: Resource[] = [
     // sales.md §Resources — the spec's resource-table cell maps
     // "Customer Acquisition Management · Sales Closure · Customer Management ·
     // Account Management" to this resource (Account Management enumerated)
+    // audit (2026-11-03, batch 3): HubSpot SPA shell at the URL; title + free-cert
+    // standing verified via HubSpot's sales-training hub ("FREE Certification
+    // Course"; "create a free HubSpot Academy account"). taught/account.
+    // The 5-cell winner (tier-2 creditingBody; id A–Z over the sales-mgmt row).
     url: "https://academy.hubspot.com/courses/inbound-sales",
     durationHours: 3,
     skillsAddressed: [
@@ -4303,6 +4323,21 @@ export const RESOURCES: Resource[] = [
     creditingBody: "HubSpot Academy",
     careerId: "sales",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Customer Acquisition Management":
+        "HubSpot's Inbound Sales method starts at lead hygiene: identifying potential buyers and building outreach strategies per the printed class list — the prospect-and-qualify loop the FSC cell prints.",
+      "Customer Relationship Management + Customer Relationship Management Operations":
+        "The same five classes walk the inbound record side — how buying signals feed a clean pipeline — the interaction-lifecycle management this printed row names.",
+      "Sales Closure":
+        "Use personalized presentations and the closing stages of the Inbound Sales Method — the follow-up-to-contract loop the cell prints.",
+      "Customer Management":
+        "Day-to-day relationship stewardship rides the exploring/advising classes: tailoring the offer to live account needs.",
+      "Account Management":
+        "The Account Management mapped cell rides the exploring stage: reading account signals and keeping the relationship moving after hand-off.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-sales-hubspot-sales-mgmt",
@@ -4311,11 +4346,16 @@ export const RESOURCES: Resource[] = [
     type: "cert",
     cost: "free",
     // process definition and pipeline discipline
+    // audit (2026-11-03, batch 3): HubSpot SPA shell; free-cert standing per the
+    // sales-training hub. taught/account. Catalog fallback only — the
+    // inbound-sales row wins its shared cells on the tier-2 creditingBody.
     url: "https://academy.hubspot.com/courses/sales-manager-training-program",
     durationHours: 3,
     skillsAddressed: ["Customer Acquisition Management", "Sales Closure"],
     creditingBody: "HubSpot Academy",
     careerId: "sales",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-sales-trailhead",
@@ -4325,6 +4365,9 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // hands-on CRM-operations practice modules; some modules need a free
     // Salesforce dev org; badge-driven
+    // audit (2026-11-03, batch 3): trailhead.salesforce.com root = the trail
+    // catalog (title verified LIVE "Trailhead | The fun way to learn") →
+    // landing/account — module pages live behind the catalog.
     url: "https://trailhead.salesforce.com/",
     durationHours: 4,
     skillsAddressed: [
@@ -4332,6 +4375,8 @@ export const RESOURCES: Resource[] = [
        
     ],
     careerId: "sales",
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-sales-wharton-customer-analytics",
@@ -4340,11 +4385,21 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // evidence-based buyer-behavior reading; audit free, certificate paid
+    // audit (2026-11-03, batch 3): fetched LIVE "Enroll for free" — descriptive/
+    // predictive/prescriptive analytics over buying data. taught/exam-paid
+    // (audit route; certificate is the ₱ tier).
     url: "https://www.coursera.org/learn/wharton-customer-analytics",
     durationHours: 12,
     skillsAddressed: ["Customer Behavior Analysis"],
     careerId: "sales",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Customer Behavior Analysis":
+        "Wharton's customer-analytics course runs descriptive, predictive and prescriptive analytics over real buying data — the tools-and-approaches reading of buyer signals the FSC cell prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-sales-top-customer-centricity",
@@ -4353,12 +4408,24 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-walled (TOP account free)
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (login-wall
+    // verified LIVE this pass; title + description verified via the TOP search
+    // mirror — "customer segmentation... rapport-building... handling concerns
+    // with professionalism... CRM tools... POS devices"). taught. The ESC-bundle
+    // winner (id A–Z over interpersonal/self-presentation).
     url: "https://e-tesda.gov.ph/course/view.php?id=5043",
     durationHours: 2,
     skillsAddressed: ["Communication · Collaboration · Customer Orientation · Global Perspective · Problem Solving (Enabling)"],
     creditingBody: "TESDA",
     careerId: "sales",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Communication · Collaboration · Customer Orientation · Global Perspective · Problem Solving (Enabling)":
+        "The Job-Ready customer-centricity module drills rapport-building, serving diverse customer types and handling concerns with professionalism — the client-facing behavior bundle as printed.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-sales-rutgers-scm",
@@ -4367,11 +4434,40 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // the delivery half of sales — order flow, logistics coordination
+    // audit (2026-11-03, batch 3): specialization page = program landing →
+    // landing/exam-paid (fail-closed; the taught courses live behind it — the
+    // per-role Supply Chain Logistics row below is the taught winner).
     url: "https://www.coursera.org/specializations/supply-chain-management",
     durationHours: 30,
     skillsAddressed: ["Order Fulfilment Administration", "Sales Delivery + Delivery Management"],
     careerId: "sales",
     pick: true,
+    form: "landing",
+    access: "exam-paid",
+  },
+  {
+    id: "res-sales-rutgers-logistics",
+    title: "Supply Chain Logistics (Rutgers)",
+    provider: "Coursera (Rutgers)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE (Wave B batch 3 fill, user-ruled): the taught course page of
+    // the same rutgers specialization ("Enroll for free", 4 modules —
+    // transportation, warehousing and inventory, logistics networks — "deliver
+    // top customer service"). The order-delivery leg of the sales loop. ₱ paid
+    // tier: certificate.
+    url: "https://www.coursera.org/learn/supply-chain-logistics",
+    durationHours: 10,
+    skillsAddressed: ["Sales Delivery + Delivery Management"],
+    careerId: "sales",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Sales Delivery + Delivery Management":
+        "Rutgers' logistics course runs the delivery half of a won deal: choosing transport modes, reading tracking statements, and designing a logistics network that delivers on customer service.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-sales-top-interpersonal",
@@ -4380,11 +4476,16 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-walled (TOP account free)
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (login-wall
+    // standing this pass; title verified via the TOP search mirror — the same
+    // Job-Ready Interpersonal module batch 2 graded for mkt). taught/account.
     url: "https://e-tesda.gov.ph/course/view.php?id=5040",
     durationHours: 2,
     skillsAddressed: ["Communication · Collaboration · Customer Orientation · Global Perspective · Problem Solving (Enabling)"],
     creditingBody: "TESDA",
     careerId: "sales",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-sales-top-self-presentation",
@@ -4393,11 +4494,128 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // client-facing presence for on-site visits; login-walled (TOP account free)
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (login-wall
+    // standing this pass; id 5038 resolves via the TOP search mirror). taught/account.
     url: "https://e-tesda.gov.ph/course/view.php?id=5038",
     durationHours: 2,
     skillsAddressed: ["Communication · Collaboration · Customer Orientation · Global Perspective · Problem Solving (Enabling)"],
     creditingBody: "TESDA",
     careerId: "sales",
+    form: "taught",
+    access: "account",
+  },
+  {
+    id: "res-sales-starweaver-stakeholder",
+    title: "Stakeholder Management (STARWEAVER)",
+    provider: "Coursera (STARWEAVER)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 3 fill, user-ruled): per-role dup of
+    // the verified Stakeholder Management row ("Enroll now" + financial aid;
+    // 21-lesson module — identification, mapping, RACI, collaboration, conflict
+    // management, change support). The multi-party coordination the cell prints.
+    url: "https://www.coursera.org/learn/stakeholder-management",
+    durationHours: 5,
+    skillsAddressed: ["Stakeholder Management"],
+    careerId: "sales",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Stakeholder Management":
+        "STARWEAVER's stakeholder course teaches identification, mapping and structured collaboration — plus managing people through change — the multi-party coordination across the selling team.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-sales-alison-retail-merch",
+    title: "Retail Management: Merchandising, Sales and Customer Communications",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 3 fill, user-ruled): the printed
+    // outcomes include "ways to create an ideal retail environment" — the
+    // retail-context selling seat. Study free; CPD certificate optional.
+    url: "https://alison.com/course/retail-management-merchandising-sales-and-customer-communications",
+    durationHours: 2,
+    skillsAddressed: ["Retail Space Utilization"],
+    careerId: "sales",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Retail Space Utilization":
+        "Alison's retail-management module teaches merchandising and how to create an ideal retail environment — the store-based selling seat's craft.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-sales-alison-cx",
+    title: "Customer Experience Design",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 3 fill, user-ruled): journey maps,
+    // touchpoints and consistency across digital/physical channels — the
+    // experience-quality FSC. Study free; CPD certificate optional.
+    url: "https://alison.com/course/customer-experience-design",
+    durationHours: 2,
+    skillsAddressed: ["Customer Experience Management"],
+    careerId: "sales",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Customer Experience Management":
+        "The CX-design course teaches journey mapping and touchpoint optimization across digital and physical channels — the experience quality the secondary FSC prints.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-sales-alison-cs-skills",
+    title: "Customer Service Skills",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 3 fill, user-ruled): complaints
+    // handling, focus on customer needs, telephone/workplace etiquette — the
+    // after-sale health of the account. Study free; CPD certificate optional.
+    url: "https://alison.com/course/customer-service-skills",
+    durationHours: 2,
+    skillsAddressed: ["After-sales Service"],
+    careerId: "sales",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "After-sales Service":
+        "The customer-service-skills course drills complaint resolution and staying focused on customer needs after the transaction — keeping the account healthy post-sale.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-sales-alison-negotiation",
+    title: "Sales and Negotiation Skills",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 3 fill, user-ruled): the printed
+    // outcomes read "negotiating on behalf of someone else", phases of
+    // negotiation, bargaining and closing a sale — the price/contract side of
+    // the selling loop. The paperwork chain itself has no taught page (the gap
+    // row below). Study free; CPD certificate optional.
+    url: "https://alison.com/course/sales-and-negotiations-skills",
+    durationHours: 2,
+    skillsAddressed: ["Contract and Vendor Management"],
+    careerId: "sales",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Contract and Vendor Management":
+        "The negotiation module teaches preparation, information exchange, bargaining and closing — the price-and-terms side of partner paperwork; the administration leg stays an honest gap (see the thin row).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-sales-gap-negotiation",
@@ -4430,6 +4648,20 @@ export const RESOURCES: Resource[] = [
     careerId: "sales",
   },
   // ── csr (3.5) ──
+  // Wave B audit (2026-11-03, batch 3): access/form per-row. The Coursera
+  // Customer Service Fundamentals page verified LIVE ("Enroll now" — SLAs,
+  // ticketing systems, ServiceNow/CRM tools module) grades taught/exam-paid and
+  // picks up the Technology-and-Systems attach (its ticketing/CRM module). The
+  // audit route COMMENT drafted honestly: Coursera audit + paid certificate
+  // (course page carries the audit/financial-aid structure per the FAQ). TOP
+  // modules graded account (login-wall verified LIVE; titles via the TOP search
+  // mirror). BBC/British-Council/Microsoft-Learn/Trailhead roots graded landing
+  // (fail-closed — indexes, not taught pages; the British Council CLI fetch
+  // failed this session as before, recorded honestly). RA 10173 statute text =
+  // reference. Honest reds KEPT: Compliance with Legal Regulations (the statute
+  // anchors it; no PH taught data-privacy course verified) and the wide printed
+  // FSC-list block (no single taught page claims six printed FSCs).
+  // Coverage: 8/10 vetted.
   {
     id: "res-csr-csf-coursera",
     title: "Customer Service Fundamentals (Coursera Knowledge Accelerators)",
@@ -4438,14 +4670,36 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // lesson list on-page: SLAs, service standards, call flow standards,
     // ticketing systems, CRM tools — the corporate service loop in course form
+    // audit (2026-11-03, batch 3): fetched LIVE ("Enroll now"; Keith Gibson /
+    // Knowledge Accelerators; 6 modules — rapport/tone, personality traits,
+    // scientific-method problem solving, SLAs, ticketing systems + ServiceNow/
+    // ITSM tools, KCS). taught/exam-paid (Coursera audit route, cert paid).
+    // The service-loop winner; the ticketing/CRM module picks up the
+    // Technology-and-Systems attach.
     url: "https://www.coursera.org/learn/customer-service-fundamentals",
     durationHours: 4,
     skillsAddressed: [
       "Perform customer service delivery processes", "Customer Service Delivery",
       "Customer Relationship Management", "Demonstrate ability to effectively engage customers",
+      "Technology and Systems Application",
     ],
     careerId: "csr",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Perform customer service delivery processes":
+        "The SLA/service-standards/call-flow modules run inbound handling exactly to enterprise procedure — the delivery-process craft the TESDA unit prints.",
+      "Customer Service Delivery":
+        "Structured methods for resolving customer issues on time, per the course's resolution module.",
+      "Customer Relationship Management":
+        "The ticketing/CRM module teaches logging interactions and managing the ticket queue — the accurate CRM logging the flagged row names.",
+      "Demonstrate ability to effectively engage customers":
+        "Rapport, tone and empathy modules coach sensing and acknowledging customer feelings inside the call — the TESDA engagement unit.",
+      "Technology and Systems Application":
+        "ServiceNow/ITSM practice in module 5 — CRM, telephony and case tools fluency as the PSF cell prints; the hands-on dialer leg stays a gap (see the thin row).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-csr-top-customer-centricity",
@@ -4454,12 +4708,26 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-walled (TOP account free)
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (login-wall
+    // verified LIVE this pass; title + syllabus verified via the TOP search
+    // mirror — "customer segmentation... rapport-building... handling concerns
+    // with professionalism... CRM tools... POS"). taught/account. Wins
+    // Customer-Handling and the Enabling bundle on the tier-2 creditingBody + id.
     url: "https://e-tesda.gov.ph/course/view.php?id=5043",
     durationHours: 2,
     skillsAddressed: ["Customer Handling and Care", "Collaboration · Communication · Customer Orientation · Digital Fluency · Problem Solving · Global Perspective (Enabling, Basic/Intermediate)"],
     creditingBody: "TESDA",
     careerId: "csr",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Customer Handling and Care":
+        "The Job-Ready customer-centricity module drills rapport-building and handling customer concerns with professionalism — the empathy/de-escalation seat inside the call.",
+      "Collaboration · Communication · Customer Orientation · Digital Fluency · Problem Solving · Global Perspective (Enabling, Basic/Intermediate)":
+        "Serving diverse customer types with a customer-focused mindset carries the printed service-behavior stages.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-csr-british-council",
@@ -4470,10 +4738,15 @@ export const RESOURCES: Resource[] = [
     // fetched successfully via the tool (fee resources structure incl.
     // A1–C1 listening/grammar); direct curl failed this session — recorded
     // honestly; optional clean browser verify before print copy
+    // audit (2026-11-03, batch 3): CLI connection failed again this session
+    // (as before, recorded; site standing verified in earlier rounds).
+    // Root index → landing (the lesson sections live behind it).
     url: "https://learnenglish.britishcouncil.org/",
     durationHours: 2,
     skillsAddressed: ["Communicate effectively in English for customer service"],
     careerId: "csr",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-csr-bbc-learning-english",
@@ -4482,11 +4755,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // daily-free English practice; data-friendly pages; no account
+    // audit (2026-11-03, batch 3): fetched LIVE (title verified) — root
+    // homepage index → landing; the lesson series live behind it.
     url: "https://www.bbc.co.uk/learningenglish",
     durationHours: 2,
     skillsAddressed: ["Communicate effectively in English for customer service"],
     careerId: "csr",
     pick: true,
+    form: "landing",
   },
   {
     id: "res-csr-top-english-business",
@@ -4495,11 +4771,23 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-walled (TOP account free)
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (login-wall
+    // standing; title + syllabus verified via the TOP search mirror —
+    // "practical English skills for business... effective communication for
+    // presenting ideas"). taught/account — the English-cell winner (tier-2
+    // creditingBody over the landing-grade English indexes).
     url: "https://e-tesda.gov.ph/course/view.php?id=2801",
     durationHours: 3,
     skillsAddressed: ["Communicate effectively in English for customer service"],
     creditingBody: "TESDA",
     careerId: "csr",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Communicate effectively in English for customer service":
+        "TESDA's business-English module develops practical English for presenting ideas and engaging stakeholders — hold the customer transactions the CCS unit prints in English.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-csr-trailhead",
@@ -4507,11 +4795,14 @@ export const RESOURCES: Resource[] = [
     provider: "Salesforce",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): trailhead root = the trail catalog
+    // (title verified LIVE) → landing/account; module pages live behind it.
     url: "https://trailhead.salesforce.com/",
     durationHours: 4,
     skillsAddressed: ["Customer Relationship Management", "Technology and Systems Application"],
     careerId: "csr",
-    pick: true,
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-csr-ra10173",
@@ -4521,11 +4812,16 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // PSF-CCB invokes RA 10173; privacy.gov.ph 403 this session — lawphil
     // carries the working statute text
+    // audit (2026-11-03, batch 3): statute text = reference (fetched LIVE,
+    // title verified). Honest red: no taught PH data-privacy course verified
+    // this pass — the compliance cell stays adviser-owned.
     url: "https://lawphil.net/statutes/repacts/ra2012/ra_10173_2012.html",
     durationHours: 2,
     skillsAddressed: ["Compliance with Legal Regulations"],
     careerId: "csr",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-csr-ms-learn",
@@ -4533,10 +4829,13 @@ export const RESOURCES: Resource[] = [
     provider: "Microsoft Learn",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 3): training-catalog hub = landing (fetched LIVE,
+    // title verified); course pages live behind the catalog.
     url: "https://learn.microsoft.com/en-us/training/",
     durationHours: 4,
     skillsAddressed: [],
     careerId: "csr",
+    form: "landing",
   },
   {
     id: "res-csr-top-interpersonal",
@@ -4545,11 +4844,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-walled (TOP account free)
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (login-wall
+    // standing; id 5040 resolves via the TOP search mirror). taught/account.
     url: "https://e-tesda.gov.ph/course/view.php?id=5040",
     durationHours: 2,
     skillsAddressed: ["Collaboration · Communication · Customer Orientation · Digital Fluency · Problem Solving · Global Perspective (Enabling, Basic/Intermediate)"],
     creditingBody: "TESDA",
     careerId: "csr",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-csr-top-writing",
@@ -4558,11 +4861,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-walled (TOP account free); end-of-call email/follow-up writing
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 5037
+    // resolves via the TOP search mirror). taught/account.
     url: "https://e-tesda.gov.ph/course/view.php?id=5037",
     durationHours: 2,
     skillsAddressed: ["Collaboration · Communication · Customer Orientation · Digital Fluency · Problem Solving · Global Perspective (Enabling, Basic/Intermediate)"],
     creditingBody: "TESDA",
     careerId: "csr",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-csr-gap-dialer",
@@ -4585,6 +4892,21 @@ export const RESOURCES: Resource[] = [
     careerId: "csr",
   },
   // ── opsanalyst (3.6) ──
+  // Wave B audit (2026-11-03, batch 3): access/form per-row. The IBM
+  // Enterprise Design Thinking page RE-POINTED to the canonical
+  // /training/enterprise-design-thinking — fetched LIVE: the program home now
+  // announces the Practitioner course moved to IBM SkillsBuild (Co-Creator/
+  // Team Essentials temporarily unavailable) → the page itself reads program
+  // marketing → landing (fail-closed; its three carried O*NET cells go back to
+  // honest red except where a verified taught claim exists). Wharton customer
+  // analytics graded taught/exam-paid (fetched LIVE "Enroll for free"). Alison
+  // LSS White Belt arrives as a per-role dup (fetched LIVE; DMAIC/waste/
+  // improvement cycles) for the process-study-scoping leg. The findings-memo
+  // leg re-homes on the TOP writing module (workplace documents attach; the
+  // §6.1 pin keeps GCF from carrying it). Honest reds KEPT (searched, no taught
+  // page verified): On-site observation
+  // & interviewing (the SkillsBuild move left no open taught page) and the four
+  // no-claim O*NET/PSOC tasks. Coverage: 5/10 vetted.
   {
     id: "res-ops-wharton-customer-analytics",
     title: "Customer Analytics (Wharton)",
@@ -4592,10 +4914,23 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // structured analysis of business data; audit free, certificate paid
+    // audit (2026-11-03, batch 3): fetched LIVE "Enroll for free" — 5 modules
+    // (descriptive/predictive/prescriptive analytics over buying data).
+    // taught/exam-paid. The vetted analyst-pool row (IBM's taught flow moved
+    // behind SkillsBuild; see that row).
     url: "https://www.coursera.org/learn/wharton-customer-analytics",
     durationHours: 12,
     skillsAddressed: ["Data analysis & solution framing", "Information gathering & organizing"],
     careerId: "opsanalyst",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Data analysis & solution framing":
+        "Wharton's analytics ladder — descriptive, predictive then prescriptive — frames data into options, not verdicts: exactly the solution-framing craft the row prints.",
+      "Information gathering & organizing":
+        "The descriptive-analytics module teaches survey design and systematic data collection — gathering and structuring the evidence.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-ops-ibm-design-thinking",
@@ -4604,7 +4939,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // observation-to-recommendation discipline taught as a repeatable method
-    url: "https://www.ibm.com/design/thinking",
+    // audit + re-point (2026-11-03, batch 3): old /design/thinking URL 301s →
+    // the canonical /training/enterprise-design-thinking (fetched LIVE): the
+    // program is "evolving" — the Practitioner course moved into IBM
+    // SkillsBuild and Co-Creator/Team Essentials are "temporarily unavailable".
+    // The page now reads program marketing → landing (fail-closed; the taught
+    // flow needs a SkillsBuild account this pass). Its three carried cells stay
+    // honestly red except the verified re-homes.
+    url: "https://www.ibm.com/training/enterprise-design-thinking",
     durationHours: 6,
     skillsAddressed: [
       "Process study planning (scoping the study of work problems)",
@@ -4616,6 +4958,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "opsanalyst",
     pick: true,
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-ops-gcf-excel",
@@ -4624,10 +4968,16 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // data pulls, workbooks, charts for findings memos
+    // audit (2026-11-03, batch 3): same verified lesson-series standing as the
+    // hra/training GCF rows — URL 308→308→200 onto LearnFree's "Excel:
+    // Foundations" series page (GCF content re-hosted, title verified); the
+    // hands-on lesson series → taught/direct. Catalog fallback only.
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: [],
     careerId: "opsanalyst",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-ops-ms-learn",
@@ -4636,10 +4986,13 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // documentation/diagrams tooling practice
+    // note (2026-11-03, batch 3): training-catalog hub → landing (title verified
+    // LIVE); ADDR empty per §6.1.
     url: "https://learn.microsoft.com/en-us/training/",
     durationHours: 4,
     skillsAddressed: [],
     careerId: "opsanalyst",
+    form: "landing",
   },
   {
     id: "res-ops-top-bizops",
@@ -4648,11 +5001,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // PH-built business-operations administration; login-walled (TOP account free)
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (batch-2 title
+    // verification stands: "Managing Business Operation"). Catalog fallback only.
     url: "https://e-tesda.gov.ph/course/view.php?id=4810",
     durationHours: 3,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "opsanalyst",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-ops-top-writing",
@@ -4660,12 +5017,51 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 5037
+    // resolves via the TOP search mirror). taught/account. The ESC winner
+    // (tier-2 creditingBody); picks up the findings-memo attach (workplace
+    // documents — §6.1 keeps GCF from carrying it).
     url: "https://e-tesda.gov.ph/course/view.php?id=5037",
     durationHours: 2,
-    skillsAddressed: ["Communication · Critical Thinking · Teamwork (Enabling)"],
+    skillsAddressed: [
+      "Communication · Critical Thinking · Teamwork (Enabling)",
+      "Findings documentation & recommendation write-ups",
+    ],
     creditingBody: "TESDA",
     careerId: "opsanalyst",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Communication · Critical Thinking · Teamwork (Enabling)":
+        "The Job-Ready writing module drills workplace documents written to be acted on — the cross-functional behavior the enabling row names.",
+      "Findings documentation & recommendation write-ups":
+        "The writing module drills workplace reports and memos — the putting-findings-on-paper leg of the task; SOP design itself has no taught page yet.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-ops-alison-lss",
+    title: "Lean Six Sigma: White Belt",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 3 fill, user-ruled): per-role dup
+    // of the ccqa-verified LSS row (waste classification, DMAIC, improvement
+    // cycles). Carries the process-study scoping leg (IBM's taught flow moved
+    // behind SkillsBuild). Study free; certificate optional.
+    url: "https://alison.com/course/lean-six-sigma-white-belt",
+    durationHours: 3,
+    skillsAddressed: ["Process study planning (scoping the study of work problems)"],
+    careerId: "opsanalyst",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Process study planning (scoping the study of work problems)":
+        "The White Belt module teaches scoping an improvement effort — waste classification and the DMAIC Define step is scope-the-problem-first work.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-ops-lhtl",
@@ -4677,6 +5073,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: [],
     careerId: "opsanalyst",
+    // catalog-only (ADDR empty per §6.1; ungraded).
   },
   {
     id: "res-ops-gap-process-mapping",
@@ -4699,6 +5096,23 @@ export const RESOURCES: Resource[] = [
     careerId: "opsanalyst",
   },
   // ── purch (3.7) — RA 9184 caveat + portal start-here ruling carried ──
+  // Wave B audit (2026-11-03, batch 3): access/form per-row. Rutgers
+  // specialization page graded landing/exam-paid (fail-closed); the two taught
+  // courses of that same specialization arrive as per-role rows (both fetched
+  // LIVE "Enroll for free" this pass): Supply Chain Sourcing (procurement,
+  // supplier selection/segmentation, procure-to-pay systems — carries the
+  // PO/requisition, supplier-evaluation and best-value legs) and Supply Chain
+  // Logistics (tracking statements, warehousing/inventory — records/shipments).
+  // GPPB's IRR page RE-POINTED to its canonical URL (301 verified; title
+  // "IRR of RA 9184 | GPPB-TSO"); PhilGEPS RE-POINTED to the canonical bare
+  // domain (301 verified). IRR + RA 9184 caveat = reference (readable law
+  // text, no teaching flow). PhilGEPS = the labeled start-here portal →
+  // landing. TOP modules graded account. Honest reds KEPT (searched, no
+  // taught page verified): Price-proposal analysis (the sourcing course prints
+  // no price-analysis module — a reviewer's note says contracts/negotiation
+  // are outside it), Legal & policy compliance (RA 9184 text is reference;
+  // CIPS paid), Contract performance monitoring, Product specification
+  // writing, Market watching. Coverage: 5/10 vetted.
   {
     id: "res-purch-rutgers-scm",
     title: "Supply Chain Management Specialization (Rutgers)",
@@ -4706,11 +5120,69 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // SCM fundamentals incl. sourcing/procurement/logistics
+    // audit (2026-11-03, batch 3): specialization page = program landing →
+    // landing/exam-paid (fail-closed; the taught course rows below are the
+    // winners).
     url: "https://www.coursera.org/specializations/supply-chain-management",
     durationHours: 30,
     skillsAddressed: ["Purchase order issuance & requisition review", "Records & shipment monitoring", "Supplier research & evaluation"],
     careerId: "purch",
+    form: "landing",
+    access: "exam-paid",
+  },
+  {
+    id: "res-purch-rutgers-sourcing",
+    title: "Supply Chain Sourcing (Rutgers)",
+    provider: "Coursera (Rutgers)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 3 fill, user-ruled): the taught
+    // course page of the sourcing side of the same specialization ("Enroll for
+    // free", 4 modules — purchasing/procurement/supply management, make-vs-buy,
+    // supplier selection & segmentation, sourcing best practices + procure-to-
+    // pay systems, supplier-evaluation assessment). ₱ paid tier: certificate.
+    url: "https://www.coursera.org/learn/sourcing",
+    durationHours: 12,
+    skillsAddressed: [
+      "Purchase order issuance & requisition review",
+      "Supplier research & evaluation",
+      "Best-value purchasing (quality/price/amount)",
+    ],
+    careerId: "purch",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Purchase order issuance & requisition review":
+        "The purchasing/procurement module runs the act of purchasing — requisition-in→PO-out — and the procure-to-pay-systems module covers automating that essential flow; issuance practice itself rides the PhilGEPS context (reference/landing rows).",
+      "Supplier research & evaluation":
+        "Supplier selection and segmentation plus the built supplier-evaluation assessment — the capability-set evaluation the row prints.",
+      "Best-value purchasing (quality/price/amount)":
+        "The supplier-evaluation module weighs quality against price and relationship across single/multiple sourcing — the best-value judgment at course granularity.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-purch-rutgers-logistics",
+    title: "Supply Chain Logistics (Rutgers)",
+    provider: "Coursera (Rutgers)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 3 fill, user-ruled): the taught
+    // course page ("Enroll for free", 4 modules — transport modes and tracking
+    // statements, warehousing, inventory). The shipment-monitoring leg.
+    url: "https://www.coursera.org/learn/supply-chain-logistics",
+    durationHours: 10,
+    skillsAddressed: ["Records & shipment monitoring"],
+    careerId: "purch",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Records & shipment monitoring":
+        "Recognizing transport modes from tracking statements plus warehousing and when-to-order inventory — the purchase-records/delivery-monitoring loop; the ERP leg stays thin (see the gap row).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-purch-gcf-excel",
@@ -4719,10 +5191,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // bid comparison matrices and price analysis
+    // audit (2026-11-03, batch 3): same verified LearnFree lesson-series
+    // standing as the ops row (URL redirects onto the Excel Foundations
+    // series page, title verified). taught/direct. Catalog fallback only.
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: [],
     careerId: "purch",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-purch-ra9184-irr",
@@ -4733,11 +5210,16 @@ export const RESOURCES: Resource[] = [
     // RA 9184 caveat renders wherever this resource does (ruled
     // fixture-ready, 2026-10-29): "governs public procurement;
     // private-sector practice borrows its discipline."
-    url: "https://www.gppb.gov.ph/laws/RA-9184/",
+    // audit + re-point (2026-11-03, batch 3): old /laws/RA-9184/ path 301s →
+    // the canonical IRR page (fetched LIVE, title "IRR of RA 9184 | GPPB-TSO").
+    // Readable law text, no teaching flow → reference.
+    url: "https://www.gppb.gov.ph/ra-9184-and-2016-revised-irr/",
     durationHours: 3,
     skillsAddressed: ["Legal & policy compliance (procurement rules)"],
     careerId: "purch",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-purch-philgeps",
@@ -4746,11 +5228,16 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // portal-as-start-here ruling 2026-10-29
-    url: "https://www.philgeps.gov.ph/",
+    // audit + re-point (2026-11-03, batch 3): 301 → canonical bare domain
+    // philgeps.gov.ph (fetched LIVE, title "PS-PhilGEPS"). The labeled
+    // start-here portal → landing (keep-with-flag).
+    url: "https://philgeps.gov.ph/",
     durationHours: 1,
     skillsAddressed: ["Supplier research & evaluation", "Market watching (supply/demand, price trends)"],
     careerId: "purch",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-purch-ms-learn",
@@ -4758,10 +5245,13 @@ export const RESOURCES: Resource[] = [
     provider: "Microsoft Learn",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 3): training-catalog hub → landing (title
+    // verified LIVE); ADDR empty per §6.1.
     url: "https://learn.microsoft.com/en-us/training/",
     durationHours: 4,
     skillsAddressed: [],
     careerId: "purch",
+    form: "landing",
   },
   {
     id: "res-purch-wharton-customer-analytics",
@@ -4770,10 +5260,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // data-driven decision method (cross-supply version of buying analytics)
+    // audit (2026-11-03, batch 3): same verified Enroll-for-free standing as
+    // the other customer-analytics rows. Catalog fallback only (ADDR empty
+    // per §6.1).
     url: "https://www.coursera.org/learn/wharton-customer-analytics",
     durationHours: 12,
     skillsAddressed: [],
     careerId: "purch",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-purch-top-professionalism",
@@ -4782,12 +5277,23 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // vendor-conduct module; login-walled (TOP account free)
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (login-wall
+    // standing; title + syllabus verified via the TOP search mirror —
+    // "change management, goal setting, quality standards, ethics, diversity
+    // and gender equality, legal compliance"). taught/account. The ESC winner.
     url: "https://e-tesda.gov.ph/course/view.php?id=5042",
     durationHours: 2,
     skillsAddressed: ["Communication · Critical Thinking · Ethics/Professionalism (Enabling)"],
     creditingBody: "TESDA",
     careerId: "purch",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Communication · Critical Thinking · Ethics/Professionalism (Enabling)":
+        "The Job-Ready professionalism module runs quality standards, ethics and error management — the vendor-relationship conduct the bundle names.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-purch-top-writing",
@@ -4796,11 +5302,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // PO/requisition/spec write-ups; login-walled (TOP account free)
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 5037
+    // resolves via the TOP search mirror). taught/account.
     url: "https://e-tesda.gov.ph/course/view.php?id=5037",
     durationHours: 2,
     skillsAddressed: ["Communication · Critical Thinking · Ethics/Professionalism (Enabling)"],
     creditingBody: "TESDA",
     careerId: "purch",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-purch-gap-negotiation",
@@ -4833,6 +5343,17 @@ export const RESOURCES: Resource[] = [
     careerId: "purch",
   },
   // ── ccqa (3.8) ──
+  // Wave B audit (2026-11-03, batch 3): access/form per-row. Alison LSS White
+  // Belt graded taught/account (fetched LIVE — Lean principles, waste, DMAIC,
+  // sustaining improvements); Wharton customer analytics graded
+  // taught/exam-paid (fetched LIVE "Enroll for free"); GCF Excel = the verified
+  // lesson series → taught/direct. TOP writing graded account (search mirror).
+  // The calibration gap row HONEST for the rubric-design/calibration craft
+  // (no taught page verified). Honest reds KEPT (searched, no taught page
+  // verified): Document Control, Analytical Method Validation, and the
+  // Change/Coaching/Risk bundle — the STARWEAVER stakeholder dup covers only
+  // its change/conflict legs, so it does NOT paper the five-FSC bundle.
+  // Coverage: 7/11 vetted.
   {
     id: "res-ccqa-lss-white-belt",
     title: "Lean Six Sigma: White Belt",
@@ -4841,11 +5362,24 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // quality-methodology foundation (defect thinking, waste, improvement
     // cycles); study free, certificate purchase optional
+    // audit (2026-11-03, batch 3): fetched LIVE (outcomes: Lean Six Sigma
+    // principles, roles in improvement, waste classification, DMAIC, sustaining
+    // improvements). taught/account. The improvement-loop winner (the
+    // calibration gap row below can never win).
     url: "https://alison.com/course/lean-six-sigma-white-belt",
     durationHours: 3,
     skillsAddressed: ["Continuous Improvement", "Systems Thinking"],
     careerId: "ccqa",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Continuous Improvement":
+        "The White Belt module runs the improvement loop — roles, waste classification, DMAIC and the steps that sustain follow-up after the audit finding.",
+      "Systems Thinking":
+        "Reading waste and defects as system-wide patterns (value delivery vs. process health) — the quality-issue-as-system read the flagged row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-ccqa-wharton-customer-analytics",
@@ -4854,11 +5388,22 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // customer-behavior/metrics analysis at university depth
+    // audit (2026-11-03, batch 3): fetched LIVE "Enroll for free" — the
+    // descriptive/predictive/prescriptive ladder. taught/exam-paid.
     url: "https://www.coursera.org/learn/wharton-customer-analytics",
     durationHours: 12,
     skillsAddressed: ["Data Analytics", "Data Visualization", "Customer Behavior Analysis"],
     careerId: "ccqa",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Data Analytics":
+        "Wharton's course teaches the descriptive→predictive→prescriptive ladder over customer data — the uncovers-trends layer of the BI-tools FSC.",
+      "Customer Behavior Analysis":
+        "The dedicated course on customer data (NPS, survey design, predictive models) reads customer behaviors at university depth.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-ccqa-gcf-excel",
@@ -4867,11 +5412,22 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // charts, dashboards and audit trackers
+    // audit (2026-11-03, batch 3): verified LearnFree lesson-series standing
+    // (URL redirects onto the Excel Foundations series page, title verified).
+    // taught/direct — the Data-Visualization winner (id A–Z over Wharton's
+    // shared claim; the dashboard/charts leg rides the series' chart lessons).
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: ["Data Visualization"],
     careerId: "ccqa",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Data Visualization":
+        "The Excel Foundations series teaches building charts from scored data — the KPI-graph leg of the QA dashboard; BI dashboards proper stay with the analytics course in the pool.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-ccqa-top-writing",
@@ -4879,12 +5435,22 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 5037
+    // resolves via the TOP search mirror). taught/account. The report-writing
+    // winner (only claim).
     url: "https://e-tesda.gov.ph/course/view.php?id=5037",
     durationHours: 2,
     skillsAddressed: ["Technical Report Writing"],
     creditingBody: "TESDA",
     careerId: "ccqa",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Technical Report Writing":
+        "The Job-Ready writing module drills memos and reports written to be acted on — the QA reports and coaching-feedback write-ups the cell prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-ccqa-ms-learn",
@@ -4893,10 +5459,13 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // document-systems fluency (share, version, retrieve)
+    // audit (2026-11-03, batch 3): training-catalog hub → landing (title
+    // verified LIVE); ADDR empty per §6.1.
     url: "https://learn.microsoft.com/en-us/training/",
     durationHours: 4,
     skillsAddressed: [],
     careerId: "ccqa",
+    form: "landing",
   },
   {
     id: "res-ccqa-top-customer-centricity",
@@ -4904,11 +5473,16 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (login-wall
+    // verified LIVE this pass; title verified via the TOP search mirror).
+    // Catalog fallback only (ADDR empty).
     url: "https://e-tesda.gov.ph/course/view.php?id=5043",
     durationHours: 2,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "ccqa",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-ccqa-top-bizops",
@@ -4916,11 +5490,15 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (batch-2 title
+    // verification stands). Catalog fallback only (ADDR empty).
     url: "https://e-tesda.gov.ph/course/view.php?id=4810",
     durationHours: 3,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "ccqa",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-ccqa-ibm-design-thinking",
@@ -4929,10 +5507,39 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // structured feedback and stakeholder-loop practice
-    url: "https://www.ibm.com/design/thinking",
+    // audit + re-point (2026-11-03, batch 3): canonical
+    // /training/enterprise-design-thinking page (fetched LIVE) now reads
+    // program marketing with the course flow moved into IBM SkillsBuild →
+    // landing (fail-closed). ADDR empty per §6.1.
+    url: "https://www.ibm.com/training/enterprise-design-thinking",
     durationHours: 6,
     skillsAddressed: [],
     careerId: "ccqa",
+    form: "landing",
+    access: "account",
+  },
+  {
+    id: "res-ccqa-starweaver-stakeholder",
+    title: "Stakeholder Management (STARWEAVER)",
+    provider: "Coursera (STARWEAVER)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 3 fill, user-ruled): per-role dup
+    // of the verified stakeholder row. Carries the customer/stakeholder-side
+    // coordination of the quality program. "Enroll now" + financial aid →
+    // exam-paid.
+    url: "https://www.coursera.org/learn/stakeholder-management",
+    durationHours: 5,
+    skillsAddressed: ["Customer Management"],
+    careerId: "ccqa",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Customer Management":
+        "The stakeholder course teaches structured collaboration, conflict management and relationship building — the stakeholder-side coordination the flagged paraphrase prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-ccqa-gap-calibration",
@@ -4945,6 +5552,21 @@ export const RESOURCES: Resource[] = [
     careerId: "ccqa",
   },
   // ── events (3.9) — permit PH-note rides the row; gaps declared ──
+  // Wave B audit (2026-11-03, batch 3): access/form per-row. All three Alison
+  // course pages graded taught/account — fetched LIVE with the printed outcome
+  // lists as the evidence: Corporate Event Planning Essentials (concept +
+  // budget management, venue factors, vendor/contract evaluation, on-site
+  // coordination, risk/contingency, post-event evaluation incl. budget-variance
+  // analysis), the Diploma (event promotion stages → the marketing attach) and
+  // Fundamentals (now retitled "Basics of Events Management" on the page —
+  // recorded, not silent). Google Project Management prof-cert graded
+  // landing/exam-paid (Google prof-cert convention; the alison-corporate row
+  // wins the shared cell anyway). MPI root + TOP rows graded landing/account
+  // fail-closed. ATTACHES (outcomes-verified): post-event evaluation +
+  // administrative details ride alison-corporate; marketing/publicizing rides
+  // the Diploma. Honest red KEPT: Bills review & payment approval (the
+  // variance-analysis leg is monitoring, not bill approval; no taught page
+  // verified). Coverage: 12/13 vetted.
   {
     id: "res-events-alison-corporate",
     title: "Corporate Event Planning Essentials",
@@ -4953,16 +5575,45 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // corporate-events orientation matching the catalog variant; study free,
     // certificate optional
+    // audit (2026-11-03, batch 3): fetched LIVE (outcomes above; the course
+    // page prints them verbatim). taught/account — the 8-cell winner (id A–Z
+    // over the diploma/fundamentals rows; also over the landing-grade Google
+    // row). Picks up two outcomes-verified attaches (post-event evaluation,
+    // administrative details).
     url: "https://alison.com/course/corporate-event-planning-essentials",
     durationHours: 3,
     skillsAddressed: [
       "Client objectives & requirements determination", "Event services coordination",
       "Provider evaluation & selection; contract negotiation", "Facility inspection & conformity",
-      "Program, agenda, budget & services planning", "Participant registration",
+      "Program, agenda, budget & services planning",
       "Event-records keeping (incl. financials)", "Event monitoring, compliance & problem resolution",
+      "Post-event evaluation", "Administrative details & inquiries",
     ],
     careerId: "events",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Client objectives & requirements determination":
+        "The course's printed first step is event-concept development aligned to the planner's responsibilities and expectations — consulting the client on objectives per the O*NET row.",
+      "Event services coordination":
+        "On-site event management and coordinating operations — the accommodation/equipment chain in course form.",
+      "Provider evaluation & selection; contract negotiation":
+        "The printed outcome reads 'evaluate the effectiveness of managing vendor relationships, contracts, and logistics' — supplier-side evaluation and negotiation craft.",
+      "Facility inspection & conformity":
+        "The venue module lists the critical factors to consider when selecting an event venue — the inspect-against-requirements sweep.",
+      "Program, agenda, budget & services planning":
+        "Comprehensive budget management and program planning per the printed second outcome — plan/budget/monitor with sponsors.",
+      "Event-records keeping (incl. financials)":
+        "Budget management and the event's financial trail — records of event aspects including financials per the O*NET row.",
+      "Event monitoring, compliance & problem resolution":
+        "The printed risk outcome — risk identification and contingency planning inside the corporate event-planning process.",
+      "Post-event evaluation":
+        "The printed outcome is literal — 'analyse the methods of event evaluation, including budget variance analysis and comprehensive event reports'.",
+      "Administrative details & inquiries":
+        "Budget/vendor/on-site coordination plus the event report covers the financial-admin and promo-dissemination admin legs; inquiry-handling itself has no dedicated lesson.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-events-alison-diploma",
@@ -4972,10 +5623,22 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // full events-management arc incl. vendor, budgeting and on-the-day
     // coordination (10–15 h per its own page); CPD-accredited certificate optional
+    // audit (2026-11-03, batch 3): fetched LIVE (outcomes: events types, venue
+    // resources, event-space/parking management, safety policies, promotion
+    // stages). taught/account. Picks up the marketing attach (the printed
+    // "different stages of event promotion" outcome).
     url: "https://alison.com/course/diploma-in-events-management",
     durationHours: 12,
-    skillsAddressed: ["Program, agenda, budget & services planning", "Event services coordination"],
+    skillsAddressed: ["Program, agenda, budget & services planning", "Event services coordination", "Marketing & publicizing support"],
     careerId: "events",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Marketing & publicizing support":
+        "The printed outcome 'outline the different stages of event promotion' — promoting the event and structuring its media push.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-events-alison-fundamentals",
@@ -4983,10 +5646,22 @@ export const RESOURCES: Resource[] = [
     provider: "Alison",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): fetched LIVE — the page now prints the
+    // course as "Basics of Events Management" (rename recorded, not silent).
+    // Outcomes: planning process, organizing, staff delegation, post-event
+    // activities, vendor/marketing/catering handling. taught/account.
     url: "https://alison.com/course/fundamentals-of-events-management",
     durationHours: 3,
     skillsAddressed: ["Participant registration", "Event services coordination"],
     careerId: "events",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Participant registration":
+        "The printed 'describe how to organise an event' outcome carries the registration logistics leg; a dedicated registration-systems lesson has no taught page yet (see the software gap row).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-events-google-pm",
@@ -4996,10 +5671,14 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // vendor coordination, scheduling, budget tracking and stakeholder comms;
     // audit free, verified certificate paid (financial aid available)
+    // audit (2026-11-03, batch 3): Google prof-cert page 200 → program landing
+    // (batch-2 convention); the taught courses live behind it.
     url: "https://www.coursera.org/professional-certificates/google-project-management",
     durationHours: 100,
     skillsAddressed: ["Provider evaluation & selection; contract negotiation"],
     careerId: "events",
+    form: "landing",
+    access: "exam-paid",
   },
   {
     id: "res-events-gcf-excel",
@@ -5008,10 +5687,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // registration lists, RSVP trackers, budget ledgers
+    // audit (2026-11-03, batch 3): verified LearnFree lesson-series standing
+    // (URL redirects onto the Excel Foundations series page, title verified).
+    // taught/direct. Catalog fallback only.
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: ["Event-records keeping (incl. financials)"],
     careerId: "events",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-events-mpi",
@@ -5022,10 +5706,14 @@ export const RESOURCES: Resource[] = [
     // the global meeting-professional body — industry standards, education
     // vocab; SPA title honestly recorded (empty <title> via curl; page
     // strings verified ×7 — re-verify visually before deep-linking in UI)
+    // audit (2026-11-03, batch 3): fetched LIVE again (title still empty via
+    // CLI, as recorded; SPA site) → landing (association resource index).
     url: "https://www.mpi.org/",
     durationHours: 2,
     skillsAddressed: [],
     careerId: "events",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-events-top-customer-centricity",
@@ -5033,11 +5721,16 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (login-wall
+    // verified LIVE; title verified via the TOP search mirror).
+    // Catalog fallback only (ADDR empty).
     url: "https://e-tesda.gov.ph/course/view.php?id=5043",
     durationHours: 2,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "events",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-events-top-writing",
@@ -5045,11 +5738,15 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 5037
+    // resolves via the TOP search mirror). taught/account.
     url: "https://e-tesda.gov.ph/course/view.php?id=5037",
     durationHours: 2,
     skillsAddressed: ["Communication · Professionalism · Teamwork (Enabling)"],
     creditingBody: "TESDA",
     careerId: "events",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-events-top-self-presentation",
@@ -5057,12 +5754,22 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 5038
+    // resolves via the TOP search mirror). taught/account. The Enabling
+    // winner (id A–Z over the writing module).
     url: "https://e-tesda.gov.ph/course/view.php?id=5038",
     durationHours: 2,
     skillsAddressed: ["Communication · Professionalism · Teamwork (Enabling)"],
     creditingBody: "TESDA",
     careerId: "events",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Communication · Professionalism · Teamwork (Enabling)":
+        "The Job-Ready self-presentation module drills presenting well and teamwork with vendors and venue staff — the client/hotel coordination behavior.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-events-gap-ph-permits",
@@ -5402,22 +6109,45 @@ export const RESOURCES: Resource[] = [
     access: "account",
   },
   // ── acctclerk (4.2) — source-verbatim row names per V-acctclerk-3 ──
+  // Wave B audit (2026-11-03, batch 3): access/form per-row, the taught
+  // accounting rows carried from the book batch's verified claims (fresh URL
+  // fetch per role this pass): ACCA-X pages RE-POINTED to edX's current
+  // canonical paths (the old /course/... slugs 301 → /learn/bookkeeping|accounting/...;
+  // titles verified "ACCA: Introduction to Bookkeeping") → taught/exam-paid;
+  // TOP Bookkeeping NC III modules graded account (login-wall standing;
+  // "Journalizing Transactions" title + description verified via the TOP
+  // search mirror this pass); GCF Excel = the verified LearnFree lesson series
+  // → taught/direct; Intuit basics graded taught/exam-paid (fetched LIVE
+  // "Enroll for free", 8 modules from collect-and-journalize to statements);
+  // CFI Basic Excel formulas graded taught/direct (open step-by-step lesson,
+  // fetched LIVE); OpenStax financial book grades taught/direct (standing
+  // OpenStax textbook verification — structured text + exercises open access);
+  // DOLE handbook + RA 10173 = reference (fetched LIVE: PDF 200 via NWPC
+  // mirror; statute title verified). Honest red KEPT: Government forms &
+  // compliance paperwork (the two reference anchors are the honest state;
+  // BIR eFPS deep pages remain dead-in-copy per the portal ruling).
+  // Coverage: 9/10 vetted.
   {
     id: "res-acct-gcf-excel",
     title: "Excel (topic hub) — GCFGlobal",
     provider: "GCFGlobal",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): verified LearnFree lesson-series standing
+    // (URL redirects onto the Excel Foundations series page, title verified);
+    // the hands-on series → taught/direct.
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: [
       "Check figures, postings, and documents for correct entry, mathematical accuracy, and proper codes",
       "Operate computers programmed with accounting software",
       "Reconcile or note and report discrepancies found in records",
-      
+       
     ],
     careerId: "acctclerk",
     pick: true,
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-acct-intuit-basics",
@@ -5425,6 +6155,11 @@ export const RESOURCES: Resource[] = [
     provider: "Coursera (Intuit)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): fetched LIVE "Enroll for free" (Intuit
+    // Academy Team; 8 modules — collect-and-analyze, record and post, trial
+    // balances, the four statements; "Tools you'll learn: Accounting
+    // Software"). taught/exam-paid. The PSOC-envelope winner (id A–Z over
+    // openstax).
     url: "https://www.coursera.org/learn/bookkeeping-basics",
     durationHours: 10,
     skillsAddressed: [
@@ -5433,6 +6168,13 @@ export const RESOURCES: Resource[] = [
       "PSOC 4311 record-keeping envelope",
     ],
     careerId: "acctclerk",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "PSOC 4311 record-keeping envelope":
+        "Intuit's basics course walks the whole compute/record/verify envelope — the six-step accounting cycle from journal to the four statements.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-acct-acca-intro",
@@ -5441,7 +6183,12 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // double-entry + banking-system accuracy + reconciliation practice
-    url: "https://www.edx.org/course/introduction-to-bookkeeping-2",
+    // audit + re-point (2026-11-03, batch 3): the old /course/introduction-to-
+    // bookkeeping-2 slug 301s → the current canonical path (fetched LIVE, title
+    // "ACCA: Introduction to Bookkeeping"). taught/exam-paid (ACCA-X free to
+    // study; certificate paid). The checking/record/reconcile/cash winner
+    // (tier-2 creditingBody).
+    url: "https://www.edx.org/learn/bookkeeping/acca-introduction-to-bookkeeping",
     durationHours: 30,
     skillsAddressed: [
       "Check figures, postings, and documents for correct entry, mathematical accuracy, and proper codes",
@@ -5452,6 +6199,19 @@ export const RESOURCES: Resource[] = [
     creditingBody: "ACCA-X",
     careerId: "acctclerk",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Check figures, postings, and documents for correct entry, mathematical accuracy, and proper codes":
+        "ACCA's accredited intro drills double-entry against source documents — figures, postings and codes checked before anything journals.",
+      "Classify, record, and summarize numerical and financial data to compile and keep financial records, using journals and ledgers or computers":
+        "The journals-and-ledgers core of the course — classifying business transactions into record systems, taught to ACCA standards.",
+      "Reconcile or note and report discrepancies found in records":
+        "The banking-system and control modules reconcile records and surface discrepancies — month-end readiness as the O*NET row prints.",
+      "Receive, record, and bank cash, checks, and vouchers (petty cash / collections recording)":
+        "Cash, cheque and voucher recording is taught inside ACCA's banking chapter — the petty-cash/collections accounting leg.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-acct-acca-intermediate",
@@ -5459,12 +6219,23 @@ export const RESOURCES: Resource[] = [
     provider: "ACCA-X (edX)",
     type: "course",
     cost: "free",
-    url: "https://www.edx.org/course/intermediate-bookkeeping-2",
+    // audit + re-point (2026-11-03, batch 3): old /course/intermediate-...
+    // slug 301s → the current canonical path (fetched LIVE, title "ACCA:
+    // Intermediate Bookkeeping"). taught/exam-paid. The statements/bills
+    // winner (only claim).
+    url: "https://www.edx.org/learn/bookkeeping/acca-intermediate-bookkeeping",
     durationHours: 30,
     skillsAddressed: ["Prepare and issue account statements / bills / invoices"],
     creditingBody: "ACCA-X",
     careerId: "acctclerk",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Prepare and issue account statements / bills / invoices":
+        "ACCA's intermediate level teaches control accounts and the statement/invoice cycle the AP-AR seat runs.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-acct-cfi-basic-excel",
@@ -5473,11 +6244,22 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // free formula reference aligned to finance work; English-only
+    // audit (2026-11-03, batch 3): fetched LIVE — the full step-by-step lesson
+    // is open at the URL (operators, cell references, the 7 formula walkthroughs).
+    // taught/direct. The spreadsheet-side winner for the accounting-software
+    // cell (QuickBooks craft rides the Intuit row below).
     url: "https://corporatefinanceinstitute.com/resources/excel/basic-excel-formulas-beginners/",
     durationHours: 2,
     skillsAddressed: ["Operate computers programmed with accounting software"],
     careerId: "acctclerk",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Operate computers programmed with accounting software":
+        "CFI's beginner formulas lesson drills the spreadsheet workhorse — SUM/AVERAGE/IF operators and cell reference discipline — the compute-accurate-records leg; QuickBooks itself rides the Intuit row.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-acct-openstax-financial",
@@ -5485,6 +6267,9 @@ export const RESOURCES: Resource[] = [
     provider: "OpenStax (free textbook)",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 3): standing OpenStax textbook verification
+    // (batch-1 fixture note: structured text + exercises, open access; URL
+    // 200 this pass, SPA shell). taught/direct. Catalog fallback only.
     url: "https://openstax.org/details/books/principles-financial-accounting",
     durationHours: 6,
     skillsAddressed: [
@@ -5493,6 +6278,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "acctclerk",
     pick: true,
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-acct-top-journalizing",
@@ -5500,6 +6287,10 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "NC",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (login-wall
+    // verified LIVE this pass; title + syllabus verified via the TOP search
+    // mirror — "logging/recording business transactions in an accounting
+    // journal"). taught/account. The journalize/post winner (entry path counts).
     url: "https://e-tesda.gov.ph/course/view.php?id=3982",
     durationHours: 4,
     skillsAddressed: [
@@ -5510,6 +6301,15 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "acctclerk",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Journalize/post transactions (bookkeeping cycle)":
+        "The official NC III module: logging business transactions in the accounting journal with best-practice procedures — close-cycle support on the bookkeeping loop.",
+      "Classify, record, and summarize numerical and financial data to compile and keep financial records, using journals and ledgers or computers":
+        "Journalizing IS the classify-and-record loop for the clerk seat — source documents sorted into journal entries per TESDA's NC III unit.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-acct-top-posting",
@@ -5517,6 +6317,9 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "NC",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (title resolved
+    // via the TOP search mirror; the book-batch "module pages redirect to the
+    // TOP login" verdict stands). Catalog fallback only.
     url: "https://e-tesda.gov.ph/course/view.php?id=3983",
     durationHours: 4,
     skillsAddressed: [
@@ -5526,6 +6329,8 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "acctclerk",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-acct-dole-handbook",
@@ -5536,10 +6341,14 @@ export const RESOURCES: Resource[] = [
     // official free government handbook; NOT FOR SALE; bwc.dole.gov.ph home
     // 403 this session — the NWPC mirror is the official agency copy
     // (re-verify BWC URL when DOLE is reachable)
+    // audit (2026-11-03, batch 3): PDF fetched reachable (200, 1.4 MB). A
+    // readable computation handbook → reference (no teaching flow).
     url: "https://nwpc.dole.gov.ph/wp-content/uploads/2024/11/Workers-Statutory-Monetary-Benefits-Handbook-2024-Edition.pdf",
     durationHours: 3,
     skillsAddressed: ["Government forms & compliance paperwork"],
     careerId: "acctclerk",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-acct-ra10173",
@@ -5548,11 +6357,15 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // privacy.gov.ph 403 this session — cite the official register when reachable
+    // audit (2026-11-03, batch 3): statute text = reference (fetched LIVE,
+    // title verified).
     url: "https://lawphil.net/statutes/repacts/ra2012/ra_10173_2012.html",
     durationHours: 2,
     skillsAddressed: ["Government forms & compliance paperwork"],
     careerId: "acctclerk",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-acct-top-workplace-comms",
@@ -5560,11 +6373,15 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 56 resolves
+    // via the TOP search mirror). Catalog fallback only.
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
     skillsAddressed: ["Communication · Professionalism · Critical Thinking (Enabling)"],
     creditingBody: "TESDA",
     careerId: "acctclerk",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-acct-top-receiving-comms",
@@ -5572,14 +6389,37 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 52 resolves
+    // via the TOP search mirror). taught/account. The Enabling winner (id A–Z).
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
     skillsAddressed: ["Communication · Professionalism · Critical Thinking (Enabling)"],
     creditingBody: "TESDA",
     careerId: "acctclerk",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Communication · Professionalism · Critical Thinking (Enabling)":
+        "TESDA's workplace-communication module: receive, respond, relay — the original-document discipline's daily practice.",
+    },
+    // learn draft — user review pending
   },
   // ── pay (4.3) — portals = labeled start-here placeholders (ruling) ──
+  // Wave B audit (2026-11-03, batch 3): access/form per-row. ADP's taught
+  // "The Payroll Cycle" course arrives as the per-role fill (fetched LIVE
+  // "Enroll for free" — step-by-step cycle: collect/validate, calculate pay,
+  // manage deductions, process and report; timekeeping, employee-leave types,
+  // year-end, audits & reconciliation, payroll-data security) — the payroll-loop
+  // craft; the US withholding context is scoped honestly in-row while the PH
+  // statutory tables ride the DOLE handbook + portals. Portals graded landing
+  // (Pag-IBIG sits behind a reCAPTCHA interstitial this pass — recorded); DOLE
+  // handbook + RA 10173 = reference. GCF Excel graded taught/direct
+  // (LearnFree standing). TOP modules graded account. Honest red KEPT:
+  // Prepare and file payroll tax returns / statutory paperwork (an
+  // authoritative taught PH withholding/return-filing walkthrough remains
+  // unverified; BIR eFPS deep pages stay dead-in-copy per the portal ruling).
+  // Coverage: 8/9 vetted.
   {
     id: "res-pay-dole-handbook",
     title: "Workers' Statutory Monetary Benefits Handbook 2024 (DOLE-BWC, official NWPC mirror)",
@@ -5588,6 +6428,9 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // official free handbook covering holiday/premium/NSD/13th-month
     // computation; check for a newer edition each year
+    // audit (2026-11-03, batch 3): PDF reachable again (200 via NWPC mirror,
+    // 1.4 MB). Readable computation handbook → reference (fail-closed;
+    // no teaching flow).
     url: "https://nwpc.dole.gov.ph/wp-content/uploads/2024/11/Workers-Statutory-Monetary-Benefits-Handbook-2024-Edition.pdf",
     durationHours: 3,
     skillsAddressed: [
@@ -5597,6 +6440,53 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "pay",
     pick: true,
+    form: "reference",
+    access: "direct",
+  },
+  {
+    id: "res-pay-adp-payroll-cycle",
+    title: "The Payroll Cycle (ADP Entry-Level Payroll Specialist)",
+    provider: "Coursera (ADP Learning Academy)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 3 fill, user-ruled): ADP's taught
+    // payroll-cycle course ("Enroll for free", 3 modules — the step-by-step
+    // cycle from collecting/validating employee data through calculating pay,
+    // managing deductions, processing payroll and reporting; timekeeping,
+    // employee-leave types, year-end, audits & reconciliation, payroll-data
+    // security). The loop mechanics in taught form; the US withholding context
+    // is scoped honestly — the PH statutory tables ride the DOLE handbook in
+    // the same pool. ₱ paid tier: certificate.
+    url: "https://www.coursera.org/learn/adp-the-payroll-cycle",
+    durationHours: 12,
+    skillsAddressed: [
+      "Verify attendance, hours worked, and pay adjustments, and post information onto designated records",
+      "Compute wages and deductions, and enter data into computers",
+      "Prepare and balance period-end reports, and reconcile issued payrolls to bank statements",
+      "Process and issue employee paychecks and statements of earnings and deductions",
+      "Keep leave records",
+      "Records hygiene & confidentiality (RA 10173 context)",
+    ],
+    creditingBody: "ADP Learning Academy",
+    careerId: "pay",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Verify attendance, hours worked, and pay adjustments, and post information onto designated records":
+        "The timekeeping module records/manages employee work minutes and the cycle teaches validating data before posting — the source-of-truth loop (PSOC e verbatim).",
+      "Compute wages and deductions, and enter data into computers":
+        "The step-by-step cycle runs calculate-pay and manage-deductions with data entry — the gross→net loop; the PH premium tables legitimately ride the DOLE handbook (same pool).",
+      "Prepare and balance period-end reports, and reconcile issued payrolls to bank statements":
+        "The dedicated audits-and-reconciliation module plus common payroll reports — the period-end/bank match.",
+      "Process and issue employee paychecks and statements of earnings and deductions":
+        "Getting-Paid plus the finalization phase walks pay-out and earnings/deductions statement issuance.",
+      "Keep leave records":
+        "The employee-leave-types module and the design-a-bonus-policy project cover leave tracking (SL/VL and statutory leave context).",
+      "Records hygiene & confidentiality (RA 10173 context)":
+        "The payroll-data-security lesson teaches the PII discipline the RA 10173 context row asks for.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-pay-sss",
@@ -5606,10 +6496,14 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // keep-with-flag ruling 2026-10-29: portals stand only as labeled
     // start-here placeholders; deep-link when reachable
+    // audit (2026-11-03, batch 3): fetched LIVE (title verified) → landing
+    // (the labeled start-here placeholder).
     url: "https://www.sss.gov.ph/",
     durationHours: 1,
     skillsAddressed: ["Compute wages and deductions, and enter data into computers"],
     careerId: "pay",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-pay-philhealth",
@@ -5617,10 +6511,13 @@ export const RESOURCES: Resource[] = [
     provider: "PhilHealth (PH regulator)",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 3): fetched LIVE (title verified) → landing.
     url: "https://www.philhealth.gov.ph/",
     durationHours: 1,
     skillsAddressed: ["Compute wages and deductions, and enter data into computers"],
     careerId: "pay",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-pay-pagibig",
@@ -5628,11 +6525,16 @@ export const RESOURCES: Resource[] = [
     provider: "Home Development Mutual Fund (PH regulator)",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 3): fetched LIVE — the site serves a reCAPTCHA
+    // interstitial to scripted fetches this pass (recorded, not silent);
+    // portal placeholder standing → landing (keep-with-flag).
     url: "https://www.pagibigfund.gov.ph/",
     durationHours: 1,
     skillsAddressed: ["Compute wages and deductions, and enter data into computers"],
     careerId: "pay",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-pay-gcf-excel",
@@ -5640,6 +6542,9 @@ export const RESOURCES: Resource[] = [
     provider: "GCFGlobal",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): verified LearnFree lesson-series standing
+    // (URL redirects onto the Excel Foundations series page, title verified).
+    // taught/direct. Catalog fallback only.
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: [
@@ -5649,6 +6554,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "pay",
     pick: true,
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-pay-acca-intro",
@@ -5657,11 +6564,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // covers "payroll and ledger accounts"
-    url: "https://www.edx.org/course/introduction-to-bookkeeping-2",
+    // audit + re-point (2026-11-03, batch 3): canonical edX path (301 verified;
+    // title standing). Catalog fallback only (ADDR empty per §6.1).
+    url: "https://www.edx.org/learn/bookkeeping/acca-introduction-to-bookkeeping",
     durationHours: 30,
     skillsAddressed: [],
     creditingBody: "ACCA-X",
     careerId: "pay",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-pay-intuit-basics",
@@ -5669,10 +6580,14 @@ export const RESOURCES: Resource[] = [
     provider: "Coursera (Intuit)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): same verified Enroll-for-free standing as
+    // the acctclerk dup. Catalog fallback only (ADDR empty per §6.1).
     url: "https://www.coursera.org/learn/bookkeeping-basics",
     durationHours: 10,
     skillsAddressed: [],
     careerId: "pay",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-pay-bir",
@@ -5682,11 +6597,15 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // eFPS deep/tutorial pages unreachable (transport error) — dead-in-copy
     // flag stands until a working official eFPS page verifies (V-pay-4)
+    // audit (2026-11-03, batch 3): fetched LIVE (title verified) → landing
+    // (labeled start-here placeholder; eFPS ruling stands).
     url: "https://www.bir.gov.ph/",
     durationHours: 1,
     skillsAddressed: ["Prepare and file payroll tax returns / statutory paperwork"],
     careerId: "pay",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-pay-ra10173",
@@ -5694,6 +6613,8 @@ export const RESOURCES: Resource[] = [
     provider: "Lawphil Project",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 3): statute text = reference (fetched LIVE,
+    // title verified).
     url: "https://lawphil.net/statutes/repacts/ra2012/ra_10173_2012.html",
     durationHours: 2,
     skillsAddressed: [
@@ -5702,6 +6623,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "pay",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-pay-top-receiving-comms",
@@ -5709,12 +6632,22 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 52 resolves
+    // via the TOP search mirror). taught/account. The employee-facing-service
+    // winner (id A–Z over the participated module).
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
     skillsAddressed: ["Provide information to employees and managers on payroll matters, tax issues, benefit plans, and collective agreement provisions"],
     creditingBody: "TESDA",
     careerId: "pay",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Provide information to employees and managers on payroll matters, tax issues, benefit plans, and collective agreement provisions":
+        "Receiving/answering workplace communication inquiries is the employee-facing-service craft the row names.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-pay-top-workplace-comms",
@@ -5722,6 +6655,9 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 56 resolves
+    // via the TOP search mirror). taught/account. The Enabling winner (only vetted
+    // claim — the digital-literacy category page grades landing).
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
     skillsAddressed: [
@@ -5731,6 +6667,13 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     careerId: "pay",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Communication · Professionalism (Enabling)":
+        "TESDA's workplace-communication module is the employee-facing behavior layer: participating, responding, relaying.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-pay-top-digital-literacy-cat",
@@ -5739,13 +6682,37 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // category page (200); titles not itemized this pass — flagged
+    // audit (2026-11-03, batch 3): category page → landing (fail-closed;
+    // e-tesda signup standing).
     url: "https://e-tesda.gov.ph/course/index.php?categoryid=1310",
     durationHours: 4,
     skillsAddressed: ["Communication · Professionalism (Enabling)"],
     creditingBody: "TESDA",
     careerId: "pay",
+    form: "landing",
+    access: "account",
   },
   // ── fas (4.4) — [PSF] PSF-GIH primary ──
+  // Wave B audit (2026-11-03, batch 3): access/form per-row. Wharton financial
+  // accounting graded taught/exam-paid (fetched LIVE "Enroll for free" —
+  // balance-sheet/debit-credit weeks, ratio-analysis week 4). ACCA-X rows
+  // RE-POINTED to edX canonical paths (301 verified) → taught/exam-paid. GCF
+  // Excel + OpenStax books graded per the standing family verifications
+  // (taught/direct). CFI's two resource gates graded reference/account
+  // (fetched LIVE: both are gated "Download now" ebook pages; only
+  // Basic-Excel formulas is an open step-by-step lesson → taught/direct). Two
+  // §6.1-class misfit claims CUT: finance-fundamentals no longer claims the
+  // ratio-analysis cell (its printed outcomes are NPV/valuation; the ratio
+  // craft rides OpenStax), and CFI Basic Excel no longer claims the
+  // draw-charts cell (formulas ≠ charts) — both ADDR cuts listed in the
+  // commit body. Two taught fills (fetched LIVE "Enroll for free",
+  // user-ruled): UIUC's Foundations of Strategic Internal Auditing (COSO
+  // control evaluation, evidence, control weaknesses) carries Internal
+  // Controls; University of Cambridge's Finance for Non-finance
+  // Professionals (budgets & proposals, budget-variance reporting, the
+  // Modelling-essentials module) carries Support strategic planning. Honest
+  // red KEPT: Diversity Awareness and Management (no taught claim verified —
+  // batch-2's searched verdict stands for the family). Coverage: 9/10 vetted.
   {
     id: "res-fas-psf-gih-doc",
     title: "Philippine Skills Framework for Global In-House Center (official PDF)",
@@ -5754,10 +6721,14 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // THE official government framework document for this role — students
     // can read the F&A Agent/Associate map itself (printed pp.92–93)
+    // audit (2026-11-03, batch 3): TESDA PDF → reference (standing;
+    // ADDR empty per §6.1).
     url: "https://www.tesda.gov.ph/Uploads/File/Philippine%20Skills%20Framework/ICT/Philippine%20Skills%20Framework%20for%20Global%20In-House%20Center.pdf",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "fas",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-fas-wharton-accounting",
@@ -5767,15 +6738,25 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // V-fas-5: confirm the fetched page reads "Introduction to Financial
     // Accounting" before final citation; enroll-for-free/audit route per family page
+    // audit (2026-11-03, batch 3): fetched LIVE "Enroll for free" — title
+    // prints "Introduction to Financial Accounting" (Bushee; 4 weeks: balance
+    // sheet/debit-credit, accrual, cash flows, ratio analysis). taught/exam-paid.
     url: "https://www.coursera.org/learn/wharton-accounting",
     durationHours: 15,
     skillsAddressed: [
       "Perform financial accounting and corporate reporting activities",
       "Process business transactions and reports using information technology tools",
-      
+       
     ],
     careerId: "fas",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Perform financial accounting and corporate reporting activities":
+        "Bushee's course runs recording-to-closing to the three statements with worked cases — month-end support and double-entry processing as the printed CWF lists.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-fas-gcf-excel",
@@ -5783,6 +6764,10 @@ export const RESOURCES: Resource[] = [
     provider: "GCFGlobal",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): verified LearnFree lesson-series standing
+    // (URL redirects onto the Excel Foundations series page, title verified).
+    // taught/direct — the transaction-processing winner (id A–Z over the
+    // Wharton shared claim; the tooling leg of the IT-systems FSC).
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: [
@@ -5791,6 +6776,15 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "fas",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Process business transactions and reports using information technology tools":
+        "Excel Foundations drills entering, structuring and computing records in workbooks — the tooling leg of the IT-processing FSC; the accounting-system leg rides the Wharton course below.",
+      "Data Collection and Analysis":
+        "Collecting entries into sortable, analyzable sheets is taught hands-on in the series.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-fas-acca-intro",
@@ -5799,11 +6793,16 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // bookkeeping + ledger systems — "input/operate" descriptors
-    url: "https://www.edx.org/course/introduction-to-bookkeeping-2",
+    // audit + re-point (2026-11-03, batch 3): canonical edX path (301 verified,
+    // title standing). taught/exam-paid. The shared Accounting-and-Tax cell's
+    // A–Z tie resolves to the intermediate row (learn line there).
+    url: "https://www.edx.org/learn/bookkeeping/acca-introduction-to-bookkeeping",
     durationHours: 30,
     skillsAddressed: ["Accounting and Tax Systems"],
     creditingBody: "ACCA-X",
     careerId: "fas",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-fas-acca-intermediate",
@@ -5811,12 +6810,22 @@ export const RESOURCES: Resource[] = [
     provider: "ACCA-X (edX)",
     type: "course",
     cost: "free",
-    url: "https://www.edx.org/course/intermediate-bookkeeping-2",
+    // audit + re-point (2026-11-03, batch 3): canonical edX path (301 verified).
+    // taught/exam-paid — the Accounting-and-Tax-Systems winner: the A–Z tie
+    // over the intro row resolves to "intermediate" ("inte" < "intr").
+    url: "https://www.edx.org/learn/bookkeeping/acca-intermediate-bookkeeping",
     durationHours: 30,
     skillsAddressed: ["Accounting and Tax Systems"],
     creditingBody: "ACCA-X",
     careerId: "fas",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Accounting and Tax Systems":
+        "Inputting and operating the ledger systems at ACCA standards — the systems-side FSC taught through ACCA's bookkeeping core.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-fas-cfi-basic-excel",
@@ -5824,11 +6833,21 @@ export const RESOURCES: Resource[] = [
     provider: "Corporate Finance Institute",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 3): fetched LIVE — the open step-by-step
+    // lesson (the ADDR Draw-charts claim CUT per §6.1: formulas teach)
+    // taught/direct. The data-collection winner (id A–Z over GCF).
     url: "https://corporatefinanceinstitute.com/resources/excel/basic-excel-formulas-beginners/",
     durationHours: 2,
     skillsAddressed: ["Data Collection and Analysis"],
     careerId: "fas",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Data Collection and Analysis":
+        "Structured data entry with SUM/AVERAGE/IF operators and reference discipline — collecting into analysis-ready sheets at analyst standards.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-fas-cfi-ratios",
@@ -5837,11 +6856,16 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // straight at the printed ratio verb; English-only
+    // audit (2026-11-03, batch 3): fetched LIVE — the page prints the guide's
+    // contents but the ebook itself rides a gated download → reference (no
+    // open teaching flow at the URL).
     url: "https://corporatefinanceinstitute.com/resources/accounting/financial-ratios-definitive-guide/",
     durationHours: 3,
     skillsAddressed: ["Financial Analysis"],
     careerId: "fas",
     pick: true,
+    form: "reference",
+    access: "account",
   },
   {
     id: "res-fas-openstax-finance",
@@ -5850,10 +6874,21 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // ratio analysis and financial-statement interpretation chapters
+    // audit (2026-11-03, batch 3): standing OpenStax textbook verification
+    // (structured text + exercises, open access; URL 200, SPA shell).
+    // taught/direct — the Financial-Analysis winner after the finance-
+    // fundamentals misfit claim cut (OpenStax genuinely teaches ratios).
     url: "https://openstax.org/details/books/principles-finance",
     durationHours: 6,
     skillsAddressed: ["Financial Analysis"],
     careerId: "fas",
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Financial Analysis":
+        "The financial-statement-analysis chapters teach ratio analysis on statements for insights — the printed L3 verb at entry rung, in a free textbook with exercises.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-fas-finance-fundamentals",
@@ -5862,10 +6897,17 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // free-route starter on financial decision basics
+    // audit (2026-11-03, batch 3): fetched LIVE "Enroll for free" — NPV,
+    // bonds/yield curve, equity valuation, IRR, capital-budgeting-in-practice
+    // readings. taught/exam-paid. The Financial-Analysis claim CUT per §6.1
+    // (the course prints no ratio module; the ratio craft rides the OpenStax
+    // book).
     url: "https://www.coursera.org/learn/finance-fundamentals",
     durationHours: 10,
-    skillsAddressed: ["Financial Analysis"],
+    skillsAddressed: [],
     careerId: "fas",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-fas-openstax-managerial",
@@ -5873,11 +6915,66 @@ export const RESOURCES: Resource[] = [
     provider: "OpenStax (free textbook)",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 3): the book pool's reference verdict stands
+    // (readable chapter context at this URL shape; the same-shape financial
+    // book grades taught by standing). Reference. Honest red for Internal
+    // Controls: the COSO-style control-evaluation craft rides the new UIUC
+    // internal-auditing row.
     url: "https://openstax.org/details/books/principles-managerial-accounting",
     durationHours: 6,
     skillsAddressed: ["Internal Controls"],
     careerId: "fas",
     pick: true,
+    form: "reference",
+    access: "direct",
+  },
+  {
+    id: "res-fas-uiuc-internal-audit",
+    title: "Foundations of Strategic Internal Auditing (U Illinois Gies)",
+    provider: "Coursera (University of Illinois)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 3 fill, user-ruled): "Enroll for
+    // free" — 4 modules; "apply frameworks such as COSO to evaluate
+    // controls", evidence gathering that reveals "control weaknesses", plus
+    // audit reporting. The control-effectiveness craft the Internal-Controls
+    // FSC prints. ₱ paid tier: certificate.
+    url: "https://www.coursera.org/learn/strategic-internal-auditing-foundations",
+    durationHours: 13,
+    skillsAddressed: ["Internal Controls"],
+    careerId: "fas",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Internal Controls":
+        "The COSO framework modules teach evaluating control effectiveness and surfacing control weaknesses — exactly the FSC's evaluate/spot-gaps pair.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-fas-cambridge-finance",
+    title: "Finance for Non-finance Professionals (U Cambridge)",
+    provider: "Coursera (University of Cambridge)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 3 fill, user-ruled): "Enroll
+    // now" + financial aid — 5 modules: budgets & investment proposals
+    // (payback/NPV/IRR), reporting against budgets with variance analysis and
+    // reforecasting, the Modelling-essentials module (model design,
+    // workbook structure, workflow, visualization, commentary). The
+    // budgeting/forecasting-assistance craft the Support-strategic-planning
+    // CWF prints. ₱ paid tier: certificate.
+    url: "https://www.coursera.org/learn/finance-for-non-finance-professionals",
+    durationHours: 31,
+    skillsAddressed: ["Support strategic planning"],
+    careerId: "fas",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Support strategic planning":
+        "The budgets-and-proposals module runs NPV/IRR/payback decision frameworks and the variance-reporting module runs reforecasting — the budgeting/forecasting-assistance leg; the P&L-analysis leg rides the Wharton accounting course.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-fas-top-workplace-comms",
@@ -5887,11 +6984,15 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // diversity thinness is honestly recorded — this is the workplace-conduct
     // foundation the Diversity row leans on
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 56
+    // resolves via the TOP search mirror). Catalog fallback only (ADDR empty).
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "fas",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-fas-top-receiving-comms",
@@ -5899,12 +7000,22 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 52
+    // resolves via the TOP search mirror). taught/account. The Enabling winner
+    // (only vetted claim — the digital-literacy category grades landing).
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
     skillsAddressed: ["Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Sense Making · Transdisciplinary Thinking (Enabling, B/I)"],
     creditingBody: "TESDA",
     careerId: "fas",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Sense Making · Transdisciplinary Thinking (Enabling, B/I)":
+        "TESDA's workplace-communication module: receive, respond, relay — the enabling strip's daily practice at the shared-service seat.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-fas-top-digital-literacy-cat",
@@ -5912,11 +7023,15 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): category page → landing (fail-closed;
+    // e-tesda signup standing).
     url: "https://e-tesda.gov.ph/course/index.php?categoryid=1310",
     durationHours: 4,
     skillsAddressed: ["Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Sense Making · Transdisciplinary Thinking (Enabling, B/I)"],
     creditingBody: "TESDA",
     careerId: "fas",
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-fas-intuit-basics",
@@ -5925,10 +7040,20 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // GL/journal-entry cycle practice (O*NET corroboration block backing)
+    // audit (2026-11-03, batch 3): same verified Enroll-for-free standing as
+    // the acctclerk dup. taught/exam-paid — the O*NET-corroboration winner
+    // (the CFI FP&A ebook grades reference).
     url: "https://www.coursera.org/learn/bookkeeping-basics",
     durationHours: 10,
     skillsAddressed: ["O*NET corroboration block (operating-the-GL-engine tasks)"],
     careerId: "fas",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "O*NET corroboration block (operating-the-GL-engine tasks)":
+        "Intuit's cycle modules — collect, record, post, balance and report — are the operating-the-GL tasks the O*NET block quotes.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-fas-cfi-fpa-guide",
@@ -5937,13 +7062,38 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // free FP&A career primer mapped to the "Support strategic planning" CWF
+    // audit (2026-11-03, batch 3): fetched LIVE — a gated "Download now" ebook
+    // page (contents listed, flow behind the account/download) → reference.
     url: "https://corporatefinanceinstitute.com/resources/fpa/essential-guide-breaking-into-fpa-free-ebook/",
     durationHours: 2,
     skillsAddressed: ["Support strategic planning", "O*NET corroboration block (operating-the-GL-engine tasks)"],
     careerId: "fas",
     pick: true,
+    form: "reference",
+    access: "account",
   },
+  // Fas taught fills note — the rows above (UIUC internal-auditing, Cambridge
+  // finance) carry the Strategic-planning and Internal-Controls cells.
   // ── fin (4.5) ──
+  // Wave B audit (2026-11-03, batch 3): per-row. OpenStax Principles of
+  // Finance grades taught/direct (standing textbook verification; the
+  // valuation/risk/claims it carried were re-checked against the book's
+  // printed chapters). Wharton Finance Fundamentals graded taught/exam-paid
+  // (fetched LIVE "Enroll for free" — NPV, bonds/yield curve, equity
+  // valuation, IRR). MIT 15.401 grades taught/direct (fetched LIVE, title
+  // verified). CFI's three gated ebook pages graded reference/account
+  // (fetched LIVE: Financial Modeling Guidelines + Ratios Guide + FP&A
+  // guide are all "Download now" flows); CFI Basic Excel grades
+  // taught/direct but its Draw-charts claim is CUT per §6.1 (formulas ≠
+  // charts — the claim mischarted the lesson). One §6.1-class ADDR cut,
+  // listed in the commit body. Cambridge's Finance for Non-finance
+  // Professionals (fetched LIVE "Enroll now"; its Modelling-essentials
+  // module teaches model design, workbook structure, workflow,
+  // visualization and commentary) is the per-role fill for the finance-
+  // model-design cell. TOP module + Wharton accounting graded per standing.
+  // Honest reds KEPT: Recommend investments and investment timing (no
+  // taught page verified), Supervise/train/mentor (resourceless by
+  // declaration). Coverage: 8/10 vetted.
   {
     id: "res-fin-openstax-finance",
     title: "Principles of Finance (OpenStax)",
@@ -5951,6 +7101,10 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // valuation, risk, markets + capital-budgeting chapters
+    // audit (2026-11-03, batch 3): standing OpenStax textbook verification
+    // (structured text + exercises, open access; URL 200, SPA shell).
+    // taught/direct — the Monitor- and Interpret-data winner (only vetted
+    // claim on both).
     url: "https://openstax.org/details/books/principles-finance",
     durationHours: 6,
     skillsAddressed: [
@@ -5961,6 +7115,15 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "fin",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Monitor economic, industrial, and corporate developments":
+        "The book's markets-and-industry chapters teach reading the economic environment a desk watches — tracking corporate and industrial context.",
+      "Interpret data on price, yield, stability, future investment-risk trends, economic influences":
+        "Bond-pricing and risk-return chapters teach reading price/yield/stability data — the market-data read the desk runs on.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-fin-mit-ocw-finance-theory",
@@ -5969,6 +7132,10 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // full free course materials (valuation foundations); heavier math, self-paced
+    // audit (2026-11-03, batch 3): fetched LIVE (title verified "Finance
+    // Theory I | Sloan School of Management | MIT OpenCourseWare" — lecture
+    // notes/assignments open). taught/direct — the capitalization winner
+    // (id A–Z over openstax).
     url: "https://ocw.mit.edu/courses/15-401-finance-theory-i-fall-2008/",
     durationHours: 40,
     skillsAddressed: [
@@ -5976,6 +7143,13 @@ export const RESOURCES: Resource[] = [
       "Advise clients on aspects of capitalization, such as amounts, sources, or timing",
     ],
     careerId: "fin",
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Advise clients on aspects of capitalization, such as amounts, sources, or timing":
+        "Finance Theory I teaches valuation and capital-budgeting foundations — the capital-budgeting fluency the O*NET row prints (normally senior-received work).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-fin-finance-fundamentals",
@@ -5983,10 +7157,43 @@ export const RESOURCES: Resource[] = [
     provider: "Coursera (University of Pennsylvania)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): fetched LIVE "Enroll for free" — NPV rule,
+    // bonds/yield curve, equity valuation, IRR, investment acceptance/reject
+    // rules. taught/exam-paid — the DCF-story winner (id A–Z over MIT).
     url: "https://www.coursera.org/learn/finance-fundamentals",
     durationHours: 10,
     skillsAddressed: ["Analyze financial information to forecast business, industry, or economic conditions for investment decisions"],
     careerId: "fin",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Analyze financial information to forecast business, industry, or economic conditions for investment decisions":
+        "The NPV framework + investments rules teach the discount-cash-flow story an analyst builds and defends — the base DCF-driven analysis.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-fin-cambridge-finance",
+    title: "Finance for Non-finance Professionals (U Cambridge)",
+    provider: "Coursera (University of Cambridge)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 3 fill, user-ruled): per-role dup
+    // of the verified row. Its Modelling-essentials module teaches model
+    // design — purpose, workbook structure, workflow, visualization and
+    // commentary in Excel — the model-design craft the O*NET financial-model
+    // row prints (both CFI guide rows grade reference).
+    url: "https://www.coursera.org/learn/finance-for-non-finance-professionals",
+    durationHours: 31,
+    skillsAddressed: ["Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions"],
+    careerId: "fin",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions":
+        "The Modelling-essentials module teaches model design — purpose, workbook structure, workflow, visualization and commentary — plus the sensitivity scenario craft.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-fin-cfi-modeling-guide",
@@ -5995,10 +7202,15 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // free model-design standards; global standard, non-PH
+    // audit (2026-11-03, batch 3): fetched LIVE — a gated "Download now"
+    // guide page (contents described on-page, flow behind the account) →
+    // reference.
     url: "https://corporatefinanceinstitute.com/resources/financial-modeling/free-financial-modeling-guide/",
     durationHours: 3,
     skillsAddressed: ["Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions"],
     careerId: "fin",
+    form: "reference",
+    access: "account",
   },
   {
     id: "res-fin-cfi-fpa-guide",
@@ -6006,11 +7218,15 @@ export const RESOURCES: Resource[] = [
     provider: "Corporate Finance Institute",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 3): fetched LIVE — gated "Download now" ebook
+    // page → reference.
     url: "https://corporatefinanceinstitute.com/resources/fpa/essential-guide-breaking-into-fpa-free-ebook/",
     durationHours: 2,
     skillsAddressed: ["Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions"],
     careerId: "fin",
     pick: true,
+    form: "reference",
+    access: "account",
   },
   {
     id: "res-fin-cfi-ratios",
@@ -6018,10 +7234,14 @@ export const RESOURCES: Resource[] = [
     provider: "Corporate Finance Institute",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 3): fetched LIVE — gated ebook-download page →
+    // reference.
     url: "https://corporatefinanceinstitute.com/resources/accounting/financial-ratios-definitive-guide/",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "fin",
+    form: "reference",
+    access: "account",
   },
   {
     id: "res-fin-top-workplace-comms",
@@ -6029,12 +7249,24 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 56
+    // resolves via the TOP search mirror). taught/account. The report/ESC
+    // winner (only vetted claim on both).
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
     skillsAddressed: ["Present oral or written reports on general economic trends, individual corporations, and entire industries", "Communication · Critical Thinking · Professionalism (Enabling)"],
     creditingBody: "TESDA",
     careerId: "fin",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Present oral or written reports on general economic trends, individual corporations, and entire industries":
+        "TESDA's workplace-communication module is the putting-analysis-on-paper/oral leg — reports written to be read and relayed.",
+      "Communication · Critical Thinking · Professionalism (Enabling)":
+        "The same module runs the participation/respond/relay craft — the analyst's communication backbone.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-fin-wharton-more-accounting",
@@ -6043,10 +7275,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // financial-statement analysis module
+    // audit (2026-11-03, batch 3): same Wharton family standing (audit route
+    // → exam-paid). Catalog fallback only (ADDR empty).
     url: "https://www.coursera.org/learn/wharton-financial-accounting",
     durationHours: 14,
     skillsAddressed: [],
     careerId: "fin",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-fin-gcf-excel",
@@ -6054,10 +7290,22 @@ export const RESOURCES: Resource[] = [
     provider: "GCFGlobal",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): verified LearnFree lesson-series standing
+    // (URL redirects onto the Excel Foundations series page, title verified;
+    // the series' chart lessons carry the chart leg). taught/direct — the
+    // chart/cell winner after the CFI misfit claim cut.
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: ["Draw charts and graphs, using computer spreadsheets, to illustrate technical reports"],
     careerId: "fin",
+    pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Draw charts and graphs, using computer spreadsheets, to illustrate technical reports":
+        "The Excel Foundations series teaches building charts and graphs in a workbook — the reporting-visuals leg of the analyst craft (the CFI lesson's formula-only claim was cut).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-fin-cfi-basic-excel",
@@ -6065,11 +7313,15 @@ export const RESOURCES: Resource[] = [
     provider: "Corporate Finance Institute",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 3): fetched LIVE — open step-by-step lesson →
+    // taught/direct. The ADDR Draw-charts claim CUT per §6.1 (the lesson
+    // teaches formulas, not charts; see the commit body).
     url: "https://corporatefinanceinstitute.com/resources/excel/basic-excel-formulas-beginners/",
     durationHours: 2,
-    skillsAddressed: ["Draw charts and graphs, using computer spreadsheets, to illustrate technical reports"],
+    skillsAddressed: [],
     careerId: "fin",
-    pick: true,
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-fin-acca-mgmt",
@@ -6078,11 +7330,16 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // cost/management accounting basics + spreadsheet use
-    url: "https://www.edx.org/course/introduction-to-management-accounting-2",
+    // audit + re-point (2026-11-03, batch 3): old slug 301s → the current
+    // canonical path (fetched LIVE, title "ACCA: Introduction to Management
+    // Accounting"). Catalog fallback only (ADDR empty per §6.1).
+    url: "https://www.edx.org/learn/accounting/acca-introduction-to-management-accounting",
     durationHours: 30,
     skillsAddressed: [],
     creditingBody: "ACCA-X",
     careerId: "fin",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-fin-cfi-careers",
@@ -6091,10 +7348,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // free tour of finance role families; non-PH framing, flagged
+    // audit (2026-11-03, batch 3): fetched LIVE (title "Careers in Finance
+    // Course | CFI") — CFI free course, registry signup → account. Catalog
+    // fallback only (ADDR empty per §6.1).
     url: "https://corporatefinanceinstitute.com/course/careers-in-finance/",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "fin",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-fin-gap-senior-tasks",
@@ -6107,6 +7369,16 @@ export const RESOURCES: Resource[] = [
     careerId: "fin",
   },
   // ── treasury (4.6) — BSP 403 flag carried; Khan US-framing flagged ──
+  // Wave B audit (2026-11-03, batch 3): access/form per-row. Khan units
+  // UNRE-VERIFIED by CLI (the environment's "Client Challenge" bot-wall — same
+  // family verdict as the swd SQL row's prior-round note); the units grade
+  // taught/direct on the standing verification, noted per-row. ACCA-X and
+  // Cambridge graded per the family standings (ACCA re-pointed to the edX
+  // canonical path; Cambridge fetched LIVE "Enroll now"). GCF Excel + OpenStax
+  // + Lawphil graded per standing. Honest reds KEPT: Balance currency/coin/
+  // checks (the statute anchor is reference; no taught cash-count page
+  // verified) and Enter-customers'-transactions (no claim — the teller-side
+  // craft; the teller batch covers the family). Coverage: 4/6 vetted.
   {
     id: "res-treasury-khan-banking",
     title: "Finance and Capital Markets — Banking & Money unit (Khan Academy)",
@@ -6115,10 +7387,16 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // free banking unit; US banking framing — flagged for PH substitution
     // (BSP pages blocked this session; recheck when reachable)
+    // audit (2026-11-03, batch 3): CLI fetch blocked by the environment's
+    // "Client Challenge" bot-wall (same family verdict as the swd Khan row's
+    // prior-round note) — graded taught/direct on the standing unit
+    // verification, recorded honestly. Catalog fallback only (ADDR empty).
     url: "https://www.khanacademy.org/economics-finance-domain/core-finance/banking-and-money",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "treasury",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-treasury-khan-interest",
@@ -6127,11 +7405,16 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // free interest mechanics (US framing flagged)
+    // audit (2026-11-03, batch 3): CLI bot-wall as above; taught/direct on
+    // the standing verification. Catalog fallback only (the A–Z id tie on
+    // the interest cell resolves to the Wharton fundamentals row).
     url: "https://www.khanacademy.org/economics-finance-domain/core-finance/interest-basics",
     durationHours: 2,
     skillsAddressed: ["Prepare financial documents, and calculate interest or brokerage charges and stamp duties payable"],
     careerId: "treasury",
     pick: true,
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-treasury-ra8791",
@@ -6139,6 +7422,10 @@ export const RESOURCES: Resource[] = [
     provider: "Lawphil Project",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 3): statute text = reference (fetched LIVE,
+    // title verified). Honest red for the cash-balance cell: the statute is
+    // the lawful context, not taught craft; no taught cash-count page
+    // verified (adviser-owned pending).
     url: "https://lawphil.net/statutes/repacts/ra2000/ra_8791_2000.html",
     durationHours: 2,
     skillsAddressed: [
@@ -6146,6 +7433,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "treasury",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-treasury-gcf-excel",
@@ -6153,11 +7442,16 @@ export const RESOURCES: Resource[] = [
     provider: "GCFGlobal",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): verified LearnFree lesson-series standing
+    // (URL redirects onto the Excel Foundations series page, title verified).
+    // taught/direct. Catalog fallback only (ACCA wins the reconcile cell).
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: ["Reconcile records of financial transactions"],
     careerId: "treasury",
     pick: true,
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-treasury-acca-intro",
@@ -6165,11 +7459,21 @@ export const RESOURCES: Resource[] = [
     provider: "ACCA-X (edX)",
     type: "course",
     cost: "free",
-    url: "https://www.edx.org/course/introduction-to-bookkeeping-2",
+    // audit + re-point (2026-11-03, batch 3): canonical edX path (301
+    // verified; title standing). taught/exam-paid. The reconcile winner
+    // (tier-2 creditingBody + id A–Z over GCF).
+    url: "https://www.edx.org/learn/bookkeeping/acca-introduction-to-bookkeeping",
     durationHours: 30,
     skillsAddressed: ["Reconcile records of financial transactions"],
     creditingBody: "ACCA-X",
     careerId: "treasury",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Reconcile records of financial transactions":
+        "ACCA's credited intro reconciles records against the banking system and flags discrepancies — the spreadsheet-reconcile discipline the O*NET verb prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-treasury-openstax-finance",
@@ -6178,6 +7482,8 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // bonds/shares mechanics underpinning securities-record upkeep
+    // audit (2026-11-03, batch 3): standing OpenStax textbook verification
+    // (URL 200, SPA shell). taught/direct. Catalog fallback only.
     url: "https://openstax.org/details/books/principles-finance",
     durationHours: 6,
     skillsAddressed: [
@@ -6186,6 +7492,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "treasury",
     pick: true,
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-treasury-finance-fundamentals",
@@ -6193,6 +7501,9 @@ export const RESOURCES: Resource[] = [
     provider: "Coursera (University of Pennsylvania)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): fetched LIVE "Enroll for free" (same
+    // standing as the fin dup). taught/exam-paid. The interest and
+    // securities-records winner (the A–Z id order: f < k < o over the pool).
     url: "https://www.coursera.org/learn/finance-fundamentals",
     durationHours: 10,
     skillsAddressed: [
@@ -6200,6 +7511,15 @@ export const RESOURCES: Resource[] = [
       "Maintain records of bonds, shares and other securities bought or sold on behalf of clients or employer",
     ],
     careerId: "treasury",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Prepare financial documents, and calculate interest or brokerage charges and stamp duties payable":
+        "Module 1 teaches simple vs. compound interest, annuities and effective annual rates — the instrument-charges math the PSOC row prints (the LC/duties paperwork leg itself has no taught page).",
+      "Maintain records of bonds, shares and other securities bought or sold on behalf of clients or employer":
+        "The fixed-income and equity-valuation modules teach what bond/share records represent and how they price — the record-upkeep context; a records-registry lesson itself has no taught page (honest leg-gap).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-treasury-cfi-careers",
@@ -6207,10 +7527,14 @@ export const RESOURCES: Resource[] = [
     provider: "Corporate Finance Institute",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): same verified CFI free-course standing as
+    // the fin dup (registry signup → account). Catalog fallback only.
     url: "https://corporatefinanceinstitute.com/course/careers-in-finance/",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "treasury",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-treasury-top-workplace-comms",
@@ -6218,12 +7542,22 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 3): TOP Moodle module → account (id 56
+    // resolves via the TOP search mirror). taught/account. The only claim —
+    // the Enabling winner.
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
     skillsAddressed: ["Accuracy/Professionalism (Enabling)"],
     creditingBody: "TESDA",
     careerId: "treasury",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Accuracy/Professionalism (Enabling)":
+        "TESDA's workplace-communication module runs precise transfer of information — the zero-surprise cash-desk behavior the enabling row names.",
+    },
+    // learn draft — user review pending
   },
   // ── coll (4.7) — thin collections-training zone declared; RA 3765 never a live link ──
   {
