@@ -143,6 +143,12 @@ create table if not exists public.counselor_requests (
 );
 alter table public.counselor_requests enable row level security;
 
--- Migration note (Google round, 2026-11-03): for an already-applied schema
+-- Migration note (Google round, 2026-11-03): for an already-applied schema,
 -- the create-block above applies verbatim (idempotent) — playwright e2e
--- treats a missing table as skip condition.
+-- treats a missing table as skip condition. If a PRE-strict version of this
+-- table was already applied (any block without the two-sided stamps check),
+-- re-create the invariant explicitly:
+--   alter table public.counselor_requests drop constraint if exists counselor_requests_check;
+--   alter table public.counselor_requests add constraint counselor_requests_check
+--     check ((status = 'pending' and decided_at is null and decided_by is null)
+--            or (status in ('approved', 'rejected') and decided_at is not null and decided_by is not null));
