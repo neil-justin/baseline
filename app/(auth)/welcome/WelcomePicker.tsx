@@ -15,9 +15,9 @@ import { useState } from "react";
  */
 type State = "fresh" | "pending" | "rejected";
 
-export default function WelcomePicker({ initial }: { initial: State }) {
+export default function WelcomePicker({ initial, initialNote }: { initial: State; initialNote?: string }) {
   const [state, setState] = useState<State>(initial);
-  const [note, setNote] = useState("");
+  const [note, setNote] = useState(initialNote ?? "");
   const [acting, setActing] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
@@ -30,7 +30,7 @@ export default function WelcomePicker({ initial }: { initial: State }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role, note: role === "counselor" ? note : undefined }),
       });
-      const data = (await res.json().catch(() => null)) as { dest?: string; error?: string; status?: string } | null;
+      const data = (await res.json().catch(() => null)) as { dest?: string; error?: string } | null;
       if (!res.ok) {
         if (data?.error === "note_required") setErr("A line about who you advise is required.");
         else if (data?.error === "not_signed_in") setState("fresh"); // session expired mid-decision — honest fresh render, next click re-authenticates

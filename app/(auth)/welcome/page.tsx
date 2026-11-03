@@ -53,7 +53,7 @@ export default async function WelcomePage() {
             <h1>Welcome, {user.fullName}.</h1>
           </div>
 
-          <WelcomePicker initial={initial} />
+          <WelcomePicker initial={initial} initialNote={request?.note ?? ""} />
         </div>
       </main>
     </div>
