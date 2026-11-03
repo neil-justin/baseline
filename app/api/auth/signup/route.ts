@@ -62,7 +62,7 @@ export async function POST(req: Request) {
     }
     const user = created.user;
 
-    const studentId = await provisionStudent({
+    await provisionStudent({
       userId: user.id,
       email,
       fullName: name,

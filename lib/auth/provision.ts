@@ -14,7 +14,7 @@ import { newStudentState } from "@/lib/session";
  */
 
 export async function nextStudentId(email: string): Promise<string> {
-  const base = email.split("@")[0].replace(/[^a-z0-9-]/g, "") || "student";
+  const base = (email.split("@")[0].replace(/[^a-z0-9-]/g, "") || "student").toLowerCase();
   let studentId = base;
   for (let n = 2; ; n++) {
     const { data: taken } = await supabaseAdmin()
