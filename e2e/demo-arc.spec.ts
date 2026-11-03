@@ -511,12 +511,14 @@ test.describe.serial("demo-arc", () => {
        - planText not-contains "Test Planning" (the retired Goals table was
          the summary-only surface) → DELETED — no replacement (the band's
          Target line + the Pathway Plan panel carry that truth now)
-       - `.band-id` "Target: …" — unchanged, no port
+       - `.band-id` "Target: …" → `.band .who .m` "Target: …" (2026-11-03
+         revamp: the band rides Dashboard's recipe — the persona line died,
+         the Target line is the .who .m row; ported in the same change)
        - `#tab-profile` → `#panel-profile` (Credentials) and `#tab-account`
          hooks — unchanged (the legacy-id contract survives). */
     await page.goto("/profile");
     await expect(page.locator("#panel-competencies")).toBeVisible(); // Competencies is the default tab
-    const bandId = ((await page.locator(".band-id").textContent()) ?? "").replace(/\s+/g, " ");
+    const bandId = ((await page.locator(".band .who .m").textContent()) ?? "").replace(/\s+/g, " ");
     expect(bandId).toContain("Target: Software QA Analyst");
     /* Tier 2 build selector ports (2026-11-03 user calls: the Plan tab's
        "Pathway stages" + "Score trajectory" cards, the page footer, and the

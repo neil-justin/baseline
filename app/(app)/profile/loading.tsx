@@ -1,35 +1,29 @@
 import "./profile.css";
 
 /**
- * Tier 3.5 route skeleton — Profile (amended 2026-11-03: TEXT-FREE).
+ * Route skeleton — Profile (2026-11-03 revamp shape, TEXT-FREE).
  * Mirror the committed stage order for the route's DEFAULT tab
- * (post-Plan-canon: Competencies) — the named band with the SHARED
- * ScoreSequence composite (count · / 100 · two ratemsg lines · the
- * five-channel bar) + the one CTA → the cardtop pill bar → the plancards
- * stack in
- * the Competencies panel's shape (skills table card · NACE 2-col table
- * card · lvl-strip dots card). NO real text — the h1, pill labels, and
- * card-head words are shape bars (the screenshot's duplicated "Profile"
- * heading is gone); one polite status region announces. Pulse gated by
- * prefers-reduced-motion (../v7.css .skel).
+ * (Competencies): the named band with the SHARED ScoreSequence composite
+ * (count · / 100 · two ratemsg lines · the five-channel bar) → the bare
+ * tab strip → the Competencies panel's TWO cards (skills table card ·
+ * NACE 2-col table card). NO real text — every label is a shape bar; one
+ * polite status region announces. Pulse gated by prefers-reduced-motion
+ * (../v7.css .skel).
  */
 export default function Loading() {
   return (
     <div className="v7profile" role="status" aria-busy="true" aria-label="Loading Profile">
       <div aria-hidden="true">
-        <section className="proband">
+        <section className="scoreband">
           <div className="band">
             <div className="bandrow">
               <div className="who">
                 <span className="skel" style={{ width: 84, height: 20 }} />
                 <span className="skel" style={{ width: 310, height: 17, marginTop: 6 }} />
-                <span className="skel" style={{ width: 150, height: 17, marginTop: 6 }} />
               </div>
-              {/* the shared ScoreSequence's stage shape (Wave 3): the
-                  composite (count + "/ 100") with its two ratemsg lines in
-                  the composite-wrap, the five-channel bar + seglabels
-                  marching beside it — the old skeleton put the count INSIDE
-                  .segs (the retired local mini-bar's shape) */}
+              {/* the shared ScoreSequence's stage shape: the composite
+                  (count + "/ 100") with its two ratemsg lines in the
+                  composite-wrap, the five-channel bar + seglabels beside it */}
               <div className="composite-wrap">
                 <div className="composite">
                   <span className="skel" style={{ width: 52, height: 46 }} />
@@ -54,22 +48,19 @@ export default function Loading() {
                   ))}
                 </div>
               </div>
-              <span className="skel" style={{ width: 150, height: 40, borderRadius: 8 }} />
             </div>
           </div>
         </section>
 
-        <div className="card tabcard planframe">
-          <div className="cardtop">
-            <div className="ptabs" role="presentation">
-              {Array.from({ length: 3 }, (_, i) => (
-                <div className="skel" style={{ width: i === 0 ? 116 : 96, height: 30, borderRadius: 6 }} key={i} />
-              ))}
-            </div>
-          </div>
+        {/* the bare tab strip (no wrapper card) */}
+        <div className="ptabs" role="presentation">
+          {Array.from({ length: 3 }, (_, i) => (
+            <div className="skel" style={{ width: i === 0 ? 116 : 96, height: 30, borderRadius: 6 }} key={i} />
+          ))}
         </div>
 
-        {/* the DEFAULT tab's committed stage: Competencies plancards */}
+        {/* the DEFAULT tab's committed stage: the Competencies panel's
+            two cards */}
         <div className="plancards">
           {/* skills-table card */}
           <div className="card">
@@ -103,9 +94,6 @@ export default function Loading() {
                 ))}
               </tbody>
             </table>
-            <p className="lcap num">
-              <span className="skel" style={{ width: "84%", height: 17 }} />
-            </p>
           </div>
 
           {/* NACE 2-col assessment table card */}
@@ -148,26 +136,6 @@ export default function Loading() {
               <span className="skel" style={{ width: 220, height: 15 }} />
               <br />
               <span className="skel" style={{ width: 150, height: 15 }} />
-            </div>
-          </div>
-
-          {/* lvl-strip dots card */}
-          <div className="card">
-            <div className="head">
-              <span className="skel" style={{ width: 180, height: 19 }} />
-              <span className="skel" style={{ width: 120, height: 16 }} />
-            </div>
-            <div className="lvl-strip">
-              {Array.from({ length: 4 }, (_, i) => (
-                <span className="lvl" key={i}>
-                  <span className="skel" style={{ width: 92, height: 15 }} />
-                  <span className="dots">
-                    {Array.from({ length: 5 }, (_, d) => (
-                      <i key={d} />
-                    ))}
-                  </span>
-                </span>
-              ))}
             </div>
           </div>
         </div>

@@ -1,43 +1,19 @@
 /* ============================================================
-   DNA v7 — Profile surface (/profile), v7.2 profile sweep +
-   Round-P2 re-cut (2026-11-02). The white band register (the
-   dashboard-family default, now the v7.4 sweep app-wide) names
-   the surface + carries the computed
-   five-channel mini-bar + the page's ONE filled CTA (→ /pathway);
-   FOUR family tabs (Plan · Competencies · Credentials · Account)
-   marry the tab strip (cardtop = the tab strip — ProfileTabs.tsx owns
-   that chrome; the kickers retired 2026-11-03).
-   PHASE-1 REVAMP (2026-11-02): the Plan tab re-cuts to stacked
-   Dashboard-register cards (.plancards) — the married card drops
-   to the transparent .planframe on that tab so the cards float on
-   the shell ground; the Plan §-document's masthead, ticklines and
-   §4 counters are gone. head/foot/plan-table/strow/lcap VALUES are
-   cloned from dashboard.css under .v7profile (per-surface cloning
-   being the repo idiom). PHASE-2 REVAMP (2026-11-02): the
-   .planframe becomes unconditional — every tab floats on the shell
-   ground (the then-psblock-register tabs kept one married surface via
-   their inner .stack — retired by the Phase-4 sweep below) — and the
-   Competencies tab re-cuts to
-   three Dashboard-register cards (skills + provenance chips · NACE
-   assessment + retake text link · the demoted starting-levels
-   strip); ProfileReadout's .readout register retires with it.
-   PHASE-3 REVAMP (2026-11-02): the Credentials tab re-cuts to ONE
-   unified ledger card — platform check-passed rows, the presence
-   stamp, and the declared entries all ride the Dashboard-register
-   .lrow unit (icon slot · plain name · chip pushed right · 11px
-   provenance lines; VALUES cloned from dashboard.css); the TESDA
-   future row, the .p-table earned-table idiom, the .prow register,
-   the TESDA/earned 720px block folds, and the doc-p/lead-count
-   remnants die here.
-   PHASE-4 REVAMP (2026-11-02): the Account tab re-cuts to three
-   separated Dashboard-register cards (Identity · Security · Data
-   rights) — the psblock/b-head/lead-mono/src-line register, its
-   .stack married-surface bridge, and the page's last .stack all
-   retire here (grep-verified zero consumers after the sweep). Every
-   tab now floats real .card units on the shell ground. scoped
-   under `.v7profile` (the page root) — shell chrome lives in
-   ../v7.css. Hook ids (#panel-plan/#panel-profile/#tab-*) ride the
-   markup, not the stylesheet; content strings are the e2e contract.
+   DNA v7 — Profile surface (/profile), the 2026-11-03 revamp
+   (folded in from the validated mockup): the band rides Dashboard's
+   recipe (name · year / Target line / the shared ScoreSequence, no
+   CTA); THREE family tabs (Competencies · Credentials · Account) —
+   the strip renders bare (no wrapper card), the panels float real
+   .plancards .card units on the shell ground. Competencies is two
+   cards (skills · NACE); Credentials is the unified ledger card +
+   the presence card; Account is Identity + a Security/Data-rights
+   two-column row; the declare form is a centered modal (career's
+   sw-modal recipe). head/foot/plan-table/lcap VALUES are cloned
+   from dashboard.css under .v7profile (per-surface cloning being
+   the repo idiom). Scoped under `.v7profile` (the page root) —
+   shell chrome lives in ../v7.css. Hook ids (#panel-profile/#tab-*)
+   ride the markup, not the stylesheet; content strings are the e2e
+   contract.
    ============================================================ */
 
 .tabpanel[hidden] { display: none !important; }
@@ -51,23 +27,10 @@
 .v7profile :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
 .v7profile a { color: inherit; }
 
-/* ---------- header band — Tier 2b: the card/row/who/CTA register lives
-   ONCE in ../v7.css (.v7 .band / .bandrow / .who .t / .cta); only the
-   page-specific split furniture stays here (the min-width, .band-id,
-   .band-meta, .band-scale) ---------- */
-
-.v7profile .proband .who { min-width: 250px; }
-.v7profile .band-id { font: 400 13px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 2px; }
-.v7profile .band-id b { color: var(--v-ink); font-weight: 500; }
-.v7profile .band-meta { font: 400 13px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 4px; }
-
-/* the local manual `.band-scale`/`.bandbar` mini-bar RETIRED (2026-11-03
-   Q25=a): the band carries the SHARED ScoreSequence whose register lives
-   in ../v7.css (.v7 .composite/.segs/.segbar) — the pose-reset hack went
-   with the block. */
-
-/* the band's ONE filled CTA (→ /pathway) — .v7 .cta in ../v7.css (the ONE
-   definition, Tier 2b); everything else on the page stays links/text */
+/* ---------- header band — Tier 2b: the card/row/who register lives
+   ONCE in ../v7.css (.v7 .band / .bandrow / .who .t / .who .m); the
+   Dashboard recipe verbatim (name · year / Target line), no page-specific
+   band furniture left ---------- */
 
 /* ---------- the Plan tab's Dashboard-register cards ----------
    One compartment per card (Goals — the pathway-stages and score-trajectory
@@ -126,6 +89,9 @@
 .v7profile .plan-table tbody tr:hover { background: #f5f8fc; }
 .v7profile .plan-table tr:last-child td { border-bottom: 0; }
 /* chips ride the State column (the family's wash pills defined below) */
+/* the NACE assessment's STATUS column reads right-aligned */
+.v7profile .assess-table th:nth-child(2),
+.v7profile .assess-table td:nth-child(2) { text-align: right; }
 
 /* ledger rows — RETIRED 2026-11-03 (Tier 2 brief A.2): the .strow/.dot/
    s-count stage-strip rules died with the "Pathway stages" card
@@ -151,48 +117,11 @@
   border-radius: 8px;
   box-shadow: var(--v-shadow);
 }
-.v7profile .card.tabcard { overflow: hidden; }
-.v7profile .tabcard .cardtop {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--v-rows);
-  background: #fafbfc;
-}
-/* the cardtop kicker rule is RETIRED (2026-11-03, brief A.4): the tab-strip
-   kickers ("0 OF 8 CLOSED" / "N COUNTED") died with their ProfileTabs prop
-   — the card heads carry the counts (grep: ProfileTabs was the only
-   .v7profile consumer of .kicker; the career/prep/pathway surfaces keep
-   their own scoped rules). */
-
-/* the floating-cards frame (Phase 2): the wrapper drops its card chrome
-   unconditionally — the tab strip stands alone as a little card and the
-   active tabpanel floats on the shell ground. PHASE 4: the old psblock-
-   register married surface (the `.stack` bridge) retires — every tab
-   renders real .card units now. */
-.v7profile .card.tabcard.planframe {
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-}
-.v7profile .planframe .cardtop {
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  box-shadow: var(--v-shadow);
-  background: #fafbfc;
-  margin-bottom: 12px;
-}
-.v7profile .planframe .tabpanel:not([hidden]) { margin-top: 12px; }
-/* PHASE 4 SWEEP: the ACCOUNT-ONLY bridge rule
-   `.planframe .tabpanel:not([hidden]) > .stack` is gone — the Account
-   panel is real .plancards .card units, so no tabpanel child .stack
-   remains (grep: page.tsx was the sole consumer). */
+/* the bare tab strip: the panels float on the shell ground directly below
+   it (no wrapper card — the old .card.tabcard/.planframe chrome is gone) */
+.v7profile .tabpanel:not([hidden]) { margin-top: 12px; }
 .v7profile .plancards .card { margin-bottom: 12px; } /* the exact family rhythm */
-/* the row's LAST card carries no bottom margin — the frame's overflow:hidden
-   BFC keeps the card's 12px inside it (the .pro-foot gap note is moot — the
-   page footer retired 2026-11-03, brief A.3) */
+/* the row's LAST card carries no bottom margin */
 .v7profile .plancards .card:last-child { margin-bottom: 0; }
 
 /* tab strip — Material segmented on the grey-wash track */
@@ -222,17 +151,31 @@
 }
 .v7profile .ptabs [role="tab"]:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 1px; }
 
-/* ---------- panel body — swept in Phase 4 (2026-11-02): the married-card
-   section register (`.stack`, `.psblock`, `.psblock + .psblock`,
-   `.stack > .psblock:first-child`, `.lead-mono`, `.b-head`, `.b-head .helper`,
-   `.b-head .helper b`, `.src-line`) had the Account tab as its last
-   consumer; the Phase-4 re-cut moved it to the `.plancards .card`
-   register, so all of these reached zero consumers and were removed —
-   each grep-verified against every consumer BEFORE deletion (the e2e
-   `.lead-mono`/`.b-head .helper` references are the pathway/prep
-   surfaces, whose own scoped stylesheets are untouched). `.helper` as a
-   class lives on only inside `.presence-head` (rule further down) — a
-   surviving consumer, kept. ---------- */
+/* the shared chip legend — in flow at the bottom of the two evidence-
+   bearing tabs (Competencies + Credentials), the family caption register */
+.v7profile .tab-legend {
+  margin-top: 24px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: var(--v-ink2, #5f6368);
+}
+
+/* the page-width cap (2026-11-03 revamp ruling): the shell's 1240px exists
+   for Dashboard's dense five-channel tables — Profile has none, so the
+   whole column (band · strip · cards · legend) reads at 860px, the Prep
+   reading-column precedent */
+.v7profile .scoreband,
+.v7profile .ptabs,
+.v7profile .plancards,
+.v7profile .tab-legend {
+  max-width: 860px;
+}
+
+/* ---------- panel body — the married-card section register (`.stack`,
+   `.psblock`, `.lead-mono`, `.b-head`, `.src-line`) was swept when the
+   Account tab moved to the `.plancards .card` register (2026-11-02);
+   the 2026-11-03 revamp removed the last `.presence-head` consumer with
+   the presence card re-cut — no married-surface classes remain. ---------- */
 
 /* ---------- the unified credential ledger (Phase 3, 2026-11-02) — one
    register for every credential source: platform check-passed rows, the
@@ -324,15 +267,65 @@
   flex-wrap: wrap;
 }
 
-/* the declaration form — Material inputs on the unified card */
-.v7profile .dec-form {
-  margin: 12px 16px 14px;
-  padding: 14px;
+/* the declaration MODAL — the /career sw-modal recipe verbatim: fixed
+   wrapper, scrim + dialog siblings, the scrim fades while the dialog
+   rises in from 97% (transform/opacity only), reduced-motion skips the
+   keyframes entirely */
+.v7profile .dec-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+.v7profile .dec-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(32, 33, 36, 0.4);
+}
+.v7profile .dec-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--v-surface);
   border: 1px solid var(--v-border);
   border-radius: 8px;
-  display: grid;
-  gap: 12px;
+  box-shadow: 0 2px 10px rgba(60, 64, 67, 0.2);
+  outline: none;
+  padding: 18px 20px 20px;
 }
+@media (prefers-reduced-motion: no-preference) {
+  .v7profile .dec-scrim { animation: dec-scrim-in 0.15s ease-out both; }
+  .v7profile .dec-dialog { animation: dec-dialog-in 0.18s cubic-bezier(0.16, 1, 0.3, 1) both; }
+}
+@keyframes dec-scrim-in { from { opacity: 0; } }
+@keyframes dec-dialog-in { from { opacity: 0; transform: translateY(6px) scale(97%); } }
+
+/* modal breathing room (the cramped first cut is gone) */
+.v7profile .dec-dialog .dec-formtop { margin-bottom: 16px; }
+.v7profile .dec-dialog .dec-kind { margin-bottom: 18px; }
+.v7profile .dec-dialog .dec-grid { margin-bottom: 16px; }
+.v7profile .dec-dialog .dec-grid + .dec-field,
+.v7profile .dec-dialog .dec-grid ~ .dec-field { margin-bottom: 16px; }
+.v7profile .dec-dialog .dec-field:last-child { margin-bottom: 0; }
+.v7profile .dec-dialog .dec-skillnote { margin-top: 8px; }
+.v7profile .dec-dialog .dec-ctas {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--v-border, #e8eaed);
+}
+
+/* the required-field marker — red asterisk on required labels only */
+.v7profile .req {
+  color: #d93025;
+  font-weight: 600;
+  margin-left: 2px;
+}
+
 .v7profile .dec-kind { display: flex; gap: 6px; flex-wrap: wrap; }
 .v7profile .dec-kindbtn {
   font: 500 12px/1.2 Roboto, system-ui, sans-serif;
@@ -366,33 +359,16 @@
   font: 500 11.5px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-amber-text);
 }
-/* the anchored declaration form's top row (brief B.3): the compact abandon
-   control rides sticky, so "Close without saving" stays reachable WITHOUT
-   scrolling the tall form; the card surface behind it keeps content sliding
-   underneath legible */
+/* the modal's title row (the compact abandon control died with the inline
+   form — "Close without saving" rides the bottom ctas only) */
 .v7profile .dec-formtop {
-  position: sticky;
-  top: 0;
-  z-index: 1;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 10px;
   flex-wrap: wrap;
-  background: var(--v-surface);
-  padding: 0 0 6px;
 }
 .v7profile .dec-formtop .cl-label { margin: 0; }
-.v7profile .dec-abandon {
-  flex: none;
-  font: 500 12px/1.4 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-}
-.v7profile .dec-abandon:hover { color: var(--v-ink); text-decoration: underline; text-underline-offset: 3px; }
 .v7profile .dec-skills { display: flex; flex-wrap: wrap; gap: 8px; }
 .v7profile .dec-skill {
   display: inline-flex;
@@ -412,37 +388,15 @@
 
 /* ---------- presence (fourth credential kind — ticket 12) ---------- */
 
-/* the declaration slot inside the unified card (Phase 3) — the stamp row
-   itself lives up in the .ledger; this is the entry machinery */
-.v7profile .formslot { margin: 12px 16px 14px; }
-/* v7.2 P2: the plain hairline form block — 1px #DADCE0 border, 8px radius,
-   no card-in-card gloss (no shadow, no inner panel styling) */
-.v7profile .presence {
-  padding: 12px 14px;
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-}
-.v7profile .presence-head .cl-label {
-  margin: 0;
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--v-ink2);
-}
-.v7profile .presence-head .helper { margin-top: 6px; font: 400 13px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 66ch; }
+/* the presence card's plain body — its own card now, so the old bordered
+   .presence block is gone; the body rides the family 16px body register
+   (the same margin .acct-id/.acct-pw carry) */
+.v7profile .presence-body { margin: 2px 16px 14px; }
 .v7profile .presence-current {
   margin-top: 10px;
   font: 400 12px/1.6 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   overflow-wrap: anywhere;
-}
-.v7profile .presence-fieldrow { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; margin-top: 10px; }
-.v7profile .presence-field { display: grid; gap: 5px; flex: 1; min-width: 220px; }
-.v7profile .presence-field .cl-label {
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--v-ink2);
 }
 .v7profile .profile-input {
   font: 400 13px/1.5 Roboto, system-ui, sans-serif;
@@ -489,6 +443,18 @@
 }
 .v7profile .acct-pw { margin: 2px 16px 14px; display: grid; gap: 10px; max-width: 420px; }
 .v7profile .acct-pw .dec-ctas { margin-top: 2px; }
+
+/* Security + Data rights share one row; the grid collapses on narrow
+   screens */
+.v7profile .acct-duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: start;
+}
+@media (max-width: 720px) {
+  .v7profile .acct-duo { grid-template-columns: 1fr; }
+}
 
 /* ---------- DPA data rights (ticket 7: export + erase as artifacts) —
    2026-11-03 build (brief B.7 + the progressive-disclosure ruling): the
@@ -564,6 +530,17 @@
 }
 .v7profile .btn-ghost:hover { border-color: var(--v-blue); background: var(--v-blue-wash); }
 .v7profile .btn-sm { padding: 6px 14px; font-size: 12.5px; }
+/* one size register for every card action button */
+.v7profile .dec-ctas .btn,
+.v7profile .presence-ctas .btn,
+.v7profile .dpa-erase-btn {
+  height: 36px;
+  padding: 0 18px;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 /* PHASE 4 SWEEP: `.btn .arrow` is gone — its only consumer was the DPA
    export anchor, re-cut in Phase 4 to the text-link register (grep:
    zero `.arrow` classNames remain under .v7profile). */
@@ -574,38 +551,10 @@
    links (grep-verified; the prep/admin/progress surfaces carry their own
    scoped rules). */
 
-/* ---------- Competencies Phase-2 register: the demoted starting-levels
-   strip — one wrapped line of name + dots units, caption-weight names so
-   the unit reads secondary next to the full cards; Wave-3 P1: the units
-   read their setup answers ("setup answer: {word}"), the caption states
-   the battery's role ---------- */
-
-.v7profile .lvl-cap {
-  margin: 0;
-  padding: 10px 16px 0;
-  font: 400 12.5px/1.55 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-}
-
-.v7profile .lvl-strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 18px;
-  padding: 2px 16px 14px;
-}
-.v7profile .lvl {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.v7profile .lvl-name {
-  font: 400 12px/1.4 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-}
-.v7profile .dots { display: flex; gap: 4px; flex: none; }
-.v7profile .dots i { width: 10px; height: 10px; background: #e8eaed; border-radius: 2px; display: block; }
-/* starting levels are setup answers, not earned — ink, never green */
-.v7profile .dots i.on { background: var(--v-ink2); }
+/* ---------- the Competencies panel is two cards (skills · NACE) — the
+   demoted starting-levels strip (.lvl-cap/.lvl-strip/.lvl/.dots) retired
+   with its card (2026-11-03 revamp); grep-verified zero consumers after
+   the loading.tsx re-cut ---------- */
 
 /* ---------- Phase-1: the Plan §-document register (masthead, ticklines,
    §-sections, stage strip, evidence counts) is gone — the Plan tab renders
@@ -655,9 +604,7 @@
   .v7profile .plan-table th:nth-child(3),
   .v7profile .plan-table td:nth-child(3) { display: none; } /* Since folds on tiny screens */
   /* Phase 3: the credential ledger's rows wrap (name · chip · provenance
-     lines) — the fold law's column-hiding has no columns left to hide
-     (the .traj/.traj-rows mobile fold went with the trajectory card) */
-  .v7profile .presence-field { min-width: 0; }
+     lines) — the fold law's column-hiding has no columns left to hide */
   /* the DPA ledger rows stack one-column (detail, then its action) */
   .v7profile .dpa-row { grid-template-columns: 1fr; }
 }

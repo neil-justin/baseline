@@ -18,9 +18,11 @@ test.describe.serial("account password confirm gate", () => {
     await page.click("#tab-account"); // the hook contract: #tab-account → #panel-account
     const card = page.locator("#panel-account .acct-pw");
     const submit = card.getByRole("button", { name: "Change password" });
+    const current = page.locator("#a-pw-current"); // the 2026-11-03 re-auth field — the gate now requires it too
     const pw = page.locator("#a-pw");
     const confirm = page.locator("#a-pw-confirm");
 
+    await current.fill(DEMO_PASSWORD);
     await pw.fill("playwright-gate-check-1");
     await confirm.fill("not-the-same-entry");
     const note = card.locator(".presence-err");

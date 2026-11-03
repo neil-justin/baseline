@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 /**
  * Profile → Credentials — the FOURTH kind's declaration (ticket 12): the
@@ -14,21 +15,26 @@ import { useState } from "react";
  * machine-verifiable" inside the stamp (recorded, never silently hidden).
  * Re-declaring replaces the LATEST stamp (latest counts).
  *
- * Phase-3 re-cut (2026-11-02): the component is now the unified ledger
- * card's inset declaration SLOT (`page.tsx` renders the stamp itself as the
- * presence .lrow with its data-presence-* hooks) — the form fields, privacy
- * note, and status lines keep every hook/aria verbatim.
- * Phase-4 trim (2026-11-02, same session): `verifiedAt`/`privateNote` rode
- * the old declared-summary line and are unused by this render — dropped
- * from the props/page call site (grep-verified: page.tsx is the sole
- * consumer). The ledger row carries the declared entry's provenance ("Not
- * declared yet" stays honest here when it is).
+ * 2026-11-03 revamp: presence is its OWN card (page.tsx renders the card
+ * head and the ledger's stamp row with its data-presence-* hooks), so the
+ * old bordered `.presence` block and its fieldrow wrappers are gone — the
+ * body renders plain (`.presence-body`, the family 16px body register) and
+ * the two fields ride the shared `.dec-grid` directly.
  */
 
-/* copy pruning (brief B.4): the private-account note rides ONE line — the
-   stamp's honest sub-result is the fact; nothing else carries it */
+/* the private-account note rides ONE line — the stamp's honest sub-result
+   is the fact; nothing else carries it */
 const PRIVATE_NOTE =
   "The stamp still verifies the link's format and your professional email; the record reads “resolves, content not machine-verifiable”.";
+
+/* the required-field marker — red asterisk on required labels */
+function Req() {
+  return (
+    <span className="req" aria-hidden="true">
+      *
+    </span>
+  );
+}
 
 interface Props {
   /** the declared entry's re-declare copy (from the signed-in student's
@@ -40,13 +46,13 @@ interface Props {
 }
 
 export default function PresenceCard({ declared }: Props) {
+  const router = useRouter();
   const [url, setUrl] = useState("");
   const [email, setEmail] = useState("");
   const [priv, setPriv] = useState(false);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  const [privOpen, setPrivOpen] = useState(false);
 
   async function submit() {
     setErr(null);
@@ -61,7 +67,7 @@ export default function PresenceCard({ declared }: Props) {
       if (res.ok) {
         setErr(null);
         setNote(json?.note ?? "Presence declared — machine-verified stamp recorded.");
-        window.location.reload(); // server page re-renders the stamped record (server-state truth)
+        router.refresh(); // server page re-renders the stamped record (server-state truth)
       } else {
         setErr(json?.detail ?? "The declaration was rejected — fix the named format check and try again. Nothing was saved.");
       }
@@ -73,24 +79,14 @@ export default function PresenceCard({ declared }: Props) {
   }
 
   return (
-    <div className="presence">
-      {/* the presence SECTION NAME (Wave 3 minimal fix for the "two
-          instruments in one card" complaint — the ledger instrument and the
-          machine-verified presence instrument share one card; naming the
-          presence section restores the grouping without restructuring.
-          The old comment claimed "the block h2 above already names it" —
-          that h2 left with the psblock register in the Phase-4 re-cut. */}
-      <div className="presence-head">
-        <p className="cl-label num">Professional presence</p>
-        <p className="helper">Machine-verified at declaration — offline format checks only, no network look-up.</p>
-      </div>
+    <div className="presence-body">
       {!declared && (
         <p className="presence-current num">Not declared yet — the presence factor stays unmeasured.</p>
       )}
-      <div className="presence-fieldrow">
-        <div className="presence-field">
+      <div className="dec-grid">
+        <div className="dec-field">
           <label className="cl-label num" htmlFor="p-url">
-            LinkedIn profile URL
+            LinkedIn profile URL <Req />
           </label>
           <input
             id="p-url"
@@ -101,9 +97,9 @@ export default function PresenceCard({ declared }: Props) {
             onChange={(e) => setUrl(e.target.value)}
           />
         </div>
-        <div className="presence-field">
+        <div className="dec-field">
           <label className="cl-label num" htmlFor="p-email">
-            Professional contact email
+            Professional contact email <Req />
           </label>
           <input
             id="p-email"
@@ -121,26 +117,28 @@ export default function PresenceCard({ declared }: Props) {
             id="p-private"
             type="checkbox"
             checked={priv}
-            onChange={(e) => {
-              setPriv(e.target.checked);
-              setPrivOpen(e.target.checked);
-            }}
+            onChange={(e) => setPriv(e.target.checked)}
           />
           <span>My LinkedIn account is private</span>
         </label>
-        {privOpen && <p className="presence-priv num">{PRIVATE_NOTE}</p>}
+        {priv && <p className="presence-priv num">{PRIVATE_NOTE}</p>}
       </div>
       <div className="presence-ctas">
-        <button className="btn btn-primary btn-sm" type="button" onClick={submit} disabled={busy || url.trim() === "" || email.trim() === ""}>
+        <button
+          className="btn btn-primary btn-sm"
+          type="button"
+          onClick={submit}
+          disabled={busy || url.trim() === "" || email.trim() === ""}
+        >
           {busy ? "Stamping…" : declared ? "Re-declare and stamp" : "Declare and stamp"}
         </button>
         <span className="presence-earn num">+3 of the Application-Readiness channel when both format checks pass</span>
       </div>
-      <p className={`${err ? "presence-err" : "presence-ok"}`} role="status" aria-live="polite">
-        {/* copy pruning (brief B.4): the idle essay is gone — the status slot
-            carries only its honest if-then state */}
-        {err ?? note ?? ""}
-      </p>
+      {(err ?? note) && (
+        <p className={err ? "presence-err" : "presence-ok"} role="status" aria-live="polite">
+          {err ?? note}
+        </p>
+      )}
     </div>
   );
 }
