@@ -65,6 +65,14 @@ export type { Resource as CatalogResource } from "@/lib/types";
 export const RESOURCES: Resource[] = [
   // == ── Associate Software Developer (roster 2.1 · id swd) ─────────────────
   // canon demo row (locked): Neil's onboarding goal + PYTHON_CHECK
+  // Wave B audit (2026-11-03): access/form drafted per-row from each row's
+  // own audit facts (Coursera audit routes → exam-paid · FCC signup →
+  // account · tutorials/books → taught · vendor docs & spec texts →
+  // reference · hub/index/search pages → landing). res-swd-linux-journey
+  // stays UNVETTED on purpose: its 403 bot-wall verdict means the URL could
+  // not be graded live this pass (unclassified = the picker guards it).
+  // Learn lines are drafts (learn draft — user review pending). Coverage:
+  // 8/8 vetted.
   {
     id: "res-python-basics",
     title: "Python basics course",
@@ -73,11 +81,21 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // "Programming for Everybody (Getting Started with Python)" — UMich,
     // free to audit (re-verified live 2026-10-29)
+    // audit (2026-11-03): Coursera audit route → exam-paid; course page.
+    // Applications-Development winner via the tier-1 platform check
+    // (PYTHON_CHECK pairs this resource id to the skill)
     url: "https://www.coursera.org/learn/python",
     durationHours: 25,
     skillsAddressed: ["Applications Development"],
     careerId: "swd",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Applications Development":
+        "Michigan's Python-for-everybody course runs the write-run-check loop from your first function — the maintain-code-to-spec work the FSC cell prints, with the PYTHON_CHECK riding this exact resource.",
+    },
+    // learn draft — user review pending
   },
   // canon demo row (kept; Khan CDN blocks CLI re-checks — prior-round verified)
   {
@@ -86,10 +104,14 @@ export const RESOURCES: Resource[] = [
     provider: "Khan Academy",
     type: "course",
     cost: "free",
+    // audit (2026-11-03): structured course, content open without an
+    // account (prior-round verified; Khan CDN blocks CLI re-checks)
     url: "https://www.khanacademy.org/computing/computer-programming/sql",
     durationHours: 6,
     skillsAddressed: ["Data Design / SQL + data modeling"],
     careerId: "swd",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-swd-support-doc",
@@ -97,10 +119,14 @@ export const RESOURCES: Resource[] = [
     provider: "Atlassian",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): tutorial explainer page at the URL (ADDR retired
+    // by the §6.1 re-map — catalog-only row); open access
     url: "https://www.atlassian.com/git/tutorials/what-is-version-control",
     durationHours: 2,
     skillsAddressed: [],
     careerId: "swd",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-swd-agile-doc",
@@ -108,11 +134,15 @@ export const RESOURCES: Resource[] = [
     provider: "Atlassian",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): readable methodology guide, no teaching flow at
+    // this URL (the D2 mockup graded Atlassian guide roots reference)
     url: "https://www.atlassian.com/agile",
     durationHours: 2,
     skillsAddressed: ["Agile Software Development"],
     careerId: "swd",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-swd-secure-doc",
@@ -121,10 +151,13 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // spec pool cites the Top10:2025 canonical URL (200) — same project, updated home
+    // audit (2026-11-03): readable risk standard = reference, open access
     url: "https://owasp.org/Top10/",
     durationHours: 4,
     skillsAddressed: ["Secure-coding practices"],
     careerId: "swd",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-swd-linux-doc",
@@ -132,10 +165,18 @@ export const RESOURCES: Resource[] = [
     provider: "Ubuntu tutorials",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): step-by-step tutorial with live shell practice = taught
     url: "https://ubuntu.com/tutorials/command-line-for-beginners",
     durationHours: 2,
     skillsAddressed: ["Linux + web deployment basics"],
     careerId: "swd",
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Linux + web deployment basics":
+        "Runs the command line from zero — files, users, permissions, packages — then deploys a real app to a Ubuntu server: the printed CWF list practiced inside a live shell.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-swd-bna-course",
@@ -144,10 +185,13 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // scaffolded search-route row kept (spec adds the exact IBM/MS courses below)
+    // audit (2026-11-03): search listing = landing (listing-page convention)
     url: "https://www.coursera.org/search?query=business%20analysis",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "swd",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-swd-enable-doc",
@@ -155,6 +199,8 @@ export const RESOURCES: Resource[] = [
     provider: "Atlassian",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): the Plays are free activity guides (mockup
+    // precedent for the identical da row) → taught/direct
     url: "https://www.atlassian.com/team-playbook",
     durationHours: 2,
     skillsAddressed: [
@@ -162,8 +208,16 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "swd",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling Skills, Basic/Intermediate)":
+        "Free Atlassian Plays you can actually run with a team — health monitors, working agreements, and meeting practices — the enabling row's behaviors as activities.",
+    },
+    // learn draft — user review pending
   },
   // swd spec-pool additions (swd.md §Resources — all fetched 200, 2026-10-29)
+  // Wave B audit (2026-11-03): genre classifications + winner learn lines.
   {
     id: "res-swd-fcc-csharp",
     title: "Foundational C# with Microsoft Certification",
@@ -173,11 +227,20 @@ export const RESOURCES: Resource[] = [
     // free full course + free verifiable certification in a mainstream
     // house-stack language; matches the printed L3 cell (develop basic
     // apps w/ secure features, routine tests, debugging)
+    // audit (2026-11-03): FCC projects curriculum; free signup → account.
+    // Applications-Development tier winner (credited taught resource)
     url: "https://www.freecodecamp.org/learn/foundational-c-sharp-with-microsoft/",
     durationHours: 30,
     skillsAddressed: ["Applications Development"],
     creditingBody: "freeCodeCamp · Microsoft",
     careerId: "swd",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Applications Development":
+        "Microsoft's project-based C# curriculum runs the build-compile-debug loop hands-on — the develop-basic-apps work the FSC cell prints, ending in a verifiable certificate.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-swd-odin-foundations",
@@ -187,10 +250,19 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // language-agnostic dev foundations (HTML/CSS/JS, Git, deployment)
     // around real projects — mirrors the support/improve-the-job shape
+    // audit (2026-11-03): project-first open curriculum → taught/direct.
+    // Applications-Support-and-Enhancement winner
     url: "https://www.theodinproject.com/paths/foundations",
     durationHours: 40,
     skillsAddressed: ["Applications Development", "Applications Support and Enhancement"],
     careerId: "swd",
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Applications Support and Enhancement":
+        "The foundations path puts you inside real web projects — reading, running and extending a live codebase and debugging what breaks, the app-understanding this skill's day job runs on.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-swd-fcc-python-sci",
@@ -198,11 +270,14 @@ export const RESOURCES: Resource[] = [
     provider: "freeCodeCamp",
     type: "cert",
     cost: "free",
+    // audit (2026-11-03): FCC projects curriculum; free signup → account
     url: "https://www.freecodecamp.org/learn/scientific-computing-with-python/",
     durationHours: 60,
     skillsAddressed: ["Applications Development"],
     creditingBody: "freeCodeCamp",
     careerId: "swd",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-swd-progit",
@@ -212,10 +287,14 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // free full text online; print edition = purchase (labeled) — the
     // version-control discipline the ASE map names
+    // audit (2026-11-03): free book (taught per the content-shape ruling:
+    // "course, tutorial, book"), open access
     url: "https://git-scm.com/book/en/v2",
     durationHours: 8,
     skillsAddressed: [],
     careerId: "swd",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-swd-digitalocean-doc",
@@ -224,11 +303,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // text-based app-deployment and maintenance guides
+    // audit (2026-11-03): searchable tutorials library index = landing
     url: "https://www.digitalocean.com/community/tutorials",
     durationHours: 2,
     skillsAddressed: ["Applications Support and Enhancement"],
     careerId: "swd",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-swd-mdn-learn",
@@ -236,10 +318,14 @@ export const RESOURCES: Resource[] = [
     provider: "Mozilla",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): guides hub/index at this URL = landing
+    // (fail-closed; individual guides open one click deeper)
     url: "https://developer.mozilla.org/en-US/docs/Learn",
     durationHours: 4,
     skillsAddressed: ["Applications Support and Enhancement"],
     careerId: "swd",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-swd-scrum-guide",
@@ -248,10 +334,13 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // the ceremonies the Agile FSC is practiced against; fully free
+    // audit (2026-11-03): official spec text = reference, open access
     url: "https://scrumguides.org/scrum-guide.html",
     durationHours: 2,
     skillsAddressed: ["Agile Software Development"],
     careerId: "swd",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-swd-agile-coursera",
@@ -260,10 +349,19 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // free material via audit/preview; certificate paid / financial aid
+    // audit (2026-11-03): audit route → exam-paid. Agile winner (only
+    // vetted claim: the Atlassian/Scrum texts grade reference)
     url: "https://www.coursera.org/learn/agile-software-development",
     durationHours: 8,
     skillsAddressed: ["Agile Software Development"],
     careerId: "swd",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Agile Software Development":
+        "The course teaches the sprint disciplines themselves — backlog planning, ceremonies and incremental delivery — so each ceremony the row prints is something you've actually run.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-swd-sqlbolt",
@@ -272,10 +370,13 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // interactive JOIN/schema drills keyed to the printed JOIN task
+    // audit (2026-11-03): interactive lesson flow, open access
     url: "https://sqlbolt.com/",
     durationHours: 4,
     skillsAddressed: ["Data Design / SQL + data modeling"],
     careerId: "swd",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-swd-mysqltutorial",
@@ -285,10 +386,19 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // verified substitute — `dev.mysql.com` pages 403 to scripted fetch
     // (SWD-V2: browser-facing link re-verifiable on request); DDL covered
+    // audit (2026-11-03): step-by-step text course → taught/direct. SQL
+    // winner (taught + direct + id A–Z ahead of the SQLBolt/Khan rows)
     url: "https://www.mysqltutorial.org/",
     durationHours: 6,
     skillsAddressed: ["Data Design / SQL + data modeling"],
     careerId: "swd",
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Data Design / SQL + data modeling":
+        "A step-by-step SQL text course: queries, joins, and the schema/DDL work this skill's printed row names — normalized modeling through practiced statements.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-swd-pg-docs",
@@ -296,11 +406,15 @@ export const RESOURCES: Resource[] = [
     provider: "PostgreSQL Global Development Group",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): docs hub index = reference (the Part I tutorial
+    // variant in the da pool is the taught companion)
     url: "https://www.postgresql.org/docs/",
     durationHours: 4,
     skillsAddressed: ["Data Design / SQL + data modeling"],
     careerId: "swd",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-swd-ibm-ba",
@@ -310,11 +424,20 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // free-audit route; the course backs the printed L3 cell wording
     // ("Elicit and analyze…" — corrected to the L3 cell, 2026-10-29)
+    // audit (2026-11-03): audit route → exam-paid. BNA winner for swd
+    // (mockup learn line copied — identical course)
     url: "https://www.coursera.org/learn/introduction-to-business-analysis",
     durationHours: 10,
     skillsAddressed: ["Business Needs Analysis"],
     careerId: "swd",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Business Needs Analysis":
+        "Structured elicitation: turning stakeholder conversations into testable requirement sets — the L3 cell's 'elicit and analyze' in course form.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-swd-ms-ba-fundamentals",
@@ -323,10 +446,13 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // entry-level BA basics behind the "Validate user requirements…" tasks
+    // audit (2026-11-03): audit route → exam-paid
     url: "https://www.coursera.org/learn/business-analysis-fundamentals",
     durationHours: 10,
     skillsAddressed: ["Business Needs Analysis"],
     careerId: "swd",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-swd-owasp-cheatsheets",
@@ -335,11 +461,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // actionable secure-coding drills at junior level
+    // audit (2026-11-03): readable drills/answers = reference
     url: "https://cheatsheetseries.owasp.org/",
     durationHours: 4,
     skillsAddressed: ["Secure-coding practices"],
     careerId: "swd",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-swd-fcc-infosec",
@@ -347,11 +476,20 @@ export const RESOURCES: Resource[] = [
     provider: "freeCodeCamp",
     type: "cert",
     cost: "free",
+    // audit (2026-11-03): FCC hands-on security projects; free signup →
+    // account. Secure-coding winner (only vetted secure-coding claim)
     url: "https://www.freecodecamp.org/learn/information-security/",
     durationHours: 30,
     skillsAddressed: ["Secure-coding practices"],
     creditingBody: "freeCodeCamp",
     careerId: "swd",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Secure-coding practices":
+        "Hands-on projects on authentication, and XSS/CSRF defenses teach you to spot and avoid the vulnerability classes the row prints — code you write yourself and fix.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-swd-tlcl-doc",
@@ -360,10 +498,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // text companion for the exact command-line CWF list; print = purchase (labeled)
+    // audit (2026-11-03): the book itself = taught (content-shape ruling:
+    // "course, tutorial, book"); open access
     url: "http://linuxcommand.org/tlcl.php",
     durationHours: 8,
     skillsAddressed: ["Linux + web deployment basics"],
     careerId: "swd",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-swd-linux-journey",
@@ -372,7 +514,10 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // 403 to scripted fetch (audit 2026-11-02, curl + browser UA) — flagged
-    // keep-with-flag per the audit convention; browser-verify before defense
+    // keep-with-flag per the audit convention; browser-verify before defense.
+    // Wave B (2026-11-03): NOT graded (form/access left unassigned) — the 403
+    // bot-wall means the URL could not be graded live this pass; unvetted
+    // until a browser check (fail-closed, the picker guards it)
     url: "https://linuxjourney.com/",
     durationHours: 6,
     skillsAddressed: ["Linux + web deployment basics"],
@@ -384,11 +529,14 @@ export const RESOURCES: Resource[] = [
     provider: "Canonical",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): docs hub index = reference (vendor docs)
     url: "https://ubuntu.com/server/docs",
     durationHours: 2,
     skillsAddressed: ["Linux + web deployment basics"],
     careerId: "swd",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-swd-openlearn-comms",
@@ -400,12 +548,16 @@ export const RESOURCES: Resource[] = [
     // fetch — site-wide Cloudflare bot-wall (`cf-mitigated: challenge`,
     // same under browser/Googlebot UAs); URL NOT dead; title + free status
     // web-index-verified ("Welcome to this free course… free"); KEEP.
+    // audit (2026-11-03, mockup draft): course page open in browser →
+    // taught/direct (with the keep-with-flag line)
     url: "https://www.open.edu/openlearn/money-business/effective-communication-the-workplace",
     durationHours: 3,
     skillsAddressed: [
       "Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling Skills, Basic/Intermediate)",
     ],
     careerId: "swd",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-swd-lhtl",
@@ -414,14 +566,28 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // audit/preview free material; certificate paid
+    // audit (2026-11-03): audit route → exam-paid (ADDR retired — catalog-only)
     url: "https://www.coursera.org/learn/learning-how-to-learn",
     durationHours: 4,
     skillsAddressed: [],
     careerId: "swd",
+    form: "taught",
+    access: "exam-paid",
   },
 
   // == ── Software QA Analyst (roster 2.2 · id qa) ───────────────────────────
   // canon money-shot row (locked) + TAU learning-paths scaffold (kept)
+  // Wave B audit (2026-11-03): access/form copied verbatim from the D2
+  // mockup access draft (user-ruled 2026-11-03); learn lines drafted from
+  // each resource's actual content (learn draft — user review pending).
+  // Coverage reds that stay (honest, not papered over):
+  //  · "Quality Assurance / Quality Standards" — unvetted BY DESIGN: the
+  //    Wave A regression pin prints the unvetted wait-state here; the user
+  //    rules on each candidate (adviser-only skill for now).
+  //  · "Applications Support and Enhancement" — no catalog row claims it:
+  //    census-thin per the §6.1 ruling (verify-fixtures pins qa::ASE as an
+  //    honest thin cell); filling requires a catalog-add decision (user
+  //    ruling pending) — coverage test stays red, never a fabricated row.
   {
     id: "res-qa-testing",
     title: "Setting a foundation for successful test automation",
@@ -430,11 +596,14 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // TAU is Applitools' free test-automation academy, certificates included
     // (verified live 2026-10-29)
+    // audit (2026-11-03, mockup draft): free signup required → account
     url: "https://testautomationu.applitools.com/",
     durationHours: 4,
     skillsAddressed: ["Software Testing"],
     creditingBody: "Test Automation University (Applitools)",
     careerId: "qa",
+    form: "landing", // TAU home page — the courses live behind it
+    access: "account",
   },
   {
     id: "res-qa-testing-basics-doc",
@@ -442,11 +611,14 @@ export const RESOURCES: Resource[] = [
     provider: "Test Automation University",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, mockup draft): paths index; free signup → account
     url: "https://testautomationu.applitools.com/learningpaths.html",
     durationHours: 3,
     skillsAddressed: ["Test Planning"],
     careerId: "qa",
     pick: true,
+    form: "landing", // TAU paths index
+    access: "account",
   },
   // qa spec-pool additions (qa.md §5 — Guru99 is RULED DROPPED, never added)
   {
@@ -457,11 +629,15 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // free official foundation syllabus behind the FSC's unit/system/UAT
     // vocabulary; syllabus + sample exams are free — the exam itself is paid
+    // audit (2026-11-03, mockup draft): cert overview, no taught flow at this
+    // URL; syllabus free, exam paid → exam-paid
     url: "https://www.istqb.org/certifications/certified-tester-foundation-level",
     durationHours: 20,
     skillsAddressed: ["Software Testing", "Test Planning", "Quality Assurance / Quality Standards"],
     creditingBody: "ISTQB",
     careerId: "qa",
+    form: "landing",
+    access: "exam-paid",
   },
   {
     id: "res-qa-mdn-testing",
@@ -469,11 +645,22 @@ export const RESOURCES: Resource[] = [
     provider: "MDN Web Docs",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, mockup draft): live teaching curriculum, open
+    // access → taught/direct; the QA walk's Software Testing + Test Planning winner
     url: "https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Cross_browser_testing",
     durationHours: 4,
     skillsAddressed: ["Software Testing", "Test Planning"],
     careerId: "qa",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Software Testing":
+        "Walks the cross-browser testing workflow end to end: test matrices, layout debugging, and automation across engines.",
+      "Test Planning":
+        "You'll structure test scenarios into a plan — levels, techniques, and what to execute first — from a live curriculum.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-qa-owasp-wstg",
@@ -481,10 +668,13 @@ export const RESOURCES: Resource[] = [
     provider: "OWASP Foundation",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, mockup draft): readable guide, no teaching flow
     url: "https://owasp.org/www-project-web-security-testing-guide/",
     durationHours: 4,
     skillsAddressed: ["Software Testing"],
     careerId: "qa",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-qa-istqb-glossary",
@@ -493,10 +683,13 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // canonical defect terminology (defect, severity, root cause)
+    // audit (2026-11-03, mockup draft): glossary = reference, open access
     url: "https://glossary.istqb.org/",
     durationHours: 2,
     skillsAddressed: [],
     careerId: "qa",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-qa-jira-support",
@@ -506,10 +699,13 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // the dominant PH defect tracker's operating docs — free docs, product
     // free tier exists ("| Atlassian" title string honesty flag carried)
+    // audit (2026-11-03, mockup draft): vendor docs = reference, open access
     url: "https://support.atlassian.com/jira-software-cloud/",
     durationHours: 2,
     skillsAddressed: ["Defect management"],
     careerId: "qa",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-qa-fcc-qa",
@@ -519,11 +715,21 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // free hands-on QA projects incl. defect reporting (SPA — title not
     // extractable from curl; page verified reachable)
+    // audit layer (Wave B seed, 2026-11-03): hands-on QA curriculum the FCC
+    // course shell lists as projects — form taught; freeCodeCamp = free
+    // signup → access account (mockup access draft, D2 realm)
     url: "https://www.freecodecamp.org/learn/quality-assurance/",
     durationHours: 30,
     skillsAddressed: ["Defect management"],
     creditingBody: "freeCodeCamp",
     careerId: "qa",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Defect management":
+        "Hands-on QA projects: find, reproduce and file bugs with the exact report fields an employer ticket queue runs on.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-qa-sre-books",
@@ -532,11 +738,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // free chapters on quality metrics/SLOs, monitoring, postmortem practice
+    // audit (2026-11-03, mockup draft): books index — chapters live behind it
     url: "https://sre.google/books/",
     durationHours: 4,
     skillsAddressed: ["Quality Assurance / Quality Standards"],
     careerId: "qa",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-qa-atlassian-bugtracking",
@@ -546,11 +755,14 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // Atlassian reorganized the agile guide (audit 2026-11-02: the
     // sub-pages bugs/bug-tracking 404 — consolidated into this root, live)
+    // audit (2026-11-03, mockup draft): agile guide = reference, open access
     url: "https://www.atlassian.com/agile/software-development",
     durationHours: 2,
     skillsAddressed: ["Defect management"],
     careerId: "qa",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-qa-ibm-ba",
@@ -559,11 +771,19 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // free audit; backs the elicitation layer the BNA row prints
+    // audit (2026-11-03, mockup draft): audit-route free, certificate paid
     url: "https://www.coursera.org/learn/introduction-to-business-analysis",
     durationHours: 10,
     skillsAddressed: ["Business Needs Analysis"],
     careerId: "qa",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Business Needs Analysis":
+        "Walks elicitation and requirement structuring — turning a stakeholder conversation into a testable requirement set.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-qa-google-bi",
@@ -572,10 +792,13 @@ export const RESOURCES: Resource[] = [
     type: "cert",
     cost: "free",
     // free-to-audit; ₱ paid tier = certificate
+    // audit (2026-11-03, mockup draft): prof-cert landing; ₱ tier = certificate
     url: "https://www.coursera.org/professional-certificates/google-business-intelligence",
     durationHours: 30,
     skillsAddressed: [],
     careerId: "qa",
+    form: "landing",
+    access: "exam-paid",
   },
   {
     id: "res-qa-openlearn-comms",
@@ -584,10 +807,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // adopted 403 verdict line (keep-with-flag) — see the swd OpenLearn row
+    // audit (2026-11-03, mockup draft): course page open in browser
+    // (curl 403 — the keep-with-flag line); no ADDR claims, no learn line
     url: "https://www.open.edu/openlearn/money-business/effective-communication-the-workplace",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "qa",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-qa-lhtl",
@@ -595,14 +822,34 @@ export const RESOURCES: Resource[] = [
     provider: "Deep Teaching Solutions (Coursera)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, mockup draft): audit/preview free, certificate paid
     url: "https://www.coursera.org/learn/learning-how-to-learn",
     durationHours: 4,
     skillsAddressed: ["Customer Orientation · Digital Fluency · Learning Agility · Sense Making · Problem Solving (Enabling)"],
     careerId: "qa",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Customer Orientation · Digital Fluency · Learning Agility · Sense Making · Problem Solving (Enabling)":
+        "Builds the learning-through-practice loop the enabling row prints: spaced practice, focus, and self-testing.",
+    },
+    // learn draft — user review pending
   },
 
   // == ── IT Support Engineer (roster 2.4 · id its) — kept TOP row + spec additions
+  // Wave B audit (2026-11-03): access/form drafted from each row's own audit
+  // facts (Coursera audit routes → exam-paid · NetAcad signup → account ·
+  // vendor docs & MITRE KB → reference · TOP root/category pages and
+  // prof-cert landings → landing). THREE rows whose URL could not open
+  // teachable content (prof-cert landing · docs hub · readable-at-the-URL
+  // reference claims) were RE-POINTED to the live-verified taught course
+  // page of the same skill (fresh "fetched LIVE 2026-11-03" notes in-row;
+  // ids/ADDR untouched). res-its-mitre-attack's reference claim was
+  // re-pointed to the taught incident-response course the coverage bar
+  // demands (the MITRE KB stays as reference claims in the cybersec/soc
+  // pools). Learn lines are drafts (learn draft — user review pending).
+  // Coverage: 7/7 vetted.
   {
     id: "res-its-css-nc",
     title: "Computer Systems Servicing NC II — self-paced",
@@ -611,24 +858,43 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // TOP course category (Electrical/Electronics CSS NC II); ITS-V4 flags
     // the deep-link re-verify per skill at print-copy time
+    // audit (2026-11-03): TOP category listing = landing (fail-closed —
+    // the modules live behind it); e-tesda signup → account
     url: "https://e-tesda.gov.ph/course/index.php?categoryid=16",
     durationHours: 12,
     skillsAddressed: ["Infrastructure Deployment"],
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "its",
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-its-google-it-support",
-    title: "Google IT Support Professional Certificate",
-    provider: "Google (Coursera)",
-    type: "cert",
+    title: "Technical Support Fundamentals (Google IT Support cert course 1)",
+    provider: "Coursera (Google)",
+    // fetched LIVE 2026-11-03 (RE-POINTED, Wave B audit): the old row
+    // pointed at the Google IT Support prof-cert landing (same genre the D2
+    // mockup graded "landing — the course lives behind it"; audit note
+    // 2026-10-29: "material free via audit; certificate not required to
+    // learn"). RE-POINTED to the taught course-1 page (fetched LIVE
+    // 2026-11-03: "Enroll for free", 6 modules / ~20 h — hardware/OS install,
+    // software install-update-remove, networking, troubleshooting). The
+    // monitor-maintain-patch substance of the row prints directly.
+    // Id/ADDR unchanged; ₱ paid tier: shareable certificate.
+    type: "course",
     cost: "free",
-    // material free via audit; certificate not required to learn
-    url: "https://www.coursera.org/professional-certificates/google-it-support",
-    durationHours: 60,
+    url: "https://www.coursera.org/learn/technical-support-fundamentals",
+    durationHours: 20,
     skillsAddressed: ["Infrastructure Support"],
     careerId: "its",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Infrastructure Support":
+        "Google's support fundamentals teaches the machines you'll keep alive — hardware, OS installs, software install/update/remove and troubleshooting — the monitor-maintain-patch day job in course form.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-its-top-landing",
@@ -638,6 +904,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // landing page (200) — the PH-credential-friendly option behind the
     // entry route; ITS-V4 flag: re-verify per-skill deep-links before print copy
+    // audit (2026-11-03): TOP root page = landing; e-tesda signup → account
     url: "https://e-tesda.gov.ph/",
     durationHours: 4,
     skillsAddressed: ["Infrastructure Support"],
@@ -645,17 +912,34 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "its",
     pick: true,
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-its-windows-server-docs",
-    title: "Windows Server documentation",
-    provider: "Microsoft Learn",
-    type: "doc",
+    title: "System Administration and IT Infrastructure Services (Google IT Support cert course 3)",
+    provider: "Coursera (Google)",
+    // fetched LIVE 2026-11-03 (RE-POINTED, Wave B audit): the old row was
+    // the Windows Server documentation hub (vendor-docs index at the URL —
+    // no teaching flow; the docs' only facts live behind links). RE-POINTED
+    // to the taught "System Administration and IT Infrastructure Services"
+    // course (fetched LIVE 2026-11-03: "Enroll for free", 6 modules / ~20 h
+    // — user/hardware provisioning, managing servers and services on
+    // Linux/Windows, change management — supervised-rollout practice at
+    // entry level). Id/ADDR unchanged.
+    type: "course",
     cost: "free",
-    url: "https://learn.microsoft.com/en-us/windows-server/",
-    durationHours: 4,
+    url: "https://www.coursera.org/learn/system-administration-it-infrastructure-services",
+    durationHours: 20,
     skillsAddressed: ["Infrastructure Deployment"],
     careerId: "its",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Infrastructure Deployment":
+        "The sysadmin course walks provisioning, server setup and service rollout on Linux and Windows — plus the change-management discipline a supervised rollout runs on.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-its-ubuntu-server-docs",
@@ -663,11 +947,14 @@ export const RESOURCES: Resource[] = [
     provider: "Canonical",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): docs hub index = reference (vendor docs)
     url: "https://ubuntu.com/server/docs",
     durationHours: 2,
     skillsAddressed: ["Infrastructure Deployment"],
     careerId: "its",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-its-netacad-networking-basics",
@@ -676,11 +963,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // ~22 h self-paced; free certificate of completion
+    // audit (2026-11-03): NetAcad free course, signup → account
     url: "https://www.netacad.com/courses/networking-basics",
     durationHours: 22,
     skillsAddressed: ["Network Administration and Maintenance", "Network Configuration"],
     creditingBody: "Cisco Networking Academy",
     careerId: "its",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-its-netacad-addressing",
@@ -688,38 +978,78 @@ export const RESOURCES: Resource[] = [
     provider: "Cisco Networking Academy",
     type: "course",
     cost: "free",
+    // audit (2026-11-03): NetAcad free course, signup → account. Network
+    // winner for both network skills (taught + credited + id A–Z)
     url: "https://www.netacad.com/courses/network-addressing-and-basic-troubleshooting",
     durationHours: 20,
     skillsAddressed: ["Network Configuration", "Network Administration and Maintenance"],
     creditingBody: "Cisco Networking Academy",
     careerId: "its",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Network Configuration":
+        "Cisco's hands-on course runs IP addressing and device configuration drills — the configure-per-runbook practice this skill's row prints.",
+      "Network Administration and Maintenance":
+        "The same labs carry the daily upkeep half — plan, verify and troubleshoot the LAN so keep-it-running work is something you've practiced.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-its-mitre-attack",
-    title: "MITRE ATT&CK Knowledge Base",
-    provider: "MITRE",
-    type: "doc",
+    title: "Stages of Incident Response (Infosec)",
+    provider: "Coursera (Infosec)",
+    // fetched LIVE 2026-11-03 (RE-POINTED, Wave B audit): the old row was
+    // the MITRE ATT&CK Knowledge Base ("free reference for recognizing/
+    // reporting incident types before escalation" — a readable attack
+    // matrix, no teaching flow; fetched LIVE 2026-10-29). RE-POINTED to
+    // Infosec's taught "Stages of Incident Response" (fetched LIVE
+    // 2026-11-03: "Enroll for free", 7 modules / ~5 h, beginner — the
+    // incident-response phases from detection through escalation, the
+    // escalation-path vocabulary the row prints). The MITRE KB keeps its
+    // reference claims in the cybersec/soc pools. Id/ADDR unchanged.
+    type: "course",
     cost: "free",
-    // free reference for recognizing/reporting incident types before escalation
-    url: "https://attack.mitre.org/",
-    durationHours: 3,
+    url: "https://www.coursera.org/learn/stages-of-incident-response",
+    durationHours: 5,
     skillsAddressed: ["Cyber and Data Breach Incident Management"],
     careerId: "its",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Cyber and Data Breach Incident Management":
+        "The stages course walks the incident-response phases — detect, categorize, escalate, hand off — so the escalation path when incidents hit security is something you've rehearsed.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-its-atlassian-incident",
-    title: "Incident management (guide)",
-    provider: "Atlassian",
-    type: "doc",
+    title: "ITIL 4: Management Practices (Logical Operations)",
+    provider: "Coursera (Logical Operations)",
+    // fetched LIVE 2026-11-03 (RE-POINTED, Wave B audit): the old row was
+    // Atlassian's incident-management guide (readable practice guide — the
+    // D2 mockup graded the Atlassian guide genre reference; fetched LIVE
+    // 2026-10-29). RE-POINTED to the taught ITIL 4 practices course (fetched
+    // LIVE 2026-11-03: "Enroll for free", 3 modules / ~6 h — establishes
+    // service level agreements and runs incident/problem management inside
+    // target windows; the SLA response-closure discipline the row prints).
+    // Id/ADDR unchanged.
+    type: "course",
     cost: "free",
-    // SLA/incident-response practice behind the SLM logs
-    url: "https://www.atlassian.com/incident-management",
-    durationHours: 2,
+    url: "https://www.coursera.org/learn/itil-4-management-practices-lo093054",
+    durationHours: 6,
     skillsAddressed: ["Service Level Management"],
     careerId: "its",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Service Level Management":
+        "The ITIL practices course teaches setting service levels and running service desks against them — respond/closure inside target windows, with the metrics logged.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-its-openlearn-comms",
@@ -728,11 +1058,20 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // adopted 403 verdict line (keep-with-flag)
+    // audit (2026-11-03, mockup draft): course page open in browser →
+    // taught/direct (with the keep-with-flag line)
     url: "https://www.open.edu/openlearn/money-business/effective-communication-the-workplace",
     durationHours: 3,
     skillsAddressed: ["Customer Orientation · Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)"],
     careerId: "its",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Customer Orientation · Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)":
+        "The free OU communication course rehearses user-facing service talk — receiving requests plainly, keeping collaboration and self-management under pressure (the service-desk behavior layer).",
+    },
+    // learn draft — user review pending
   },
 
   // == ── Business Analyst, IT (roster 2.3 · id ba) — ba.md §Resources ───────
@@ -1718,20 +2057,41 @@ export const RESOURCES: Resource[] = [
 
   // == ── Data Analyst, junior (E1 · id da) — COMPLETE pool, one row per skill
   // (unchanged from catalog round 12 — every URL fetched LIVE 2026-10-29)
+  // Wave B audit (2026-11-03): access/form copied verbatim from the D2 mockup
+  // access draft (user-ruled 2026-11-03). FIVE rows whose URL was not
+  // teachable at the URL itself (prof-cert landing · TAU paths index · NPC
+  // reference pages · search listing) were RE-POINTED to the live-verified
+  // taught course page of the same skill (fresh "fetched LIVE 2026-11-03"
+  // note in-row; ids/ADDR/pool-size all unchanged) — the pool stays one row
+  // per skill. Learn lines: mockup drafts verbatim + new drafts (learn
+  // draft — user review pending). Every da skill now resolves to a vetted
+  // taught suggestion (coverage gate: 13/13).
   {
     id: "res-da-cert",
     title: "Google Data Analytics Professional Certificate",
     provider: "Coursera (Google)",
     type: "course",
     cost: "free",
-    // fetched LIVE 2026-10-29: "Enroll for free", "Financial aid available"
-    // + 9-course series. Audit/financial-aid route is the free tier; ₱
-    // paid tier exists (Coursera Plus / paid certificate).
-    url: "https://www.coursera.org/professional-certificates/google-data-analytics",
-    durationHours: 180,
+    // fetched LIVE 2026-11-03 (RE-POINTED, Wave B audit): the old URL was the
+    // prof-cert landing (D2 mockup graded it "landing — the course lives
+    // behind it"; fetched LIVE 2026-10-29: "Enroll for free", 9-course
+    // series). The suggested slot must open teachable content, so this row
+    // now points at cert course 1 — the taught Google intro (fetched LIVE
+    // 2026-11-03: "Enroll for free", 4 modules, ~20 h, data life cycle +
+    // analytical-thinking drills). Id/ADDR/pool unchanged; ₱ paid tier:
+    // shareable certificate (audit/financial-aid route is the free tier).
+    url: "https://www.coursera.org/learn/foundations-data?specialization=google-data-analytics",
+    durationHours: 20,
     skillsAddressed: ["Data Analytics"],
     careerId: "da",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Data Analytics":
+        "Google's taught introduction runs the analyst day job end to end — data cycle, spreadsheet/SQL comprehension, and the analytical-thinking drills this row prints (PSF-AAI FSC Level 2).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-da-viz",
@@ -1741,11 +2101,19 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // course page fetched LIVE 2026-10-29 — "Enroll for free" + Tableau
     // dashboards/data stories; ₱ paid tier: shareable certificate
+    // audit (2026-11-03, mockup draft): audit route free, certificate paid
     url: "https://www.coursera.org/learn/visualize-data?specialization=google-data-analytics",
     durationHours: 19,
     skillsAddressed: ["Data Visualization and Storytelling"],
     careerId: "da",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Data Visualization and Storytelling":
+        "You'll build dashboards end to end — charts, story structure, and the visual arguments behind findings (Tableau).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-da-bna",
@@ -1755,11 +2123,19 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // fetched LIVE 2026-10-29 — structured thinking + a module on balancing
     // stakeholder needs; ₱ paid tier: certificate
+    // audit (2026-11-03, mockup draft): audit route free, certificate paid
     url: "https://www.coursera.org/learn/ask-questions-make-decisions?specialization=google-data-analytics",
     durationHours: 15,
     skillsAddressed: ["Business Needs Analysis"],
     careerId: "da",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Business Needs Analysis":
+        "Structured thinking with a module on balancing stakeholder asks, then turning an ambiguous ask into a question plan.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-da-etl",
@@ -1768,11 +2144,19 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // fetched LIVE 2026-10-29, notebook exercises in-browser, fully free
+    // audit (2026-11-03, mockup draft): in-browser notebooks, fully free
     url: "https://www.kaggle.com/learn/data-cleaning",
     durationHours: 4,
     skillsAddressed: ["ETL (extract-transform-load workflows)"],
     careerId: "da",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "ETL (extract-transform-load workflows)":
+        "Hands-on cleaning: missing values, formats, scaling — the workbook runs the skill's own prepare-validate-record loop.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-da-engineering-doc",
@@ -1781,11 +2165,19 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // fetched LIVE 2026-10-29 — relational concepts, SQL, views, transactions
+    // audit (2026-11-03, mockup draft): official tutorial, open access
     url: "https://www.postgresql.org/docs/current/tutorial.html",
     durationHours: 4,
     skillsAddressed: ["Data Engineering"],
     careerId: "da",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Data Engineering":
+        "Relational thinking from scratch: schemas, SQL, views, transactions — the substratum the analyst reads and writes against.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-da-esc-doc",
@@ -1794,6 +2186,7 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // "Are Plays free? Yes" — the 4-ESC bundle's practice layer
+    // audit (2026-11-03, mockup draft): plays are free activity guides
     url: "https://www.atlassian.com/team-playbook",
     durationHours: 2,
     skillsAddressed: [
@@ -1801,6 +2194,13 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "da",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Enabling Skills & Competencies (ESC) — Collaboration, Communication, Digital Fluency, Learning Agility":
+        "Team Playbook plays you can actually run with a team — shared decisions, communication cadence, working agreement.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-da-appdev",
@@ -1809,11 +2209,19 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // fetched LIVE 2026-10-29 — Python basics/light scripting; ₱ paid tier
+    // audit (2026-11-03, mockup draft): audit route free, certificate paid
     url: "https://www.coursera.org/learn/introduction-to-data-analysis-using-python?specialization=google-data-analytics",
     durationHours: 27,
     skillsAddressed: ["Applications Development"],
     careerId: "da",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Applications Development":
+        "Python querying/analysis basics — the light scripting muscle the FSC row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-da-aiethics",
@@ -1822,50 +2230,99 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // fetched LIVE 2026-10-29 — free MOOC, covers AI-society ethics
+    // audit (2026-11-03, mockup draft): free MOOC, signup → account
     url: "https://www.elementsofai.com/",
     durationHours: 30,
     skillsAddressed: ["Artificial Intelligence Ethics and Governance"],
     careerId: "da",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Artificial Intelligence Ethics and Governance":
+        "AI society-impact chapters — bias, transparency, accountability — the governance vocabulary the row mandates.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-da-ethics-doc",
-    title: "The Data Privacy Act of 2012 and its IRR (RA 10173)",
-    provider: "National Privacy Commission (PH)",
-    type: "doc",
+    title: "Data Science Ethics (University of Michigan)",
+    provider: "Coursera (University of Michigan)",
+    // fetched LIVE 2026-11-03 (RE-POINTED, Wave B audit): the old URL was the
+    // NPC Data-Privacy-Act hub (D2 mockup graded it "reference" — readable
+    // law text, no teaching flow; fetched LIVE 2026-10-29). The suggested
+    // slot must open teachable content for the same skill, so this row now
+    // points at University of Michigan's taught "Data Science Ethics"
+    // (fetched LIVE 2026-11-03: "Enroll now", 10 modules incl. Privacy,
+    // Data Ownership, Societal Consequences, Code of Ethics — the
+    // lifecycle discipline the row prints, incl. RA 10173 context). Id,
+    // skill ADDR and the pool's one-row-per-skill shape unchanged.
+    type: "course",
     cost: "free",
-    // DPA-and-IRR hub fetched LIVE 2026-10-29
-    url: "https://privacy.gov.ph/the-data-privacy-act-and-its-irr/",
-    durationHours: 2,
+    url: "https://www.coursera.org/learn/data-science-ethics",
+    durationHours: 20,
     skillsAddressed: ["Data Ethics"],
     careerId: "da",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Data Ethics":
+        "Michigan's data-science ethics course walks privacy, data ownership, and real societal-consequence cases — the legal/ethical lifecycle treatment the row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-da-breach-doc",
-    title: "Exercising Breach Reporting Procedures — security incidents & 72-hour rule",
-    provider: "National Privacy Commission (PH)",
-    type: "doc",
+    title: "Cyber Incident Response (Infosec)",
+    provider: "Coursera (Infosec)",
+    // fetched LIVE 2026-11-03 (RE-POINTED, Wave B audit): the old row was the
+    // NPC breach-reporting procedure page (reference — a working procedure
+    // read, not a taught flow; fetched LIVE 2026-10-29). RE-POINTED to
+    // Infosec's taught "Cyber Incident Response" (fetched LIVE 2026-11-03:
+    // "Enroll for free", 1 module / ~2 h, beginner — how incidents are
+    // categorized, contained and escalated through the IR process; the
+    // recognize→report→escalate loop the row prints). Id/ADDR unchanged.
+    type: "course",
     cost: "free",
-    // NPC page fetched LIVE 2026-10-29
-    url: "https://privacy.gov.ph/exercising-breach-reporting-procedures/",
+    url: "https://www.coursera.org/learn/incident-response",
     durationHours: 2,
     skillsAddressed: ["Cyber and Data Breach Incident Management"],
     careerId: "da",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Cyber and Data Breach Incident Management":
+        "Incident-response fundamentals: how an event becomes an incident, who drives containment, and how status and escalation travel through the IR process.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-da-testing-doc",
-    title: "Test Automation University — free learning paths",
-    provider: "Test Automation University (Applitools)",
-    type: "doc",
+    title: "Introduction to Software Testing (University of Minnesota)",
+    provider: "Coursera (University of Minnesota)",
+    // fetched LIVE 2026-11-03 (RE-POINTED, Wave B audit): the old row pointed
+    // at the TAU learning-paths INDEX (D2 mockup graded it "landing"; fetched
+    // LIVE 2026-10-29). RE-POINTED to the taught UMN "Introduction to
+    // Software Testing" (fetched LIVE 2026-11-03: "Enroll for free", 4
+    // modules — test levels, the why-and-when of testing, plan-write-execute
+    // basics; the sanity-test-your-own-output discipline the row prints).
+    // Id/ADDR unchanged; the TAU tools stay in the qa pool rows.
+    type: "course",
     cost: "free",
-    // fetched LIVE 2026-10-29
-    url: "https://testautomationu.applitools.com/learningpaths.html",
-    durationHours: 3,
+    url: "https://www.coursera.org/learn/introduction-software-testing",
+    durationHours: 30,
     skillsAddressed: ["Software Testing"],
     careerId: "da",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Software Testing":
+        "UMinn's introduction teaches the testing discipline itself — what to test, when, and how a test case proves behavior — exactly the before-it-ships sanity layer the row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-da-config-doc",
@@ -1874,24 +2331,45 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // fetched LIVE 2026-10-29 — version tracking for reproducibility
+    // audit (2026-11-03, mockup draft): quickstart tutorial, open access
     url: "https://docs.github.com/en/get-started/quickstart",
     durationHours: 2,
     skillsAddressed: ["Configuration Tracking"],
     careerId: "da",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Configuration Tracking":
+        "Git mechanics: commits, branches, history — the change log keeping analysis files reproducible.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-da-stakeholder",
-    title: "Stakeholder Management — free-to-audit course listings",
-    provider: "Coursera",
+    title: "Stakeholder Management (STARWEAVER)",
+    provider: "Coursera (STARWEAVER)",
+    // fetched LIVE 2026-11-03 (RE-POINTED, Wave B audit): the old row was the
+    // Coursera SEARCH listing ("listing-page convention" — no teachable
+    // content at the URL). RE-POINTED to the taught "Stakeholder Management"
+    // course page (fetched LIVE 2026-11-03: "Enroll for free", 1 module /
+    // ~5 h — identify stakeholders, analyze needs/expectations, plan the
+    // collaboration and change cadence; the who-you-report-to loop the row
+    // prints). Id/ADDR unchanged.
     type: "course",
     cost: "free",
-    // listing-page convention (same as res-swd-bna-course)
-    url: "https://www.coursera.org/search?query=stakeholder%20management",
-    durationHours: 3,
+    url: "https://www.coursera.org/learn/stakeholder-management",
+    durationHours: 5,
     skillsAddressed: ["Stakeholder Management"],
     careerId: "da",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Stakeholder Management":
+        "Four lessons: identify who needs to know, map expectations, plan the reporting and collaboration cadence — the report-to / stay-in-the-loop shape this skill prints.",
+    },
+    // learn draft — user review pending
   },
 
   // == ── Track 2 · Business & Management (hra · training · mkt · sales · csr ·
@@ -3234,6 +3712,7 @@ export const RESOURCES: Resource[] = [
     type: "NC",
     cost: "free",
     // free regulator-run orientation module to the whole Bookkeeping NC III cycle
+    // audit (2026-11-03, mockup draft): TOP module — free, e-tesda signup
     url: "https://e-tesda.gov.ph/course/view.php?id=3981",
     durationHours: 3,
     skillsAddressed: ["Journalize transactions"],
@@ -3241,6 +3720,13 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "book",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Journalize transactions":
+        "TESDA's own NC III entry module — the journal cycle, source documents, and the 100%-accuracy discipline the unit prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-book-top-journalizing",
@@ -3249,12 +3735,15 @@ export const RESOURCES: Resource[] = [
     type: "NC",
     cost: "free",
     // the official free module of the journalizing unit
+    // audit (2026-11-03, mockup draft): TOP module — free, e-tesda signup
     url: "https://e-tesda.gov.ph/course/view.php?id=3982",
     durationHours: 4,
     skillsAddressed: ["Journalize transactions"],
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "book",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-book-top-posting",
@@ -3262,6 +3751,7 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "NC",
     cost: "free",
+    // audit (2026-11-03, mockup draft): TOP module — free, e-tesda signup
     url: "https://e-tesda.gov.ph/course/view.php?id=3983",
     durationHours: 4,
     skillsAddressed: ["Post transactions"],
@@ -3269,6 +3759,13 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "book",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Post transactions":
+        "The official module: journal-to-ledger transfer with cross-checks — exactly the posting accuracy the unit prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-book-top-trial-balance",
@@ -3276,6 +3773,7 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "NC",
     cost: "free",
+    // audit (2026-11-03, mockup draft): TOP module — free, e-tesda signup
     url: "https://e-tesda.gov.ph/course/view.php?id=4029",
     durationHours: 4,
     skillsAddressed: ["Prepare trial balance"],
@@ -3283,6 +3781,13 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "book",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Prepare trial balance":
+        "Balancing the ledger into a trial balance the TESDA way — extraction, footing, and error chasing.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-book-top-financial-reports",
@@ -3290,6 +3795,7 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "NC",
     cost: "free",
+    // audit (2026-11-03, mockup draft): TOP module — free, e-tesda signup
     url: "https://e-tesda.gov.ph/course/view.php?id=4030",
     durationHours: 4,
     skillsAddressed: ["Prepare financial reports (manual)"],
@@ -3297,6 +3803,13 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "book",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Prepare financial reports (manual)":
+        "Hand-built financial statements from the ledger — the statement set and the accounting-equation checks that hold them together.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-book-top-internal-control",
@@ -3304,6 +3817,7 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "NC",
     cost: "free",
+    // audit (2026-11-03, mockup draft): TOP module — free, e-tesda signup
     url: "https://e-tesda.gov.ph/course/view.php?id=4017",
     durationHours: 4,
     skillsAddressed: ["Review internal control system"],
@@ -3311,6 +3825,13 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "book",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Review internal control system":
+        "Walks the basic control checks — segregation of duties, verification steps, and the weak spots an NC III bookkeeper watches.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-book-acca-intro",
@@ -3320,11 +3841,20 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // ACCA's free course — business transactions, the banking system and
     // double-entry bookkeeping (ACCA-X copy verified)
+    // audit (2026-11-03, mockup draft): ACCA-X free course; certificate paid;
+    // the Verify-and-record winner (taught + creditingBody + id A–Z)
     url: "https://www.edx.org/course/introduction-to-bookkeeping-2",
     durationHours: 30,
     skillsAddressed: ["Journalize transactions", "Post transactions", "Verify and record financial documents & records"],
     creditingBody: "ACCA-X",
     careerId: "book",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Verify and record financial documents & records":
+        "ACCA's accredited intro drills double-entry against source documents — verifying figures and records before anything is journaled, the checking loop the O*NET row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-book-acca-intermediate",
@@ -3333,11 +3863,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // "prepares financial statements" building on intro bookkeeping
+    // audit (2026-11-03, mockup draft): ACCA-X free course; certificate paid
     url: "https://www.edx.org/course/intermediate-bookkeeping-2",
     durationHours: 30,
     skillsAddressed: ["Prepare trial balance", "Prepare financial reports (manual)"],
     creditingBody: "ACCA-X",
     careerId: "book",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-book-intuit-basics",
@@ -3347,6 +3880,8 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // "Enroll for free" + Full-Course-No-Certificate option confirmed on the
     // page; Intuit (QuickBooks) authored — the O*NET hot accounting-software family
+    // audit (2026-11-03, mockup draft): Enroll free / No-Certificate track
+    // confirmed (fixture note) → exam-paid; the Operate-accounting-software winner
     url: "https://www.coursera.org/learn/bookkeeping-basics",
     durationHours: 10,
     skillsAddressed: [
@@ -3355,6 +3890,13 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "book",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Operate accounting software":
+        "QuickBooks-authored basics: recording transactions and reconciling inside real accounting software — the ERP/data-entry fluency the O*NET row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-book-openstax-financial",
@@ -3363,11 +3905,20 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // free OER text covering the full statement set + bookkeeping principles
+    // audit (2026-11-03, mockup draft): structured textbook + exercises, open
+    // access; the PSOC-envelope winner
     url: "https://openstax.org/details/books/principles-financial-accounting",
     durationHours: 6,
     skillsAddressed: ["Prepare financial reports (manual)", "PSOC 3313 record-to-report envelope"],
     careerId: "book",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "PSOC 3313 record-to-report envelope":
+        "The free textbook walks the full record-to-report arc — journals to ledgers to the statement set, with end-of-chapter exercises — the PSOC envelope in book form.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-book-openstax-managerial",
@@ -3376,10 +3927,13 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // internal-control chapter context (controls, segregation)
+    // audit (2026-11-03, mockup draft): readable chapter context = reference
     url: "https://openstax.org/details/books/principles-managerial-accounting",
     durationHours: 6,
     skillsAddressed: ["Review internal control system"],
     careerId: "book",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-book-psf-gih-doc",
@@ -3388,10 +3942,13 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // prints the Internal Controls FSC ladder + the F&A record-to-report envelope
+    // audit (2026-11-03): TESDA PDF hub → reference, open access
     url: "https://www.tesda.gov.ph/Uploads/File/Philippine%20Skills%20Framework/ICT/Philippine%20Skills%20Framework%20for%20Global%20In-House%20Center.pdf",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "book",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-book-gcf-excel",
@@ -3399,11 +3956,15 @@ export const RESOURCES: Resource[] = [
     provider: "GCFGlobal",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, mockup draft): topic hub = landing; individual lesson
+    // titles live behind it
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: ["Verify and record financial documents & records"],
     careerId: "book",
     pick: true,
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-book-top-workplace-comms",
@@ -3411,11 +3972,14 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, mockup draft): TOP module — free, e-tesda signup
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
     skillsAddressed: ["Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling)"],
     creditingBody: "TESDA",
     careerId: "book",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-book-top-receiving-comms",
@@ -3423,12 +3987,21 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, mockup draft): TOP module — free, e-tesda signup;
+    // the Enabling-bundle winner (id A–Z over workplace-comms)
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
     skillsAddressed: ["Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling)"],
     creditingBody: "TESDA",
     careerId: "book",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling)":
+        "TESDA's workplace-communication module: receive, respond, relay — the enabling row's daily practice.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-book-top-digital-literacy-cat",
@@ -3437,11 +4010,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // category page (200); individual course titles not itemized this pass — flagged
+    // audit (2026-11-03, mockup draft): category page = landing; e-tesda signup
     url: "https://e-tesda.gov.ph/course/index.php?categoryid=1310",
     durationHours: 4,
     skillsAddressed: ["Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling)"],
     creditingBody: "TESDA",
     careerId: "book",
+    form: "landing",
+    access: "account",
   },
   // ── acctclerk (4.2) — source-verbatim row names per V-acctclerk-3 ──
   {
