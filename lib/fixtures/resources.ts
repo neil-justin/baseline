@@ -1985,6 +1985,14 @@ export const RESOURCES: Resource[] = [
   },
 
   // == ── Security Analyst (2.7 · id cybersec) ───────────────────────────────
+  // Wave B audit (2026-11-03, batch 2): access/form per-row. The IBM
+  // SkillsBuild root and the Google prof-cert landing grade landing (both
+  // ride the hub pages); one census-thin taught claim filled user-ruled —
+  // the per-role Infosec incident-response course (verified LIVE in the da
+  // pool) carries the Cyber-and-Data-Breach-Incident-Management cell, whose
+  // only prior claim was reference-grade MITRE. Learn lines drafted from
+  // each resource's actual content (learn draft — user review pending).
+  // Coverage: 5/5 vetted.
   {
     id: "res-cybersec-netacad-intro-cyber",
     title: "Introduction to Cybersecurity",
@@ -1992,11 +2000,20 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // ~6 h free beginner course; certificate of completion
+    // audit (2026-11-03): NetAcad course page verified LIVE; free signup →
+    // account. Threat-analysis winner (crediting Cisco beats the hub rows).
     url: "https://www.netacad.com/courses/introduction-to-cybersecurity",
     durationHours: 6,
     skillsAddressed: ["Threat analysis / monitoring"],
     creditingBody: "Cisco Networking Academy",
     careerId: "cybersec",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Threat analysis / monitoring":
+        "Walks how attacks happen and get detected: threat types, the CIA triad, attack vectors and the monitoring mindset a junior security analyst watches for.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-cybersec-skillsbuild",
@@ -2006,10 +2023,14 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // free CIA-triad/data-privacy/threat courses with shareable badges —
     // matched to the RA 10173-anchored performance expectations; free with account
+    // audit (2026-11-03): skillsbuild.org root = the platform home (courses
+    // live behind it) → landing/account
     url: "https://skillsbuild.org/",
     durationHours: 12,
     skillsAddressed: ["Threat analysis / monitoring"],
     careerId: "cybersec",
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-cybersec-google-cybersecurity",
@@ -2018,10 +2039,39 @@ export const RESOURCES: Resource[] = [
     type: "cert",
     cost: "free",
     // material free via audit; certificate paid / financial aid
+    // audit (2026-11-03): prof-cert landing → landing/exam-paid
     url: "https://www.coursera.org/professional-certificates/google-cybersecurity",
     durationHours: 60,
     skillsAddressed: ["Threat analysis / monitoring"],
     careerId: "cybersec",
+    form: "landing",
+    access: "exam-paid",
+  },
+  {
+    id: "res-cybersec-infosec-ir",
+    title: "Cyber Incident Response (Infosec)",
+    provider: "Coursera (Infosec)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the
+    // incident-management cell had only reference-grade MITRE. Per-role
+    // duplicate of the da pool's verified Infosec course (pool convention):
+    // 1 module / ~2 h, "Enroll for free" — how incidents are categorized,
+    // contained and escalated through the IR process, the
+    // recognize→report→escalate loop this family prints. ₱ paid certificate.
+    url: "https://www.coursera.org/learn/incident-response",
+    durationHours: 2,
+    skillsAddressed: ["Cyber and Data Breach Incident Management"],
+    creditingBody: "Infosec",
+    careerId: "cybersec",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Cyber and Data Breach Incident Management":
+        "Incident-response fundamentals taught hands-on-light: when an event becomes an incident, who drives containment, and how status and escalation travel through the IR process — the breach-response loop the row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-cybersec-mitre-attack",
@@ -2030,11 +2080,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // threat/technique reading behind escalation practice + incident taxonomy
+    // audit (2026-11-03): knowledge base = readable reference
     url: "https://attack.mitre.org/",
     durationHours: 3,
     skillsAddressed: ["Threat analysis / monitoring", "Cyber and Data Breach Incident Management"],
     careerId: "cybersec",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-cybersec-fortinet",
@@ -2044,10 +2097,13 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // free NSE-family courses w/ free completion certificates (SOC-adjacent);
     // CYB-V5: current certificate terms re-check queued
+    // audit (2026-11-03): training-catalog hub = landing/direct
     url: "https://www.fortinet.com/training-certification",
     durationHours: 6,
     skillsAddressed: [],
     careerId: "cybersec",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-cybersec-netacad-networking-basics",
@@ -2056,12 +2112,20 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // "understand the networks being defended"
+    // audit (2026-11-03): NetAcad course page verified LIVE; free signup → account
     url: "https://www.netacad.com/courses/networking-basics",
     durationHours: 22,
     skillsAddressed: ["Network administration & maintenance"],
     creditingBody: "Cisco Networking Academy",
     careerId: "cybersec",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Network administration & maintenance":
+        "Teaches the networks being defended — addresses, hosts, routers and the build-and-check flow of running a small network, the maintenance base the row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-cybersec-tryhackme",
@@ -2071,11 +2135,15 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // hands-on vulnerability-scanning/PtT practice in browser; free rooms
     // exist, full paths/advanced labs are paid — stated plainly on copy (CYB-V5)
+    // audit (2026-11-03): tryhackme.com root = the landing; rooms sit behind
+    // the free signup → landing/account
     url: "https://tryhackme.com/",
     durationHours: 4,
     skillsAddressed: ["Vulnerability assessment support (VAPT analyst track)"],
     careerId: "cybersec",
     pick: true,
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-cybersec-netacad-ethical-hacker",
@@ -2084,11 +2152,20 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // ~70 h free course covering scans/tests basics; seat availability at signup
+    // audit (2026-11-03): NetAcad course page verified LIVE ("Ethical
+    // Hacker"); free signup → account. VAPT-track winner.
     url: "https://www.netacad.com/courses/ethical-hacker",
     durationHours: 70,
     skillsAddressed: ["Vulnerability assessment support (VAPT analyst track)"],
     creditingBody: "Cisco Networking Academy",
     careerId: "cybersec",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Vulnerability assessment support (VAPT analyst track)":
+        "A full scan-and-report curriculum: reconnaissance, the scanning and enumeration drills, vulnerability identification and the safety rules for testing — the VAPT support craft, hands-on.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-cybersec-openlearn-comms",
@@ -2097,14 +2174,36 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // adopted 403 verdict line (keep-with-flag); escalation/report writing
+    // audit (2026-11-03, mockup draft): course page open in browser →
+    // taught/direct (curl 403 — the keep-with-flag line)
     url: "https://www.open.edu/openlearn/money-business/effective-communication-the-workplace",
     durationHours: 3,
     skillsAddressed: ["Collaboration · Communication · Problem Solving · Digital Fluency (Enabling)"],
     careerId: "cybersec",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Collaboration · Communication · Problem Solving · Digital Fluency (Enabling)":
+        "Practice writing and briefing for the workplace — escalation notes and cross-team explanation — the communication/problem-solving bundle behaviors.",
+    },
+    // learn draft — user review pending
   },
 
   // == ── Web Developer (2.8 · id webdev) ────────────────────────────────────
+  // Wave B audit (2026-11-03, batch 2): access/form per-row (MDN Learn hub +
+  // web.dev hub + Atlassian/Scrum/WAI grade landing or reference
+  // fail-closed). Two census-thin taught claims filled user-ruled (both
+  // fetched LIVE 2026-11-03): the official Learn WordPress course carries
+  // the CMS cell, and the verified IBM swd Agile course arrives as a
+  // per-role duplicate row for the agility cell. The site life-operations
+  // task-cluster stays honestly red (adviser-only: its six O*NET verbs —
+  // tests/updates/backups/renewals/maintenance/performance — sit behind no
+  // one free taught page verified this pass). The FCC responsive row picks
+  // up the accessibility cell's taught leg (its curriculum includes the
+  // accessibility projects). Learn lines drafted from the resources'
+  // actual content (learn draft — user review pending).
+  // Coverage: 5/6 vetted.
   {
     id: "res-webdev-fcc-rwd",
     title: "Responsive Web Design Certification",
@@ -2112,11 +2211,24 @@ export const RESOURCES: Resource[] = [
     type: "cert",
     cost: "free",
     // free ~300-h curriculum + free certificate
+    // audit (2026-11-03): FCC projects curriculum; free signup → account.
+    // Carries the responsive/accessibility cell (the curriculum runs the
+    // accessibility projects) — the JS row holds the client-coding winner.
     url: "https://www.freecodecamp.org/learn/responsive-web-design/",
     durationHours: 60,
-    skillsAddressed: ["Client-side coding (HTML/CSS/JS)"],
+    skillsAddressed: [
+      "Client-side coding (HTML/CSS/JS)",
+      "Responsive/UI basics + accessibility",
+    ],
     creditingBody: "freeCodeCamp",
     careerId: "webdev",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Responsive/UI basics + accessibility":
+        "The responsive-design curriculum builds pages that reflow across devices and runs accessibility-minded markup and contrast work in its projects — the cross-device + accessible rendering this row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-webdev-mdn-learn",
@@ -2124,11 +2236,15 @@ export const RESOURCES: Resource[] = [
     provider: "Mozilla",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): curriculum hub index = landing (fail-closed;
+    // the individual modules open one click deeper)
     url: "https://developer.mozilla.org/en-US/docs/Learn_web_development",
     durationHours: 4,
     skillsAddressed: ["Client-side coding (HTML/CSS/JS)", "Responsive/UI basics + accessibility"],
     careerId: "webdev",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-webdev-odin",
@@ -2137,10 +2253,13 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // project-first full curriculum incl. Git
+    // audit (2026-11-03): project-first open curriculum → taught/direct
     url: "https://www.theodinproject.com/paths/foundations",
     durationHours: 40,
     skillsAddressed: ["Client-side coding (HTML/CSS/JS)"],
     careerId: "webdev",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-webdev-fcc-js",
@@ -2148,11 +2267,20 @@ export const RESOURCES: Resource[] = [
     provider: "freeCodeCamp",
     type: "cert",
     cost: "free",
+    // audit (2026-11-03): FCC projects curriculum; free signup → account.
+    // Client-coding winner (id A–Z over the RWD row — both credited FCC).
     url: "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/",
     durationHours: 40,
     skillsAddressed: ["Client-side coding (HTML/CSS/JS)"],
     creditingBody: "freeCodeCamp",
     careerId: "webdev",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Client-side coding (HTML/CSS/JS)":
+        "You write and debug real JavaScript in the browser through the whole curriculum — functions, DOM work and the structured problem-solving a web site's front end runs on.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-webdev-wordpress-docs",
@@ -2160,10 +2288,13 @@ export const RESOURCES: Resource[] = [
     provider: "WordPress.org",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): vendor docs hub = reference
     url: "https://wordpress.org/documentation/",
     durationHours: 4,
     skillsAddressed: ["CMS administration (WordPress etc.)"],
     careerId: "webdev",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-webdev-wordpress-first-steps",
@@ -2171,11 +2302,41 @@ export const RESOURCES: Resource[] = [
     provider: "WordPress.org",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): authored how-to walk-through text = readable
+    // reference (no teaching flow/exercises at the URL)
     url: "https://wordpress.org/documentation/article/first-steps-with-wordpress/",
     durationHours: 2,
     skillsAddressed: ["CMS administration (WordPress etc.)"],
     careerId: "webdev",
     pick: true,
+    form: "reference",
+    access: "direct",
+  },
+  {
+    id: "res-webdev-wpl-learn",
+    title: "Beginner WordPress User (Learn WordPress — official)",
+    provider: "WordPress.org (Learn WordPress)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the CMS
+    // cell had only reference-grade docs rows. New row for the CMS's OWN
+    // official course on the WordPress learning site ("Beginner WordPress
+    // User", 200 verified; lessons page displays the full course; the
+    // WordPress learning site teaches free) — installs/config, the admin
+    // dashboard, themes, plugins, users and content management — the
+    // run-the-CMS craft this row prints.
+    url: "https://learn.wordpress.org/course/beginner-wordpress-user/",
+    durationHours: 4,
+    skillsAddressed: ["CMS administration (WordPress etc.)"],
+    creditingBody: "WordPress.org",
+    careerId: "webdev",
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "CMS administration (WordPress etc.)":
+        "The CMS teaches itself officially: dashboard navigation, settings, themes and plugins, users, and day-to-day content publishing — administering the WordPress stack, lesson by lesson.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-webdev-w3c-wai",
@@ -2183,10 +2344,13 @@ export const RESOURCES: Resource[] = [
     provider: "W3C",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): readable fundamentals = reference
     url: "https://www.w3.org/WAI/fundamentals/",
     durationHours: 4,
     skillsAddressed: ["Responsive/UI basics + accessibility"],
     careerId: "webdev",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-webdev-mdn-accessibility",
@@ -2194,11 +2358,14 @@ export const RESOURCES: Resource[] = [
     provider: "Mozilla",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): docs article = readable reference
     url: "https://developer.mozilla.org/en-US/docs/Learn/Accessibility",
     durationHours: 3,
     skillsAddressed: ["Responsive/UI basics + accessibility"],
     careerId: "webdev",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-webdev-webdev-learn",
@@ -2207,11 +2374,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // performance/responsive course docs behind the site life-operations verb
+    // audit (2026-11-03): learn hub index = landing (fail-closed)
     url: "https://web.dev/learn/",
     durationHours: 4,
     skillsAddressed: ["↳ task-cluster sub-row: site life-operations", "Responsive/UI basics + accessibility"],
     careerId: "webdev",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-webdev-progit",
@@ -2220,11 +2390,20 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // free text; print = purchase (labeled)
+    // audit (2026-11-03): free book (taught per the content-shape ruling);
+    // open access. Version-control winner.
     url: "https://git-scm.com/book/en/v2",
     durationHours: 8,
     skillsAddressed: ["Version control (git)"],
     careerId: "webdev",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Version control (git)":
+        "The full Git workflow from commit to remote: branching models for teams, resolving conflicts, and reviewing history — team-safe code management.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-webdev-scrum-guide",
@@ -2232,10 +2411,38 @@ export const RESOURCES: Resource[] = [
     provider: "Scrum.org / Schwaber & Sutherland",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): official spec text = reference
     url: "https://scrumguides.org/scrum-guide.html",
     durationHours: 2,
     skillsAddressed: ["Agile Software Development (when agency-run)"],
     careerId: "webdev",
+    form: "reference",
+    access: "direct",
+  },
+  {
+    id: "res-webdev-agile-coursera",
+    title: "Agile Software Development (course)",
+    provider: "Coursera",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the agility
+    // cell had only reference-grade guide claims. Per-role duplicate of the
+    // swd pool's verified taught Agile course (pool convention): the sprint
+    // disciplines themselves — backlog planning, ceremonies, incremental
+    // delivery — the agency-sprint practice this row prints. Audit route →
+    // exam-paid (₱ certificate).
+    url: "https://www.coursera.org/learn/agile-software-development",
+    durationHours: 8,
+    skillsAddressed: ["Agile Software Development (when agency-run)"],
+    creditingBody: "IBM",
+    careerId: "webdev",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Agile Software Development (when agency-run)":
+        "The course teaches the sprint disciplines themselves — backlog planning, ceremonies and incremental delivery — so each ceremony this skill prints is something you've actually run.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-webdev-atlassian-agile",
@@ -2243,14 +2450,29 @@ export const RESOURCES: Resource[] = [
     provider: "Atlassian",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03): text library = readable reference
     url: "https://www.atlassian.com/agile",
     durationHours: 2,
     skillsAddressed: ["Agile Software Development (when agency-run)"],
     careerId: "webdev",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
 
   // == ── Digital / Multimedia Artist (2.9 · id digart) ──────────────────────
+  // Wave B audit (2026-11-03, batch 2): access/form per-row. The TESDA
+  // category listing grades landing (the 7 VGD modules live behind TOP
+  // accounts — module pages verified to redirect to login), Canva stays
+  // UNGRADED (403 bot-wall this pass, fail-closed), Figma's article index
+  // grades landing. Two census-thin taught claims filled user-ruled (both
+  // fetched LIVE 2026-11-03): Google's UX foundations course and its
+  // wireframes/low-fi course carry the UX and UI units. Adviser-only reds
+  // remain, honest, never papered over (searched the open catalog this
+  // pass — Packaging, Booth/Display, the tools row and the 2D-Animator
+  // counterpart have no free taught page verified; Adobe tutorials stay
+  // 403 per DIG-V2). Learn lines drafted from the resources' actual
+  // content (learn draft — user review pending). Coverage: 6/10 vetted.
   {
     id: "res-digart-tesda-vgd-elearning",
     title: "Visual Graphic Design NC III e-learning (7 free modules)",
@@ -2259,6 +2481,9 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // the direct free e-learning companion to the exact TR units
     // (category listing 200, module set verified 1:1); free, self-paced; TOP account
+    // audit (2026-11-03): the category page is a course index; the seven
+    // module pages (ids 3365–3371, verified LIVE) redirect to the TOP login
+    // → landing/account (the modules themselves teach behind the TOP account)
     url: "https://e-tesda.gov.ph/course/index.php?categoryid=1524",
     durationHours: 12,
     skillsAddressed: [
@@ -2273,6 +2498,8 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "digart",
     pick: true,
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-digart-tr-doc",
@@ -2295,6 +2522,8 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // free-audit visual design principles grounding; audit/preview free,
     // certificate paid
+    // audit (2026-11-03): Coursera course page → audit route free, cert paid
+    // → exam-paid; taught. Logo/Print/brief winner.
     url: "https://www.coursera.org/learn/fundamentals-of-graphic-design",
     durationHours: 15,
     skillsAddressed: [
@@ -2304,6 +2533,17 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "digart",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "DEVELOP DESIGNS FOR A LOGO (ICT216313)":
+        "Teaches making the design decisions a logo needs — image-making, typography and composition worked through brief-driven exercises, the visual-design principles the unit prints.",
+      "DEVELOP DESIGNS FOR PRINT MEDIA (ICT216314)":
+        "The same visual fundamentals applied to print-bound graphics: composition, scale and color worked in the course's design exercises — the printed-output craft behind posters/brochures.",
+      "Follow creative brief + brand guideline development":
+        "Every module's assignment runs brief-to-submittable-design: read the given brief constraints, iterate options, and produce the finished design for review — the brief-discipline loop the TR units print.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-digart-blender-manual",
@@ -2313,6 +2553,7 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // the free industry-grade animation/3D tool's manual — the tool row's
     // Blender leg AND the Junior-2D-Animator counterpart row's linkage (DIG-V3)
+    // audit (2026-11-03): vendor manual = reference
     url: "https://docs.blender.org/manual/en/latest/",
     durationHours: 4,
     skillsAddressed: [
@@ -2321,6 +2562,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "digart",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-digart-canva-design-school",
@@ -2329,10 +2572,62 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // beginner-friendly design-tool courses; free tier suffices
+    // audit (2026-11-03): canva.com/designschool 403 to this environment —
+    // NOT GRADED (fail-closed; same bot-wall class as the OpenLearn verdict
+    // but not yet adopted for this domain)
     url: "https://www.canva.com/designschool/",
     durationHours: 4,
     skillsAddressed: ["Use specialized graphic/animation tools (Adobe suite, Blender etc.)"],
     careerId: "digart",
+  },
+  {
+    id: "res-digart-google-ux",
+    title: "Foundations of User Experience (UX) Design (Google)",
+    provider: "Google (Coursera)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the UX unit
+    // had only index/landing-grade claims. New row for Google's taught UX
+    // foundations course ("Enroll for free", cert course 1 — UX basics,
+    // user-centered design thinking end to end) — the
+    // develop-designs-for-user-experience unit, taught. ₱ paid tier:
+    // shareable certificate.
+    url: "https://www.coursera.org/learn/foundations-user-experience-design",
+    durationHours: 15,
+    skillsAddressed: ["DEVELOP DESIGNS FOR USER EXPERIENCE (ICT216315)"],
+    creditingBody: "Google",
+    careerId: "digart",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "DEVELOP DESIGNS FOR USER EXPERIENCE (ICT216315)":
+        "Teaches UX end to end in course 1 of Google's certificate: what a UX designer produces, user-centered design thinking, and the problem-space exploration the unit's design work builds on.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-digart-google-wireframes",
+    title: "Build Wireframes and Low-Fidelity Prototypes (Google)",
+    provider: "Google (Coursera)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the UI unit
+    // had only index/landing-grade claims. New row for cert course 3
+    // ("Enroll for free", verified) — storyboards, wireframes and paper/digital
+    // low-fidelity prototypes for a mobile app: screen layout and flows, the
+    // interface-design building work the unit prints. ₱ paid tier.
+    url: "https://www.coursera.org/learn/wireframes-low-fidelity-prototypes",
+    durationHours: 15,
+    skillsAddressed: ["DEVELOP DESIGNS FOR USER INTERFACE (ICT216316)"],
+    creditingBody: "Google",
+    careerId: "digart",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "DEVELOP DESIGNS FOR USER INTERFACE (ICT216316)":
+        "You draw screen layouts and interface flows hands-on — storyboards, wireframes and low-fidelity prototypes for a product's screens — the interface-design development the unit prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-digart-figma",
@@ -2341,6 +2636,8 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // UI/prototyping tooling tutorials behind COC 2 (UI/UX)
+    // audit (2026-11-03): fetched LIVE — "Resource Library — How-To & Best
+    // Practice Articles": an article INDEX at this URL = landing
     url: "https://www.figma.com/resource-library/",
     durationHours: 3,
     skillsAddressed: [
@@ -2350,6 +2647,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "digart",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-digart-openlearn-comms",
@@ -2358,15 +2657,33 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // adopted 403 verdict line (keep-with-flag); client-facing behaviors
+    // audit (2026-11-03, mockup draft): course page open in browser →
+    // taught/direct (curl 403 — the keep-with-flag line)
     url: "https://www.open.edu/openlearn/money-business/effective-communication-the-workplace",
     durationHours: 3,
     skillsAddressed: ["Client communication & revision handling"],
     careerId: "digart",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Client communication & revision handling":
+        "Workplace communication practice — presenting work, taking feedback and negotiating changes with colleagues/clients, the liaise-and-revise loop the client behaviors row prints.",
+    },
+    // learn draft — user review pending
   },
   // DIG-V2: Adobe official tutorials 403 — flagged, NOT cited here.
 
   // == ── SOC Analyst (E4 · id soc) — soc.md §Resources ──────────────────────
+  // Wave B audit (2026-11-03, batch 2): access/form per-row (root/catalog
+  // rows grade landing fail-closed; NIST/OTX/MITRE grade reference). The
+  // SOC-operations cells had reference-grade claims only — they now ride
+  // the verified Cisco SOC course (fetched LIVE 2026-11-03: "Enroll for
+  // free", SIEM integration + incident-response workflows + threat-hunting
+  // for associate analysts) as a taught row; LetsDefend stays in data
+  // graded landing (no taught deep-link verified this pass). Learn lines
+  // drafted from the resources' actual content (learn draft — user review
+  // pending). Coverage: 7/7 vetted.
   {
     id: "res-soc-letsdefend",
     title: "LetsDefend — SOC analyst training simulator (free plan)",
@@ -2375,10 +2692,52 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // free plan placement printed on the landing page; trains the printed
     // queue workflow; limits/pricing terms stated at signup (SOC-V6)
+    // audit (2026-11-03): letsdefend.io root verified LIVE; no taught
+    // deep-link found at roadmap/simulator/training slugs (404) →
+    // landing/account
     url: "https://letsdefend.io/",
     durationHours: 6,
     skillsAddressed: ["Monitor cyber security systems", "Manage response to cyber security incidents"],
     careerId: "soc",
+    form: "landing",
+    access: "account",
+  },
+  {
+    id: "res-soc-cisco-soc",
+    title: "Security Operations Center (SOC) (Cisco)",
+    provider: "Cisco (Coursera)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 2 fill, user-ruled): the SOC
+    // operations cells had only reference-grade MITRE/NIST/OTX/Splunk
+    // claims. New row for Cisco's taught SOC course ("Enroll for free",
+    // associate-level analyst training): SOC team roles and core functions,
+    // SIEM integration, event monitoring, incident-response workflows, and
+    // threat-hunting techniques plus workflow-management/automation for
+    // high alert volume. ₱ paid tier: certificate (audit/financial-aid free).
+    url: "https://www.coursera.org/learn/security-operations-center-soc",
+    durationHours: 10,
+    skillsAddressed: [
+      "Monitor cyber security systems",
+      "Maintain cyber security operations",
+      "Manage response to cyber security incidents",
+      "Threat Analysis and Defence · Threat Intelligence and Detection (family FSC cross-cite)",
+    ],
+    creditingBody: "Cisco",
+    careerId: "soc",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Monitor cyber security systems":
+        "Teaches the monitoring shift end to end — SIEM feeds, centralized event monitoring, and the workflow discipline for working a high-volume alert queue.",
+      "Maintain cyber security operations":
+        "You learn how a SOC runs day to day: team roles, runbook-driven workflow management, and the automation that keeps operations steady across shifts.",
+      "Manage response to cyber security incidents":
+        "Incident-response workflows taught for the associate analyst — contain, coordinate, escalate, and feed the post-incident review.",
+      "Threat Analysis and Defence · Threat Intelligence and Detection (family FSC cross-cite)":
+        "The threat-hunting module connects indicator intelligence to detection — hunting for adversary behavior and turning findings into defence adjustments.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-soc-mitre-attack",
@@ -2387,6 +2746,7 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // the "Knowledge of attack framework" reference; incident-type taxonomy
+    // audit (2026-11-03): knowledge base = reference
     url: "https://attack.mitre.org/",
     durationHours: 3,
     skillsAddressed: [
@@ -2396,6 +2756,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "soc",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-soc-splunk-free",
@@ -2405,11 +2767,14 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // free-course landing (introductory log/SIEM analysis); older splunk101
     // deep-link 404'd today — recorded, replaced by the landing (SOC-V6)
+    // audit (2026-11-03): free-courses listing = landing/direct
     url: "https://www.splunk.com/en_us/training/free-courses.html",
     durationHours: 6,
     skillsAddressed: ["Monitor cyber security systems", "Maintain cyber security operations"],
     careerId: "soc",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-soc-fortinet",
@@ -2419,10 +2784,13 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // free NSE-family security-operations courseware; certificate terms
     // re-check rides sibling CYB-V5
+    // audit (2026-11-03): catalog hub = landing/direct
     url: "https://www.fortinet.com/training-certification",
     durationHours: 6,
     skillsAddressed: [],
     careerId: "soc",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-soc-nist-800-61",
@@ -2431,10 +2799,13 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // free authoritative incident-handling reference
+    // audit (2026-11-03): NIST publication = reference
     url: "https://csrc.nist.gov/pubs/sp/800/61/r3/final",
     durationHours: 3,
     skillsAddressed: ["Manage response to cyber security incidents"],
     careerId: "soc",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-soc-otx",
@@ -2443,11 +2814,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // free live threat-intel feed implementing the TESDA criterion
+    // audit (2026-11-03): live threat-feed platform = reference
     url: "https://otx.alienvault.com/",
     durationHours: 2,
     skillsAddressed: ["Threat Analysis and Defence · Threat Intelligence and Detection (family FSC cross-cite)"],
     careerId: "soc",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-soc-tryhackme",
@@ -2456,11 +2830,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // hands-on scanning/triage practice; flag the paid tier boundary on copy
+    // audit (2026-11-03): root = landing; rooms behind the free signup → landing/account
     url: "https://tryhackme.com/",
     durationHours: 4,
     skillsAddressed: ["Vulnerability scanning (VAPT-adjacent, TESDA-printed)"],
     careerId: "soc",
     pick: true,
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-soc-netacad-ethical-hacker",
@@ -2469,11 +2846,20 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // scan-and-report curriculum; seat availability at signup
+    // audit (2026-11-03): course page verified LIVE ("Ethical Hacker");
+    // free signup → account. Vulnerability-scanning winner.
     url: "https://www.netacad.com/courses/ethical-hacker",
     durationHours: 70,
     skillsAddressed: ["Vulnerability scanning (VAPT-adjacent, TESDA-printed)"],
     creditingBody: "Cisco Networking Academy",
     careerId: "soc",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Vulnerability scanning (VAPT-adjacent, TESDA-printed)":
+        "The scan-and-report curriculum: reconnaissance and scanning drills against test targets, vulnerability identification, and writing findings with the safety rules observed.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-soc-netacad-networking-basics",
@@ -2482,12 +2868,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // the "LAN, WAN, port forwarding" knowledge the TESDA unit prints
+    // audit (2026-11-03): course page verified LIVE; free signup → account
     url: "https://www.netacad.com/courses/networking-basics",
     durationHours: 22,
     skillsAddressed: ["Network security understanding (network administration family)"],
     creditingBody: "Cisco Networking Academy",
     careerId: "soc",
     pick: true,
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-soc-netacad-network-defense",
@@ -2496,11 +2885,21 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // defensive-tooling course behind the firewall/EDR alert-source range
+    // audit (2026-11-03): course page verified LIVE; free signup → account.
+    // Network-security coverage winner (id A–Z over the Basics row — the
+    // Basics row keeps the fallback flag, fewer hours).
     url: "https://www.netacad.com/courses/network-defense",
     durationHours: 24,
     skillsAddressed: ["Network security understanding (network administration family)"],
     creditingBody: "Cisco Networking Academy",
     careerId: "soc",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Network security understanding (network administration family)":
+        "Teaches the defence side of the network: access controls, firewall rules, monitoring and the hardening choices that keep a LAN protected — the understanding the SOC expects you to carry.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-soc-google-cybersecurity",
@@ -2509,10 +2908,13 @@ export const RESOURCES: Resource[] = [
     type: "cert",
     cost: "free",
     // 200 via CLI 2026-10-29; audit→Preview drift re-check at enrollment
+    // audit (2026-11-03): prof-cert landing (ADDR-catalog-only)
     url: "https://www.coursera.org/professional-certificates/google-cybersecurity",
     durationHours: 60,
     skillsAddressed: [],
     careerId: "soc",
+    form: "landing",
+    access: "exam-paid",
   },
   {
     id: "res-soc-openlearn-comms",
@@ -2521,11 +2923,20 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // adopted 403 verdict line (keep-with-flag)
+    // audit (2026-11-03, mockup draft): course page open in browser →
+    // taught/direct (curl 403 — the keep-with-flag line)
     url: "https://www.open.edu/openlearn/money-business/effective-communication-the-workplace",
     durationHours: 3,
     skillsAddressed: ["Collaboration · Communication · Problem Solving · Digital Fluency (Enabling)"],
     careerId: "soc",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Collaboration · Communication · Problem Solving · Digital Fluency (Enabling)":
+        "Workplace communication practice — briefing the handover, explaining technical state plainly — the bundle's communication/problem-solving behaviors.",
+    },
+    // learn draft — user review pending
   },
 
   // == ── Data Analyst, junior (E1 · id da) — COMPLETE pool, one row per skill

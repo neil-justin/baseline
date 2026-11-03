@@ -975,10 +975,10 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
 });
 
 describe("§6.1 re-map census (final mapping state) + canon rails", () => {
-  it("catalog intact: no rows deleted (437 → 445 Wave B batch 2 fills are additive); 551 ADDR entries", () => {
-    expect(RESOURCES).toHaveLength(445); // +8 verified taught rows (2 ba · 1 sysadmin · 5 dba; 437 baseline)
+  it("catalog intact: no rows deleted (437 → 451, Wave B batch 2 fills all additive); 561 ADDR entries", () => {
+    expect(RESOURCES).toHaveLength(451); // +14 verified taught rows (2 ba · 1 sysadmin · 5 dba · 1 cybersec · 1 soc · 2 webdev · 2 digart; 437 baseline)
     const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
-    expect(mappings).toBe(551); // 537 + 14 (UAT claim · Visio claim · ba ESC attach · design-CWF attach · SLO claim · 4×IBM DBA · Meta · IBM vuln · Google dup · postmortem · FCC migration)
+    expect(mappings).toBe(561); // 537 + 24 (see batch-2 row edits: fills + attaches, incl. the ba ESC attach and the webdev responsive attach)
   });
 
   it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {
@@ -1031,7 +1031,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
     return a.id.localeCompare(b.id);
   };
 
-  it("211 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
+  it("212 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
     const winnersBySkill = new Map<string, string>(); // career::skill → row id
     const winnerRows = new Set<string>();
     for (const c of CAREERS) {
@@ -1048,7 +1048,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
       }
     }
     const flags = RESOURCES.filter((r) => r.pick).map((r) => r.id);
-    expect(flags).toHaveLength(211); // 208 → 209 (qa::ASE) → 211 (Wave B batch 2: ba::UAT + sysadmin::SLA fallback winners flagged; dba winners unchanged — see the row edits)
+    expect(flags).toHaveLength(212); // 208 → 209 (qa::ASE) → 212 (Wave B batch 2: ba::UAT + sysadmin::SLA winners; the atlassian-agile Web-flag replaces the scrum-guide flag there)
     expect(new Set(flags)).toEqual(winnerRows); // byte-match in BOTH directions
     expect(winnersBySkill.get("swd::Applications Development")).toBe("res-python-basics");
     // the canon money-shot stays flagged-adjacent: the qa fallback winner is a
