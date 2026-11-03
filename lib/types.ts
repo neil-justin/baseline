@@ -5,6 +5,18 @@ export type BarSource =
   | "checked" // ✓✓ comprehension-checked resource completion
   | "claimed"; // self-report only (flagged; never counts toward skills-match)
 
+/**
+ * The takeability fact behind a resource's front door (2026-11-03 audit
+ * rulings — "free" can no longer do three jobs):
+ *   direct    — open URL, learn, no gate
+ *   account   — free with a (free) signup
+ *   exam-paid — content free to study; the credit itself is a paid exam
+ *   paidUni   — costs pesos (never holds the suggested slot)
+ * The picker's self-serve gate is direct/account/exam-paid — paidUni never
+ * wins, so a paid suggestion can never masquerade as a path in.
+ */
+export type AccessState = "direct" | "account" | "exam-paid" | "paidUni";
+
 /** ES carrier — the step-③ competency assessment's per-competency result
  *  (7 NACE competencies, E&I excluded by recorded choice; ADR 0002). */
 export type CompetencyStatus = "verified" | "claimed";
@@ -190,6 +202,23 @@ export interface Resource {
    *  (free tier → fewer hours → provider) until flags exist */
   pick?: boolean;
   skillsAddressed: string[];
+  /* ── the suggestion-audit layer (2026-11-03 rulings) ──
+   * access: the takeability fact ("free" can no longer do three jobs).
+   *   direct    — open URL, learn, no gate
+   *   account   — free with a (free) signup
+   *   exam-paid — content free to study; the credit itself is a paid exam
+   *   paidUni   — costs pesos (never holds the suggested slot)
+   * form: content-shape gate (taught-only catalog ruling).
+   *   taught    — the URL opens teachable content
+   *   reference — readable material, no teaching flow
+   *   landing   — admin/index/search/marketing page: no learnable content
+   * Rows WITHOUT these fields are UNVETTED: the walk renders the honest
+   * "audit pending" wait-state for their skills, never a pretend pick.
+   * learnNotes: the per-claim learn line ("why this teaches this skill"),
+   * keyed by skill name — authored content, user-edited (spec §6). */
+  access?: AccessState;
+  form?: "taught" | "reference" | "landing";
+  learnNotes?: Record<string, string>;
   creditingBody?: string;
   countsTowardEntryPath?: boolean;
   careerId: string;
