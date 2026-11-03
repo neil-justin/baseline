@@ -3422,7 +3422,16 @@ export const RESOURCES: Resource[] = [
   // Implementation / Skills-Framework Adoption (no taught claim verified —
   // adviser ruling pending). Learn lines drafted from the resources'
   // actual content (learn draft — user review pending).
-  // Coverage: 15/20 vetted.
+  // Wave E recap (2026-11-03, user-delegated hunt): the DEIB cell fills with
+  // Coursera's Fundamentals of DEI&B (HTTP 200, printed 4 h), the Talent
+  // Capability Assessment cell fills with Coursera's SAGE Talent Management
+  // (HTTP 200, 14 modules incl. Talent Assessment Tools), and the
+  // HR-Practices-Implementation no-claim fills with Minnesota's
+  // Recruiting-Hiring-Onboarding course (HTTP 200, 20 h). Employee Mobility
+  // (transfers/promotions/redeployment records) and Skills Framework
+  // Adoption (promoting + logging framework adoption) re-hunted: no taught
+  // self-serve page exists for either — adjudicated Wave E.
+  // Coverage: 18/20 vetted.
   {
     id: "res-hra-alison-diploma-hr",
     title: "Diploma in Human Resources (HR)",
@@ -3717,6 +3726,76 @@ export const RESOURCES: Resource[] = [
         "The writing module drills the workplace-communication pieces — memos, announcements and reports written for internal audiences — the employee-communication flow this cell prints.",
     },
     // learn draft — user review pending
+  },
+  {
+    id: "res-hra-coursera-deib",
+    title: "Fundamentals of Diversity, Equity, Inclusion, and Belonging",
+    provider: "Coursera",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave E hunt): course page HTTP 200,
+    // "Enroll for free" ×3 (audit route; ₱ certificate), printed 4 hours
+    // to complete, 3 modules. The DEIB cell's only claims were a statute
+    // reference row and the declared gap — this row carries the craft taught.
+    url: "https://www.coursera.org/learn/fundamentals-of-diversity-equity-inclusion-and-belonging",
+    durationHours: 4,
+    skillsAddressed: ["Diversity, Equity, Inclusion and Belonging Management"],
+    careerId: "hra",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Diversity, Equity, Inclusion and Belonging Management":
+        "Teaches the tools of DEIB work — advocating and embedding diversity, equity, inclusion and belonging initiatives across a workplace — the management practice this cell prints.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-hra-coursera-talent-mgmt",
+    title: "Talent Management",
+    provider: "Coursera",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave E hunt): course page HTTP 200,
+    // "Enroll for free" (audit route; ₱ certificate), 14 modules including
+    // Talent Assessment Tools and Talent Assessment Fundamentals. The
+    // capability-assessment cell's only claims were a reference factsheet
+    // row and the declared gap — this row carries the assessment craft taught.
+    url: "https://www.coursera.org/learn/sage-talent-management",
+    durationHours: 10,
+    skillsAddressed: ["Talent Capability Assessment"],
+    careerId: "hra",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Talent Capability Assessment":
+        "Dedicated modules teach talent-assessment fundamentals and the assessment tools an HR practice runs — judging people's capabilities and measuring who fits which role.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-hra-minnesota-recruit",
+    title: "Recruiting, Hiring, and Onboarding Employees",
+    provider: "Coursera (University of Minnesota)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave E hunt): course page HTTP 200,
+    // "Enroll for free" ×3 (audit route; ₱ certificate), printed
+    // "2 weeks to complete at 10 hours a week". The HR-Practices cell was a
+    // no-claim red — this row carries the implement-HR-practice craft taught
+    // (offer letters/contracts built within hiring regulations is the CWF
+    // anchor this row paraphrases).
+    url: "https://www.coursera.org/learn/recruiting-hiring-onboarding-employees",
+    durationHours: 20,
+    skillsAddressed: ["Human Resources Practices Implementation"],
+    careerId: "hra",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Human Resources Practices Implementation":
+        "You build the people practices themselves — recruitment through onboarding run inside hiring rules, with offer letters and contracts drafted from standard templates — implementing HR policy in every actionable step.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-hra-gap-interview",
