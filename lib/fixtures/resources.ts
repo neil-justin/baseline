@@ -7560,6 +7560,21 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   // ── coll (4.7) — thin collections-training zone declared; RA 3765 never a live link ──
+  // Wave B audit (2026-11-03, batch 4): access/form per-row. TOP Moodle modules
+  // → account (303 login-wall verified LIVE this pass). GCF Excel graded
+  // taught/direct (URL 308s onto LearnFree's "Excel: Foundations" series —
+  // the standing lesson-series verification; re-verified fresh this pass).
+  // Wharton + ACCA-X Coursera/edX rows graded taught/exam-paid (fetched LIVE
+  // "Enroll for free"; the old edX slug 301s onto the canonical
+  // /learn/bookkeeping/acca-introduction-to-bookkeeping path). Statutes + DOLE
+  // handbook → reference. Digital-literacy category page → landing. New
+  // per-role fill (fetched LIVE 2026-11-03, user-ruled): Alison's taught
+  // "Accounts Receivable Management" ("Start Course Now", CPD-accredited) —
+  // its printed outcomes carry establish-collection-procedures/credit-terms
+  // and the AR process flow: the three collections-craft cells. Honest reds
+  // kept (no taught page verified this pass): the face-to-face reason-review
+  // conversation, delinquent-customer skip-tracing, the
+  // legal-action/disconnection recommendation. Coverage: 6/9 vetted.
   {
     id: "res-coll-top-receiving-comms",
     title: "Receiving and Responding to Workplace Communication (TOP)",
@@ -7567,11 +7582,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // the closest free PH anchor to call-handling craft
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303 login-wall
+    // verified LIVE; id 52 resolves via the TOP search mirror).
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "coll",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-coll-top-workplace-comms",
@@ -7585,6 +7604,13 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     careerId: "coll",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Communication · Professionalism (Enabling)":
+        "TESDA's workplace-communication module: participating, responding, relaying — the daily behavior layer of the collections desk (original-document discipline included).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-coll-khan-banking",
@@ -7593,10 +7619,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // credit-side context; US framing flagged (BSP 403)
+    // audit (2026-11-03, batch 4): fetched LIVE (200, title verified) →
+    // taught/direct (Khan units are free, open, self-serve).
     url: "https://www.khanacademy.org/economics-finance-domain/core-finance/banking-and-money",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "coll",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-coll-gcf-excel",
@@ -7605,6 +7635,11 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // status-of-collection trackers
+    // audit (2026-11-03, batch 4): URL 308s onto LearnFree's "Excel:
+    // Foundations" series page (re-verified fresh; the batch-3 standing
+    // lesson-series verification carries the grade). taught/direct. The
+    // status-tracking leg is the tool-craft winner (the collections craft
+    // rows ride the Alison AR row below).
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: [
@@ -7613,6 +7648,13 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "coll",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Record information about financial status of customers and status of collection efforts":
+        "The Excel Foundations series drills the worksheet side — building the status-of-account tracker the row names, entries updated per collection effort.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-coll-finance-fundamentals",
@@ -7620,10 +7662,14 @@ export const RESOURCES: Resource[] = [
     provider: "Coursera (University of Pennsylvania)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): fetched LIVE "Enroll for free" →
+    // taught/exam-paid. Catalog fallback only (ADDR empty per §6.1).
     url: "https://www.coursera.org/learn/finance-fundamentals",
     durationHours: 10,
     skillsAddressed: [],
     careerId: "coll",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-coll-acca-intro",
@@ -7632,12 +7678,23 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // banking-system + ledger discipline behind posting receipts
-    url: "https://www.edx.org/course/introduction-to-bookkeeping-2",
+    // audit + re-point (2026-11-03, batch 4): the old /course/introduction-to-
+    // bookkeeping-2 slug 301s onto edX's current canonical path (fetched LIVE;
+    // "Enroll for free" standing, batch-3 verified). taught/exam-paid. The
+    // receive-and-post winner (tier-2 creditingBody).
+    url: "https://www.edx.org/learn/bookkeeping/acca-introduction-to-bookkeeping",
     durationHours: 30,
     skillsAddressed: ["Receive payments and post amounts paid to customer accounts"],
     creditingBody: "ACCA-X",
     careerId: "coll",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Receive payments and post amounts paid to customer accounts":
+        "ACCA's banking chapter teaches receiving cash/cheque/voucher amounts and posting them onto customer accounts — the payment-posting loop the row names.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-coll-ra10173",
@@ -7647,6 +7704,10 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // the statute governing tracing-activity personal-data handling (RA 3765
     // is NEVER rendered live anywhere — dead-in-copy flag, ruling 2026-10-29)
+    // audit (2026-11-03, batch 4): statute text = reference (readable material;
+    // no teaching flow). The tracing/legal-actions/upkeep cells stay red on
+    // these claims — no taught self-serve page verified for the skip-tracing
+    // and legal-recommendation crafts (adviser-only).
     url: "https://lawphil.net/statutes/repacts/ra2012/ra_10173_2012.html",
     durationHours: 2,
     skillsAddressed: [
@@ -7656,6 +7717,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "coll",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-coll-dole-handbook",
@@ -7664,10 +7727,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // generic labor-standards context — noted as context, not collections doctrine
+    // audit (2026-11-03, batch 4): PDF fetched reachable (200) → reference
+    // (readable computation handbook; no teaching flow).
     url: "https://nwpc.dole.gov.ph/wp-content/uploads/2024/11/Workers-Statutory-Monetary-Benefits-Handbook-2024-Edition.pdf",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "coll",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-coll-top-digital-literacy-cat",
@@ -7681,6 +7748,45 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Communication · Professionalism (Enabling)"],
     creditingBody: "TESDA",
     careerId: "coll",
+    // audit (2026-11-03, batch 4): category page → landing (fail-closed; TOP
+    // signup standing).
+    form: "landing",
+    access: "account",
+  },
+  {
+    id: "res-coll-alison-ar",
+    title: "Accounts Receivable Management (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 4 fill, user-ruled): "Start Course
+    // Now" with no paywall (certificate optional/paid, CPD-accredited) →
+    // taught/account. Printed outcomes carry the three collections-craft legs:
+    // "establish clear collection procedures to manage delinquent accounts",
+    // "assessing credit risk and setting appropriate credit limits and payment
+    // terms", plus the full AR process flow (billing, cash application,
+    // payments reconciliation). taught/account. The locate-and-notify,
+    // repayment-scheduling and accounts-upkeep winner (id A–Z).
+    url: "https://alison.com/course/accounts-receivable-management",
+    durationHours: 2,
+    skillsAddressed: [
+      "Locate and notify customers of delinquent accounts by mail, telephone, or personal visits to solicit payment",
+      "Arrange for debt repayment or establish repayment schedules, based on customers' financial situations",
+      "Administrative upkeep of assigned accounts",
+    ],
+    careerId: "coll",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Locate and notify customers of delinquent accounts by mail, telephone, or personal visits to solicit payment":
+        "The collection-procedures module teaches the delinquent-account outreach loop — notices and follow-up actions per collection stage.",
+      "Arrange for debt repayment or establish repayment schedules, based on customers' financial situations":
+        "The credit-terms module runs assessing risk and setting payment terms/schedules — the repayment-arrangement craft.",
+      "Administrative upkeep of assigned accounts":
+        "The AR process-flow modules (billing → cash application → reconciliation) are the day-to-day accounts-upkeep machinery.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-coll-gap-collections-training",
@@ -7693,12 +7799,33 @@ export const RESOURCES: Resource[] = [
     careerId: "coll",
   },
   // ── credit (4.8) ──
+  // Wave B audit (2026-11-03, batch 4): access/form per-row. Wharton rows
+  // graded taught/exam-paid (fetched LIVE "Enroll for free"). CFI's free
+  // resource page graded reference/account (fetched LIVE: "FREE pdf eBook
+  // Download" gate — the batch-3 CFI ebook-page verdict family). Statutes →
+  // reference. TOP modules → taught/account (303 login-wall verified LIVE);
+  // the Digital-Literacy category page → landing. GCF Excel graded
+  // taught/direct (LearnFree standing) but its credit/loan-paperwork claims
+  // are CUT as §6.1-class misfits (spreadsheet trackers ≠ loan documentation,
+  // same paperwork-chain honesty as batch 3's Order-Fulfilment red) — the
+  // claim freed cells are listed in the commit body. Likewise the §6.1-class
+  // misfit cut: Fundamentals of Finance no longer claims the loan-research
+  // cell (its printed outcomes are NPV/valuation; the AR/bad-debt statement
+  // analysis rides "More Introduction to Financial Accounting" — that row is
+  // the research-evaluation winner). Honesty valve: credit-analysis,
+  // loan-interviewing/approval, product explanation, underwriter liaison and
+  // portfolio-sizing stay red (adviser-only; no taught self-serve page
+  // verified this pass — the CBCA-style craft is paid-only on the market).
+  // Coverage: 2/9 vetted.
   {
     id: "res-credit-cfi-ratios",
     title: "Financial Ratios Definitive Guide (CFI free resource)",
     provider: "Corporate Finance Institute",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 4): fetched LIVE — the URL serves the gated
+    // "FREE pdf eBook Download" flow → reference/account (readable material
+    // behind an email gate; no teaching flow).
     url: "https://corporatefinanceinstitute.com/resources/accounting/financial-ratios-definitive-guide/",
     durationHours: 3,
     skillsAddressed: [
@@ -7707,6 +7834,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "credit",
     pick: true,
+    form: "reference",
+    access: "account",
   },
   {
     id: "res-credit-finance-fundamentals",
@@ -7714,13 +7843,15 @@ export const RESOURCES: Resource[] = [
     provider: "Coursera (University of Pennsylvania)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): fetched LIVE "Enroll for free" →
+    // taught/exam-paid. ADDR cut this pass (§6.1-class misfit — printed
+    // outcomes are NPV/valuation, not loan-research craft; listed in commit).
     url: "https://www.coursera.org/learn/finance-fundamentals",
     durationHours: 10,
-    skillsAddressed: [
-      "Researching and evaluating loan applicant's financial status, references, credit and ability to repay the loan",
-      
-    ],
+    skillsAddressed: [],
     careerId: "credit",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-credit-wharton-more-accounting",
@@ -7729,6 +7860,10 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // AR/bad-debt and statement-analysis modules
+    // audit (2026-11-03, batch 4): fetched LIVE "Enroll for free" →
+    // taught/exam-paid. The loan-research winner (sole vetted claim after the
+    // fundamentals misfit cut; the AR/bad-debt and statement-analysis modules
+    // are the reading-a-borrower's-financials craft).
     url: "https://www.coursera.org/learn/wharton-financial-accounting",
     durationHours: 14,
     skillsAddressed: [
@@ -7736,6 +7871,14 @@ export const RESOURCES: Resource[] = [
       
     ],
     careerId: "credit",
+    
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Researching and evaluating loan applicant's financial status, references, credit and ability to repay the loan":
+        "Wharton's accounts-receivable and bad-debt modules teach reading a firm's statements — receivables quality and debt position are the receivable-recovery/repaycraft legs the cell prints (note: the interview/limits craft is the §6.1 adviser line).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-credit-top-receiving-comms",
@@ -7743,11 +7886,15 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303 login-wall
+    // verified LIVE; id 52 resolves via the TOP search mirror).
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "credit",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-credit-top-workplace-comms",
@@ -7755,6 +7902,9 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 56 resolves via the TOP search mirror).
+    // taught/account. The Enabling winner (over the landing category page).
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
     skillsAddressed: [
@@ -7765,6 +7915,13 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     careerId: "credit",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Integrity/Professionalism (Enabling)":
+        "TESDA's workplace-communication module is the professionalism layer — participating, integrity and courtesy in every workplace exchange.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-credit-ra8791",
@@ -7772,6 +7929,9 @@ export const RESOURCES: Resource[] = [
     provider: "Lawphil Project",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 4): statute text = reference (readable
+    // material; no teaching flow). The paperwork-chain cells ride red on it —
+    // no taught self-serve page verified (adviser-only).
     url: "https://lawphil.net/statutes/repacts/ra2000/ra_8791_2000.html",
     durationHours: 2,
     skillsAddressed: [
@@ -7779,6 +7939,8 @@ export const RESOURCES: Resource[] = [
       "Completing credit and loan documentation",
     ],
     careerId: "credit",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-credit-ra10173",
@@ -7787,6 +7949,8 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // credit-file PII (RA 3765 dead-in-copy flag rides the record)
+    // audit (2026-11-03, batch 4): statute text = reference (fetched LIVE,
+    // title verified).
     url: "https://lawphil.net/statutes/repacts/ra2012/ra_10173_2012.html",
     durationHours: 2,
     skillsAddressed: [
@@ -7795,6 +7959,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "credit",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-credit-gcf-excel",
@@ -7802,13 +7968,19 @@ export const RESOURCES: Resource[] = [
     provider: "GCFGlobal",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): URL verified LearnFree lesson-series
+    // standing (308 onto the Excel Foundations series) → taught/direct.
+    // ADDR cut this pass (§6.1-class misfit cuts ×2): spreadsheet trackers
+    // don't teach "keeping payment records + preparing routine letters for
+    // overdue accounts" nor "completing credit and loan documentation" — the
+    // paperwork-chain honesty batch 3 applied to sales' Order Fulfilment; the
+    // freed cells are listed in the commit body and stay adviser-only.
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
-    skillsAddressed: [
-      "Keeping records of payments, and preparing routine letters requesting payment for overdue accounts and forwarding these for legal action",
-      "Completing credit and loan documentation",
-    ],
+    skillsAddressed: [],
     careerId: "credit",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-credit-intuit-basics",
@@ -7817,10 +7989,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // payment-cycle literacy behind delinquency paperwork (honest thin otherwise)
+    // audit (2026-11-03, batch 4): same verified Enroll-for-free standing as
+    // the acctclerk dup (fetched LIVE). Catalog fallback only.
     url: "https://www.coursera.org/learn/bookkeeping-basics",
     durationHours: 10,
     skillsAddressed: [],
     careerId: "credit",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-credit-top-digital-literacy-cat",
@@ -7834,6 +8010,9 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Integrity/Professionalism (Enabling)"],
     creditingBody: "TESDA",
     careerId: "credit",
+    // audit (2026-11-03, batch 4): category page → landing (fail-closed).
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-credit-gap-credit-analysis",
@@ -7846,6 +8025,22 @@ export const RESOURCES: Resource[] = [
     careerId: "credit",
   },
   // ── teller (4.9) ──
+  // Wave B audit (2026-11-03, batch 4): access/form per-row. TOP Moodle
+  // modules → taught/account (303 login-wall verified LIVE); the SSS portal
+  // placeholder → landing (keep-with-flag). Khan units → taught/direct
+  // (fetched LIVE; US framing flagged). CFI's Careers in Finance course →
+  // taught/account (fetched LIVE "Enroll for free", CFI signup). ACCA-X row
+  // re-pointed to edX's canonical path (old slug 301s, fetched LIVE) →
+  // taught/exam-paid. GCF Excel → taught/direct (LearnFree standing). RA 8791
+  // → reference. New per-role fill (fetched LIVE 2026-11-03, user-ruled):
+  // Alison's taught "Customer Service Skills" — the customer-service cell's
+  // front-desk craft leg (the special-services specifics stay scoped
+  // in-row). Honest reds kept (no taught self-serve page verified this
+  // pass; the statute-anchored verdict is the treasury family's): cash-
+  // drawer balancing, check/cash deposit & deposit-slip verification,
+  // transaction entry/receipts, account-discrepancy resolution, the
+  // payment-desk mortgage/loan/utility leg, and the cross-sell cell.
+  // Coverage: 3/9 vetted.
   {
     id: "res-teller-khan-banking",
     title: "Finance and Capital Markets — Banking & Money unit (Khan Academy)",
@@ -7854,10 +8049,14 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // free banking mechanics; US contexts (Fed shipments) flagged — supplemented
     // with the PH-side statute row below
+    // audit (2026-11-03, batch 4): fetched LIVE (200, title verified) →
+    // taught/direct.
     url: "https://www.khanacademy.org/economics-finance-domain/core-finance/banking-and-money",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "teller",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-teller-ra8791",
@@ -7865,6 +8064,10 @@ export const RESOURCES: Resource[] = [
     provider: "Lawphil Project",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 4): statute text = reference (readable
+    // material; no teaching flow). The balancing/receiving cells stay red on
+    // it — no taught self-serve page verified (adviser-only; batch-3's
+    // treasury verdict for the same cells stands for the family).
     url: "https://lawphil.net/statutes/repacts/ra2000/ra_8791_2000.html",
     durationHours: 2,
     skillsAddressed: [
@@ -7873,6 +8076,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "teller",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-teller-acca-intro",
@@ -7880,11 +8085,16 @@ export const RESOURCES: Resource[] = [
     provider: "ACCA-X (edX)",
     type: "course",
     cost: "free",
-    url: "https://www.edx.org/course/introduction-to-bookkeeping-2",
+    // audit + re-point (2026-11-03, batch 4): the old edX slug 301s onto the
+    // canonical path (fetched LIVE; "Enroll for free" standing). taught/
+    // exam-paid.
+    url: "https://www.edx.org/learn/bookkeeping/acca-introduction-to-bookkeeping",
     durationHours: 30,
     skillsAddressed: [],
     creditingBody: "ACCA-X",
     careerId: "teller",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-teller-gcf-excel",
@@ -7893,10 +8103,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // teller-balance worksheets
+    // audit (2026-11-03, batch 4): verified LearnFree lesson-series standing
+    // (308 onto the Excel Foundations series) → taught/direct.
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: [],
     careerId: "teller",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-teller-khan-interest",
@@ -7905,10 +8119,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // term-deposit/interest mechanics (US framing flagged)
+    // audit (2026-11-03, batch 4): fetched LIVE (200, title verified) →
+    // taught/direct.
     url: "https://www.khanacademy.org/economics-finance-domain/core-finance/interest-basics",
     durationHours: 2,
     skillsAddressed: [],
     careerId: "teller",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-teller-sss",
@@ -7917,11 +8135,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // keep-with-flag ruling 2026-10-29: start-here placeholder only
+    // audit (2026-11-03, batch 4): fetched LIVE (title verified) → landing.
     url: "https://www.sss.gov.ph/",
     durationHours: 1,
     skillsAddressed: ["Receive mortgage, loan, or public utility bill payments, verifying payment dates and amounts due / process term deposits and other savings-plan transactions"],
     careerId: "teller",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-teller-top-receiving-comms",
@@ -7929,11 +8150,15 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 52 resolves via the TOP search mirror).
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "teller",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-teller-cfi-careers",
@@ -7942,10 +8167,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // tour incl. retail-banking branch roles; non-PH framing flagged
+    // audit (2026-11-03, batch 4): fetched LIVE "Enroll for free" (CFI
+    // course page; free signup) → taught/account.
     url: "https://corporatefinanceinstitute.com/course/careers-in-finance/",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "teller",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-teller-top-workplace-comms",
@@ -7953,12 +8182,24 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 56 resolves via the TOP search mirror).
+    // taught/account. The two Enabling winners.
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
     skillsAddressed: ["Front-desk service etiquette (Enabling)", "Professionalism · Teamwork (Enabling)"],
     creditingBody: "TESDA",
     careerId: "teller",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Front-desk service etiquette (Enabling)":
+        "TESDA's workplace-communication module drills receiving/relaying workplace exchange with courtesy — the front-desk conduct base.",
+      "Professionalism · Teamwork (Enabling)":
+        "The participating-in-workplace-communication unit is the professionalism/teamwork practice (obtaining and providing information cooperatively).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-teller-top-digital-literacy-cat",
@@ -7967,19 +8208,65 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // core-systems fluency start
+    // audit (2026-11-03, batch 4): category page → landing (fail-closed).
     url: "https://e-tesda.gov.ph/course/index.php?categoryid=1310",
     durationHours: 4,
     skillsAddressed: ["Professionalism · Teamwork (Enabling)"],
     creditingBody: "TESDA",
     careerId: "teller",
+    form: "landing",
+    access: "account",
+  },
+  {
+    id: "res-teller-alison-cs",
+    title: "Customer Service Skills (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // per-role dup of the batch-3-verified res-sales-alison-cs-skills row
+    // (re-verified LIVE 2026-11-03: "Start Course Now", CPD-accredited,
+    // certificate optional) → taught/account. The customer-service cell's
+    // service-interaction craft; the card/check-ordering specifics are
+    // bank-internal procedures (scoped honestly here — no taught page for
+    // them this pass).
+    url: "https://alison.com/course/customer-service-skills",
+    durationHours: 2,
+    skillsAddressed: ["Customer service & special services (cards, checks ordering)"],
+    careerId: "teller",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Customer service & special services (cards, checks ordering)":
+        "Alison's service-skills modules cover the counter exchange — greeting, listening, handling requests — the service leg of the card/check-ordering row; the order-processing specifics themselves are bank-internal craft.",
+    },
+    // learn draft — user review pending
   },
   // ── audit (4.10) — BIR eFPS dead-in-copy; row-11 tech row waits for the pin ──
+  // Wave B audit (2026-11-03, batch 4): access/form per-row. Wharton graded
+  // taught/exam-paid (fetched LIVE "Enroll for free"); MIT OCW → taught/
+  // direct (fetched LIVE 200, title verified — open course materials); the
+  // ACCA-X rows re-pointed to edX canonical paths (old slugs 301s, fetched
+  // LIVE) → taught/exam-paid; GCF Excel → taught/direct (LearnFree standing);
+  // OpenStax managerial → reference/direct (the book pool's verdict stands);
+  // statutes + TESDA PDF → reference; CFI's ratios page → reference/account
+  // (the "FREE pdf eBook Download" gate); BIR portal → landing (keep-with-
+  // flag); TOP modules → taught/account (303 login-wall verified LIVE);
+  // Digital-Literacy category → landing. New per-role fill (re-verified LIVE
+  // 2026-11-03, user-ruled): the batch-3-verified UIUC "Foundations of
+  // Strategic Internal Auditing" dup — COSO control evaluation carries the
+  // fraud/controls cell. Honest reds kept (no taught self-serve page
+  // verified this pass): cash/negotiables inspection, records-examination &
+  // worker-interview fieldwork, the compliance/tax-analog cell, and the
+  // senior-heavy supervision fold-in. Coverage: 7/11 vetted.
   {
     id: "res-audit-wharton-accounting",
     title: "Introduction to Financial Accounting (Wharton)",
     provider: "Coursera (University of Pennsylvania)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): fetched LIVE "Enroll for free" →
+    // taught/exam-paid.
     url: "https://www.coursera.org/learn/wharton-accounting",
     durationHours: 15,
     skillsAddressed: [
@@ -7988,6 +8275,8 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "audit",
     pick: true,
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-audit-mit-ocw-15501",
@@ -7996,6 +8285,8 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // free full course materials (financial statements, reporting); rigorous
+    // audit (2026-11-03, batch 4): fetched LIVE (200, title verified) →
+    // taught/direct (open self-serve course materials).
     url: "https://ocw.mit.edu/courses/15-501-introduction-to-financial-and-managerial-accounting-spring-2004/",
     durationHours: 40,
     skillsAddressed: [
@@ -8003,6 +8294,8 @@ export const RESOURCES: Resource[] = [
       "Review accounts for discrepancies and reconcile differences",
     ],
     careerId: "audit",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-audit-acca-intro",
@@ -8011,7 +8304,10 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // accounting-cycle literacy
-    url: "https://www.edx.org/course/introduction-to-bookkeeping-2",
+    // audit + re-point (2026-11-03, batch 4): old edX slug 301s onto the
+    // canonical path (fetched LIVE; "Enroll for free" standing). taught/
+    // exam-paid. The records/reconcile winner (tier-2 creditingBody).
+    url: "https://www.edx.org/learn/bookkeeping/acca-introduction-to-bookkeeping",
     durationHours: 30,
     skillsAddressed: [
       "Prepare, examine, or analyze accounting records, financial statements, or other financial reports to assess accuracy, completeness, and conformance to reporting and procedural standards",
@@ -8019,6 +8315,16 @@ export const RESOURCES: Resource[] = [
     ],
     creditingBody: "ACCA-X",
     careerId: "audit",
+    
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Prepare, examine, or analyze accounting records, financial statements, or other financial reports to assess accuracy, completeness, and conformance to reporting and procedural standards":
+        "ACCA's accredited intro drills double-entry figures, postings and codes against source documents — examining records for accuracy/completeness before anything journals.",
+      "Review accounts for discrepancies and reconcile differences":
+        "The banking-system and control modules reconcile records and surface discrepancies — month-end readiness as the row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-audit-psf-gih-doc",
@@ -8027,10 +8333,14 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // Internal Controls FSC ladder ("control gaps" language)
+    // audit (2026-11-03, batch 4): TESDA PDF → reference (standing;
+    // ADDR empty per §6.1).
     url: "https://www.tesda.gov.ph/Uploads/File/Philippine%20Skills%20Framework/ICT/Philippine%20Skills%20Framework%20for%20Global%20In-House%20Center.pdf",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "audit",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-audit-cfi-ratios",
@@ -8038,10 +8348,14 @@ export const RESOURCES: Resource[] = [
     provider: "Corporate Finance Institute",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 4): fetched LIVE — gated "FREE pdf eBook
+    // Download" flow → reference/account. Catalog fallback only.
     url: "https://corporatefinanceinstitute.com/resources/accounting/financial-ratios-definitive-guide/",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "audit",
+    form: "reference",
+    access: "account",
   },
   {
     id: "res-audit-openstax-managerial",
@@ -8049,11 +8363,17 @@ export const RESOURCES: Resource[] = [
     provider: "OpenStax (free textbook)",
     type: "doc",
     cost: "free",
+    // audit (2026-11-03, batch 4): the book pool's reference verdict stands
+    // (readable internal-control chapter context). The fraud/controls cell
+    // rides red on it — the COSO-style control-evaluation craft is carried by
+    // the new UIUC internal-auditing per-role dup below.
     url: "https://openstax.org/details/books/principles-managerial-accounting",
     durationHours: 6,
     skillsAddressed: ["Collect and analyze data to detect deficient controls, duplicated effort, extravagance, fraud, or non-compliance with laws, regulations, and management policies"],
     careerId: "audit",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-audit-ra9298",
@@ -8063,10 +8383,14 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // the PH practice band under which audit work sits (CPA board, practice
     // scope); lawphil is a mirror — cite the PRC/Gazette register when reachable
+    // audit (2026-11-03, batch 4): statute text = reference (readable
+    // material; no teaching flow).
     url: "https://lawphil.net/statutes/repacts/ra2004/ra_9298_2004.html",
     durationHours: 2,
     skillsAddressed: [],
     careerId: "audit",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-audit-acca-intermediate",
@@ -8074,11 +8398,15 @@ export const RESOURCES: Resource[] = [
     provider: "ACCA-X (edX)",
     type: "course",
     cost: "free",
-    url: "https://www.edx.org/course/intermediate-bookkeeping-2",
+    // audit + re-point (2026-11-03, batch 4): old edX slug 301s onto the
+    // canonical path (fetched LIVE; title standing). taught/exam-paid.
+    url: "https://www.edx.org/learn/bookkeeping/acca-intermediate-bookkeeping",
     durationHours: 30,
     skillsAddressed: [],
     creditingBody: "ACCA-X",
     careerId: "audit",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-audit-top-workplace-comms",
@@ -8087,12 +8415,22 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // written reporting discipline; client-facing request handling
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 56 resolves via the TOP search mirror).
+    // taught/account. The detailed-reports winner (sole claim).
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
     skillsAddressed: ["Prepare detailed reports on audit findings", "Professional Skepticism (attitude) · Communication (Enabling)"],
     creditingBody: "TESDA",
     careerId: "audit",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Prepare detailed reports on audit findings":
+        "Participating-in-workplace-communication drills gathering, structuring and relaying workplace information — the complete, written reporting form the audit-findings row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-audit-gcf-excel",
@@ -8101,11 +8439,21 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // workpaper tables
+    // audit (2026-11-03, batch 4): verified LearnFree lesson-series standing
+    // (308 onto the Excel Foundations series) → taught/direct. The audit-
+    // technology-fluency winner (sole URL claim).
     url: "https://edu.gcfglobal.org/en/excel/",
     durationHours: 4,
     skillsAddressed: ["Audit technology fluency (accounting software / Excel family)"],
     careerId: "audit",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Audit technology fluency (accounting software / Excel family)":
+        "The Excel Foundations series is the spreadsheet leg of the O*NET 30-pinned technology set (Excel is a printed category) — formulas, tables and workpaper discipline; the QuickBooks/Sage instances ride paid vendor trials.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-audit-top-journalizing",
@@ -8114,6 +8462,10 @@ export const RESOURCES: Resource[] = [
     type: "NC",
     cost: "free",
     // the journal/posting/trial-balance lifecycle adjusting entries touch
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; title + syllabus verified via the TOP search
+    // mirror). taught/account. The adjusting-entries winner (tier-2 + entry
+    // path counts, id A–Z over the posting/trial modules).
     url: "https://e-tesda.gov.ph/course/view.php?id=3982",
     durationHours: 4,
     skillsAddressed: ["Prepare adjusting journal entries / establish tables of accounts and assign entries to proper accounts"],
@@ -8121,6 +8473,13 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "audit",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Prepare adjusting journal entries / establish tables of accounts and assign entries to proper accounts":
+        "The NC III module teaches logging business transactions in the accounting journal and assigning entries to accounts — the structure adjusting entries edit.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-audit-top-posting",
@@ -8128,12 +8487,16 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "NC",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; title resolved via the TOP search mirror).
     url: "https://e-tesda.gov.ph/course/view.php?id=3983",
     durationHours: 4,
     skillsAddressed: ["Prepare adjusting journal entries / establish tables of accounts and assign entries to proper accounts"],
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "audit",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-audit-top-trial-balance",
@@ -8141,12 +8504,16 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "NC",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; title resolved via the TOP search mirror).
     url: "https://e-tesda.gov.ph/course/view.php?id=4029",
     durationHours: 4,
     skillsAddressed: ["Prepare adjusting journal entries / establish tables of accounts and assign entries to proper accounts"],
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "audit",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-audit-intuit-basics",
@@ -8155,10 +8522,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // adjusting-entries module ("make adjusting entries…")
+    // audit (2026-11-03, batch 4): same verified Enroll-for-free standing as
+    // the acctclerk dup (fetched LIVE).
     url: "https://www.coursera.org/learn/bookkeeping-basics",
     durationHours: 10,
     skillsAddressed: ["Prepare adjusting journal entries / establish tables of accounts and assign entries to proper accounts"],
     careerId: "audit",
+    form: "taught",
+    access: "exam-paid",
   },
   {
     id: "res-audit-dole-handbook",
@@ -8167,10 +8538,15 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // the statutory-benefit baseline payroll-audit engagements test against
+    // audit (2026-11-03, batch 4): PDF fetched reachable (200) → reference
+    // (readable computation handbook; no teaching flow). The compliance cell
+    // stays red on it (adviser-only).
     url: "https://nwpc.dole.gov.ph/wp-content/uploads/2024/11/Workers-Statutory-Monetary-Benefits-Handbook-2024-Edition.pdf",
     durationHours: 3,
     skillsAddressed: ["Compliance / tax analog & frameworks"],
     careerId: "audit",
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-audit-bir",
@@ -8179,11 +8555,15 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // keep-with-flag ruling 2026-10-29 (same treatment as pay)
+    // audit (2026-11-03, batch 4): fetched LIVE (title verified) → landing
+    // (labeled start-here placeholder; eFPS ruling stands).
     url: "https://www.bir.gov.ph/",
     durationHours: 1,
     skillsAddressed: ["Compliance / tax analog & frameworks"],
     careerId: "audit",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-audit-top-receiving-comms",
@@ -8195,6 +8575,9 @@ export const RESOURCES: Resource[] = [
     // audit.md §Resources — this row sits under the group header that
     // records "Rows 9–11 — Enabling layer + technology row", so its keying
     // enumerates the whole group incl. row 9 (Senior-heavy supervision fold-in)
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE). taught/account. The skepticism-cell winner
+    // (id A–Z over the participated module).
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
     skillsAddressed: [
@@ -8205,6 +8588,13 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     careerId: "audit",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Professional Skepticism (attitude) · Communication (Enabling)":
+        "The receiving-and-responding module is the ask-clarify-confirm exchange discipline — the communication half of the skepticism compound row.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-audit-top-digital-literacy-cat",
@@ -8216,15 +8606,56 @@ export const RESOURCES: Resource[] = [
     // audit.md §Resources — this row sits under the group header that
     // records "Rows 9–11 — Enabling layer + technology row"; the group's
     // keying enumerates rows 9–11 (row 9 = the Senior-heavy supervision fold-in)
+    // audit (2026-11-03, batch 4): category page → landing (fail-closed;
+    // ADDR empty per §6.1).
     url: "https://e-tesda.gov.ph/course/index.php?categoryid=1310",
     durationHours: 4,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "audit",
+    form: "landing",
+    access: "account",
+  },
+  {
+    id: "res-audit-uiuc-internal-audit",
+    title: "Foundations of Strategic Internal Auditing (U Illinois Gies)",
+    provider: "Coursera (University of Illinois)",
+    type: "course",
+    cost: "free",
+    // per-role dup of the batch-3-verified res-fas-uiuc-internal-audit row
+    // (re-verified LIVE 2026-11-03: "Enroll for free" — 4 modules). The
+    // COSO control-evaluation and evidence-gathering modules carry the
+    // fraud/controls cell. ₱ paid tier: certificate.
+    url: "https://www.coursera.org/learn/strategic-internal-auditing-foundations",
+    durationHours: 13,
+    skillsAddressed: ["Collect and analyze data to detect deficient controls, duplicated effort, extravagance, fraud, or non-compliance with laws, regulations, and management policies"],
+    careerId: "audit",
+    
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Collect and analyze data to detect deficient controls, duplicated effort, extravagance, fraud, or non-compliance with laws, regulations, and management policies":
+        "The COSO modules teach applying frameworks to evaluate controls and surface control weaknesses from gathered evidence — the detection craft the row prints.",
+    },
+    // learn draft — user review pending
   },
   // == ── Track 4 · Office & Administration (adminassoc · clerk · encode · desk ·
   // execsec · records) — blessed role-spec pools ────────────────────────────
   // ── adminassoc (5.1) ──
+  // Wave B audit (2026-11-03, batch 4): access/form per-row. TOP Moodle
+  // modules → taught/account (303 login-wall verified LIVE); the IBM
+  // SkillsBuild home → landing (fetched LIVE; marketing shell); Google
+  // Workspace / Calendar / Microsoft 365 hubs → landing (re-pointed to
+  // canonical hub paths; /getstarted now 301s to the Calendar hub; /office
+  // 301s to the M365 hub; both fetched LIVE this pass); UK National Archives
+  // guidance → reference; Google Applied Digital Skills re-pointed onto the
+  // exceeds canonical lesson path (old applieddigitalskills URL 301s —
+  // fetched LIVE, title "Google Sheets for Beginners") → taught/account. New
+  // per-role fill (fetched LIVE 2026-11-03, user-ruled): Alison's
+  // "Administrative Assistant Training" ("Start Course Now", CPD) — printed
+  // outcomes carry decimal/group-name filing systems, essential office
+  // equipment (telephones/computers/fax), telephone/voicemail etiquette and
+  // meeting organization → the four office-craft cells. Coverage: 6/6 vetted.
   {
     id: "res-adminassoc-top-digitallit",
     title: "Microsoft Digital Literacy (TOP)",
@@ -8232,11 +8663,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // login-gated (TOP account free); e-certificate on completion
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 4716).
     url: "https://e-tesda.gov.ph/course/view.php?id=4716",
     durationHours: 4,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "adminassoc",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-adminassoc-uk-archives",
@@ -8246,11 +8681,17 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // professional records guidance: creation, naming, filing, retention;
     // UK retention law is non-PH — transfer the filing discipline
+    // audit (2026-11-03, batch 4): fetched LIVE (200, title verified) —
+    // professional guidance library → reference (readable material; no
+    // teaching flow). The filing-system cell rides red on it; the taught leg
+    // is carried by the new Alison per-role row below.
     url: "https://www.nationalarchives.gov.uk/information-management/",
     durationHours: 3,
     skillsAddressed: ["Filing systems (paper/electronic) operation"],
     careerId: "adminassoc",
-    pick: true,
+    
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-adminassoc-ads-sheets",
@@ -8258,14 +8699,25 @@ export const RESOURCES: Resource[] = [
     provider: "Google for Education",
     type: "course",
     cost: "free",
-    // free lesson w/ completion credential; platform-migration banner —
-    // re-check near the defense (VA1/VE-6 standing flag)
-    url: "https://applieddigitalskills.withgoogle.com/c/college-and-continuing-education/en/google-sheets-for-beginners/overview.html",
+    // free lesson w/ completion credential
+    // audit + re-point (2026-11-03, batch 4): the applieddigitalskills URL
+    // 301s onto the exceeds canonical lesson path (fetched LIVE, title
+    // "Google Sheets for Beginners" — the platform-migration banner's landing
+    // point). taught/account (Google signup; the standing VA1/VE-6
+    // re-check flag travels). The data-entry winner (tier-2 creditingBody).
+    url: "https://edu.exceedlms.com/student/path/1606124",
     durationHours: 1,
     skillsAddressed: ["Database entry & maintenance"],
     creditingBody: "Google for Education",
     careerId: "adminassoc",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Database entry & maintenance":
+        "The Sheets-for-Beginners lesson walks spreadsheet entry, formatting and tidying — the structured-records upkeep the row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-adminassoc-workspace",
@@ -8273,12 +8725,16 @@ export const RESOURCES: Resource[] = [
     provider: "Google",
     type: "doc",
     cost: "free",
-    // per-app official training (Sheets/Docs/Drive)
+    // per-app official training hub (Sheets/Docs/Drive)
+    // audit (2026-11-03, batch 4): fetched LIVE (200, "Google Workspace
+    // Learning Center") — per-app training hub → landing (fail-closed).
     url: "https://support.google.com/a/users",
     durationHours: 2,
     skillsAddressed: ["Database entry & maintenance", "Multi-channel reception & call routing"],
     careerId: "adminassoc",
-    pick: true,
+    
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-adminassoc-top-receiving-comms",
@@ -8287,11 +8743,22 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // telephone/message/inquiry handling
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE). taught/account. The multi-channel winner
+    // (tier-2 creditingBody over the Alison etiquette attach).
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
     skillsAddressed: ["Multi-channel reception & call routing"],
     creditingBody: "TESDA",
     careerId: "adminassoc",
+    
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Multi-channel reception & call routing":
+        "The receiving-and-responding module runs taking telephone/calls-and-messages, recording the exchange and relaying to the right person — the reception/routing loop.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-adminassoc-ms-365",
@@ -8300,10 +8767,16 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // troubleshooting/how-to for Office apps + equipment-adjacent flows
-    url: "https://support.microsoft.com/en-us/office",
+    // audit + re-point (2026-11-03, batch 4): the old /en-us/office path 301s
+    // onto the canonical M365 hub (fetched LIVE) → landing (help-hub; the
+    // how-to articles under it are out of this row's claim set).
+    url: "https://support.microsoft.com/en-US/microsoft-365",
     durationHours: 2,
     skillsAddressed: ["Meeting/coordination documentation"],
     careerId: "adminassoc",
+    // form/access graded landing/direct (hub; fail-closed)
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-adminassoc-owl-memos",
@@ -8312,10 +8785,16 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // memo/office-note structure
+    // audit (2026-11-03, batch 4): fetched LIVE (200) — the OWL memo section
+    // is an open writing tutorial ("four types of memo standards, audience",
+    // format + samples) → taught/direct. In the meeting-doc cell it loses the
+    // id race to the Alison org row (authored note honest).
     url: "https://owl.purdue.edu/owl/subject_specific_writing/professional_technical_writing/memos/index.html",
     durationHours: 2,
     skillsAddressed: ["Meeting/coordination documentation"],
     careerId: "adminassoc",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-adminassoc-gcal",
@@ -8324,11 +8803,15 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // scheduling/event calendars
-    url: "https://support.google.com/calendar/getstarted",
+    // audit + re-point (2026-11-03, batch 4): /getstarted 301s onto the
+    // general Calendar hub (fetched LIVE) → landing (help-hub).
+    url: "https://support.google.com/calendar/",
     durationHours: 1,
     skillsAddressed: ["Meeting/coordination documentation"],
     careerId: "adminassoc",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-adminassoc-top-ilo-humanskills",
@@ -8337,12 +8820,21 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // human/soft-skills module; login-gated (TOP account free); e-certificate
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 2014). taught/account. The Enabling winner.
     url: "https://e-tesda.gov.ph/course/view.php?id=2014",
     durationHours: 2,
     skillsAddressed: ["Communication · Professionalism · Critical Thinking (Enabling)"],
     creditingBody: "TESDA × ILO",
     careerId: "adminassoc",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Communication · Professionalism · Critical Thinking (Enabling)":
+        "The ILO human-skills module drills professionalism, communication and judgment for entry jobs — the whole Enabling bundle in one taught track.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-adminassoc-skillsbuild",
@@ -8351,12 +8843,70 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // TOP-mirrored as course id 3331 (login-gated)
+    // audit (2026-11-03, batch 4): fetched LIVE — the skillsbuild.org home is
+    // the badge-library marketing shell → landing (fail-closed).
     url: "https://skillsbuild.org/",
     durationHours: 3,
     skillsAddressed: ["Communication · Professionalism · Critical Thinking (Enabling)"],
     careerId: "adminassoc",
+    form: "landing",
+    access: "account",
+  },
+  {
+    id: "res-adminassoc-alison-admin",
+    title: "Administrative Assistant Training (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 4 fill, user-ruled): "Start
+    // Course Now", CPD-accredited → taught/account. Printed outcomes carry
+    // the four office-craft legs verbatim: "distinguish between the 'decimal'
+    // and 'group name' filing systems", "state how to use essential office
+    // equipment such as telephones, computers, fax machines and so on",
+    // "outline some basic telephone and voicemail etiquette", and "explain
+    // how to organise an annual shareholders' meeting". The filing, equipment
+    // and meeting-doc winners (id A–Z).
+    url: "https://alison.com/course/administrative-assistant-training",
+    durationHours: 2,
+    skillsAddressed: [
+      "Filing systems (paper/electronic) operation",
+      "Office equipment operation & basic troubleshooting",
+      "Meeting/coordination documentation",
+      "Multi-channel reception & call routing",
+    ],
+    careerId: "adminassoc",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Filing systems (paper/electronic) operation":
+        "The filing-systems module contrasts the decimal and group-name systems and their index/labeling logic — the filing-rules operation the row prints.",
+      "Office equipment operation & basic troubleshooting":
+        "The equipment module covers operating telephones, computers, fax machines and the office set; the troubleshooting leg rides the unit's diagnosing-side content (operation is the printed craft).",
+      "Meeting/coordination documentation":
+        "The meetings module walks organizing a formal meeting end-to-end — the coordination paperwork the row names.",
+      "Multi-channel reception & call routing":
+        "The telephone/voicemail-etiquette outcome covers the reception leg (routing craft rides the TOP module's credited claim — the taught fallback).",
+    },
+    // learn draft — user review pending
   },
   // ── clerk (5.2) — split rows; row 6 declared resourceless-thin ──
+  // Wave B audit (2026-11-03, batch 4): access/form per-row. The UK National
+  // Archives guidance → reference; TOP modules → taught/account (303
+  // login-wall verified LIVE); Microsoft 365 → landing (re-pointed to the
+  // canonical M365 hub, /en-us/office 301s fetched LIVE); Purdue OWL memos →
+  // taught/direct (open writing tutorial fetched LIVE); Gmail Help RE-POINTED
+  // onto the GCF/LearnFree Gmail lesson series (the URL 308s onto
+  // learnfree.org/en/gmail/ — the re-hosted standing lesson series, verified
+  // fresh) → taught/direct; Ratatype → taught/direct (open tutor, fetched
+  // LIVE); IBM SkillsBuild home → landing. New per-role fill (fetched LIVE
+  // 2026-11-03, user-ruled): Alison's "Secretarial Studies and Office
+  // Administration" — printed outcomes carry "identify methods for effective
+  // file management and distinguish between digital and physical filing
+  // systems" → the filing cell. Honest reds kept: photocopying (machine
+  // operation craft; no taught self-serve page verified) and the equipment-
+  // issue register (the declared resourceless-thin row stands). Coverage:
+  // 7/9 vetted.
   {
     id: "res-clerk-uk-archives",
     title: "The National Archives (UK) — Information management",
@@ -8364,11 +8914,16 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // records life: creation → storage → retrieval → disposal
+    // audit (2026-11-03, batch 4): fetched LIVE (200, title verified) →
+    // reference. The filing cell rides red on it; the taught leg is the new
+    // Alison per-role row below.
     url: "https://www.nationalarchives.gov.uk/information-management/",
     durationHours: 3,
     skillsAddressed: ["Recording, preparing, sorting, classifying and filing information"],
     careerId: "clerk",
-    pick: true,
+    
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-clerk-top-digitallit",
@@ -8377,24 +8932,41 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // digital-filing/electronic-records basics
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 4716).
     url: "https://e-tesda.gov.ph/course/view.php?id=4716",
     durationHours: 4,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "clerk",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-clerk-gmail",
-    title: "Gmail Help (official docs)",
-    provider: "Google",
+    title: "Gmail (lesson series) — GCFGlobal",
+    provider: "GCFGlobal",
     type: "doc",
     cost: "free",
     // labels, archiving, mail routing — the email side of the mail-flow task
-    url: "https://support.google.com/mail",
+    // audit + re-point (2026-11-03, batch 4): the old Gmail-help docs URL
+    // graded reference — re-pointed onto the GCF/LearnFree Gmail lesson
+    // series (edu.gcfglobal.org/en/gmail/ 308s onto learnfree.org/en/gmail/,
+    // verified fresh; the re-hosted standing lesson-series verification
+    // carries the grade) → taught/direct. The mail-handling winner (labels/
+    // filters series; the physical-accounting leg is the paper craft).
+    url: "https://edu.gcfglobal.org/en/gmail/",
     durationHours: 1,
     skillsAddressed: ["Sorting, opening and sending mail"],
     careerId: "clerk",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Sorting, opening and sending mail":
+        "The Gmail series teaches labels, archiving, filters and composing/sending — the electronic-mail side of the sort-open-send loop.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-clerk-ms-365",
@@ -8403,10 +8975,15 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // printing/PDF flows for document reproduction
-    url: "https://support.microsoft.com/en-us/office",
+    // audit + re-point (2026-11-03, batch 4): the old /en-us/office path 301s
+    // onto the canonical M365 hub (fetched LIVE) → landing (ADDR empty per
+    // §6.1).
+    url: "https://support.microsoft.com/en-US/microsoft-365",
     durationHours: 2,
     skillsAddressed: [],
     careerId: "clerk",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-clerk-owl-memos",
@@ -8415,11 +8992,16 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // "correspondence of a routine nature"
+    // audit (2026-11-03, batch 4): fetched LIVE (200) — open writing
+    // tutorial → taught/direct. The routine-reports cell's runner-up (the
+    // TOP module wins tier-2).
     url: "https://owl.purdue.edu/owl/subject_specific_writing/professional_technical_writing/memos/index.html",
     durationHours: 2,
     skillsAddressed: ["Routine reports & correspondence"],
     careerId: "clerk",
     pick: true,
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-clerk-top-receiving-comms",
@@ -8427,12 +9009,24 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE). taught/account. The routine-reports and
+    // enquiries winner (tier-2 creditingBody).
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
     skillsAddressed: ["Routine reports & correspondence", "Responding to enquiries (telephone/electronic) or forwarding"],
     creditingBody: "TESDA",
     careerId: "clerk",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Routine reports & correspondence":
+        "The module teaches recording and relaying workplace communication in the routine written forms the row prints.",
+      "Responding to enquiries (telephone/electronic) or forwarding":
+        "Receiving/answering telephone and electronic exchange then forwarding to the right responder — the enquiries loop itself.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-clerk-top-intro-bookkeeping",
@@ -8441,6 +9035,9 @@ export const RESOURCES: Resource[] = [
     type: "NC",
     cost: "free",
     // backs the figures/invoices thin row (letter g)
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 3981). taught/account. The figures/invoices
+    // winner (sole claim).
     url: "https://e-tesda.gov.ph/course/view.php?id=3981",
     durationHours: 3,
     skillsAddressed: ["Checking figures, preparing invoices and recording details of financial transactions made"],
@@ -8448,6 +9045,13 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "clerk",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Checking figures, preparing invoices and recording details of financial transactions made":
+        "The NC III intro-bookkeeping module teaches documenting financial transactions and the record-keeping envelope — figures/invoices for the general clerk.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-clerk-ratatype",
@@ -8456,11 +9060,22 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // transcription throughput (letter h); certificate earned online
+    // audit (2026-11-03, batch 4): fetched LIVE (200, title "Online Touch
+    // Typing Tutor") — open touch-typing drills → taught/direct (the free
+    // certificate flow needs an account; noted in-row). The transcribing
+    // winner (sole claim).
     url: "https://www.ratatype.com/",
     durationHours: 3,
     skillsAddressed: ["Transcribing information into computers, and proof-reading and correcting copy"],
     careerId: "clerk",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Transcribing information into computers, and proof-reading and correcting copy":
+        "Ratatype's typing exercises + accuracy metrics are the touch-typing/transcription throughput craft; retyping-and-correcting practice is the loop.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-clerk-top-ilo-humanskills",
@@ -8468,12 +9083,21 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA TOP × ILO",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE). taught/account. The Enabling winner.
     url: "https://e-tesda.gov.ph/course/view.php?id=2014",
     durationHours: 2,
     skillsAddressed: ["Communication · Professionalism (Enabling)"],
     creditingBody: "TESDA × ILO",
     careerId: "clerk",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Communication · Professionalism (Enabling)":
+        "The ILO human-skills module is the taught professionalism/communication layer for first-job roles.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-clerk-skillsbuild",
@@ -8482,10 +9106,37 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // TOP mirror at course id 3331
+    // audit (2026-11-03, batch 4): fetched LIVE — the skillsbuild.org home is
+    // a marketing shell → landing.
     url: "https://skillsbuild.org/",
     durationHours: 3,
     skillsAddressed: ["Communication · Professionalism (Enabling)"],
     careerId: "clerk",
+    form: "landing",
+    access: "account",
+  },
+  {
+    id: "res-clerk-alison-secretarial",
+    title: "Secretarial Studies and Office Administration (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 4 fill, user-ruled): "Start
+    // Course Now", CPD-accredited → taught/account. Printed outcomes carry
+    // "identify methods for effective file management and distinguish
+    // between digital and physical filing systems". The filing winner.
+    url: "https://alison.com/course/secretarial-studies-and-office-administration",
+    durationHours: 3,
+    skillsAddressed: ["Recording, preparing, sorting, classifying and filing information"],
+    careerId: "clerk",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Recording, preparing, sorting, classifying and filing information":
+        "The file-management module contrasts digital and physical filing methods — the sort/classify/file rules the row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-clerk-gap-equipment",
@@ -8498,19 +9149,50 @@ export const RESOURCES: Resource[] = [
     careerId: "clerk",
   },
   // ── encode (5.3) — d/e split; crypto anchor rides the data-movement row ──
+  // Wave B audit (2026-11-03, batch 4): access/form per-row. Google Applied
+  // Digital Skills re-pointed onto the exceeds canonical lesson path (old
+  // applieddigitalskills URL 301s, fetched LIVE) → taught/account; Google's
+  // exceeds lesson catalog → landing; Microsoft support → RE-POINTED onto
+  // the open Excel import how-to ("Import data from a CSV, HTML, or text
+  // file", fetched LIVE 200 with the Get&Transform walkthrough steps) →
+  // taught/direct, carrying the import/export-data cell; typing tutors both
+  // taught/direct (fetched LIVE; Ratatype is the accuracy winner by id over
+  // typing.com); the Sheets data-organization lesson path → taught/account
+  // (fetched LIVE, title "Google Workspace: Sheets - Part 1"); TOP modules →
+  // taught/account (303 login-wall verified LIVE); RA 10173 → reference. New
+  // per-role fill (fetched LIVE 2026-11-03, user-ruled): Alison's
+  // "Introduction to Electronic Document Management" — printed outcomes
+  // carry the document lifecycle/versioning stages → the storing-completed-
+  // documents cell. Honest reds kept: operating bookkeeping/calculating
+  // machines (machine craft; no taught self-serve page verified). Coverage:
+  // 7/8 vetted.
   {
     id: "res-encode-ads-sheets",
     title: "Google Applied Digital Skills: Google Sheets for Beginners",
     provider: "Google for Education",
     type: "course",
     cost: "free",
-    // free 45–90 min lesson; platform-migration banner — re-check near defense
-    url: "https://applieddigitalskills.withgoogle.com/c/college-and-continuing-education/en/google-sheets-for-beginners/overview.html",
+    // free 45–90 min lesson
+    // audit + re-point (2026-11-03, batch 4): the applieddigitalskills URL
+    // 301s onto the exceeds canonical lesson path (fetched LIVE, title
+    // "Google Sheets for Beginners"). taught/account (Google signup; the
+    // standing migration re-check flag travels). The receive-and-register
+    // and field-mapping winner (tier-2 creditingBody).
+    url: "https://edu.exceedlms.com/student/path/1606124",
     durationHours: 1,
     skillsAddressed: ["Receiving & registering source documents for data capture", "Source-document reading & field mapping (entering from source material)"],
     creditingBody: "Google for Education",
     careerId: "encode",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Receiving & registering source documents for data capture":
+        "The Sheets-for-Beginners lesson registers source data into structured sheets — the receive-and-log discipline of the data-capture loop.",
+      "Source-document reading & field mapping (entering from source material)":
+        "Entering data from source material into the sheet's fields is the lesson's core craft — the field-mapping leg.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-encode-workspace-catalog",
@@ -8518,22 +9200,41 @@ export const RESOURCES: Resource[] = [
     provider: "Google for Education (edu.exceedlms)",
     type: "course",
     cost: "free",
-    // free lesson collection; Google account required; works on phone
+    // free lesson collection; Google account required
+    // audit (2026-11-03, batch 4): fetched LIVE (200, catalog listing
+    // title) → landing (lesson catalog index; fail-closed).
     url: "https://edu.exceedlms.com/student/catalog/list?category_ids=11040-google-workspace-training",
     durationHours: 3,
     skillsAddressed: ["Receiving & registering source documents for data capture", "Source-document reading & field mapping (entering from source material)"],
     careerId: "encode",
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-encode-ms-365",
-    title: "Microsoft 365 help & learning (Excel training)",
+    title: "Excel: how to import data from a CSV, HTML, or text file (Microsoft Support how-to)",
     provider: "Microsoft Support",
     type: "doc",
     cost: "free",
-    url: "https://support.microsoft.com/en-us/office",
+    // audit + re-point (2026-11-03, batch 4): the old M365-hub claim is
+    // re-pointed onto the open Excel import how-to (fetched LIVE 200 —
+    // "Import data from a CSV, HTML, or text file", the Get&Transform > From
+    // File walkthrough with numbered steps) → taught/direct. The
+    // import/export winner (sole claim; the office-side data movement — the
+    // O*NET cryptographic anchor stays in the rowspec, and the
+    // database-engine export leg is scoped honestly).
+    url: "https://support.microsoft.com/en-us/excel/import-data-from-a-csv-html-or-text-file",
     durationHours: 2,
-    skillsAddressed: ["Source-document reading & field mapping (entering from source material)"],
+    skillsAddressed: ["Source-document reading & field mapping (entering from source material)", "Importing and exporting data between different database systems and softwares"],
     careerId: "encode",
+    pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Importing and exporting data between different database systems and softwares":
+        "The Get&Transform walkthrough teaches moving CSV/text/HTML source data into Excel's data model — the software-boundary import leg; engine-to-engine export stays the craft scope note.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-encode-typing-com",
@@ -8542,10 +9243,14 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // free tutor with accuracy drills; ad-supported
+    // audit (2026-11-03, batch 4): fetched LIVE (200, lessons title) →
+    // taught/direct (open drills).
     url: "https://www.typing.com/student/lessons",
     durationHours: 3,
     skillsAddressed: ["Accuracy/error detection & correction"],
     careerId: "encode",
+    form: "taught",
+    access: "direct",
   },
   {
     id: "res-encode-ratatype",
@@ -8554,6 +9259,8 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // accuracy/speed evidence for the accuracy loop and the split thin rows
+    // audit (2026-11-03, batch 4): fetched LIVE (200) → taught/direct. The
+    // accuracy winner (id A–Z over typing.com).
     url: "https://www.ratatype.com/",
     durationHours: 3,
     skillsAddressed: [
@@ -8563,6 +9270,13 @@ export const RESOURCES: Resource[] = [
     ],
     careerId: "encode",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Accuracy/error detection & correction":
+        "Ratatype scores errors live and re-drills — the detect-and-correct loop the row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-encode-sheets-organize",
@@ -8572,12 +9286,22 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // "Organize raw data with sorting, formatting, and data validation" —
     // direct pre-entry sorting/validation practice; credential-for-completion
+    // audit (2026-11-03, batch 4): fetched LIVE (200, title "Google
+    // Workspace: Sheets - Part 1") → taught/account. The compile/sort/verify
+    // winner (sole claim).
     url: "https://edu.exceedlms.com/student/path/1606820",
     durationHours: 1,
     skillsAddressed: ["Compilation, sorting, verification before entry"],
     creditingBody: "Google for Education",
     careerId: "encode",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Compilation, sorting, verification before entry":
+        "The Sheets data-organization lesson runs sorting, formatting and data validation — the compile/verify-before-entry craft verbatim.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-encode-top-digitallit",
@@ -8586,11 +9310,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // backs both split rows' tool/data-movement base
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 4716).
     url: "https://e-tesda.gov.ph/course/view.php?id=4716",
     durationHours: 4,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "encode",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-encode-top-data-privacy",
@@ -8599,11 +9327,22 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // PH-specific confidentiality backing (Filipino-context examples)
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 4395). taught/account. The
+    // confidentiality winner (over the statute reference).
     url: "https://e-tesda.gov.ph/course/view.php?id=4395",
     durationHours: 2,
     skillsAddressed: ["Confidentiality (Etiquette/Professionalism — Enabling)"],
     creditingBody: "TESDA",
     careerId: "encode",
+    
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Confidentiality (Etiquette/Professionalism — Enabling)":
+        "The TOP data-privacy module teaches practicing workplace confidentiality with Filipino-context examples — the handling discipline the row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-encode-ra10173",
@@ -8613,13 +9352,51 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // full statute text; privacy.gov.ph + officialgazette.gov.ph 403-blocked
     // this session — flagged
+    // audit (2026-11-03, batch 4): statute text = reference (readable
+    // material; no teaching flow).
     url: "http://www.lawphil.net/statutes/repacts/ra2012/ra_10173_2012.html",
     durationHours: 2,
     skillsAddressed: ["Confidentiality (Etiquette/Professionalism — Enabling)"],
     careerId: "encode",
     pick: true,
+    form: "reference",
+    access: "direct",
+  },
+  {
+    id: "res-encode-alison-edm",
+    title: "Introduction to Electronic Document Management (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 4 fill, user-ruled): "Start
+    // Course Now", CPD-accredited → taught/account. Printed outcomes carry
+    // the document-lifecycle stages and version-control/access-control
+    // components → the storing-completed-documents-and-logs cell (the
+    // electronic-side of records-throughput discipline).
+    url: "https://alison.com/course/introduction-to-electronic-document-management",
+    durationHours: 3,
+    skillsAddressed: ["Storing completed documents & logs (records + throughput discipline)"],
+    careerId: "encode",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Storing completed documents & logs (records + throughput discipline)":
+        "The EDM course walks the document lifecycle through its storage stage with versioning and access control — the completed-document/log upkeep discipline.",
+    },
+    // learn draft — user review pending
   },
   // ── desk (5.5) — tourism-family honesty note rides the TOP front-office rows ──
+  // Wave B audit (2026-11-03, batch 4): access/form per-row. TOP Moodle
+  // modules → taught/account (303 login-wall verified LIVE); the Google/MS
+  // hubs → landing (both re-pointed canonical — /a/users 200 hub, /office
+  // 301s to the M365 hub, fetched LIVE); ADS re-pointed onto the exceeds
+  // canonical lesson path (301 fetched LIVE) → taught/account; OpenLearn →
+  // taught/direct (the standing keep-with-flag verification; curl 403 this
+  // pass); IBM SkillsBuild home → landing. The NC II front-office rows win
+  // the five lettered PSOC cells (tier-2 crediting + entry-path counts).
+  // Honest red kept: issuing forms/information kits/brochures (no taught
+  // claim exists — adviser-only). Coverage: 5/6 vetted.
   {
     id: "res-desk-top-front-office",
     title: "Providing Front Office Services (TOP Tourism, Front Office Services NC II)",
@@ -8630,6 +9407,10 @@ export const RESOURCES: Resource[] = [
     // tourism-organized (hotel front-office family) while the catalog refuses
     // hotel framing — the reception/enquiry lessons are the closest free PH
     // credential track for front-desk conduct (wording approved, travels)
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 4). taught/account. The five lettered
+    // PSOC-cell winner (tier-2 crediting + entry-path counts, id A–Z over
+    // the intro).
     url: "https://e-tesda.gov.ph/course/view.php?id=4",
     durationHours: 12,
     skillsAddressed: [
@@ -8642,6 +9423,22 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "desk",
+    
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Answering inquiries about goods/services/policies (availability, location, price)":
+        "The front-office modules answer guest/inquiry questions availability-first — the answered-inquiry craft with the tourism framing scoped to the corporate desk.",
+      "Assisting on problems, advice, information (member of the counter service set)":
+        "The reception/counter-service lessons walk assisting visitors with problems and advice — the counter-service-set behavior.",
+      "Recording information about enquiries and complaints":
+        "The front-office records lessons cover logging guest concerns and keeping the enquiry/complaint log — the recorded-information leg.",
+      "Referring complex enquiries to team leaders or expert advisers":
+        "The escalation elements (concierge/front-desk referring upward) carry the refer-onward craft; the NC II walks when-and-how to escalate.",
+      "Communication & professionalism at the corporate front-desk (Enabling)":
+        "The NC II's communication/professional conduct lessons are the taught front-desk etiquette core.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-desk-top-front-office-intro",
@@ -8650,6 +9447,8 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // entry-level intro of the same family; same tourism-family honesty note
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 50).
     url: "https://e-tesda.gov.ph/course/view.php?id=50",
     durationHours: 3,
     skillsAddressed: [
@@ -8659,6 +9458,8 @@ export const RESOURCES: Resource[] = [
     ],
     creditingBody: "TESDA",
     careerId: "desk",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-desk-top-workplace-comms",
@@ -8666,6 +9467,8 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 56).
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
     skillsAddressed: [
@@ -8676,6 +9479,8 @@ export const RESOURCES: Resource[] = [
     creditingBody: "TESDA",
     careerId: "desk",
     pick: true,
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-desk-ads-sheets",
@@ -8684,12 +9489,17 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // spreadsheet-logging lesson (header row + entries)
-    url: "https://applieddigitalskills.withgoogle.com/c/college-and-continuing-education/en/google-sheets-for-beginners/overview.html",
+    // audit + re-point (2026-11-03, batch 4): the applieddigitalskills URL
+    // 301s onto the exceeds canonical lesson path (fetched LIVE) → taught/
+    // account. The recording cell's runner-up (the NC II row wins tier-2+3).
+    url: "https://edu.exceedlms.com/student/path/1606124",
     durationHours: 1,
     skillsAddressed: ["Recording information about enquiries and complaints"],
     creditingBody: "Google for Education",
     careerId: "desk",
     pick: true,
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-desk-workspace",
@@ -8697,11 +9507,14 @@ export const RESOURCES: Resource[] = [
     provider: "Google",
     type: "doc",
     cost: "free",
-    // Forms/Sheets for simple inquiry logs
+    // per-app official training hub (Forms/Sheets for simple inquiry logs)
+    // audit (2026-11-03, batch 4): fetched LIVE (200, hub title) → landing.
     url: "https://support.google.com/a/users",
     durationHours: 2,
     skillsAddressed: ["Recording information about enquiries and complaints"],
     careerId: "desk",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-desk-ms-365",
@@ -8710,10 +9523,15 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // producing/typing forms and handouts
-    url: "https://support.microsoft.com/en-us/office",
+    // audit + re-point (2026-11-03, batch 4): the old /en-us/office path 301s
+    // onto the canonical M365 hub (fetched LIVE) → landing (ADDR empty per
+    // §6.1).
+    url: "https://support.microsoft.com/en-US/microsoft-365",
     durationHours: 2,
     skillsAddressed: [],
     careerId: "desk",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-desk-top-ilo-humanskills",
@@ -8721,12 +9539,16 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA TOP × ILO",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 2014).
     url: "https://e-tesda.gov.ph/course/view.php?id=2014",
     durationHours: 2,
     skillsAddressed: ["Communication & professionalism at the corporate front-desk (Enabling)"],
     creditingBody: "TESDA × ILO",
     careerId: "desk",
     pick: true,
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-desk-skillsbuild",
@@ -8735,10 +9557,13 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // TOP-mirrored (id 3331)
+    // audit (2026-11-03, batch 4): fetched LIVE — marketing shell → landing.
     url: "https://skillsbuild.org/",
     durationHours: 3,
     skillsAddressed: ["Communication & professionalism at the corporate front-desk (Enabling)"],
     careerId: "desk",
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-desk-openlearn-comms",
@@ -8746,15 +9571,43 @@ export const RESOURCES: Resource[] = [
     provider: "Open University (OpenLearn)",
     type: "course",
     cost: "free",
-    // adopted 403 verdict line (keep-with-flag; flipped from "dropped" 2026-10-29);
-    // row-6 communication/professionalism backing
+    // audit (2026-11-03, batch 4): the standing family verification carries
+    // the grade (course page open in browser → taught/direct; curl 403 —
+    // the keep-with-flag line).
+    // adopted 403 verdict line (keep-with-flag; flipped from "dropped" 2026-10-29)
     url: "https://www.open.edu/openlearn/money-business/effective-communication-the-workplace",
     durationHours: 3,
     skillsAddressed: ["Communication & professionalism at the corporate front-desk (Enabling)"],
     careerId: "desk",
+    form: "taught",
+    access: "direct",
   },
   // ── execsec (E2) — rebuilt to the blessed execsec.md pool (pre-blessing
   // round-12 scaffolds retired; the NARA rows are not in the blessed pool) ──
+  // Wave B audit (2026-11-03, batch 4): access/form per-row. Coursera rows
+  // graded taught/exam-paid (fetched LIVE "Enroll for free": Work Smarter,
+  // Plus the new Madecraft meetings course); Google Calendar / M365 /
+  // Workspace / Meet / Gmail help docs: Calendar re-pointed onto the general
+  // hub (/getstarted 301s fetched LIVE), M365 re-pointed onto the canonical
+  // M365 hub (/office 301s fetched LIVE), Google Meet graded reference,
+  // Gmail RE-POINTED onto the GCF/LearnFree Gmail lesson series (308
+  // verified fresh) → taught/direct; TOP modules → taught/account (303
+  // login-wall verified LIVE); AccountingCoach RE-POINTED onto its open
+  // "Payroll Accounting: In-Depth Explanation" lesson (fetched LIVE 200) →
+  // taught/direct; UK National Archives guidance → reference; Google AI
+  // Educator category listing → landing. Three new per-role fills (fetched
+  // LIVE 2026-11-03, user-ruled): Madecraft's "How to Stop Wasting Time in
+  // Meetings" (printed outcomes: structuring meetings + "take notes that
+  // drive real follow-through" — meeting administration/minutes), ADP's
+  // verified "The Payroll Cycle" per-role dup (the timekeeping module —
+  // employee time-recording), and Alison's "Diploma in Administrative
+  // Procedures and Office Support" (printed outcomes: "Plan travel, meetings,
+  // and events with attention to detail, vendors, and follow-up tasks" +
+  // binder/document organization — travel and records-filing). Honest reds
+  // kept (searched; the purchase book holds the real craft): executive
+  // research & briefing support, administrative policy setup, representing
+  // the executive, supervision/training of clerical staff, operating-
+  // practice review. Coverage: 12/17 vetted.
   {
     id: "res-execsec-work-smarter",
     title: "Work Smarter, Not Harder: Time Management for Personal & Professional Productivity",
@@ -8763,10 +9616,20 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // VE3-3: audit-availability re-check before fixture copy — if audit is
     // not offered at re-check, treat as paid and drop
+    // audit (2026-11-03, batch 4): fetched LIVE "Enroll for free" →
+    // taught/exam-paid. The schedule winner (sole vetted claim).
     url: "https://www.coursera.org/learn/work-smarter-not-harder",
     durationHours: 6,
     skillsAddressed: ["Executive schedule & calendar management"],
     careerId: "execsec",
+    
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Executive schedule & calendar management":
+        "Irvine's time-management modules plan around the calendar — the disciplined scheduling/estimating line the executive seat runs.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-execsec-gcal",
@@ -8775,11 +9638,15 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // scheduling docs + itinerary-as-calendar practice
-    url: "https://support.google.com/calendar/getstarted",
+    // audit + re-point (2026-11-03, batch 4): /getstarted 301s onto the
+    // general Calendar hub (fetched LIVE) → landing (help-hub).
+    url: "https://support.google.com/calendar/",
     durationHours: 1,
     skillsAddressed: ["Executive schedule & calendar management", "Travel arrangements"],
     careerId: "execsec",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-execsec-ms-365",
@@ -8789,11 +9656,17 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // the "word processing, spreadsheet, database, or presentation software"
     // clause's direct back + timesheet practice docs
-    url: "https://support.microsoft.com/en-us/office",
+    // audit + re-point (2026-11-03, batch 4): the old /en-us/office path 301s
+    // onto the canonical M365 hub (fetched LIVE) → landing. The time-tracking
+    // and minutes cells ride red on it; the taught legs arrive via the
+    // per-role fills below.
+    url: "https://support.microsoft.com/en-US/microsoft-365",
     durationHours: 2,
     skillsAddressed: ["Correspondence & document production", "Meeting administration & minutes", "Employee time-tracking"],
     careerId: "execsec",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-execsec-owl-memos",
@@ -8802,10 +9675,21 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // memo/minutes-adjacent writing
+    // audit (2026-11-03, batch 4): fetched LIVE (200) — open writing
+    // tutorial → taught/direct. The correspondence winner (id A–Z over the
+    // paid Madecraft fill loses on hours? no — the Coursera Madecraft dup is
+    // the minutes winner; correspondence stays here).
     url: "https://owl.purdue.edu/owl/subject_specific_writing/professional_technical_writing/memos/index.html",
     durationHours: 2,
     skillsAddressed: ["Correspondence & document production", "Meeting administration & minutes"],
     careerId: "execsec",
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Correspondence & document production":
+        "The OWL memos section teaches the memo format, audience and organization — the routine structural correspondence the row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-execsec-gmeet",
@@ -8814,11 +9698,15 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // meeting-flow docs (recording availability depends on Workspace edition)
+    // audit (2026-11-03, batch 4): fetched LIVE (200) — official help docs →
+    // reference (readable material; no teaching flow).
     url: "https://support.google.com/meet",
     durationHours: 1,
     skillsAddressed: ["Meeting administration & minutes"],
     careerId: "execsec",
     pick: true,
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-execsec-top-receiving-comms",
@@ -8826,12 +9714,17 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 52). The gatekeeping cell's runner-up
+    // (the front-office NC II wins the id race).
     url: "https://e-tesda.gov.ph/course/view.php?id=52",
     durationHours: 2,
     skillsAddressed: ["Information gatekeeping: calls & visitors"],
     creditingBody: "TESDA",
     careerId: "execsec",
     pick: true,
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-execsec-top-front-office",
@@ -8840,11 +9733,22 @@ export const RESOURCES: Resource[] = [
     type: "NC",
     cost: "free",
     // reception/visitor conduct; same tourism-family honesty note as desk
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 4). taught/account. The gatekeeping
+    // winner (tier-2 tie; id A–Z over the receiving module).
     url: "https://e-tesda.gov.ph/course/view.php?id=4",
     durationHours: 12,
     skillsAddressed: ["Information gatekeeping: calls & visitors"],
     creditingBody: "TESDA",
     careerId: "execsec",
+    
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Information gatekeeping: calls & visitors":
+        "The front-office reception lessons manage incoming calls and visitor flow — screening, logging and routing the executive's traffic (tourism framing scoped).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-execsec-google-ai-admin",
@@ -8854,11 +9758,17 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // AI-assisted drafting/research; free w/ Google account; TOP-mirrored
     // (ICT category 2160, verified public 200)
+    // audit (2026-11-03, batch 4): fetched LIVE — the listing now resolves to
+    // a catalog index whose lessons are teacher workflows (grants, coaching,
+    // parent comms) with no executive-briefing lesson → landing (fail-closed).
+    // The research & briefing cell rides red on it (adviser-only).
     url: "https://edu.exceedlms.com/student/catalog/list?category_ids=11692-google-ai-educator-series-administrative-applications",
     durationHours: 2,
     skillsAddressed: ["Research & briefing support for executives"],
     creditingBody: "Google for Education",
     careerId: "execsec",
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-execsec-workspace",
@@ -8866,25 +9776,39 @@ export const RESOURCES: Resource[] = [
     provider: "Google",
     type: "doc",
     cost: "free",
-    // search/draft tooling + upkeep tooling (Sheets/Drive)
+    // per-app official training hub (search/draft/upkeep tooling)
+    // audit (2026-11-03, batch 4): fetched LIVE (200, hub title) → landing.
     url: "https://support.google.com/a/users",
     durationHours: 2,
     skillsAddressed: ["Research & briefing support for executives", "Travel arrangements"],
     careerId: "execsec",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-execsec-gmail",
-    title: "Gmail Help (official docs)",
-    provider: "Google",
+    title: "Gmail (lesson series) — GCFGlobal",
+    provider: "GCFGlobal",
     type: "doc",
     cost: "free",
     // labels/filter/route docs — the triage row's tool layer
-    url: "https://support.google.com/mail",
+    // audit + re-point (2026-11-03, batch 4): re-pointed onto the GCF/LearnFree
+    // Gmail lesson series (308 verified fresh; standing lesson-series
+    // verification carries the grade) → taught/direct. The triage winner
+    // (labels/filters/archiving = the incoming-material triage layer).
+    url: "https://edu.gcfglobal.org/en/gmail/",
     durationHours: 1,
     skillsAddressed: ["Incoming-material triage & distribution"],
     careerId: "execsec",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Incoming-material triage & distribution":
+        "The Gmail series teaches filters, labels and archiving — the sort-route-file triage loop for incoming material (the electronic leg; physical mail stays the desk craft).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-execsec-top-intro-bookkeeping",
@@ -8893,6 +9817,9 @@ export const RESOURCES: Resource[] = [
     type: "NC",
     cost: "free",
     // budget-prep-assistance clause backing
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 3981). taught/account. The coordination
+    // winner (sole claim).
     url: "https://e-tesda.gov.ph/course/view.php?id=3981",
     durationHours: 3,
     skillsAddressed: ["Office services coordination"],
@@ -8900,19 +9827,38 @@ export const RESOURCES: Resource[] = [
     countsTowardEntryPath: true,
     careerId: "execsec",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Office services coordination":
+        "The intro-bookkeeping module teaches documenting and servicing the office's financial transactions — the coordination paperwork the budget-prep clause backs.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-execsec-accountingcoach",
-    title: "AccountingCoach (free accounting text incl. payroll topic)",
+    title: "Payroll Accounting: In-Depth Explanation (AccountingCoach)",
     provider: "AccountingCoach",
     type: "doc",
     cost: "free",
     // free text-based accounting; pro features sold — use the free layer
-    url: "https://www.accountingcoach.com/",
+    // audit + re-point (2026-11-03, batch 4): the accountingcoach home was a
+    // lesson-catalog landing; RE-POINTED onto the open deep lesson (fetched
+    // LIVE 200 — "Payroll Accounting: In-Depth Explanation with Examples",
+    // step-by-step explanations) → taught/direct. The payroll-information
+    // winner (sole vetted claim; PRO Plus upsell noted).
+    url: "https://www.accountingcoach.com/payroll-accounting/explanation/1",
     durationHours: 3,
     skillsAddressed: ["Payroll-information processing", "General office duties & tools"],
     careerId: "execsec",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Payroll-information processing":
+        "The payroll lesson walks gross-to-net computation, payroll registers and the journal entries — processing the payroll information the row prints (the run-the-actual-payroll leg rides the ADP fill in the pool).",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-execsec-top-journalizing",
@@ -8920,12 +9866,16 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "NC",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 3982).
     url: "https://e-tesda.gov.ph/course/view.php?id=3982",
     durationHours: 4,
     skillsAddressed: [],
     creditingBody: "TESDA",
     countsTowardEntryPath: true,
     careerId: "execsec",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-execsec-top-workplace-comms",
@@ -8934,12 +9884,24 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // liaison/clerical-cooperation backing
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 56). taught/account. The general-office
+    // and clerical-cooperation winners (tier-2 creditingBody).
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
     skillsAddressed: ["General office duties & tools", "Clerical support across departments"],
     creditingBody: "TESDA",
     careerId: "execsec",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "General office duties & tools":
+        "The workplace-communication unit is the taught general-office exchange discipline (obtaining/providing information across tasks and tools).",
+      "Clerical support across departments":
+        "Participating-in-communication across workplace contexts trains the cross-department relay/correspondence a clerical support seat runs.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-execsec-top-ilo-humanskills",
@@ -8948,11 +9910,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // any-row human-skills add
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 2014).
     url: "https://e-tesda.gov.ph/course/view.php?id=2014",
     durationHours: 2,
     skillsAddressed: [],
     creditingBody: "TESDA × ILO",
     careerId: "execsec",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-execsec-skillsbuild",
@@ -8961,10 +9927,13 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // senior-heavy rows' free backing side (the book rides PURCHASE_BOOKS)
+    // audit (2026-11-03, batch 4): fetched LIVE — marketing shell → landing.
     url: "https://skillsbuild.org/",
     durationHours: 3,
     skillsAddressed: [],
     careerId: "execsec",
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-execsec-uk-archives",
@@ -8973,14 +9942,107 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // UK retention law not transferable — transfer the records discipline
+    // audit (2026-11-03, batch 4): fetched LIVE (200) → reference. The
+    // records-filing cell rides red on it; the taught leg is the Alison
+    // diploma fill below.
     url: "https://www.nationalarchives.gov.uk/information-management/",
     durationHours: 3,
     skillsAddressed: ["Records & document filing/retrieval"],
     careerId: "execsec",
     pick: true,
+    form: "reference",
+    access: "direct",
+  },
+  {
+    id: "res-execsec-madecraft-meetings",
+    title: "How to Stop Wasting Time in Meetings (Madecraft)",
+    provider: "Coursera (Madecraft)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 4 fill, user-ruled): "Enroll for
+    // free", 3 modules — printed outcomes: "how to open, structure, and close
+    // meetings" + "assign roles and take notes that drive real follow-through"
+    // → taught/exam-paid. The meeting-administration/minutes winner (id A–Z
+    // over the OWL memos runner-up). ₱ paid tier: certificate.
+    url: "https://www.coursera.org/learn/how-to-stop-wasting-time-in-meetings",
+    durationHours: 2,
+    skillsAddressed: ["Meeting administration & minutes"],
+    careerId: "execsec",
+    
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Meeting administration & minutes":
+        "The meetings course teaches structuring the meeting and taking recorded notes that drive follow-through — the minutes/administration craft.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-execsec-adp-payroll-cycle",
+    title: "The Payroll Cycle (ADP Entry-Level Payroll Specialist)",
+    provider: "Coursera (ADP Learning Academy)",
+    type: "course",
+    cost: "free",
+    // per-role dup of the batch-3-verified res-pay-adp-payroll-cycle row
+    // (re-verified LIVE 2026-11-03: "Enroll for free"). The timekeeping
+    // module ("record/manage employee work minutes") carries the
+    // employee-time-tracking cell. taught/exam-paid.
+    url: "https://www.coursera.org/learn/adp-the-payroll-cycle",
+    durationHours: 12,
+    skillsAddressed: ["Employee time-tracking"],
+    careerId: "execsec",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Employee time-tracking":
+        "The ADP timekeeping module records and manages employee work minutes into the payroll system — the time-record upkeep the row prints.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-execsec-alison-diploma",
+    title: "Administrative Procedures and Office Support (Alison Diploma)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-03 (Wave B batch 4 fill, user-ruled): "Start
+    // Course Now", CPD-accredited diploma → taught/account. Printed outcomes
+    // carry "Plan travel, meetings, and events with attention to detail,
+    // vendors, and follow-up tasks" and "Arrange binder contents to ensure
+    // accessible and professional document organisation" → the travel and
+    // records-filing winners.
+    url: "https://alison.com/course/diploma-in-administrative-procedures-and-office-support",
+    durationHours: 8,
+    skillsAddressed: ["Travel arrangements", "Records & document filing/retrieval"],
+    careerId: "execsec",
+    
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Travel arrangements":
+        "The procedures module teaches planning travel/meetings/events end-to-end — vendors, details and follow-up tasks per its printed outcome.",
+      "Records & document filing/retrieval":
+        "The document-organisation outcome (arranging binder/file contents accessibly) is the filing/retrieval discipline the row prints.",
+    },
+    // learn draft — user review pending
   },
   // ── records (E3) — rebuilt to the blessed records.md pool (per-row linkage;
   // purchase books ride PURCHASE_BOOKS; the pre-blessing NARA lessons retire) ──
+  // Wave B audit (2026-11-03, batch 4): access/form per-row. The UK National
+  // Archives guidance → reference; TOP modules → taught/account (303
+  // login-wall verified LIVE); the Google Workspace/M365/Calendar hubs →
+  // landing (re-pointed canonical: /office 301s + /getstarted 301s, fetched
+  // LIVE); ADS re-pointed onto the exceeds canonical lesson path (301,
+  // fetched LIVE) → taught/account; Gmail RE-POINTED onto the GCF/LearnFree
+  // Gmail lesson series (308 verified fresh) → taught/direct. New per-role
+  // fill (fetched LIVE 2026-11-03, user-ruled): Alison's "Secretarial
+  // Studies and Office Administration" — printed outcomes carry
+  // "identify methods for effective file management and distinguish between
+  // digital and physical filing systems" → the filing-chain and scheduling
+  // cells. Honest reds kept (no taught self-serve page verified this pass):
+  // the reprographics machine craft and the front-office record/database
+  // upkeep row (the hub claims grade landing fail-closed). Coverage: 9/11
+  // vetted.
   {
     id: "res-records-uk-archives",
     title: "The National Archives (UK) — Information management",
@@ -8988,11 +10050,16 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // records-creation/keeping/retrieval/evaluation guidance
+    // audit (2026-11-03, batch 4): fetched LIVE (200, title verified) →
+    // reference. The filing-chain cells ride red on it; the taught leg is
+    // the Alison per-role dup below.
     url: "https://www.nationalarchives.gov.uk/information-management/",
     durationHours: 3,
     skillsAddressed: ["Sort & classify materials to filing rules", "Filing into storage (drawers/cabinets/boxes)", "File retrieval on request"],
     careerId: "records",
-    pick: true,
+    
+    form: "reference",
+    access: "direct",
   },
   {
     id: "res-records-top-digitallit",
@@ -9001,11 +10068,15 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // electronic-filing side + hardware-basic operation
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 4716).
     url: "https://e-tesda.gov.ph/course/view.php?id=4716",
     durationHours: 4,
     skillsAddressed: [],
     creditingBody: "TESDA",
     careerId: "records",
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-records-ads-sheets",
@@ -9013,13 +10084,23 @@ export const RESOURCES: Resource[] = [
     provider: "Google for Education",
     type: "course",
     cost: "free",
-    // spreadsheet log practice for the filing-log row; migration banner noted
-    url: "https://applieddigitalskills.withgoogle.com/c/college-and-continuing-education/en/google-sheets-for-beginners/overview.html",
+    // spreadsheet log practice for the filing-log row
+    // audit + re-point (2026-11-03, batch 4): the applieddigitalskills URL
+    // 301s onto the exceeds canonical lesson path (fetched LIVE) → taught/
+    // account. The filing-log winner (tier-2 creditingBody).
+    url: "https://edu.exceedlms.com/student/path/1606124",
     durationHours: 1,
     skillsAddressed: ["Filing log / records of materials filed & removed"],
     creditingBody: "Google for Education",
     careerId: "records",
     pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Filing log / records of materials filed & removed":
+        "The Sheets-for-Beginners lesson builds the logged-entry sheet pattern — the filed/removed log the row prints.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-records-workspace",
@@ -9027,12 +10108,16 @@ export const RESOURCES: Resource[] = [
     provider: "Google",
     type: "doc",
     cost: "free",
-    // shared-Drive record maintenance + record/database upkeep
+    // shared-Drive record maintenance hub
+    // audit (2026-11-03, batch 4): fetched LIVE (200, hub title) → landing
+    // (fail-closed). The database-upkeep cell rides red on it.
     url: "https://support.google.com/a/users",
     durationHours: 2,
     skillsAddressed: ["Filing log / records of materials filed & removed", "Front-office record & database upkeep"],
     careerId: "records",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-records-workspace-catalog",
@@ -9040,10 +10125,14 @@ export const RESOURCES: Resource[] = [
     provider: "Google for Education (edu.exceedlms)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): fetched LIVE — catalog index → landing
+    // (fail-closed).
     url: "https://edu.exceedlms.com/student/catalog/list?category_ids=11040-google-workspace-training",
     durationHours: 3,
     skillsAddressed: ["Front-office record & database upkeep"],
     careerId: "records",
+    form: "landing",
+    access: "account",
   },
   {
     id: "res-records-ms-365",
@@ -9052,10 +10141,15 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // scanning/printing/PDF-flow docs
-    url: "https://support.microsoft.com/en-us/office",
+    // audit + re-point (2026-11-03, batch 4): the old /en-us/office path 301s
+    // onto the canonical M365 hub (fetched LIVE) → landing (ADDR empty per
+    // §6.1).
+    url: "https://support.microsoft.com/en-US/microsoft-365",
     durationHours: 2,
     skillsAddressed: [],
     careerId: "records",
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-records-top-front-office",
@@ -9064,11 +10158,24 @@ export const RESOURCES: Resource[] = [
     type: "NC",
     cost: "free",
     // reception corroboration rows; tourism-family honesty note (as desk)
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 4). taught/account. The telephone/
+    // front-desk and visitor winners (tier-2 tie, free tie, id A–Z over the
+    // intro row).
     url: "https://e-tesda.gov.ph/course/view.php?id=4",
     durationHours: 12,
     skillsAddressed: ["Telephone, switchboard & front-desk duties", "Visitor greeting & routing"],
     creditingBody: "TESDA",
     careerId: "records",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Telephone, switchboard & front-desk duties":
+        "The NC II reception modules run the telephone/front-desk conduct and message handling — the switchboard-side duties (tourism framing scoped, as desk).",
+      "Visitor greeting & routing":
+        "The reception/visitor-service lessons teach greeting and routing guests — the front-desk greeting craft.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-records-top-front-office-intro",
@@ -9076,12 +10183,17 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA Online Program (TOP)",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 50). The NC II row wins the id race for
+    // the two front-office cells.
     url: "https://e-tesda.gov.ph/course/view.php?id=50",
     durationHours: 3,
     skillsAddressed: ["Telephone, switchboard & front-desk duties", "Visitor greeting & routing"],
     creditingBody: "TESDA",
     careerId: "records",
     pick: true,
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-records-gcal",
@@ -9090,24 +10202,39 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // scheduling row backing
-    url: "https://support.google.com/calendar/getstarted",
+    // audit + re-point (2026-11-03, batch 4): /getstarted 301s onto the
+    // general Calendar hub (fetched LIVE) → landing.
+    url: "https://support.google.com/calendar/",
     durationHours: 1,
     skillsAddressed: ["Appointment & calendar scheduling"],
     careerId: "records",
     pick: true,
+    form: "landing",
+    access: "direct",
   },
   {
     id: "res-records-gmail",
-    title: "Gmail Help (official docs)",
-    provider: "Google",
+    title: "Gmail (lesson series) — GCFGlobal",
+    provider: "GCFGlobal",
     type: "doc",
     cost: "free",
     // labels/filters/archiving for mail handling
-    url: "https://support.google.com/mail",
+    // audit + re-point (2026-11-03, batch 4): re-pointed onto the GCF/
+    // LearnFree Gmail lesson series (308 verified fresh; standing
+    // lesson-series verification carries the grade) → taught/direct. The
+    // mail-handling winner (the electronic-mail leg).
+    url: "https://edu.gcfglobal.org/en/gmail/",
     durationHours: 1,
     skillsAddressed: ["Mail & document handling"],
     careerId: "records",
     pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Mail & document handling":
+        "The Gmail series teaches labels, filters and archiving — the electronic mail-and-documents handling loop.",
+    },
+    // learn draft — user review pending
   },
   {
     id: "res-records-top-workplace-comms",
@@ -9116,12 +10243,17 @@ export const RESOURCES: Resource[] = [
     type: "course",
     cost: "free",
     // speaking/listening emphasis
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 56). The info/CS-communication cell's
+    // runner-up (the ILO module wins the id race).
     url: "https://e-tesda.gov.ph/course/view.php?id=56",
     durationHours: 2,
     skillsAddressed: ["Info & customer-service communication"],
     creditingBody: "TESDA",
     careerId: "records",
     pick: true,
+    form: "taught",
+    access: "account",
   },
   {
     id: "res-records-top-ilo-humanskills",
@@ -9129,11 +10261,58 @@ export const RESOURCES: Resource[] = [
     provider: "TESDA TOP × ILO",
     type: "course",
     cost: "free",
+    // audit (2026-11-03, batch 4): TOP Moodle module → account (303
+    // login-wall verified LIVE; id 2014). taught/account. The info/CS
+    // communication winner (id A–Z over the participated module).
     url: "https://e-tesda.gov.ph/course/view.php?id=2014",
     durationHours: 2,
     skillsAddressed: ["Info & customer-service communication"],
     creditingBody: "TESDA × ILO",
     careerId: "records",
+    
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Info & customer-service communication":
+        "The ILO human-skills module drills the communication/service conduct for service seats — information sharing plus courtesy in one taught track.",
+    },
+    // learn draft — user review pending
+  },
+  {
+    id: "res-records-alison-secretarial",
+    title: "Secretarial Studies and Office Administration (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // per-role dup of the batch-4-verified res-clerk-alison-secretarial row
+    // (re-verified LIVE 2026-11-03: "Start Course Now", CPD-accredited) →
+    // taught/account. Printed outcomes carry "identify methods for effective
+    // file management and distinguish between digital and physical filing
+    // systems" and "list the steps for planning and organizing meetings" →
+    // the filing-chain and scheduling winners.
+    url: "https://alison.com/course/secretarial-studies-and-office-administration",
+    durationHours: 3,
+    skillsAddressed: [
+      "Sort & classify materials to filing rules",
+      "Filing into storage (drawers/cabinets/boxes)",
+      "File retrieval on request",
+      "Appointment & calendar scheduling",
+    ],
+    careerId: "records",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Sort & classify materials to filing rules":
+        "The file-management module contrasts digital and physical filing methods — the sorting/classifying rules the row prints.",
+      "Filing into storage (drawers/cabinets/boxes)":
+        "The physical-filing leg of the same module (distinct filing systems, cabinet storage) — the stored-record discipline.",
+      "File retrieval on request":
+        "The filing-system module's index/retrieval logic covers finding the filed record on call.",
+      "Appointment & calendar scheduling":
+        "The meetings/calendars module walks planning and organizing meetings and calendar entries — the scheduling craft.",
+    },
+    // learn draft — user review pending
   },
 
 ];

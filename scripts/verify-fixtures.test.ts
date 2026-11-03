@@ -977,10 +977,10 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
 });
 
 describe("§6.1 re-map census (final mapping state) + canon rails", () => {
-  it("catalog intact: no rows deleted (437 → 473, Wave B batch 3 fills all additive); 600 ADDR entries", () => {
-    expect(RESOURCES).toHaveLength(473); // +14 verified taught rows in batch 3 (sales 6 · purch 2 · opsanalyst 1 · ccqa 1 · pay 1 · fas 2 · fin 1; 459 after batch 2)
+  it("catalog intact: no rows deleted (437 → 473 → 483, Wave B batch 3 + 4 fill all additive); 617 ADDR entries", () => {
+    expect(RESOURCES).toHaveLength(483); // +14 verified taught rows in batch 3 (sales 6 · purch 2 · opsanalyst 1 · ccqa 1 · pay 1 · fas 2 · fin 1), +10 in batch 4 (coll 1 · credit 0 · teller 1 · audit 1 · adminassoc 1 · clerk 1 · records 1 · encode 1 · execsec 3; 459 after batch 2)
     const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
-    expect(mappings).toBe(600); // 577 (batch 2) + 21 (new-row claims) + 4 (outcomes-verified attaches: csr Technology, ops findings-memo, events ×3) − 2 (§6.1-class misfit cuts: Wharton ratio claim, CFI draw-charts claim)
+    expect(mappings).toBe(617); // 600 (batch 3) + 19 (new-row claims) + 1 (outcomes-verified attach: encode Excel-CSV import on the re-pointed ms row) − 3 (§6.1-class misfit cuts, all in the credit pool: Wharton Fundamentals ratio-research claim, GCF-Excel payment-letters + loan-documentation claims)
   });
 
   it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {
@@ -1001,7 +1001,7 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
     }
   });
 
-  it("declared-thin census: 63 career-skill cells carry no URL row; empty ADDR rows = 73", () => {    const thin: string[] = [];
+  it("declared-thin census: 58 career-skill cells carry no URL row; empty ADDR rows = 75", () => {    const thin: string[] = [];
     for (const c of CAREERS) {
       for (const s of c.skills) {
         const urlPool = RESOURCES.filter(
@@ -1010,20 +1010,20 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
         if (urlPool.length === 0) thin.push(`${c.id}::${s.name}`);
       }
     }
-    // 74 (batch 2) → 63: Wave B batch 3 covers eleven thin cells with verified
-    // taught claims — sales ×5 (After-sales, CX, Retail, Stakeholder and the
-    // contract/vendor leg via the verified Alison courses + STARWEAVER dup),
-    // events ×3 by outcomes-verified attaches (post-event evaluation,
-    // marketing/publicizing, admin details), purch Best-value (the sourcing
-    // course's supplier-evaluation leg), pay's pay-out cell (the ADP payroll
-    // cycle) and ccqa Customer-management (the per-role stakeholder dup).
-    // Every remaining thin cell is listed in the batch commit body.
-    expect(thin).toHaveLength(63);
+    // 63 (batch 3) → 58: Wave B batch 4 covers five thin cells with verified
+    // taught claims — coll Locate-and-notify (the Alison AR course),
+    // adminassoc Office-equipment (Alison Admin-Assistant Training), encode
+    // Import/export (the Excel CSV-import how-to) + Store-completed-docs
+    // (Alison EDM), teller Customer-service (the Alison CS dup). Every
+    // remaining thin cell is listed in the batch commit body.
+    expect(thin).toHaveLength(58);
     // thin cells never get papered over: no pick flag, no invented row
     const thinPick = RESOURCES.filter((r) => r.pick && r.url === undefined);
     expect(thinPick).toEqual([]);
-    // empty-ADDR catalog-only rows grow by the two misfit cuts (71 → 73)
-    expect(RESOURCES.filter((r) => r.skillsAddressed.length === 0)).toHaveLength(73);
+    // empty-ADDR catalog-only rows grow by the two misfit cuts (71 → 73) and
+    // the two batch-4 credit-pool cuts (73 → 75: Wharton Fundamentals and the
+    // credit GCF-Excel row)
+    expect(RESOURCES.filter((r) => r.skillsAddressed.length === 0)).toHaveLength(75);
     // spot pins: the honest holes include these recorded ones
     expect(thin).toContain("sysadmin::IT Asset Management"); // gap-row only
     expect(thin).toContain("execsec::Supervision & training of clerical staff");
@@ -1041,7 +1041,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
     return a.id.localeCompare(b.id);
   };
 
-  it("228 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
+  it("231 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
     const winnersBySkill = new Map<string, string>(); // career::skill → row id
     const winnerRows = new Set<string>();
     for (const c of CAREERS) {
@@ -1058,7 +1058,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
       }
     }
     const flags = RESOURCES.filter((r) => r.pick).map((r) => r.id);
-    expect(flags).toHaveLength(228); // 217 (batch 2) → 228 (Wave B batch 3: 14 new taught winners flagged, 4 stale flags dropped — the IBM/Trailhead landings, the §6.1-cut CFI row and the rutgers specialization landing; recalc'd from the data)
+    expect(flags).toHaveLength(231); // 228 (batch 3) → 231 (Wave B batch 4 recalc: 10 new rows carry the flag; stale winners dropped as the taught fills/re-points moved the fallback winners; byte-matched to the data)
     expect(new Set(flags)).toEqual(winnerRows); // byte-match in BOTH directions
     expect(winnersBySkill.get("swd::Applications Development")).toBe("res-python-basics");
     // the canon money-shot stays flagged-adjacent: the qa fallback winner is a
