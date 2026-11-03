@@ -978,9 +978,9 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
 
 describe("§6.1 re-map census (final mapping state) + canon rails", () => {
   it("catalog intact: no rows deleted (437 → 473 → 483, Wave B batch 3 + 4 fill all additive); 617 ADDR entries", () => {
-    expect(RESOURCES).toHaveLength(496); // batch 3 + 4 + Wave E (sysadmin 1 · digart 4 · hra 4 · training 4); 483 after batch 4
+    expect(RESOURCES).toHaveLength(491); // batch 3 + 4 + Wave E (sysadmin 1 · digart 4 · hra 3); 483 after batch 4
     const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
-    expect(mappings).toBe(632); // 617 (batch 4) + 15 Wave E new-row claims (sys 1 · digart 4 · hra 4 · training 6 — the training onboarding row carries two)
+    expect(mappings).toBe(625); // 617 (batch 4) + 6 Wave E new-row claims (sysadmin 1 · digart 4 · hra 3)
   });
 
   it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {
@@ -1010,12 +1010,11 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
         if (urlPool.length === 0) thin.push(`${c.id}::${s.name}`);
       }
     }
-    // 63 (batch 3) → 58 (batch 4) → 51 (Wave E fills: sysadmin Optimize-perf
-    // (MS Learn module), hra HR-Practices (Minnesota recruiting) + Employee
-    // Mobility (EDUCBA movement), training Onboarding + both Exit cells
-    // (Minnesota/EDUCBA) + HR-Analytics (Wharton dup) — every remaining thin
-    // cell is listed in the batch commit body)
-    expect(thin).toHaveLength(51);
+    // 63 (batch 3) → 58 (batch 4) → 56 (Wave E: sysadmin Optimize-perf gains
+    // the MS Learn module row; hra HR-Practices gains the Minnesota
+    // recruiting course — every remaining thin cell is listed in the batch
+    // commit body)
+    expect(thin).toHaveLength(56);
     // thin cells never get papered over: no pick flag, no invented row
     const thinPick = RESOURCES.filter((r) => r.pick && r.url === undefined);
     expect(thinPick).toEqual([]);
@@ -1057,7 +1056,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
       }
     }
     const flags = RESOURCES.filter((r) => r.pick).map((r) => r.id);
-    expect(flags).toHaveLength(239); // 231 (batch 4) + 8 (Wave E: sys wsperf · digart packaging/visual-me/anim · hra minnesota-recruit + educba-movement · training minnesota-recruit/movement/analytics dup flags; the LMS row loses the fallback to Moodle Academy 4h)
+    expect(flags).toHaveLength(235); // 231 (batch 4) + 4 (Wave E: sysadmin ms-learn-wsperf · digart packaging/visual-me/anim · hra minnesota-recruit; byte-matched to the data)
     expect(new Set(flags)).toEqual(winnerRows); // byte-match in BOTH directions
     expect(winnersBySkill.get("swd::Applications Development")).toBe("res-python-basics");
     // the canon money-shot stays flagged-adjacent: the qa fallback winner is a
