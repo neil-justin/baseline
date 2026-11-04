@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import "../prep.css";
+import GuideBandArt from "./BandArt";
 
 export const metadata: Metadata = {
   title: "Resume format guide — Baseline",
-  description: "The curated entry-level corporate resume format: sections, order, length, and Philippine entry-level conventions — with the Harvard bullet-point template.",
+  description:
+    "The curated entry-level corporate resume format: sections, order, length, and Philippine entry-level conventions — with the Harvard bullet-point template.",
 };
 
 /**
@@ -55,35 +57,68 @@ const BULLETS = [
   "One page — a second page is for the experience you'll earn after graduation.",
 ];
 
+/** The three plain-layout rules — the parser-blank rule carries the ONE
+ *  watch-class tone (`watch: true`), the source-line stays the page's one
+ *  provenance caption. */
+const PLAIN_RULES: { text: string; watch?: true }[] = [
+  { text: "Single column, standard fonts, no photos (PH job boards agree — JobStreet, vendor)." },
+  { text: "Content in images or text boxes reads as blank to parsers — that's the scan/no-OCR reject.", watch: true },
+  { text: "Bullets open with action verbs, one accomplishment each; numbers are strictly optional." },
+];
+
+const SRC_LINE =
+  "Sourced: NACE Job Outlook 2025 (survey); WVU Eberly “NACE Resume Guidelines”; HBS/Accenture" +
+  " Hidden Workers 2021; SHRM 2024; JobStreet Philippines (vendor); parsing literature (Yu et al." +
+  " 2005; RecSys in HR'23); Harvard MCS bullet-point resume template.";
+
 /**
  * Prep → Resume checker → Guide — the dropzone's quiet-format-guide door
- * plus the Harvard bullet-point template link. Shared .v7prep world
- * (prep.css): named band → one card of flush sections (the sections table is
- * a real STEP / RULE / WHY table in the pathway plan-table register, drawn
- * ink-circle numerals) → the ghost back pointer. One blue primary: the
- * Harvard template link (external). v7.4 recut: helper prose halved — the
- * tables and the checks stay, the sources line stays as the one provenance
- * caption.
+ * plus the Harvard bullet-point template link. Rides the .v7prep world
+ * (prep.css). v9.1 STRUCTURE round (2026-11-04 cutover — the #mockups
+ * realm proposal user-approved "looks good" the same day; realm retired
+ * with the cutover):
+ *   · band: the top back chip (ArrowLeft · "Back to Prep", the M3 tonal
+ *     pill) + the drawn ONE-PAGE RESUME SHEET leading the title cluster
+ *     (GuideBandArt — hero-law: this figure is the guide's alone);
+ *   · body: four own-cards (the 2026-11-03 "every section its OWN card"
+ *     ruling applied here) at the 860px reading column;
+ *   · state-language color only: step numerals to blue-wash discs, ONE
+ *     amber watch line (the parser-blank caution, never red), the
+ *     single blue primary stays on the Harvard link (locked);
+ *   · the buried foot back pointer is GONE — the band chip replaces it.
+ * Content byte-kept: same tables, checks, sources caption, links. The
+ * old v7.4 "one card of flush sections" anatomy and its .guide-card CSS
+ * retired with the round.
  */
 export default function GuidePage() {
   return (
-    <div className="v7prep">
+    <div className="v7prep g-surface">
       <header className="band">
+        <p className="g-backrow">
+          <Link className="g-back" href="/prep">
+            <ArrowLeft size={14} aria-hidden="true" /> Back to Prep
+          </Link>
+        </p>
         <div className="bandrow">
-          <div className="who">
-            <h1 className="t">Resume format guide</h1>
-            <p className="m">reference — curated and sourced, not a builder</p>
+          <div className="who g-who">
+            <GuideBandArt />
+            <div>
+              <h1 className="t">Resume format guide</h1>
+              <p className="m">reference — curated and sourced, not a builder</p>
+            </div>
           </div>
         </div>
       </header>
 
-      <section className="card guide-card">
-        <section className="panel-sec">
-          <p className="prep-sublabel num">
-            Write your resume yourself (Docs/Word, outside this system), and the format &amp; evidence check reads it back
-          </p>
+      <div className="g-cards">
+        {/* CARD 1 — the standard sections, in order */}
+        <section className="card">
           <div className="b-head">
             <h2>The standard sections, in order</h2>
+            <p className="helper">
+              Write your resume yourself (Docs/Word, outside this system), and the format
+              &amp; evidence check reads it back
+            </p>
           </div>
           <table className="guide-table num">
             <thead>
@@ -95,7 +130,7 @@ export default function GuidePage() {
             </thead>
             <tbody>
               {SECTIONS.map((s, i) => (
-                <tr key={i}>
+                <tr key={s.name}>
                   <td className="ct-step">
                     <span className="g-num num">{i + 1}</span>
                   </td>
@@ -112,7 +147,8 @@ export default function GuidePage() {
           </table>
         </section>
 
-        <section className="panel-sec">
+        {/* CARD 2 — the five checks + the one provenance caption */}
+        <section className="card">
           <div className="b-head">
             <h2>The five checks — self-mark before the run</h2>
           </div>
@@ -123,36 +159,35 @@ export default function GuidePage() {
               </p>
             ))}
           </div>
-          <p className="src-line num">
-            Sourced: NACE Job Outlook 2025 (survey); WVU Eberly “NACE Resume Guidelines”; HBS/Accenture
-            Hidden Workers 2021; SHRM 2024; JobStreet Philippines (vendor); parsing literature (Yu et al.
-            2005; RecSys in HR&apos;23); Harvard MCS bullet-point resume template. No CHED/DOLE format
-            standard exists — deliberately not cited.
-          </p>
+          <p className="src-line num">{SRC_LINE}</p>
         </section>
 
-        <section className="panel-sec">
+        {/* CARD 3 — plain layout; the parser-blank rule is the ONE amber line */}
+        <section className="card">
           <div className="b-head">
             <h2>Plain layout, by design</h2>
             <p className="helper">
-              ATS-friendly is a formatting property: real text, standard titles, no content inside text
-              boxes. Keep graphics decorative.
+              ATS-friendly is a formatting property: real text, standard titles, no content
+              inside text boxes. Keep graphics decorative.
             </p>
           </div>
           <ul className="rs-plain num">
-            <li>Single column, standard fonts, no photos (PH job boards agree — JobStreet, vendor).</li>
-            <li>Content in images or text boxes reads as blank to parsers — that&apos;s the scan/no-OCR reject.</li>
-            <li>Bullets open with action verbs, one accomplishment each; numbers are strictly optional.</li>
+            {PLAIN_RULES.map((r, i) => (
+              <li key={i} className={r.watch ? "rs-warn" : undefined}>
+                {r.watch ? <span className="chip c-amber">Watch</span> : null} {r.text}
+              </li>
+            ))}
           </ul>
         </section>
 
-        <section className="panel-sec">
+        {/* CARD 4 — the Harvard reference; the single blue primary (locked) */}
+        <section className="card">
           <div className="b-head">
             <h2>Reference template — Harvard</h2>
             <p className="helper">
-              The one-page bullet-point resume template from Harvard&apos;s Mignone Center for Career
-              Success — the reference frame for the format rules above. Links open Harvard&apos;s
-              career-services site (external).
+              The one-page bullet-point resume template from Harvard&apos;s Mignone Center
+              for Career Success — the reference frame for the format rules above. Links
+              open Harvard&apos;s career-services site (external).
             </p>
           </div>
           <div className="rs-ctas">
@@ -176,13 +211,8 @@ export default function GuidePage() {
               Google Docs copy <ArrowUpRight size={12} aria-hidden="true" />
             </a>
           </div>
-          <p className="g-back">
-            <Link className="btn btn-ghost" href="/prep">
-              Back to the Resume checker <ArrowRight size={14} aria-hidden="true" />{" "}
-            </Link>
-          </p>
         </section>
-      </section>
+      </div>
     </div>
   );
 }

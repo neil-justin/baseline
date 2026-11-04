@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
-import { resumeRunStore, resumePersistenceNotice, type ResumeRunSummary } from "@/lib/db/resume-run-store";
-import { letterRunStore, letterPersistenceNotice, type LetterRunSummary } from "@/lib/db/letter-run-store";
+import { resumeRunStore, type ResumeRunSummary } from "@/lib/db/resume-run-store";
+import { letterRunStore, type LetterRunSummary } from "@/lib/db/letter-run-store";
 import { AR_FACTORS, WEIGHTS } from "@/lib/engines/score";
 import { RESUME_AIR_WEIGHTS, LETTER_AIR_WEIGHTS } from "@/lib/engines/air";
 import type { ResumeFinding } from "@/lib/engines/resume/analyze";
@@ -33,7 +33,10 @@ export const metadata: Metadata = {
  *      2026-11-04 — the My Plan plan-ring geometry).
  *   2. CHANNEL CARDS — Resume · Letter · Presence as one KPI card each
  *      (Dashboard `.kpis` geometry): name → fraction → 4px honest bar →
- *      wash chip → one-line receipt.
+ *      wash chip → one-line receipt → the reference door at the card foot
+ *      (user ruling 2026-11-04: the format guide moves OFF the buried
+ *      RE-RUN links line onto its channel card; the Letter card's peer
+ *      door waits for a letter guide — never a dead link).
  *   3. TOOLBAR — `.prep-lens` segmented tabs (Resume checker /
  *      Cover-letter checker), outside any card.
  *   4. READOUT CARD — run label + file line, the big /100 score, the
@@ -76,6 +79,7 @@ function ChannelCard({
   note,
   tone,
   icon,
+  door,
 }: {
   name: string;
   part: PartView;
@@ -84,6 +88,10 @@ function ChannelCard({
   /** the wash family — Dashboard's three-tone kicon register (2026-11-04) */
   tone: "blue" | "green" | "amber";
   icon: ReactNode;
+  /** the card-foot reference door (Resume: the format guide). Pinned to
+   *  the card's foot so the three cards' feet stay aligned; a sibling
+   *  without a door just ends at its note. */
+  door?: { label: string; href: string };
 }) {
   const full = part.measured && part.earned === part.max;
   const pct = (n: number) => `${Math.round((n / part.max) * 100)}%`;
@@ -126,6 +134,11 @@ function ChannelCard({
         <span className="chip c-grey">{notRun}</span>
       )}
       <p className="k-note">{note}</p>
+      {door ? (
+        <a className="k-door num" href={door.href}>
+          {door.label} <ArrowRight size={12} aria-hidden="true" />
+        </a>
+      ) : null}
     </div>
   );
 }
@@ -344,9 +357,7 @@ function RunResult({
           <b className="num">
             parse {Math.round(RESUME_AIR_WEIGHTS.parse * 100)}% + format {Math.round(RESUME_AIR_WEIGHTS.format * 100)}% + evidence {Math.round(RESUME_AIR_WEIGHTS.keywords * 100)}%
           </b>{" "}
-          , your latest run counts{resumePersistenceNotice() ? (
-            <span className="rs-notyet"> {resumePersistenceNotice()}</span>
-          ) : null}
+          , your latest run counts
         </p>
       </section>
 
@@ -427,9 +438,7 @@ function LetterResult({ run, staleFor, children }: {
           <b className="num">
             parse {Math.round(LETTER_AIR_WEIGHTS.parse * 100)}% + evidence {Math.round(LETTER_AIR_WEIGHTS.keywords * 100)}% + structure {Math.round(LETTER_AIR_WEIGHTS.structural * 100)}%
           </b>{" "}
-          , your latest check counts{letterPersistenceNotice() ? (
-            <span className="cl-notyet"> {letterPersistenceNotice()}</span>
-          ) : null}
+          , your latest check counts
         </p>
       </section>
 
@@ -658,6 +667,7 @@ export default async function PrepPage() {
               notRun="NOT YET RUN"
               note={resumeNote}
               tone="blue"
+              door={{ label: "Format guide", href: "/prep/guide" }}
               icon={
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />

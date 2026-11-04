@@ -35,7 +35,9 @@
   padding: 12px 16px 24px;
 }
 /* R1 (user ruling 2026-11-03): the checker surface caps at 860px — the
-   960px run still read stretched. The guide page keeps the full width. */
+   960px run still read stretched. The guide joined the column at the
+   v9.1 structure round (g-surface, 2026-11-04 — see the round block
+   at the file's foot). */
 .v7prep.prep-surface {
   max-width: 860px;
   margin: 0 auto;
@@ -148,6 +150,25 @@
 .v7prep .prep-kpi.k-blue .kicon { background: var(--v-blue-wash); }
 .v7prep .prep-kpi.k-green .kicon { background: var(--v-green-wash); }
 .v7prep .prep-kpi.k-amber .kicon { background: var(--v-amber-wash); }
+
+/* the channel-card door — the card-foot reference link (user ruling
+   2026-11-04: the format guide's doorway moves OFF the buried RE-RUN
+   links line onto its channel card; `.num` per the card's numeral-line
+   register). margin-top: auto pins it to the card's foot — a sibling
+   card without a door just ends at its note. Styled distinct from the
+   receipt note: it is a door, not a receipt. */
+.v7prep .prep-kpi .k-door {
+  margin-top: auto;
+  padding-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  font: 500 12.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-blue);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.v7prep .prep-kpi .k-door:hover { text-decoration: underline; }
+.v7prep .prep-kpi .k-door svg { flex: none; }
 
 /* wash chips (card state + verdict chips) */
 
@@ -853,7 +874,6 @@
   color: var(--v-ink2);
 }
 .v7prep .rs-plain li + li { margin-top: 4px; }
-.v7prep .g-back { margin: 14px 0 0; }
 
 /* ---------- responsive (the family folds) ---------- */
 
@@ -1063,3 +1083,64 @@
 @keyframes prep-card-in { from { opacity: 0; transform: translateY(5px); } }
 @keyframes prep-fade-in { from { opacity: 0; } }
 @keyframes hero-grow { from { min-height: 0; opacity: 0.4; transform: translateY(-6px); } }
+
+/* ============================================================
+   v9.1 structure round — the guide page (2026-11-04 cutover;
+   the #mockups realm proposal user-approved "looks good" the
+   same day, realm retired with the cutover). Band: the top back
+   chip + the drawn ONE-PAGE RESUME SHEET (guide/BandArt.tsx,
+   hero-law: the guide's figure alone) leading the title cluster.
+   Body: four own-cards (the 2026-11-03 "every section its OWN
+   card" ruling applied here) at the 860px reading column; wash-
+   state color only — step numerals to blue-wash discs, ONE amber
+   watch line, the single blue primary stays on the Harvard link.
+   Also lands here: the missing .chip.c-amber for this surface
+   (gap surfaced during the round — the factor watch-chips render
+   unstyled without it).
+   ============================================================ */
+
+/* the guide joined the reading column (see R1, above) */
+.v7prep.g-surface {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* the band: art leads the title cluster (the assessments .who art
+   slot register); the back chip is the M3 tonal pill */
+.v7prep .g-who { display: flex; align-items: center; gap: 16px; }
+.v7prep .g-art { flex: 0 0 auto; width: 88px; height: 88px; }
+.v7prep .g-backrow { margin: 0 0 10px; }
+.v7prep .g-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--v-blue-wash);
+  color: var(--v-blue-deep);
+  border-radius: 999px;
+  padding: 6px 13px;
+  font: 500 12.5px/1 Roboto, system-ui, sans-serif;
+  text-decoration: none;
+}
+.v7prep .g-back:hover { background: #c5d9f8; }
+
+/* the four own-cards */
+.v7prep .g-cards { display: grid; gap: 12px; }
+
+/* the step numerals → blue-wash discs (the ink outline retired) */
+.v7prep .g-num {
+  background: var(--v-blue-wash);
+  border: 0;
+  color: var(--v-blue-deep);
+}
+
+/* the ONE amber watch tone — the parser-blank caution (never red) */
+.v7prep .rs-warn { color: var(--v-amber-text); }
+.v7prep .rs-warn .chip { margin-right: 6px; transform: translateY(-1px); }
+/* the amber chip — prep carried c-green/c-blue/c-grey only */
+.v7prep .chip.c-amber { background: var(--v-amber-wash); color: var(--v-amber-text); }
+
+/* the art folds with the band */
+@media (max-width: 560px) {
+  .v7prep .g-who { gap: 12px; }
+  .v7prep .g-art { width: 64px; height: 64px; }
+}
