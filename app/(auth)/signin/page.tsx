@@ -3,7 +3,6 @@ import { BackArrow } from "../glyphs";
 import BrandMark from "../../../components/BrandMark";
 import GoogleAuth from "../GoogleAuth";
 import SignInForm from "./SignInForm";
-import SigninMockupGate from "../_mockup/SigninMockupGate";
 import "./auth.css";
 import "../v7-auth.css";
 import "../v9-auth.css";
@@ -28,8 +27,6 @@ export default async function SignInPage({
   const { state } = await searchParams;
   return (
     <div className="auth-body v7auth v9auth">
-      {/* option-(a) comp: the #mockup realm (client-only, hash-gated) */}
-      <SigninMockupGate />
       <header className="bar">
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
@@ -40,28 +37,41 @@ export default async function SignInPage({
       </header>
 
       <main className="auth-main" id="main">
-        <div className="auth-panel">
+        <div className="auth-split">
           <div className="auth-head">
             <h1>Sign in.</h1>
           </div>
 
-          {state === "google" && (
-            <div className="field-err" role="status" style={{ display: "block", marginBottom: 14 }}>
-              The Google sign-in didn&apos;t complete — consent was closed or it
-              expired. Try it again from the button below.
+          <div className="split-card">
+            <div className="split-shapes" aria-hidden="true">
+              <i className="sh sh-circle"></i>
+              <i className="sh sh-clover"><i></i><i></i><i></i><i></i></i>
+              <i className="sh sh-pill"></i>
+              <i className="sh sh-quarter"></i>
+              <i className="sh sh-mark"><i></i></i>
+              <i className="sh sh-dot"></i>
             </div>
-          )}
 
-          <SignInForm />
+            <div className="split-form">
+              {state === "google" && (
+                <div className="field-err" role="status" style={{ display: "block", marginBottom: 14 }}>
+                  The Google sign-in didn&apos;t complete — consent was closed or it
+                  expired. Try it again from the button below.
+                </div>
+              )}
 
-          <GoogleAuth />
+              <SignInForm />
 
-          <p className="auth-alt">
-            New here?{" "}
-            <a href="/signup">
-              Start check <BackArrow />
-            </a>
-          </p>
+              <GoogleAuth />
+
+              <p className="auth-alt">
+                New here?{" "}
+                <a href="/signup">
+                  Start check <BackArrow />
+                </a>
+              </p>
+            </div>
+          </div>
         </div>
       </main>
     </div>

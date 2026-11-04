@@ -129,3 +129,113 @@
   background: var(--v-grey-wash);
 }
 .v9auth .auth-or { font-family: var(--mono); }
+
+/* ---------- the split auth card (option a, cut over 2026-11-04) ---------- */
+/* Google's two-pane auth card: the M3 expressive-shape panel + the form
+   pane, one card. The four-color shapes are the user-approved exception
+   to §4's single-blue auth rule (recorded in DESIGN.md, v9 §4 note).
+   Decorative only — never a verdict; hooks stay in the form pane.      */
+.v9auth .auth-split { width: 100%; max-width: 920px; }
+.v9auth .split-card {
+  display: grid;
+  grid-template-columns: 0.78fr 1fr;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--v-shadow);
+  background: var(--v-surface);
+}
+.v9auth .split-form { padding: 40px 44px 36px; }
+
+.v9auth .split-shapes {
+  position: relative;
+  overflow: hidden;
+  background: var(--v-blue-wash);
+  min-height: 100%;
+}
+.v9auth .split-shapes .sh { position: absolute; }
+.v9auth .sh-circle {
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: var(--v-blue);
+  top: -70px;
+  left: 40px;
+}
+.v9auth .sh-clover { width: 150px; height: 150px; right: 22px; top: 118px; }
+.v9auth .sh-clover i {
+  position: absolute;
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: #34a853;
+}
+.v9auth .sh-clover i:nth-child(1) { left: 32px; top: 0; }
+.v9auth .sh-clover i:nth-child(2) { left: 64px; top: 32px; }
+.v9auth .sh-clover i:nth-child(3) { left: 32px; top: 64px; }
+.v9auth .sh-clover i:nth-child(4) { left: 0; top: 32px; }
+.v9auth .sh-pill {
+  width: 150px;
+  height: 68px;
+  border-radius: 999px;
+  background: #fbbc04;
+  transform: rotate(-24deg);
+  left: 34px;
+  bottom: 120px;
+}
+.v9auth .sh-quarter {
+  width: 150px;
+  height: 150px;
+  background: #ea4335;
+  border-radius: 0 100% 0 0;
+  right: 0;
+  bottom: 0;
+}
+.v9auth .sh-mark {
+  width: 110px;
+  height: 110px;
+  border-radius: 30px;
+  background: var(--v-ink);
+  display: grid;
+  place-items: center;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: var(--v-shadow);
+}
+.v9auth .sh-mark i {
+  display: block;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: var(--v-blue);
+}
+.v9auth .sh-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  left: 44px;
+  bottom: 56px;
+}
+
+@media (max-width: 940px) {
+  .v9auth .split-card { grid-template-columns: 1fr; }
+  .v9auth .split-shapes { min-height: 210px; }
+  .v9auth .split-form { padding: 30px 28px 28px; }
+}
+@media (max-width: 560px) {
+  .v9auth .split-shapes { min-height: 150px; }
+  .v9auth .sh-pill,
+  .v9auth .sh-dot { display: none; }
+  .v9auth .sh-circle { width: 150px; height: 150px; top: -50px; left: 24px; }
+  .v9auth .sh-clover { width: 110px; height: 110px; right: 18px; top: 96px; }
+  .v9auth .sh-clover i { width: 62px; height: 62px; }
+  .v9auth .sh-clover i:nth-child(1) { left: 24px; top: 0; }
+  .v9auth .sh-clover i:nth-child(2) { left: 48px; top: 24px; }
+  .v9auth .sh-clover i:nth-child(3) { left: 24px; top: 48px; }
+  .v9auth .sh-clover i:nth-child(4) { left: 0; top: 24px; }
+  .v9auth .sh-quarter { width: 100px; height: 100px; }
+  .v9auth .sh-mark { width: 72px; height: 72px; border-radius: 20px; }
+  .v9auth .sh-mark i { width: 24px; height: 24px; border-radius: 8px; }
+  .v9auth .split-form { padding: 24px 20px 22px; }
+}
