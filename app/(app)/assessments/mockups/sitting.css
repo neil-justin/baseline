@@ -1,0 +1,317 @@
+/* ============================================================
+   DNA v9 — the SITTING mockup realm's chrome (/assessments#mockups).
+   `amsk*`-namespaced with one `.amsk` root; ZERO collision with the
+   shipped surface's hooks/classes — the backdrop replica rides the
+   page's OWN `.v7ass` register; only realm chrome is scoped here.
+   The user's 2026-11-04 ruling: the sitting is a FOCUSED SCREEN —
+   header, back button, the instrument; nothing else.
+   ============================================================ */
+
+/* the veil — a full takeover over the shipped page, never inside it */
+.amsk {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: var(--v-ground);
+  display: grid;
+  grid-template-columns: 264px 1fr;
+  grid-template-rows: 56px 1fr;
+}
+@media (max-width: 720px) {
+  .amsk { grid-template-columns: 1fr; }
+  .amsk .amsk-side { display: none; }
+  .amsk .v7-main { grid-column: 1; }
+}
+
+/* the veil head + the realm's exit */
+.amsk .v7-head { z-index: 61; }
+.amsk-exit {
+  margin-left: auto;
+  font: 500 12.5px "Google Sans Text", Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  background: var(--v-grey-wash);
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+}
+.amsk-exit:hover { color: var(--v-ink); }
+
+/* the replica sidebar — nav no-ops, the real register cloned onto spans
+   (the `>` child selectors keep the font shorthand OFF the icon spans:
+   the shorthand resets font-feature-settings and strands the ligature) */
+.amsk .sidenav > span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-radius: 12px;
+  font: 500 15px/1.2 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  cursor: default;
+}
+.amsk .sidenav > span .ms { font-size: 21px; }
+.amsk .sidenav > span.on {
+  background: var(--v-blue-wash);
+  color: var(--v-blue-deep);
+}
+
+/* the replica main — 1240-capped, scrollable, family padding */
+.amsk .v7-main {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  min-height: 0;
+  width: min(100%, 1240px);
+  padding-bottom: 96px;
+  overflow-y: auto;
+}
+
+/* the armed CTA highlight (the nace entry state) */
+.amsk-arm { position: relative; }
+.amsk-nace[data-mock="entry"] .amsk-arm,
+.amsk .amsk-highlight {
+  outline: 2px solid var(--v-blue);
+  outline-offset: 3px;
+  border-radius: 999px;
+}
+.amsk-deep {
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 46ch;
+}
+.amsk-deep b { color: var(--v-ink); font-weight: 500; }
+
+/* ---------- the FOCUSED SITTING — header, back, the instrument ---------- */
+
+.amsk-focus {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: var(--v-ground);
+  display: flex;
+  flex-direction: column;
+}
+.amsk-fhead {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 20px;
+  background: var(--v-surface);
+}
+.amsk-fhead .side-brand { flex: 1; }
+.amsk-fback {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--v-blue-wash);
+  color: #041e49;
+  font: 500 13px/36px "Google Sans Text", Roboto, system-ui, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.14s ease, transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+}
+.amsk-fback:hover { background: #c5d9f8; }
+.amsk-fback:active { transform: scale(0.97); }
+.amsk-fback-arrow {
+  font-size: 17px;
+  line-height: 1;
+  translate: 0 -1px;
+}
+.amsk-fbody {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+}
+.amsk-fcol {
+  width: min(680px, 100%);
+  padding: 28px 16px 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.amsk-fcol > .amsk-obtag { align-self: flex-start; }
+.amsk-obtag {
+  display: inline-block;
+  font: 500 12px/1.2 Roboto, system-ui, sans-serif;
+  color: var(--v-blue-deep);
+  background: var(--v-blue-wash);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.amsk-obcard {
+  background: var(--v-surface);
+  border-radius: 16px;
+  box-shadow: var(--v-shadow);
+  padding: 16px;
+}
+.amsk-stem {
+  padding: 12px 0 0;
+  font: 400 15px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  margin: 0;
+}
+.amsk-opts { padding: 10px 0 0; display: grid; gap: 8px; }
+.amsk-opt {
+  padding: 11px 14px;
+  border: 1px solid var(--v-border);
+  border-radius: 12px;
+  background: var(--v-surface);
+  cursor: pointer;
+  font: 400 14px/1.45 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  text-align: left;
+  transition: background-color 0.12s ease;
+}
+.amsk-opt:hover { background: var(--v-grey-wash); }
+.amsk-pick { color: var(--v-ink); font-weight: 500; }
+.amsk-fade { color: var(--v-ink2); }
+/* the onboarding register's immediate verdict band — pass green, fail amber */
+.amsk-qband {
+  margin: 10px 0 0;
+  border-radius: 0 8px 8px 0;
+  border-left: 3px solid var(--v-green);
+  background: var(--v-green-wash);
+  padding: 8px 12px;
+  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  display: none;
+}
+.amsk-qband.pass { display: block; border-color: var(--v-green); }
+.amsk-qband.fail {
+  display: block;
+  border-color: var(--v-amber);
+  background: var(--v-amber-wash);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .amsk-qband.pass, .amsk-qband.fail { animation: amsk-band-in 0.18s cubic-bezier(0.2, 0, 0, 1); }
+}
+@keyframes amsk-band-in { from { opacity: 0; transform: translateY(-3px); } }
+
+.amsk-dfoot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 0 0;
+}
+.amsk-spacer { flex: 1; }
+.amsk-btn {
+  border: 0;
+  height: 40px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font: 500 14px/40px "Google Sans Text", Roboto, system-ui, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.14s ease, transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+}
+.amsk-btn:active { transform: scale(0.97); }
+.amsk-btn.primary { background: var(--v-blue); color: #fff; }
+.amsk-btn.primary:hover { background: var(--v-blue-deep); }
+.amsk-btn.quiet { background: var(--v-blue-wash); color: #041e49; }
+.amsk-btn.quiet:hover { background: #c5d9f8; }
+.amsk-btn.amsk-idle { cursor: default; }
+.amsk-btn.amsk-idle.primary { background: var(--v-blue-wash); color: #041e49; }
+
+/* the verdict — the onboarding result register on the focused screen */
+.amsk-restitle {
+  font: 500 26px/1.25 "Google Sans", Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  margin: 0 0 4px;
+}
+.amsk-rescopy {
+  font: 400 15px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  margin: 0 0 4px;
+}
+.amsk-res { display: grid; }
+.amsk-rrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--v-surface);
+  border-bottom: 1px solid var(--v-rows);
+  font: 400 14px/1.4 Roboto, system-ui, sans-serif;
+}
+.amsk-rrow:first-child { border-radius: 12px 12px 0 0; }
+.amsk-rrow:last-child { border-bottom: 0; border-radius: 0 0 12px 12px; }
+.amsk-rrow b { flex: 1; font: 400 14px/1.4 Roboto, system-ui, sans-serif; }
+.amsk-vline {
+  font: 400 12.5px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  margin: 0;
+}
+
+/* the just-verified chip — the row's fresh receipt, one soft pulse */
+@media (prefers-reduced-motion: no-preference) {
+  .amsk-new { animation: amsk-new-in 0.25s cubic-bezier(0.2, 0, 0, 1); }
+}
+@keyframes amsk-new-in { from { opacity: 0; transform: scale(0.94); } }
+
+/* ---------- the dock + colophon — realm furniture ---------- */
+
+.amsk-dock {
+  position: fixed;
+  bottom: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 80;
+  display: flex;
+  gap: 4px;
+  background: var(--v-surface);
+  border-radius: 999px;
+  box-shadow: var(--v-shadow);
+  padding: 4px;
+  max-width: calc(100vw - 32px);
+  overflow-x: auto;
+}
+.amsk-dock button {
+  border: 0;
+  background: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font: 500 12.5px/1.2 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.amsk-dock button:hover { color: var(--v-ink); }
+.amsk-dock button.on {
+  background: var(--v-blue);
+  color: #fff;
+}
+.amsk-dock button:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 1px; }
+
+.amsk-colophon {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.05em;
+  color: var(--v-ink2);
+}
+.amsk-colophon.amsk-fixed {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 80;
+  background: var(--v-grey-wash);
+  border-radius: 999px;
+  padding: 6px 14px;
+  max-width: calc(100vw - 24px);
+  text-align: center;
+}
+.amsk-colophon .amsk-route { margin-left: 10px; font-weight: 400; letter-spacing: 0; color: var(--v-meta); }
+
+@media (max-width: 720px) {
+  .amsk-dock { bottom: 70px; }
+  .amsk-colophon.amsk-fixed {
+    bottom: 16px;
+    font-size: 10px;
+    max-width: calc(100vw - 24px);
+    padding: 5px 10px;
+  }
+}

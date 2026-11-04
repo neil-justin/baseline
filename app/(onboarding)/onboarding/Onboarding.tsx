@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Check } from "lucide-react";
 import { SegRubricBar } from "@/components/instrument";
+import QuestionCard from "@/components/quiz/QuestionCard";
 import { CAREERS, DEMO_SUGGESTION_ORDER, TRACKS, TRACK_LABELS, trackLabelOf } from "@/lib/fixtures/catalog";
 import { RESOURCES } from "@/lib/fixtures/resources";
 import {
@@ -116,8 +117,11 @@ interface StateView {
   score: { sp: number; es: number; tp: number; ar: number | null; cc: number; total: number } | null;
 }
 
-export default function Onboarding() {
-  const [screen, setScreen] = useState<Screen>("strand");
+export default function Onboarding({ retake = false }: { retake?: boolean }) {
+  /* the retake NACE mode (2026-11-04 hub round): `?step=assessIntro` starts
+     the already-onboarded student straight at the instrument — no onboarding
+     replay — and its result returns to the hub instead of the goal flow. */
+  const [screen, setScreen] = useState<Screen>(retake ? "assessIntro" : "strand");
 
   // OB-1 strand · OB-3a quiz · OB-3a cards
   const [strand, setStrand] = useState<string | null>(null);
@@ -713,9 +717,15 @@ export default function Onboarding() {
         {/* ============ step ③ · the competency instrument — intro ============ */}
         {screen === "assessIntro" && (
           <section className="ob-screen">
-            <button className="ob-back" onClick={() => back("framing")}>
-              <ArrowLeft size={14} aria-hidden="true" /> Back
-            </button>
+            {retake ? (
+              <a className="ob-back" href="/assessments">
+                <ArrowLeft size={14} aria-hidden="true" /> Back to Assessments
+              </a>
+            ) : (
+              <button className="ob-back" onClick={() => back("framing")}>
+                <ArrowLeft size={14} aria-hidden="true" /> Back
+              </button>
+            )}
             <div className="screen-head" style={{ marginTop: 12 }}>
               <h1>The competency check — the real one.</h1>
               <p>
@@ -948,9 +958,15 @@ export default function Onboarding() {
                 </p>
               )}
               <div className="ob-ctas">
-                <button className="btn btn-primary" onClick={() => { setVView("intro"); go("verify"); }}>
-                  Continue
-                </button>
+                {retake ? (
+                  <a className="btn btn-primary" href="/assessments">
+                    Back to Assessments
+                  </a>
+                ) : (
+                  <button className="btn btn-primary" onClick={() => { setVView("intro"); go("verify"); }}>
+                    Continue
+                  </button>
+                )}
               </div>
             </section>
           );
@@ -981,52 +997,18 @@ export default function Onboarding() {
 
             {vView === "question" && quizItems[vi] && (() => {
               const q = quizItems[vi];
-              const passed = picked !== null && picked === q.answer;
               return (
                 <div>
-                  <div className="ob-qbar" style={{ maxWidth: 640 }}>
-                    <span className="q-skill-tag num">
-                      Question {vi + 1} of {quizItems.length}
-                    </span>
-                    <button
-                      className="ob-back"
-                      onClick={() => {
-                        setVView("intro");
-                        setVi(0);
-                        setPicked(null);
-                        setAnswered(false);
-                      }}
-                    >
-                      <ArrowLeft size={14} aria-hidden="true" /> Back
-                    </button>
-                  </div>
-                  <div className="panel ob-mcqcard" style={{ maxWidth: 640, marginTop: 12 }}>
-                    <span className="q-skill-tag">About: {q.skill}</span>
-                    <p className="q-stem" style={{ marginTop: 10 }}>{q.stem}</p>
-                    <div className="q-opts">
-                      {q.options.map((t, i) => (
-                        <button
-                          key={i}
-                          className="opt"
-                          type="button"
-                          onClick={() => !answered && answerVerify(q, i)}
-                        >
-                          {t}
-                        </button>
-                      ))}
-                    </div>
-                    <div className={`q-band ${answered ? "show" : ""} ${passed ? "pass" : "fail"}`}>
-                      {answered &&
-                        (passed
-                          ? `Correct. ${q.skill}: confirmed.`
-                          : `Not quite — that's what it does: ${q.options[q.answer]}. ${q.skill} stays as your own rating for now.`)}
-                    </div>
-                    <div style={{ marginTop: 16 }}>
-                      <button className="btn btn-ghost" disabled={!answered} onClick={verifyNext}>
-                        Next
-                      </button>
-                    </div>
-                  </div>
+                  <QuestionCard
+                    question={q}
+                    index={vi}
+                    total={quizItems.length}
+                    picked={picked}
+                    onAnswer={(i) => answerVerify(q, i)}
+                    onNext={verifyNext}
+                    back={{ label: "Back", onClick: () => { setVView("intro"); setVi(0); setPicked(null); setAnswered(false); } }}
+                    nextLabel={vi + 1 >= quizItems.length ? "See result" : "Next"}
+                  />
                 </div>
               );
             })()}

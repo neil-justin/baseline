@@ -1,0 +1,131 @@
+/* ============================================================
+   DNA v9 — the shared question register, tokens cloned from the
+   onboarding surface's OB-3b-3 register (the values that survived the
+   v9 sweep, onboarding.css 305–345 + the tonal-rect override 562–567).
+   Scoped under `vq-*` names; both consumers (the onboarding verify
+   mini-quiz and the /verify retake sitting) render the SAME register —
+   one home, never a lookalike (user ruling, 2026-11-04).
+   ============================================================ */
+
+.vq-qbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  max-width: 640px;
+}
+.vq-qtag {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.vq-back {
+  display: inline-flex;
+  align-items: center;
+  font: 500 13px/1.2 Roboto, system-ui, sans-serif;
+  color: var(--v-blue-deep);
+  background: none;
+  border: 0;
+  padding: 4px 0;
+  cursor: pointer;
+}
+.vq-back:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* the card: borderless tonal surface at the 16px rung (v9) */
+.vq-card {
+  background: var(--v-surface);
+  border: 0;
+  border-radius: 16px;
+  box-shadow: var(--v-shadow);
+  padding: 24px;
+  max-width: 640px;
+  margin-top: 12px;
+}
+.vq-tag {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.vq-stem {
+  font: 500 17px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  max-width: 62ch;
+}
+.vq-opts {
+  margin-top: 18px;
+  display: grid;
+  gap: 8px;
+  max-width: 560px;
+}
+.vq-opt {
+  text-align: left;
+  padding: 12px 16px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--v-grey-wash);
+  font: 400 15px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+.vq-opt:hover { background: #e8eaed; }
+
+/* feedback: chips-language at band scale — green tells, warm amber
+   corrects, never red (12px radius, v9 band scale at 14.5px) */
+.vq-band {
+  margin-top: 16px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  font: 400 14.5px/1.5 Roboto, system-ui, sans-serif;
+  display: none;
+}
+.vq-band.show { display: block; }
+.vq-band.pass { background: var(--v-green-wash); color: var(--v-green-text); }
+.vq-band.fail { background: var(--v-amber-wash); color: var(--v-amber-text); }
+
+/* the Next CTA: the v9 pill register, the tonal wash (btn-ghost's sweep) */
+.vq-foot { margin-top: 16px; }
+.vq-next {
+  display: inline-flex;
+  align-items: center;
+  border: 0;
+  background: var(--v-blue-wash);
+  color: #041e49;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font: 500 14px "Google Sans", Roboto, system-ui, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.14s ease, transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+}
+.vq-next:hover:not(:disabled) { background: #c5d9f8; }
+.vq-next:active:not(:disabled) { transform: scale(0.97); }
+.vq-next:disabled { opacity: 0.45; cursor: default; }
+
+/* the retake sitting's result — the verdict on the focused screen */
+.vq-screen {
+  width: min(640px, 100%);
+  margin: 24px auto 0;
+}
+.vq-h1 {
+  font: 500 26px/1.25 "Google Sans", Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  margin: 0;
+}
+.vq-copy {
+  font: 400 15px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  margin: 6px 0 0;
+}
+.vq-okband {
+  margin-top: 16px;
+  background: var(--v-green-wash);
+  color: var(--v-green-text);
+  border-radius: 12px;
+  padding: 11px 14px;
+  font: 400 14.5px/1.5 Roboto, system-ui, sans-serif;
+}
+.vq-note {
+  margin-top: 12px;
+  font: 400 14.5px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.vq-ctas { margin-top: 20px; display: flex; gap: 12px; }

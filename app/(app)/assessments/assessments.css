@@ -23,6 +23,19 @@
 .v7ass a { color: inherit; }
 .v7ass .num { font-variant-numeric: tabular-nums; }
 
+/* the band's drawn imagery — the CHECKSHEET (user asked 2026-11-04: every
+   console band owns its hero figure; the hub's metaphor is the instrument
+   itself — a self-drawn assessment sheet, two confirmed rows and a dashed
+   open row: the tab's mechanism drawn, never a state it asserts). It LEADS
+   the band's left cluster, the profile seal's slot, but is its own figure
+   (the hero-law: imagery never shared across pages). */
+.v7ass .band .who { display: flex; align-items: center; gap: 16px; }
+.v7ass .assart { flex: 0 0 auto; width: 88px; height: 88px; }
+@media (max-width: 560px) {
+  .v7ass .band .who { gap: 12px; }
+  .v7ass .assart { width: 64px; height: 64px; }
+}
+
 /* the m-line carries the locked sentence — hold it to a reading measure */
 .v7ass .who .m { max-width: 74ch; }
 
@@ -157,7 +170,10 @@
 /* the honest gate: no button at all when no bank covers a claim */
 .v7ass .battery.gated { background: var(--v-grey-wash); }
 
-/* ---------- per-skill rows ---------- */
+/* ---------- per-skill rows ----------
+   The two-column grid RESERVES the action column (user ruling 2026-11-04:
+   text never encroaches on the status/button territory — the name and its
+   receipt wrap inside col 1; chips and controls own col 2 outright). */
 
 .v7ass .rows-label {
   padding: 2px 16px 8px;
@@ -168,13 +184,12 @@
 }
 .v7ass .skillrows { border-top: 1px solid var(--v-rows); }
 .v7ass .skillrow {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 14px;
+  gap: 6px 14px;
   padding: 11px 16px;
   border-bottom: 1px solid var(--v-rows);
-  flex-wrap: wrap;
   transition: background-color 0.12s ease;
 }
 .v7ass .skillrow:last-child { border-bottom: 0; }
@@ -195,8 +210,8 @@
   max-width: 62ch;
 }
 .v7ass .s-side {
-  flex: none;
-  margin-left: auto;
+  /* the reserved column: chips and controls, never entered by col 1 */
+  text-align: right;
 }
 
 /* the honest idle row — a dashed tray, no action (ruling 9) */
@@ -259,6 +274,8 @@
     padding-right: 0;
   }
   .v7ass .nval { font-size: 22px; }
+  .v7ass .band .who { gap: 12px; }
+  .v7ass .assart { width: 64px; height: 64px; }
   .v7ass .battery { align-items: flex-start; }
   .v7ass .cta-row .cta {
     width: 100%;
@@ -272,8 +289,8 @@
     padding: 0 12px;
     font-size: 13px;
   }
-  .v7ass .skillrow { gap: 8px; }
-  .v7ass .s-side { margin-left: 0; }
+  .v7ass .skillrow { gap: 2px 8px; }
+  .v7ass .s-side { justify-self: end; }
 }
 
 /* ---------- v9.1 motion (subtle, M3, reduced-motion safe) ---------- */

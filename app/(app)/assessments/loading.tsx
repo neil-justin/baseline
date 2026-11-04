@@ -16,8 +16,15 @@ export default function Loading() {
         <header className="band">
           <div className="bandrow">
             <div className="who">
-              <span className="skel" style={{ width: 160, height: 22 }} />
-              <span className="skel" style={{ width: 430, height: 16, marginTop: 8, display: "block" }} />
+              {/* the drawn checksheet's SLOT as a grey shape (88px, the page
+                  art's render size) — the coloured art itself never renders
+                  in a skeleton (static-chrome rule: pure track-grey until
+                  the data lands, user feedback 2026-11-04) */}
+              <span className="skel" style={{ width: 88, height: 88, borderRadius: 12, flex: "none" }} />
+              <div>
+                <span className="skel" style={{ width: 160, height: 22 }} />
+                <span className="skel" style={{ width: 430, height: 16, marginTop: 8, display: "block" }} />
+              </div>
             </div>
           </div>
         </header>

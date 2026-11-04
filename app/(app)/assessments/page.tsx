@@ -3,10 +3,12 @@ import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
 import { ASSESSED_COMPETENCIES, WEIGHTS, roundHalfDown } from "@/lib/engines/score";
-import { VERIFY_BANK } from "@/app/(onboarding)/onboarding/banks";
+import { SKILL_BANKS } from "@/lib/fixtures/skill-banks";
 import { fmtEventDate } from "@/lib/fmt";
 import type { DemoEventKind } from "@/lib/types";
 import { ArrowRight, Check, CheckCheck } from "lucide-react";
+import AssBandArt from "./BandArt";
+import AssessSittingGate from "./mockups/SittingGate";
 import "./assessments.css";
 
 export const dynamic = "force-dynamic";
@@ -28,6 +30,11 @@ const NEW_EVIDENCE: ReadonlySet<DemoEventKind> = new Set([
   "check-passed",
   "presence-stamped",
 ]);
+
+/**
+ * The band's drawn imagery — moved to `./BandArt` (the source of truth the
+ * page skeleton and the mockup realm mirror).
+ */
 
 /**
  * /assessments — the hub + context round (user ruling 2026-11-04).
@@ -77,7 +84,7 @@ export default async function AssessmentsPage() {
      banked skill serves every role that maps to it (backlog §3). The rows
      sort closed-first, then actionable claims, then the honest idle and
      open remainder; catalog order holds inside each group. */
-  const banked = new Map(VERIFY_BANK.map((q) => [q.catalogSkill, q]));
+  const banked = new Map(SKILL_BANKS.map((q) => [q.catalogSkill, q]));
   const rows = (career?.skills ?? []).map((spec) => ({
     spec,
     source: state.bars[spec.name]?.source ?? null,
@@ -101,14 +108,20 @@ export default async function AssessmentsPage() {
 
   return (
     <div className="v7ass">
-      {/* the named band — copy is the locked user-facing contract */}
+      {/* the named band — copy is the locked user-facing contract; the
+          drawn checksheet leads the identity cluster, Dashboard's gauge /
+          Profile's seal / Prep's ring slot on this surface. */}
       <header className="band">
         <div className="bandrow">
           <div className="who">
-            <h1 className="t">Assessments</h1>
-            <p className="m">
-              Prove something again — latest attempt counts, a re-take replaces it, never best-ever.
-            </p>
+            <AssBandArt />
+            <div>
+              <h1 className="t">Assessments</h1>
+              <p className="m">
+                Prove something again — latest attempt counts, a re-take replaces it, never
+                best-ever.
+              </p>
+            </div>
           </div>
         </div>
       </header>
@@ -118,7 +131,6 @@ export default async function AssessmentsPage() {
         <section className="card" aria-labelledby="ass-nace-head">
           <div className="head">
             <b id="ass-nace-head">NACE competency instrument</b>
-            <span className="num">career-agnostic, always live</span>
           </div>
 
           <div className="nace-facts num">
@@ -150,15 +162,10 @@ export default async function AssessmentsPage() {
           </div>
 
           <div className="cta-row">
-            <button
-              type="button"
-              className="cta ass-cta"
-              aria-disabled="true"
-              title="wires up in the build round"
-            >
+            <a className="cta" href="/onboarding?step=assessIntro">
               {takenAt ? "Re-take the assessment" : "Take the assessment"}{" "}
               <ArrowRight size={15} aria-hidden="true" />
-            </button>
+            </a>
           </div>
         </section>
 
@@ -180,7 +187,7 @@ export default async function AssessmentsPage() {
               <div className="battery-copy">
                 <div className="battery-t">Whole-battery check</div>
                 <div className="battery-sub num">
-                  Pick a career first — the role-based check measures against your target.
+                  Pick a career first — the check runs against your target.
                 </div>
               </div>
               <a className="cta" href="/career">
@@ -193,8 +200,8 @@ export default async function AssessmentsPage() {
                 <div className="battery-t">Whole-battery check</div>
                 <div className="battery-sub num">
                   {claimed.length === 0
-                    ? "Nothing self-reported yet — claim skills on your walk, then come back."
-                    : "No banked questions for your self-reported skills yet — the claims stand as self-reported."}
+                    ? "Nothing self-reported yet — come back after your first claim."
+                    : "No check ready for your self-reported skills yet — the claims stand."}
                 </div>
               </div>
             </div>
@@ -203,18 +210,13 @@ export default async function AssessmentsPage() {
               <div className="battery-copy">
                 <div className="battery-t">Whole-battery check</div>
                 <div className="battery-sub num">
-                  {bankedClaimed.length} of {claimed.length} self-reported skills have a banked
-                  check — one sitting draws up to five.
+                  {bankedClaimed.length} of {claimed.length} self-reported skills have a check
+                  ready — one sitting, up to five questions.
                 </div>
               </div>
-              <button
-                type="button"
-                className="cta ass-cta"
-                aria-disabled="true"
-                title="wires up in the build round"
-              >
+              <a className="cta" href="/verify">
                 Take the role-based assessment <ArrowRight size={15} aria-hidden="true" />
-              </button>
+              </a>
             </div>
           )}
 
@@ -251,17 +253,11 @@ export default async function AssessmentsPage() {
                       <div className="skillrow" key={spec.name}>
                         <div className="s-main">
                           <span className="s-name">{spec.name}</span>
-                          <span className="s-sub">Self-reported — take the quiz to verify.</span>
                         </div>
                         <div className="s-side">
-                          <button
-                            type="button"
-                            className="ass-quiz"
-                            aria-disabled="true"
-                            title="wires up in the build round"
-                          >
+                          <a className="ass-quiz" href={`/verify?skill=${encodeURIComponent(spec.name)}`}>
                             Take the quiz
-                          </button>
+                          </a>
                         </div>
                       </div>
                     );
@@ -272,9 +268,6 @@ export default async function AssessmentsPage() {
                       <div className="skillrow idle" key={spec.name}>
                         <div className="s-main">
                           <span className="s-name">{spec.name}</span>
-                          <span className="s-sub">
-                            Self-reported — no banked quiz exists for this skill yet.
-                          </span>
                         </div>
                         <div className="s-side">
                           <span className="chip c-grey">No check yet</span>
@@ -287,7 +280,6 @@ export default async function AssessmentsPage() {
                     <div className="skillrow open" key={spec.name}>
                       <div className="s-main">
                         <span className="s-name">{spec.name}</span>
-                        <span className="s-sub">The walk is its route to a claim.</span>
                       </div>
                       <div className="s-side">
                         <span className="chip c-grey">OPEN</span>
@@ -301,13 +293,32 @@ export default async function AssessmentsPage() {
 
           {career && (
             <div className="foot num">
-              Verified <Check size={11} aria-hidden="true" /> and Checked{" "}
-              <CheckCheck size={11} aria-hidden="true" /> are machine receipts; Self-reported is a
-              claim, never a pass. The quiz verifies claims — an unclaimed skill has no route here.
+              Verified ✓ / Checked ✓✓ = passed a check · Self-reported = your claim.
             </div>
           )}
         </section>
       </div>
+
+      {/* the mockup realm — hash-gated (#mockups), client-only; the shipped
+          page renders byte-unchanged without the hash. The lite facts ride
+          in engine-true — the realm never repaints a computed value. */}
+      <AssessSittingGate
+        lite={{
+          es,
+          esVerified,
+          takenAt: takenAt ? fmtEventDate(takenAt) : null,
+          careerName: career?.name ?? null,
+          proven,
+          total: career?.skills.length ?? 0,
+          claimed: claimed.length,
+          bankedClaimed: bankedClaimed.length,
+          rows: sorted.map((r) => ({
+            name: r.spec.name,
+            state: r.source as "verified" | "checked" | "claimed" | "open",
+            banked: !!r.quiz,
+          })),
+        }}
+      />
     </div>
   );
 }
