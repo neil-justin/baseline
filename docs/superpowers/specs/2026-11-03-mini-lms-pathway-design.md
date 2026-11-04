@@ -68,4 +68,6 @@ No runtime third-party fetching. Fixtures remain the curated, human-verified cat
 
 ## 10. Banked rulings (session log)
 
-O\*NET-as-law Option 1 · categories demolished · D2 flat spine · satisfaction tiers · hours out of ranking · narrow-claim bonus dead · taught-only catalog · provider omitted · self-serve eligibility · audit lane unrendered · learn-line authorship · closed rows keep suggestions · unvetted ≠ absent wording · API boundary · maintainability plan · date: 2026-11-03.
+O\*NET-as-law Option 1 · categories demolished · D2 flat spine · satisfaction tiers · hours out of ranking · narrow-claim bonus dead · taught-only catalog · provider omitted · self-serve eligibility · audit lane unrendered · learn-line authorship · closed rows keep suggestions · unvetted ≠ absent wording · API boundary · maintainability plan · e2e removed · **the D2 walk is the ratified My Plan successor** · date: 2026-11-03.
+
+**Status: LANDED (2026-11-04).** Waves A–E shipped: engine picker (`d4171d6`), full-roster resource audit across all 36 careers (batches through `4250ce1`), surface cutover (`9d719e8`/`51ba298`), mock cleanup (`2540140`), Wave E hunt+prune+registry close-out (`51c82a0`/`08f1a26`/`ae44c7c`). Final coverage: **346/373 cells vetted** (vetted = taught · self-serve · learn-lined, live-verified), **27 adjudicated adviser-owned cells** registered in `verify-coverage.test.ts` with reasons; full test suite green; `pre-cutover` tag remains the defense-surface rollback.
