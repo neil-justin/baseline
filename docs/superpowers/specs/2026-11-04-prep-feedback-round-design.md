@@ -1,6 +1,6 @@
 # Prep feedback round — ring, icons, analyze motion, not-letter gate
 
-Date: 2026-11-04 · Status: approved (chat rulings, see table)
+Date: 2026-11-04 · Status: **implemented** (F1–F4 user-ruled)
 Prior: `2026-11-03-prep-section-cards-design.md` (card inventory stands, untouched)
 
 ## 1. Feedback (user, 2026-11-04)
@@ -113,3 +113,16 @@ Engines' scoring, rubrics, AIR weights, stores, `/api` routes' behavior,
 honesty copy, 860px geometry, card inventory (R1–R13), tab deep links, the
 dropzone auto-run, named rejections' codes other than the added one,
 resume-side parse gates.
+
+## 6. Implementation record (2026-11-04)
+
+Executed via the subagent-driven flow on branch `prep-feedback-round`
+(worktree): `8f3a76b` gate · `cdcfa75` relay/copy · `7387a4f` kicons ·
+`356570f` ring · `402b379` analyze beat. Two review findings landed as a
+fix commit (`119f296`): a zero-fraction arc paints a round-cap dot with the
+register's linecap, so BOTH rings (prep + My Plan) now render their arc
+only when the fraction is positive — never a painted zero; and the ≤720px
+band fold regained the ring's right edge (`margin-left: auto`). Full vitest
+bank 144/144 and `tsc --noEmit` green at every landing; `next build`
+compiles (its page-export type check fails on pre-existing
+`sortResourcePool`/`buildQueue` exports — reproduced on main, out of scope).
