@@ -1,4 +1,5 @@
-import type { BarSource, Career, Resource } from "@/lib/types";
+import type { Metadata } from "next";
+import type { BarSource } from "@/lib/types";
 import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
@@ -16,15 +17,20 @@ import DeclaredCredentials from "./DeclaredCredentials";
 import { AccountIdentity, AccountPassword } from "./AccountForms";
 import DpaArtifacts from "./DpaArtifacts";
 import { fmtEventDate } from "@/lib/fmt";
+import { ArrowRight, Check, CheckCheck } from "lucide-react";
 import "./profile.css";
 
 export const dynamic = "force-dynamic";
 
+export const metadata: Metadata = {
+  title: "Profile — Baseline",
+};
+
 /* badge voices — the family compact forms (`Verified ·✓` / `Checked ·✓✓` /
    `Self-reported`); open rows carry the OPEN chip */
 function skillBadge(source: BarSource) {
-  if (source === "verified") return <span className="chip c-green">Verified ·✓</span>;
-  if (source === "checked") return <span className="chip c-green">Checked ·✓✓</span>;
+  if (source === "verified") return <span className="chip c-green">Verified <Check size={11} aria-hidden="true" /></span>;
+  if (source === "checked") return <span className="chip c-green">Checked <CheckCheck size={11} aria-hidden="true" /></span>;
   return <span className="chip c-grey hatch-chip">Self-reported</span>;
 }
 
@@ -81,25 +87,6 @@ export default async function ProfilePage() {
   const skChecked = skillRows.filter((n) => state.bars[n]?.source === "checked").length;
   const skClaimed = skillRows.filter((n) => state.bars[n]?.source === "claimed").length;
 
-  function skillSub(c: Career, skill: string): string | null {
-    const bar = state.bars[skill];
-    if (!bar) return null;
-    if (bar.source === "claimed") return "Your own claim; the check hasn't been passed yet";
-    if (bar.source === "verified")
-      return state.decisions.verifiedTransferred.includes(skill)
-        ? "Passed during setup; carried over when you switched careers"
-        : "Passed a verification quiz during setup";
-    const ev = state.events.find((e) => e.kind === "bar-closed" && e.detail.startsWith(`${skill} closed`));
-    const res: Resource | undefined = RESOURCES.find(
-      (r) => r.careerId === c.id && r.skillsAddressed.includes(skill)
-    );
-    return res
-      ? `${res.provider} · ${res.title}${ev?.date ? ` · check passed ${fmtEventDate(ev.date)}` : ""}`
-      : ev?.date
-        ? `Comprehension check passed ${fmtEventDate(ev.date)}`
-        : null;
-  }
-
   /* the instrument's 7 competency titles (verbatim from the approved bank) —
      verified ·✓ vs claimed per competency */
   const assessed = INSTRUMENT.map((c) => ({
@@ -140,7 +127,7 @@ export default async function ProfilePage() {
         <div className="head">
           <b>Skills for this career</b>
           <span className="num">
-            {skVerified} verified · {skChecked} checked · {skClaimed} self-reported
+            {skVerified} verified, {skChecked} checked, {skClaimed} self-reported
           </span>
         </div>
         {v.closed === 0 ? (
@@ -152,23 +139,18 @@ export default async function ProfilePage() {
             <thead>
               <tr>
                 <th scope="col" className="col-item">Skill</th>
-                <th scope="col">Source</th>
-                <th scope="col">Evidence</th>
+                <th scope="col" className="col-src">Source</th>
               </tr>
             </thead>
             <tbody>
               {skillRows.map((skill) => {
                 const bar = state.bars[skill];
-                const sub = skillSub(career, skill);
                 return (
                   <tr key={skill}>
                     <td>
                       <div className="item">{skill}</div>
                     </td>
-                    <td>{bar ? skillBadge(bar.source) : <span className="chip c-grey">OPEN</span>}</td>
-                    <td>
-                      <div className="sub num">{sub ?? <span className="p-dash">—</span>}</div>
-                    </td>
+                    <td className="col-src">{bar ? skillBadge(bar.source) : <span className="chip c-grey">OPEN</span>}</td>
                   </tr>
                 );
               })}
@@ -181,12 +163,12 @@ export default async function ProfilePage() {
         <div className="head">
           <b>NACE assessment</b>
           <span className="num">
-            {state.assessment ? `Latest attempt · ${fmtEventDate(state.assessment.takenAt)}` : "Not assessed yet"}
+            {state.assessment ? `Latest attempt, ${fmtEventDate(state.assessment.takenAt)}` : "Not assessed yet"}
           </span>
         </div>
         <div className="lcap num">
-          <p>Employability · {v.es} of {WEIGHTS.es}</p>
-          <p>{v.esVerified} of 7 NACE competencies verified ·✓</p>
+          <p>Employability, {v.es} of {WEIGHTS.es}</p>
+          <p>{v.esVerified} of 7 NACE competencies verified <Check size={11} aria-hidden="true" /></p>
         </div>
         <table className="plan-table assess-table">
           <thead>
@@ -203,7 +185,7 @@ export default async function ProfilePage() {
                 </td>
                 <td>
                   {c.status === "verified" ? (
-                    <span className="chip c-green">Verified ·✓</span>
+                    <span className="chip c-green">Verified <Check size={11} aria-hidden="true" /></span>
                   ) : c.status === "claimed" ? (
                     <span className="chip c-grey hatch-chip">Self-reported</span>
                   ) : (
@@ -217,7 +199,7 @@ export default async function ProfilePage() {
         <div className="foot num">
           Latest attempt counts — a re-take replaces it, never best-ever.{" "}
           <a className="foot-link" href="/onboarding">
-            Re-take the assessment →
+            Re-take the assessment <ArrowRight size={14} aria-hidden="true" />{" "}
           </a>
         </div>
       </div>
@@ -231,8 +213,8 @@ export default async function ProfilePage() {
         <div className="head">
           <b>Credentials</b>
           <span className="num">
-            {platformCount} platform · {declaredVerified} verified · {declaredPending} awaiting audit · presence{" "}
-            {presenceMeasuredNow ? "✓" : "—"}
+            {platformCount} platform, {declaredVerified} verified, {declaredPending} awaiting audit, presence{" "}
+            {presenceMeasuredNow ? <Check size={11} aria-hidden="true" /> : "—"}
           </span>
         </div>
         {platformCount === 0 && !presence && declaredRows.length === 0 && (
@@ -257,12 +239,12 @@ export default async function ProfilePage() {
                 <span className="chip c-grey">DECLARED — NOT YET MEASURED</span>
               )}
               <span className="lsub num" data-presence-sub>
-                {presence.linkedinUrl} · {presence.email} · stamped{" "}
+                {presence.linkedinUrl}, {presence.email}, stamped{" "}
                 {fmtEventDate(presence.stamp.verifiedAt)}
-                {presence.stamp.offline ? " · stamped offline — no network look-up ran" : ""}
-                {presence.stamp.checks.linkedinUrlFormat === "fail" ? " · URL format failed" : ""}
-                {presence.stamp.checks.professionalEmailFormat === "fail" ? " · email format failed" : ""}
-                {presence.stamp.contentNote ? ` · ${presence.stamp.contentNote}` : ""}
+                {presence.stamp.offline ? ", stamped offline — no network look-up ran" : ""}
+                {presence.stamp.checks.linkedinUrlFormat === "fail" ? ", URL format failed" : ""}
+                {presence.stamp.checks.professionalEmailFormat === "fail" ? ", email format failed" : ""}
+                {presence.stamp.contentNote ? `, ${presence.stamp.contentNote}` : ""}
               </span>
             </div>
           )}
@@ -275,10 +257,10 @@ export default async function ProfilePage() {
                 task_alt
               </span>
               <b>{c.title}</b>
-              <span className="chip c-green">Checked ·✓✓</span>
+              <span className="chip c-green">Checked <CheckCheck size={11} aria-hidden="true" /></span>
               <span className="lsub num">
-                {c.provider ? `${c.provider} · ${c.free ? "free" : "paid"} · ` : ""}
-                check passed {c.date} · counted when its comprehension check passed
+                {c.provider ? `${c.provider}, ${c.free ? "free" : "paid"}, ` : ""}
+                check passed {c.date}, counted when its comprehension check passed
               </span>
             </div>
           ))}
@@ -318,7 +300,7 @@ export default async function ProfilePage() {
       <div className="card">
         <div className="head">
           <b>Identity</b>
-          <span className="num">self-service · campus fixed: {profile.campus}</span>
+          <span className="num">self-service, campus fixed: {profile.campus}</span>
         </div>
         <AccountIdentity
           initial={{
@@ -339,7 +321,7 @@ export default async function ProfilePage() {
         <div className="card">
           <div className="head">
             <b>Security</b>
-            <span className="num">current password required · same policy sign-up enforced</span>
+            <span className="num">current password required, same policy sign-up enforced</span>
           </div>
           <AccountPassword />
         </div>
@@ -362,10 +344,17 @@ export default async function ProfilePage() {
         <div className="band">
           <div className="bandrow">
             <div className="who">
-              <h1 className="t">
-                {state.name} · {state.yearLevel}
-              </h1>
-              <div className="m">Target: {career.name}</div>
+              {/* D2 parity figure — the drawn INITIALS SEAL (user ruling
+                  2026-11-04): the profile band's imagery is identity, not a
+                  gauge; it leads the band's left cluster and reads the
+                  student's own initials off state. */}
+              <BandSeal name={state.name} />
+              <div>
+                <h1 className="t">
+                  {state.name}, {state.yearLevel}
+                </h1>
+                <div className="m">Target: {career.name}</div>
+              </div>
             </div>
             {/* the SHARED band instrument (Dashboard parity): the score
                 counts up, the five-channel bar arms after it settles, and
@@ -374,20 +363,23 @@ export default async function ProfilePage() {
                 the band's whole do-area. */}
             <ScoreSequence
               score={score.total}
-              parts={v.parts}
-              labels={[
-                `SP ${score.sp}/${WEIGHTS.sp}`,
-                `ES ${score.es}/${WEIGHTS.es}`,
-                `TP ${score.tp}/${WEIGHTS.tp}`,
-                v.arMeasured ? `AR ${score.ar}/${WEIGHTS.ar}` : "AR —",
-                `CC ${score.cc}/${WEIGHTS.cc}`,
+              channels={[
+                { name: "Skill progress", value: `${score.sp}/${WEIGHTS.sp}`, fill: score.sp / WEIGHTS.sp },
+                { name: "Employability skills", value: `${score.es}/${WEIGHTS.es}`, fill: v.es / WEIGHTS.es },
+                { name: "Training progress", value: `${score.tp}/${WEIGHTS.tp}`, fill: score.tp / WEIGHTS.tp },
+                {
+                  name: "Application readiness",
+                  value: v.arMeasured ? `${score.ar}/${WEIGHTS.ar}` : "—",
+                  fill: v.arMeasured && score.ar !== null ? score.ar / WEIGHTS.ar : null,
+                },
+                { name: "Career clarity", value: `${score.cc}/${WEIGHTS.cc}`, fill: score.cc / WEIGHTS.cc },
               ]}
               suffix={
                 v.ccFirstDone || v.arMeasured || v.stageOne.done > 0
                   ? ""
-                  : " · your starting line"
+                  : " — your starting line"
               }
-              ratemsg="Computed from your own records · NACE-aligned"
+              ratemsg="Computed from your own records, NACE-aligned"
               fine={
                 <>
                   You&apos;re <b className="num">{score.total}%</b> ready for{" "}
@@ -410,6 +402,58 @@ export default async function ProfilePage() {
   );
 }
 
+/**
+ * The band's drawn imagery (user ruling 2026-11-04): a circular INITIALS
+ * SEAL — the profile-tab identity figure, the same structural slot the
+ * Dashboard band gives its readiness gauge. Drawn, not photographed: a
+ * hatch-etched outer ring, a solid inner disc, and the student's initials
+ * in the family's Google Sans register. aria-hidden — the name already
+ * reads aloud in the band's h1.
+ */
+function BandSeal({ name }: { name: string }) {
+  const initials = name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? "")
+    .join("") || "?";
+  const cx = 50;
+  const cy = 50;
+  // hatch marks ride the ring band between the two circles (the family
+  // repeating-linear-gradient etch, drawn as SVG so it scales as ink)
+  const hatchMarks = Array.from({ length: 28 }, (_, i) => {
+    const a = (i / 28) * Math.PI * 2;
+    return (
+      <line
+        key={i}
+        x1={cx + 40 * Math.cos(a)}
+        y1={cy + 40 * Math.sin(a)}
+        x2={cx + 44 * Math.cos(a)}
+        y2={cy + 44 * Math.sin(a)}
+        stroke="var(--v-rows)"
+        strokeWidth="2"
+      />
+    );
+  });
+  return (
+    <svg className="bandseal" viewBox="0 0 100 100" role="img" aria-hidden="true">
+      <circle cx={cx} cy={cy} r={46} fill="var(--v-surface)" stroke="var(--v-border)" strokeWidth="1.5" />
+      {hatchMarks}
+      <circle cx={cx} cy={cy} r={34} fill="var(--v-blue-wash)" stroke="var(--v-border)" strokeWidth="1.5" />
+      <text
+        x={cx}
+        y={cy + 1}
+        textAnchor="middle"
+        dominantBaseline="central"
+        className="bandseal-ink"
+        fill="var(--v-blue-deep)"
+      >
+        {initials}
+      </text>
+    </svg>
+  );
+}
+
 /** Earlier-than-fixtures student: no career yet — honest. No tab strip
  *  (tabs were decorative on this state): one band + one card, the one
  *  filled CTA the /career picker. */
@@ -420,10 +464,13 @@ function UndecidedProfile({ name, yearLevel }: { name: string; yearLevel: string
         <div className="band">
           <div className="bandrow">
             <div className="who">
-              <h1 className="t">
-                {name} · {yearLevel}
-              </h1>
-              <div className="m">no career picked yet</div>
+              <BandSeal name={name} />
+              <div>
+                <h1 className="t">
+                  {name}, {yearLevel}
+                </h1>
+                <div className="m">no career picked yet</div>
+              </div>
             </div>
           </div>
         </div>
@@ -436,7 +483,7 @@ function UndecidedProfile({ name, yearLevel }: { name: string; yearLevel: string
           </div>
           <div className="u-cta">
             <a className="cta" href="/career">
-              Browse the career index →
+              Browse the career index <ArrowRight size={14} aria-hidden="true" />{" "}
             </a>
           </div>
           <div className="foot num">Explore the index — the score, skills, and plan follow your pick.</div>

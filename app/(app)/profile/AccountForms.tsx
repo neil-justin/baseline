@@ -250,7 +250,7 @@ export function AccountIdentity({ initial, programs }: { initial: Identity; prog
           </button>
         </div>
       </form>
-      <p className="acct-campus num">Campus — {initial.campus} · the tenant key is fixed; it identifies your school&apos;s roster.</p>
+      <p className="acct-campus num">Campus — {initial.campus}, the tenant key is fixed; it identifies your school&apos;s roster.</p>
       {/* the status slot renders ONLY when it has a message — no phantom line */}
       {statusMsg && (
         <p className={genErr ? "presence-err" : "presence-ok"} role="status" aria-live="polite">

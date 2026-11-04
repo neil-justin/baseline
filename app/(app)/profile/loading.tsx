@@ -1,14 +1,17 @@
 import "./profile.css";
 
 /**
- * Route skeleton — Profile (2026-11-03 revamp shape, TEXT-FREE).
+ * Route skeleton — Profile (2026-11-03 revamp shape, TEXT-FREE; band
+ * re-mirrored 2026-11-04: the initials-seal band + the band's own
+ * end-to-end channel row).
  * Mirror the committed stage order for the route's DEFAULT tab
- * (Competencies): the named band with the SHARED ScoreSequence composite
- * (count · / 100 · two ratemsg lines · the five-channel bar) → the bare
- * tab strip → the Competencies panel's TWO cards (skills table card ·
- * NACE 2-col table card). NO real text — every label is a shape bar; one
- * polite status region announces. Pulse gated by prefers-reduced-motion
- * (../v7.css .skel).
+ * (Competencies): the named band with the seal leading the identity
+ * cluster, the SHARED ScoreSequence composite (count · / 100 · two
+ * ratemsg lines), the five-channel bar as its own full-width row → the
+ * bare tab strip → the Competencies panel's TWO cards (skills table
+ * card in its TWO-column commit · NACE 2-col table card). NO real
+ * text — every label is a shape bar; one polite status region
+ * announces. Pulse gated by prefers-reduced-motion (../v7.css .skel).
  */
 export default function Loading() {
   return (
@@ -18,12 +21,17 @@ export default function Loading() {
           <div className="band">
             <div className="bandrow">
               <div className="who">
-                <span className="skel" style={{ width: 84, height: 20 }} />
-                <span className="skel" style={{ width: 310, height: 17, marginTop: 6 }} />
+                {/* the seal disc (BandSeal's slot, 88px round) */}
+                <span className="skel" style={{ width: 88, height: 88, borderRadius: "50%", flex: "none" }} />
+                <div>
+                  <span className="skel" style={{ width: 84, height: 20 }} />
+                  <span className="skel" style={{ width: 310, height: 17, marginTop: 6, display: "block" }} />
+                </div>
               </div>
               {/* the shared ScoreSequence's stage shape: the composite
                   (count + "/ 100") with its two ratemsg lines in the
-                  composite-wrap, the five-channel bar + seglabels beside it */}
+                  composite-wrap; the five-channel bar wraps below as
+                  the band's full-width row (the .scoreband .segs rule) */}
               <div className="composite-wrap">
                 <div className="composite">
                   <span className="skel" style={{ width: 52, height: 46 }} />
@@ -32,22 +40,20 @@ export default function Loading() {
                 <span className="skel" style={{ width: 236, height: 13, marginTop: 8, display: "block" }} />
                 <span className="skel" style={{ width: 250, height: 13, marginTop: 5, display: "block" }} />
               </div>
-              <div className="segs">
-                <div className="segbar" style={{ marginTop: 0 }}>
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <div className="seg" style={{ flex: 1 }} key={i}>
+              {/* the stacked five-channel read's stage shape: five rows —
+                  name · earned track · numeral, weighted fills armed by
+                  the count-up */}
+              <ul className="chanlist">
+                {Array.from([25, 30, 20, 15, 10], (w, i) => (
+                  <li className="chan-row" key={i}>
+                    <span className="skel" style={{ width: 116, height: 15, borderRadius: 6 }} />
+                    <span className="chan-track">
                       <i style={{ width: 0 }} />
-                    </div>
-                  ))}
-                </div>
-                <div className="seglabels num">
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <span key={i}>
-                      <span className="skel" style={{ width: 46, height: 13, margin: "0 auto" }} />
                     </span>
-                  ))}
-                </div>
-              </div>
+                    <span className="skel" style={{ width: 40, height: 15, borderRadius: 6 }} />
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
@@ -71,11 +77,12 @@ export default function Loading() {
             <table className="plan-table skills-table">
               <thead>
                 <tr>
-                  {Array.from({ length: 3 }, (_, i) => (
-                    <th key={i}>
-                      <span className="skel" style={{ width: 58, height: 15 }} />
-                    </th>
-                  ))}
+                  <th>
+                    <span className="skel" style={{ width: 58, height: 15 }} />
+                  </th>
+                  <th style={{ textAlign: "right" }}>
+                    <span className="skel" style={{ width: 58, height: 15, marginLeft: "auto" }} />
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -84,11 +91,8 @@ export default function Loading() {
                     <td>
                       <span className="skel" style={{ width: "64%", height: 18 }} />
                     </td>
-                    <td>
-                      <span className="skel" style={{ width: 72, height: 20 }} />
-                    </td>
-                    <td>
-                      <span className="skel" style={{ width: "70%", height: 16 }} />
+                    <td style={{ textAlign: "right" }}>
+                      <span className="skel" style={{ width: 72, height: 20, marginLeft: "auto" }} />
                     </td>
                   </tr>
                 ))}

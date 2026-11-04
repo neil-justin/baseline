@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { createPortal } from "react-dom";
+import { X } from "lucide-react";
 
 /**
  * Profile → Credentials — the declared-entry flow for the three counselor-
@@ -125,11 +127,27 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
   const kindMeta = KIND_OPTIONS.find((k) => k.id === kind)!;
   const titleRef = useRef<HTMLInputElement>(null);
 
-  /* opening the modal focuses its first input */
+  /* PORTAL HOST — the blink fix (2026-11-04, root-caused against the
+     reproduced probe): the authed profile render sits the modal inside a
+     `.card`, and the card's v9 lift rule carries a transform transition —
+     a transformed ancestor steals `position: fixed`'s containing block,
+     and Chromium ping-pongs the dialog between card-relative and viewport
+     geometry at frame rate (the reported "blinking"). Portaling the modal
+     to the page root (`.v7profile` — OUTSIDE the card subtree, INSIDE the
+     `--v-*` token chain) resolves it against the viewport for good. CSS
+     scopes stay intact: the portal keeps the same ancestor class.
+     Focus rides modalHost resolution — a single [open] effect raced the
+     portal paint and focus fell through to the footer buttons. */
+  const [modalHost, setModalHost] = useState<HTMLElement | null>(null);
   useEffect(() => {
     if (!open) return;
-    titleRef.current?.focus();
+    setModalHost(document.querySelector<HTMLElement>(".v7profile") ?? document.body);
+    return () => setModalHost(null);
   }, [open]);
+  useEffect(() => {
+    if (!open || !modalHost) return;
+    titleRef.current?.focus();
+  }, [open, modalHost]);
 
   function startEdit(row: DeclaredRow) {
     setEdit(row);
@@ -265,7 +283,7 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
               ? `${row.startedOn ? fmtDate(row.startedOn) : "…"}${row.endedOn ? ` – ${fmtDate(row.endedOn)}` : ""}`
               : "";
           const skillLine = row.declaredSkills.length
-            ? `declared skills: ${row.declaredSkills.join(" · ")}`
+            ? `declared skills: ${row.declaredSkills.join(", ")}`
             : "no skills declared with this entry";
           return (
             <div className={`lrow dec-row dec-${row.status}`} key={row.id} data-cred-row>
@@ -279,7 +297,7 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
               <span className="lsub num">
                 {kindLabel}
                 {row.organization ? ` — ${row.organization}` : ""}
-                {dateRange ? ` · ${dateRange}` : ""}
+                {dateRange ? ` — ${dateRange}` : ""}
               </span>
               <span className="lsub">
                 evidence:{" "}
@@ -289,8 +307,9 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
                   </a>
                 ) : (
                   row.evidenceNote || "none attached"
-                )}{" "}
-                · {skillLine}
+                )}
+                {", "}
+                {skillLine}
               </span>
               {row.status === "rejected" && row.auditNote && (
                 <span className="lsub rej-note num">the audit&apos;s note: “{row.auditNote}”</span>
@@ -298,7 +317,7 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
               {row.status === "verified" && (
                 <span className="lsub num">
                   verified{row.verifiedBy ? ` by ${row.verifiedBy}` : ""}
-                  {row.verifiedAt ? ` · ${fmtStamp(row.verifiedAt)}` : ""} — the audit decision is a shared record; the
+                  {row.verifiedAt ? `, ${fmtStamp(row.verifiedAt)}` : ""} — the audit decision is a shared record; the
                   entry reads only.
                 </span>
               )}
@@ -351,187 +370,203 @@ export default function DeclaredCredentials({ rows, skillVocabulary, persistence
         </button>
       </p>
 
-      {open && (
+      {open && modalHost && (
         /* the centered modal — the /career switch-modal recipe: fixed
            wrapper, scrim + dialog siblings, the scrim fades while the
            dialog rises in from 97%, Esc/scrim close, reduced-motion skips
-           the animation */
-        <div className="dec-modal" role="dialog" aria-modal="true" aria-label="Declare a credential">
-          <div className="dec-scrim" onClick={closeModal} />
-          <div
-            className="dec-dialog"
-            data-cred-form
-            tabIndex={-1}
-            onKeyDown={(e) => e.key === "Escape" && closeModal()}
-          >
-            <div className="dec-formtop">
-              <p className="cl-label num">
-                {edit ? (revoking ? "Revise the not-accepted entry" : "Edit the declared entry") : "Declare a credential"}
-              </p>
-            </div>
-            <div className="dec-kind" role="group" aria-label="Credential kind">
-              {KIND_OPTIONS.map((k) => (
+           the animation. PORTALED (2026-11-04 blink fix, see the host
+           hook above). */
+        createPortal(
+          <div className="dec-modal" role="dialog" aria-modal="true" aria-label="Declare a credential">
+            <div className="dec-scrim" onClick={closeModal} />
+            <div
+              className="dec-dialog"
+              data-cred-form
+              tabIndex={-1}
+              onKeyDown={(e) => e.key === "Escape" && closeModal()}
+            >
+              <div className="dec-formtop">
+                <p className="cl-label num">
+                  {edit ? (revoking ? "Revise the not-accepted entry" : "Edit the declared entry") : "Declare a credential"}
+                </p>
                 <button
-                  key={k.id}
+                  className="dec-x"
                   type="button"
-                  className={`dec-kindbtn${kind === k.id ? " on" : ""}`}
-                  aria-pressed={kind === k.id}
-                  onClick={() => {
-                    setKind(k.id);
-                    setErrors((prev) => ({ ...prev, organization: undefined }));
-                  }}
+                  onClick={closeModal}
+                  aria-label="Close"
+                  title="Close"
                   disabled={busy}
                 >
-                  {k.label}
+                  <X size={14} aria-hidden="true" />
                 </button>
-              ))}
-            </div>
-            <div className="dec-grid">
-              <div className="dec-field">
-                <label className="cl-label num" htmlFor="c-title">
-                  {kind === "internship" ? "Role / position" : "Title"} <Req />
-                </label>
-                <input
-                  id="c-title"
-                  ref={titleRef}
-                  type="text"
-                  className="profile-input"
-                  placeholder={kind === "internship" ? "e.g., Intern, Data team" : kind === "certification" ? "e.g., Google Data Analytics" : "e.g., Student council secretary"}
-                  value={title}
-                  onChange={(e) => {
-                    setTitle(e.target.value);
-                    setErrors((prev) => ({ ...prev, title: undefined }));
-                  }}
-                  maxLength={120}
-                />
-                {errors.title && (
-                  <p className="field-err" role="alert">
-                    {errors.title}
-                  </p>
-                )}
               </div>
-              <div className="dec-field">
-                <label className="cl-label num" htmlFor="c-org">
-                  {kindMeta.org} {kindMeta.orgRequired && <Req />}
-                </label>
-                <input
-                  id="c-org"
-                  type="text"
-                  className="profile-input"
-                  placeholder={kind === "internship" ? "the employer" : "who issued it or where it happened"}
-                  value={organization}
-                  onChange={(e) => {
-                    setOrganization(e.target.value);
-                    setErrors((prev) => ({ ...prev, organization: undefined }));
-                  }}
-                  maxLength={120}
-                />
-                {errors.organization && (
-                  <p className="field-err" role="alert">
-                    {errors.organization}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="dec-grid dec-grid-3">
-              <div className="dec-field">
-                <label className="cl-label num" htmlFor="c-start">
-                  Start (optional)
-                </label>
-                <input
-                  id="c-start"
-                  type="date"
-                  className="profile-input"
-                  value={startedOn}
-                  onChange={(e) => {
-                    setStartedOn(e.target.value);
-                    setErrors((prev) => ({ ...prev, dates: undefined }));
-                  }}
-                />
-              </div>
-              <div className="dec-field">
-                <label className="cl-label num" htmlFor="c-end">
-                  End (optional)
-                </label>
-                <input
-                  id="c-end"
-                  type="date"
-                  className="profile-input"
-                  value={endedOn}
-                  onChange={(e) => {
-                    setEndedOn(e.target.value);
-                    setErrors((prev) => ({ ...prev, dates: undefined }));
-                  }}
-                />
-              </div>
-            </div>
-            {errors.dates && (
-              <p className="field-err" role="alert">
-                {errors.dates}
-              </p>
-            )}
-            <div className="dec-field">
-              <label className="cl-label num" htmlFor="c-ev">
-                Evidence — link or file URL
-              </label>
-              <input
-                id="c-ev"
-                type="url"
-                className="profile-input"
-                placeholder="https://… — the audit opens this when it rules"
-                value={evidenceUrl}
-                onChange={(e) => {
-                  setEvidenceUrl(e.target.value);
-                  setErrors((prev) => ({ ...prev, evidenceUrl: undefined }));
-                }}
-              />
-              {errors.evidenceUrl && (
-                <p className="field-err" role="alert">
-                  {errors.evidenceUrl}
-                </p>
-              )}
-            </div>
-            <div className="dec-field">
-              <label className="cl-label num" htmlFor="c-evnote">
-                Evidence note (optional) — what the link or file shows
-              </label>
-              <input
-                id="c-evnote"
-                type="text"
-                className="profile-input"
-                placeholder="e.g., certificate of completion, PDF upload link"
-                value={evidenceNote}
-                onChange={(e) => setEvidenceNote(e.target.value)}
-                maxLength={300}
-              />
-            </div>
-            <div className="dec-field">
-              <p className="cl-label num">Declared skills — from the framework vocabulary</p>
-              <div className="dec-skills" role="group" aria-label="Declared skills picker">
-                {skillVocabulary.map((s) => (
-                  <label key={s} className={`dec-skill${skills.includes(s) ? " on" : ""}`}>
-                    <input type="checkbox" checked={skills.includes(s)} onChange={() => toggleSkill(s)} />
-                    <span>{s}</span>
-                  </label>
+              <div className="dec-kind" role="group" aria-label="Credential kind">
+                {KIND_OPTIONS.map((k) => (
+                  <button
+                    key={k.id}
+                    type="button"
+                    className={`dec-kindbtn${kind === k.id ? " on" : ""}`}
+                    aria-pressed={kind === k.id}
+                    onClick={() => {
+                      setKind(k.id);
+                      setErrors((prev) => ({ ...prev, organization: undefined }));
+                    }}
+                    disabled={busy}
+                  >
+                    {k.label}
+                  </button>
                 ))}
               </div>
-              <p className="dec-skillnote num">{SKILL_NOTE}</p>
+              <div className="dec-grid">
+                <div className="dec-field">
+                  <label className="cl-label num" htmlFor="c-title">
+                    {kind === "internship" ? "Role / position" : "Title"} <Req />
+                  </label>
+                  <input
+                    id="c-title"
+                    ref={titleRef}
+                    type="text"
+                    className="profile-input"
+                    placeholder={kind === "internship" ? "e.g., Intern, Data team" : kind === "certification" ? "e.g., Google Data Analytics" : "e.g., Student council secretary"}
+                    value={title}
+                    onChange={(e) => {
+                      setTitle(e.target.value);
+                      setErrors((prev) => ({ ...prev, title: undefined }));
+                    }}
+                    maxLength={120}
+                  />
+                  {errors.title && (
+                    <p className="field-err" role="alert">
+                      {errors.title}
+                    </p>
+                  )}
+                </div>
+                <div className="dec-field">
+                  <label className="cl-label num" htmlFor="c-org">
+                    {kindMeta.org} {kindMeta.orgRequired && <Req />}
+                  </label>
+                  <input
+                    id="c-org"
+                    type="text"
+                    className="profile-input"
+                    placeholder={kind === "internship" ? "the employer" : "who issued it or where it happened"}
+                    value={organization}
+                    onChange={(e) => {
+                      setOrganization(e.target.value);
+                      setErrors((prev) => ({ ...prev, organization: undefined }));
+                    }}
+                    maxLength={120}
+                  />
+                  {errors.organization && (
+                    <p className="field-err" role="alert">
+                      {errors.organization}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="dec-grid dec-grid-3">
+                <div className="dec-field">
+                  <label className="cl-label num" htmlFor="c-start">
+                    Start (optional)
+                  </label>
+                  <input
+                    id="c-start"
+                    type="date"
+                    className="profile-input"
+                    value={startedOn}
+                    onChange={(e) => {
+                      setStartedOn(e.target.value);
+                      setErrors((prev) => ({ ...prev, dates: undefined }));
+                    }}
+                  />
+                </div>
+                <div className="dec-field">
+                  <label className="cl-label num" htmlFor="c-end">
+                    End (optional)
+                  </label>
+                  <input
+                    id="c-end"
+                    type="date"
+                    className="profile-input"
+                    value={endedOn}
+                    onChange={(e) => {
+                      setEndedOn(e.target.value);
+                      setErrors((prev) => ({ ...prev, dates: undefined }));
+                    }}
+                  />
+                </div>
+              </div>
+              {errors.dates && (
+                <p className="field-err" role="alert">
+                  {errors.dates}
+                </p>
+              )}
+              <div className="dec-field">
+                <label className="cl-label num" htmlFor="c-ev">
+                  Evidence — link or file URL
+                </label>
+                <input
+                  id="c-ev"
+                  type="url"
+                  className="profile-input"
+                  placeholder="https://… — the audit opens this when it rules"
+                  value={evidenceUrl}
+                  onChange={(e) => {
+                    setEvidenceUrl(e.target.value);
+                    setErrors((prev) => ({ ...prev, evidenceUrl: undefined }));
+                  }}
+                />
+                {errors.evidenceUrl && (
+                  <p className="field-err" role="alert">
+                    {errors.evidenceUrl}
+                  </p>
+                )}
+              </div>
+              <div className="dec-field">
+                <label className="cl-label num" htmlFor="c-evnote">
+                  Evidence note (optional) — what the link or file shows
+                </label>
+                <input
+                  id="c-evnote"
+                  type="text"
+                  className="profile-input"
+                  placeholder="e.g., certificate of completion, PDF upload link"
+                  value={evidenceNote}
+                  onChange={(e) => setEvidenceNote(e.target.value)}
+                  maxLength={300}
+                />
+              </div>
+              <div className="dec-field">
+                <p className="cl-label num">Declared skills — from the framework vocabulary</p>
+                <div className="dec-skills" role="group" aria-label="Declared skills picker">
+                  {skillVocabulary.map((s) => (
+                    <label key={s} className={`dec-skill${skills.includes(s) ? " on" : ""}`}>
+                      <input type="checkbox" checked={skills.includes(s)} onChange={() => toggleSkill(s)} />
+                      <span>{s}</span>
+                    </label>
+                  ))}
+                </div>
+                <p className="dec-skillnote num">{SKILL_NOTE}</p>
+              </div>
+              {statusMsg && (
+                <p className={err ? "presence-err" : "presence-ok"} role="status" aria-live="polite">
+                  {statusMsg}
+                </p>
+              )}
+              {/* actions — user Option A (2026-11-04): quiet Cancel on the
+                  left, the primary on the right (flex-end owns the row) */}
+              <div className="dec-ctas">
+                <button className="btn btn-ghost btn-sm" type="button" onClick={closeModal} disabled={busy}>
+                  Cancel
+                </button>
+                <button className="btn btn-primary btn-sm" type="button" onClick={submit} disabled={busy}>
+                  {busy ? "Saving…" : revoking ? "Resubmit for the audit" : edit ? "Save the declaration" : "Declare it"}
+                </button>
+              </div>
             </div>
-            {statusMsg && (
-              <p className={err ? "presence-err" : "presence-ok"} role="status" aria-live="polite">
-                {statusMsg}
-              </p>
-            )}
-            <div className="dec-ctas">
-              <button className="btn btn-primary btn-sm" type="button" onClick={submit} disabled={busy}>
-                {busy ? "Saving…" : revoking ? "Resubmit for the audit" : edit ? "Save the declaration" : "Declare it"}
-              </button>
-              <button className="btn btn-ghost btn-sm" type="button" onClick={closeModal} disabled={busy}>
-                Close without saving
-              </button>
-            </div>
-          </div>
-        </div>
+          </div>,
+          modalHost
+        )
       )}
       {persistence && <p className="lcap num">{persistence}</p>}
     </div>

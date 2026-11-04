@@ -33,7 +33,7 @@ const isTab = (v: string): v is TabId => TABS.some((t) => t.id === v);
 
 /* the shared chip legend — rides both evidence-bearing tabs */
 const LEGEND =
-  "·✓ passed a verification quiz · ·✓✓ passed a comprehension check · self-reported = your claim, until its check passes";
+  "Verified = passed a verification quiz. Checked = passed a comprehension check. Self-reported = your claim, until its check passes";
 
 export default function ProfileTabs({
   panels,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowRight } from "lucide-react";
 
 /**
  * Profile — the DPA data-subject rights as working surfaces (ticket 7's
@@ -79,7 +80,7 @@ export default function DpaArtifacts() {
       </div>
       <details className="dpa-details">
         <summary>What the file contains</summary>
-        <p className="dpa-src num">profile · state · event history · credentials · resume runs · letter runs · presence</p>
+        <p className="dpa-src num">profile, state, event history, credentials, resume runs, letter runs, presence</p>
       </details>
       <div className="dpa-erase">
         {/* the ONE visible erase announcement (erase ×2 → 1) — it cannot hide */}
@@ -87,7 +88,13 @@ export default function DpaArtifacts() {
         {/* the erase-order chain, gated (moved from the card's .lcap) */}
         <details className="dpa-details">
           <summary>Erase order</summary>
-          <p className="dpa-src num">auth user → profile → state → credentials → resume/letter runs → evidence</p>
+          <p className="dpa-src num">
+            auth user <ArrowRight size={10} aria-hidden="true" /> profile{" "}
+            <ArrowRight size={10} aria-hidden="true" /> state{" "}
+            <ArrowRight size={10} aria-hidden="true" /> credentials{" "}
+            <ArrowRight size={10} aria-hidden="true" /> resume/letter runs{" "}
+            <ArrowRight size={10} aria-hidden="true" /> evidence
+          </p>
         </details>
         {/* a real form: Enter at the confirm input submits (B.7) */}
         <form

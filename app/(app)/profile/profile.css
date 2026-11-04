@@ -77,6 +77,77 @@
   border-bottom: 1px solid var(--v-rows);
 }
 .v7profile .plan-table th.col-item { width: 42%; }
+/* Source: the survivor column of the 2026-11-04 feedback round — pushed to
+   the right edge (the EVIDENCE column is retired; skillSub died with it) */
+.v7profile .plan-table .col-src { text-align: right; }
+.v7profile .plan-table td.col-src { white-space: nowrap; }
+
+/* the five-channel STACKED register (user ruled 2026-11-04 after the
+   weighted ribbon buckled on narrow bands): one row per channel —
+   name · earned track · numeral — holding shape at any width. The
+   ribbon's weight-var rules and their fold are retired with it. */
+.v7profile .chanlist {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 9px;
+  width: 100%;
+}
+.v7profile .chan-row { display: flex; align-items: center; gap: 14px; }
+.v7profile .chan-name {
+  flex: 0 0 190px;
+  font: 500 12.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7profile .chan-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--v-track);
+  overflow: hidden;
+}
+.v7profile .chan-track i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--v-blue);
+}
+/* unmeasured channel: bare track, never a painted zero fill */
+.v7profile .chan-track.none { background: var(--v-rows); }
+@media (prefers-reduced-motion: no-preference) {
+  .v7profile .chan-track i { transition: width 0.45s cubic-bezier(0.2, 0, 0, 1); }
+}
+.v7profile .chan-val {
+  flex: 0 0 auto;
+  min-width: 52px;
+  text-align: right;
+  font: 500 12.5px/1.2 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 560px) {
+  .v7profile .chan-row { gap: 10px; }
+  .v7profile .chan-name { flex-basis: 128px; font-size: 12px; }
+  .v7profile .chan-val { min-width: 44px; font-size: 12px; }
+}
+
+/* ---------- the band's drawn imagery — the initials seal ---------- */
+/* the user's 2026-11-04 layout ruling: the seal LEADS the band's left
+   cluster (inside .who), and the five-channel seg bar spans the band
+   END TO END below it */
+.v7profile .scoreband .who { display: flex; align-items: center; gap: 16px; }
+.v7profile .scoreband .segs { flex: 1 1 100%; max-width: none; width: 100%; }
+.v7profile .bandseal { flex: 0 0 auto; width: 88px; height: 88px; }
+.v7profile .bandseal-ink {
+  font: 700 26px "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: 0.02em;
+}
+@media (max-width: 560px) {
+  .v7profile .scoreband .who { gap: 12px; }
+  .v7profile .bandseal { width: 64px; height: 64px; }
+  .v7profile .bandseal-ink { font-size: 19px; }
+}
 .v7profile .plan-table td {
   padding: 9px 16px;
   border-bottom: 1px solid var(--v-rows);
@@ -296,7 +367,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(60, 64, 67, 0.2);
   outline: none;
-  padding: 18px 20px 20px;
+  padding: 20px 24px 20px;
 }
 @media (prefers-reduced-motion: no-preference) {
   .v7profile .dec-scrim { animation: dec-scrim-in 0.15s ease-out both; }
@@ -342,7 +413,7 @@
   color: var(--v-blue-deep);
   border-color: var(--v-blue);
 }
-.v7profile .dec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+.v7profile .dec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; }
 .v7profile .dec-grid-3 { grid-template-columns: repeat(3, 1fr); }
 .v7profile .dec-field { display: grid; gap: 5px; min-width: 0; }
 .v7profile .dec-field .cl-label {
@@ -363,7 +434,7 @@
    form — "Close without saving" rides the bottom ctas only) */
 .v7profile .dec-formtop {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 10px;
   flex-wrap: wrap;
@@ -384,7 +455,27 @@
 .v7profile .dec-skill.on { background: var(--v-blue-wash); color: var(--v-blue-deep); border-color: var(--v-blue); }
 .v7profile .dec-skill input { accent-color: var(--v-blue); margin: 0; }
 .v7profile .dec-skillnote { margin-top: 8px; font: 400 11px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
-.v7profile .dec-ctas { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+/* actions — Option A (2026-11-04): quiet Cancel left, primary right */
+.v7profile .dec-ctas { display: flex; align-items: center; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+.v7profile .dec-ctas .btn-ghost { margin-right: auto; }
+
+/* the header ✕ (Option A: the abandon control returns) — drawn 32px
+   tonal disc, ink-2 idle, hover fills the grey wash */
+.v7profile .dec-x {
+  margin-left: auto;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--v-ink2);
+  font: 400 14px/1 Roboto, system-ui, sans-serif;
+  cursor: pointer;
+}
+.v7profile .dec-x:hover { background: var(--v-grey-wash); color: var(--v-ink); }
+.v7profile .dec-x:hover:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 1px; }
 
 /* ---------- presence (fourth credential kind — ticket 12) ---------- */
 
@@ -410,6 +501,19 @@
 }
 .v7profile .profile-input::placeholder { color: var(--v-meta); } /* decorative placeholder only — the input's own text is ink */
 .v7profile .profile-input:disabled { background: var(--v-grey-wash); color: var(--v-ink2); }
+/* Option A restyle (2026-11-04) — the declare-dialog's fields read as
+   soft tonal wells (rounded, subtle ground fill) without touching the
+   Account forms' register */
+.v7profile .dec-dialog .profile-input {
+  height: 42px;
+  padding: 8px 12px;
+  font-size: 13.5px;
+  border-radius: 10px;
+  background: var(--v-ground);
+  border-color: var(--v-rows);
+}
+.v7profile .dec-dialog .profile-input:hover { border-color: var(--v-meta); }
+.v7profile .dec-dialog .profile-input:focus { background: var(--v-surface); border-color: var(--v-blue); outline: none; box-shadow: 0 0 0 1px var(--v-blue) inset; }
 .v7profile .presence-privacy { margin-top: 8px; }
 .v7profile .presence-check { display: inline-flex; align-items: center; gap: 8px; font: 400 13px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); cursor: pointer; }
 .v7profile .presence-priv { margin-top: 6px; font: 400 11.5px/1.6 Roboto, system-ui, sans-serif; color: var(--v-ink2); max-width: 74ch; }
