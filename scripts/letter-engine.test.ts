@@ -166,3 +166,22 @@ describe("the not-letter sanity floor (2026-11-04 feedback round)", () => {
     expect(intake.ok).toBe(true);
   });
 });
+
+describe("the letter route's not_letter relay (2026-11-04 feedback round)", () => {
+  it("a rejected essay carries the code, the detail and the missing inventory", async () => {
+    const essay = "Chapter one. It was the best of times, it was the worst of times. In those days the land was ruled by reason and the people by custom, and every family kept to its own affairs. The seasons turned and the harvest was measured against the years before, and few questioned how things had always been done until the great change came.";
+    const intake = await intakeLetterFile({ bytes: Buffer.from(essay, "utf8"), fileName: "chapter-one.txt", fileCount: 1 });
+    expect(intake).toMatchObject({
+      ok: false,
+      code: "not_letter",
+      detail: "This doesn't read as a cover letter.",
+    });
+    if (!intake.ok) {
+      expect(intake.missing).toEqual([
+        "a salutation or letter-style opener",
+        "an applying-for/position mention",
+        "a closing or sign-off line",
+      ]);
+    }
+  });
+});

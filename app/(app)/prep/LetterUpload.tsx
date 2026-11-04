@@ -27,6 +27,7 @@ const REJECT_COPY: Record<string, string> = {
   no_career: "Pick your target role first — the check measures against it.",
   no_file: "Choose a cover letter file first (TXT, PDF, or DOCX).",
   multi_file: "One file at a time — drop the cover letter as a single PDF, DOCX, or TXT.",
+  not_letter: "This doesn't read as a cover letter.",
   oversize: "Over the 5 MB limit — a plain, text-only letter export stays well under it. Remove images and export the letter again.",
   empty: "The file carries almost no text — a letter needs its body.",
   encrypted: "This file is password-protected or encrypted — save an unlocked copy as a PDF, DOCX, or TXT and upload that.",
@@ -64,9 +65,10 @@ export default function LetterUpload({
       if (res.ok) {
         window.location.reload(); // the server page re-renders the stored run
       } else {
-        const json = (await res.json().catch(() => null)) as { error?: string; detail?: string } | null;
+        const json = (await res.json().catch(() => null)) as { error?: string; detail?: string; missing?: string[] } | null;
         const code = json?.error ?? "parse_error";
-        setErr(json?.detail ?? REJECT_COPY[code] ?? "The file was rejected — try exporting the letter as a PDF, DOCX, or TXT.");
+        const tail = json?.missing?.length ? ` It's missing ${json.missing.join(" and ")}.` : "";
+        setErr((json?.detail ?? REJECT_COPY[code] ?? "The file was rejected — try exporting the letter as a PDF, DOCX, or TXT.") + tail);
       }
     } catch {
       setErr("The upload failed — check the connection and try again.");

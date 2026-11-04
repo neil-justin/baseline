@@ -77,7 +77,10 @@ export async function POST(req: Request) {
 
   const intake = await intakeLetterFile({ bytes, fileName: file.name, fileCount: realFiles.length });
   if (!intake.ok) {
-    return NextResponse.json({ error: intake.code, detail: intake.detail }, { status: 422 });
+    return NextResponse.json(
+      { error: intake.code, detail: intake.detail, missing: intake.missing ?? null },
+      { status: 422 }
+    );
   }
 
   const run = runLetterCheck({
