@@ -32,8 +32,9 @@ spans pages the swap-in shows furniture the skeleton hid.
   tbody maps `rows.slice((page - 1) * PER_PAGE, page * PER_PAGE)`.
 - Page state lives inside `CohortTable`, which remounts per tab switch (the pane is
   keyed by `active`), so no cross-tab retention and no reset logic is needed.
-- **New `Pager` component** placed in `AdminShell.tsx` (or a sibling `Pager.tsx` if
-  the file grows), modeled on the mockup's but rendered below the real table:
+- **New `Pager` component** placed in a sibling `app/admin/Pager.tsx` (concrete: a
+  sibling file, imported by `AdminShell` — modeled on the mockup's but rendered
+  below the real table):
   `<nav class="atabs-pager" aria-label="Table pagination">` → prev button
   (`‹` chevron), one numbered button per page, next button (`›` chevron), and a
   `PAGE x OF y` label. Numbered buttons take `aria-current="page"` when active;
@@ -91,9 +92,9 @@ Consistent with the repo's `scripts/*.test.ts` habit:
 
 ### Out of scope
 
-- Pagination on the Audit Queue tab (the `Pager` component will be lifted/reused
-  when that round happens — keep it importable, not `CohortTable`-private, if
-  trivially so; otherwise YAGNI and copy later).
+- Pagination on the Audit Queue tab (the `Pager` lives in its own `Pager.tsx`
+  precisely so that round can import it — that queue's cutover is its own round,
+  untouched here).
 - Filters, sorting, server-side paging, or URL-state persistence.
 
 ## Success criteria
