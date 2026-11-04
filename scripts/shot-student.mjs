@@ -28,30 +28,13 @@ await page.waitForTimeout(1400);
 await page.screenshot({ path: ".impeccable/review/admin-r5-student-marco-1440.png" });
 console.log("✓ marco (zero state) 1440");
 
-// skeleton capture: throttle the API by racing a slow route on student page
-await page.route("**/admin/student?student=neil*", async (route) => {
-  await new Promise((r) => setTimeout(r, 2500));
-  await route.continue();
-});
-await page.setViewportSize({ width: 1440, height: 900 });
-await page.goto(`${base}/admin/student?student=neil`, { waitUntil: "networkidle" });
-await page.waitForTimeout(900);
-await page.unrouteAll({ behavior: "ignoreErrors" });
-await page.route("**/admin/student?student=*", async (route) => {
-  await new Promise((r) => setTimeout(r, 2500));
-  await route.continue();
-});
-await page.getByText("Next student").click(); // client nav → frozen route skeleton
-await page.waitForTimeout(1600);
-await page.screenshot({ path: ".impeccable/review/admin-r8-loading-detail.png" });
-console.log("✓ drill-in skeleton via row click (mirrors the back row)");
-
 // 2026-11-04 UX round: pn-row always painted (390 bottom proof), console
 // /admin loading skeletons for both roles (route-delay race freezes them)
 await page.setViewportSize({ width: 390, height: 900 });
 await page.goto(`${base}/admin/student?student=neil`, { waitUntil: "networkidle" });
 await page.waitForTimeout(1400);
-await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+// the veil is its own scroll container — window.scrollTo does nothing
+await page.evaluate(() => { const v = document.querySelector(".atabs-veil"); v.scrollTop = v.scrollHeight; });
 await page.waitForTimeout(400);
 await page.screenshot({ path: ".impeccable/review/admin-r5-student-neil-390-bottom.png" });
 console.log("✓ neil 390 bottom (pn-row proof)");

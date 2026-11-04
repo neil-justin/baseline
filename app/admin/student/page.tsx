@@ -183,12 +183,6 @@ export default async function AdminStudentPage({
   return (
     <div className="v7admin">
       <AdminVeil role={profile.role} mode="detail" active="cohort">
-        {/* the way home (user ruling 2026-11-04): the sidebar is chrome,
-            not a back affordance — the drill-in carries its own quiet link
-            on the student surfaces' register */}
-        <Link className="dt-back" href="/admin">
-          <ArrowLeft size={14} aria-hidden="true" /> Back to cohort
-        </Link>
         <section className="detail" data-dir={dir} aria-labelledby="dt-h">
           <StudentMoveShell student={sp.student ?? "_first"}>
             <Suspense fallback={<div aria-busy="true" aria-label="Loading student detail"><DetailSkeleton /></div>}>
@@ -221,6 +215,12 @@ async function StudentDetail({ raw }: { raw?: string }) {
 
   return (
     <>
+      {/* the way home — content of the detail, not chrome (user ruling
+          2026-11-04): it arrives WITH the panel, and the loading states
+          reserve its box as a mute pill instead of rendering it */}
+      <Link className="dt-back" href="/admin">
+        <ArrowLeft size={14} aria-hidden="true" /> Back to cohort
+      </Link>
           <Reveal className="panel detail-panel">
             <div className="dt-head">
               <div className="dt-id">
@@ -239,7 +239,6 @@ async function StudentDetail({ raw }: { raw?: string }) {
                   <CountUp to={s.score} dur={900} className="num" />
                   <small>/100</small>
                 </div>
-                <p className="dt-samesub">the same number their dashboard shows</p>
               </div>
             </div>
 
