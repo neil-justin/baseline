@@ -5,10 +5,10 @@
  *      URL, performance navigation entries unchanged)
  *   2. the old content stays visible while the zone reads Analyzing…, scroll
  *      position preserved through the whole wait
- *   3. `useTransition().isPending` tracks the refresh (pending-flip log)
- *   4. after the swap: prep-card-in cascade animationstart records on the
- *      ACTIVE panel's cards; verdict card aligned to viewport top
- *   5. band AR figures updated live (no reload); zone back to idle
+ *   3. after the swap: prep-card-in cascade animationstart records on the
+ *      ACTIVE panel's cards; verdict card aligned to viewport top — the
+ *      choreography only runs when awaitLanding observed the isPending flip
+ *   4. band AR figures updated live (no reload); zone back to idle
  */
 import { chromium } from "@playwright/test";
 import path from "node:path";
@@ -18,12 +18,18 @@ const base = "http://localhost:3111";
 const out = "/tmp/opencode";
 const navEvents = [];
 
+const email = process.env.E2E_NEIL_EMAIL;
+if (!email || !process.env.E2E_NEIL_PASSWORD) {
+  console.error("missing E2E_NEIL_* env");
+  process.exit(1);
+}
+
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "no-preference" });
 const page = await ctx.newPage();
 
 await page.goto(`${base}/signin`, { waitUntil: "networkidle" });
-await page.fill("#f-email", process.env.E2E_NEIL_EMAIL ?? "");
+await page.fill("#f-email", email);
 await page.fill("#f-pass", process.env.E2E_NEIL_PASSWORD ?? "");
 await page.click("#signin-form button[type=submit]");
 await page.waitForURL(/dashboard|onboarding|admin/, { timeout: 20000 });
@@ -32,7 +38,6 @@ await page.waitForURL(/dashboard|onboarding|admin/, { timeout: 20000 });
 // through the flow, so it survives the whole probe
 await ctx.addInitScript(() => {
   window.__prepLog = { anims: [], navEntriesAtStart: performance.getEntriesByType("navigation").length, readyAt: Math.round(performance.now()) };
-  window.__prepPending = []; // the component's isPending samples land here
   document.addEventListener("animationstart", (e) => {
     const c = e.target?.className?.toString?.() ?? "";
     if (c.includes("card") || c.includes("prep-kpi") || c.includes("kpi")) {
@@ -128,7 +133,6 @@ const after = await page.evaluate(() => ({
     score: k.querySelector(".k-score")?.textContent?.trim(),
     chip: k.querySelector(".chip")?.textContent?.trim(),
   })),
-  pending: window.__prepPending ?? null,
   log: window.__prepLog,
 }));
 console.log("AFTER:", JSON.stringify(after, null, 2));

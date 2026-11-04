@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 
 /**
  * The cover-letter checker's intake (v7.4 recut; Q15 slim affordance
@@ -31,8 +31,9 @@ import { useRef, useState, useTransition } from "react";
 const ANALYZE_MIN_MS = 900;
 
 /** the landing watchdog (round 2, user-ruled 2026-11-04): the in-place swap
- * must finish in bounded time — past it, the choreography is skipped
- * honestly (the swap already landed or will; the zone is just idle) */
+ * must finish in bounded time — awaitLanding resolves FALSE at this
+ * deadline; the call site then skips the replay/scroll (the ruled
+ * dead-end: the swap is already landed or will be, and the zone is idle) */
 const LANDING_SETTLE_MS = 8000;
 
 const REJECT_COPY: Record<string, string> = {
@@ -65,6 +66,15 @@ export default function LetterUpload({
    * it runs in an old render's closure, so the value must stay current */
   const pendingRef = useRef(isPending);
   pendingRef.current = isPending;
+  /* teardown: if the page navigates away mid-landing, the polling interval
+   * must not outlive the component (strict-mode-safe: reset on mount) */
+  const unmountedRef = useRef(false);
+  useEffect(() => {
+    unmountedRef.current = false;
+    return () => {
+      unmountedRef.current = true;
+    };
+  }, []);
   const [employer, setEmployer] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -72,22 +82,27 @@ export default function LetterUpload({
   const head = slim ? "Check another version" : "Drop your cover letter here";
   const sub = slim ? "TXT, PDF, or DOCX · drop or browse" : "TXT, PDF, or DOCX · the check runs the moment the file lands";
 
-  /* the landing signal — mirrored from the resume intake (round 2's probe-
-   * verified mechanics): startTransition(() => router.refresh()) flips
-   * isPending true, then false when the swapped server tree commits —
-   * poll inside rAF, capped at the watchdog (its timeout resolves WITHOUT
-   * replay/scroll — honest dead-end, the zone is already idle) */
+  /* the landing signal — mirrored from the resume intake: startTransition(
+   * () => router.refresh()) flips isPending true, then false when the
+   * swapped server tree commits — the poll observes that flip cycle and
+   * resolves true; the watchdog deadline resolves false instead (the ruled
+   * dead-end: the call site then skips the replay/scroll). Polled on an
+   * 80 ms interval: unlike a rAF chain it keeps ticking while the document
+   * is hidden and observes the flip the same way either side of a frame. */
   function awaitLanding() {
-    return new Promise<void>((resolve) => {
-      const deadline = performance.now() + LANDING_SETTLE_MS;
+    return new Promise<boolean>((resolve) => {
       let sawPending = false;
-      const tick = () => {
-        if (pendingRef.current) sawPending = true;
-        else if (sawPending) return resolve();
-        if (performance.now() > deadline) return resolve();
-        requestAnimationFrame(tick);
+      const deadline = performance.now() + LANDING_SETTLE_MS;
+      const settle = (landed: boolean) => {
+        clearInterval(timer);
+        resolve(landed);
       };
-      requestAnimationFrame(tick);
+      const timer = setInterval(() => {
+        if (unmountedRef.current) return settle(false); // the page went away mid-landing — nothing to choreograph
+        if (pendingRef.current) sawPending = true;
+        else if (sawPending) return settle(true);
+        if (performance.now() > deadline) return settle(false);
+      }, 80);
     });
   }
 
@@ -99,7 +114,9 @@ export default function LetterUpload({
     requestAnimationFrame(() => {
       cards.forEach((el) => {
         el.style.animation = "none";
-        void el.getBoundingClientRect(); // reflow records the restart
+      });
+      void panel?.getBoundingClientRect(); // ONE reflow records every restart
+      cards.forEach((el) => {
         el.style.animation = "";
       });
     });
@@ -127,8 +144,8 @@ export default function LetterUpload({
         startTransition(() => {
           router.refresh(); // re-renders the server tree IN PLACE (no reload)
         });
-        await awaitLanding();
-        replayAndScroll(); // the cascade replays as the scroll hands off
+        const landed = await awaitLanding();
+        if (landed) replayAndScroll(); // watchdog = the ruled dead-end: no replay, no scroll
       } else {
         const json = (await res.json().catch(() => null)) as { error?: string; detail?: string; missing?: string[] } | null;
         const code = json?.error ?? "parse_error";
