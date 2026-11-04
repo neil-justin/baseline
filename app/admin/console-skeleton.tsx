@@ -37,6 +37,25 @@ function CohortArtSkel() {
 const ROSTER_ROWS = [0, 1, 2, 3, 4, 5];
 const ROSTER_COL_WIDTHS = [44, 44, 20, 44];
 
+/** The pager ghost (user-ruled 2026-11-05, both blind mirrors paint the
+ *  paginated furniture) — chevron pill · 4 page pills · chevron pill,
+ *  plus the right-anchored label pill. ALL greys through .skel:
+ *  text-free, no countable claims, footprint-fixed against the real
+ *  pager's faces (26px chevrons, 24px page middles, 96px label). */
+function PagerGhost() {
+  return (
+    <div className="atabs-pager atabs-pager-skel">
+      <span className="skel" style={{ width: 26, height: 24, borderRadius: 6 }} />
+      <span className="skel" style={{ width: 24, height: 24, borderRadius: 6 }} />
+      <span className="skel" style={{ width: 24, height: 24, borderRadius: 6 }} />
+      <span className="skel" style={{ width: 24, height: 24, borderRadius: 6 }} />
+      <span className="skel" style={{ width: 24, height: 24, borderRadius: 6 }} />
+      <span className="skel" style={{ width: 26, height: 24, borderRadius: 6 }} />
+      <span className="skel" style={{ marginLeft: "auto", width: 96, height: 11 }} />
+    </div>
+  );
+}
+
 function CohortSkeleton() {
   return (
     <section className="panel cohort-table" aria-hidden="true">
@@ -77,6 +96,7 @@ function CohortSkeleton() {
           ))}
         </tbody>
       </table>
+      <PagerGhost />
     </section>
   );
 }
@@ -110,6 +130,7 @@ function SlotSkeleton() {
         </div>
       ))}
       <p className="atabs-empty" />
+      <PagerGhost />
     </section>
   );
 }

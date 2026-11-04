@@ -107,3 +107,23 @@ describe("hook-class registry (e2e-hook rule: atabs-, never mk-)", () => {
     expect(css).not.toMatch(/^\.v7admin \.mk-/m);
   });
 });
+
+describe("skeleton mirror + page margin (user-ruled 2026-11-05)", () => {
+  it("keeps the cohort mirror's six rows verbatim", () => {
+    expect(readFileSync("app/admin/console-skeleton.tsx", "utf8")).toContain(
+      "const ROSTER_ROWS = [0, 1, 2, 3, 4, 5];"
+    );
+  });
+
+  it("ghosts the pager furniture in BOTH skeletons", () => {
+    const src = readFileSync("app/admin/console-skeleton.tsx", "utf8");
+    // chevron · 4 page pills · chevron + right-anchored label pill
+    expect(src).toContain("function PagerGhost()");
+    expect(src.includes('className="atabs-pager atabs-pager-skel"')).toBe(true);
+  });
+
+  it("reserves bottom margin on every tab page", () => {
+    const css = readFileSync("app/admin/admin-tabs.css", "utf8");
+    expect(css).toMatch(/\.v7admin \.atabs-tabpage\s*\{[^}]*margin-bottom:[^}]*\}/s);
+  });
+});

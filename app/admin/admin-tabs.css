@@ -199,6 +199,9 @@
 
 .v7admin .atabs-tabpage {
   animation: atabs-in 0.18s ease;
+  /* every page breathes at the capped bottom — no tab flush against the
+     shell's end (user-ruled 2026-11-05); 24px matches the atabs rhythm */
+  margin-bottom: 24px;
 }
 @keyframes atabs-in {
   from {
