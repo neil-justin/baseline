@@ -8,7 +8,7 @@ import BrandMark from "./BrandMark";
 /**
  * (app) shell chrome — v7.3 sidebar round (user-ruled 2026-11-02): the
  * 56px top bar RETIRES as nav but survives as the horizontal HEADER band
- * spanning the full frame (brand block: 6px-blue-inlay mark + "Baseline"
+ * spanning the full frame (brand block: BrandMark SVG mark + "Baseline"
  * wordmark; no search, no bells). Desktop navigation is the
  * left SIDEBAR (.v7-side) spanning vertically beside the content:
  * professional icon+name tabs stacked in it (.sidenav: 13.5px/500 labels,

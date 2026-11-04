@@ -31,6 +31,17 @@ The current in-page brand mark is a bland CSS-drawn square (rounded span + blue 
 
 Explicitly out: `app/(marketing)/mockup/` and `app/admin/mockups/` (historical prototype mounts stay untouched). (Coordination note: another session (`ses_e5b0cd1a7ffehsc8H2NGbFnQc4`) is revamping the app in parallel; per user decision 2026-11-04 we accept the conflict risk on the header files above rather than defer.)
 
+## Outcome reconciliation (2026-11-04, post-implementation)
+
+Implementation surfaced four deltas from the table above; all resolved in the shipped commits:
+
+- **Marketing:** the parallel session's DNA v9 cutover landed first (`c18e2e2`) — the swap targets `m-mark` / `app/(marketing)/v9.css` instead (`2bc0561`).
+- **Auth:** v9 auth layer uses a 24px box, so pages use `<BrandMark size={24} />` (not 18px); a fifth page — `(auth)/reset` — exists and was included; dead rules came out of `globals.css` + `v7-auth.css` (`a8b82d8`; signin's swap rode inside the parallel session's `8ac2128`).
+- **Sidebar (scope addition):** the signed-in app shell (`components/Sidebar.tsx`) had the same CSS-drawn mark — swapped too, dead rules removed from `app/(app)/v7.css` (`32bb08c`).
+- **All live call sites use `size={24}`** for a uniform 24px mark.
+
+**Deferred follow-up:** `.v9auth .brand-mark` / `.brand-mark::after` rules in `app/(auth)/v9-auth.css` are now dead selectors — the file had uncommitted parallel-session edits at implementation time. Delete both rules whenever that file is quiet.
+
 ## Design spec
 
 - **Canvas:** 64×64 viewBox.
