@@ -295,3 +295,31 @@
 }
 .v7dash .chip { border-radius: 8px; }
 .v7dash .card .head b { font-family: "Google Sans", Roboto, system-ui, sans-serif; letter-spacing: -0.01em; }
+
+/* ---------- v9 type scale bump (2026-11-04) ---------- */
+.v7dash { font: 400 15px/1.55 Roboto, system-ui, sans-serif; }
+.v7dash .kpi .s-name { font-size: 15px; }
+.v7dash .kpi .score { font-size: 24px; }
+.v7dash .kpi .score small { font-size: 13px; }
+.v7dash .kpi .s-note { font-size: 12.5px; }
+.v7dash .kpi .sub-row .vbadge { font-size: 12px; }
+.v7dash .card .head b { font-size: 16px; }
+.v7dash .card .head span { font-size: 12.5px; }
+.v7dash .foot { font-size: 12.5px; }
+.v7dash .plan-table th { font-size: 11.5px; }
+.v7dash .plan-table td { font-size: 14px; }
+.v7dash .plan-table .item { font-size: 14.5px; }
+.v7dash .plan-table .sub { font-size: 12px; }
+.v7dash .plan-table .eff { font-size: 13px; }
+.v7dash .actions .row b { font-size: 14px; }
+.v7dash .actions .row .sub { font-size: 12px; }
+.v7dash .actions .badge { font-size: 13px; }
+.v7dash .journey-row { font-size: 12px; }
+.v7dash .lrow b { font-size: 14px; }
+.v7dash .lcap { font-size: 12.5px; }
+.v7dash .label { font-size: 11.5px; }
+.v7dash .score-readout .score-big { font-size: 52px; }
+.v7dash .score-readout small { font-size: 14px; }
+.v7dash .score-line { font-size: 14.5px; }
+.v7dash .chip { font-size: 12px; }
+.v7dash .vbadge.ok { font-size: 12px; }

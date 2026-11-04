@@ -589,3 +589,42 @@
 .v7ob .chip { border-radius: 8px; }
 .v7ob .q-band,
 .v7ob .okband { border-radius: 12px; }
+
+/* ---------- v9 type scale bump (2026-11-04) ---------- */
+.v7ob { font: 400 15px/1.55 Roboto, system-ui, sans-serif; }
+.v7ob .screen-head h1 { font-size: 26px; }
+.v7ob .screen-head p { font-size: 15px; }
+.v7ob .ob-band-name { font-size: 17px; }
+.v7ob .ob-band-meta { font-size: 12.5px; }
+.v7ob .nextcard h3 { font-size: 16px; }
+.v7ob .nextcard .n-why { font-size: 14.5px; }
+.v7ob .nextcard .n-target { font-size: 13px; }
+.v7ob .btn { font-size: 14px; }
+.v7ob .btn-hero { font-size: 14.5px; }
+.v7ob .label { font-size: 11.5px; }
+.v7ob .chip { font-size: 12px; }
+.v7ob .q-stem { font-size: 17px; }
+.v7ob .q-stem-md { font-size: 14.5px; }
+.v7ob .q-opts .opt { font-size: 15px; }
+.v7ob .skill-row .s-name { font-size: 15px; }
+.v7ob .skill-row .s-what { font-size: 12.5px; }
+.v7ob .choice button { font-size: 12.5px; }
+.v7ob .inst-head h3 { font-size: 16px; }
+.v7ob .inst-head blockquote { font-size: 13.5px; }
+.v7ob .scale button { font-size: 12px; }
+.v7ob .ob-step-num { font-size: 12px; }
+.v7ob .ob-step-label { font-size: 11.5px; }
+.v7ob .ob-strip-label { font-size: 11.5px; }
+.v7ob .ob-hint { font-size: 11.5px; }
+.v7ob .ob-fine { font-size: 12.5px; }
+.v7ob .ob-note { font-size: 14.5px; }
+.v7ob .ob-src { font-size: 11.5px; }
+.v7ob .ob-quiet { font-size: 13.5px; }
+.v7ob .ob-back { font-size: 13px; }
+.v7ob .link-sub { font-size: 14px; }
+.v7ob .vbadge { font-size: 12px; }
+.v7ob .okband { font-size: 14.5px; }
+.v7ob .q-band { font-size: 14.5px; }
+.v7ob .tickline { font-size: 13.5px; }
+.v7ob .readout-score { font-size: 52px; }
+.v7ob .readout-score small { font-size: 14px; }

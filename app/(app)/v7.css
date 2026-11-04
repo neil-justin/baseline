@@ -686,3 +686,22 @@ body:has(.v7) { background: #f8f9fa; }
   outline: 2px solid var(--v-blue);
   outline-offset: 2px;
 }
+
+/* ---------- v9 type scale — the console bump (user-ruled 2026-11-04) ----------
+   The v7 hierarchy ran 13.5px body / 11px floors — dense-2019, the other
+   half of the "underwhelming" verdict. Bumped ~10–15% on the PROTECTED
+   surfaces only (marketing/auth already run larger): body 15, page heads
+   26, band titles 17, section heads 16, floors to 11.5/12, readout 52.
+   Every numeral stays Roboto tabular; families per the v9 font law. ---- */
+.v7 .sidenav a,
+.v7 .sidenav .signout button { font-size: 14px; }
+.v7 .brand { font-size: 16px; }
+.v7 .band .who .t { font-size: 17px; }
+.v7 .band .who .m { font-size: 12.5px; }
+.v7 .bcell .label { font-size: 11.5px; }
+.v7 .bval { font-size: 15px; }
+.v7 .composite .score-big { font-size: 52px; }
+.v7 .composite .c-of { font-size: 14px; }
+.v7 .ratemsg { font-size: 12.5px; }
+.v7 .seglabels span { font-size: 12px; }
+.v7 .cta { font-size: 14.5px; }
