@@ -553,3 +553,65 @@
   }
   .v7plan .btn:active { transform: scale(0.97); }
 }
+
+/* ============================================================
+   v9 pathway rethink (user ruling 2026-11-04): ONE header (the
+   band absorbs "Your path to X" + the fact counter, which renders
+   as a slim honest bar), the walk column capped for reading
+   length, spacing tightened, tonal color moments added (M3
+   secondary-container on the start-here card, green-wash earned
+   numerals). The .vd2-band section retired from the DOM.
+   ============================================================ */
+
+/* the band's honest fraction bar */
+.v7plan .vplan-bar {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 320px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--v-track);
+  margin-top: 12px;
+}
+.v7plan .vplan-bar i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 2px;
+  background: var(--v-blue);
+}
+
+/* the meta line carries the counter now — size it like one */
+.v7plan .planband .band .who .m { font-size: 15px; max-width: none; }
+.v7plan .vd2-lead.lead-mono { font-size: 15px; }
+.v7plan .vd2-lead.lead-mono b { font-size: 15px; }
+
+/* the walk column: capped to reading length, centered in the cap */
+.v7plan .vd2-map,
+.v7plan .vd2-standing {
+  max-width: 880px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.v7plan .vd2-standing { margin: 18px auto 10px; font-size: 13.5px; }
+
+/* tonal moments */
+.v7plan .vd2-cir.vd2-cir-earned {
+  background: var(--v-green-wash);
+  border-color: var(--v-green);
+  color: var(--v-green-text);
+}
+.v7plan .vd2-row:has(.vd2-start) .vd2-ncard {
+  background: #eef3fc;
+}
+
+/* spacing: the band hands off tighter to the spine */
+.v7plan .vd2-standing + .vd2-map { margin-top: 4px; }
+
+@media (max-width: 720px) {
+  .v7plan .vplan-bar { max-width: none; }
+  .v7plan .vd2-map,
+  .v7plan .vd2-standing { margin-left: 0; margin-right: 0; }
+}

@@ -111,16 +111,40 @@ export default function PathwayTabs({
 
   return (
     <div className="v7plan">
-      {/* surface band: names the surface + the career line — the shared
-          recipe's .band (white), copy byte-faithful. Undecided: "My Plan"
-          only, no desc. */}
+      {/* surface band — the rethink (user ruling 2026-11-04): ONE header.
+          "My Plan" absorbs the walk's "Your path to X" + the fact counter
+          (the .vd2-band section retired); the honest fraction renders as
+          a slim bar. Locators (.vd2-lead/.lead-mono) ride along. */}
       <section className="planband" aria-label="My Plan">
         <div className="band">
           <div className="bandrow">
             <div className="who">
               <h1 className="t">My Plan</h1>
               {careerName ? (
-                <p className="m">For {careerName} — your next steps, ranked by what carries the most weight first.</p>
+                <p className="m">
+                  Your path to {careerName} —{" "}
+                  <span className="vd2-lead num lead-mono">
+                    <b>{walk!.closed}</b> of {walk!.total} required skills
+                    checked
+                  </span>
+                  .
+                </p>
+              ) : null}
+              {careerName && walk ? (
+                <div
+                  className="vplan-bar"
+                  role="progressbar"
+                  aria-label={`${walk!.closed} of ${walk!.total} required skills checked`}
+                  aria-valuemin={0}
+                  aria-valuemax={walk!.total}
+                  aria-valuenow={walk!.closed}
+                >
+                  <i
+                    style={{
+                      width: `${Math.round((walk!.closed / walk!.total) * 100)}%`,
+                    }}
+                  />
+                </div>
               ) : null}
             </div>
           </div>
@@ -129,20 +153,10 @@ export default function PathwayTabs({
 
       {showWalk ? (
         <>
-          {/* surface head — the fact counter counts the REQUIRED walk (the
-              category counters were demolished with the categories) */}
-          <section className="vd2-band">
-            <div className="vd2-bandrow">
-              <h2>Your path to {walk!.careerName}</h2>
-              <span className="vd2-lead num lead-mono">
-                <b>{walk!.closed}</b> of {walk!.total} required skills checked
-              </span>
-            </div>
-            <p className="vd2-standing">
-              These are the role&apos;s required skills, in a fixed order — check
-              them off. The walk never re-sorts; your state is the overlay.
-            </p>
-          </section>
+          <p className="vd2-standing">
+            These are the role&apos;s required skills, in a fixed order — check
+            them off. The walk never re-sorts; your state is the overlay.
+          </p>
 
           {/* THE SPINE — one continuous 2px line down the left; one container
               card holds every node row (the region cards were demolished);
