@@ -7,6 +7,7 @@ import WelcomePicker from "./WelcomePicker";
 // ../auth.css in this repo — each sibling route keeps page-specific
 // additions welcome doesn't use.
 import "../v7-auth.css";
+import "../v9-auth.css";
 
 export const dynamic = "force-dynamic";
 
@@ -37,7 +38,7 @@ export default async function WelcomePage() {
   const initial = request?.status === "pending" ? "pending" : request?.status === "rejected" ? "rejected" : "fresh";
 
   return (
-    <div className="auth-body v7auth">
+    <div className="auth-body v7auth v9auth">
       <header className="bar">
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
