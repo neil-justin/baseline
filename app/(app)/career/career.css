@@ -668,3 +668,88 @@
 .v7career .index-table:has(+ .vpager) .role-block:last-of-type .index-detail {
   border-bottom: 1px solid var(--v-rows);
 }
+
+/* ============================================================
+   DNA v9 sweep — careers (2026-11-04): rides the shell's v9
+   token block. Cards borderless at the 16px rung; controls pill;
+   segmented registers (ptabs/choice) become M3 pills; rank badge
+   goes tonal; chips 8px; dialog + popover borderless. Type rides
+   the v9 scale (v7.css #7). Hooks byte-untouched.
+   ============================================================ */
+
+.v7career { font: 400 15px/1.55 Roboto, system-ui, sans-serif; }
+
+.v7career .card { border: 0; border-radius: 16px; }
+.v7career .sw-dialog { border: 0; border-radius: 16px; }
+.v7career .cc-switch .disclosure p { border: 0; border-radius: 12px; box-shadow: 0 4px 16px rgba(60, 64, 67, 0.2); }
+.v7career .nextcard { border: 0; border-radius: 12px; }
+.v7career .sw-stays { border: 0; border-radius: 12px; }
+
+/* controls → the pill register; ghost → the M3 tonal pill */
+.v7career .btn {
+  border-radius: 999px;
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+  padding: 9px 22px;
+}
+.v7career .btn-primary { box-shadow: none; }
+.v7career .btn-primary:hover { box-shadow: none; }
+.v7career .btn-ghost {
+  background: var(--v-blue-wash);
+  border: 0;
+  color: #041e49;
+}
+.v7career .btn-ghost:hover { border-color: transparent; background: #c5d9f8; }
+.v7career .d-cta .btn { padding: 7px 16px; font-size: 13px; }
+
+/* segmented registers → M3 pills */
+.v7career .ptabs { border: 0; border-radius: 999px; }
+.v7career .ptabs button { border-radius: 999px; font-size: 13px; }
+.v7career .ptabs button[aria-pressed="true"] { border-color: transparent; }
+.v7career .choice { border-radius: 999px; }
+.v7career .choice button { border-radius: 999px; font-size: 12.5px; }
+.v7career .choice button[aria-pressed="true"] { border-color: transparent; }
+
+/* the rank badge: tonal disc, no stroke */
+.v7career .rank { border: 0; background: var(--v-grey-wash); font-size: 13px; }
+
+.v7career .chip { border-radius: 8px; font-size: 12px; }
+.v7career .vbadge { font-size: 12px; }
+
+/* ---------- v9 type scale (see v7.css #7) ---------- */
+.v7career .label { font-size: 11.5px; }
+.v7career .kicker { font-size: 11.5px; }
+.v7career .index-colheads span { font-size: 11.5px; }
+.v7career .row-name { font-size: 14.5px; }
+.v7career .c-sub { font-size: 12.5px; }
+.v7career .fit-line { font-size: 13px; }
+.v7career .cell-entry { font-size: 13px; }
+.v7career .quiet-toggle { font-size: 13.5px; }
+.v7career .d-block p { font-size: 13.5px; }
+.v7career .m-name { font-size: 15px; }
+.v7career .m-fit { font-size: 13px; }
+.v7career .m-sub { font-size: 12.5px; }
+.v7career .sw-head .t { font-size: 17px; }
+.v7career .sw-head .m { font-size: 14.5px; }
+.v7career .sw-cost { font-size: 15px; }
+.v7career .sw-stays p { font-size: 14.5px; }
+.v7career .sw-backnote { font-size: 13px; }
+.v7career .sw-banner { font-size: 14px; }
+.v7career .reassess h2 { font-size: 18px; font-family: "Google Sans", Roboto, system-ui, sans-serif; letter-spacing: -0.01em; }
+.v7career .reassess > p { font-size: 14.5px; }
+.v7career .s-name { font-size: 15px; }
+.v7career .s-what { font-size: 13.5px; }
+.v7career .reassess-note { font-size: 13px; }
+.v7career .readout-score { font-size: 52px; }
+.v7career .readout-score small { font-size: 15px; }
+.v7career .readout-sub { font-size: 13px; }
+.v7career .readout-legend { font-size: 13px; }
+.v7career .readout-fit { font-size: 13.5px; }
+.v7career .nextcard h3 { font-size: 15px; }
+.v7career .nextcard .n-target { font-size: 13px; }
+.v7career .n-why { font-size: 13.5px; }
+.v7career .rec-line { font-size: 13.5px; }
+.v7career .rec-note { font-size: 13px; }
+.v7career .disclosure p { font-size: 13.5px; }
+@media (max-width: 720px) {
+  .v7career .bval { font-size: 13px; }
+}
