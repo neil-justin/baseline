@@ -1,13 +1,16 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useRef, useState, useTransition } from "react";
 
 /**
  * The resume checker's intake (v7.4 recut; Q15 slim affordance 2026-11-03):
  * ONE dropzone. A file landing here — dragged or browsed — POSTs immediately
- * to /api/resume/diagnose; on a successful run the page re-renders the stored
- * result (full reload: the result is server-rendered from the store,
- * force-dynamic; a document load re-renders honestly every time). Default
+ * to /api/resume/diagnose; on a successful run the page swaps the result IN
+ * PLACE (round 2, user ruling 2026-11-04): router.refresh() re-renders the
+ * server tree inside the transition — no browser reload (no blank, no
+ * scroll jump) — then the entrance cascade replays deliberately and the
+ * readout (verdict card) auto-scrolls to the top of the viewport. Default
  * variant = the upload-first hero (a first run). `slim` = Q15's demoted
  * "Check another version" footer affordance on the results-first card —
  * same hooks/classes/aria contract byte-kept (.rs-upload .dz-zone), only
@@ -18,6 +21,11 @@ import { useRef, useState } from "react";
 /** the simulated analyze beat (F3, user-ruled 2026-11-04): a deliberate
  * ~900 ms floor runs beside the fetch — a fast parse still reads as work */
 const ANALYZE_MIN_MS = 900;
+
+/** the landing watchdog (round 2, user-ruled 2026-11-04): the in-place swap
+ * must finish in bounded time — past it, the choreography is skipped
+ * honestly (the swap already landed or will; the zone is just idle) */
+const LANDING_SETTLE_MS = 8000;
 
 const REJECT_COPY: Record<string, string> = {
   bad_form: "The upload didn't arrive complete — pick the file again.",
@@ -36,11 +44,56 @@ const REJECT_COPY: Record<string, string> = {
 
 export default function ResumeUpload({ slim = false }: { slim?: boolean }) {
   const fileInput = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  /* the landing loop reads isPending through a ref written at render time —
+   * it runs in an old render's closure, so the value must stay current */
+  const pendingRef = useRef(isPending);
+  pendingRef.current = isPending;
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [drag, setDrag] = useState(false);
   const head = slim ? "Check another version" : "Drop your resume here";
   const sub = slim ? "PDF or DOCX · drop or browse" : "PDF or DOCX · the format & evidence check runs the moment the file lands";
+
+  /* the landing signal: startTransition(() => router.refresh()) flips
+   * isPending true, then false when the swapped server tree commits —
+   * poll inside rAF, capped at the watchdog (its timeout resolves WITHOUT
+   * replay/scroll — honest dead-end, the zone is already idle). Probe-
+   * verified live (scripts/prep-feedback-probe-2.mjs): the flip tracks the
+   * refresh — first rAF tick reads true, it returns false at the commit. */
+  function awaitLanding() {
+    return new Promise<void>((resolve) => {
+      const deadline = performance.now() + LANDING_SETTLE_MS;
+      let sawPending = false;
+      const tick = () => {
+        if (pendingRef.current) sawPending = true;
+        else if (sawPending) return resolve();
+        if (performance.now() > deadline) return resolve();
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }
+
+  /* the landing choreography: restart the stylesheet cascade on the active
+   * panel's cards, then scroll the verdict card to the viewport top — */
+  function replayAndScroll() {
+    const panel = document.querySelector(".tabpanel:not([hidden])");
+    const cards = panel?.querySelectorAll<HTMLElement>(".prep-kpi, .prep-stack > .card") ?? [];
+    requestAnimationFrame(() => {
+      cards.forEach((el) => {
+        el.style.animation = "none";
+        void el.getBoundingClientRect(); // reflow records the restart
+        el.style.animation = "";
+      });
+    });
+    const verdict = panel?.querySelector(".rs-readout, .cl-readout");
+    verdict?.scrollIntoView({
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "start",
+    });
+  }
 
   async function run(files: FileList | null) {
     if (!files || files.length === 0) return;
@@ -54,7 +107,11 @@ export default function ResumeUpload({ slim = false }: { slim?: boolean }) {
         new Promise((resolve) => setTimeout(resolve, ANALYZE_MIN_MS)),
       ]);
       if (res.ok) {
-        window.location.reload(); // the server page re-renders the stored run
+        startTransition(() => {
+          router.refresh(); // re-renders the server tree IN PLACE (no reload)
+        });
+        await awaitLanding();
+        replayAndScroll(); // the cascade replays as the scroll hands off
       } else {
         const json = (await res.json().catch(() => null)) as { error?: string; detail?: string; missing?: string[] } | null;
         const code = json?.error ?? "parse_error";
