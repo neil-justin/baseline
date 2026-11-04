@@ -54,6 +54,8 @@ describe("pager render law (mockup register, atabs- hooks)", () => {
     expect(html).toContain('aria-label="Table pagination"');
     expect(html).toContain('aria-current="page"');
     expect(html).toContain("PAGE 2 OF 3");
+    expect(html).toContain('aria-label="Previous page"');
+    expect(html).toContain('aria-label="Next page"');
     // exactly one active-numbered face, never two
     expect(html.match(/class="atabs-pager-btn on"/g)?.length).toBe(1);
   });

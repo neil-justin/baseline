@@ -25,6 +25,7 @@ export default function Pager({
       <button
         type="button"
         className="atabs-pager-btn"
+        aria-label="Previous page"
         disabled={page <= 1}
         onClick={() => setPage(page - 1)}
       >
@@ -44,6 +45,7 @@ export default function Pager({
       <button
         type="button"
         className="atabs-pager-btn"
+        aria-label="Next page"
         disabled={page >= pages}
         onClick={() => setPage(page + 1)}
       >
