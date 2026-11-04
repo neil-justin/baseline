@@ -47,6 +47,7 @@ export type LetterRejectionCode =
   | "encrypted" // password-protected/encrypted document
   | "scanned" // image-only PDF — NO OCR; re-export as real text
   | "wrong_type" // content is neither PDF, DOCX, nor plain text
+  | "not_letter" // parsed fine, but reads no more like a letter than a resume does (2026-11-04)
   | "parse_error"; // parser threw for another reason
 
 export interface LetterRejected {
@@ -54,6 +55,8 @@ export interface LetterRejected {
   code: LetterRejectionCode;
   /** user-facing one-liner (names the letter, not the resume) */
   detail: string;
+  /** what's-missing inventory for `not_letter` (resume's not_resume parity; the UI appends the tail) */
+  missing?: string[];
 }
 
 export interface LetterParsed {
@@ -134,7 +137,12 @@ const sniffLetter = (bytes: Buffer): LetterKind | "binary" => {
   return printable / bytes.length >= 0.98 ? "txt" : "binary";
 };
 
-const reject = (code: LetterRejectionCode, detail: string): LetterRejected => ({ ok: false, code, detail });
+const reject = (code: LetterRejectionCode, detail: string, missing?: string[]): LetterRejected => ({
+  ok: false,
+  code,
+  detail,
+  missing,
+});
 
 export interface LetterIntakeFile {
   bytes: Buffer;
@@ -187,7 +195,7 @@ export async function intakeLetterFile(file: LetterIntakeFile): Promise<LetterIn
       if (text.length < 25) {
         return reject("empty", "Almost no text came out of this PDF — its pages are effectively blank. Export the letter with real text inside.");
       }
-      return { ok: true, kind: "pdf", text };
+      return delivered("pdf", text);
     }
 
     if (kind === "docx") {
@@ -197,7 +205,7 @@ export async function intakeLetterFile(file: LetterIntakeFile): Promise<LetterIn
       if (text.length < 25) {
         return reject("empty", "Almost no text came out of this document — its body is effectively blank. Export the letter with real text inside.");
       }
-      return { ok: true, kind: "docx", text };
+      return delivered("docx", text);
     }
 
     // txt: strip a UTF-8 BOM if the exporter left one
@@ -207,7 +215,7 @@ export async function intakeLetterFile(file: LetterIntakeFile): Promise<LetterIn
     if (text.length < 25) {
       return reject("empty", "The file carries almost no text — a letter needs its body. Save the letter as real text and try again.");
     }
-    return { ok: true, kind: "txt", text };
+    return delivered("txt", text);
   } catch (e) {
     const m = e as { name?: string; message?: string };
     if (/password|encrypt/i.test(m?.name ?? "") || /password|encrypt/i.test(m?.message ?? "")) {
@@ -226,6 +234,44 @@ const SALUTATION_RE =
 /** closing ask: the closing asks for the next step (tail of the text only) */
 const CLOSING_ASK_RE =
   /\b(look(?:s|ing)?\s?forward|hear(?:ing)? from you|further discuss|interview|consider(?:ed|ing)? (?:my|me for)|welcome the (?:chance|opportunity)|opportunity to|at your convenience|kind regards,?\s*\n|appreciate(?:s)? (?:the|your)|grateful if|hop(?:e|ing) to)/i;
+
+/* ── "doesn't read as a cover letter" gate (2026-11-04 feedback round) ───── */
+
+/** applying/role mention: the letter names an application, a position, a role */
+const APPLYING_RE =
+  /\b(applicat(?:ion|ions|ions? for|ion letter)|appl(?:y|ied|ying) (?:for|to)|position|vacanc(?:y|ies)|hiring|candidate for|role)\b/i;
+
+/** sign-off line: the letter's tail closes as a letter does */
+const SIGNOFF_RE =
+  /\b(sincerel?y(?: yours)?|respectfully yours|kind regards|best regards|warm regards|yours (?:truly|faithfully))\b/i;
+
+/**
+ * Parsed fine, but the text carries fewer than two of a letter's three
+ * signals (letter-style opener · applying/position mention · closing or
+ * signature line). Mirrors the resume's `isProbablyResume` deliberately
+ * LOW floors: a plain-but-real letter that opens without "Dear" still
+ * passes; an essay, a recipe, or an invoice does not. The missing
+ * inventory rides OUT of the detail (the route relays `missing`; the
+ * surface appends the tail) — the resume's routed not_resume pattern.
+ */
+export function isProbablyLetter(text: string): LetterRejected | null {
+  const missing: string[] = [];
+  if (!SALUTATION_RE.test(text)) missing.push("a salutation or letter-style opener");
+  if (!APPLYING_RE.test(text)) missing.push("an applying-for/position mention");
+  if (!CLOSING_ASK_RE.test(text) && !SIGNOFF_RE.test(text)) {
+    missing.push("a closing or sign-off line");
+  }
+  if (missing.length >= 2) {
+    return reject("not_letter", "This doesn't read as a cover letter.", missing);
+  }
+  return null;
+}
+
+/** the shared parsed-success point — every kind's text clears the gate here */
+const delivered = (kind: LetterKind, text: string): LetterParsed | LetterRejected => {
+  const gate = isProbablyLetter(text);
+  return gate ?? { ok: true, kind, text };
+};
 
 export interface LetterStructural {
   salutation: boolean;

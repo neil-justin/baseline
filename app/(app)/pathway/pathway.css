@@ -574,44 +574,6 @@
   box-shadow: var(--v-shadow);
   padding: 24px 28px;
 }
-/* the ring — the ONE progress visual (130px, 9px stroke: the text inside
-   was riding the arc's inner edge at the old 118/10 register) */
-.v7plan .plan-ring {
-  position: relative;
-  width: 130px;
-  height: 130px;
-  flex: none;
-}
-.v7plan .plan-ring svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-}
-.v7plan .plan-ring circle { fill: none; }
-.v7plan .plan-ring-track { stroke: var(--v-rows); }
-.v7plan .plan-ring-arc { stroke: var(--v-blue); stroke-linecap: round; }
-.v7plan .plan-ring-mid {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  text-align: center;
-}
-.v7plan .plan-ring-mid b {
-  font: 500 26px/1 "Google Sans", Roboto, system-ui, sans-serif;
-  letter-spacing: -0.01em;
-  color: var(--v-ink);
-  font-variant-numeric: tabular-nums;
-}
-.v7plan .plan-ring-mid small {
-  display: block;
-  margin-top: 3px;
-  font: 500 10px/1.4 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--v-meta);
-}
 /* head text */
 .v7plan .plan-head { min-width: 0; }
 .v7plan .plan-head .t {

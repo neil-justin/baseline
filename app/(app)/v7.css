@@ -570,6 +570,47 @@ body:has(.v7) { background: #f8f9fa; }
 .v7 .ratemsg { font: 400 11.5px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); margin-top: 2px; } /* v7.1: state-bearing grey → ink-2 ≥4.5:1 */
 .v7 .ratemsg b { color: var(--v-ink); font-weight: 500; }
 
+/* ---------- the band readiness ring (2026-11-04 Prep round) — the
+   plan-ring geometry lifted from pathway.css so My Plan and Prep ride ONE
+   ring register; the .lead-mono e2e counter is markup, not CSS.
+   The `b`'s white-space: nowrap is this round's one additive (both figures
+   are short tabular numerals; the old block never carried it). ---------- */
+.v7 .plan-ring,
+.v7 .readring { position: relative; width: 130px; height: 130px; flex: none; }
+.v7 .plan-ring svg,
+.v7 .readring svg { display: block; width: 100%; height: 100%; transform: rotate(-90deg); }
+.v7 .plan-ring circle,
+.v7 .readring circle { fill: none; }
+.v7 .plan-ring-track,
+.v7 .readring-track { stroke: var(--v-rows); }
+.v7 .plan-ring-arc,
+.v7 .readring-arc { stroke: var(--v-blue); stroke-linecap: round; }
+.v7 .plan-ring-mid,
+.v7 .readring-mid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.v7 .plan-ring-mid b,
+.v7 .readring-mid b {
+  font: 500 26px/1 "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.v7 .plan-ring-mid small,
+.v7 .readring-mid small {
+  display: block;
+  margin-top: 3px;
+  font: 500 10px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--v-meta);
+}
+
 .v7 .segs { flex: 1; max-width: 520px; }
 .v7 .segbar { height: 8px; gap: 3px; }
 .v7 .segbar .seg { border-radius: 2px; background: var(--v-track); }

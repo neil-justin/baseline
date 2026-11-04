@@ -133,3 +133,55 @@ describe("letter intake floor (content decides, no OCR)", () => {
     if (!res.ok) expect(res.code).toBe("parse_error"); // real pdf carrier, broken body
   });
 });
+
+describe("the not-letter sanity floor (2026-11-04 feedback round)", () => {
+  it("rejects an essay that parses fine but carries no letter signals", async () => {
+    const essay = "The causes and consequences of climate change have been studied for decades. Scientists measure ice cores, tree rings, and ocean temperatures to model what happens next. Policymakers debate carbon pricing while farmers adapt to shifting seasons. The evidence keeps mounting and public awareness keeps growing with every report published.";
+    const intake = await intakeLetterFile({ bytes: Buffer.from(essay, "utf8"), fileName: "essay.txt", fileCount: 1 });
+    expect(intake.ok).toBe(false);
+    if (intake.ok) return;
+    expect(intake.code).toBe("not_letter");
+    expect(intake.detail).toBe("This doesn't read as a cover letter.");
+    expect(intake.missing).toContain("a salutation or letter-style opener");
+    expect(intake.missing).toContain("an applying-for/position mention");
+  });
+
+  it("rejects a recipe the same way", async () => {
+    const recipe = "Preheat the oven to 180 degrees Celsius. Mix the flour, sugar, and eggs in a large bowl until smooth. Pour the batter into a greased pan and bake for forty minutes. Let it cool before serving with cream or fresh fruit on top. Store leftovers in an airtight container for up to three days at room temperature.";
+    const intake = await intakeLetterFile({ bytes: Buffer.from(recipe, "utf8"), fileName: "recipe.txt", fileCount: 1 });
+    expect(intake.ok).toBe(false);
+    if (intake.ok) return;
+    expect(intake.code).toBe("not_letter");
+  });
+
+  it("a plain but real letter with no 'Dear' still passes (low signal floor)", async () => {
+    const plain = "Hello Ms. Reyes — I am applying for the Software QA Analyst position at your company. I have completed a full-cycle manual QA internship where I authored and tracked over sixty defect reports, ran regression suites against two releases, and presented findings to the development team in weekly sessions. My coursework covered software testing fundamentals, version control with Git, and SQL querying. I would welcome the chance to discuss how my testing experience fits your team. Sincerely, Paolo Mendoza";
+    const intake = await intakeLetterFile({ bytes: Buffer.from(plain, "utf8"), fileName: "no-dear.txt", fileCount: 1 });
+    expect(intake.ok).toBe(true);
+  });
+
+  it("the canon demo letter still clears the gate", async () => {
+    const raw = readFileSync(FIX("cover-letter-qa.txt"), "utf8");
+    const intake = await intakeLetterFile({ bytes: Buffer.from(raw, "utf8"), fileName: "cover-letter-qa.txt", fileCount: 1 });
+    expect(intake.ok).toBe(true);
+  });
+});
+
+describe("the letter route's not_letter relay (2026-11-04 feedback round)", () => {
+  it("a rejected essay carries the code, the detail and the missing inventory", async () => {
+    const essay = "Chapter one. It was the best of times, it was the worst of times. In those days the land was ruled by reason and the people by custom, and every family kept to its own affairs. The seasons turned and the harvest was measured against the years before, and few questioned how things had always been done until the great change came.";
+    const intake = await intakeLetterFile({ bytes: Buffer.from(essay, "utf8"), fileName: "chapter-one.txt", fileCount: 1 });
+    expect(intake).toMatchObject({
+      ok: false,
+      code: "not_letter",
+      detail: "This doesn't read as a cover letter.",
+    });
+    if (!intake.ok) {
+      expect(intake.missing).toEqual([
+        "a salutation or letter-style opener",
+        "an applying-for/position mention",
+        "a closing or sign-off line",
+      ]);
+    }
+  });
+});

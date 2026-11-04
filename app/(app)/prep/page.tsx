@@ -26,8 +26,9 @@ export const metadata: Metadata = {
  * is laid out"; second recut the same day: every section its OWN card).
  * The page reads, top to bottom:
  *
- *   1. NAMED BAND — Prep + target on the left, application readiness /15 as
- *      the composite on the right (the slot Dashboard gives 36/100).
+ *   1. NAMED BAND — Prep + target on the left, the readiness ring /15 on
+ *      the right (the slot Dashboard gives 36/100; ring register, F1
+ *      2026-11-04 — the My Plan plan-ring geometry).
  *   2. CHANNEL CARDS — Resume · Letter · Presence as one KPI card each
  *      (Dashboard `.kpis` geometry): name → fraction → 4px honest bar →
  *      wash chip → one-line receipt.
@@ -71,16 +72,25 @@ function ChannelCard({
   part,
   notRun,
   note,
+  tone,
+  icon,
 }: {
   name: string;
   part: PartView;
   notRun: string;
   note: string;
+  /** the wash family — Dashboard's three-tone kicon register (2026-11-04) */
+  tone: "blue" | "green" | "amber";
+  icon: ReactNode;
 }) {
   const full = part.measured && part.earned === part.max;
   const pct = (n: number) => `${Math.round((n / part.max) * 100)}%`;
   return (
-    <div className="prep-kpi">
+    <div className={`prep-kpi k-${tone}`}>
+      {/* F4 (2026-11-04): the kicon wash disc — Dashboard's imagery register */}
+      <span className="kicon" aria-hidden="true">
+        {icon}
+      </span>
       <span className="k-name">{name}</span>
       <span className={`k-score num${part.measured ? "" : " bquiet"}`}>
         {part.measured ? (
@@ -560,10 +570,18 @@ export default async function PrepPage() {
     letterFirstRun
   );
 
+  /* the band ring figure — earned AR points (null when nothing measured;
+     "—" is the honest unmeasured figure) */
+  const readinessAr = score?.ar ?? null;
+  /* the ring's arc: null/0 readiness renders NO arc at all — a zero-length
+     dash reads as a round-cap dot with the register's linecap; never a
+     painted zero (2026-11-04 review finding) */
+  const readinessFr = readinessAr && readinessAr > 0 ? readinessAr / WEIGHTS.ar : 0;
+
   return (
     <div className="v7prep prep-surface">
-      {/* named band — the white dashboard register. The composite slot that
-          Dashboard gives 36/100 carries application readiness here. */}
+      {/* named band — the white dashboard register. The readiness ring that
+          My Plan rides carries application readiness here. */}
       <header className="band">
         <div className="bandrow">
           <div className="who">
@@ -574,12 +592,36 @@ export default async function PrepPage() {
               <p className="m">A format &amp; evidence screen for your resume and cover letter.</p>
             )}
           </div>
-          <div className="composite-wrap prep-readiness">
-            <div className="composite">
-              <span className="score-big num">{score?.ar ?? "—"}</span>
-              {score ? <span className="c-of">/{WEIGHTS.ar}</span> : null}
-            </div>
-            <div className="ratemsg">application readiness</div>
+          {/* F1 (2026-11-04): the band's visual — the readiness ring, My
+              Plan's plan-ring register. Same figure the composite read:
+              ar / WEIGHTS.ar; no career or nothing measured (ar null) still
+              paints "—" and NO arc — never a faked fraction. */}
+          <div
+            className="readring"
+            role="img"
+            aria-label={
+              readinessAr !== null
+                ? `${readinessAr} of ${WEIGHTS.ar} application-readiness points`
+                : "Application readiness — not yet measured"
+            }
+          >
+            <svg viewBox="0 0 130 130" aria-hidden="true">
+              <circle className="readring-track" cx="65" cy="65" r="56" strokeWidth="9" />
+              {readinessFr > 0 && (
+                <circle
+                  className="readring-arc"
+                  cx="65"
+                  cy="65"
+                  r="56"
+                  strokeWidth="9"
+                  strokeDasharray={`${Math.round(readinessFr * 3519) / 10} 351.9`}
+                />
+              )}
+            </svg>
+            <span className="readring-mid">
+              <b className="num">{readinessAr !== null ? `${readinessAr}/${WEIGHTS.ar}` : "—"}</b>
+              <small>application readiness</small>
+            </span>
           </div>
         </div>
       </header>
@@ -600,9 +642,46 @@ export default async function PrepPage() {
         <>
           {/* one card per channel (R3) — the Dashboard KPI grid */}
           <section className="prep-kpis" aria-label="Prep channels">
-            <ChannelCard name="Resume" part={parts.resume} notRun="NOT YET RUN" note={resumeNote} />
-            <ChannelCard name="Letter" part={parts.letter} notRun="NOT YET CHECKED" note={letterNote} />
-            <ChannelCard name="Presence" part={parts.presence} notRun="NOT DECLARED" note={presenceNote} />
+            <ChannelCard
+              name="Resume"
+              part={parts.resume}
+              notRun="NOT YET RUN"
+              note={resumeNote}
+              tone="blue"
+              icon={
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <path d="M14 2v6h6" />
+                  <path d="M9 13h6M9 17h4" />
+                </svg>
+              }
+            />
+            <ChannelCard
+              name="Letter"
+              part={parts.letter}
+              notRun="NOT YET CHECKED"
+              note={letterNote}
+              tone="green"
+              icon={
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="M3 7l9 6 9-6" />
+                </svg>
+              }
+            />
+            <ChannelCard
+              name="Presence"
+              part={parts.presence}
+              notRun="NOT DECLARED"
+              note={presenceNote}
+              tone="amber"
+              icon={
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 21c0-4.2 3.6-6.5 8-6.5s8 2.3 8 6.5" />
+                </svg>
+              }
+            />
           </section>
 
           <PrepTabs panels={{ resume: resumePanel, letter: letterPanel }} />

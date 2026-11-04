@@ -115,6 +115,12 @@ export default function PathwayTabs({
     ? (walk!.nodes.map((n, i) => ({ n, i })).find(({ n }) => n.state === "open") ?? null)
     : null;
 
+  /* the plan-ring's arc: a 0-closed walk renders NO arc at all — a
+     zero-length dash reads as a round-cap dot with the register's linecap;
+     never a painted zero (2026-11-04 review finding, shared with the
+     Prep readiness ring) */
+  const closedFr = showWalk && walk!.closed > 0 ? walk!.closed / walk!.total : 0;
+
   return (
     <div className="v7plan">
       {/* Take 3 header (user ruling 2026-11-04): ONE white card — the
@@ -133,14 +139,16 @@ export default function PathwayTabs({
           >
             <svg viewBox="0 0 130 130" aria-hidden="true">
               <circle className="plan-ring-track" cx="65" cy="65" r="56" strokeWidth="9" />
-              <circle
-                className="plan-ring-arc"
-                cx="65"
-                cy="65"
-                r="56"
-                strokeWidth="9"
-                strokeDasharray={`${Math.round((walk!.closed / walk!.total) * 3519) / 10} 351.9`}
-              />
+              {closedFr > 0 && (
+                <circle
+                  className="plan-ring-arc"
+                  cx="65"
+                  cy="65"
+                  r="56"
+                  strokeWidth="9"
+                  strokeDasharray={`${Math.round(closedFr * 3519) / 10} 351.9`}
+                />
+              )}
             </svg>
             <span className="plan-ring-mid num lead-mono">
               <b>

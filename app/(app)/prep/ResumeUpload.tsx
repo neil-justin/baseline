@@ -15,6 +15,10 @@ import { useRef, useState } from "react";
  * paste box, nothing authored INSIDE the system (hard fence).
  */
 
+/** the simulated analyze beat (F3, user-ruled 2026-11-04): a deliberate
+ * ~900 ms floor runs beside the fetch — a fast parse still reads as work */
+const ANALYZE_MIN_MS = 900;
+
 const REJECT_COPY: Record<string, string> = {
   bad_form: "The upload didn't arrive complete — pick the file again.",
   unauthorized: "Your session ended — sign in again and re-upload.",
@@ -45,7 +49,10 @@ export default function ResumeUpload({ slim = false }: { slim?: boolean }) {
     setBusy(true);
     setErr(null);
     try {
-      const res = await fetch("/api/resume/diagnose", { method: "POST", body: form });
+      const [res] = await Promise.all([
+        fetch("/api/resume/diagnose", { method: "POST", body: form }),
+        new Promise((resolve) => setTimeout(resolve, ANALYZE_MIN_MS)),
+      ]);
       if (res.ok) {
         window.location.reload(); // the server page re-renders the stored run
       } else {
@@ -66,7 +73,7 @@ export default function ResumeUpload({ slim = false }: { slim?: boolean }) {
       <div
         role="button"
         tabIndex={busy ? -1 : 0}
-        className={`dz-zone${slim ? " dz-slim" : ""}${drag ? " dz-over" : ""}`}
+        className={`dz-zone${slim ? " dz-slim" : ""}${drag ? " dz-over" : ""}${busy ? " dz-analyzing" : ""}`}
         onClick={() => !busy && fileInput.current?.click()}
         onKeyDown={(e) => {
           if (!busy && (e.key === "Enter" || e.key === " ")) {
@@ -87,7 +94,13 @@ export default function ResumeUpload({ slim = false }: { slim?: boolean }) {
         aria-label="Drop your resume here (PDF or DOCX) or click to browse — the checker runs on drop"
       >
         {busy ? (
-          <span className="dz-busy">Reading the file…</span>
+          <span className="dz-busy dz-analyzing" role="status" aria-live="polite">
+            <svg className="dz-spin" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
+              <circle cx="12" cy="12" r="9" opacity="0.25" />
+              <path d="M21 12a9 9 0 0 0-9-9" />
+            </svg>
+            Analyzing…
+          </span>
         ) : err ? (
           <span className="rs-err dz-err" role="status" aria-live="polite">
             {err}
