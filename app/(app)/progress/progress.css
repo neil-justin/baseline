@@ -649,3 +649,149 @@
 @media (prefers-reduced-motion: reduce) {
   .v7prog .rubric-mini .seg i { transform: scaleX(var(--earn, 0)) !important; transition: none !important; }
 }
+
+/* ============================================================
+   DNA v9 sweep — progress (2026-11-04, rides the shell's v9
+   token block). Cards + the check panel borderless at the 16px
+   rung; inner trays and feedback bands at the 12px rung; the
+   check options read as tonal rounded rects (selection = 2px
+   primary ring); chips 8px; buttons pill (ghost → tonal); the
+   goal-type segmented goes M3 pills. Type rides the v9 scale;
+   v9.1 motion (card lift, form/overlay mounts, press scale)
+   gated by prefers-reduced-motion. Hooks byte-untouched.
+   ============================================================ */
+
+/* cards: borderless at the 16px rung */
+.v7prog .card,
+.v7prog .check-panel {
+  border: 0;
+  border-radius: 16px;
+}
+/* inner trays + feedback bands at the 12px rung */
+.v7prog .goal-suggest {
+  border: 0;
+  border-radius: 12px;
+  background: var(--v-grey-wash);
+}
+.v7prog .okband { border-radius: 12px; }
+.v7prog .g-event.okband,
+.v7prog .r-band {
+  border: 0;
+  border-radius: 12px;
+}
+
+/* the check options: tonal rounded rects, selection = the 2px primary ring */
+.v7prog .q-opts .opt {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--v-grey-wash);
+}
+.v7prog .q-opts .opt:hover {
+  border-color: transparent;
+  background: #eef3fc;
+}
+.v7prog .q-opts .opt[aria-pressed="true"] {
+  border-color: transparent;
+  background: #eef3fc;
+  box-shadow: inset 0 0 0 2px var(--v-blue);
+}
+
+/* hierarchy: card + overlay heads go Google Sans */
+.v7prog .card .head .h-title,
+.v7prog .r-head {
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* buttons: the pill register, state tints not baked shadows */
+.v7prog .btn {
+  border-radius: 999px;
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+  padding: 9px 22px;
+  font-size: 14px;
+}
+.v7prog .btn-primary { box-shadow: none; }
+.v7prog .btn-primary:hover { box-shadow: none; }
+.v7prog .btn-ghost {
+  background: var(--v-blue-wash);
+  border: 0;
+  color: #041e49;
+}
+.v7prog .btn-ghost:hover { border-color: transparent; background: #c5d9f8; }
+
+/* the goal-type segmented → M3 pills */
+.v7prog .choice { border: 0; border-radius: 999px; }
+.v7prog .choice button { border-radius: 999px; font-size: 12.5px; }
+.v7prog .choice button[aria-pressed="true"] { border-color: transparent; }
+
+/* chips at the 8px rung */
+.v7prog .chip { border-radius: 8px; font-size: 12px; }
+
+/* ---------- v9 type scale bump (see ../v7.css #7) ---------- */
+.v7prog { font: 400 15px/1.55 Roboto, system-ui, sans-serif; }
+.v7prog .band-id { font-size: 14px; }
+.v7prog .prog-sub { font-size: 14.5px; }
+.v7prog .prog-ctx { font-size: 14px; }
+.v7prog .readout-head .label { font-size: 11.5px; }
+.v7prog .readout-sub { font-size: 12.5px; }
+.v7prog .readout-score > span:first-child,
+.v7prog .readout-score .countwrap { font-size: 52px; }
+.v7prog .readout-score small { font-size: 14px; }
+.v7prog .tickline { font-size: 13px; }
+.v7prog .readout-fit { font-size: 13px; }
+.v7prog .card .head .h-title { font-size: 16px; }
+.v7prog .card .head span { font-size: 12.5px; }
+.v7prog .card .head .label { font-size: 11.5px; }
+.v7prog .card .foot { font-size: 12.5px; }
+.v7prog .feed-cols span { font-size: 11.5px; }
+.v7prog .f-title { font-size: 14.5px; }
+.v7prog .f-meta { font-size: 12.5px; }
+.v7prog .f-closed { font-size: 13.5px; }
+.v7prog .f-pass { font-size: 13px; }
+.v7prog .f-lock { font-size: 12px; }
+.v7prog .f-when { font-size: 12.5px; }
+.v7prog .feed-tail { font-size: 14px; }
+.v7prog .g-name,
+.v7prog .g-title { font-size: 14.5px; }
+.v7prog .c-gap-note { font-size: 12.5px; }
+.v7prog .open-foot { font-size: 13.5px; }
+.v7prog .g-status { font-size: 14px; }
+.v7prog .goal-suggest h3 { font-size: 15px; }
+.v7prog .goal-suggest .n-why { font-size: 14px; }
+.v7prog .goal-suggest .n-target { font-size: 13px; }
+.v7prog .g-input,
+.v7prog .ng-form input[type="text"],
+.v7prog .profile-input { font-size: 14px; }
+.v7prog .quiet-toggle { font-size: 13px; }
+.v7prog .link-quiet,
+.v7prog .link-sub { font-size: 14px; }
+.v7prog .btn-sm { font-size: 13px; }
+.v7prog .okband { font-size: 12.5px; }
+.v7prog .r-head { font-size: 24px; }
+.v7prog .r-note { font-size: 14.5px; }
+.v7prog .q-stem { font-size: 17px; }
+.v7prog .q-opts .opt { font-size: 14.5px; }
+.v7prog .check-top .q-skill-tag { font-size: 11.5px; }
+.v7prog .check-top .ob-back { font-size: 13px; }
+.v7prog .r-line { font-size: 14px; }
+.v7prog .r-band { font-size: 13.5px; }
+
+/* ---------- v9.1 motion (subtle, M3, reduced-motion safe) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .v7prog .card {
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .v7prog .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  }
+  .v7prog .btn {
+    transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease,
+      transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .v7prog .btn:active { transform: scale(0.97); }
+  /* the new-goal entry + the check panel: mount from -4px (drawer register) */
+  .v7prog .ng-form,
+  .v7prog .check-panel { animation: prog-drawer-in 0.18s cubic-bezier(0.16, 1, 0.3, 1); }
+}
+@keyframes prog-drawer-in { from { opacity: 0; transform: translateY(-4px); } }
