@@ -505,3 +505,93 @@
   .v7ob .scale { justify-content: flex-start; width: 100%; }
   .v7ob .readout-score { font-size: 38px; }
 }
+
+/* ============================================================
+   DNA v9 sweep — onboarding (2026-11-04, rides the shell's v9
+   token block in ../v7.css). Shapes: cards borderless at the 16px
+   rung; controls go full pill; selectable options read as tonal
+   rounded rects (no hairlines); selection = 2px primary ring on
+   the secondary-container tint (selection wash is sanctioned).
+   Fonts: hierarchy carries Google Sans; numerals stay Roboto
+   tabular (The Tabular Rule). Hooks byte-untouched.
+   ============================================================ */
+
+/* cards + band: borderless tonal surfaces */
+.v7ob .panel,
+.v7ob .card,
+.v7ob .nextcard,
+.v7ob .ob-band {
+  border: 0;
+  border-radius: 16px;
+}
+
+/* hierarchy: page head + band name in Google Sans */
+.v7ob .screen-head h1 { font-family: "Google Sans", Roboto, system-ui, sans-serif; letter-spacing: -0.01em; }
+.v7ob .ob-band-name { font-family: "Google Sans", Roboto, system-ui, sans-serif; }
+
+/* buttons: the pill register, state tints not baked shadows */
+.v7ob .btn {
+  border-radius: 999px;
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+  padding: 10px 22px;
+}
+.v7ob .btn-primary { box-shadow: none; }
+.v7ob .btn-hero { padding: 13px 26px; font-size: 14px; }
+/* the ghost register becomes the M3 tonal pill */
+.v7ob .btn-ghost {
+  background: var(--v-blue-wash);
+  border: 0;
+  color: #041e49;
+}
+.v7ob .btn-ghost:hover:not(:disabled) {
+  background: #c5d9f8;
+  border-color: transparent;
+}
+
+/* selectable cards: hover = tonal tint, selected = 2px primary ring */
+.v7ob .strand-card:hover,
+.v7ob .card:hover { border-color: transparent; background: #eef3fc; }
+.v7ob .strand-card.sel,
+.v7ob .card.sel {
+  border-color: transparent;
+  box-shadow: inset 0 0 0 2px var(--v-blue), var(--v-shadow);
+  background: #eef3fc;
+}
+
+/* option rows: tonal rounded rects (transparent border preserves size) */
+.v7ob .q-opts .opt {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--v-grey-wash);
+}
+.v7ob .q-opts .opt:hover { border-color: transparent; background: #e8eaed; }
+
+/* the self-report choice + the instrument scale: M3 segmented pills */
+.v7ob .choice {
+  border: 1px solid transparent;
+  border-radius: 999px;
+}
+.v7ob .choice button { border-radius: 999px; }
+.v7ob .choice button[aria-pressed="true"] { border-color: transparent; }
+.v7ob .scale button {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--v-grey-wash);
+}
+.v7ob .scale button:hover { border-color: transparent; background: #e8eaed; color: var(--v-ink); }
+.v7ob .scale button[aria-pressed="true"] {
+  border-color: transparent;
+  background: var(--v-blue-wash);
+  color: var(--v-blue-deep);
+}
+
+/* chips at the 8px rung; band-scale feedback at 12px */
+.v7ob .chip { border-radius: 8px; }
+.v7ob .q-band,
+.v7ob .okband { border-radius: 12px; }
+
+/* the 64px Material bottom nav owns the bottom edge — page content
+   needs clearance or the CTA clips under it (bird's-eye catch) */
+@media (max-width: 720px) {
+  .v7ob { padding-bottom: 96px; }
+}

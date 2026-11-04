@@ -32,6 +32,15 @@ for (const [w, h, tag] of [
     reducedMotion: "reduce",
   });
   const page = await ctx.newPage();
+  if (process.env.CAPTURE_AUTH) {
+    // signed-in mode: the real /signin form (hooks: #f-email / #f-pass).
+    // Creds ride the env the other capture scripts already use.
+    await page.goto(`${base}/signin`, { waitUntil: "networkidle" });
+    await page.fill("#f-email", process.env.E2E_NEIL_EMAIL ?? "");
+    await page.fill("#f-pass", process.env.E2E_NEIL_PASSWORD ?? "");
+    await page.click("#signin-form button[type=submit]");
+    await page.waitForURL(/dashboard|onboarding|admin/, { timeout: 20000 });
+  }
   await page.goto(url, { waitUntil: "networkidle" });
   if (hash) {
     // the realm mounts on hashchange too; force-parse for deep links

@@ -590,3 +590,71 @@ body:has(.v7) { background: #f8f9fa; }
   .v7 .seglabels { flex-wrap: wrap; row-gap: 6px; }
   .v7 .seglabels span { flex: 1 1 40%; text-align: left; }
 }
+
+/* ============================================================
+   DNA v9 amendments — the M3 fidelity upgrade (2026-11-04)
+   Appended per DESIGN.md v9 (user-ruled; see the amendment for
+   the rule-by-rule supersessions). This block rides LAST so its
+   overrides win the cascade: tokens recolor every surface at
+   once; shape/chrome overrides retire the hairline card borders
+   and pill the shared controls. Per-surface sweeps (starting
+   with onboarding) add their own v9 blocks in their files.
+   ============================================================ */
+
+@font-face {
+  font-family: "Google Sans";
+  src: url("/fonts/google-sans/google-sans-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Google Sans Text";
+  src: url("/fonts/google-sans/google-sans-text-400-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Google Sans Text";
+  src: url("/fonts/google-sans/google-sans-text-500-latin.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: block;
+}
+
+/* the v9 token deltas — every surface inherits these */
+.v7 {
+  --v-blue: #0b57d0;
+  --v-blue-deep: #0842a0;
+  --v-blue-wash: #d3e3fd;
+  --v-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+}
+
+/* chrome: hairline borders retire (Surface-Tone Rule); the white
+   chrome reads against the ground by tone, not by stroke */
+.v7-head { border-bottom: 0; }
+.v7-side { border-right: 0; }
+.v7 .rail { border: 0; }
+
+/* hierarchy carriers go Google Sans (The Tabular Rule keeps every
+   NUMERAL in Roboto — data cells, readouts, and bars are untouched) */
+.brand { font-family: "Google Sans", Roboto, system-ui, sans-serif; }
+.v7 .band .who .t { font-family: "Google Sans", Roboto, system-ui, sans-serif; letter-spacing: -0.01em; }
+.v7 .cta { font-family: "Google Sans", Roboto, system-ui, sans-serif; }
+
+/* the band: borderless card at the 16px rung */
+.v7 .band { border: 0; border-radius: 16px; }
+
+/* the ONE band CTA: the v9 pill register, state tints not baked shadows */
+.v7 .cta {
+  border-radius: 999px;
+  padding: 0 24px;
+  box-shadow: none;
+}
+.v7 .cta:hover { box-shadow: none; }
+
+/* the bottom nav: borderless white surface */
+@media (max-width: 720px) {
+  .v7 .rail { box-shadow: var(--v-shadow); }
+}
