@@ -11087,6 +11087,27 @@ export const RESOURCES: Resource[] = [
   // research & briefing support, administrative policy setup, representing
   // the executive, supervision/training of clerical staff, operating-
   // practice review. Coverage: 12/17 vetted.
+  // Wave E final hunt (fetched LIVE fresh 2026-11-04, user-delegated): three
+  // taught fills land — Coursera's "Report Findings Effectively" (Enroll for
+  // free, 2 modules/2 h; the four-section executive-report framework +
+  // two-page executive-summary compile + translate-findings-into-executive-
+  // language leg → Research & briefing support), Alison's "Introduction to
+  // Supervision" per-role dup (Start Course Now, CPD; supervision
+  // responsibilities/delegation/coaching-vs-mentoring outcomes → Supervision
+  // & training of clerical staff) and Alison's "Process Improvement in
+  // Practice" (Start Course Now, CPD; identify-broken-process/select-best-
+  // process/10-step methodology outcomes → Operating-practice review). Two
+  // honest reds stay, adjudicated Wave E 2026-11-04 (one honest attempt
+  // each; the batch-4 search lands confirm):
+  //   · Administrative policy setup & interpretation — the open field prints
+  //     office-procedures-manual TEMPLATES and guide PDFs (no course page
+  //     teaching the explain/write-the-rules craft); policy-manual ruling
+  //     pages are firm-form templates, not taught pages. Adviser-owned.
+  //   · Representing executives / meeting on their behalf — the closest
+  //     taught pages (EA-skills, minute-taking) cover scheduling/minutes,
+  //     never the attend-for-the-executive-and-report-back duty. Adviser-
+  //     owned.
+  // Coverage: 15/17 vetted (2 adjudicated-only reds).
   {
     id: "res-execsec-work-smarter",
     title: "Work Smarter, Not Harder: Time Management for Personal & Professional Productivity",
@@ -11257,11 +11278,14 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // per-app official training hub (search/draft/upkeep tooling)
     // audit (2026-11-03, batch 4): fetched LIVE (200, hub title) → landing.
+    // pick flag retired (Wave E final hunt 2026-11-04): the Coursera
+    // "Report Findings Effectively" fill now wins the research & briefing
+    // cell (fallbackSort provider A–Z); the Workspace hub keeps the pool
+    // provenance only (landing rows never satisfy the gate).
     url: "https://support.google.com/a/users",
     durationHours: 2,
     skillsAddressed: ["Research & briefing support for executives", "Travel arrangements"],
     careerId: "execsec",
-    pick: true,
     form: "landing",
     access: "direct",
   },
@@ -11505,6 +11529,94 @@ export const RESOURCES: Resource[] = [
     },
     // learn draft — user review pending
   },
+  {
+    id: "res-execsec-coursera-report",
+    title: "Report Findings Effectively (Coursera)",
+    provider: "Coursera",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E final-hunt fill, user-delegated):
+    // "Enroll for free", 2 modules / 2 h, beginner — printed outcomes teach
+    // transforming gathered material into a clear two-page executive report,
+    // the four-section briefing framework (Objective · Methodology · Findings
+    // · Actions) that builds credibility with decision-makers, writing
+    // recommendations with owners and timelines, translating technical
+    // findings into executive-friendly language, and diagnosing a poorly
+    // structured report plus defending the structure to a skeptical VP.
+    // The shape-information-into-briefing-papers craft (the dig-up leg rides
+    // the research routine the report's Methodology section anchors).
+    // ₱ paid tier: shareable certificate (audit/financial-aid free). The
+    // research & briefing winner (sole vetted claim; the Google AI educator
+    // category and Workspace hub stay landing fail-closed pool provenance).
+    url: "https://www.coursera.org/learn/report-findings-effectively",
+    durationHours: 2,
+    skillsAddressed: ["Research & briefing support for executives"],
+    careerId: "execsec",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Research & briefing support for executives":
+        "The course teaches compiling gathered information into a two-page executive report on the four-section briefing framework — Objective, Methodology, Findings, Actions — so the recommendation reaches decision-makers in a form they can act on.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-execsec-alison-supervision",
+    title: "Introduction to Supervision (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // per-role dup of the Wave-E-verified res-audit-alison-supervision row
+    // (re-verified LIVE fresh 2026-11-04, user-delegated — Wave E rules
+    // fresh fetches): "Start Course Now", 1.5-3 h, CPD-accredited, beginner
+    // level — printed outcomes define supervision and the responsibilities
+    // of a supervisor, drill delegating successfully, list ways to motivate
+    // subordinates, establish why trust matters, and teach the
+    // coaching-vs-mentoring distinction alongside leadership principles.
+    // The onboard-and-guide-the-junior-clerks craft in taught form.
+    // Certificate optional (paid).
+    url: "https://alison.com/course/introduction-to-supervision",
+    durationHours: 3,
+    skillsAddressed: ["Supervision & training of clerical staff"],
+    careerId: "execsec",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Supervision & training of clerical staff":
+        "The course teaches supervising a junior team — the supervisor's responsibilities, delegating tasks successfully, motivating and building trust with subordinates, and the coaching-vs-mentoring split that shapes how a new clerk gets trained.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-execsec-alison-process",
+    title: "Process Improvement in Practice (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E final-hunt fill, user-delegated):
+    // "Start Course Now", 1.5-3 h (Contains Video), CPD-accredited,
+    // beginner level — printed outcomes teach identifying a broken process
+    // in the workplace, selecting the best process for improvement using
+    // mathematical techniques, process mapping at macro/functional/task
+    // levels, and applying the Ten-Step Process Improvement Methodology in a
+    // real-life case study — the spot-the-slow-spots-and-propose-fixes
+    // review craft the row prints. Certificate optional (paid). The
+    // operating-practice winner (sole claim).
+    url: "https://alison.com/course/process-improvement-in-practice",
+    durationHours: 2,
+    skillsAddressed: ["Operating-practice review"],
+    careerId: "execsec",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Operating-practice review":
+        "The course teaches the 10-step improvement review — mapping the workflow to find where it breaks down, picking the right process to fix with selection math, and proposing the redesign — the find-the-slow-spots-and-fix-them craft.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
   // ── records (E3) — rebuilt to the blessed records.md pool (per-row linkage;
   // purchase books ride PURCHASE_BOOKS; the pre-blessing NARA lessons retire) ──
   // Wave B audit (2026-11-03, batch 4): access/form per-row. The UK National
@@ -11522,6 +11634,15 @@ export const RESOURCES: Resource[] = [
   // the reprographics machine craft and the front-office record/database
   // upkeep row (the hub claims grade landing fail-closed). Coverage: 9/11
   // vetted.
+  // Wave E final hunt (fetched LIVE fresh 2026-11-04, user-delegated): both
+  // remaining cells fill — the Microsoft Windows-scanner walkthrough arrives
+  // as a per-role dup (re-verified LIVE fresh; the reproduce-and-view/send
+  // flow → the reprographics cell's digital-reproduction form, the clerk
+  // photocopy precedent) and Alison's "Data Documentation and Record
+  // Keeping for Organisational Excellence" fills the upkeep cell (Start
+  // Course Now, CPD; storage/retrieval ordering, DBMS function, version-
+  // control outcomes; the contact-record specifics ride the same records-
+  // upkeep family). Coverage: 11/11 vetted.
   {
     id: "res-records-uk-archives",
     title: "The National Archives (UK) — Information management",
@@ -11590,11 +11711,14 @@ export const RESOURCES: Resource[] = [
     // shared-Drive record maintenance hub
     // audit (2026-11-03, batch 4): fetched LIVE (200, hub title) → landing
     // (fail-closed). The database-upkeep cell rides red on it.
+    // pick flag retired (Wave E final hunt 2026-11-04): the Alison
+    // Data-Documentation fill now wins the upkeep cell (fallbackSort
+    // provider A–Z); the hub keeps the pool provenance only (landing rows
+    // never satisfy the gate).
     url: "https://support.google.com/a/users",
     durationHours: 2,
     skillsAddressed: ["Filing log / records of materials filed & removed", "Front-office record & database upkeep"],
     careerId: "records",
-    pick: true,
     form: "landing",
     access: "direct",
   },
@@ -11792,6 +11916,64 @@ export const RESOURCES: Resource[] = [
         "The meetings/calendars module walks planning and organizing meetings and calendar entries — the scheduling craft.",
     },
     // learn draft — user review pending
+  },
+  {
+    id: "res-records-ms-scanner",
+    title: "Install and use a scanner in Windows (Microsoft Support how-to)",
+    provider: "Microsoft Support",
+    type: "doc",
+    cost: "free",
+    // per-role dup of the Wave-E-verified res-clerk-ms-365 row (re-verified
+    // LIVE fresh 2026-11-04, user-delegated — Wave E rules fresh fetches):
+    // 200 on the deep walkthrough — install the scanner (local and network
+    // discovery), flatbed/feeder placement rules, the Windows Scan app's
+    // numbered steps (source/file-type/save location), then view, edit or
+    // send the saved scan. Scanning is the copy machine's workflow side —
+    // the reproduced-image leg of reprographics (the encode import-how-to
+    // and clerk photocopy precedents); the photocopier/fax hardware craft
+    // rides the same machine-operation family (scoped in-row).
+    url: "https://support.microsoft.com/en-us/windows/hardware/printer/install-and-use-a-scanner-in-windows",
+    durationHours: 2,
+    skillsAddressed: ["Reprographics: photocopy, scan, fax"],
+    careerId: "records",
+    pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Reprographics: photocopy, scan, fax":
+        "The walkthrough teaches running a reproduction end to end — install the scanner, place the document flatbed/feeder-correct, run the Windows Scan app's numbered steps, then view and send the saved copy — the reproduce-and-share workflow (the photocopier/fax hardware legs ride the same machine-operation family).",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-records-alison-doc-records",
+    title: "Data Documentation and Record Keeping for Organisational Excellence (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E final-hunt fill, user-delegated):
+    // "Start Course Now", 1.5-3 h (Contains Video), CPD-accredited,
+    // advanced level — printed outcomes teach the value of data
+    // documentation, ordering data efficiently for optimal storage and
+    // retrieval, the function and importance of database management
+    // systems, organised vs unstructured storage, and applying version
+    // control to keep data files current — the keep-the-records-and-
+    // database-current upkeep craft (the contact-record specifics ride the
+    // same records-upkeep family, scoped in-row). Certificate optional
+    // (paid). The upkeep winner (the Workspace hub/catalog claims stay
+    // landing fail-closed in the pool).
+    url: "https://alison.com/course/data-documentation-and-record-keeping-for-organisational-excellence",
+    durationHours: 2,
+    skillsAddressed: ["Front-office record & database upkeep"],
+    careerId: "records",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Front-office record & database upkeep":
+        "The course teaches keeping the records-and-database side current — ordering data for storage and retrieval, the database-management-systems craft, organised-vs-unstructured storage, and version control that keeps files up to date.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
   },
 
 ];

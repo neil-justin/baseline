@@ -980,10 +980,10 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
 });
 
 describe("§6.1 re-map census (final mapping state) + canon rails", () => {
-  it("catalog intact: no rows deleted (437 → 473 → 483 → 496 → 503 → 514 → 516 → 522 → 528, Wave B/Wave E fills all additive); 670 ADDR entries", () => {
-    expect(RESOURCES).toHaveLength(528); // 522 + 6 Wave E six-career fills (credit mortgage-lending + credit alison-ar dup · teller cash-handling dups ×2 · audit alison-supervision dup · encode typing-10key)
+  it("catalog intact: no rows deleted (437 → 473 → 483 → 496 → 503 → 514 → 516 → 522 → 528 → 533, Wave B/Wave E fills all additive); 675 ADDR entries", () => {
+    expect(RESOURCES).toHaveLength(533); // 528 + 5 Wave E final-hunt fills (execsec Coursera-Report + execsec Alison-Supervision dup + execsec Alison-Process-Improvement · records MS-scanner dup + records Alison-Data-Documentation)
     const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
-    expect(mappings).toBe(670); // 659 + 11 Wave E claims (9 new-row claims + the UIUC examine-records claim + the clerk scanner re-point claim)
+    expect(mappings).toBe(675); // 670 + 5 Wave E final-hunt claims (one per new row)
   });
 
   it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {
@@ -1032,8 +1032,11 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
     // examine-records/interview + senior-heavy supervision, clerk
     // photocopying (scanner re-point), encode operating-machines — the
     // ten remaining thin cells carry the adjudications listed in the commit
-    // body)
-    expect(thin).toHaveLength(26);
+    // body) → 23 (Wave E final-hunt fills: execsec research-briefing +
+    // supervision + operating-practice, records reprographics + database
+    // upkeep; the twenty-three remaining thin cells carry the adjudications
+    // listed in the commit body)
+    expect(thin).toHaveLength(23);
     // thin cells never get papered over: no pick flag, no invented row
     const thinPick = RESOURCES.filter((r) => r.pick && r.url === undefined);
     expect(thinPick).toEqual([]);
@@ -1044,7 +1047,6 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
     expect(RESOURCES.filter((r) => r.skillsAddressed.length === 0)).toHaveLength(74);
     // spot pins: the honest holes include these recorded ones
     expect(thin).toContain("sysadmin::IT Asset Management"); // gap-row only
-    expect(thin).toContain("execsec::Supervision & training of clerical staff");
   });
 });
 
@@ -1076,7 +1078,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
       }
     }
     const flags = RESOURCES.filter((r) => r.pick).map((r) => r.id);
-    expect(flags).toHaveLength(263); // 256 + 7 new fallbackSort winners (Wave E banking/office fills: credit mortgage-lending ×2 cells + credit alison-ar dup + teller alison-cash-handling (entry cell; the deposit cell stays with RA 8791 on hours and the teller bank-telling dup likewise loses the balance cell to RA 8791, so neither rides a flag) + audit uiuc (examine-records sole claim; loses the fraud cell to OpenStax still) + audit alison-supervision + clerk ms-365 (scanner re-point) + encode typing-10key)
+    expect(flags).toHaveLength(266); // 263 + 5 new fallbackSort winners (Wave E final-hunt fills: execsec Coursera-Report (research&briefing) + execsec Alison-Supervision dup (supervision) + execsec Alison-Process-Improvement (operating-practice) + records MS-scanner dup (reprographics) + records Alison-Data-Documentation (upkeep); the execsec and records Workspace-hub flags retired in the same pass — both rows lost their winning cell to the new fills and keep pool provenance only)
     expect(new Set(flags)).toEqual(winnerRows); // byte-match in BOTH directions
     expect(winnersBySkill.get("swd::Applications Development")).toBe("res-python-basics");
     // the canon money-shot stays flagged-adjacent: the qa fallback winner is a
