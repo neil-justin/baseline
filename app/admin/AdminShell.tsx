@@ -33,6 +33,8 @@ import AuditQueue from "./AuditQueue";
 import { AdminApprovalsSlot, AdminAccountsSlot } from "./slots";
 import AdminVeil from "./AdminVeil";
 import { adminLandingFor, adminTabsFor, type AdminTabId } from "./tabs";
+import Pager from "./Pager";
+import { pagesOf, slicePage } from "./pager-math";
 import "./admin-tabs.css";
 
 /* ---------- panes ---------- */
@@ -63,9 +65,12 @@ function CohortArt() {
   );
 }
 
-/** COHORT — the existing roster table, moved in whole (same grid classes,
- *  same row markup; the hooks stay verbatim). */
+/** COHORT — the existing roster table, paginated client-side per the
+ *  2026-11-04 spec: the full rows array is already shipped, so the
+ *  slice is local state only (10/page, Pager hidden while it fits).
+ *  Same grid classes, same row markup; the hooks stay verbatim. */
 function CohortTable({ rows }: { rows: LiveRow[] }) {
+  const [page, setPage] = useState(1);
   return (
     <section className="panel cohort-table" aria-label="Cohort roster">
       <div className="ct-head">
@@ -90,7 +95,7 @@ function CohortTable({ rows }: { rows: LiveRow[] }) {
           </tr>
         </thead>
         <tbody>
-          {rows.map((r) => (
+          {slicePage(rows, page).map((r) => (
             <StudentRow
               key={r.id}
               id={r.id}
@@ -107,6 +112,7 @@ function CohortTable({ rows }: { rows: LiveRow[] }) {
           ))}
         </tbody>
       </table>
+      <Pager page={page} pages={pagesOf(rows.length)} setPage={setPage} />
     </section>
   );
 }
