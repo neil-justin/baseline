@@ -326,7 +326,8 @@
    dense deck breathes.
    ============================================================ */
 
-.v7dash { max-width: 1200px; margin-inline: auto; }
+/* gutters only — the 1200px column cap was reverted same-day (user
+   ruling: they asked for imagery/color/spacing, not column caps) */
 .v7dash .kpi { padding: 16px 20px 18px; }
 .v7dash .card .head { padding: 16px 20px 12px; }
 .v7dash .foot { padding: 12px 20px 16px; }

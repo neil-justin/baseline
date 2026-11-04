@@ -765,11 +765,9 @@
 }
 
 /* ---------- rhythm round (2026-11-04) — the pathway lesson applied:
-   the careers surface rides ONE capped, centered column ---------- */
-.v7career {
-  max-width: 1000px;
-  margin-inline: auto;
-}
+   the careers surface rides ONE capped, centered column ----------
+   (reverted same day: the user wants imagery/color/spacing passes,
+   not column caps — the surface returns to full width) */
 
 /* ============================================================
    v9.1 fix round — careers (user feedback, 2026-11-04):
