@@ -663,10 +663,11 @@ export default function CareerClient({
                       </span>
                     </div>
 
-                    {/* role detail — the registry-fact strip (v7.3 ruling):
-                        what lives in the row, skill map counts live in the
-                        fit column — the drawer keeps the three catalog
-                        receipts only */}
+                    {/* role detail — the registry-fact strip (v7.3 ruling) plus
+                        the skills-in-common block (user ruling 2026-11-04):
+                        matched skills chip green, self-reported ride the
+                        hatch, and the full map summary states the rest —
+                        the fit column's count stays the headline truth */}
                     {openId === r.id && (
                       <div className="index-detail" id={`detail-${r.id}`}>
                         <div className="d-grid">
@@ -681,6 +682,31 @@ export default function CareerClient({
                           <div className="d-block">
                             <span className="label">JOB MARKET</span>
                             <p>{r.demand}</p>
+                          </div>
+                          <div className="d-block d-wide">
+                            <span className="label">
+                              {r.current ? "YOUR SKILLS ON THIS MAP" : "SKILLS IN COMMON"}
+                            </span>
+                            <p className="skill-chips">
+                              {r.x === 0 ? (
+                                <span className="skill-zero">
+                                  No demonstrated skills overlap yet — claims never
+                                  count alone.
+                                </span>
+                              ) : (
+                                r.confirmed.map((s) => (
+                                  <span className={`chip ${s.src === "checked" ? "c-blue" : "c-green"}`} key={s.name}>
+                                    {s.name}
+                                  </span>
+                                ))
+                              )}
+                              {r.selfReported.map((n) => (
+                                <span className="chip c-grey hatch-chip" key={n}>
+                                  {n}
+                                </span>
+                              ))}
+                            </p>
+                            <p className="skill-map-note num">{r.skillsSummary}</p>
                           </div>
                         </div>
                         {!r.current && (

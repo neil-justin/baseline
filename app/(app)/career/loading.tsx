@@ -69,9 +69,11 @@ export default function Loading() {
                 </span>
                 <span className="cell-fit">
                   <span className="skel" style={{ width: 46, height: 12 }} />
-                  <span className="mbar" aria-hidden="true">
-                    <i style={{ width: `${42 - r * 9}%` }} />
-                  </span>
+                  {/* the match bar renders as an EMPTY track in the skeleton —
+                      a filled blue bar would paint a fit fraction the engine
+                      never computed (the honesty law applies to loading
+                      states double) */}
+                  <span className="mbar" aria-hidden="true" />
                 </span>
                 <span className="cell-entry">
                   <span className="skel" style={{ width: 74, height: 12 }} />
