@@ -629,7 +629,13 @@
 .v7prep .dz-icon { color: var(--v-blue); display: block; }
 .v7prep .dz-head { font: 500 15px/1.35 Roboto, system-ui, sans-serif; color: var(--v-ink); }
 .v7prep .dz-sub { font: 400 12.5px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
-.v7prep .dz-busy { font: 400 13.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7prep .dz-busy {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
 .v7prep .dz-err { font: 400 12.5px/1.5 Roboto, system-ui, sans-serif; max-width: 64ch; }
 
 .v7prep .rs-upload .dz-err, .v7prep .cl-upload .dz-err { color: var(--v-amber-text); font-weight: 500; }
@@ -967,6 +973,30 @@
   /* the findings disclosure: content mounts from -4px (drawer register) */
   .v7prep .rs-disc[open] .checks-table,
   .v7prep .rs-disc[open] .rs-findings { animation: prep-drawer-in 0.18s cubic-bezier(0.16, 1, 0.3, 1); }
+  /* the analyzing beat: the zone breathes while the check runs */
+  .v7prep .dz-zone.dz-analyzing { animation: dz-pulse 1.4s ease-in-out infinite; }
+  .v7prep .dz-spin { animation: dz-rot 0.9s linear infinite; }
+  /* the landing: result cards fade-slide in, a ~40ms stagger */
+  .v7prep .prep-kpi,
+  .v7prep .prep-stack > .card { animation: prep-card-in 0.25s cubic-bezier(0.2, 0, 0, 1) backwards; }
+  .v7prep .prep-kpis .prep-kpi:nth-child(2),
+  .v7prep .prep-stack > .card:nth-child(2) { animation-delay: 40ms; }
+  .v7prep .prep-kpis .prep-kpi:nth-child(3),
+  .v7prep .prep-stack > .card:nth-child(3) { animation-delay: 80ms; }
+  .v7prep .prep-stack > .card:nth-child(4) { animation-delay: 120ms; }
+  .v7prep .prep-stack > .card:nth-child(5) { animation-delay: 160ms; }
+  .v7prep .prep-stack > .card:nth-child(6) { animation-delay: 200ms; }
+  .v7prep .prep-stack > .card:nth-child(7) { animation-delay: 240ms; }
+  .v7prep .prep-stack > .card:nth-child(n + 8) { animation-delay: 240ms; }
+  /* the rejection copy fades in under the same beat */
+  .v7prep .dz-err { animation: prep-fade-in 0.25s cubic-bezier(0.2, 0, 0, 1); }
 }
 @keyframes prep-panel-in { from { opacity: 0; transform: translateY(6px); } }
 @keyframes prep-drawer-in { from { opacity: 0; transform: translateY(-4px); } }
+@keyframes dz-pulse {
+  0%, 100% { border-color: var(--v-border); box-shadow: none; }
+  50% { border-color: var(--v-blue); box-shadow: 0 0 0 4px var(--v-blue-wash); }
+}
+@keyframes dz-rot { to { transform: rotate(360deg); } }
+@keyframes prep-card-in { from { opacity: 0; transform: translateY(5px); } }
+@keyframes prep-fade-in { from { opacity: 0; } }
