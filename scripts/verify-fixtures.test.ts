@@ -951,9 +951,12 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
     expect(ADDR("res-audit-ra9298")).toEqual([]);
     expect(ADDR("res-credit-top-receiving-comms")).toEqual([]);
     expect(ADDR("res-encode-ratatype").includes("Importing and exporting data between different database systems and softwares")).toBe(false);
-    expect(ADDR("res-clerk-ms-365")).toEqual([]); // office suites ≠ photocopying
     expect(ADDR("res-desk-ms-365")).toEqual([]);
     expect(ADDR("res-records-ms-365")).toEqual([]);
+    // the clerk office row no longer carries the M365 hub claim — Wave E
+    // re-pointed it onto the open Windows scanner how-to (fetched LIVE
+    // 2026-11-04) so the photocopying/sending cell gets a taught leg
+    expect(ADDR("res-clerk-ms-365")).toEqual(["Photocopying and sending documents"]);
     // the Learning-How-to-Learn / comms-class bundle lifts stay cut where the
     // bundle's what line does not name the component being fed
     expect(ADDR("res-swd-lhtl")).toEqual([]);
@@ -977,10 +980,10 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
 });
 
 describe("§6.1 re-map census (final mapping state) + canon rails", () => {
-  it("catalog intact: no rows deleted (437 → 473 → 483 → 496 → 503 → 514 → 516 → 522, Wave B/Wave E fills all additive); 659 ADDR entries", () => {
-    expect(RESOURCES).toHaveLength(522); // 516 + 6 Wave E six-career fills (acct-family salvage 2 at 88fa941 · fas DEI 1 · fin investments+supervision 2 · treasury teller-craft 2 · coll PDCflow skip-trace 1)
+  it("catalog intact: no rows deleted (437 → 473 → 483 → 496 → 503 → 514 → 516 → 522 → 528, Wave B/Wave E fills all additive); 670 ADDR entries", () => {
+    expect(RESOURCES).toHaveLength(528); // 522 + 6 Wave E six-career fills (credit mortgage-lending + credit alison-ar dup · teller cash-handling dups ×2 · audit alison-supervision dup · encode typing-10key)
     const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
-    expect(mappings).toBe(659); // 652 + 7 Wave E claims (1 per new row ×6 + the Alison-AR confer re-point)
+    expect(mappings).toBe(670); // 659 + 11 Wave E claims (9 new-row claims + the UIUC examine-records claim + the clerk scanner re-point claim)
   });
 
   it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {
@@ -1024,14 +1027,21 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
     // DEI-awareness, fin recommend-investments + supervision, treasury
     // transaction-entry, coll confer — the remaining thin cells carry the
     // adjudication or the declared-thin references listed in the commit body)
-    expect(thin).toHaveLength(33);
+    // → 26 (Wave E banking/office fills: credit application-submission +
+    // product-explanation, teller transaction-entry, audit
+    // examine-records/interview + senior-heavy supervision, clerk
+    // photocopying (scanner re-point), encode operating-machines — the
+    // ten remaining thin cells carry the adjudications listed in the commit
+    // body)
+    expect(thin).toHaveLength(26);
     // thin cells never get papered over: no pick flag, no invented row
     const thinPick = RESOURCES.filter((r) => r.pick && r.url === undefined);
     expect(thinPick).toEqual([]);
     // empty-ADDR catalog-only rows grow by the two misfit cuts (71 → 73) and
     // the two batch-4 credit-pool cuts (73 → 75: Wharton Fundamentals and the
-    // credit GCF-Excel row)
-    expect(RESOURCES.filter((r) => r.skillsAddressed.length === 0)).toHaveLength(75);
+    // credit GCF-Excel row); the clerk M365 hub claim left via the Wave E
+    // scanner re-point (75 → 74)
+    expect(RESOURCES.filter((r) => r.skillsAddressed.length === 0)).toHaveLength(74);
     // spot pins: the honest holes include these recorded ones
     expect(thin).toContain("sysadmin::IT Asset Management"); // gap-row only
     expect(thin).toContain("execsec::Supervision & training of clerical staff");
@@ -1049,7 +1059,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
     return a.id.localeCompare(b.id);
   };
 
-  it("252 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
+  it("263 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
     const winnersBySkill = new Map<string, string>(); // career::skill → row id
     const winnerRows = new Set<string>();
     for (const c of CAREERS) {
@@ -1066,7 +1076,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
       }
     }
     const flags = RESOURCES.filter((r) => r.pick).map((r) => r.id);
-    expect(flags).toHaveLength(256); // 252 (Wave E prior) + 4 new winners (Wave E six-career fills: fas alison-dei, fin educba-equity + alison-supervision, treasury alison-cash-handling are their cells' fallbackSort winners — the treasury bank-telling row loses the balance cell to RA 8791 on hours and the coll PDCflow row loses skip-tracing to RA 10173 on the provider tie-break, so neither rides a flag)
+    expect(flags).toHaveLength(263); // 256 + 7 new fallbackSort winners (Wave E banking/office fills: credit mortgage-lending ×2 cells + credit alison-ar dup + teller alison-cash-handling (entry cell; the deposit cell stays with RA 8791 on hours and the teller bank-telling dup likewise loses the balance cell to RA 8791, so neither rides a flag) + audit uiuc (examine-records sole claim; loses the fraud cell to OpenStax still) + audit alison-supervision + clerk ms-365 (scanner re-point) + encode typing-10key)
     expect(new Set(flags)).toEqual(winnerRows); // byte-match in BOTH directions
     expect(winnersBySkill.get("swd::Applications Development")).toBe("res-python-basics");
     // the canon money-shot stays flagged-adjacent: the qa fallback winner is a

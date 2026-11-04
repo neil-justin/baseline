@@ -9026,11 +9026,21 @@ export const RESOURCES: Resource[] = [
   // misfit cut: Fundamentals of Finance no longer claims the loan-research
   // cell (its printed outcomes are NPV/valuation; the AR/bad-debt statement
   // analysis rides "More Introduction to Financial Accounting" — that row is
-  // the research-evaluation winner). Honesty valve: credit-analysis,
-  // loan-interviewing/approval, product explanation, underwriter liaison and
-  // portfolio-sizing stay red (adviser-only; no taught self-serve page
-  // verified this pass — the CBCA-style craft is paid-only on the market).
-  // Coverage: 2/9 vetted.
+  // the research-evaluation winner). New per-role fills (fetched LIVE
+  // 2026-11-04, user-delegated): Coursera EDUCBA "Mortgage Loans and Lending
+  // Fundamentals" — printed outcomes carry explaining loan products/lending
+  // processes, the documentation module (borrower documentation + the
+  // Loan-Documentation skill tag) and the application/underwriting-process
+  // module; Alison "Accounts Receivable Management" per-role dup (printed
+  // collection-procedures/cash-application outcomes carry the
+  // payment-records/overdue-letters cell). Honest reds kept with fresh
+  // attempts (adjudicated Wave E 2026-11-04): applicant-interviewing (no
+  // taught self-serve page teaches the applicant conversation craft),
+  // underwriter liaison (best candidates are member-gated or
+  // process-overview pages that don't teach the liaison conversation) and
+  // portfolio-sizing (delinquency-report craft; template vendors and paid
+  // LMS only; the §6.1-class thin line rides the gap row as history).
+  // Coverage: 6/9 vetted (3 adjudicated-only reds).
   {
     id: "res-credit-cfi-ratios",
     title: "Financial Ratios Definitive Guide (CFI free resource)",
@@ -9144,8 +9154,9 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // audit (2026-11-03, batch 4): statute text = reference (readable
-    // material; no teaching flow). The paperwork-chain cells ride red on it —
-    // no taught self-serve page verified (adviser-only).
+    // material; no teaching flow). The paperwork-chain cells now carry the
+    // taught legs (credit's EDUCBA mortgage-lending and Alison-AR dups); the
+    // statute keeps the lawful context in the same pool.
     url: "https://lawphil.net/statutes/repacts/ra2000/ra_8791_2000.html",
     durationHours: 2,
     skillsAddressed: [
@@ -9164,7 +9175,8 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // credit-file PII (RA 3765 dead-in-copy flag rides the record)
     // audit (2026-11-03, batch 4): statute text = reference (fetched LIVE,
-    // title verified).
+    // title verified). The records-of-payments cell now carries the taught
+    // leg (Alison-AR dup); the statute keeps the KYC/legal context.
     url: "https://lawphil.net/statutes/repacts/ra2012/ra_10173_2012.html",
     durationHours: 2,
     skillsAddressed: [
@@ -9238,6 +9250,70 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Researching and evaluating loan applicant's financial status, references, credit and ability to repay the loan"],
     careerId: "credit",
   },
+  {
+    id: "res-credit-mortgage-lending",
+    title: "Mortgage Loans and Lending Fundamentals (EDUCBA)",
+    provider: "Coursera (EDUCBA)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): "Enroll now",
+    // 4 modules / 9 h, June 2026 update. Printed outcomes teach explaining
+    // mortgage loan products, lending processes, borrower documentation, and
+    // evaluating lending risks to recommend suitable solutions; the module
+    // list drills the complete step-by-step lending process (M1),
+    // borrower documents + payments + credit appraisal (M2), mortgage
+    // products + underwriting + the application process (M3), and the
+    // "Loan Documentation" skill tag prints on the page. The
+    // documentation/application/recommendation and product-explanation cells
+    // ride the taught flow; certificate optional (paid).
+    url: "https://www.coursera.org/learn/mortgage-loans-and-lending-fundamentals",
+    durationHours: 9,
+    skillsAddressed: [
+      "Completing credit and loan documentation",
+      "Explain to customers the different types of loans and credit options that are available, as well as the terms of those services",
+      "Submitting credit and loan applications to management with recommendations for approval or rejection; approving or rejecting within authorized limits",
+    ],
+    careerId: "credit",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Completing credit and loan documentation":
+        "Module 2 (Documentation, Payments & Risk Assessment) teaches the borrower-documentation set and what the credit-appraisal file carries — the loan-documentation completeness the row prints.",
+      "Explain to customers the different types of loans and credit options that are available, as well as the terms of those services":
+        "The printed outcome teaches explaining loan products, lending processes and repayment structures, and Module 3 walks the various mortgage products with their cost structures — the product-explanation conversation (mortgage-depth framing; the wider loan family rides the same product/terms craft).",
+      "Submitting credit and loan applications to management with recommendations for approval or rejection; approving or rejecting within authorized limits":
+        "M1's complete step-by-step lending process plus M3's application/underwriting modules and the recommend-suitable-solutions outcome teach the decision-support workflow — the paper submission and risk-based recommendation craft (approve/reject authority limits stay bank-policy).",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-credit-alison-ar",
+    title: "Accounts Receivable Management (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // per-role dup of the batch-3-verified res-coll-alison-ar row (re-verified
+    // LIVE fresh 2026-11-04, user-delegated — Wave E rules fresh fetches):
+    // "Start Course Now", 1.5-3 h, CPD-accredited; the printed collection-
+    // procedures outcome ("establish clear collection procedures to manage
+    // delinquent accounts"), the AR process-flow stages (billing → cash
+    // application → payments reconciliation) and the collection-agency
+    // functions outcome carry the payment-records/overdue-letters cell. The
+    // legal-forwarding decision leg is management-side craft (scoped).
+    url: "https://alison.com/course/accounts-receivable-management",
+    durationHours: 2,
+    skillsAddressed: ["Keeping records of payments, and preparing routine letters requesting payment for overdue accounts and forwarding these for legal action"],
+    careerId: "credit",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Keeping records of payments, and preparing routine letters requesting payment for overdue accounts and forwarding these for legal action":
+        "The collection-procedures module teaches the delinquent-account outreach loop (payment-request notices past the printed terms) and the cash-application/payments-reconciliation modules are the payment-record upkeep; the legal-forwarding decision leg stays management-side craft.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
   // ── teller (4.9) ──
   // Wave B audit (2026-11-03, batch 4): access/form per-row. TOP Moodle
   // modules → taught/account (303 login-wall verified LIVE); the SSS portal
@@ -9249,12 +9325,21 @@ export const RESOURCES: Resource[] = [
   // → reference. New per-role fill (fetched LIVE 2026-11-03, user-ruled):
   // Alison's taught "Customer Service Skills" — the customer-service cell's
   // front-desk craft leg (the special-services specifics stay scoped
-  // in-row). Honest reds kept (no taught self-serve page verified this
-  // pass; the statute-anchored verdict is the treasury family's): cash-
-  // drawer balancing, check/cash deposit & deposit-slip verification,
-  // transaction entry/receipts, account-discrepancy resolution, the
-  // payment-desk mortgage/loan/utility leg, and the cross-sell cell.
-  // Coverage: 3/9 vetted.
+  // in-row). New per-role dups (fetched LIVE again fresh 2026-11-04,
+  // user-delegated — Wave E rules fresh fetches): Alison "Introduction to
+  // Bank Telling" (Start Course Now, CPD-accredited; teller-responsibilities,
+  // payment-methods/bookkeeping-guidelines, sorting-cash and
+  // accounting-and-math outcomes — the drawer close) and Alison "Guide to
+  // Effective Cash Handling Techniques" (check-verification processes and
+  // POS transaction-efficiency outcomes — the deposit-taking and
+  // transaction-entry dups). Honest reds kept with fresh attempts
+  // (adjudicated Wave E 2026-11-04): account-discrepancy resolution (no
+  // taught self-serve page teaches the discrepancy loop; bank-LMS platforms
+  // are member-gated or paid), the payment-desk mortgage/loan/utility leg +
+  // savings-plan processing (statute-anchored counter paperwork; the SSS
+  // placeholder keeps the start-here flag) and the cross-sell cell
+  // (product-referral craft; paid bank-LMS modules only — study.com stays
+  // ruled-strip). Coverage: 6/9 vetted (3 adjudicated-only reds).
   {
     id: "res-teller-khan-banking",
     title: "Finance and Capital Markets — Banking & Money unit (Khan Academy)",
@@ -9279,9 +9364,9 @@ export const RESOURCES: Resource[] = [
     type: "doc",
     cost: "free",
     // audit (2026-11-03, batch 4): statute text = reference (readable
-    // material; no teaching flow). The balancing/receiving cells stay red on
-    // it — no taught self-serve page verified (adviser-only; batch-3's
-    // treasury verdict for the same cells stands for the family).
+    // material; no teaching flow). The balancing/receiving cells now carry
+    // the taught legs (Alison bank-telling and cash-handling dups); the
+    // statute keeps the lawful context in the same pool.
     url: "https://lawphil.net/statutes/repacts/ra2000/ra_8791_2000.html",
     durationHours: 2,
     skillsAddressed: [
@@ -9350,6 +9435,10 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // keep-with-flag ruling 2026-10-29: start-here placeholder only
     // audit (2026-11-03, batch 4): fetched LIVE (title verified) → landing.
+    // adjudicated Wave E 2026-11-04 — the payment-desk/savings-plan cell
+    // rides red on it: one honest attempt (bank-LMS candidates are
+    // member-gated or paid); no taught self-serve page teaches the statutory
+    // counter paperwork.
     url: "https://www.sss.gov.ph/",
     durationHours: 1,
     skillsAddressed: ["Receive mortgage, loan, or public utility bill payments, verifying payment dates and amounts due / process term deposits and other savings-plan transactions"],
@@ -9456,6 +9545,75 @@ export const RESOURCES: Resource[] = [
     },
     // learn draft — user review pending
   },
+  {
+    id: "res-teller-alison-bank-telling",
+    title: "Introduction to Bank Telling (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // per-role dup of the Wave-E-verified res-treasury-alison-bank-telling
+    // row (re-verified LIVE fresh 2026-11-04, user-delegated — Wave E rules
+    // fresh fetches): "Start Course Now", 1.5-3 h (Contains Video),
+    // CPD-accredited, beginner level — printed outcomes carry the critical
+    // roles and responsibilities of bank tellers, the skills/abilities they
+    // need, the different payment methods and bookkeeping guidelines, the
+    // techniques and procedures for sorting cash, and the accounting and
+    // mathematical skills a teller's role needs. The end-of-shift
+    // cash-drawer close (currency, coin and checks against the counted
+    // daily total) is the taught craft. Kept out of the deposit cell: the
+    // check-verification processes print on the cash-handling dup in this
+    // pool. Certificate optional (paid). The RA 8791 statute row keeps the
+    // lawful context in the same pool.
+    url: "https://alison.com/course/introduction-to-bank-telling",
+    durationHours: 3,
+    skillsAddressed: [
+      "Balance currency, coin, and checks in cash drawers at ends of shifts and calculate daily transactions, using computers, calculators, or adding machines",
+    ],
+    careerId: "teller",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Balance currency, coin, and checks in cash drawers at ends of shifts and calculate daily transactions, using computers, calculators, or adding machines":
+        "The course teaches the teller craft around the drawer — the responsibilities that include receiving and sorting currency/coin/checks, the payment-method and bookkeeping-guideline modules they post against, and the accounting-and-math skills (payment-method arithmetic, check handling) the end-of-shift count-and-balance runs on.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-teller-alison-cash-handling",
+    title: "Guide to Effective Cash Handling Techniques (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // per-role dup of the Wave-E-verified res-treasury-alison-cash-handling
+    // row (re-verified LIVE fresh 2026-11-04, user-delegated): "Start Course
+    // Now", 1.5-3 h (Contains Video), CPD-accredited, advanced level —
+    // printed outcomes carry the modern POS systems used to optimise
+    // transaction efficiency, the benefits of accurate calculations in
+    // financial transactions, and the processes involved in verifying
+    // checks. The deposit-taking (verify amounts/check the slip accuracy
+    // against the check-verification loop) and transaction-entry/receipt
+    // cells ride the taught flow (cased claim on the deposit cell — the
+    // fallback-sort winner stays RA 8791 on hours; scoped note). US
+    // cashier-desk framing scoped honestly in-row. Certificate optional
+    // (paid).
+    url: "https://alison.com/course/guide-to-effective-cash-handling-techniques",
+    durationHours: 3,
+    skillsAddressed: [
+      "Receive checks and cash for deposit, verify amounts, and check accuracy of deposit slips",
+      "Enter customers' transactions into computers to record transactions and issue computer-generated receipts",
+    ],
+    careerId: "teller",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Receive checks and cash for deposit, verify amounts, and check accuracy of deposit slips":
+        "The check-verification module teaches the processes a teller runs to verify checks — amount, signature and funds verification against the receiving desk; the deposit-slip accuracy leg rides the accurate-calculation discipline the course drills.",
+      "Enter customers' transactions into computers to record transactions and issue computer-generated receipts":
+        "The POS-systems module teaches the transaction-processing loop — entering each customer's payment into the system, the accurate-calculation discipline behind it, and the computer-generated receipt the system issues.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
   // ── audit (4.10) — BIR eFPS dead-in-copy; row-11 tech row waits for the pin ──
   // Wave B audit (2026-11-03, batch 4): access/form per-row. Wharton graded
   // taught/exam-paid (fetched LIVE "Enroll for free"); MIT OCW → taught/
@@ -9469,10 +9627,17 @@ export const RESOURCES: Resource[] = [
   // Digital-Literacy category → landing. New per-role fill (re-verified LIVE
   // 2026-11-03, user-ruled): the batch-3-verified UIUC "Foundations of
   // Strategic Internal Auditing" dup — COSO control evaluation carries the
-  // fraud/controls cell. Honest reds kept (no taught self-serve page
-  // verified this pass): cash/negotiables inspection, records-examination &
-  // worker-interview fieldwork, the compliance/tax-analog cell, and the
-  // senior-heavy supervision fold-in. Coverage: 7/11 vetted.
+  // fraud/controls cell. Wave E additions (fetched LIVE fresh 2026-11-04,
+  // user-delegated): the same UIUC row carries the examine-records/
+  // interview cell (M3 "Audit Execution" prints the records/walkthroughs/
+  // interviews evidence-gathering flow), and Alison "Introduction to
+  // Supervision" is the senior-heavy supervision dup. Honest reds kept with
+  // fresh attempts (adjudicated Wave E 2026-11-04): cash/negotiables/
+  // canceled-check inspection (no taught self-serve page teaches the
+  // physical-inspection craft; the UIUC modules print no counting/inspection
+  // lesson) and the compliance/tax-analog cell (statute-anchored; PTA
+  // serves BIR personnel/bespoke cohorts, not a free self-serve taught
+  // page). Coverage: 9/11 vetted (2 adjudicated-only reds).
   {
     id: "res-audit-wharton-accounting",
     title: "Introduction to Financial Accounting (Wharton)",
@@ -9755,6 +9920,10 @@ export const RESOURCES: Resource[] = [
     // audit (2026-11-03, batch 4): PDF fetched reachable (200) → reference
     // (readable computation handbook; no teaching flow). The compliance cell
     // stays red on it (adviser-only).
+    // adjudicated Wave E 2026-11-04 — one honest attempt for the
+    // compliance/tax-analog cell (PTA/BIR training serves BIR personnel and
+    // bespoke cohorts; no free self-serve taught page); the DOLE handbook
+    // keeps the readable statutory-benefit baseline.
     url: "https://nwpc.dole.gov.ph/wp-content/uploads/2024/11/Workers-Statutory-Monetary-Benefits-Handbook-2024-Edition.pdf",
     durationHours: 3,
     skillsAddressed: ["Compliance / tax analog & frameworks"],
@@ -9840,18 +10009,59 @@ export const RESOURCES: Resource[] = [
     // (re-verified LIVE 2026-11-03: "Enroll for free" — 4 modules). The
     // COSO control-evaluation and evidence-gathering modules carry the
     // fraud/controls cell. ₱ paid tier: certificate.
+    // Wave E re-point (fetched LIVE fresh 2026-11-04, user-delegated — Wave
+    // E rules fresh fetches): M3 "Audit Execution" prints the craft —
+    // auditors "gather, analyze, and consolidate evidence" with data
+    // analytics, process mapping and "qualitative evidence such as
+    // interviews and walkthroughs" to surface control weaknesses and root
+    // causes — the examine-records/interview-workers fieldwork leg of the
+    // compliance-ensure cell ("Enroll for free" live; 12 assignments in the
+    // module). The physical inspection of cash/negotiables does NOT print
+    // (stays adjudicated red in-row above).
     url: "https://www.coursera.org/learn/strategic-internal-auditing-foundations",
     durationHours: 13,
-    skillsAddressed: ["Collect and analyze data to detect deficient controls, duplicated effort, extravagance, fraud, or non-compliance with laws, regulations, and management policies"],
+    skillsAddressed: [
+      "Collect and analyze data to detect deficient controls, duplicated effort, extravagance, fraud, or non-compliance with laws, regulations, and management policies",
+      "Examine records and interview workers to ensure recording of transactions and compliance with laws and regulations",
+    ],
     careerId: "audit",
-    
+    pick: true,
     form: "taught",
     access: "exam-paid",
     learnNotes: {
       "Collect and analyze data to detect deficient controls, duplicated effort, extravagance, fraud, or non-compliance with laws, regulations, and management policies":
         "The COSO modules teach applying frameworks to evaluate controls and surface control weaknesses from gathered evidence — the detection craft the row prints.",
+      "Examine records and interview workers to ensure recording of transactions and compliance with laws and regulations":
+        "The Audit-Execution module teaches the fieldwork loop — gathering and consolidating evidence from records and interviews (walkthroughs included) and forming defensible judgments that withstand scrutiny.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-audit-alison-supervision",
+    title: "Introduction to Supervision (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // per-role dup of the Wave-E-verified res-fin-alison-supervision row
+    // (re-verified LIVE fresh 2026-11-04, user-delegated — Wave E rules
+    // fresh fetches; the identical carve carries fin's supervise cell):
+    // "Start Course Now", 1.5-3 h, CPD-accredited — printed outcomes define
+    // supervision, list the responsibilities of a supervisor, drill
+    // delegating successfully, list ways to motivate subordinates and
+    // distinguish coaching vs mentoring. The honesty fold-in's taught base;
+    // the cell stays a non-entry-expectation ride-along per the rowspec.
+    url: "https://alison.com/course/introduction-to-supervision",
+    durationHours: 3,
+    skillsAddressed: ["Senior-heavy supervision tasks"],
+    careerId: "audit",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Senior-heavy supervision tasks":
+        "The course teaches supervising others — the responsibilities set, delegating successfully, motivating and building trust with subordinates, and the coaching-vs-mentoring split — the supervision fold-in's taught base.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
   },
   // == ── Track 4 · Office & Administration (adminassoc · clerk · encode · desk ·
   // execsec · records) — blessed role-spec pools ────────────────────────────
@@ -10117,10 +10327,15 @@ export const RESOURCES: Resource[] = [
   // 2026-11-03, user-ruled): Alison's "Secretarial Studies and Office
   // Administration" — printed outcomes carry "identify methods for effective
   // file management and distinguish between digital and physical filing
-  // systems" → the filing cell. Honest reds kept: photocopying (machine
-  // operation craft; no taught self-serve page verified) and the equipment-
-  // issue register (the declared resourceless-thin row stands). Coverage:
-  // 7/9 vetted.
+  // systems" → the filing cell. Wave E addition (fetched LIVE 2026-11-04,
+  // user-delegated): the Microsoft row RE-POINTED onto the Windows scanner
+  // how-to ("Install and use a scanner in Windows" — flatbed/feeder
+  // placement, the Scan app walkthrough, save-and-send flow) → the
+  // photocopying/sending cell in its digital-reproduction form (the encode
+  // import-how-to precedent). Honest red kept with a fresh attempt
+  // (adjudicated Wave E 2026-11-04): the equipment-issue register
+  // (template-vendor downloads only; the declared resourceless-thin row
+  // stands). Coverage: 8/9 vetted (1 adjudicated-only red).
   {
     id: "res-clerk-uk-archives",
     title: "The National Archives (UK) — Information management",
@@ -10184,7 +10399,7 @@ export const RESOURCES: Resource[] = [
   },
   {
     id: "res-clerk-ms-365",
-    title: "Microsoft 365 help & learning",
+    title: "Install and use a scanner in Windows (Microsoft Support how-to)",
     provider: "Microsoft Support",
     type: "doc",
     cost: "free",
@@ -10192,12 +10407,26 @@ export const RESOURCES: Resource[] = [
     // audit + re-point (2026-11-03, batch 4): the old /en-us/office path 301s
     // onto the canonical M365 hub (fetched LIVE) → landing (ADDR empty per
     // §6.1).
-    url: "https://support.microsoft.com/en-US/microsoft-365",
+    // Wave E re-point (fetched LIVE 2026-11-04, user-delegated): the hub
+    // claim was the §6.1 empty ADDR; re-pointed onto the open scanner
+    // how-to (200, deep walkthrough: install the scanner, flatbed/feeder
+    // placement, the Windows Scan app's numbered steps, viewing/sending the
+    // saved scan) → taught/direct. The photocopying/sending cell in its
+    // digital-reproduction form — scanning is the copy machine's workflow
+    // side (the encode import-how-to precedent); the standalone
+    // photocopier's paper craft rides the same machine-operation family.
+    url: "https://support.microsoft.com/en-us/windows/hardware/printer/install-and-use-a-scanner-in-windows",
     durationHours: 2,
-    skillsAddressed: [],
+    skillsAddressed: ["Photocopying and sending documents"],
     careerId: "clerk",
-    form: "landing",
+    pick: true,
+    form: "taught",
     access: "direct",
+    learnNotes: {
+      "Photocopying and sending documents":
+        "The walkthrough teaches running a reproduction end to end — install the scanner, place the document flatbed/feeder-correct, run the Windows Scan app's numbered steps, then view and send the saved copy — the reproduce-and-send workflow the row prints.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-clerk-owl-memos",
@@ -10354,7 +10583,7 @@ export const RESOURCES: Resource[] = [
   },
   {
     id: "res-clerk-gap-equipment",
-    title: "Equipment-issue register — declared resourceless-thin (no verified free resource; no forced search)",
+    title: "Equipment-issue register — declared resourceless-thin (adjudicated Wave E 2026-11-04: search landed template vendors and checklist downloads only — no taught self-serve page teaches the recording act; row stands as the declared thin)",
     provider: "resource gap — unresolved",
     durationHours: 0,
     type: "course",
@@ -10377,9 +10606,13 @@ export const RESOURCES: Resource[] = [
   // per-role fill (fetched LIVE 2026-11-03, user-ruled): Alison's
   // "Introduction to Electronic Document Management" — printed outcomes
   // carry the document lifecycle/versioning stages → the storing-completed-
-  // documents cell. Honest reds kept: operating bookkeeping/calculating
-  // machines (machine craft; no taught self-serve page verified). Coverage:
-  // 7/8 vetted.
+  // documents cell. Wave E addition (fetched LIVE 2026-11-04,
+  // user-delegated): typing.com's "Numeric Keypad / 10 Key" lesson (fetched
+  // LIVE, 200, lesson title verified — the same typing.com family the
+  // accuracy cell rides) → the operating-machines cell in its digital
+  // keypad form (the modern calculating machine's interface; the legacy
+  // bookkeeping-machine instance is the hardware the branch still names).
+  // Coverage: 8/8 vetted.
   {
     id: "res-encode-ads-sheets",
     title: "Google Applied Digital Skills: Google Sheets for Beginners",
@@ -10600,6 +10833,32 @@ export const RESOURCES: Resource[] = [
     },
     // learn draft — user review pending
   },
+  {
+    id: "res-encode-typing-10key",
+    title: "Numeric Keypad / 10 Key lesson (typing.com)",
+    provider: "Typing.com",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): 200 on the
+    // lesson page ("Typing Lessons | Numeric Keypad / 10 Key") — the same
+    // open typing.com family the accuracy cell rides (taught/direct
+    // standing). The lesson is pure numeric-keypad / 10-key entry drilling —
+    // the operating craft for the modern calculating machine's interface
+    // (the legacy bookkeeping/calculating machine is the keyed hardware the
+    // row's source names; the keypad drills are its digital stand-in).
+    url: "https://www.typing.com/student/lesson/351/numeric-keypad-10-key",
+    durationHours: 2,
+    skillsAddressed: ["Operating bookkeeping and calculating machines"],
+    careerId: "encode",
+    pick: true,
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Operating bookkeeping and calculating machines":
+        "The 10-key lesson drills number-row and keypad entry without looking — the operating fluency the digital calculating machine's keypad runs on.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
   // ── desk (5.5) — tourism-family honesty note rides the TOP front-office rows ──
   // Wave B audit (2026-11-03, batch 4): access/form per-row. TOP Moodle
   // modules → taught/account (303 login-wall verified LIVE); the Google/MS
@@ -10609,8 +10868,14 @@ export const RESOURCES: Resource[] = [
   // taught/direct (the standing keep-with-flag verification; curl 403 this
   // pass); IBM SkillsBuild home → landing. The NC II front-office rows win
   // the five lettered PSOC cells (tier-2 crediting + entry-path counts).
-  // Honest red kept: issuing forms/information kits/brochures (no taught
-  // claim exists — adviser-only). Coverage: 5/6 vetted.
+  // Wave E attempt (2026-11-04, user-delegated): the issuing-forms/information-
+  // kits/brochures cell re-attempted — Alison "Office Procedures in the
+  // Modern Workplace" fetched LIVE (200, CPD) but its printed outcomes stop
+  // at office environment/equipment/communication (no form/brochure
+  // distribution lesson); nothing else free-and-self-serve teaches the
+  // counter's document-service act. Honest red kept (adjudicated Wave E
+  // 2026-11-04: no taught claim exists — adviser-only). Coverage: 5/6
+  // vetted.
   {
     id: "res-desk-top-front-office",
     title: "Providing Front Office Services (TOP Tourism, Front Office Services NC II)",
