@@ -936,8 +936,7 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
     expect(has("res-ops-gcf-excel", "Findings documentation & recommendation write-ups")).toBe(false);
     expect(has("res-hra-top-professionalism", "Human Resources Systems Management")).toBe(false);
     expect(has("res-audit-top-digital-literacy-cat", "Audit technology fluency (accounting software / Excel family)")).toBe(false);
-    expect(has("res-book-gcf-excel", "Operate accounting software")).toBe(false);
-    // vendor spec PDFs (PSF/TR) are provenance, not craft instruction
+    expect(has("res-book-gcf-excel", "Operate accounting software")).toBe(false);  // vendor spec PDFs (PSF/TR) are provenance, not craft instruction
     expect(ADDR("res-book-psf-gih-doc")).toEqual([]);
     expect(ADDR("res-fas-psf-gih-doc")).toEqual([]);
     expect(ADDR("res-audit-psf-gih-doc")).toEqual([]);
@@ -972,7 +971,11 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
     expect(ADDR("res-training-ms-learn")).toEqual([]);
     expect(ADDR("res-csr-ms-learn")).toEqual([]);
     expect(ADDR("res-ccqa-ms-learn")).toEqual([]);
-    expect(ADDR("res-mkt-gcf")).toEqual([]);
+    // res-mkt-gcf deleted in the close-out prune (soft-home redirect: the
+    // gcf topics root 308s onto the bare LearnFree root; landing + empty
+    // ADDR, rendered nowhere) — the hub may never return as a job-function
+    // claim row
+    expect(RESOURCES.some((r) => r.id === "res-mkt-gcf")).toBe(false);
     expect(has("res-sales-trailhead", "After-sales Service")).toBe(false);
     expect(has("res-sales-trailhead", "Sales Delivery + Delivery Management")).toBe(false);
     expect(ADDR("res-events-mpi")).toEqual([]);
@@ -980,10 +983,21 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
 });
 
 describe("§6.1 re-map census (final mapping state) + canon rails", () => {
-  it("catalog intact: no rows deleted (437 → 473 → 483 → 496 → 503 → 514 → 516 → 522 → 528 → 533, Wave B/Wave E fills all additive); 675 ADDR entries", () => {
-    expect(RESOURCES).toHaveLength(533); // 528 + 5 Wave E final-hunt fills (execsec Coursera-Report + execsec Alison-Supervision dup + execsec Alison-Process-Improvement · records MS-scanner dup + records Alison-Data-Documentation)
+  it("catalog: 477 rows post close-out prune (533 − 56 inert/dead rows), 602 ADDR entries", () => {
+    // Wave E close-out prune (2026-11-04, user-ruled): 55 inert
+    // landing/reference rows (every claimed skill has a vetted taught winner
+    // standing on the walk; none renders on any live surface) + the
+    // soft-home-redirect landing row res-mkt-gcf (edu.gcfglobal.org/en/ 308s
+    // to the bare LearnFree root) — the 13 convention-pinned rows of the
+    // candidate set (canon companions, RA statute anchors, the seven ruled
+    // keep-with-flag portal rows) stay. 675 → 602 ADDR entries.
+    expect(RESOURCES).toHaveLength(477);
     const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
-    expect(mappings).toBe(675); // 670 + 5 Wave E final-hunt claims (one per new row)
+    expect(mappings).toBe(602);
+    // §6.1 catalog-only rows: 74 → 73 (the soft-home-redirect row
+    // res-mkt-gcf deleted in the close-out prune); the other 73 stay shipped
+    // (rows never deleted — catalog-only pool provenance per §6.1)
+    expect(RESOURCES.filter((r) => r.skillsAddressed.length === 0)).toHaveLength(73);
   });
 
   it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {
@@ -1043,8 +1057,9 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
     // empty-ADDR catalog-only rows grow by the two misfit cuts (71 → 73) and
     // the two batch-4 credit-pool cuts (73 → 75: Wharton Fundamentals and the
     // credit GCF-Excel row); the clerk M365 hub claim left via the Wave E
-    // scanner re-point (75 → 74)
-    expect(RESOURCES.filter((r) => r.skillsAddressed.length === 0)).toHaveLength(74);
+    // scanner re-point (75 → 74); the soft-home-redirect row res-mkt-gcf
+    // left via the close-out prune (74 → 73)
+    expect(RESOURCES.filter((r) => r.skillsAddressed.length === 0)).toHaveLength(73);
     // spot pins: the honest holes include these recorded ones
     expect(thin).toContain("sysadmin::IT Asset Management"); // gap-row only
   });
@@ -1061,7 +1076,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
     return a.id.localeCompare(b.id);
   };
 
-  it("263 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
+  it("262 pick flags — exactly the per-skill fallback winners (free → fewer hours → provider → id), one per covered skill", () => {
     const winnersBySkill = new Map<string, string>(); // career::skill → row id
     const winnerRows = new Set<string>();
     for (const c of CAREERS) {
@@ -1078,7 +1093,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
       }
     }
     const flags = RESOURCES.filter((r) => r.pick).map((r) => r.id);
-    expect(flags).toHaveLength(266); // 263 + 5 new fallbackSort winners (Wave E final-hunt fills: execsec Coursera-Report (research&briefing) + execsec Alison-Supervision dup (supervision) + execsec Alison-Process-Improvement (operating-practice) + records MS-scanner dup (reprographics) + records Alison-Data-Documentation (upkeep); the execsec and records Workspace-hub flags retired in the same pass — both rows lost their winning cell to the new fills and keep pool provenance only)
+    expect(flags).toHaveLength(262); // 266 → 262 (close-out prune 2026-11-04: 28 flagged inert rows deleted; 24 new winners re-flagged where the winner moved to an unflagged row — the same fallbackSort rule, recomputed over the post-prune pool)
     expect(new Set(flags)).toEqual(winnerRows); // byte-match in BOTH directions
     expect(winnersBySkill.get("swd::Applications Development")).toBe("res-python-basics");
     // the canon money-shot stays flagged-adjacent: the qa fallback winner is a

@@ -156,6 +156,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Secure-coding practices"],
     careerId: "swd",
+    pick: true,
     form: "reference",
     access: "direct",
   },
@@ -256,6 +257,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 40,
     skillsAddressed: ["Applications Development", "Applications Support and Enhancement"],
     careerId: "swd",
+    pick: true,
     form: "taught",
     access: "direct",
     learnNotes: {
@@ -297,52 +299,6 @@ export const RESOURCES: Resource[] = [
     access: "direct",
   },
   {
-    id: "res-swd-digitalocean-doc",
-    title: "DigitalOcean Community Tutorials library",
-    provider: "DigitalOcean",
-    type: "doc",
-    cost: "free",
-    // text-based app-deployment and maintenance guides
-    // audit (2026-11-03): searchable tutorials library index = landing
-    url: "https://www.digitalocean.com/community/tutorials",
-    durationHours: 2,
-    skillsAddressed: ["Applications Support and Enhancement"],
-    careerId: "swd",
-    pick: true,
-    form: "landing",
-    access: "direct",
-  },
-  {
-    id: "res-swd-mdn-learn",
-    title: "MDN Web Docs — Learn web development",
-    provider: "Mozilla",
-    type: "doc",
-    cost: "free",
-    // audit (2026-11-03): guides hub/index at this URL = landing
-    // (fail-closed; individual guides open one click deeper)
-    url: "https://developer.mozilla.org/en-US/docs/Learn",
-    durationHours: 4,
-    skillsAddressed: ["Applications Support and Enhancement"],
-    careerId: "swd",
-    form: "landing",
-    access: "direct",
-  },
-  {
-    id: "res-swd-scrum-guide",
-    title: "The Scrum Guide (official, free text)",
-    provider: "Scrum.org / Schwaber & Sutherland",
-    type: "doc",
-    cost: "free",
-    // the ceremonies the Agile FSC is practiced against; fully free
-    // audit (2026-11-03): official spec text = reference, open access
-    url: "https://scrumguides.org/scrum-guide.html",
-    durationHours: 2,
-    skillsAddressed: ["Agile Software Development"],
-    careerId: "swd",
-    form: "reference",
-    access: "direct",
-  },
-  {
     id: "res-swd-agile-coursera",
     title: "Agile Software Development (course)",
     provider: "Coursera",
@@ -375,6 +331,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Data Design / SQL + data modeling"],
     careerId: "swd",
+    pick: true,
     form: "taught",
     access: "direct",
   },
@@ -399,22 +356,6 @@ export const RESOURCES: Resource[] = [
         "A step-by-step SQL text course: queries, joins, and the schema/DDL work this skill's printed row names — normalized modeling through practiced statements.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-swd-pg-docs",
-    title: "PostgreSQL Documentation (official)",
-    provider: "PostgreSQL Global Development Group",
-    type: "doc",
-    cost: "free",
-    // audit (2026-11-03): docs hub index = reference (the Part I tutorial
-    // variant in the da pool is the taught companion)
-    url: "https://www.postgresql.org/docs/",
-    durationHours: 4,
-    skillsAddressed: ["Data Design / SQL + data modeling"],
-    careerId: "swd",
-    pick: true,
-    form: "reference",
-    access: "direct",
   },
   {
     id: "res-swd-ibm-ba",
@@ -453,22 +394,6 @@ export const RESOURCES: Resource[] = [
     careerId: "swd",
     form: "taught",
     access: "exam-paid",
-  },
-  {
-    id: "res-swd-owasp-cheatsheets",
-    title: "OWASP Cheat Sheet Series",
-    provider: "OWASP Foundation",
-    type: "doc",
-    cost: "free",
-    // actionable secure-coding drills at junior level
-    // audit (2026-11-03): readable drills/answers = reference
-    url: "https://cheatsheetseries.owasp.org/",
-    durationHours: 4,
-    skillsAddressed: ["Secure-coding practices"],
-    careerId: "swd",
-    pick: true,
-    form: "reference",
-    access: "direct",
   },
   {
     id: "res-swd-fcc-infosec",
@@ -704,6 +629,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Defect management"],
     careerId: "qa",
+    pick: true,
     form: "reference",
     access: "direct",
   },
@@ -757,23 +683,6 @@ export const RESOURCES: Resource[] = [
         "The SRE book's quality chapter teaches standards as measured objectives — define SLIs and SLO targets, budget the misses, and let the error budget gate what ships — quality criteria you can write and track rather than hope for.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-qa-atlassian-bugtracking",
-    title: "Bug tracking in agile software development",
-    provider: "Atlassian",
-    type: "doc",
-    cost: "free",
-    // Atlassian reorganized the agile guide (audit 2026-11-02: the
-    // sub-pages bugs/bug-tracking 404 — consolidated into this root, live)
-    // audit (2026-11-03, mockup draft): agile guide = reference, open access
-    url: "https://www.atlassian.com/agile/software-development",
-    durationHours: 2,
-    skillsAddressed: ["Defect management"],
-    careerId: "qa",
-    pick: true,
-    form: "reference",
-    access: "direct",
   },
   {
     id: "res-qa-ibm-ba",
@@ -914,6 +823,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 20,
     skillsAddressed: ["Infrastructure Support"],
     careerId: "its",
+    pick: true,
     form: "taught",
     access: "exam-paid",
     learnNotes: {
@@ -921,25 +831,6 @@ export const RESOURCES: Resource[] = [
         "Google's support fundamentals teaches the machines you'll keep alive — hardware, OS installs, software install/update/remove and troubleshooting — the monitor-maintain-patch day job in course form.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-its-top-landing",
-    title: "TESDA Online Program (TOP) — official PH e-learning",
-    provider: "TESDA Online Program (TOP)",
-    type: "NC",
-    cost: "free",
-    // landing page (200) — the PH-credential-friendly option behind the
-    // entry route; ITS-V4 flag: re-verify per-skill deep-links before print copy
-    // audit (2026-11-03): TOP root page = landing; e-tesda signup → account
-    url: "https://e-tesda.gov.ph/",
-    durationHours: 4,
-    skillsAddressed: ["Infrastructure Support"],
-    creditingBody: "TESDA",
-    countsTowardEntryPath: true,
-    careerId: "its",
-    pick: true,
-    form: "landing",
-    access: "account",
   },
   {
     id: "res-its-windows-server-docs",
@@ -1198,6 +1089,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 10,
     skillsAddressed: ["Requirements Specification"],
     careerId: "ba",
+    pick: true,
     form: "taught",
     access: "exam-paid",
     learnNotes: {
@@ -1205,24 +1097,6 @@ export const RESOURCES: Resource[] = [
         "Teaches turning elicited needs into written requirement documents and communicating them downstream — the specify-and-document flow this catalog row prints.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-ba-figma",
-    title: "Figma Learn — resource library (official tutorials)",
-    provider: "Figma",
-    type: "doc",
-    cost: "free",
-    // low-fidelity prototyping/wireframing + FigJam diagram tutorials
-    // audit (2026-11-03): fetched LIVE — "Resource Library — How-To & Best
-    // Practice Articles": an article INDEX at this URL = landing (the
-    // individual articles/tutorials open one click deeper; fail-closed)
-    url: "https://www.figma.com/resource-library/",
-    durationHours: 3,
-    skillsAddressed: ["Requirements Specification"],
-    careerId: "ba",
-    pick: true,
-    form: "landing",
-    access: "direct",
   },
   {
     id: "res-ba-ms-testing-fund",
@@ -1474,22 +1348,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-sysadmin-top-landing",
-    title: "TESDA Online Program (TOP) — official PH e-learning",
-    provider: "TESDA Online Program (TOP)",
-    type: "NC",
-    cost: "free",
-    url: "https://e-tesda.gov.ph/",
-    durationHours: 4,
-    skillsAddressed: ["Infrastructure Support"],
-    creditingBody: "TESDA",
-    countsTowardEntryPath: true,
-    careerId: "sysadmin",
-    pick: true,
-    form: "landing", // the constituency root — the Moodle modules live behind it
-    access: "account",
-  },
-  {
     id: "res-sysadmin-ms-learn-wsperf",
     title: "Monitor Windows Server performance (module)",
     provider: "Microsoft Learn",
@@ -1717,6 +1575,7 @@ export const RESOURCES: Resource[] = [
     ],
     creditingBody: "IBM",
     careerId: "dba",
+    pick: true,
     form: "taught",
     access: "exam-paid",
     learnNotes: {
@@ -1730,28 +1589,6 @@ export const RESOURCES: Resource[] = [
         "A troubleshooting module for connectivity, login and configuration failures — diagnose, fix, and automate the alerting around them.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-dba-mysql-refman",
-    title: "MySQL 8.0 Reference Manual (official PDF)",
-    provider: "Oracle / MySQL",
-    type: "doc",
-    cost: "free",
-    // DBA-V1: dev.mysql.com/doc pages 403 to scripted fetch (public in
-    // browsers) — this verified official PDF is the cited substitute
-    // audit (2026-11-03): reference manual = readable text, no teaching
-    // flow → reference
-    url: "https://downloads.mysql.com/docs/refman-8.0-en.pdf",
-    durationHours: 6,
-    skillsAddressed: [
-      "Database Administration",
-      "↳ CWF sub-row: Oversee database administration",
-      "↳ CWF sub-row: Optimize database performance",
-    ],
-    careerId: "dba",
-    pick: true,
-    form: "reference",
-    access: "direct",
   },
   {
     id: "res-dba-sqlserver-docs",
@@ -1810,22 +1647,6 @@ export const RESOURCES: Resource[] = [
     access: "direct",
   },
   {
-    id: "res-dba-oracle-admin-guide",
-    title: "Oracle Database 19c Administrator's Guide",
-    provider: "Oracle",
-    type: "doc",
-    cost: "free",
-    // scripted backup/automation + SI-organization procedures
-    // audit (2026-11-03): vendor admin guide = readable reference
-    url: "https://docs.oracle.com/en/database/oracle/oracle-database/19/admin/",
-    durationHours: 6,
-    skillsAddressed: ["Database Administration", "↳ CWF sub-row: Resolve database incidents"],
-    careerId: "dba",
-    pick: true,
-    form: "reference",
-    access: "direct",
-  },
-  {
     id: "res-dba-fcc-relational",
     title: "Relational Database Certification",
     provider: "freeCodeCamp",
@@ -1840,6 +1661,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Data Engineering", "Data Migration"],
     creditingBody: "freeCodeCamp",
     careerId: "dba",
+    pick: true,
     form: "taught",
     access: "account",
     learnNotes: {
@@ -1849,37 +1671,6 @@ export const RESOURCES: Resource[] = [
         "The program's extract-transform-load drills move real records between systems and formats — writing the import/export scripts that get data across cleanly, the migration craft this row prints.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-dba-mongodb-manual",
-    title: "MongoDB Manual",
-    provider: "MongoDB",
-    type: "doc",
-    cost: "free",
-    // import/export and migration tooling (the overview names MongoDB)
-    // audit (2026-11-03): vendor manual = reference
-    url: "https://www.mongodb.com/docs/manual/",
-    durationHours: 4,
-    skillsAddressed: ["Data Migration"],
-    careerId: "dba",
-    form: "reference",
-    access: "direct",
-  },
-  {
-    id: "res-dba-mariadb-docs",
-    title: "MariaDB documentation",
-    provider: "MariaDB Foundation",
-    type: "doc",
-    cost: "free",
-    // cross-engine migrate/upgrade guides common in PH SME stacks
-    // audit (2026-11-03): vendor docs = reference
-    url: "https://mariadb.com/kb/en/documentation/",
-    durationHours: 4,
-    skillsAddressed: ["Data Migration"],
-    careerId: "dba",
-    pick: true,
-    form: "reference",
-    access: "direct",
   },
   {
     id: "res-dba-ibm-db-vuln",
@@ -1899,6 +1690,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Database security controls"],
     creditingBody: "IBM",
     careerId: "dba",
+    pick: true,
     form: "taught",
     access: "exam-paid",
     learnNotes: {
@@ -1906,22 +1698,6 @@ export const RESOURCES: Resource[] = [
         "Teaches the controls directly: user profiles and password policies, privilege/role setup, injection vulnerability testing, encryption-heavy protection techniques, and the security/auditing models built in hands-on labs.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-dba-owasp-db-cheatsheet",
-    title: "Database Security Cheat Sheet",
-    provider: "OWASP Foundation",
-    type: "doc",
-    cost: "free",
-    // privileges/permissions guidance mirrors the security CWF
-    // audit (2026-11-03): cheat sheet = readable reference
-    url: "https://cheatsheetseries.owasp.org/cheatsheets/Database_Security_Cheat_Sheet.html",
-    durationHours: 3,
-    skillsAddressed: ["Database security controls"],
-    careerId: "dba",
-    pick: true,
-    form: "reference",
-    access: "direct",
   },
   {
     id: "res-dba-ubuntu-server-docs",
@@ -1981,6 +1757,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Problem Management"],
     careerId: "dba",
+    pick: true,
     form: "taught",
     access: "direct",
     learnNotes: {
@@ -1988,21 +1765,6 @@ export const RESOURCES: Resource[] = [
         "Teaches how problems get solved for good: gather the incident timeline, run the blameless RCA over the failure sequence, then ship and track the corrective actions that keep the problem class from recurring.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-dba-atlassian-incident",
-    title: "Incident management (guide)",
-    provider: "Atlassian",
-    type: "doc",
-    cost: "free",
-    // audit (2026-11-03): guide hub = reference
-    url: "https://www.atlassian.com/incident-management",
-    durationHours: 2,
-    skillsAddressed: ["Problem Management"],
-    careerId: "dba",
-    pick: true,
-    form: "reference",
-    access: "direct",
   },
   {
     id: "res-dba-openlearn-comms",
@@ -2050,6 +1812,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Threat analysis / monitoring"],
     creditingBody: "Cisco Networking Academy",
     careerId: "cybersec",
+    pick: true,
     form: "taught",
     access: "account",
     learnNotes: {
@@ -2057,38 +1820,6 @@ export const RESOURCES: Resource[] = [
         "Walks how attacks happen and get detected: threat types, the CIA triad, attack vectors and the monitoring mindset a junior security analyst watches for.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-cybersec-skillsbuild",
-    title: "IBM SkillsBuild — Cybersecurity Fundamentals courses",
-    provider: "IBM SkillsBuild",
-    type: "course",
-    cost: "free",
-    // free CIA-triad/data-privacy/threat courses with shareable badges —
-    // matched to the RA 10173-anchored performance expectations; free with account
-    // audit (2026-11-03): skillsbuild.org root = the platform home (courses
-    // live behind it) → landing/account
-    url: "https://skillsbuild.org/",
-    durationHours: 12,
-    skillsAddressed: ["Threat analysis / monitoring"],
-    careerId: "cybersec",
-    form: "landing",
-    access: "account",
-  },
-  {
-    id: "res-cybersec-google-cybersecurity",
-    title: "Google Cybersecurity Professional Certificate",
-    provider: "Google (Coursera)",
-    type: "cert",
-    cost: "free",
-    // material free via audit; certificate paid / financial aid
-    // audit (2026-11-03): prof-cert landing → landing/exam-paid
-    url: "https://www.coursera.org/professional-certificates/google-cybersecurity",
-    durationHours: 60,
-    skillsAddressed: ["Threat analysis / monitoring"],
-    careerId: "cybersec",
-    form: "landing",
-    access: "exam-paid",
   },
   {
     id: "res-cybersec-infosec-ir",
@@ -2115,22 +1846,6 @@ export const RESOURCES: Resource[] = [
         "Incident-response fundamentals taught hands-on-light: when an event becomes an incident, who drives containment, and how status and escalation travel through the IR process — the breach-response loop the row prints.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-cybersec-mitre-attack",
-    title: "MITRE ATT&CK Knowledge Base",
-    provider: "MITRE",
-    type: "doc",
-    cost: "free",
-    // threat/technique reading behind escalation practice + incident taxonomy
-    // audit (2026-11-03): knowledge base = readable reference
-    url: "https://attack.mitre.org/",
-    durationHours: 3,
-    skillsAddressed: ["Threat analysis / monitoring", "Cyber and Data Breach Incident Management"],
-    careerId: "cybersec",
-    pick: true,
-    form: "reference",
-    access: "direct",
   },
   {
     id: "res-cybersec-fortinet",
@@ -2278,22 +1993,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-webdev-mdn-learn",
-    title: "MDN Web Docs — Learn web development",
-    provider: "Mozilla",
-    type: "doc",
-    cost: "free",
-    // audit (2026-11-03): curriculum hub index = landing (fail-closed;
-    // the individual modules open one click deeper)
-    url: "https://developer.mozilla.org/en-US/docs/Learn_web_development",
-    durationHours: 4,
-    skillsAddressed: ["Client-side coding (HTML/CSS/JS)", "Responsive/UI basics + accessibility"],
-    careerId: "webdev",
-    pick: true,
-    form: "landing",
-    access: "direct",
-  },
-  {
     id: "res-webdev-odin",
     title: "Foundations path — The Odin Project",
     provider: "The Odin Project",
@@ -2321,6 +2020,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Client-side coding (HTML/CSS/JS)"],
     creditingBody: "freeCodeCamp",
     careerId: "webdev",
+    pick: true,
     form: "taught",
     access: "account",
     learnNotes: {
@@ -2338,21 +2038,6 @@ export const RESOURCES: Resource[] = [
     // audit (2026-11-03): vendor docs hub = reference
     url: "https://wordpress.org/documentation/",
     durationHours: 4,
-    skillsAddressed: ["CMS administration (WordPress etc.)"],
-    careerId: "webdev",
-    form: "reference",
-    access: "direct",
-  },
-  {
-    id: "res-webdev-wordpress-first-steps",
-    title: "First Steps With WordPress (official starter doc)",
-    provider: "WordPress.org",
-    type: "doc",
-    cost: "free",
-    // audit (2026-11-03): authored how-to walk-through text = readable
-    // reference (no teaching flow/exercises at the URL)
-    url: "https://wordpress.org/documentation/article/first-steps-with-wordpress/",
-    durationHours: 2,
     skillsAddressed: ["CMS administration (WordPress etc.)"],
     careerId: "webdev",
     pick: true,
@@ -2384,35 +2069,6 @@ export const RESOURCES: Resource[] = [
         "The CMS teaches itself officially: dashboard navigation, settings, themes and plugins, users, and day-to-day content publishing — administering the WordPress stack, lesson by lesson.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-webdev-w3c-wai",
-    title: "W3C Web Accessibility Initiative — Accessibility Fundamentals",
-    provider: "W3C",
-    type: "doc",
-    cost: "free",
-    // audit (2026-11-03): readable fundamentals = reference
-    url: "https://www.w3.org/WAI/fundamentals/",
-    durationHours: 4,
-    skillsAddressed: ["Responsive/UI basics + accessibility"],
-    careerId: "webdev",
-    form: "reference",
-    access: "direct",
-  },
-  {
-    id: "res-webdev-mdn-accessibility",
-    title: "MDN Accessibility (Learn modules)",
-    provider: "Mozilla",
-    type: "doc",
-    cost: "free",
-    // audit (2026-11-03): docs article = readable reference
-    url: "https://developer.mozilla.org/en-US/docs/Learn/Accessibility",
-    durationHours: 3,
-    skillsAddressed: ["Responsive/UI basics + accessibility"],
-    careerId: "webdev",
-    pick: true,
-    form: "reference",
-    access: "direct",
   },
   {
     id: "res-webdev-webdev-learn",
@@ -2463,6 +2119,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Agile Software Development (when agency-run)"],
     careerId: "webdev",
+    pick: true,
     form: "reference",
     access: "direct",
   },
@@ -2491,22 +2148,6 @@ export const RESOURCES: Resource[] = [
     },
     // learn draft — user review pending
   },
-  {
-    id: "res-webdev-atlassian-agile",
-    title: "Atlassian Agile Coach (free text library)",
-    provider: "Atlassian",
-    type: "doc",
-    cost: "free",
-    // audit (2026-11-03): text library = readable reference
-    url: "https://www.atlassian.com/agile",
-    durationHours: 2,
-    skillsAddressed: ["Agile Software Development (when agency-run)"],
-    careerId: "webdev",
-    pick: true,
-    form: "reference",
-    access: "direct",
-  },
-
   // == ── Digital / Multimedia Artist (2.9 · id digart) ──────────────────────
   // Wave B audit (2026-11-03, batch 2): access/form per-row. The TESDA
   // category listing grades landing (the 7 VGD modules live behind TOP
@@ -2696,25 +2337,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-digart-blender-manual",
-    title: "Blender Manual (official docs)",
-    provider: "Blender Foundation",
-    type: "doc",
-    cost: "free",
-    // the free industry-grade animation/3D tool's manual — the tool row's
-    // Blender leg AND the Junior-2D-Animator counterpart row's linkage (DIG-V3)
-    // audit (2026-11-03): vendor manual = reference
-    url: "https://docs.blender.org/manual/en/latest/",
-    durationHours: 4,
-    skillsAddressed: [
-      "Use specialized graphic/animation tools (Adobe suite, Blender etc.)",
-      "Junior 2D Animator — [PSF-DAA] (counterpart, optional — user ruling 2026-10-29 ADD)",
-    ],
-    careerId: "digart",
-    form: "reference",
-    access: "direct",
-  },
-  {
     id: "res-digart-canva-design-school",
     title: "Canva Design School (free courses)",
     provider: "Canva",
@@ -2728,6 +2350,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Use specialized graphic/animation tools (Adobe suite, Blender etc.)"],
     careerId: "digart",
+    pick: true,
   },
   {
     id: "res-digart-google-ux",
@@ -2779,27 +2402,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-digart-figma",
-    title: "Figma Learn — resource library",
-    provider: "Figma",
-    type: "doc",
-    cost: "free",
-    // UI/prototyping tooling tutorials behind COC 2 (UI/UX)
-    // audit (2026-11-03): fetched LIVE — "Resource Library — How-To & Best
-    // Practice Articles": an article INDEX at this URL = landing
-    url: "https://www.figma.com/resource-library/",
-    durationHours: 3,
-    skillsAddressed: [
-      "DEVELOP DESIGNS FOR USER EXPERIENCE (ICT216315)",
-      "DEVELOP DESIGNS FOR USER INTERFACE (ICT216316)",
-      "Use specialized graphic/animation tools (Adobe suite, Blender etc.)",
-    ],
-    careerId: "digart",
-    pick: true,
-    form: "landing",
-    access: "direct",
-  },
-  {
     id: "res-digart-openlearn-comms",
     title: "Effective communication in the workplace",
     provider: "Open University (OpenLearn)",
@@ -2848,6 +2450,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 6,
     skillsAddressed: ["Monitor cyber security systems", "Manage response to cyber security incidents"],
     careerId: "soc",
+    pick: true,
     form: "landing",
     access: "account",
   },
@@ -2874,6 +2477,7 @@ export const RESOURCES: Resource[] = [
     ],
     creditingBody: "Cisco",
     careerId: "soc",
+    pick: true,
     form: "taught",
     access: "exam-paid",
     learnNotes: {
@@ -2889,43 +2493,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-soc-mitre-attack",
-    title: "MITRE ATT&CK Knowledge Base",
-    provider: "MITRE",
-    type: "doc",
-    cost: "free",
-    // the "Knowledge of attack framework" reference; incident-type taxonomy
-    // audit (2026-11-03): knowledge base = reference
-    url: "https://attack.mitre.org/",
-    durationHours: 3,
-    skillsAddressed: [
-      "Monitor cyber security systems",
-      "Manage response to cyber security incidents",
-      "Threat Analysis and Defence · Threat Intelligence and Detection (family FSC cross-cite)",
-    ],
-    careerId: "soc",
-    pick: true,
-    form: "reference",
-    access: "direct",
-  },
-  {
-    id: "res-soc-splunk-free",
-    title: "Free courses — Splunk Training",
-    provider: "Splunk",
-    type: "course",
-    cost: "free",
-    // free-course landing (introductory log/SIEM analysis); older splunk101
-    // deep-link 404'd today — recorded, replaced by the landing (SOC-V6)
-    // audit (2026-11-03): free-courses listing = landing/direct
-    url: "https://www.splunk.com/en_us/training/free-courses.html",
-    durationHours: 6,
-    skillsAddressed: ["Monitor cyber security systems", "Maintain cyber security operations"],
-    careerId: "soc",
-    pick: true,
-    form: "landing",
-    access: "direct",
-  },
-  {
     id: "res-soc-fortinet",
     title: "Fortinet Training Institute — free self-paced catalog",
     provider: "Fortinet",
@@ -2939,37 +2506,6 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: [],
     careerId: "soc",
     form: "landing",
-    access: "direct",
-  },
-  {
-    id: "res-soc-nist-800-61",
-    title: "Computer Security Incident Handling Guide (NIST SP 800-61 Rev. 3)",
-    provider: "NIST",
-    type: "doc",
-    cost: "free",
-    // free authoritative incident-handling reference
-    // audit (2026-11-03): NIST publication = reference
-    url: "https://csrc.nist.gov/pubs/sp/800/61/r3/final",
-    durationHours: 3,
-    skillsAddressed: ["Manage response to cyber security incidents"],
-    careerId: "soc",
-    form: "reference",
-    access: "direct",
-  },
-  {
-    id: "res-soc-otx",
-    title: "Open Threat Exchange (OTX)",
-    provider: "AlienVault / AT&T",
-    type: "doc",
-    cost: "free",
-    // free live threat-intel feed implementing the TESDA criterion
-    // audit (2026-11-03): live threat-feed platform = reference
-    url: "https://otx.alienvault.com/",
-    durationHours: 2,
-    skillsAddressed: ["Threat Analysis and Defence · Threat Intelligence and Detection (family FSC cross-cite)"],
-    careerId: "soc",
-    pick: true,
-    form: "reference",
     access: "direct",
   },
   {
@@ -3610,20 +3146,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-hra-ms-excel",
-    title: "Excel help & learning",
-    provider: "Microsoft Support",
-    type: "doc",
-    cost: "free",
-    // audit (2026-11-03): support help-hub index = landing
-    url: "https://support.microsoft.com/en-us/excel",
-    durationHours: 2,
-    skillsAddressed: ["Data Management", "Data Collection and Preparation"],
-    careerId: "hra",
-    form: "landing",
-    access: "direct",
-  },
-  {
     id: "res-hra-ra10173",
     title: "Republic Act No. 10173 (Data Privacy Act of 2012)",
     provider: "Lawphil Project",
@@ -3901,6 +3423,7 @@ export const RESOURCES: Resource[] = [
     skillsAddressed: ["Learning Needs Analysis", "Learning and Development Programs Management"],
     creditingBody: "HRCI",
     careerId: "training",
+    pick: true,
     form: "taught",
     access: "exam-paid",
     learnNotes: {
@@ -3961,21 +3484,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-training-cipd",
-    title: "CIPD Factsheets (Learning and development; Training evaluation)",
-    provider: "CIPD (UK HR professional body)",
-    type: "doc",
-    cost: "free",
-    // audit (2026-11-03): factsheet library = readable reference
-    url: "https://www.cipd.org/uk/knowledge/factsheets/",
-    durationHours: 2,
-    skillsAddressed: ["Learning Needs Analysis"],
-    careerId: "training",
-    pick: true,
-    form: "reference",
-    access: "direct",
-  },
-  {
     id: "res-training-lhtl",
     title: "Learning How to Learn",
     provider: "Coursera (McMaster & University of Ottawa)",
@@ -4002,6 +3510,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 4,
     skillsAddressed: ["Data Management", "Data Collection and Preparation"],
     careerId: "training",
+    pick: true,
     form: "taught",
     access: "direct",
     learnNotes: {
@@ -4011,21 +3520,6 @@ export const RESOURCES: Resource[] = [
         "Collecting entries into structured, sortable sheets — the gathering-and-cleanup step before any training report.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-training-ms-excel",
-    title: "Excel help & learning",
-    provider: "Microsoft Support",
-    type: "doc",
-    cost: "free",
-    // audit (2026-11-03): support help-hub index = landing
-    url: "https://support.microsoft.com/en-us/excel",
-    durationHours: 2,
-    skillsAddressed: ["Data Collection and Preparation", "Data Management"],
-    careerId: "training",
-    pick: true,
-    form: "landing",
-    access: "direct",
   },
   {
     id: "res-training-moodle-academy",
@@ -4345,22 +3839,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-mkt-illinois-dmx",
-    title: "Digital Marketing Specialization (University of Illinois)",
-    provider: "Coursera",
-    type: "course",
-    cost: "free",
-    // audit free per course; certificate paid (financial aid)
-    // audit (2026-11-03): specialization page = program landing →
-    // landing/exam-paid
-    url: "https://www.coursera.org/specializations/digital-marketing",
-    durationHours: 30,
-    skillsAddressed: ["Digital Marketing", "Media Strategy Development"],
-    careerId: "mkt",
-    form: "landing",
-    access: "exam-paid",
-  },
-  {
     id: "res-mkt-wharton-customer-analytics",
     title: "Customer Analytics (Wharton)",
     provider: "Coursera (Wharton)",
@@ -4556,21 +4034,6 @@ export const RESOURCES: Resource[] = [
         "The Job-Ready customer-centricity module puts the customer at the center of every work decision — the orientation behavior the ESC cell prints.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-mkt-gcf",
-    title: "GCFGlobal — free office/tooling courses",
-    provider: "GCFGlobal",
-    type: "course",
-    cost: "free",
-    // practical tooling for calendars, trackers, media logs; free, no account
-    // audit (2026-11-03): gcf topics root = an all-topics index → landing
-    url: "https://edu.gcfglobal.org/en/",
-    durationHours: 2,
-    skillsAddressed: [],
-    careerId: "mkt",
-    form: "landing",
-    access: "direct",
   },
   {
     id: "res-mkt-ie-marketing-mix",
@@ -5316,24 +4779,9 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Communicate effectively in English for customer service"],
     careerId: "csr",
-    form: "landing",
-    access: "direct",
-  },
-  {
-    id: "res-csr-bbc-learning-english",
-    title: "BBC Learning English",
-    provider: "BBC",
-    type: "doc",
-    cost: "free",
-    // daily-free English practice; data-friendly pages; no account
-    // audit (2026-11-03, batch 3): fetched LIVE (title verified) — root
-    // homepage index → landing; the lesson series live behind it.
-    url: "https://www.bbc.co.uk/learningenglish",
-    durationHours: 2,
-    skillsAddressed: ["Communicate effectively in English for customer service"],
-    careerId: "csr",
     pick: true,
     form: "landing",
+    access: "direct",
   },
   {
     id: "res-csr-top-english-business",
@@ -5359,21 +4807,6 @@ export const RESOURCES: Resource[] = [
         "TESDA's business-English module develops practical English for presenting ideas and engaging stakeholders — hold the customer transactions the CCS unit prints in English.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-csr-trailhead",
-    title: "Trailhead (Salesforce)",
-    provider: "Salesforce",
-    type: "course",
-    cost: "free",
-    // audit (2026-11-03, batch 3): trailhead root = the trail catalog
-    // (title verified LIVE) → landing/account; module pages live behind it.
-    url: "https://trailhead.salesforce.com/",
-    durationHours: 4,
-    skillsAddressed: ["Customer Relationship Management", "Technology and Systems Application"],
-    careerId: "csr",
-    form: "landing",
-    access: "account",
   },
   {
     id: "res-csr-ra10173",
@@ -6561,23 +5994,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-events-google-pm",
-    title: "Google Project Management Professional Certificate",
-    provider: "Coursera (Google)",
-    type: "cert",
-    cost: "free",
-    // vendor coordination, scheduling, budget tracking and stakeholder comms;
-    // audit free, verified certificate paid (financial aid available)
-    // audit (2026-11-03, batch 3): Google prof-cert page 200 → program landing
-    // (batch-2 convention); the taught courses live behind it.
-    url: "https://www.coursera.org/professional-certificates/google-project-management",
-    durationHours: 100,
-    skillsAddressed: ["Provider evaluation & selection; contract negotiation"],
-    careerId: "events",
-    form: "landing",
-    access: "exam-paid",
-  },
-  {
     id: "res-events-gcf-excel",
     title: "Excel (Foundations) — GCFGlobal",
     provider: "GCFGlobal",
@@ -6932,21 +6348,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-book-openstax-managerial",
-    title: "Principles of Accounting, Volume 2: Managerial Accounting (OpenStax)",
-    provider: "OpenStax (free textbook)",
-    type: "doc",
-    cost: "free",
-    // internal-control chapter context (controls, segregation)
-    // audit (2026-11-03, mockup draft): readable chapter context = reference
-    url: "https://openstax.org/details/books/principles-managerial-accounting",
-    durationHours: 6,
-    skillsAddressed: ["Review internal control system"],
-    careerId: "book",
-    form: "reference",
-    access: "direct",
-  },
-  {
     id: "res-book-psf-gih-doc",
     title: "Philippine Skills Framework for Global In-House Center (official PDF)",
     provider: "TESDA",
@@ -7013,22 +6414,6 @@ export const RESOURCES: Resource[] = [
         "TESDA's workplace-communication module: receive, respond, relay — the enabling row's daily practice.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-book-top-digital-literacy-cat",
-    title: "Digital Literacy course category (TOP)",
-    provider: "TESDA Online Program (TOP)",
-    type: "course",
-    cost: "free",
-    // category page (200); individual course titles not itemized this pass — flagged
-    // audit (2026-11-03, mockup draft): category page = landing; e-tesda signup
-    url: "https://e-tesda.gov.ph/course/index.php?categoryid=1310",
-    durationHours: 4,
-    skillsAddressed: ["Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling)"],
-    creditingBody: "TESDA",
-    careerId: "book",
-    form: "landing",
-    access: "account",
   },
   // ── acctclerk (4.2) — source-verbatim row names per V-acctclerk-3 ──
   // Wave B audit (2026-11-03, batch 3): access/form per-row, the taught
@@ -7637,23 +7022,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-pay-top-digital-literacy-cat",
-    title: "Digital Literacy course category (TOP)",
-    provider: "TESDA Online Program (TOP)",
-    type: "course",
-    cost: "free",
-    // category page (200); titles not itemized this pass — flagged
-    // audit (2026-11-03, batch 3): category page → landing (fail-closed;
-    // e-tesda signup standing).
-    url: "https://e-tesda.gov.ph/course/index.php?categoryid=1310",
-    durationHours: 4,
-    skillsAddressed: ["Communication · Professionalism (Enabling)"],
-    creditingBody: "TESDA",
-    careerId: "pay",
-    form: "landing",
-    access: "account",
-  },
-  {
     id: "res-pay-adp-us-payroll-fundamentals",
     title: "Advancing Proficiency in U.S. Payroll Fundamentals (ADP)",
     provider: "Coursera (ADP Learning Academy)",
@@ -7962,6 +7330,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 31,
     skillsAddressed: ["Support strategic planning"],
     careerId: "fas",
+    pick: true,
     form: "taught",
     access: "exam-paid",
     learnNotes: {
@@ -8012,22 +7381,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-fas-top-digital-literacy-cat",
-    title: "Digital Literacy course category (TOP)",
-    provider: "TESDA Online Program (TOP)",
-    type: "course",
-    cost: "free",
-    // audit (2026-11-03, batch 3): category page → landing (fail-closed;
-    // e-tesda signup standing).
-    url: "https://e-tesda.gov.ph/course/index.php?categoryid=1310",
-    durationHours: 4,
-    skillsAddressed: ["Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Sense Making · Transdisciplinary Thinking (Enabling, B/I)"],
-    creditingBody: "TESDA",
-    careerId: "fas",
-    form: "landing",
-    access: "account",
-  },
-  {
     id: "res-fas-intuit-basics",
     title: "Bookkeeping basics (Intuit)",
     provider: "Coursera (Intuit)",
@@ -8041,6 +7394,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 10,
     skillsAddressed: ["O*NET corroboration block (operating-the-GL-engine tasks)"],
     careerId: "fas",
+    pick: true,
     form: "taught",
     access: "exam-paid",
     learnNotes: {
@@ -8048,23 +7402,6 @@ export const RESOURCES: Resource[] = [
         "Intuit's cycle modules — collect, record, post, balance and report — are the operating-the-GL tasks the O*NET block quotes.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-fas-cfi-fpa-guide",
-    title: "Essential Guide Breaking Into FP&A (CFI free ebook)",
-    provider: "Corporate Finance Institute",
-    type: "doc",
-    cost: "free",
-    // free FP&A career primer mapped to the "Support strategic planning" CWF
-    // audit (2026-11-03, batch 3): fetched LIVE — a gated "Download now" ebook
-    // page (contents listed, flow behind the account/download) → reference.
-    url: "https://corporatefinanceinstitute.com/resources/fpa/essential-guide-breaking-into-fpa-free-ebook/",
-    durationHours: 2,
-    skillsAddressed: ["Support strategic planning", "O*NET corroboration block (operating-the-GL-engine tasks)"],
-    careerId: "fas",
-    pick: true,
-    form: "reference",
-    access: "account",
   },
   // Fas taught fills note — the rows above (UIUC internal-auditing, Cambridge
   // finance) carry the Strategic-planning and Internal-Controls cells.
@@ -8216,6 +7553,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 31,
     skillsAddressed: ["Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions"],
     careerId: "fin",
+    pick: true,
     form: "taught",
     access: "exam-paid",
     learnNotes: {
@@ -8223,39 +7561,6 @@ export const RESOURCES: Resource[] = [
         "The Modelling-essentials module teaches model design — purpose, workbook structure, workflow, visualization and commentary — plus the sensitivity scenario craft.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-fin-cfi-modeling-guide",
-    title: "Financial Modeling Guidelines (CFI free guide)",
-    provider: "Corporate Finance Institute",
-    type: "doc",
-    cost: "free",
-    // free model-design standards; global standard, non-PH
-    // audit (2026-11-03, batch 3): fetched LIVE — a gated "Download now"
-    // guide page (contents described on-page, flow behind the account) →
-    // reference.
-    url: "https://corporatefinanceinstitute.com/resources/financial-modeling/free-financial-modeling-guide/",
-    durationHours: 3,
-    skillsAddressed: ["Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions"],
-    careerId: "fin",
-    form: "reference",
-    access: "account",
-  },
-  {
-    id: "res-fin-cfi-fpa-guide",
-    title: "Essential Guide Breaking Into FP&A (CFI free ebook)",
-    provider: "Corporate Finance Institute",
-    type: "doc",
-    cost: "free",
-    // audit (2026-11-03, batch 3): fetched LIVE — gated "Download now" ebook
-    // page → reference.
-    url: "https://corporatefinanceinstitute.com/resources/fpa/essential-guide-breaking-into-fpa-free-ebook/",
-    durationHours: 2,
-    skillsAddressed: ["Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions"],
-    careerId: "fin",
-    pick: true,
-    form: "reference",
-    access: "account",
   },
   {
     id: "res-fin-cfi-ratios",
@@ -8908,23 +8213,6 @@ export const RESOURCES: Resource[] = [
     access: "direct",
   },
   {
-    id: "res-coll-top-digital-literacy-cat",
-    title: "Digital Literacy course category (TOP)",
-    provider: "TESDA Online Program (TOP)",
-    type: "course",
-    cost: "free",
-    // tooling fluency for the "automated systems" recording task
-    url: "https://e-tesda.gov.ph/course/index.php?categoryid=1310",
-    durationHours: 4,
-    skillsAddressed: ["Communication · Professionalism (Enabling)"],
-    creditingBody: "TESDA",
-    careerId: "coll",
-    // audit (2026-11-03, batch 4): category page → landing (fail-closed; TOP
-    // signup standing).
-    form: "landing",
-    access: "account",
-  },
-  {
     id: "res-coll-alison-ar",
     title: "Accounts Receivable Management (Alison)",
     provider: "Alison",
@@ -9225,22 +8513,6 @@ export const RESOURCES: Resource[] = [
     access: "exam-paid",
   },
   {
-    id: "res-credit-top-digital-literacy-cat",
-    title: "Digital Literacy course category (TOP)",
-    provider: "TESDA Online Program (TOP)",
-    type: "course",
-    cost: "free",
-    // loan-systems fluency start point
-    url: "https://e-tesda.gov.ph/course/index.php?categoryid=1310",
-    durationHours: 4,
-    skillsAddressed: ["Integrity/Professionalism (Enabling)"],
-    creditingBody: "TESDA",
-    careerId: "credit",
-    // audit (2026-11-03, batch 4): category page → landing (fail-closed).
-    form: "landing",
-    access: "account",
-  },
-  {
     id: "res-credit-gap-credit-analysis",
     title: "Credit-analysis-specific free training — declared thin (BSP 403; CFI CBCA paid)",
     provider: "resource gap — unresolved",
@@ -9503,22 +8775,6 @@ export const RESOURCES: Resource[] = [
         "The participating-in-workplace-communication unit is the professionalism/teamwork practice (obtaining and providing information cooperatively).",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-teller-top-digital-literacy-cat",
-    title: "Digital Literacy course category (TOP)",
-    provider: "TESDA Online Program (TOP)",
-    type: "course",
-    cost: "free",
-    // core-systems fluency start
-    // audit (2026-11-03, batch 4): category page → landing (fail-closed).
-    url: "https://e-tesda.gov.ph/course/index.php?categoryid=1310",
-    durationHours: 4,
-    skillsAddressed: ["Professionalism · Teamwork (Enabling)"],
-    creditingBody: "TESDA",
-    careerId: "teller",
-    form: "landing",
-    access: "account",
   },
   {
     id: "res-teller-alison-cs",
@@ -10221,23 +9477,6 @@ export const RESOURCES: Resource[] = [
     access: "direct",
   },
   {
-    id: "res-adminassoc-gcal",
-    title: "Google Calendar Help (official docs)",
-    provider: "Google",
-    type: "doc",
-    cost: "free",
-    // scheduling/event calendars
-    // audit + re-point (2026-11-03, batch 4): /getstarted 301s onto the
-    // general Calendar hub (fetched LIVE) → landing (help-hub).
-    url: "https://support.google.com/calendar/",
-    durationHours: 1,
-    skillsAddressed: ["Meeting/coordination documentation"],
-    careerId: "adminassoc",
-    pick: true,
-    form: "landing",
-    access: "direct",
-  },
-  {
     id: "res-adminassoc-top-ilo-humanskills",
     title: "Module 3: Building Human Skills for Career Success (TOP × ILO)",
     provider: "TESDA TOP × ILO",
@@ -10259,22 +9498,6 @@ export const RESOURCES: Resource[] = [
         "The ILO human-skills module drills professionalism, communication and judgment for entry jobs — the whole Enabling bundle in one taught track.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-adminassoc-skillsbuild",
-    title: "IBM SkillsBuild (workplace-skills library with badges)",
-    provider: "IBM",
-    type: "course",
-    cost: "free",
-    // TOP-mirrored as course id 3331 (login-gated)
-    // audit (2026-11-03, batch 4): fetched LIVE — the skillsbuild.org home is
-    // the badge-library marketing shell → landing (fail-closed).
-    url: "https://skillsbuild.org/",
-    durationHours: 3,
-    skillsAddressed: ["Communication · Professionalism · Critical Thinking (Enabling)"],
-    careerId: "adminassoc",
-    form: "landing",
-    access: "account",
   },
   {
     id: "res-adminassoc-alison-admin",
@@ -10380,11 +9603,14 @@ export const RESOURCES: Resource[] = [
     // labels, archiving, mail routing — the email side of the mail-flow task
     // audit + re-point (2026-11-03, batch 4): the old Gmail-help docs URL
     // graded reference — re-pointed onto the GCF/LearnFree Gmail lesson
-    // series (edu.gcfglobal.org/en/gmail/ 308s onto learnfree.org/en/gmail/,
-    // verified fresh; the re-hosted standing lesson-series verification
-    // carries the grade) → taught/direct. The mail-handling winner (labels/
-    // filters series; the physical-accounting leg is the paper craft).
-    url: "https://edu.gcfglobal.org/en/gmail/",
+    // series (the email/labels/archiving side). Close-out re-point
+    // (fetched LIVE 2026-11-04): the re-host's /en/gmail/ path vanished
+    // (404 after the 308) — the standing lesson series lives at
+    // learnfree.org/series/gmail (HTTP 200 verified fresh: "Gmail tips ·
+    // Create a Gmail · Using Gmail · How to use Gmail · Master Gmail")
+    // → taught/direct. The mail-handling winner (labels/filters series;
+    // the physical-accounting leg is the paper craft).
+    url: "https://www.learnfree.org/series/gmail",
     durationHours: 1,
     skillsAddressed: ["Sorting, opening and sending mail"],
     careerId: "clerk",
@@ -10543,22 +9769,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-clerk-skillsbuild",
-    title: "IBM SkillsBuild (workplace-readiness library)",
-    provider: "IBM",
-    type: "course",
-    cost: "free",
-    // TOP mirror at course id 3331
-    // audit (2026-11-03, batch 4): fetched LIVE — the skillsbuild.org home is
-    // a marketing shell → landing.
-    url: "https://skillsbuild.org/",
-    durationHours: 3,
-    skillsAddressed: ["Communication · Professionalism (Enabling)"],
-    careerId: "clerk",
-    form: "landing",
-    access: "account",
-  },
-  {
     id: "res-clerk-alison-secretarial",
     title: "Secretarial Studies and Office Administration (Alison)",
     provider: "Alison",
@@ -10640,22 +9850,6 @@ export const RESOURCES: Resource[] = [
         "Entering data from source material into the sheet's fields is the lesson's core craft — the field-mapping leg.",
     },
     // learn draft — user review pending
-  },
-  {
-    id: "res-encode-workspace-catalog",
-    title: "Google Workspace Training catalog (Sheets/Docs/Drive)",
-    provider: "Google for Education (edu.exceedlms)",
-    type: "course",
-    cost: "free",
-    // free lesson collection; Google account required
-    // audit (2026-11-03, batch 4): fetched LIVE (200, catalog listing
-    // title) → landing (lesson catalog index; fail-closed).
-    url: "https://edu.exceedlms.com/student/catalog/list?category_ids=11040-google-workspace-training",
-    durationHours: 3,
-    skillsAddressed: ["Receiving & registering source documents for data capture", "Source-document reading & field mapping (entering from source material)"],
-    careerId: "encode",
-    form: "landing",
-    access: "account",
   },
   {
     id: "res-encode-ms-365",
@@ -10981,21 +10175,6 @@ export const RESOURCES: Resource[] = [
     access: "account",
   },
   {
-    id: "res-desk-workspace",
-    title: "Google Workspace Learning Center",
-    provider: "Google",
-    type: "doc",
-    cost: "free",
-    // per-app official training hub (Forms/Sheets for simple inquiry logs)
-    // audit (2026-11-03, batch 4): fetched LIVE (200, hub title) → landing.
-    url: "https://support.google.com/a/users",
-    durationHours: 2,
-    skillsAddressed: ["Recording information about enquiries and complaints"],
-    careerId: "desk",
-    form: "landing",
-    access: "direct",
-  },
-  {
     id: "res-desk-ms-365",
     title: "Microsoft 365 help & learning",
     provider: "Microsoft Support",
@@ -11027,21 +10206,6 @@ export const RESOURCES: Resource[] = [
     careerId: "desk",
     pick: true,
     form: "taught",
-    access: "account",
-  },
-  {
-    id: "res-desk-skillsbuild",
-    title: "IBM SkillsBuild (workplace-skills library)",
-    provider: "IBM",
-    type: "course",
-    cost: "free",
-    // TOP-mirrored (id 3331)
-    // audit (2026-11-03, batch 4): fetched LIVE — marketing shell → landing.
-    url: "https://skillsbuild.org/",
-    durationHours: 3,
-    skillsAddressed: ["Communication & professionalism at the corporate front-desk (Enabling)"],
-    careerId: "desk",
-    form: "landing",
     access: "account",
   },
   {
@@ -11192,23 +10356,6 @@ export const RESOURCES: Resource[] = [
     // learn draft — user review pending
   },
   {
-    id: "res-execsec-gmeet",
-    title: "Google Meet Help",
-    provider: "Google",
-    type: "doc",
-    cost: "free",
-    // meeting-flow docs (recording availability depends on Workspace edition)
-    // audit (2026-11-03, batch 4): fetched LIVE (200) — official help docs →
-    // reference (readable material; no teaching flow).
-    url: "https://support.google.com/meet",
-    durationHours: 1,
-    skillsAddressed: ["Meeting administration & minutes"],
-    careerId: "execsec",
-    pick: true,
-    form: "reference",
-    access: "direct",
-  },
-  {
     id: "res-execsec-top-receiving-comms",
     title: "Receiving and Responding to Workplace Communication (TOP)",
     provider: "TESDA Online Program (TOP)",
@@ -11271,25 +10418,6 @@ export const RESOURCES: Resource[] = [
     access: "account",
   },
   {
-    id: "res-execsec-workspace",
-    title: "Google Workspace Learning Center",
-    provider: "Google",
-    type: "doc",
-    cost: "free",
-    // per-app official training hub (search/draft/upkeep tooling)
-    // audit (2026-11-03, batch 4): fetched LIVE (200, hub title) → landing.
-    // pick flag retired (Wave E final hunt 2026-11-04): the Coursera
-    // "Report Findings Effectively" fill now wins the research & briefing
-    // cell (fallbackSort provider A–Z); the Workspace hub keeps the pool
-    // provenance only (landing rows never satisfy the gate).
-    url: "https://support.google.com/a/users",
-    durationHours: 2,
-    skillsAddressed: ["Research & briefing support for executives", "Travel arrangements"],
-    careerId: "execsec",
-    form: "landing",
-    access: "direct",
-  },
-  {
     id: "res-execsec-gmail",
     title: "Gmail (lesson series) — GCFGlobal",
     provider: "GCFGlobal",
@@ -11297,10 +10425,12 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // labels/filter/route docs — the triage row's tool layer
     // audit + re-point (2026-11-03, batch 4): re-pointed onto the GCF/LearnFree
-    // Gmail lesson series (308 verified fresh; standing lesson-series
-    // verification carries the grade) → taught/direct. The triage winner
-    // (labels/filters/archiving = the incoming-material triage layer).
-    url: "https://edu.gcfglobal.org/en/gmail/",
+    // Gmail lesson series. Close-out re-point (fetched LIVE 2026-11-04): the
+    // re-host's /en/gmail/ path vanished (404) — the standing lesson series
+    // lives at learnfree.org/series/gmail (HTTP 200 verified fresh) →
+    // taught/direct. The triage winner (labels/filters/archiving = the
+    // incoming-material triage layer).
+    url: "https://www.learnfree.org/series/gmail",
     durationHours: 1,
     skillsAddressed: ["Incoming-material triage & distribution"],
     careerId: "execsec",
@@ -11471,6 +10601,7 @@ export const RESOURCES: Resource[] = [
     durationHours: 2,
     skillsAddressed: ["Meeting administration & minutes"],
     careerId: "execsec",
+    pick: true,
     
     form: "taught",
     access: "exam-paid",
@@ -11723,21 +10854,6 @@ export const RESOURCES: Resource[] = [
     access: "direct",
   },
   {
-    id: "res-records-workspace-catalog",
-    title: "Google Workspace Training catalog (Sheets/Drive lesson catalog)",
-    provider: "Google for Education (edu.exceedlms)",
-    type: "course",
-    cost: "free",
-    // audit (2026-11-03, batch 4): fetched LIVE — catalog index → landing
-    // (fail-closed).
-    url: "https://edu.exceedlms.com/student/catalog/list?category_ids=11040-google-workspace-training",
-    durationHours: 3,
-    skillsAddressed: ["Front-office record & database upkeep"],
-    careerId: "records",
-    form: "landing",
-    access: "account",
-  },
-  {
     id: "res-records-ms-365",
     title: "Microsoft 365 help & learning",
     provider: "Microsoft Support",
@@ -11823,10 +10939,12 @@ export const RESOURCES: Resource[] = [
     cost: "free",
     // labels/filters/archiving for mail handling
     // audit + re-point (2026-11-03, batch 4): re-pointed onto the GCF/
-    // LearnFree Gmail lesson series (308 verified fresh; standing
-    // lesson-series verification carries the grade) → taught/direct. The
-    // mail-handling winner (the electronic-mail leg).
-    url: "https://edu.gcfglobal.org/en/gmail/",
+    // LearnFree Gmail lesson series. Close-out re-point (fetched LIVE
+    // 2026-11-04): the re-host's /en/gmail/ path vanished (404) — the
+    // standing lesson series lives at learnfree.org/series/gmail
+    // (HTTP 200 verified fresh) → taught/direct. The mail-handling winner
+    // (the electronic-mail leg).
+    url: "https://www.learnfree.org/series/gmail",
     durationHours: 1,
     skillsAddressed: ["Mail & document handling"],
     careerId: "records",
