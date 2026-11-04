@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { destFor, getCounselorRequest, getCurrentProfile, getSignedInUser } from "@/lib/session";
+import BrandMark from "../../../components/BrandMark";
 import WelcomePicker from "./WelcomePicker";
 // The .auth-body/.auth-panel/.field framework lives in app/globals.css
 // (root layout); v7-auth.css is the shared (auth) skin. There is no shared
@@ -42,7 +43,7 @@ export default async function WelcomePage() {
       <header className="bar">
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
-            <span className="brand-mark" aria-hidden="true"></span>
+            <BrandMark size={24} />
             <span className="brand-name">Baseline</span>
           </a>
         </div>

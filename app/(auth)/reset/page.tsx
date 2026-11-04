@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BackArrow } from "../glyphs";
+import BrandMark from "../../../components/BrandMark";
 import { supabaseServer } from "@/lib/supabase/server";
 import ResetForm from "./ResetForm";
 import "./auth.css";
@@ -32,7 +33,7 @@ export default async function ResetPage() {
       <header className="bar">
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
-            <span className="brand-mark" aria-hidden="true"></span>
+            <BrandMark size={24} />
             <span className="brand-name">Baseline</span>
           </a>
         </div>

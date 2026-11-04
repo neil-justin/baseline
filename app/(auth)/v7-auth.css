@@ -83,15 +83,6 @@ body:has(.v7auth) { background: #f8f9fa; }
 
 .v7auth .bar-in { max-width: 1240px; width: 100%; margin: 0 auto; padding: 0 24px; }
 .v7auth .bar { height: 56px; display: flex; align-items: center; border-bottom: 1px solid var(--v-border); }
-/* brand mark lifted to the family geometry (24px, 2px ink border, 6px radius;
-   the blue inlay square is the globals' ::after via the var bridge) */
-.v7auth .brand-mark {
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--v-ink);
-  border-radius: 6px;
-}
-.v7auth .brand-mark::after { border-radius: 1px; }
 .v7auth .brand-name { font: 500 16px/1.2 Roboto, system-ui, sans-serif; letter-spacing: 0; }
 
 /* ---------- the auth frame ---------- */

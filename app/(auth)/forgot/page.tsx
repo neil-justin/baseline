@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BackArrow } from "../glyphs";
+import BrandMark from "../../../components/BrandMark";
 import ForgotForm from "./ForgotForm";
 import "./auth.css";
 import "../v7-auth.css";
@@ -25,7 +26,7 @@ export default async function ForgotPage({
       <header className="bar">
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
-            <span className="brand-mark" aria-hidden="true"></span>
+            <BrandMark size={24} />
             <span className="brand-name">Baseline</span>
           </a>
         </div>

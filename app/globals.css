@@ -184,14 +184,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   max-width: 1360px; margin: 0 auto;
 }
 .brand { display: flex; align-items: center; gap: 10px; }
-.brand-mark {
-  width: 18px; height: 18px; flex: none;
-  border: 1.5px solid var(--ink);
-  display: grid; place-items: center;
-}
-.brand-mark::after {
-  content: ""; width: 6px; height: 6px; background: var(--accent);
-}
 .brand-name { font-weight: 640; font-size: 14px; letter-spacing: -0.01em; }
 .brand-meta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.02em; }
 .bar-right { display: flex; align-items: center; gap: 22px; }
