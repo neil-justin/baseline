@@ -150,3 +150,17 @@ out = too disruptive for the one-surface Prep.
 Follow-up obligation: the e2e specs in `.worktrees/google-signin/e2e/`
 assume reload semantics (they still pass — assertions carry 45 s budgets —
 but their "RELOADED document" comments need a visit on that branch).
+
+Executed as plan Task 7 and landed on `main`: `43c6bb3` in-place swap —
+`startTransition(() => router.refresh())`, landing signal = the sanctioned
+`useTransition().isPending` flip cycle (verified live: flips false exactly
+at the RSC commit), then the animation-restart trick replays the cascade
+on the active panel's cards and the verdict card scrolls to the viewport
+top (reduced motion → instant `auto`). Review fixes (`ecc0f5a`): the 8 s
+watchdog now discriminates — an UNOBSERVED landing is the honest dead-end
+(no replay, no scroll); the landing timer is an 80 ms interval (rAF
+freezes on hidden tabs); the restart is one batched reflow; the probe
+script's contract matches what it measures. Evidence: no document
+navigation (perf entries 1→1), scroll preserved then animated to
+`verdictTop = 0`, cascade replay recorded post-commit, zone idle after.
+`tsc` clean + vitest 144/144 at both landings.
