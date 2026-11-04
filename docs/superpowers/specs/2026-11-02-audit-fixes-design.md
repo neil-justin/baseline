@@ -228,7 +228,52 @@ Playwright-driven manual-QA pass at 390px / 768px / 1024px viewports over landin
 sizes, tap targets, spacing. Apply fixes, then re-verify. Known gaps from investigation: auth
 surfaces have zero media queries; only the app shell was ever audited beyond the landing.
 
-### Queue standing order (user-locked 2026-11-02)
+### Overnight authorization (2026-11-03 pre-sleep, user message)
+
+- Rows #2–#14 of the ledger are **user-approved for background execution tonight**; #19
+  (Q10 wording) = **Candidate A**; #18 resolved — user browser-verified all three bot-walled
+  hosts (`linuxjourney.com`, `canva.com`, `privacy.gov.ph`) as VALID links (no content change;
+  `EXPECTED_BLOCKED` stands).
+- Overnight stream plan: (A) fixtures batch stream — §6.1 re-map per the banked plan
+  (small-batch pick inserts with intermediate tsc), ranking rewire (check-linked → dedicated →
+  free → hours → id) + pick-flag retirement, Q5 swap Candidate A; (B) prep stream — substance
+  matching + aliases + merge tolerance + section-scoped matching + weighted scoring (parse .2
+  / format .4 / keywords .4, letter inherits), stale-run AR exclusion + banner, results-first
+  layout, band KPI cells, honest relabels, red loop green; (C) UI chain — Tier 3 animation →
+  landing draft (PENDING user copy review; wip-labeled commit) → Tier 3.5 skeletons (Next 16
+  docs first) → Wave 2 register spread (progress/dashboard/career rows) → ghost-label port →
+  `npm run build` → Tier 4 mobile audit LAST (only if the user's server answers; else report
+  blocked, never start a server). Streams own disjoint files; no commits by streams — the
+  session reviews + stream-splits commits as reports land.
+- Morning spot-checks listed in `handoff/handoff-2026-11-03-overnight.md`.
+
+**QUOTA INTERRUPT (2026-11-03, ~98% used): the overnight program is ABORTED before it started.
+All three streams were ordered to stop + revert their files to the committed byte state. The
+handoff file above describes the PLANNED program — it remains the resume plan for the next
+available budget window (or after quota reset), with one amendment: Profile #plan retires the
+Goals card and the "Plan" pill (tabs collapse to Competencies | Credentials | Account; goals
+stay visible on My Plan milestones + Dashboard), user call 2026-11-03. Morning priorities under
+quota: (1) commit+checkpoint the completed Profile build, (2) landing copy review, (3) the two
+decision questions; heavy streams wait until budget reality is known.** TIMESTAMP — confirm
+the stream-revert reports landed before trusting the tree; check `git status` is clean of
+foreign modifications.
+
+### Landing content brief — user-locked 2026-11-03
+
+Legacy landing copy is ruled AI-slop: **banned as a reference**; structure rebuilds to the
+platform convention (hero → how-it-works 1-2-3 → counselor band → trust ribbon) with copy
+authored fresh. Locked brief: hero's one verb = **"Start the check"** (quiet Sign-in for
+returning students); promise = "Know exactly where you stand for your first career — and what
+closes the gap next — verified, not self-reported" ( NON-tech wording — the 36-entry index spans
+IT + business + accounting + office tracks, user correction); tone = **plain and concrete**;
+claims allowed but de-jargonized ("Philippine labor-demand reports" not DOLE-BLE/LMI;
+"national career-framework standards" not O*NET 31.0; channel words, never SP/ES/TP/AR/CC;
+"checks you actually pass — verified, not self-reported" with the never-claims-ATS fence kept;
+"your data stays yours" — RA 10173 to a footnote at most). Counselor band: roster reads the
+same record · checks verify/claims hatch · clean erase & export. Landing copy itself = draft
+until the user's in-browser blessing.
+
+### Queue standing order (user-locked 2026-11-02; amended 2026-11-03 by the overnight authorization)
 
 **Algorithmic/data passes are QUEUED, not interleaved**: they execute in background only on the
 user's explicit signal, alongside the Tier 4 manual-QA audit (last task). Immediately deferred
@@ -239,6 +284,129 @@ to that signal-gated batch:
   wording approval — goes in with the batch).
 - Pick-flag retirement (data-side deletion of the 10 flags; the engine-side ignore is part of
   the Tier 2d build).
+- §6.4 prep engine stream (substance matching, weighted scoring, stale-run exclusion,
+  results-first layout, band KPI cells) — user-authorized 2026-11-03.
+- Tier 4 mobile-QA audit at 390/768/1024 (last; runs alongside the batch).
+
+### FIX stream landed (2026-11-03) — committed `d0ee1c4`
+
+- §6.1 re-map FINAL numbers: **696 → 536 mappings (160 cut), 89 declared-thin cells, 73
+  catalog-only rows, 208 inert pick flags** (record the retired fallback; the engine never
+  reads them — tests pin both directions; canon rails held).
+- **Reconciliation done at commit time**: PREP's 2 cross-stream ports (letter pin 75→90;
+  demo-trio seed re-pin) + FIX's describe block co-exist; full battery green post-merge.
+- Morning-review notes: (1) PREP's interpretive call — pitch-only skill mentions are demoted
+  ("a pitch is not evidence"); one-line flip if user disagrees. (2) Gap-only skills may
+  surface their gap row as pool content since gap rows are dedicated-by-construction — UI
+  glance at the Resources tab checkpoint; filter decision if user dislikes it.
+- User letter on record: "#19 = a" → Q5/A swapped, dated comment in-row.
+- §6.4 prep engine stream (substance matching, weighted scoring, stale-run exclusion,
+  results-first layout, band KPI cells) — user-authorized 2026-11-03; see the next section.
+- Pick-flag retirement (data-side deletion of the 10 flags; the engine-side ignore is part of
+  the Tier 2d build).
+
+### Prep results anatomy — user ruling (2026-11-03, screenshot evidence)
+
+The PREP stream's engine landed (`1333c8c`) but the presentation regressed (stacked
+label→%→sentence lines, resurrected "three factors" fold, one flat table across three
+factor groups — bare ✓/✗ glyphs, NOTE as an all-"—" column, oversized footer dropzone,
+toolbar score duplication). Ruled: rebuild with **Dashboard as inspiration, not clone** —
+verdict strip (big score + factor KPI cells: label, share, 4px honest bar, green at 100%);
+factor groups as real banded sections with their own mini-heads; checks = honest-ledger
+tables with wash CHIPS (never raw glyphs; never red); noteless columns dropped; Q15
+live-expand restored (no mid-card fold); slim one-row "Check another version" footer; the
+tabs-row LATEST RUN kicker removed (the verdict strip owns the score). Letter tab mirrors.
+
+### Band system final rulings (2026-11-03, grill-me round)
+
+- **System ruling (2026-11-03, user words): the DASHBOARD is the reference design language for
+  all (app) surfaces — Careers, My Plan, Prep, Profile + their CHILD panels: "well-organized;
+  though it carries many data it doesn't look convoluted."** Concretely that means Dashboard
+  grammar is canon everywhere: the band row (who + instrument + one CTA), the KPI-cell recipe
+  (label → big/small value → 4px honest bar → wash chips), the honest-ledger table anatomy
+  (11px tracked uppercase heads, real rows, chips not glyphs, no noteless columns), the tray
+  `.bcell` register, tabular numerals, `--v-grey-wash` hovers, staged skeleton shapes.
+
+### Careers/Prep/Profile band cases (2026-11-03, grill-me round)
+
+- Dashboard band = the REFERENCE ("ideal"). **Careers**: cells rise onto the KPI register —
+  Skill map + First 30 days get bars (fill = share, green at full); Track stays a bare text
+  cell (no fake bar) — queued to the chain.
+- **Prep**: the 1333c8c rebuild already sits on the register (verify at checkpoint).
+- **Profile (Q25=a)**: full parity — the shared `ScoreSequence` instrument (CountUp composite
+  + armed SegRubricBar) replaces the local mini-bar; the ONE variance stays user-locked by
+  Q23: seglabels carry full channel words with slash values ("Skill progress 19/25"), never
+  "SP". Local `.band-scale/.bandbar` die; undecided variant stays simple; CTA canon.
+
+### Wave 3 — Dashboard-grammar audit (OPEN TASK, created 2026-11-03)
+
+User's systemic ruling becomes an executable audit + fix pass for every (app) surface's CHILD
+panels, sequenced AFTER the chain lands + commits (it must audit the committed end-state, not
+mid-flight files). CANON (from the band-register diff + design.md): `.kpis` KPI-cell recipe
+(label → big/small value → 4px honest bar → wash chips); honest-ledger tables (11px tracked
+uppercase heads, group mini-heads, chips not glyphs, no noteless columns); `.bcell` tray
+register; bandrow (who + instrument + one CTA); tabular numerals; `--v-grey-wash` hovers;
+staged skeletons; CTA canon "Open your plan →"; kicker policy = card-head counters only.
+AUDIT SCOPE per surface: Careers (index table, match-table, switch-flow children, skill rows),
+My Plan (plan/resources panels away from the committed family register?), Prep (tabs, guide,
+band), Profile (competencies/credentials/account children incl. contained tables, presence
+card, DPA), Progress (feed, goals cards, readiness channel bits), Dashboard itself is the
+reference. Deliverable: per-surface deviation list → one fix stream (surface-split commits)
+→ per-surface checkpoint for the user.
+
+### Wave-3 user ruling (2026-11-03): "recommendations" accepted — fix list
+
+C1 (hatch self-report share in Careers band bar) · C3 (fold ENTRY PATH under detail ≤860) ·
+C4 (Careers skeleton mirrors the ranked index) · C5 (full channel words in the readout
+legend; codes banned per Q23+court) · P1 (starting-levels honest wording: "setup answer:
+{word}") · Pr1 (4-of-5 duplication pruned; margin case keeps its line) · Pr2 (closed-head
+moves to the kicker register: "2 OF 22 CLOSED"; career name leaves the counter) · Pr3
+(completed-goal single receipt line) · Pr4 (CheckOverlay marks → wash chips, never glyphs,
+never red) · M1–M4 and C2 = keep-as-applied/no change. **#12 (NACE retake route) stays OPEN
+— needs its own design minute (a flow decision, not a one-liner).**
+
+### Prep workstream letters (2026-11-03, user-locked)
+
+- **§6.4 diagnosis opened**: user's real resume misgraded (no-Experience verdict on a
+  "WORK EXPERIENCE" heading; canonical-phrase skill verdicts; 48/100 product math; 3-second
+  "analysis"). Red loop BANKED in untracked `scripts/prep-engine-quality.test.ts` (3/4 red,
+  on purpose — stays uncommitted until the engine fix turns it green). Engine fact map:
+  unpdf/mammoth extraction; `SECTION_RE` leftmost-word canon (`analyze.ts:98,144`); phrase-gated
+  keyword matching over a thin hand-seeded corpus (`analyze.ts:154-171` + `synonyms.ts`);
+  multiplicative AIR product (`air.ts:65-71`); letter checker imports the resume matcher
+  (`letter.ts:31`); fixtures overfit — the test resume is generated *containing* the canonical
+  phrases (`make-resume-artifacts.mjs` GOOD_LINES).
+- **Q15 = results-first for returning users** (layout plan approved verbatim 2026-11-03):
+  verdict-then-factors card (score big + parse/format/keywords as chips/bars — the "×" product
+  line dies; live-expanded factor checks; findings keep example bullets); dropzone demotes to
+  a slim "Check another version" footer affordance; first-time users keep the upload-first
+  flow; Cover-letter tab mirrors the anatomy (+ the Q19 banner).
+- **Q16 = (a) deterministic substance pass** — user decision grounded in convention-research
+  (answered live): Jobscan/Teal/Kickresume-style checkers are rule-based keyword/section
+  matchers; LLMs appear only in separate AI-writing features, not under the score. Scope:
+  section alias canon (internship/OJT → Experience; per-word heads), extraction line-merge
+  tolerance, per-skill substance corpus, section-scoped matching, honest relabeling
+  ("format & evidence screen").
+- **Q17 = weighted sum** (parse .2 / format .4 / keywords .4 proposed) replaces the product
+  formula; letter checker inherits.
+- **Q18 = the ENTIRE Prep stream joins the signal-gated background batch** (layout + engine +
+  stale-target + letter), not an immediate build.
+- **Q19 = (a)** runs whose target ≠ current career are excluded from the AR score; card shows
+  "Ran against {old role} — re-run to score".
+- **Post-brief user findings (2026-11-03, fed as addendum to the Profile build)**: (a)
+  Account input-type audit — `type="email"` readOnly, true password fields with
+  `autoComplete="new-password"`, DELETE-confirm `autoComplete="off"`; (b) Data rights
+  progressive-disclosure ruling — destructive-action detail (export inventory, erase-order
+  chain) renders only when the user starts that action; ONE minimal always-visible warning
+  line stays per destructive control (honesty floor), the explanatory volume is gated.
+  Current-password re-auth + NACE-retake rerouting remain flagged-not-built.
+- **Prep band KPI cells** (user approved the diagnosis + register 2026-11-03): cells rebuild
+  onto the Dashboard KPI register — plain-name labels (no "· 7"), one fraction value, 4px
+  honest bar (fill = earned share, ✓ chip ONLY on a fully-earned factor), AR cell unchanged;
+  the triple-presentation (label·7 + /7 + ✓ on partials) and the dishonest green die. Queued
+  with the Prep batch.
+- Tail item: the switch-flow recovered screen's ghost button still reads "See your gaps"
+  (CareerClient ~993) — port to the CTA canon with the next career-surface touch.
 
 ## Verification strategy
 

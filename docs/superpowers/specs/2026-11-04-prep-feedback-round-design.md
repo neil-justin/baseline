@@ -74,9 +74,8 @@ Prior: `2026-11-03-prep-section-cards-design.md` (card inventory stands, untouch
 - Result entrance: on the server-rendered page, `.prep-kpis` cards +
   `.prep-stack .card` animate in (opacity 0→1, translateY 5px→0, ~250 ms
   each, ~40 ms stagger via `animation-delay` on `nth-child`), all inside
-  `@media (prefers-reduced-motion: no-preference)`. Skeletons (`loading.tsx`)
-  keep their no-entrance contract (stated in the 2026-11-04 skeleton ruling
-  — text-free, no motion).
+  `@media (prefers-reduced-motion: no-preference)`. Route loading skeletons
+  stay untouched (no entrance motion added to them).
 - No hooks change: `.dz-zone`, `.rs-upload`, `.rs-readout`, `.dz-err`
   all byte-kept; e2e unaffected (waits key on the same selectors; the reload
   still carries the result).

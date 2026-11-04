@@ -42,8 +42,7 @@ A pre-graduation **career-readiness diagnostic**: a student picks a discipline t
 
 ## Brand Commitments
 
-- **Working title "Career Readiness"** — no final name/logo yet; naming belongs to design when asked.
-- Voice: English-only UI; honest, non-patronizing copy — the score *advises*, never predicts hiring.
+- **Product name: "Baseline"** (user-ruled 2026-11-03, adopted alongside the v8 revamp round; all three landing direction proposals carried the wordmark, risk discussed, user signed off). Logo/wordmark treatment still owned by the winning DNA. Voice: English-only UI; honest, non-patronizing copy — the score *advises*, never predicts hiring.
 - **Design direction (user-locked): "professional/enterprise-like"** — the prior SHS look ("unorthodox, hairline tables, instrument labels") is the flagged **anti-reference**. New work must read as credible enterprise product software; the panel judges the Dashboard first.
 
 ## Evidence on Hand
