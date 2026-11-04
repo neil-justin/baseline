@@ -712,3 +712,22 @@ body:has(.v7) { background: #f8f9fa; }
 .v7 .ratemsg { font-size: 12.5px; }
 .v7 .seglabels span { font-size: 12px; }
 .v7 .cta { font-size: 14.5px; }
+
+/* ---------- sidebar size bump (user-ruled 2026-11-04) ---------- */
+.v7 { grid-template-columns: 264px 1fr; }
+.v7 .sidenav a {
+  font: 500 15px/1.2 Roboto, system-ui, sans-serif;
+  padding: 11px 16px;
+  gap: 10px;
+}
+.v7 .sidenav a .ms { font-size: 21px; }
+.v7 .sidenav .signout button {
+  font: 500 15px/1.2 Roboto, system-ui, sans-serif;
+  padding: 11px 14px;
+  gap: 10px;
+}
+.v7 .sidenav .signout .ms { font-size: 21px; }
+.v7 .brand { font-size: 17px; }
+@media (max-width: 720px) {
+  .v7 .rail .ms { font-size: 22px; }
+}
