@@ -764,6 +764,13 @@
   max-width: 70ch;
 }
 
+/* ---------- rhythm round (2026-11-04) — the pathway lesson applied:
+   the careers surface rides ONE capped, centered column ---------- */
+.v7career {
+  max-width: 1000px;
+  margin-inline: auto;
+}
+
 /* ============================================================
    v9.1 fix round — careers (user feedback, 2026-11-04):
    band skill ledger replaces the two KPI bars; detail expands
