@@ -115,17 +115,15 @@ function Pane({
   tab,
   rows,
   queue,
-  ruledByLabel,
 }: {
   tab: AdminTabId;
   rows: LiveRow[] | null;
   queue: QueueRow[] | null;
-  ruledByLabel: string;
 }) {
   if (tab === "audit") {
     // Honest guard: a role without the queue build gets nothing faked.
     if (queue === null) return null;
-    return <AuditQueue rows={queue} ruledByLabel={ruledByLabel} />;
+    return <AuditQueue rows={queue} />;
   }
   if (tab === "approvals") return <AdminApprovalsSlot />;
   if (tab === "accounts") return <AdminAccountsSlot />;
@@ -139,7 +137,6 @@ export default function AdminShell({
   role,
   rows,
   queue,
-  ruledByLabel,
 }: {
   role: Role;
   /** null = the server skipped the roster build for this role (sysadmin);
@@ -147,7 +144,6 @@ export default function AdminShell({
   rows: LiveRow[] | null;
   /** null = the server skipped the audit-queue build for this role. */
   queue: QueueRow[] | null;
-  ruledByLabel: string;
 }) {
   const [tab, setTab] = useState<AdminTabId>(() => adminLandingFor(role));
   const active = adminTabsFor(role).some((t) => t.id === tab)
@@ -157,7 +153,7 @@ export default function AdminShell({
   return (
     <AdminVeil role={role} mode="state" active={active} onNavigate={setTab}>
       <div className="atabs-tabpage" key={active}>
-        <Pane tab={active} rows={rows} queue={queue} ruledByLabel={ruledByLabel} />
+        <Pane tab={active} rows={rows} queue={queue} />
       </div>
     </AdminVeil>
   );

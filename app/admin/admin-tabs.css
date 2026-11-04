@@ -545,3 +545,57 @@
 @media (min-width: 721px) {
   .v7admin .atabs-veil { grid-template-columns: 264px 1fr; }
 }
+
+/* ============================================================
+   WAVES 4 — the tables' pager (2026-11-04; the mockup realm's
+   Pager format, docs/superpowers/specs/2026-11-04-cohort-roster-
+   pagination-design.md): ‹ / one numbered button per page / › with
+   the PAGE x OF y tracked label right. Rendered ONLY when the
+   table overflows a page (the component's own law), 10 rows/page.
+   ============================================================ */
+
+.v7admin .atabs-pager {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--v-rows);
+}
+.v7admin .atabs-pager-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  padding: 4px 8px;
+  border: 1px solid var(--v-border);
+  border-radius: 6px;
+  background: var(--v-surface);
+  color: var(--v-ink2);
+  font: 500 12px/1.4 Roboto, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+.v7admin .atabs-pager-btn:hover:not(:disabled) {
+  background: var(--v-grey-wash);
+  color: var(--v-ink);
+}
+.v7admin .atabs-pager-btn.on {
+  background: var(--v-blue-deep);
+  border-color: var(--v-blue-deep);
+  color: #FFFFFF;
+}
+.v7admin .atabs-pager-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+/* nav rows under the padded table need the 20px' matching rhythm */
+.v7admin .queue .atabs-pager { padding: 10px 20px; }
+.v7admin .atabs-pager-label {
+  margin-left: auto;
+  font: 500 11.5px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+  font-variant-numeric: tabular-nums;
+}

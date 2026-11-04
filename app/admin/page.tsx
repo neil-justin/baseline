@@ -104,27 +104,49 @@ async function buildRows(creds: CohortCredentialRow[]): Promise<LiveRow[]> {
   return views.map((v) => ({ ...v, belowAvg: v.decided && v.score < avg }));
 }
 
+/**
+ * The queue's rows carry the student's TARGET career skill names
+ * (Ledger-Register Rule): the audit chips key to this map — filled where
+ * the ruling would close the cited gap bar (verified-join vocabulary,
+ * lib/actions.ts applyVerifiedCredential). Nothing is invented: a skill
+ * off the map reads outline, a student without a target career reads
+ * null → all chips outline.
+ */
 export async function buildQueue(creds: CohortCredentialRow[]): Promise<QueueRow[]> {
   const states = await db.listStudentStates();
+  const mapSkills = new Map<string, string[] | null>();
+  const mapCareer = new Map<string, string | null>();
+  for (const c of creds) {
+    if (mapSkills.has(c.studentId)) continue;
+    const { state, career } = await getStudentView(c.studentId);
+    mapSkills.set(c.studentId, career ? career.skills.map((s) => s.name) : null);
+    mapCareer.set(c.studentId, career?.name ?? null);
+  }
   const rank = (s: CohortCredentialRow["status"]) => (s === "declared" ? 0 : s === "rejected" ? 1 : 2);
   const ruledAt = (c: CohortCredentialRow) => c.verifiedAt ?? "";
   return creds
-    .map((c) => ({
-      id: c.id,
-      studentId: c.studentId,
-      studentName: states[c.studentId]?.name ?? "(unknown cohort member)",
-      kind: c.kind,
-      title: c.title,
-      organization: c.organization,
-      evidenceUrl: c.evidenceUrl,
-      evidenceNote: c.evidenceNote,
-      declaredSkills: c.declaredSkills,
-      status: c.status,
-      declaredAt: c.createdAt,
-      ruledBy: c.verifiedBy,
-      ruledAt: c.verifiedAt,
-      auditNote: c.auditNote,
-    }))
+    .map((c) => {
+      const state = states[c.studentId];
+      return {
+        id: c.id,
+        studentId: c.studentId,
+        studentName: state?.name ?? "(unknown cohort member)",
+        sub: state ? personaMeta(state.yearLevel, state.track) : "",
+        kind: c.kind,
+        title: c.title,
+        organization: c.organization,
+        evidenceUrl: c.evidenceUrl,
+        evidenceNote: c.evidenceNote,
+        declaredSkills: c.declaredSkills,
+        careerSkills: mapSkills.get(c.studentId) ?? null,
+        careerName: mapCareer.get(c.studentId) ?? null,
+        status: c.status,
+        declaredAt: c.createdAt,
+        ruledBy: c.verifiedBy,
+        ruledAt: c.verifiedAt,
+        auditNote: c.auditNote,
+      };
+    })
     .sort(
       (a, b) =>
         rank(a.status) - rank(b.status) ||
@@ -163,7 +185,7 @@ export default async function AdminCohortPage() {
           row click streams the drill-in's loading directly, and this
           fallback covers the console side via the streamed document. */}
       <Suspense fallback={<ConsoleSkeleton role={profile.role} />}>
-        <ConsoleReady isSysadmin={isSysadmin} ruledByLabel={profile.fullName} />
+        <ConsoleReady isSysadmin={isSysadmin} />
       </Suspense>
       <AdminMockupGate />
     </div>
@@ -172,16 +194,10 @@ export default async function AdminCohortPage() {
 
 /** The pane build: the only slow part of the console (auth + role are
  *  known ahead; the roster/queue builds stream under the fallback). */
-async function ConsoleReady({
-  isSysadmin,
-  ruledByLabel,
-}: {
-  isSysadmin: boolean;
-  ruledByLabel: string;
-}) {
+async function ConsoleReady({ isSysadmin }: { isSysadmin: boolean }) {
   const creds = isSysadmin ? null : await credentialStore.listAll();
   const queue = creds ? await buildQueue(creds) : null;
   const rows = creds ? await buildRows(creds) : null;
 
-  return <AdminShell role={isSysadmin ? "sysadmin" : "counselor"} rows={rows} queue={queue} ruledByLabel={ruledByLabel} />;
+  return <AdminShell role={isSysadmin ? "sysadmin" : "counselor"} rows={rows} queue={queue} />;
 }

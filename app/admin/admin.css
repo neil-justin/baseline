@@ -376,20 +376,10 @@
 
 /* ---------- stacked rubric-proportion bars (honest fills, v7 tokens) ---------- */
 
-/* ---------- the Round-8 credential audit queue (the counselor's function) ---------- */
+/* ---------- the Round-8 credential audit queue (the counselor's function;
+   v9: see the DNA v9 Round 6 block at the file tail — the base .aq-*
+   rules below stay the row geometry the v9 block builds on) ---------- */
 
-.v7admin .queue .aq-sub {
-  margin: 3px 0 0;
-  max-width: 68ch;
-  color: var(--v-ink2);
-  font-size: 12.5px;
-}
-.v7admin .aq-legend {
-  white-space: nowrap;
-}
-.v7admin .aq-legend b {
-  color: var(--v-blue-deep);
-}
 .v7admin .aq-empty {
   padding: 18px;
   color: var(--v-ink2);
@@ -407,18 +397,16 @@
 .v7admin .aq-row:last-of-type {
   border-bottom: 0;
 }
-.v7admin .aq-declared {
-  background: #fdfbf4;
-}
+/* the v9 rounds re-write this geometry from the file tail (7 columns,
+   dialog, pager) — the base rules below that survive are the cell
+   primitives the new geometry composes (.aq-name .aq-title .aq-skills
+   .aq-link .aq-line .aq-btn .aq-rejectbtn .aq-note .chip). */
+/* the v9 round retires .aq-declared's former cream wash (the washed
+   region register — state color shows in the chips alone) */
+
 .v7admin .aq-statuscell .chip {
   min-width: 92px;
   text-align: center;
-}
-.v7admin .aq-entry {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
 }
 .v7admin .aq-name {
   font: 400 11px/1.4 Roboto, system-ui, sans-serif;
@@ -429,11 +417,6 @@
 .v7admin .aq-title {
   font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
-}
-.v7admin .aq-meta,
-.v7admin .aq-stamp {
-  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
 }
 .v7admin .aq-evidence {
   display: flex;
@@ -455,17 +438,6 @@
   font: 400 12px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   overflow-wrap: anywhere;
-}
-.v7admin .aq-ruling {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-}
-.v7admin .aq-acts {
-  display: inline-flex;
-  gap: 8px;
-  flex-wrap: wrap;
 }
 .v7admin .aq-btn {
   font: 500 12.5px/1.4 Roboto, system-ui, sans-serif;
@@ -496,12 +468,6 @@
   background: var(--v-amber-wash);
   border-color: var(--v-amber-text);
 }
-.v7admin .aq-rejectform {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-}
 .v7admin .aq-note {
   font: 400 12.5px/1.4 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
@@ -515,15 +481,6 @@
 .v7admin .aq-note:focus-visible {
   outline: 2px solid var(--v-blue);
   outline-offset: 1px;
-}
-.v7admin .aq-ruled,
-.v7admin .aq-err {
-  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-}
-.v7admin .aq-err {
-  margin: 10px 18px 14px;
-  color: var(--v-amber-text);
 }
 .v7admin .aq-rejected .aq-title {
   text-decoration: line-through;
@@ -1219,4 +1176,357 @@
     opacity: 0;
     transform: translateY(4px);
   }
+}
+
+/* ============================================================
+   DNA v9 — Round 6: the Audit queue tab (2026-11-04)
+   The Round-8 queue onto the Cohort round's register: the panel
+   at the 16px rung (borderless, M3 shadow), the v9 type scale on
+   the rows, the audit-spine legend retired (provenance noise —
+   the meta line folds the computed counts), the declared skills
+   as the Ledger-Register's tonal chips keyed to the student's
+   target career map, M3 pills for the ruling actions, and the
+   tab's own A5 ruling-stamp imagery. Skeletons unchanged — tabs
+   are client state, not fetches; the streamed console skeleton
+   mirrors the role's LANDING tab only. Every numeral stays
+   Roboto tabular (queue rows are kinds + dates, not scores).
+   ============================================================ */
+
+.v7admin .queue {
+  border: 0;
+  border-radius: 16px;
+}
+
+/* headline: the two-step hierarchy (17px Google Sans title / 11.5px
+   tracked meta) + the tab's own imagery */
+.v7admin .queue .ct-head { padding: 18px 20px 16px; }
+.v7admin .queue .ct-headline {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.v7admin .queue .ct-title {
+  font: 500 17px/1.3 "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+.v7admin .queue .ct-meta {
+  margin: 0;
+  font: 500 11.5px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7admin .queue .ct-art { flex: none; }
+
+/* column heads: the v9 floor register on the row grid's own template */
+.v7admin .queue .ct-colheads {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1.4fr) minmax(0, 1.6fr) minmax(0, 1.5fr);
+  gap: 0 20px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--v-rows);
+  font: 500 11.5px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+/* the row fold (existing ≤900 shell rule) re-templates the ROWS alone —
+   at that width the four tracked heads no longer match the fold */
+@media (max-width: 900px) {
+  .v7admin .queue .ct-colheads { display: none; }
+}
+
+/* rows: the 20px rhythm; the two-step type hierarchy — the WHO line
+   ink (the ledger's 15px name rung), the entry + evidence details grey */
+.v7admin .queue .aq-row { gap: 8px 20px; padding: 14px 20px; }
+.v7admin .queue .aq-statuscell .chip { min-width: 96px; }
+.v7admin .queue .aq-name {
+  font: 500 15px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--v-ink);
+}
+.v7admin .queue .aq-title {
+  font: 400 13.5px/1.45 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .queue .aq-meta,
+.v7admin .queue .aq-stamp { font: 400 12.5px/1.5 Roboto, system-ui, sans-serif; }
+.v7admin .queue .aq-evidence { gap: 5px; }
+.v7admin .queue .aq-link,
+.v7admin .queue .aq-line { font: 400 13.5px/1.5 Roboto, system-ui, sans-serif; }
+
+/* the declared skills — the Ledger-Register chip carrier: filled where
+   the cited skill sits on the student's TARGET career map (the ruling
+   would close its gap bar), outline otherwise (off-map = closes nothing) */
+.v7admin .queue .aq-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-width: 0;
+}
+.v7admin .queue .aq-skillchip {
+  display: inline-block;
+  border-radius: 8px;
+  padding: 2px 9px;
+  font: 500 12px/1.5 Roboto, system-ui, sans-serif;
+  /* the careers-round chip law: a too-narrow column wraps the pill's
+     text instead of riding it over the next column (probe-verified there) */
+  white-space: normal;
+  overflow-wrap: break-word;
+  background: var(--v-surface);
+  color: var(--v-ink2);
+  box-shadow: inset 0 0 0 1px var(--v-border);
+}
+.v7admin .queue .aq-skillchip.on-map {
+  background: var(--v-blue-wash);
+  color: var(--v-blue-deep);
+  box-shadow: none;
+}
+
+/* status chips onto the 12px/8px rung (the Cohort round's register) */
+.v7admin .queue .chip {
+  font-size: 12px;
+  border-radius: 8px;
+  padding: 2px 8px;
+}
+
+/* the ruling actions: M3 pills — Verify is the console's single primary
+   (filled blue), Reject the quiet tonal pill, armed = amber-toned */
+.v7admin .queue .aq-btn {
+  font: 500 14px/1.2 "Google Sans Text", Roboto, system-ui, sans-serif;
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 18px;
+  background: var(--v-blue);
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: background-color 0.14s ease, color 0.14s ease;
+}
+.v7admin .queue .aq-btn:hover:not(:disabled) { background: var(--v-blue-deep); }
+.v7admin .queue .aq-btn:disabled { opacity: 0.55; cursor: default; }
+.v7admin .queue .aq-rejectbtn { background: var(--v-grey-wash); color: var(--v-ink2); }
+.v7admin .queue .aq-rejectbtn:hover:not(:disabled),
+.v7admin .queue .aq-rejectbtn.armed { background: var(--v-amber-wash); color: var(--v-amber-text); }
+@media (prefers-reduced-motion: no-preference) {
+  .v7admin .queue .aq-btn {
+    transition: background-color 0.14s ease, color 0.14s ease, transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .v7admin .queue .aq-btn:active:not(:disabled) { transform: scale(0.97); }
+}
+
+/* the armed reject form: the note field on the pill's quiet register */
+.v7admin .queue .aq-note {
+  font: 400 13.5px/1.4 Roboto, system-ui, sans-serif;
+  border-radius: 8px;
+  padding: 8px 12px;
+  min-width: 260px;
+}
+.v7admin .queue .aq-ruled { font: 400 12.5px/1.5 Roboto, system-ui, sans-serif; }
+.v7admin .queue .aq-err {
+  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
+  margin: 10px 20px 16px;
+}
+
+/* empty state: the honest line on the card, comfortable under the
+   head moment — no invented furniture below the fold */
+.v7admin .queue .aq-empty { padding: 2px 20px 22px; }
+
+/* ============================================================
+   DNA v9 — Round 6.1: the queue's fix round (2026-11-04, user-
+   ruled): SEVEN defined columns (every fact its own), the pager
+   under the rows, and the ruling living in a row-click DETAIL
+   DIALOG (the mockup realm's audit sketch) — the note becomes a
+   growing textarea so a reason can be a paragraph. This block
+   re-writes the Round-6 geometry (same tail-block order law);
+   the v9 headline/type recipes above still apply.
+   ============================================================ */
+
+/* ---------- the seven-column table register ---------- */
+
+.v7admin .queue .ct-colheads {
+  grid-template-columns: 108px minmax(0, 0.95fr) minmax(0, 1.25fr) minmax(0, 1.05fr) minmax(0, 1.05fr) 96px minmax(0, 0.95fr);
+  gap: 0 14px;
+  padding: 10px 20px;
+}
+.v7admin .queue .aq-row {
+  grid-template-columns: 108px minmax(0, 0.95fr) minmax(0, 1.25fr) minmax(0, 1.05fr) minmax(0, 1.05fr) 96px minmax(0, 0.95fr);
+  gap: 8px 14px;
+  padding: 14px 20px;
+  cursor: pointer;
+  align-items: start;
+}
+.v7admin .queue .aq-row:focus-visible {
+  outline: 2px solid var(--v-blue);
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+/* the v9 cell register: two-step hierarchy per column */
+.v7admin .queue .aq-studentcell,
+.v7admin .queue .aq-entrycell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.v7admin .queue .aq-subline,
+.v7admin .queue .aq-org {
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  overflow-wrap: anywhere;
+}
+.v7admin .queue .aq-evidence { min-width: 0; }
+.v7admin .queue .aq-line {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* the long attached note clamps at two lines; the dialog carries it verbatim */
+}
+.v7admin .queue .aq-skillcell { min-width: 0; }
+.v7admin .queue .aq-declaredcell,
+.v7admin .queue .aq-rulingcell {
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: var(--v-ink2);
+  overflow-wrap: anywhere;
+}
+
+/* the mobile fold: status full row, who + declared two-up, the rest stacked */
+@media (max-width: 900px) {
+  .v7admin .queue .aq-row {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+  .v7admin .queue .aq-row > .aq-statuscell { grid-column: 1 / -1; }
+  .v7admin .queue .aq-row > .aq-studentcell { grid-column: 1; grid-row: 2; }
+  .v7admin .queue .aq-row > .aq-declaredcell { grid-column: 2; grid-row: 2; text-align: right; }
+  .v7admin .queue .aq-row > .aq-entrycell { grid-column: 1 / -1; grid-row: 3; }
+  .v7admin .queue .aq-row > .aq-evidence { grid-column: 1 / -1; grid-row: 4; }
+  .v7admin .queue .aq-row > .aq-skillcell { grid-column: 1 / -1; grid-row: 5; }
+  .v7admin .queue .aq-row > .aq-rulingcell { grid-column: 1 / -1; grid-row: 6; }
+}
+
+/* ---------- the audit detail dialog (the ruling's home) ---------- */
+
+.v7admin .aq-dialog-back {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(32, 33, 36, 0.32);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.v7admin .aq-dialog {
+  position: relative;
+  width: min(100%, 600px);
+  max-height: min(84dvh, 700px);
+  overflow-y: auto;
+  background: var(--v-surface);
+  border: 0;
+  border-radius: 16px; /* the v9 16px rung */
+  box-shadow: 0 6px 28px rgba(60, 64, 67, 0.32); /* the M3 picker shadow */
+  padding: 18px 22px 20px;
+  outline: none;
+  animation: aq-din 0.18s cubic-bezier(0.2, 0, 0, 1);
+}
+.v7admin .aq-dialog:focus-visible { outline: 2px solid var(--v-blue); }
+@keyframes aq-din {
+  from { opacity: 0; transform: translateY(10px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v7admin .aq-dialog { animation: none; }
+}
+.v7admin .aq-dhead { display: flex; flex-direction: column; gap: 6px; padding-right: 40px; }
+.v7admin .aq-dchips { display: flex; gap: 6px; flex-wrap: wrap; }
+.v7admin .aq-dtitle {
+  margin: 0;
+  font: 500 17px/1.3 "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+/* the kind chip: the outline register (state color is the status chip's alone) */
+.v7admin .aq-dchips .chip.c-kind {
+  background: var(--v-surface);
+  color: var(--v-ink2);
+  box-shadow: inset 0 0 0 1px var(--v-border);
+}
+.v7admin .aq-dclose {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--v-ink2);
+  cursor: pointer;
+  transition: background-color 0.14s ease;
+}
+.v7admin .aq-dclose:hover { background: var(--v-grey-wash); color: var(--v-ink); }
+.v7admin .aq-dclose:focus-visible { outline: 2px solid var(--v-blue); }
+.v7admin .aq-dfield { display: flex; flex-direction: column; gap: 4px; padding: 12px 0 0; }
+.v7admin .aq-dlabel {
+  margin: 0;
+  font: 500 11.5px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7admin .aq-dline { margin: 0; font: 400 14.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink); }
+.v7admin .aq-dsub { color: var(--v-ink2); }
+.v7admin .aq-dstamp { margin: 0; font: 400 12.5px/1.5 Roboto, system-ui, sans-serif; font-variant-numeric: tabular-nums; color: var(--v-ink2); }
+.v7admin .aq-dtitle + .aq-dchips,
+.v7admin .aq-dchips { order: 0; }
+.v7admin .aq-dkey { margin: 0; font: 400 12.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7admin .aq-dkey b { color: var(--v-blue-deep); font-weight: 500; }
+.v7admin .aq-dwarn { font: 500 12.5px/1.5 Roboto, system-ui, sans-serif; color: var(--v-amber-text); }
+.v7admin .aq-dnote {
+  margin: 0;
+  font: 400 14.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .aq-drule { border-top: 1px solid var(--v-rows); margin-top: 14px; padding-top: 14px; }
+.v7admin .aq-drule .aq-note {
+  width: 100%;
+  min-width: 0;
+  flex: none;
+  resize: vertical;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
+}
+.v7admin .aq-derr {
+  margin: 0;
+  font: 500 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-amber-text);
+}
+.v7admin .aq-dacts {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.v7admin .aq-dcancel {
+  border: 0;
+  background: none;
+  color: var(--v-ink2);
+  font: 500 14px/1.2 "Google Sans Text", Roboto, system-ui, sans-serif;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 999px;
+}
+.v7admin .aq-dcancel:hover:not(:disabled) { background: var(--v-grey-wash); color: var(--v-ink); }
+.v7admin .aq-dcancel:disabled { opacity: 0.55; cursor: default; }
+
+@media (max-width: 480px) {
+  .v7admin .aq-dialog-back { padding: 10px; }
+  .v7admin .aq-dialog { padding: 14px 16px 16px; }
 }
