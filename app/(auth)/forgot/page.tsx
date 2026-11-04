@@ -3,6 +3,7 @@ import { BackArrow } from "../glyphs";
 import ForgotForm from "./ForgotForm";
 import "./auth.css";
 import "../v7-auth.css";
+import "../v9-auth.css";
 
 export const metadata: Metadata = {
   title: "Baseline — reset your password",
@@ -20,7 +21,7 @@ export default async function ForgotPage({
 }) {
   const { state } = await searchParams;
   return (
-    <div className="auth-body v7auth">
+    <div className="auth-body v7auth v9auth">
       <header className="bar">
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
