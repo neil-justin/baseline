@@ -26,21 +26,34 @@ export default function SignUpPage() {
       </header>
 
       <main className="auth-main" id="main">
-        <div className="auth-panel">
+        <div className="auth-split">
           <div className="auth-head">
             <h1>Start the check.</h1>
           </div>
 
-          <SignupForm />
+          <div className="split-card">
+            <div className="split-shapes" aria-hidden="true">
+              <i className="sh sh-circle"></i>
+              <i className="sh sh-clover"><i></i><i></i><i></i><i></i></i>
+              <i className="sh sh-pill"></i>
+              <i className="sh sh-quarter"></i>
+              <i className="sh sh-mark"><i></i></i>
+              <i className="sh sh-dot"></i>
+            </div>
 
-          <GoogleAuth />
+            <div className="split-form">
+              <SignupForm />
 
-          <p className="auth-alt">
-            Already have an account?{" "}
-            <a href="/signin">
-              Sign in <ForwardArrow />
-            </a>
-          </p>
+              <GoogleAuth />
+
+              <p className="auth-alt">
+                Already have an account?{" "}
+                <a href="/signin">
+                  Sign in <ForwardArrow />
+                </a>
+              </p>
+            </div>
+          </div>
         </div>
       </main>
     </div>
