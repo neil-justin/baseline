@@ -555,63 +555,134 @@
 }
 
 /* ============================================================
-   v9 pathway rethink (user ruling 2026-11-04): ONE header (the
-   band absorbs "Your path to X" + the fact counter, which renders
-   as a slim honest bar), the walk column capped for reading
-   length, spacing tightened, tonal color moments added (M3
-   secondary-container on the start-here card, green-wash earned
-   numerals). The .vd2-band section retired from the DOM.
+   v9 pathway rethink — TAKE 3 (user ruling 2026-11-04): ONE white
+   header card; the progress RING is the progress visual (the
+   linear bar retired, no illustration); the up-next steer rides
+   as a bare line (option 1 — no box). Walk cards all white:
+   state lives in the numerals, one chip, and the single blue
+   rail on the start-here card. The .vd2-standing paragraph
+   folded into the header meta line.
    ============================================================ */
 
-/* the band's honest fraction bar */
-.v7plan .vplan-bar {
+/* the header card */
+.v7plan .planhead {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  background: var(--v-surface);
+  border-radius: 16px;
+  box-shadow: var(--v-shadow);
+  padding: 24px 28px;
+  margin-bottom: 10px;
+}
+/* the ring — the ONE progress visual */
+.v7plan .plan-ring {
   position: relative;
-  overflow: hidden;
+  width: 118px;
+  height: 118px;
+  flex: none;
+}
+.v7plan .plan-ring svg {
+  display: block;
   width: 100%;
-  max-width: 320px;
-  height: 4px;
-  border-radius: 2px;
-  background: var(--v-track);
-  margin-top: 12px;
+  height: 100%;
+  transform: rotate(-90deg);
 }
-.v7plan .vplan-bar i {
+.v7plan .plan-ring circle { fill: none; }
+.v7plan .plan-ring-track { stroke: var(--v-rows); }
+.v7plan .plan-ring-arc { stroke: var(--v-blue); stroke-linecap: round; }
+.v7plan .plan-ring-mid {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  border-radius: 2px;
-  background: var(--v-blue);
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
 }
-
-/* the meta line carries the counter now — size it like one */
-.v7plan .planband .band .who .m { font-size: 15px; max-width: none; }
-.v7plan .vd2-lead.lead-mono { font-size: 15px; }
-.v7plan .vd2-lead.lead-mono b { font-size: 15px; }
+.v7plan .plan-ring-mid b {
+  font: 500 30px/1 "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+.v7plan .plan-ring-mid small {
+  display: block;
+  margin-top: 2px;
+  font: 500 10.5px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-meta);
+}
+/* head text */
+.v7plan .plan-head { min-width: 0; }
+.v7plan .plan-head .t {
+  margin: 0;
+  font: 400 26px/1.25 "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+.v7plan .plan-head .m {
+  margin-top: 6px;
+  font-size: 14.5px;
+  color: var(--v-ink2);
+  max-width: 62ch;
+}
+.v7plan .plan-head .m b { color: var(--v-ink); font-weight: 500; }
+/* the bare up-next line (option 1): tiny label + one blue link */
+.v7plan .plan-upnext { margin: 16px 0 0; }
+.v7plan .plan-uplab {
+  display: block;
+  font: 500 10.5px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-meta);
+}
+.v7plan .plan-upnext a,
+.v7plan .plan-upskill {
+  display: inline-block;
+  margin-top: 5px;
+  font: 500 14.5px/1.4 "Google Sans Text", Roboto, system-ui, sans-serif;
+  color: var(--v-blue-deep);
+  text-decoration: none;
+}
+.v7plan .plan-upnext a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 /* the walk column: capped to reading length, centered in the cap */
-.v7plan .vd2-map,
-.v7plan .vd2-standing {
+.v7plan .vd2-map {
   max-width: 880px;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 18px;
 }
-.v7plan .vd2-standing { margin: 18px auto 10px; font-size: 13.5px; }
 
-/* tonal moments */
+/* walk cards: white, roomier — state = numerals + one chip + ONE rail */
+.v7plan .vd2-ncard { padding: 18px 22px; }
+/* earned numerals: solid green discs (claimed stays grey — the hatch
+   chip carries self-report honestly) */
 .v7plan .vd2-cir.vd2-cir-earned {
-  background: var(--v-green-wash);
+  background: var(--v-green);
   border-color: var(--v-green);
-  color: var(--v-green-text);
+  color: #fff;
 }
+/* the single accent in the list: the start-here card's blue rail */
 .v7plan .vd2-row:has(.vd2-start) .vd2-ncard {
-  background: #eef3fc;
+  background: var(--v-surface);
+  box-shadow: inset 3px 0 0 var(--v-blue), var(--v-shadow);
 }
-
-/* spacing: the band hands off tighter to the spine */
-.v7plan .vd2-standing + .vd2-map { margin-top: 4px; }
+/* Start here → the one solid blue pill in the list */
+.v7plan .vd2-start {
+  font: 500 11.5px/1.2 Roboto, system-ui, sans-serif;
+  color: #fff;
+  background: var(--v-blue);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
 
 @media (max-width: 720px) {
-  .v7plan .vplan-bar { max-width: none; }
-  .v7plan .vd2-map,
-  .v7plan .vd2-standing { margin-left: 0; margin-right: 0; }
+  .v7plan .planhead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 20px;
+  }
+  .v7plan .vd2-map { margin-left: 0; margin-right: 0; }
 }

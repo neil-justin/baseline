@@ -93,7 +93,7 @@ export const RESOURCES: Resource[] = [
     access: "exam-paid",
     learnNotes: {
       "Applications Development":
-        "Michigan's Python-for-everybody course runs the write-run-check loop from your first function — the maintain-code-to-spec work the FSC cell prints, with the PYTHON_CHECK riding this exact resource.",
+        "Michigan's Python-for-everybody course runs the write-run-check loop from your first function — the maintain-code-to-spec work the FSC cell prints, with the skill check riding this exact resource.",
     },
     // learn line — authored 2026-11-03, user-delegated
   },

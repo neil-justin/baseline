@@ -109,55 +109,84 @@ export default function PathwayTabs({
   const showWalk = !undecided && walk;
   const nodes: WalkNode[] = showWalk ? walk.nodes : [];
 
+  /* the up-next steer — the first OPEN node in walk order (header
+     option 1: a bare line, no box) */
+  const upNext = showWalk
+    ? (walk!.nodes.map((n, i) => ({ n, i })).find(({ n }) => n.state === "open") ?? null)
+    : null;
+
   return (
     <div className="v7plan">
-      {/* surface band — the rethink (user ruling 2026-11-04): ONE header.
-          "My Plan" absorbs the walk's "Your path to X" + the fact counter
-          (the .vd2-band section retired); the honest fraction renders as
-          a slim bar. Locators (.vd2-lead/.lead-mono) ride along. */}
-      <section className="planband" aria-label="My Plan">
-        <div className="band">
-          <div className="bandrow">
-            <div className="who">
-              <h1 className="t">My Plan</h1>
-              {careerName ? (
-                <p className="m">
-                  Your path to {careerName} —{" "}
-                  <span className="vd2-lead num lead-mono">
-                    <b>{walk!.closed}</b> of {walk!.total} required skills
-                    checked
-                  </span>
-                  .
-                </p>
-              ) : null}
-              {careerName && walk ? (
-                <div
-                  className="vplan-bar"
-                  role="progressbar"
-                  aria-label={`${walk!.closed} of ${walk!.total} required skills checked`}
-                  aria-valuemin={0}
-                  aria-valuemax={walk!.total}
-                  aria-valuenow={walk!.closed}
-                >
-                  <i
-                    style={{
-                      width: `${Math.round((walk!.closed / walk!.total) * 100)}%`,
-                    }}
-                  />
-                </div>
-              ) : null}
+      {/* Take 3 header (user ruling 2026-11-04): ONE white card — the
+          progress RING is the progress visual (the linear bar retired;
+          no illustration), and the up-next steer rides as a bare line
+          (option 1 — label + link, nothing boxed). The `.lead-mono` e2e
+          guard counter rides the ring mid ("keep a .lead-mono counter
+          on the head" — cutover plan §338). The .vd2-standing paragraph
+          folded into the meta line. */}
+      {showWalk ? (
+        <section className="planhead" aria-label="My Plan">
+          <div
+            className="plan-ring"
+            role="img"
+            aria-label={`${walk!.closed} of ${walk!.total} required skills checked`}
+          >
+            <svg viewBox="0 0 118 118" aria-hidden="true">
+              <circle className="plan-ring-track" cx="59" cy="59" r="51" strokeWidth="10" />
+              <circle
+                className="plan-ring-arc"
+                cx="59"
+                cy="59"
+                r="51"
+                strokeWidth="10"
+                strokeDasharray={`${Math.round((walk!.closed / walk!.total) * 3204) / 10} 320.4`}
+              />
+            </svg>
+            <span className="plan-ring-mid num lead-mono">
+              <b>
+                {walk!.closed}/{walk!.total}
+              </b>
+              <small>checked</small>
+            </span>
+          </div>
+          <div className="plan-head">
+            <h1 className="t">My Plan</h1>
+            <p className="m">
+              Your path to <b>{careerName}</b> — the walk never re-sorts; your
+              state is the overlay.
+            </p>
+            {upNext && (
+              <p className="plan-upnext">
+                <span className="plan-uplab">
+                  Up next · skill {upNext.i + 1} of {walk!.total}
+                </span>
+                {upNext.n.material?.url ? (
+                  <a href={upNext.n.material.url} target="_blank" rel="noopener noreferrer">
+                    {upNext.n.skill} — {upNext.n.material.title}{" "}
+                    <span aria-hidden="true">→</span>
+                  </a>
+                ) : (
+                  <span className="plan-upskill">{upNext.n.skill}</span>
+                )}
+              </p>
+            )}
+          </div>
+        </section>
+      ) : (
+        <section className="planband" aria-label="My Plan">
+          <div className="band">
+            <div className="bandrow">
+              <div className="who">
+                <h1 className="t">My Plan</h1>
+                {careerName ? <p className="m">Your path to {careerName}.</p> : null}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {showWalk ? (
         <>
-          <p className="vd2-standing">
-            These are the role&apos;s required skills, in a fixed order — check
-            them off. The walk never re-sorts; your state is the overlay.
-          </p>
-
           {/* THE SPINE — one continuous 2px line down the left; one container
               card holds every node row (the region cards were demolished);
               each row draws its own line segment; the last row ends its
