@@ -41,7 +41,7 @@ export default function Loading() {
                   ))}
                 </div>
               </div>
-              <span className="skel" style={{ width: 150, height: 40, borderRadius: 8 }} />
+              <span className="skel" style={{ width: 150, height: 40, borderRadius: 999 }} />
             </div>
           </div>
         </section>

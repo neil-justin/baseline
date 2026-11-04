@@ -279,3 +279,19 @@
   .v7dash .plan-table th:nth-child(3),
   .v7dash .plan-table td:nth-child(3) { display: none; } /* State folds on tiny screens */
 }
+
+/* ============================================================
+   DNA v9 sweep — dashboard (2026-11-04, rides the shell's v9
+   token block in ../v7.css). Cards borderless at the 16px rung;
+   chips at the 8px rung; card heads in Google Sans. The five
+   channel cells' honest bars, wash chips, and every numeral stay
+   Roboto tabular (Tabular Rule). Hooks byte-untouched.
+   ============================================================ */
+
+.v7dash .kpi,
+.v7dash .card {
+  border: 0;
+  border-radius: 16px;
+}
+.v7dash .chip { border-radius: 8px; }
+.v7dash .card .head b { font-family: "Google Sans", Roboto, system-ui, sans-serif; letter-spacing: -0.01em; }
