@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { PER_PAGE, pagesOf, slicePage } from "@/app/admin/pager-math";
+import Pager from "@/app/admin/Pager";
 
 /**
  * Pager verification — the cohort pagination round (spec
@@ -32,5 +35,48 @@ describe("pager page math (10 per page, user-ruled 2026-11-04)", () => {
 
   it("slices an empty roster without throwing", () => {
     expect(slicePage([], 1)).toEqual([]);
+  });
+
+  it("parameterizes per (the audit queue's future knob)", () => {
+    expect(pagesOf(11, 5)).toBe(3);
+    expect(slicePage([1, 2, 3, 4, 5, 6, 7], 2, 5)).toEqual([6, 7]);
+  });
+});
+
+const noop = () => {};
+
+describe("pager render law (mockup register, atabs- hooks)", () => {
+  it("renders the nav with the active page marked and the position label", () => {
+    const html = renderToStaticMarkup(
+      createElement(Pager, { page: 2, pages: 3, setPage: noop }),
+    );
+    expect(html).toContain('class="atabs-pager"');
+    expect(html).toContain('aria-label="Table pagination"');
+    expect(html).toContain('aria-current="page"');
+    expect(html).toContain("PAGE 2 OF 3");
+    // exactly one active-numbered face, never two
+    expect(html.match(/class="atabs-pager-btn on"/g)?.length).toBe(1);
+  });
+
+  it("hides itself while the table fits one page (mockup behavior)", () => {
+    const html = renderToStaticMarkup(
+      createElement(Pager, { page: 1, pages: 1, setPage: noop }),
+    );
+    expect(html).toBe("");
+  });
+
+  it("disables the chevrons at the bounds, never the numbers", () => {
+    const first = renderToStaticMarkup(
+      createElement(Pager, { page: 1, pages: 3, setPage: noop }),
+    );
+    expect(first.match(/disabled=""?/g)?.length).toBe(1);
+    const last = renderToStaticMarkup(
+      createElement(Pager, { page: 3, pages: 3, setPage: noop }),
+    );
+    expect(last.match(/disabled=""?/g)?.length).toBe(1);
+    const middle = renderToStaticMarkup(
+      createElement(Pager, { page: 2, pages: 3, setPage: noop }),
+    );
+    expect(middle.includes("disabled")).toBe(false);
   });
 });
