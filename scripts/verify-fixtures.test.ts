@@ -977,10 +977,10 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
 });
 
 describe("§6.1 re-map census (final mapping state) + canon rails", () => {
-  it("catalog intact: no rows deleted (437 → 473 → 483 → 496 → 503 → 514 → 516, Wave B/Wave E fills all additive); 652 ADDR entries", () => {
-    expect(RESOURCES).toHaveLength(516); // 514 + 2 Wave E acct-family salvage (cancelled batch, live-verified 2026-11-04: acctclerk Alison US tax-filing 1 · pay Coursera ADP payroll-fundamentals 1)
+  it("catalog intact: no rows deleted (437 → 473 → 483 → 496 → 503 → 514 → 516 → 522, Wave B/Wave E fills all additive); 659 ADDR entries", () => {
+    expect(RESOURCES).toHaveLength(522); // 516 + 6 Wave E six-career fills (acct-family salvage 2 at 88fa941 · fas DEI 1 · fin investments+supervision 2 · treasury teller-craft 2 · coll PDCflow skip-trace 1)
     const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
-    expect(mappings).toBe(652); // 650 + 2 salvage new-row claims (1 claim each)
+    expect(mappings).toBe(659); // 652 + 7 Wave E claims (1 per new row ×6 + the Alison-AR confer re-point)
   });
 
   it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {
@@ -1020,9 +1020,11 @@ describe("§6.1 re-map census (final mapping state) + canon rails", () => {
     // Performance-Sourcing bundle) → 38 (Wave E four-career fills: opsanalyst
     // Implementation-support/Forms-review/Records-program, purch Price-
     // proposal/Contract-monitoring/Spec-writing, ccqa Document Control,
-    // events Bills-review — the remaining 8 thin cells are the adjudicated
-    // or declared-thin cells listed in the batch commit body)
-    expect(thin).toHaveLength(38);
+    // events Bills-review) → 33 (Wave E six-career fills: fas
+    // DEI-awareness, fin recommend-investments + supervision, treasury
+    // transaction-entry, coll confer — the remaining thin cells carry the
+    // adjudication or the declared-thin references listed in the commit body)
+    expect(thin).toHaveLength(33);
     // thin cells never get papered over: no pick flag, no invented row
     const thinPick = RESOURCES.filter((r) => r.pick && r.url === undefined);
     expect(thinPick).toEqual([]);
@@ -1064,7 +1066,7 @@ describe("pick-flag census (retired authored picks → inert fallback annotation
       }
     }
     const flags = RESOURCES.filter((r) => r.pick).map((r) => r.id);
-    expect(flags).toHaveLength(252); // 244 (Wave E prior) + 8 new winners ( Wave E four-career fills: ops tott-design/adobe-document-design/ops-edm · purch tco/contract-execution/specs-to-pos · ccqa-edm · events-invoice-approval; qual-research, educba-bidding and market-scan lose their cell's fallbackSort to the shorter/earlier rows)
+    expect(flags).toHaveLength(256); // 252 (Wave E prior) + 4 new winners (Wave E six-career fills: fas alison-dei, fin educba-equity + alison-supervision, treasury alison-cash-handling are their cells' fallbackSort winners — the treasury bank-telling row loses the balance cell to RA 8791 on hours and the coll PDCflow row loses skip-tracing to RA 10173 on the provider tie-break, so neither rides a flag)
     expect(new Set(flags)).toEqual(winnerRows); // byte-match in BOTH directions
     expect(winnersBySkill.get("swd::Applications Development")).toBe("res-python-basics");
     // the canon money-shot stays flagged-adjacent: the qa fallback winner is a

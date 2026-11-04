@@ -7698,9 +7698,15 @@ export const RESOURCES: Resource[] = [
   // control evaluation, evidence, control weaknesses) carries Internal
   // Controls; University of Cambridge's Finance for Non-finance
   // Professionals (budgets & proposals, budget-variance reporting, the
-  // Modelling-essentials module) carries Support strategic planning. Honest
-  // red KEPT: Diversity Awareness and Management (no taught claim verified —
-  // batch-2's searched verdict stands for the family). Coverage: 9/10 vetted.
+  // Modelling-essentials module) carries Support strategic planning.
+  // Wave E hunt (2026-11-04, user-delegated): Diversity Awareness and
+  // Management fills — Alison's "Creating a Diverse and Inclusive Workplace
+  // Culture" (fetched LIVE 200: "Start Course Now", 1.5-3 h, CPD-accredited;
+  // printed outcomes define workplace diversity/equity/inclusiveness,
+  // evaluate workplace culture with respect to DEI, and drill overcoming
+  // unconscious bias incl. its gender-bias effects) → taught/account; the
+  // batch-2 searched verdict is superseded by this live-verified taught
+  // page. Coverage: 10/10 vetted.
   {
     id: "res-fas-psf-gih-doc",
     title: "Philippine Skills Framework for Global In-House Center (official PDF)",
@@ -8062,6 +8068,32 @@ export const RESOURCES: Resource[] = [
   },
   // Fas taught fills note — the rows above (UIUC internal-auditing, Cambridge
   // finance) carry the Strategic-planning and Internal-Controls cells.
+  {
+    id: "res-fas-alison-dei",
+    title: "Creating a Diverse and Inclusive Workplace Culture (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): "Start Course
+    // Now", 1.5-3 h (Contains Video), CPD-accredited, beginner level —
+    // printed outcomes define workplace diversity/equity/inclusiveness,
+    // evaluate workplace culture with respect to diversity/equity/
+    // inclusiveness, and drill overcoming unconscious bias (incl. its
+    // gender-bias effects) plus inclusive team meetings. Certificate
+    // optional (paid); study free/account.
+    url: "https://alison.com/course/creating-a-diverse-and-inclusive-workplace-culture",
+    durationHours: 3,
+    skillsAddressed: ["Diversity Awareness and Management"],
+    careerId: "fas",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Diversity Awareness and Management":
+        "The course runs the DEI awareness loop on workplace culture — defining diversity/equity/inclusiveness, evaluating the culture against them, and drilling the unconscious-bias (incl. gender-bias) and inclusive-meeting behaviors.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
   // ── fin (4.5) ──
   // Wave B audit (2026-11-03, batch 3): per-row. OpenStax Principles of
   // Finance grades taught/direct (standing textbook verification; the
@@ -8079,9 +8111,18 @@ export const RESOURCES: Resource[] = [
   // module teaches model design, workbook structure, workflow,
   // visualization and commentary) is the per-role fill for the finance-
   // model-design cell. TOP module + Wharton accounting graded per standing.
-  // Honest reds KEPT: Recommend investments and investment timing (no
-  // taught page verified), Supervise/train/mentor (resourceless by
-  // declaration). Coverage: 8/10 vetted.
+  // Wave E hunt (2026-11-04, user-delegated): two cells fill — EDUCBA's
+  // "Equity Investments and Valuation Strategies" (fetched LIVE on the
+  // Coursera audit route: "Enroll for free", 5 modules; the equity-valuation
+  // module teaches estimating intrinsic value, comparing investment
+  // opportunities and building valuation-driven strategies to make informed
+  // investment decisions) carries Recommend-investments; Alison's
+  // "Introduction to Supervision" (fetched LIVE 200: "Start Course Now",
+  // 1.5-3 h, CPD-accredited; outcomes list the responsibilities of a
+  // supervisor, delegating successfully, motivating subordinates and the
+  // coaching-vs-mentoring split) carries Supervise/train/mentor — the taught
+  // craft behind the O*NET row (the entry path carries the skill before the
+  // supervising seat). Coverage: 10/10 vetted.
   {
     id: "res-fin-openstax-finance",
     title: "Principles of Finance (OpenStax)",
@@ -8353,8 +8394,67 @@ export const RESOURCES: Resource[] = [
     durationHours: 0,
     type: "course",
     cost: "free",
+    // Wave E (2026-11-04): the taught fill this declaration waited on landed —
+    // the Alison Introduction to Supervision row below now carries the cell;
+    // this row stays as the honest history (no padding).
     skillsAddressed: ["Supervise, train, or mentor junior team members"],
     careerId: "fin",
+  },
+  {
+    id: "res-fin-educba-equity-investments",
+    title: "Equity Investments and Valuation Strategies (EDUCBA)",
+    provider: "Coursera (EDUCBA)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): "Enroll for
+    // free", 5 modules in the Investment Management and Capital Markets
+    // Specialization — market foundations → market mechanisms/indices and
+    // efficiency → equity instruments/return characteristics and behavioral
+    // finance → industry/competitive analysis (business cycles, Porter's
+    // Five Forces) → the equity-valuation module: dividend-discount,
+    // asset-based and multiplier approaches, "estimate intrinsic value,
+    // compare investment opportunities, and build valuation-driven
+    // investment strategies". The recommend-investments-and-timing craft in
+    // taught form; ₱ paid tier: certificate.
+    url: "https://www.coursera.org/learn/equity-investments-valuation-strategies",
+    durationHours: 10,
+    skillsAddressed: ["Recommend investments and investment timing"],
+    careerId: "fin",
+    pick: true,
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Recommend investments and investment timing":
+        "The equity-valuation module teaches the recommendation loop — estimating intrinsic value via dividend-discount/asset-based/multiplier models, comparing investment opportunities, and building valuation-driven strategies (the market-efficiency and business-cycle modules carry the timing read).",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-fin-alison-supervision",
+    title: "Introduction to Supervision (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): "Start Course
+    // Now", 1.5-3 h, CPD-accredited — printed outcomes define supervision
+    // and the responsibilities of a supervisor, drill delegating
+    // successfully, list ways to motivate subordinates, establish why trust
+    // matters, and teach the coaching-vs-mentoring distinction alongside
+    // leadership principles. The supervise/train/mentor craft for juniors in
+    // taught form (the entry path carries the skill before the supervising
+    // seat); certificate optional (paid).
+    url: "https://alison.com/course/introduction-to-supervision",
+    durationHours: 3,
+    skillsAddressed: ["Supervise, train, or mentor junior team members"],
+    careerId: "fin",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Supervise, train, or mentor junior team members":
+        "The course teaches supervising others — the responsibilities of a supervisor, delegating successfully, motivating and building trust with subordinates, and the coaching-vs-mentoring split that shapes how a junior gets trained.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
   },
   // ── treasury (4.6) — BSP 403 flag carried; Khan US-framing flagged ──
   // Wave B audit (2026-11-03, batch 3): access/form per-row. Khan units
@@ -8367,6 +8467,19 @@ export const RESOURCES: Resource[] = [
   // checks (the statute anchor is reference; no taught cash-count page
   // verified) and Enter-customers'-transactions (no claim — the teller-side
   // craft; the teller batch covers the family). Coverage: 4/6 vetted.
+  // Wave E hunt (2026-11-04, user-delegated): both teller-side cells fill —
+  // Alison's "Introduction to Bank Telling" (fetched LIVE 200: "Start Course
+  // Now", 1.5-3 h, CPD-accredited; outcomes carry the critical roles and
+  // responsibilities of bank tellers, cash-sorting techniques and the
+  // accounting/mathematical skills a teller's role needs) carries the
+  // cash-drawer-balance cell (the desk's end-of-shift close and its running
+  // daily-transaction math; the RA 8791 statute row keeps the lawful
+  // context); Alison's "Guide to Effective Cash Handling Techniques"
+  // (fetched LIVE 200: "Start Course Now", 1.5-3 h; the modern-POS-systems
+  // outcome rides transaction efficiency plus accurate-calculation and
+  // check-verification processes) carries the transaction-entry/receipts
+  // cell (US cashier-desk framing scoped honestly in-row). Coverage: 6/6
+  // vetted.
   {
     id: "res-treasury-khan-banking",
     title: "Finance and Capital Markets — Banking & Money unit (Khan Academy)",
@@ -8547,6 +8660,64 @@ export const RESOURCES: Resource[] = [
     },
     // learn draft — user review pending
   },
+  {
+    id: "res-treasury-alison-bank-telling",
+    title: "Introduction to Bank Telling (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): "Start Course
+    // Now", 1.5-3 h (Contains Video), CPD-accredited, beginner level —
+    // printed outcomes carry the critical roles and responsibilities of
+    // bank tellers, the skills/abilities they need, different payment
+    // methods and bookkeeping guidelines, the techniques and procedures for
+    // sorting cash, and the accounting and mathematical skills a teller's
+    // role needs. The end-of-shift cash-drawer close (currency, coin and
+    // checks against a counted daily total) is the teller responsibility the
+    // course teaches; certificate optional (paid). The RA 8791 statute row
+    // keeps the lawful context in the same pool.
+    url: "https://alison.com/course/introduction-to-bank-telling",
+    durationHours: 3,
+    skillsAddressed: [
+      "Balance currency, coin, and checks in cash drawers at ends of shifts and calculate daily transactions, using computers, calculators, or adding machines",
+    ],
+    careerId: "treasury",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Balance currency, coin, and checks in cash drawers at ends of shifts and calculate daily transactions, using computers, calculators, or adding machines":
+        "The course teaches the teller craft around the drawer — the responsibilities that include receiving and sorting currency/coin/checks, the bookkeeping guidelines they post against, and the accounting-and-math skills (payment-method arithmetic, check handling) the end-of-shift count-and-balance runs on.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
+  {
+    id: "res-treasury-alison-cash-handling",
+    title: "Guide to Effective Cash Handling Techniques (Alison)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): "Start Course
+    // Now", 1.5-3 h (Contains Video), CPD-accredited, advanced level —
+    // printed outcomes carry the modern POS systems used to optimise
+    // transaction efficiency, the benefits of accurate calculations in
+    // financial transactions, check-verification processes and cash-
+    // management principles (plus fraud-prevention safeguards). The
+    // transaction-entry/receipt-issuing desk loop in taught form; US
+    // cashier-desk framing scoped honestly in-row (the bank-bookkeeping
+    // side rides the bank-telling anchor in the same pool).
+    url: "https://alison.com/course/guide-to-effective-cash-handling-techniques",
+    durationHours: 3,
+    skillsAddressed: ["Enter customers' transactions into computers to record transactions and issue computer-generated receipts"],
+    careerId: "treasury",
+    pick: true,
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Enter customers' transactions into computers to record transactions and issue computer-generated receipts":
+        "The POS-systems module teaches the transaction-processing loop — entering each customer's purchase/payment into the system, the accurate-calculation discipline behind it, and the computer-generated receipt the system issues (check-verification and cash-management safeguards included).",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
   // ── coll (4.7) — thin collections-training zone declared; RA 3765 never a live link ──
   // Wave B audit (2026-11-03, batch 4): access/form per-row. TOP Moodle modules
   // → account (303 login-wall verified LIVE this pass). GCF Excel graded
@@ -8559,10 +8730,22 @@ export const RESOURCES: Resource[] = [
   // per-role fill (fetched LIVE 2026-11-03, user-ruled): Alison's taught
   // "Accounts Receivable Management" ("Start Course Now", CPD-accredited) —
   // its printed outcomes carry establish-collection-procedures/credit-terms
-  // and the AR process flow: the three collections-craft cells. Honest reds
-  // kept (no taught page verified this pass): the face-to-face reason-review
-  // conversation, delinquent-customer skip-tracing, the
-  // legal-action/disconnection recommendation. Coverage: 6/9 vetted.
+  // and the AR process flow: the three collections-craft cells.
+  // Wave E hunt (2026-11-04, user-delegated): two more cells fill —
+  // PDCflow's "Skip Tracing Tools and Techniques for Collections" (fetched
+  // LIVE 200: a deep step-by-step guide converted from the CAC Collection
+  // Boot Camp curriculum — skip classification, locate services/tools,
+  // permissible-purpose rules and informant questioning scripts) carries
+  // skip-tracing in taught form; the fresh AR fetch (LIVE 2026-11-04)
+  // re-points the AR row to the confer/terms-review cell on its printed
+  // collection-procedures + credit-terms outcomes. Honest red adjudicated
+  // Wave E 2026-11-04 — Recommend-legal-action/disconnection: no taught
+  // page teaches the recommendation itself (the taught ecosystem drills
+  // compliant settlement and litigation AVOIDANCE — the PDCflow boot-camp
+  // series prints settlement criteria and attorney-review guardrails, not
+  // escalation-craft; Alison AR prints collection agencies as functions).
+  // The RA 10173 reference anchor + the declared-thin gap carry the cell.
+  // Coverage: 8/9 vetted (adjudicated-only red).
   {
     id: "res-coll-top-receiving-comms",
     title: "Receiving and Responding to Workplace Communication (TOP)",
@@ -8755,10 +8938,19 @@ export const RESOURCES: Resource[] = [
     // terms", plus the full AR process flow (billing, cash application,
     // payments reconciliation). taught/account. The locate-and-notify,
     // repayment-scheduling and accounts-upkeep winner (id A–Z).
+    // Re-point (fetched LIVE fresh 2026-11-04, Wave E user-delegated): the
+    // printed collection-procedures outcome ("establish clear collection
+    // procedures to manage delinquent accounts") is the delinquent-account
+    // outreach loop — conferring with the customer to determine overdue
+    // reasons — and the credit-terms outcome ("assessing credit risk and
+    // setting appropriate credit limits and payment terms") is the
+    // terms-of-sale/service/credit-contract review; the confer cell rides
+    // the same taught procedures work.
     url: "https://alison.com/course/accounts-receivable-management",
     durationHours: 2,
     skillsAddressed: [
       "Locate and notify customers of delinquent accounts by mail, telephone, or personal visits to solicit payment",
+      "Confer with customers by telephone or in person to determine reasons for overdue payments and to review the terms of sales, service, or credit contracts",
       "Arrange for debt repayment or establish repayment schedules, based on customers' financial situations",
       "Administrative upkeep of assigned accounts",
     ],
@@ -8769,12 +8961,46 @@ export const RESOURCES: Resource[] = [
     learnNotes: {
       "Locate and notify customers of delinquent accounts by mail, telephone, or personal visits to solicit payment":
         "The collection-procedures module teaches the delinquent-account outreach loop — notices and follow-up actions per collection stage.",
+      "Confer with customers by telephone or in person to determine reasons for overdue payments and to review the terms of sales, service, or credit contracts":
+        "Managing delinquent accounts through the collection-procedures module is the confer loop — contacting the customer, hearing the overdue reasons, and re-walking the terms of the sale/service/credit contract with the credit-risk/payment-terms lens the course drills.",
       "Arrange for debt repayment or establish repayment schedules, based on customers' financial situations":
         "The credit-terms module runs assessing risk and setting payment terms/schedules — the repayment-arrangement craft.",
       "Administrative upkeep of assigned accounts":
         "The AR process-flow modules (billing → cash application → reconciliation) are the day-to-day accounts-upkeep machinery.",
     },
     // learn draft — user review pending
+  },
+  {
+    id: "res-coll-pdcflow-skip-trace",
+    title: "Skip Tracing Tools and Techniques for Collections (PDCflow)",
+    provider: "PDCflow (CAC Collection Boot Camp series)",
+    type: "doc",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): HTTP 200, deep
+    // step-by-step guide converted from the CAC Collection Boot Camp
+    // curriculum (bylined past CAC President + CAC MAP attorney) — it
+    // teaches the skip-tracing craft itself: classifying skips
+    // (company/unintentional/intentional/criminal), choosing locate
+    // vendors/tools (credit-report services like Accurint/Clear/TLO plus
+    // free social/government sources), running searches under "permissible
+    // purpose" (FCRA) and third-party-verification rules ("contact only
+    // once, identify yourself, disclose only location-confirmation"), and
+    // informant questioning scripts drilled with active-listening,
+    // closed/open-ended and reflexive-question technique. taught/direct as
+    // a step-by-step how-to doc (the Atlassian/deep-guide family standing);
+    // US FCRA framing scoped honestly in-row — the PH personal-data
+    // handling rides RA 10173 in the same pool.
+    url: "https://www.pdcflow.com/debt-collection/collection-boot-camp-skip-tracing-guide/",
+    durationHours: 2,
+    skillsAddressed: ["Trace delinquent customers to new addresses by inquiring at post offices, telephone companies, credit bureaus, or through the questioning of neighbors"],
+    careerId: "coll",
+    form: "taught",
+    access: "direct",
+    learnNotes: {
+      "Trace delinquent customers to new addresses by inquiring at post offices, telephone companies, credit bureaus, or through the questioning of neighbors":
+        "The guide teaches locating a delinquent customer through institutions and third parties — classify the skip, pick the locate service (post-office/utility/credit-bureau-class data and social/government sources), stay inside the permissible-purpose and third-party-verification rules, and run the account-numbered searches and informant scripts (active listening, open/closed questions) that surface a new address.",
+    },
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-coll-gap-collections-training",
