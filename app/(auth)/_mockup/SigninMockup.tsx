@@ -25,16 +25,14 @@ export default function SigninMockup() {
         <h1 className="mock-h1">Sign in.</h1>
 
         <div className="mock-card">
-          <figure className="mock-photo">
-            {/* self-hosted (offline demo); free license (Pexels) */}
-            {/* eslint-disable-next-line @next/next/no-img-element -- static local asset */}
-            <img
-              src="/landing-graduates.jpg"
-              alt="Graduates in gowns throwing their caps into a clear blue sky"
-              width={1600}
-              height={1067}
-            />
-          </figure>
+          <div className="mock-shapes" aria-hidden="true">
+            <i className="sh sh-circle"></i>
+            <i className="sh sh-clover"><i></i><i></i><i></i><i></i></i>
+            <i className="sh sh-pill"></i>
+            <i className="sh sh-quarter"></i>
+            <i className="sh sh-mark"><i></i></i>
+            <i className="sh sh-dot"></i>
+          </div>
 
           <div className="mock-form">
             <form noValidate>

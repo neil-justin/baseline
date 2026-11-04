@@ -39,6 +39,11 @@
   --m-l1: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
   --m-ui: "Google Sans", "Google Sans Text", Roboto, system-ui, sans-serif;
   --m-text: "Google Sans Text", Roboto, system-ui, sans-serif;
+  /* the marketing four-color moment (decorative register — v9 §4) */
+  --m-gblue: #4285f4;
+  --m-ggreen: #34a853;
+  --m-gyellow: #fbbc04;
+  --m-gred: #ea4335;
 
   font: 400 14.5px/1.55 var(--m-text);
   color: var(--m-ink);
@@ -103,19 +108,6 @@
   overflow: hidden;
   box-shadow: var(--m-l1);
   background: #fff;
-}
-.v9mock .mock-photo {
-  margin: 0;
-  min-height: 100%;
-  position: relative;
-}
-.v9mock .mock-photo img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
 }
 .v9mock .mock-form { padding: 40px 44px 36px; }
 
@@ -202,15 +194,117 @@
 .v9mock .mock-alt a { font-weight: 500; color: var(--m-ink); text-underline-offset: 3px; }
 .v9mock .mock-alt a:hover { color: var(--m-primary); }
 
-/* ---------- folds ---------- */
+/* ---------- THE M3 SHAPE PANEL (replaces the photo pane) ---------- */
+/* Material's expressive-shape register: tonal primary-container ground
+   with a four-color shape composition (decorative register — v9 §4).
+   Pure CSS — nothing to crop, nothing to load, offline-safe.        */
+.v9mock .mock-shapes {
+  position: relative;
+  overflow: hidden;
+  background: var(--m-blue-wash);
+  min-height: 100%;
+}
+.v9mock .mock-shapes .sh {
+  position: absolute;
+}
+/* the hero circle — command blue, bleeding off the top edge */
+.v9mock .sh-circle {
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: var(--m-primary);
+  top: -70px;
+  left: 40px;
+}
+/* the M3 four-leaf clover — green, four overlapping circles */
+.v9mock .sh-clover {
+  width: 150px;
+  height: 150px;
+  right: 22px;
+  top: 118px;
+}
+.v9mock .sh-clover i {
+  position: absolute;
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: var(--m-ggreen);
+}
+.v9mock .sh-clover i:nth-child(1) { left: 32px; top: 0; }
+.v9mock .sh-clover i:nth-child(2) { left: 64px; top: 32px; }
+.v9mock .sh-clover i:nth-child(3) { left: 32px; top: 64px; }
+.v9mock .sh-clover i:nth-child(4) { left: 0; top: 32px; }
+/* the pill — yellow, rotated */
+.v9mock .sh-pill {
+  width: 150px;
+  height: 68px;
+  border-radius: 999px;
+  background: var(--m-gyellow);
+  transform: rotate(-24deg);
+  left: 34px;
+  bottom: 120px;
+}
+/* the quarter disc — red, anchored to the bottom-right */
+.v9mock .sh-quarter {
+  width: 150px;
+  height: 150px;
+  background: var(--m-gred);
+  border-radius: 0 100% 0 0;
+  right: 0;
+  bottom: 0;
+}
+/* the brand-mark echo — large ink square, blue inlay, centered */
+.v9mock .sh-mark {
+  width: 110px;
+  height: 110px;
+  border-radius: 30px;
+  background: var(--m-ink);
+  display: grid;
+  place-items: center;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: var(--m-l1);
+}
+.v9mock .sh-mark i {
+  display: block;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: var(--m-primary);
+}
+/* the small dot — white, for rhythm */
+.v9mock .sh-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  left: 44px;
+  bottom: 56px;
+}
+
+/* ---------- responsive folds ---------- */
 @media (max-width: 940px) {
   .v9mock .mock-card { grid-template-columns: 1fr; }
-  .v9mock .mock-photo { min-height: 150px; }
+  .v9mock .mock-shapes { min-height: 210px; }
   .v9mock .mock-form { padding: 30px 28px 28px; }
   .v9mock .mock-main { padding: 44px 20px 56px; }
 }
 @media (max-width: 560px) {
-  .v9mock .mock-photo { min-height: 120px; }
+  .v9mock .mock-shapes { min-height: 150px; }
+  .v9mock .sh-pill,
+  .v9mock .sh-dot { display: none; }
+  .v9mock .sh-circle { width: 150px; height: 150px; top: -50px; left: 24px; }
+  .v9mock .sh-clover { width: 110px; height: 110px; right: 18px; top: 96px; }
+  .v9mock .sh-clover i { width: 62px; height: 62px; }
+  .v9mock .sh-clover i:nth-child(1) { left: 24px; top: 0; }
+  .v9mock .sh-clover i:nth-child(2) { left: 48px; top: 24px; }
+  .v9mock .sh-clover i:nth-child(3) { left: 24px; top: 48px; }
+  .v9mock .sh-clover i:nth-child(4) { left: 0; top: 24px; }
+  .v9mock .sh-pill { width: 110px; height: 50px; left: 22px; bottom: 80px; }
+  .v9mock .sh-quarter { width: 100px; height: 100px; }
+  .v9mock .sh-mark { width: 72px; height: 72px; border-radius: 20px; }
+  .v9mock .sh-mark i { width: 24px; height: 24px; border-radius: 8px; }
   .v9mock .mock-form { padding: 24px 20px 22px; }
   .v9mock .mock-main { padding: 32px 14px 48px; }
 }
