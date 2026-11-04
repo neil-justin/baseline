@@ -599,16 +599,16 @@
   text-align: center;
 }
 .v7plan .plan-ring-mid b {
-  font: 500 30px/1 "Google Sans", Roboto, system-ui, sans-serif;
+  font: 500 24px/1 "Google Sans", Roboto, system-ui, sans-serif;
   letter-spacing: -0.01em;
   color: var(--v-ink);
   font-variant-numeric: tabular-nums;
 }
 .v7plan .plan-ring-mid small {
   display: block;
-  margin-top: 2px;
-  font: 500 10.5px/1.4 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.08em;
+  margin-top: 3px;
+  font: 500 10px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--v-meta);
 }
@@ -655,7 +655,7 @@
 }
 
 /* walk cards: white, roomier — state = numerals + one chip + ONE rail */
-.v7plan .vd2-ncard { padding: 18px 22px; }
+.v7plan .vd2-ncard { padding: 20px 24px; }
 /* earned numerals: solid green discs (claimed stays grey — the hatch
    chip carries self-report honestly) */
 .v7plan .vd2-cir.vd2-cir-earned {
@@ -685,4 +685,50 @@
     padding: 20px;
   }
   .v7plan .vd2-map { margin-left: 0; margin-right: 0; }
+}
+
+/* ============================================================
+   v9 pathway fix round (user feedback, 2026-11-04): the walk
+   card's inner hierarchy was BACKWARDS (the "what" line rode
+   13px grey while the "learn" detail rode near-black) and the
+   blocks had no breathing room; at 390 the glyph|main|eff grid
+   squeezed the text column to ~90px. Fixes: two-step type
+   hierarchy, real gaps between blocks, and the item folds to
+   ONE column on mobile (chip row on top, full-width text).
+   ============================================================ */
+
+/* text hierarchy: the skill's JOB reads strongest, the learn
+   detail steps down — never samey-grey */
+.v7plan .vd2-skill {
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+  font-size: 16.5px;
+}
+.v7plan .vd2-what {
+  margin-top: 7px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--v-ink);
+}
+.v7plan .vd2-res { margin-top: 12px; font-size: 13.5px; }
+.v7plan .vd2-learn {
+  margin-top: 8px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--v-ink2);
+}
+.v7plan .vd2-nores,
+.v7plan .vd2-nocheck { margin-top: 8px; }
+
+/* the 390 fold: one column — the chip row sits atop the text,
+   the SP projection drops under it, the text gets FULL width */
+@media (max-width: 720px) {
+  .v7plan .vd2-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .v7plan .vd2-glyph { padding-top: 0; min-height: 0; }
+  .v7plan .vd2-eff { padding-top: 0; }
+  .v7plan .vd2-ncard { padding: 18px 16px; }
 }

@@ -713,8 +713,14 @@ body:has(.v7) { background: #f8f9fa; }
 .v7 .seglabels span { font-size: 12px; }
 .v7 .cta { font-size: 14.5px; }
 
-/* ---------- sidebar size bump (user-ruled 2026-11-04) ---------- */
-.v7 { grid-template-columns: 264px 1fr; }
+/* ---------- sidebar size bump (user-ruled 2026-11-04) ----------
+   The 264px column is DESKTOP-ONLY: this block loads after the shell's
+   ≤720 collapse (line ~411), so an unscoped rule here would override it
+   and squeeze main into a 264px column on phones (caught on /pathway at
+   390, 2026-11-04). */
+@media (min-width: 721px) {
+  .v7 { grid-template-columns: 264px 1fr; }
+}
 .v7 .sidenav a {
   font: 500 15px/1.2 Roboto, system-ui, sans-serif;
   padding: 11px 16px;
