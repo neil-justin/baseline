@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T03:46:18.704Z",
+  "generatedAt": "2026-11-04T13:41:13.924Z",
   "total": 244,
   "dead": [],
   "moved": [
@@ -69,7 +69,7 @@
     },
     {
       "url": "https://web.dev/learn/",
-      "finalUrl": "https://web.dev/learn?hl=zh-tw"
+      "finalUrl": "https://web.dev/learn?hl=es-419"
     },
     {
       "url": "https://docs.github.com/en/get-started/quickstart",
