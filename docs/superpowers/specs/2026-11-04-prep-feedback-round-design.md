@@ -116,6 +116,8 @@ resume-side parse gates.
 
 ## 6. Implementation record (2026-11-04)
 
+### 6.1 Execution
+
 Executed via the subagent-driven flow on branch `prep-feedback-round`
 (worktree): `8f3a76b` gate · `cdcfa75` relay/copy · `7387a4f` kicons ·
 `356570f` ring · `402b379` analyze beat. Two review findings landed as a
@@ -126,3 +128,25 @@ band fold regained the ring's right edge (`margin-left: auto`). Full vitest
 bank 144/144 and `tsc --noEmit` green at every landing; `next build`
 compiles (its page-export type check fails on pre-existing
 `sortResourcePool`/`buildQueue` exports — reproduced on main, out of scope).
+
+Merged to `main` (`651c2e5`), branch + worktree retired.
+
+### 6.2 Round 2 — the in-place swap (user-ruled 2026-11-04, after live
+measurement)
+
+Live measurement showed the ~900 ms beat and the card cascade both RUN, but
+`window.location.reload()` breaks the handoff: the old document blanks, the
+new document's progressive paint reads as a skeleton, the scroll position
+jumps (1765 → 870 in the probe), and the 0.25 s cascade finishes in a part
+of the page the user isn't looking at. Ruling: **Option A — swap in place
+via `router.refresh()`** (no document reload, scroll preserved); after the
+refresh settles the entrance cascade is **replayed deliberately** via the
+animation-restart trick, and the page **always auto-scrolls the verdict
+card** (the readout, first card of the active tab's stack) to the top of
+the viewport. Rationale: in-place swap is how comparable checkers
+(Jobscan-style flows) land results; a dedicated results route was ruled
+out = too disruptive for the one-surface Prep.
+
+Follow-up obligation: the e2e specs in `.worktrees/google-signin/e2e/`
+assume reload semantics (they still pass — assertions carry 45 s budgets —
+but their "RELOADED document" comments need a visit on that branch).
