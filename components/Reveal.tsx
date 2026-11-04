@@ -13,7 +13,7 @@ export default function Reveal({
   id,
 }: {
   children: ReactNode;
-  as?: "div" | "section" | "p" | "span" | "h1" | "h2";
+  as?: "div" | "section" | "p" | "span" | "h1" | "h2" | "figure";
   className?: string;
   delay?: number;
   ariaLabel?: string;

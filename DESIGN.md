@@ -171,7 +171,7 @@ The signed-in app reads as real product software running a scoring instrument: a
 
 **The Element-budget rule (the user's lock condition, applies on every surface):** every on-screen element must map to a real feature or a data need — no search bars, no notification bells, no invented affordances (nothing backs them in the 7-feature scope). Prune, don't dress.
 
-Honesty is the material: numbers are computed (`lib/engines/*`, locked by `scripts/verify-fixtures.test.ts`), never painted; verified state reads solid, self-report hatched, unmeasured empty with an honest "not yet measured"/"—", and nothing is ever red. Material state language only — no entrance motion, no scroll theatrics.
+Honesty is the material: numbers are computed (`lib/engines/*`, locked by `scripts/verify-fixtures.test.ts`), never painted; verified state reads solid, self-report hatched, unmeasured empty with an honest "not yet measured"/"—", and nothing is ever red. Motion follows the **v9.1 M3 Motion Rule** (below — the v7 no-motion law is repealed, user-ruled 2026-11-04): subtle, M3 durations and emphasized easing, transform/opacity only, reduced-motion honored.
 
 ## Colors
 
@@ -253,7 +253,7 @@ Quietly lifted, still official: the whisper shadow (`0 1px 2px rgba(60,64,67,.10
 **Don't**
 - Don't add search, bells, sign-out, or invented affordances on the student chrome (element-budget rule); sign-out stays pruned.
 - Don't paint a number or confirm a claim the engine didn't compute; no red anywhere.
-- Don't fill regions with wash colors or ship entrance animations — state language only.
+- Don't fill regions with wash colors — state language only. (Motion is governed by the **v9.1 M3 Motion Rule**, below — subtle M3-conformant motion is sanctioned; theatrics are not.)
 - Don't use hosted font sheets; don't expand glyphs beyond the subset.
 - Don't exceed the shadow vocabulary or the 8px radius ceiling-in-reverse (no bigger-radius children than container).
 - Don't consult the superseded worlds as reference: The Index (green hairline instrument, 6px ceiling, drafting grid) and the Navy Console (gradient mass) are both rejected directions, kept only as anti-references on legacy surfaces awaiting their own v7 re-skin.
@@ -329,3 +329,11 @@ v9:
 Ruling record: session 2026-11-04 (`/#mockup` realm = the approved comp target for the marketing register). The mockup realm does not touch the server page; the landing cutover is a later, user-gated round. *(Round 1, 2026-11-04: the comp was user-approved ("this is the way") and CUT OVER — the live landing now runs this register under `.v9` in `app/(marketing)/v9.css`; the `#mockup` realm files retired with it. Next in queue: auth pages.)*
 
 7. **The v9 Type Scale** (user-ruled 2026-11-04, protected surfaces only). The v7 hierarchy's 13.5px body / 11px floors read dense — the other half of the "underwhelming" verdict. The console (onboarding, dashboard, and every surface after) bumps ~10–15%: **body 15px, page heads 26px, band titles 17px, section heads 16px, floors to 11.5/12px, readout 52px**, buttons 14–14.5px, chips 12px. Families unchanged (Google Sans hierarchy / Roboto body+numerals). The marketing + auth registers are exempt (they already run larger). Implemented as appended override blocks per surface file + the shared block in `v7.css`.
+
+8. **The v9.1 M3 Motion Rule** (user-ruled 2026-11-04 — "remove that v7 no motion law… as long as the animation is subtle and conforms to Google Material Design 3, go crazy"). The v7 no-motion law is REPEALED. Motion is now a sanctioned register everywhere, bounded by Material 3:
+
+   - **Vocabulary**: durations 150–450ms; standard easing `cubic-bezier(0.2, 0, 0, 1)`, emphasized easing `cubic-bezier(0.16, 1, 0.3, 1)`; entrance = fade-through (opacity + translateY ≤14px or scale 97→100%); stagger = 40–80ms per child.
+   - **Animate ONLY transform / opacity / filter** — the CLS contract (v7.2 #6) still holds: never animate layout properties; entrances reserve final space.
+   - **Sanctioned**: staggered hero/list entrances; scroll-triggered reveals (marketing register); drawer/tab/dialog state transitions; bar fills on reveal; hover lift ≤2px with shadow growth; press scale ≤0.97; the pre-existing count-up and skeleton pulse (instruments).
+   - **Still banned**: parallax, autoplaying media, painted/computed-fake numbers, motion that shifts layout, any motion not honoring `prefers-reduced-motion` (final state renders immediately).
+   - Rollout order follows the screen queue: landing first, then auth, then the console surfaces.

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { CATALOG_TOTAL, getCareer } from "@/lib/fixtures/catalog";
 import type { Career } from "@/lib/types";
 import { destFor, getCurrentProfile, getSignedInUser } from "@/lib/session";
+import Reveal from "@/components/Reveal";
 
 export const dynamic = "force-dynamic";
 
@@ -104,10 +105,10 @@ export default async function LandingPage() {
 
   return (
     <>
-      {/* ── hero: the Google-marketing voice ── */}
+      {/* ── hero: the Google-marketing voice (staggered entrance) ── */}
       <section className="m-hero">
         <div className="m-cap m-hero-grid">
-          <div>
+          <Reveal>
             <p className="m-dots" aria-hidden="true">
               <i className="m-d m-db"></i>
               <i className="m-d m-dr"></i>
@@ -134,8 +135,8 @@ export default async function LandingPage() {
               {CATALOG_TOTAL} careers · four tracks · five channels, scored
               honestly
             </p>
-          </div>
-          <figure className="m-photo">
+          </Reveal>
+          <Reveal as="figure" className="m-photo" delay={140}>
             {/* self-hosted (offline demo); free license (Pexels, graduates throwing caps) */}
             {/* eslint-disable-next-line @next/next/no-img-element -- static local asset */}
             <img
@@ -144,7 +145,7 @@ export default async function LandingPage() {
               width={1600}
               height={1067}
             />
-          </figure>
+          </Reveal>
         </div>
       </section>
 
@@ -160,7 +161,7 @@ export default async function LandingPage() {
             </p>
           </div>
           <div className="m-facts">
-            <div className="m-fact">
+            <Reveal as="div" className="m-fact" delay={0}>
               <span className="m-tile m-tb" aria-hidden="true">
                 <Icon {...ICON_GAUGE} />
               </span>
@@ -168,8 +169,8 @@ export default async function LandingPage() {
                 <b>One score out of 100</b>
                 <p>computed from your own records — never self-report alone.</p>
               </div>
-            </div>
-            <div className="m-fact">
+            </Reveal>
+            <Reveal as="div" className="m-fact" delay={90}>
               <span className="m-tile m-tg" aria-hidden="true">
                 <Icon {...ICON_COMPASS} />
               </span>
@@ -180,8 +181,8 @@ export default async function LandingPage() {
                   Philippine labor-demand reports.
                 </p>
               </div>
-            </div>
-            <div className="m-fact">
+            </Reveal>
+            <Reveal as="div" className="m-fact" delay={180}>
               <span className="m-tile m-ty" aria-hidden="true">
                 <Icon {...ICON_STEPS} />
               </span>
@@ -192,7 +193,7 @@ export default async function LandingPage() {
                   front.
                 </p>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -200,6 +201,7 @@ export default async function LandingPage() {
       {/* ── the features — real screenshots of the actual product ── */}
       <section className="m-sec" aria-label="What the platform does">
         <div className="m-cap">
+          <Reveal>
           <div className="m-head">
             <h2>What you get, screen by screen.</h2>
             <p>Every image below is the product itself — no mockups, no promises.</p>
@@ -292,12 +294,14 @@ export default async function LandingPage() {
               />
             </figure>
           </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ── how-it-works: the tonal band ── */}
       <section className="m-band" id="how-it-works">
         <div className="m-cap">
+          <Reveal>
           <div className="m-head">
             <h2>How it works.</h2>
             <p>Three steps, in this order.</p>
@@ -364,12 +368,14 @@ export default async function LandingPage() {
               </div>
             </div>
           </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ── for counselors: the shared-record card ── */}
       <section className="m-sec" aria-label="For counselors">
         <div className="m-cap m-rub">
+          <Reveal>
           <div className="m-head">
             <h2>For counselors.</h2>
             <p>The same record your students see, on your side of the desk.</p>
@@ -390,12 +396,14 @@ export default async function LandingPage() {
               </li>
             </ul>
           </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ── FAQ — the objections, answered plainly ── */}
       <section className="m-sec" id="faq">
         <div className="m-cap">
+          <Reveal>
           <div className="m-head">
             <h2>Questions, answered plainly.</h2>
             <p>No fine print — the same rules the product runs by.</p>
@@ -408,6 +416,7 @@ export default async function LandingPage() {
               </details>
             ))}
           </div>
+          </Reveal>
         </div>
       </section>
 
