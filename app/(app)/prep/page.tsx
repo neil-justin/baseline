@@ -26,8 +26,9 @@ export const metadata: Metadata = {
  * is laid out"; second recut the same day: every section its OWN card).
  * The page reads, top to bottom:
  *
- *   1. NAMED BAND — Prep + target on the left, application readiness /15 as
- *      the composite on the right (the slot Dashboard gives 36/100).
+ *   1. NAMED BAND — Prep + target on the left, the readiness ring /15 on
+ *      the right (the slot Dashboard gives 36/100; ring register, F1
+ *      2026-11-04 — the My Plan plan-ring geometry).
  *   2. CHANNEL CARDS — Resume · Letter · Presence as one KPI card each
  *      (Dashboard `.kpis` geometry): name → fraction → 4px honest bar →
  *      wash chip → one-line receipt.
@@ -569,10 +570,14 @@ export default async function PrepPage() {
     letterFirstRun
   );
 
+  /* the band ring figure — earned AR points (null when nothing measured;
+     "—" and a 0-length arc are the honest unmeasured states) */
+  const readinessAr = score?.ar ?? null;
+
   return (
     <div className="v7prep prep-surface">
-      {/* named band — the white dashboard register. The composite slot that
-          Dashboard gives 36/100 carries application readiness here. */}
+      {/* named band — the white dashboard register. The readiness ring that
+          My Plan rides carries application readiness here. */}
       <header className="band">
         <div className="bandrow">
           <div className="who">
@@ -583,12 +588,34 @@ export default async function PrepPage() {
               <p className="m">A format &amp; evidence screen for your resume and cover letter.</p>
             )}
           </div>
-          <div className="composite-wrap prep-readiness">
-            <div className="composite">
-              <span className="score-big num">{score?.ar ?? "—"}</span>
-              {score ? <span className="c-of">/{WEIGHTS.ar}</span> : null}
-            </div>
-            <div className="ratemsg">application readiness</div>
+          {/* F1 (2026-11-04): the band's visual — the readiness ring, My
+              Plan's plan-ring register. Same figure the composite read:
+              ar / WEIGHTS.ar; no career or nothing measured (ar null) still
+              paints "—" and the arc stays at 0 — never a faked fraction. */}
+          <div
+            className="readring"
+            role="img"
+            aria-label={
+              readinessAr !== null
+                ? `${readinessAr} of ${WEIGHTS.ar} application-readiness points`
+                : "Application readiness — not yet measured"
+            }
+          >
+            <svg viewBox="0 0 130 130" aria-hidden="true">
+              <circle className="readring-track" cx="65" cy="65" r="56" strokeWidth="9" />
+              <circle
+                className="readring-arc"
+                cx="65"
+                cy="65"
+                r="56"
+                strokeWidth="9"
+                strokeDasharray={`${readinessAr !== null ? Math.round((readinessAr / WEIGHTS.ar) * 351.9 * 10) / 10 : 0} 351.9`}
+              />
+            </svg>
+            <span className="readring-mid">
+              <b className="num">{readinessAr !== null ? `${readinessAr}/${WEIGHTS.ar}` : "—"}</b>
+              <small>application readiness</small>
+            </span>
           </div>
         </div>
       </header>

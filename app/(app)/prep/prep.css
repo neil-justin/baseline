@@ -2,8 +2,9 @@
    DNA v7 — Prep surface (/prep + /prep/guide), the per-section recut.
    The page is a STACK OF CARDS, Dashboard-style — never a card
    inside a card:
-     1. named band — Prep + target left, application readiness /15
-        as the composite right (the Dashboard 36/100 slot);
+     1. named band — Prep + target left, the readiness ring /15
+        as the right slot (the Dashboard 36/100 slot, ring register
+        2026-11-04 — the My Plan plan-ring geometry);
      2. `.prep-kpis` — Resume · Letter · Presence, one KPI card each;
      3. `.prep-lens` segmented toolbar (outside every card);
      4. readout card → one card per factor → findings card →
@@ -44,9 +45,10 @@
 .v7prep a { color: inherit; }
 .v7prep .num { font-variant-numeric: tabular-nums; }
 
-/* ---------- named band — Tier 2b: the card/row/who/bcell register lives
-   ONCE in ../v7.css (.v7 .band / .bandrow / .who .t+.m / .bcell /
-   .bandcells); only the page-specific AR-cell furniture stays here ---------- */
+/* ---------- named band — Tier 2b: the card/row/who register lives
+   ONCE in ../v7.css (.v7 .band / .bandrow / .who .t+.m); the right slot
+   is the shared readiness ring (R2 ruling 2026-11-03; ring register,
+   2026-11-04 F1) — no page-specific band rules remain here ---------- */
 
 .v7prep .who { min-width: 220px; }
 .v7prep .who .m { max-width: 74ch; }
@@ -57,21 +59,6 @@
   color: var(--v-ink2);
   white-space: nowrap;
 }
-
-/* ---------- the band composite — application readiness in the slot
-   Dashboard gives 36/100 (R2, user ruling 2026-11-03) ---------- */
-
-.v7prep .prep-readiness {
-  min-width: 0;
-  text-align: right;
-}
-.v7prep .prep-readiness .composite { justify-content: flex-end; }
-.v7prep .prep-readiness .score-big {
-  min-width: 2ch;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-.v7prep .prep-readiness .ratemsg { margin-top: 4px; }
 
 /* ---------- channel KPI cards (R3/R4) — one card per channel, the
    Dashboard `.kpis` geometry: 12px grid gap, 14px 16px 16px padding,
@@ -813,8 +800,8 @@
 @media (max-width: 720px) {
   .v7prep { padding: 12px 12px 80px; } /* clears the ≤720px bottom nav */
   .v7prep .who { min-width: 0; }
-  /* the band composite wraps under the title and keeps its right edge */
-  .v7prep .prep-readiness { width: 100%; }
+  /* the readiness ring flexes none — it wraps under the title on the fold
+     (bandrow's flex-wrap carries it; no page rule needed) */
   /* channel cards fold 3 → 2 → 1 */
   .v7prep .prep-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .v7prep .panel-sec { padding: 12px 12px 14px; }
