@@ -977,10 +977,10 @@ describe("§6.1 substance re-map (2026-11-03 overnight batch) — lie inventory"
 });
 
 describe("§6.1 re-map census (final mapping state) + canon rails", () => {
-  it("catalog intact: no rows deleted (437 → 473 → 483 → 496 → 503, Wave B/Wave E fills all additive); 650 ADDR entries", () => {
-    expect(RESOURCES).toHaveLength(514); // 503 + 11 Wave E four-career fills (opsanalyst 4 · purch 5 · ccqa dup 1 · events dup 1)
+  it("catalog intact: no rows deleted (437 → 473 → 483 → 496 → 503 → 514 → 516, Wave B/Wave E fills all additive); 652 ADDR entries", () => {
+    expect(RESOURCES).toHaveLength(516); // 514 + 2 Wave E acct-family salvage (cancelled batch, live-verified 2026-11-04: acctclerk Alison US tax-filing 1 · pay Coursera ADP payroll-fundamentals 1)
     const mappings = RESOURCES.reduce((a, r) => a + r.skillsAddressed.length, 0);
-    expect(mappings).toBe(650); // 639 + 11 Wave E new-row claims (1 claim each: ops 4 · purch 5 · ccqa 1 · events 1)
+    expect(mappings).toBe(652); // 650 + 2 salvage new-row claims (1 claim each)
   });
 
   it("canon rails: demo pins byte-true; da pool untouched at 13; 27 gap rows stay shipped (no new gaps)", () => {

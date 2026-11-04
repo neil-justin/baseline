@@ -7045,10 +7045,17 @@ export const RESOURCES: Resource[] = [
   // fetched LIVE); OpenStax financial book grades taught/direct (standing
   // OpenStax textbook verification — structured text + exercises open access);
   // DOLE handbook + RA 10173 = reference (fetched LIVE: PDF 200 via NWPC
-  // mirror; statute title verified). Honest red KEPT: Government forms &
-  // compliance paperwork (the two reference anchors are the honest state;
-  // BIR eFPS deep pages remain dead-in-copy per the portal ruling).
-  // Coverage: 9/10 vetted.
+  // mirror; statute title verified).
+  // Wave E hunt (2026-11-04, user-delegated): the gov-forms cell fills —
+  // Alison's "Filing Tax Returns Independently in the United States (US)"
+  // (fetched LIVE 200: "Start Course Now", 3-4 h; outcomes teach the steps
+  // in filing a tax return using relevant forms and schedules, the
+  // form-and-schedule landscape by taxpayer category, and tax-document
+  // record-keeping/retention) → taught/account; the non-PH framing is
+  // scoped honestly in-row (the PH forms chain stays with the statute
+  // anchors below; BIR eFPS deep pages remain dead-in-copy per the portal
+  // ruling). The lawphil reference row keeps the cell's fallback pick (2 h
+  // beats 4 h on the fallbackSort). Coverage: 10/10 vetted.
   {
     id: "res-acct-gcf-excel",
     title: "Excel (topic hub) — GCFGlobal",
@@ -7327,6 +7334,33 @@ export const RESOURCES: Resource[] = [
     },
     // learn draft — user review pending
   },
+  {
+    id: "res-acct-us-tax-filing",
+    title: "Filing Tax Returns Independently in the United States (US)",
+    provider: "Alison",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): "Start Course
+    // Now", 3-4 h, CPD-accredited — outcomes teach the steps in filing a tax
+    // return using relevant forms and schedules, the forms-and-schedules
+    // landscape by taxpayer category, filing-prep record-keeping and
+    // retention periods, and estimated-tax payments. The government-forms
+    // paperwork craft in taught form; US framing scoped honestly — the PH
+    // statutory forms chain (BIR eFPS deep pages remain dead-in-copy per
+    // the portal ruling) stays with the RA 10173 / DOLE reference anchors
+    // above. Certificate optional (paid); study free/account.
+    url: "https://alison.com/course/filing-tax-returns-independently-in-the-united-states-us",
+    durationHours: 4,
+    skillsAddressed: ["Government forms & compliance paperwork"],
+    careerId: "acctclerk",
+    form: "taught",
+    access: "account",
+    learnNotes: {
+      "Government forms & compliance paperwork":
+        "The course drills the filing workflow itself — assembling records, choosing the right tax forms and schedules per taxpayer category, and stepping through a submission with record-retention in mind; the PH-specific forms ride the statute anchors in the same pool (honest non-PH scoping).",
+    },
+    // learn line — authored 2026-11-03, user-delegated
+  },
   // ── pay (4.3) — portals = labeled start-here placeholders (ruling) ──
   // Wave B audit (2026-11-03, batch 3): access/form per-row. ADP's taught
   // "The Payroll Cycle" course arrives as the per-role fill (fetched LIVE
@@ -7337,11 +7371,16 @@ export const RESOURCES: Resource[] = [
   // statutory tables ride the DOLE handbook + portals. Portals graded landing
   // (Pag-IBIG sits behind a reCAPTCHA interstitial this pass — recorded); DOLE
   // handbook + RA 10173 = reference. GCF Excel graded taught/direct
-  // (LearnFree standing). TOP modules graded account. Honest red KEPT:
-  // Prepare and file payroll tax returns / statutory paperwork (an
-  // authoritative taught PH withholding/return-filing walkthrough remains
-  // unverified; BIR eFPS deep pages stay dead-in-copy per the portal ruling).
-  // Coverage: 8/9 vetted.
+  // (LearnFree standing). TOP modules graded account.
+  // Wave E hunt (2026-11-04, user-delegated): the statutory-returns cell
+  // fills — ADP's "Advancing Proficiency in U.S. Payroll Fundamentals"
+  // (fetched LIVE "Enroll for free": Modules Getting to Net Pay / Employer
+  // Payroll Taxes / **Deposits and Filings** — the module walks the regular
+  // federal deposits, the filing timeline and the forms needed to manage
+  // tax filings properly) → taught/exam-paid per the ADP family pack (the
+  // PH statutory tables still ride the DOLE handbook + BIR portal anchors
+  // in the same pool). The BIR landing row keeps the cell's fallback pick
+  // (1 h beats 10 h). Coverage: 9/9 vetted.
   {
     id: "res-pay-dole-handbook",
     title: "Workers' Statutory Monetary Benefits Handbook 2024 (DOLE-BWC, official NWPC mirror)",
@@ -7613,6 +7652,33 @@ export const RESOURCES: Resource[] = [
     careerId: "pay",
     form: "landing",
     access: "account",
+  },
+  {
+    id: "res-pay-adp-us-payroll-fundamentals",
+    title: "Advancing Proficiency in U.S. Payroll Fundamentals (ADP)",
+    provider: "Coursera (ADP Learning Academy)",
+    type: "course",
+    cost: "free",
+    // fetched LIVE 2026-11-04 (Wave E fill, user-delegated): "Enroll for
+    // free" — 3 modules (Getting to Net Pay; Employer Payroll Taxes; the
+    // Deposits-and-Filings module: "the responsibilities of an employer in
+    // regards to regular federal deposits and filings... the typical
+    // timeline and forms needed to properly manage tax filings"). The
+    // return-prep/filing craft the cell prints, US-framed and scoped
+    // honestly — the PH statutory tables (BIR eFPS deep pages stay
+    // dead-in-copy per the portal ruling) ride the DOLE handbook + BIR
+    // portal anchors in the same pool. ₱ paid tier: certificate.
+    url: "https://www.coursera.org/learn/adp-advancing-proficiency-in-us-payroll-fundamentals",
+    durationHours: 10,
+    skillsAddressed: ["Prepare and file payroll tax returns / statutory paperwork"],
+    careerId: "pay",
+    form: "taught",
+    access: "exam-paid",
+    learnNotes: {
+      "Prepare and file payroll tax returns / statutory paperwork":
+        "Module 2 covers employer payroll taxes and withholding, and Module 3 (Deposits and Filings) walks the regular deposit schedule, the filing timeline and the forms — the statutory-paperwork prep-and-file loop; the PH tables ride the DOLE handbook (honest non-PH scoping).",
+    },
+    // learn line — authored 2026-11-03, user-delegated
   },
   // ── fas (4.4) — [PSF] PSF-GIH primary ──
   // Wave B audit (2026-11-03, batch 3): access/form per-row. Wharton financial
