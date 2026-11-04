@@ -665,6 +665,13 @@ body:has(.v7) { background: #f8f9fa; }
 .v7.v7-focus { grid-template-columns: 1fr; }
 .v7.v7-focus .v7-main { grid-column: 1; grid-row: 2; }
 
+/* ---------- v9.1 console motion (shared) — press scale on the one CTA;
+   hover/state transitions already live on the sidenav + rows ---------- */
+.v7 .cta {
+  transition: background-color 0.14s ease, transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+}
+.v7 .cta:active { transform: scale(0.97); }
+
 /* the focused band's session exit: a quiet text control, right-aligned
    (the sidebar's sign-out contract — plain form POST, 303 to /signin) */
 .v7.v7-focus .focus-signout { margin-left: auto; }

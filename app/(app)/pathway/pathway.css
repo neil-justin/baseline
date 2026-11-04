@@ -456,3 +456,100 @@
 .v7plan .res-table:has(+ .vpager) .res-row:last-child {
   border-bottom: 1px solid var(--v-rows);
 }
+
+/* ============================================================
+   DNA v9 sweep — pathway (2026-11-04, rides the shell's v9
+   token block in ../v7.css). The walk cards (vd2-band/hcard/
+   ncard) go borderless at the 16px rung on the M3 level-1
+   shadow; chips at the 8px rung; the button register pills.
+   Hierarchy carriers go Google Sans; every numeral stays Roboto
+   tabular (The Tabular Rule). Type rides the v9 scale; v9.1
+   motion (card lift + press) gated by prefers-reduced-motion.
+   Hooks byte-untouched. (This file loads after walk.css, so
+   these overrides win the cascade.)
+   ============================================================ */
+
+/* cards + band: borderless tonal surfaces */
+.v7plan .card,
+.v7plan .vd2-band,
+.v7plan .vd2-hcard,
+.v7plan .vd2-ncard {
+  border: 0;
+  border-radius: 16px;
+  box-shadow: var(--v-shadow);
+}
+
+/* hierarchy: the walk heads go Google Sans */
+.v7plan .vd2-band h2,
+.v7plan .vd2-hhead h3 {
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* buttons: the pill register, state tints not baked shadows */
+.v7plan .btn {
+  border-radius: 999px;
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+  padding: 9px 22px;
+  font-size: 14px;
+}
+.v7plan .btn-primary { box-shadow: none; }
+.v7plan .btn-primary:hover { box-shadow: none; }
+
+/* the retired tabs' segmented register (kept for parity) → M3 pills */
+.v7plan .ptabs { border: 0; border-radius: 999px; }
+.v7plan .ptabs button { border-radius: 999px; font-size: 13px; }
+.v7plan .ptabs button[aria-selected="true"] { border-color: transparent; }
+
+/* chips at the 8px rung */
+.v7plan .chip,
+.v7plan .vd2-chip,
+.v7plan .vd2-working { border-radius: 8px; }
+.v7plan .chip,
+.v7plan .vd2-chip,
+.v7plan .vd2-working { font-size: 12px; }
+
+/* ---------- v9 type scale bump (see ../v7.css #7) ---------- */
+.v7plan { font: 400 15px/1.55 Roboto, system-ui, sans-serif; }
+.v7plan .vd2-band h2 { font-size: 24px; }
+.v7plan .vd2-hhead h3 { font-size: 16px; }
+.v7plan .vd2-cap,
+.v7plan .vd2-count,
+.v7plan .vd2-covlabel,
+.v7plan .vd2-core { font-size: 11.5px; }
+.v7plan .vd2-ext,
+.v7plan .vd2-nocheck { font-size: 12px; }
+.v7plan .vd2-start { font-size: 12.5px; }
+.v7plan .vd2-standing { font-size: 12.5px; }
+.v7plan .vd2-what,
+.v7plan .vd2-res,
+.v7plan .vd2-nores,
+.v7plan .vd2-learn,
+.v7plan .vd2-mmeta,
+.v7plan .vd2-blurb,
+.v7plan .vd2-empty,
+.v7plan .vd2-eff { font-size: 13px; }
+.v7plan .vd2-lead,
+.v7plan .vd2-lead.lead-mono { font-size: 13.5px; }
+.v7plan .vd2-covname { font-size: 14.5px; }
+.v7plan .vd2-skill,
+.v7plan .vd2-mlabel { font-size: 15px; }
+.v7plan .defaultband p { font-size: 14.5px; }
+
+/* ---------- v9.1 motion (subtle, M3, reduced-motion safe) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .v7plan .card,
+  .v7plan .vd2-ncard {
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .v7plan .card:hover,
+  .v7plan .vd2-ncard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  }
+  .v7plan .btn {
+    transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease,
+      transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .v7plan .btn:active { transform: scale(0.97); }
+}
