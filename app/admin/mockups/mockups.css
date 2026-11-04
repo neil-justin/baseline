@@ -1,0 +1,716 @@
+/* ============================================================
+   ADMIN MOCKUPS — the /admin#mockups realms (2026-11-03 roles round;
+   feedback round 2: structured tables only — defined column heads,
+   filled values, pagination; no band, no filters, no explanatory copy).
+   The realm borrows the STUDENT shell (v7.3 sidebar round): full-bleed
+   brand-only header band + left sidebar icon tabs + capped content
+   column. Classes are all mk*-prefixed — none of the e2e hook classes
+   (.s-row, .aq-*, .dt-score, .rubric, …) collide, and the sleeves
+   mirror app/(app)/v7.css values so the realm reads as the same
+   product. Panels/rows ride the same v7 tokens: the veil renders
+   inside .v7admin, which owns those variables.
+   ============================================================ */
+
+/* Material Symbols — admin-realm subset. The (app) shell's
+   material-symbols-outlined-var.woff2 is a 6-glyph subset built for the
+   student sidebar only; this realm needs more icons, so it ships its own
+   subset (15 ligatures + the rclt fill chain) as
+   material-symbols-outlined-admin.woff2 — the student asset is untouched. */
+@font-face {
+  font-family: "Material Symbols Outlined";
+  src: url("/fonts/material-symbols-outlined-admin.woff2") format("woff2");
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: block;
+}
+
+/* ---------- the veil · student-shell grid ---------- */
+
+.v7admin .mk-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: var(--v-ground);
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 56px auto 1fr;
+  overflow-y: auto;
+}
+
+/* ---------- brand-only header band (spans both columns) ---------- */
+
+.v7admin .mk-head {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  background: var(--v-surface);
+  border-bottom: 1px solid var(--v-border);
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+.v7admin .mk-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 6px;
+  color: var(--v-ink);
+}
+.v7admin .mk-word {
+  font: 500 15px/1.2 Roboto, system-ui, sans-serif;
+  padding: 0 6px;
+}
+.v7admin .mk-brand .brandmark {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--v-ink);
+  border-radius: 6px;
+  position: relative;
+  flex: none;
+}
+.v7admin .mk-brand .brandmark i {
+  position: absolute;
+  left: 7px;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  background: var(--v-blue);
+  border-radius: 1px;
+}
+
+/* ---------- the sidebar (icon+name tabs, chrome pinned at the bottom) ---------- */
+
+.v7admin .mk-side {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: start;
+  position: sticky;
+  top: 56px;
+  height: calc(100dvh - 56px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--v-surface);
+  border-right: 1px solid var(--v-border);
+  padding: 16px 10px;
+  z-index: 40;
+  overflow-x: hidden; /* a rendering fallback must never scroll the page sideways */
+}
+.v7admin .mk-sidenav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.v7admin .mk-sidenav button,
+.v7admin .mk-tail a {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--v-ink2);
+  text-decoration: none;
+  font: 500 13.5px/1.2 Roboto, system-ui, sans-serif;
+  padding: 7px 14px;
+  border-radius: 12px;
+  white-space: nowrap;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background-color 0.14s ease, color 0.14s ease;
+}
+.v7admin .mk-sidenav button:hover {
+  background: transparent;
+  color: var(--v-ink);
+}
+.v7admin .mk-sidenav button.on {
+  background: var(--v-blue-wash);
+  color: var(--v-blue-deep);
+}
+.v7admin .mk-sidenav button.on:hover {
+  background: var(--v-blue-wash);
+  color: var(--v-blue-deep);
+}
+.v7admin .mk-sidenav button:focus-visible,
+.v7admin .mk-tail a:focus-visible {
+  outline: 2px solid var(--v-blue);
+  outline-offset: 2px;
+}
+.v7admin .mk-sidenav .ms {
+  font-size: 18px;
+  opacity: 0.85;
+}
+.v7admin .mk-sidenav button.on .ms {
+  opacity: 1;
+}
+.v7admin .mk-sidenav .mk-new {
+  font: 500 9px/1.4 Roboto, system-ui, sans-serif;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--v-amber-text);
+  background: var(--v-amber-wash);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+.v7admin .mk-sidenav button.on .mk-new {
+  color: var(--v-amber-text);
+  background: #fff;
+}
+
+/* realm controls — pinned where Student pins Sign out */
+.v7admin .mk-tail {
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid var(--v-rows);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.v7admin .mk-tail a:hover {
+  background: var(--v-grey-wash);
+  color: var(--v-ink);
+}
+.v7admin .mk-tail .ms {
+  font-size: 18px;
+  opacity: 0.85;
+}
+
+/* ---------- Material Symbols glyph class (same law as v7.css) ---------- */
+
+.v7admin .ms {
+  font-family: "Material Symbols Outlined";
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  direction: ltr;
+  font-variation-settings: "FILL" 0, "wght" 400, "opsz" 24;
+  font-feature-settings: "liga";
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- main column ---------- */
+
+.v7admin .mk-main {
+  grid-column: 2;
+  grid-row: 2 / -1;
+  min-width: 0;
+  justify-self: center;
+  width: min(100%, 1240px);
+  padding: 16px 8px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ---------- panels + structured tables ---------- */
+
+.v7admin .mk-panel {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  overflow: hidden;
+}
+.v7admin .mk-label {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7admin .mk-share {
+  margin: 10px 18px 0;
+  padding: 8px 12px;
+  border: 1px solid var(--v-border);
+  border-radius: 4px;
+  background: var(--v-grey-wash);
+  font: 400 12px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  align-self: flex-start;
+}
+
+/* the shared column-head + row grids; every table defines its own */
+.v7admin .mk-rowheads {
+  display: grid;
+  gap: 8px 14px;
+  padding: 9px 18px;
+  border-bottom: 1px solid var(--v-rows);
+}
+.v7admin .mk-row {
+  display: grid;
+  gap: 6px 14px;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--v-rows);
+  position: relative;
+}
+.v7admin .mk-r-roster {
+  grid-template-columns: minmax(0, 1.9fr) minmax(0, 1.3fr) 0.9fr minmax(0, 1fr) minmax(0, 1fr) 0.7fr;
+}
+.v7admin .mk-r-audit {
+  grid-template-columns: 120px minmax(0, 1.05fr) minmax(0, 1.15fr) minmax(0, 0.8fr) minmax(0, 1.35fr) 0.7fr;
+}
+.v7admin .mk-r-appr {
+  grid-template-columns: minmax(0, 1.5fr) 0.9fr minmax(0, 0.9fr) minmax(0, 1.15fr) 0.9fr 1fr;
+}
+.v7admin .mk-r-acc {
+  grid-template-columns: minmax(0, 2fr) 0.9fr 1fr minmax(0, 0.9fr) auto;
+}
+.v7admin .mk-row.mk-click {
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+.v7admin .mk-row.mk-click:hover,
+.v7admin .mk-aqrow.mk-click:hover {
+  background: #f5f8fc;
+}
+.v7admin .mk-row:last-of-type,
+.v7admin .mk-aqrow:last-of-type {
+  border-bottom: 0;
+}
+.v7admin .mk-row.mk-row-demo {
+  background: var(--v-blue-wash);
+}
+.v7admin .mk-row.mk-row-demo::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  bottom: 0;
+  width: 2px;
+  background: var(--v-blue);
+}
+.v7admin .mk-row.mk-off .mk-name {
+  color: var(--v-ink2);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+/* row cells */
+.v7admin .mk-cellname {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.v7admin .mk-name {
+  font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.v7admin .mk-sub {
+  font: 400 11px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .mk-row .mk-cellname .mk-recid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+/* accounts rows read as identity + email — avatar beside the stack */
+.v7admin .mk-r-acc .mk-cellname {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.v7admin .mk-marks {
+  display: inline-flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.v7admin .mk-career {
+  font: 400 12px/1.45 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  overflow-wrap: anywhere;
+}
+.v7admin .mk-score {
+  font: 400 14px/1.4 Roboto, system-ui, sans-serif;
+  text-align: right;
+}
+.v7admin .mk-score small {
+  font-size: 11px;
+  color: var(--v-ink2);
+  margin-left: 1px;
+}
+.v7admin .mk-aud {
+  font: 500 11px/1.5 Roboto, system-ui, sans-serif;
+}
+.v7admin .mk-aud .mk-chip {
+  display: block;
+  text-align: center;
+}
+.v7admin .mk-active {
+  font: 400 12px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .mk-view {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  color: var(--v-blue-deep);
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* ---------- audit-queue rows (clickable; groupless — STATUS carries it) ---------- */
+
+.v7admin .mk-aqrow {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1.05fr) minmax(0, 1.15fr) minmax(0, 0.8fr) minmax(0, 1.35fr) 0.7fr;
+  gap: 6px 14px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--v-rows);
+  align-items: center;
+  position: relative;
+}
+.v7admin .mk-aqrow.mk-aq-declared {
+  background: #fdfbf4;
+}
+.v7admin .mk-aqrow .mk-aqstatus {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+/* ---------- the detail dialog ---------- */
+
+.v7admin .mk-modal-back {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(32, 33, 36, 0.32);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.v7admin .mk-modal {
+  width: min(100%, 560px);
+  max-height: min(82dvh, 680px);
+  overflow-y: auto;
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(60, 64, 67, 0.28);
+}
+.v7admin .mk-modalhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid var(--v-rows);
+  position: sticky;
+  top: 0;
+  background: var(--v-surface);
+}
+.v7admin .mk-modalhead h3 {
+  font: 500 17px/1.3 Roboto, system-ui, sans-serif;
+}
+.v7admin .mk-modalx {
+  border: 0;
+  background: none;
+  color: var(--v-ink2);
+  font: 400 14px/1 Roboto, system-ui, sans-serif;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+.v7admin .mk-modalx:hover {
+  background: var(--v-grey-wash);
+  color: var(--v-ink);
+}
+.v7admin .mk-modalbody {
+  padding: 14px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.v7admin .mk-modalmeta {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+}
+.v7admin .mk-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.v7admin .mk-line {
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .mk-line.small {
+  font-size: 11.5px;
+}
+.v7admin .mk-meta {
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .mk-meta.block {
+  display: block;
+}
+.v7admin .mk-link {
+  color: var(--v-blue-deep);
+  font: 400 12.5px/1.45 Roboto, system-ui, sans-serif;
+  overflow-wrap: anywhere;
+}
+.v7admin .mk-fakeinput {
+  display: block;
+  border: 1px solid var(--v-border);
+  border-radius: 6px;
+  padding: 7px 10px;
+  color: var(--v-meta);
+  font: 400 12.5px/1.4 Roboto, system-ui, sans-serif;
+  background: var(--v-grey-wash);
+}
+.v7admin .mk-acts {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.v7admin .mk-acts button {
+  font: 500 12.5px/1.4 Roboto, system-ui, sans-serif;
+  border-radius: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--v-border);
+  background: var(--v-surface);
+  color: var(--v-blue-deep);
+  cursor: default;
+}
+.v7admin .mk-acts button + button {
+  color: var(--v-amber-text);
+}
+.v7admin .mk-acts button.armed {
+  background: var(--v-blue-wash);
+  border-color: var(--v-blue-deep);
+}
+.v7admin .mk-acts button.armed-reject {
+  background: var(--v-amber-wash);
+  border-color: var(--v-amber-text);
+  color: var(--v-amber-text);
+}
+
+/* the single row-affordance: kebab (accounts), replacing inline text actions */
+.v7admin .mk-kebab {
+  justify-self: end;
+  border: 1px solid var(--v-border);
+  background: var(--v-surface);
+  color: var(--v-ink2);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font: 500 14px/1.4 Roboto, system-ui, sans-serif;
+  cursor: default;
+}
+
+/* ---------- pagination (every table gets one) ---------- */
+
+.v7admin .mk-pager {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--v-rows);
+  background: var(--v-surface);
+}
+.v7admin .mk-pager button {
+  min-width: 26px;
+  padding: 4px 8px;
+  border: 1px solid var(--v-border);
+  border-radius: 6px;
+  background: var(--v-surface);
+  color: var(--v-ink2);
+  font: 500 12px/1.4 Roboto, system-ui, sans-serif;
+  cursor: pointer;
+}
+.v7admin .mk-pager button:hover:not(:disabled) {
+  background: var(--v-grey-wash);
+  color: var(--v-ink);
+}
+.v7admin .mk-pager button.on {
+  background: var(--v-blue-deep);
+  border-color: var(--v-blue-deep);
+  color: #fff;
+}
+.v7admin .mk-pager button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.v7admin .mk-pager .mk-label {
+  margin-left: auto;
+}
+
+/* ---------- chips (the wash-chip economy) ---------- */
+
+.v7admin .mk-chip {
+  display: inline-block;
+  background: var(--v-grey-wash);
+  color: var(--v-grey-text);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font: 500 11px/1.5 Roboto, system-ui, sans-serif;
+  white-space: nowrap;
+}
+.v7admin .mk-chip.t-g {
+  background: var(--v-green-wash);
+  color: var(--v-green-text);
+}
+.v7admin .mk-chip.t-a {
+  background: var(--v-amber-wash);
+  color: var(--v-amber-text);
+}
+.v7admin .mk-chip.t-b {
+  background: var(--v-blue-wash);
+  color: var(--v-blue-deep);
+}
+
+/* avatar (accounts + quick identity lines) */
+.v7admin .mk-ava {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--v-grey-wash);
+  color: var(--v-grey-text);
+  border: 1px solid var(--v-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: 500 11px/1 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- page transition ---------- */
+
+.v7admin .mk-tabpage {
+  animation: mk-in 0.18s ease;
+}
+@keyframes mk-in {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v7admin .mk-tabpage {
+    animation: none;
+  }
+}
+
+/* ---------- colophon (the one honesty line the realm keeps) ---------- */
+
+.v7admin .mk-colophon {
+  margin: 18px auto 30px;
+  padding: 12px 8px 0;
+  border-top: 1px solid var(--v-border);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.05em;
+  color: var(--v-ink2);
+}
+
+/* ============================================================
+   RESPONSIVE — re-grid, never squish
+   ============================================================ */
+
+@media (max-width: 1020px) {
+  .v7admin .mk-rowheads {
+    display: none;
+  }
+  .v7admin .mk-r-roster,
+  .v7admin .mk-r-audit,
+  .v7admin .mk-r-appr,
+  .v7admin .mk-r-acc,
+  .v7admin .mk-aqrow {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) auto;
+  }
+  .v7admin .mk-row > .mk-cellname,
+  .v7admin .mk-aqrow > .mk-aqstatus {
+    grid-column: 1 / 3;
+    grid-row: 1;
+  }
+  .v7admin .mk-r-roster > .mk-score,
+  .v7admin .mk-r-appr > span:nth-child(5) {
+    grid-column: 3;
+    grid-row: 1 / 3;
+    align-self: center;
+  }
+  .v7admin .mk-r-roster > .mk-view,
+  .v7admin .mk-aqrow > .mk-view,
+  .v7admin .mk-r-acc > .mk-kebab {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    text-align: left;
+    justify-self: start;
+  }
+  .v7admin .mk-r-roster > .mk-active {
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
+  .v7admin .mk-aqrow > *:nth-child(3),
+  .v7admin .mk-aqrow > *:nth-child(4),
+  .v7admin .mk-aqrow > *:nth-child(5) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 720px) {
+  /* the sidebar becomes a horizontal strip under the band */
+  .v7admin .mk-veil {
+    grid-template-columns: 1fr;
+    grid-template-rows: 56px auto 1fr;
+  }
+  .v7admin .mk-side {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    position: sticky;
+    top: 56px;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-right: 0;
+    border-bottom: 1px solid var(--v-border);
+    padding: 8px 10px;
+  }
+  .v7admin .mk-sidenav {
+    flex-direction: row;
+    flex: none;
+  }
+  .v7admin .mk-tail {
+    margin-top: 0;
+    margin-left: auto;
+    padding-top: 0;
+    border-top: 0;
+    flex-direction: row;
+    flex: none;
+  }
+  .v7admin .mk-main {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+}

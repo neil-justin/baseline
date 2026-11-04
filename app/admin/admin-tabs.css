@@ -1,0 +1,542 @@
+/* ============================================================
+   ADMIN TABS — the Wave-1 multi-tab roles console chrome
+   (2026-11-03 admin-replacement cutover). Mirrors the approved
+   mockup realm (app/admin/mockups/mockups.css, v7 shell values)
+   but every class is `atabs-`-prefixed: the pending e2e-hook
+   rule forbids hook classes (.s-row, .aq-*, .dt-score, .rubric,
+   .cohort*) in new chrome. The table classes themselves
+   (.panel .ct-* .s-row .aq-* .chip) are the defended surface's
+   own and are NOT restyled here — the panes reuse them as-is.
+   Tokens live on .v7admin (admin.css).
+   ============================================================ */
+
+/* Material Symbols — admin-realm subset (copied verbatim from the
+   mockups' @font-face: the (app) shell's 6-glyph student subset doesn't
+   carry these ligatures; this realm ships its own 15-glyph subset). */
+@font-face {
+  font-family: "Material Symbols Outlined";
+  src: url("/fonts/material-symbols-outlined-admin.woff2") format("woff2");
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: block;
+}
+
+/* Material Symbols glyph class (same law as v7.css / mockups.css) */
+.v7admin .ms {
+  font-family: "Material Symbols Outlined";
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  direction: ltr;
+  font-variation-settings: "FILL" 0, "wght" 400, "opsz" 24;
+  font-feature-settings: "liga";
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- the shell · student-shell grid ---------- */
+
+.v7admin .atabs-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: var(--v-ground);
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 56px auto 1fr;
+  overflow-y: auto;
+}
+
+/* ---------- brand-only header band (spans both columns) ---------- */
+
+.v7admin .atabs-head {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  background: var(--v-surface);
+  border-bottom: 1px solid var(--v-border);
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+.v7admin .atabs-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 6px;
+  color: var(--v-ink);
+}
+.v7admin .atabs-word {
+  font: 500 15px/1.2 Roboto, system-ui, sans-serif;
+  padding: 0 6px;
+}
+
+/* ---------- the sidebar (icon+name tab buttons, controls pinned at the bottom) ---------- */
+
+.v7admin .atabs-side {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: start;
+  position: sticky;
+  top: 56px;
+  height: calc(100dvh - 56px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--v-surface);
+  border-right: 1px solid var(--v-border);
+  padding: 16px 10px;
+  z-index: 40;
+  overflow-x: hidden; /* a rendering fallback must never scroll the page sideways */
+}
+.v7admin .atabs-sidenav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.v7admin .atabs-sidenav button,
+.v7admin .atabs-tail .admin-signout {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--v-ink2);
+  text-decoration: none;
+  font: 500 13.5px/1.2 Roboto, system-ui, sans-serif;
+  padding: 7px 14px;
+  border-radius: 12px;
+  white-space: nowrap;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background-color 0.14s ease, color 0.14s ease;
+}
+.v7admin .atabs-sidenav button:hover {
+  background: transparent;
+  color: var(--v-ink);
+}
+.v7admin .atabs-sidenav button.on {
+  background: var(--v-blue-wash);
+  color: var(--v-blue-deep);
+}
+.v7admin .atabs-sidenav button.on:hover {
+  background: var(--v-blue-wash);
+  color: var(--v-blue-deep);
+}
+.v7admin .atabs-sidenav button:focus-visible,
+.v7admin .atabs-tail .admin-signout:focus-visible {
+  outline: 2px solid var(--v-blue);
+  outline-offset: 2px;
+}
+.v7admin .atabs-sidenav .ms,
+.v7admin .atabs-tail .ms {
+  font-size: 18px;
+  opacity: 0.85;
+}
+.v7admin .atabs-sidenav button.on .ms {
+  opacity: 1;
+}
+.v7admin .atabs-new {
+  font: 500 9px/1.4 Roboto, system-ui, sans-serif;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--v-amber-text);
+  background: var(--v-amber-wash);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+.v7admin .atabs-sidenav button.on .atabs-new {
+  color: var(--v-amber-text);
+  background: #fff;
+}
+
+/* console controls — pinned where Student pins Sign out. The
+   .admin-signout hook rides along; its styling re-homes from the
+   old bar's blue pill to a quiet sidebar row (hook name unchanged). */
+.v7admin .atabs-tail {
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid var(--v-rows);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.v7admin .atabs-tail form {
+  margin: 0;
+}
+.v7admin .atabs-tail .admin-signout {
+  color: var(--v-ink2);
+  background: none;
+}
+.v7admin .atabs-tail .admin-signout:hover {
+  background: var(--v-grey-wash);
+  color: var(--v-ink);
+}
+
+/* ---------- main column ---------- */
+
+.v7admin .atabs-main {
+  grid-column: 2;
+  grid-row: 2 / -1;
+  min-width: 0;
+  justify-self: center;
+  width: min(100%, 1240px);
+  padding: 16px 8px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ---------- the page transition ---------- */
+
+.v7admin .atabs-tabpage {
+  animation: atabs-in 0.18s ease;
+}
+@keyframes atabs-in {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v7admin .atabs-tabpage {
+    animation: none;
+  }
+}
+
+/* ---------- the Wave-2/3 wiring slots (one honest line, nothing else) ---------- */
+
+.v7admin .atabs-slot {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  padding: 18px;
+}
+.v7admin .atabs-slotline {
+  margin: 0;
+  font: 500 11px/1.5 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+
+/* ============================================================
+   WAVES 2+3 — the real APPROVALS + ACCOUNTS tables (2026-11-03
+   admin-replacement). The mockup realm's table law rebuilt with
+   `atabs-` names only; the pending tables (.mk-*, .crq-*, .aq-*)
+   stay the defended surface's own — never restyled here.
+   ============================================================ */
+
+/* ---------- the panel + defined column heads ---------- */
+
+.v7admin .atabs-panel {
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: var(--v-shadow);
+  overflow: hidden;
+}
+.v7admin .atabs-label {
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7admin .atabs-heads {
+  display: grid;
+  gap: 8px 14px;
+  padding: 9px 18px;
+  border-bottom: 1px solid var(--v-rows);
+}
+/* the defined table laws (mockup grids, verbatim values) */
+.v7admin .atabs-appr-grid {
+  grid-template-columns: minmax(0, 1.5fr) 0.9fr minmax(0, 0.9fr) minmax(0, 1.15fr) 0.9fr 1fr;
+}
+.v7admin .atabs-acc-grid {
+  grid-template-columns: minmax(0, 2fr) 0.9fr 1fr minmax(0, 0.9fr) auto;
+}
+.v7admin .atabs-row {
+  display: grid;
+  gap: 6px 14px;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--v-rows);
+  position: relative;
+  transition: background-color 0.12s ease;
+}
+.v7admin .atabs-row:hover {
+  background: #f5f8fc;
+}
+.v7admin .atabs-row:last-of-type {
+  border-bottom: 0;
+}
+
+/* ---------- cells ---------- */
+
+.v7admin .atabs-cellname {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+/* accounts rows read as identity + email — avatar beside the stack */
+.v7admin .atabs-idcell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.v7admin .atabs-recid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.v7admin .atabs-name {
+  font: 500 13.5px/1.4 Roboto, system-ui, sans-serif;
+  min-width: 0;
+}
+.v7admin .atabs-line {
+  overflow-wrap: anywhere;
+}
+.v7admin .atabs-small {
+  font: 400 11.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .atabs-meta {
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+
+/* the honest vacancy: the deactivated name carries the strike */
+.v7admin .atabs-off .atabs-name {
+  color: var(--v-ink2);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+/* avatar (accounts) */
+.v7admin .atabs-ava {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--v-grey-wash);
+  color: var(--v-grey-text);
+  border: 1px solid var(--v-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: 500 11px/1 Roboto, system-ui, sans-serif;
+}
+
+/* ---------- chips (the wash-chip economy) ---------- */
+
+.v7admin .atabs-chip {
+  display: inline-block;
+  background: var(--v-grey-wash);
+  color: var(--v-grey-text);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font: 500 11px/1.5 Roboto, system-ui, sans-serif;
+  white-space: nowrap;
+}
+.v7admin .atabs-chip-ok {
+  background: var(--v-green-wash);
+  color: var(--v-green-text);
+}
+.v7admin .atabs-chip-warn {
+  background: var(--v-amber-wash);
+  color: var(--v-amber-text);
+}
+.v7admin .atabs-chip-blue {
+  background: var(--v-blue-wash);
+  color: var(--v-blue-deep);
+}
+
+/* ---------- the armed action pair (approvals, PENDING rows only;
+   blue wash confirm / amber wash deny-confirm, ✕ CANCEL disarms) ---------- */
+
+.v7admin .atabs-acts {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.v7admin .atabs-acts button {
+  font: 500 12.5px/1.4 Roboto, system-ui, sans-serif;
+  border-radius: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--v-border);
+  background: var(--v-surface);
+  color: var(--v-blue-deep);
+  cursor: pointer;
+}
+.v7admin .atabs-acts button + button {
+  color: var(--v-amber-text);
+}
+.v7admin .atabs-acts button.atabs-armed {
+  background: var(--v-blue-wash);
+  border-color: var(--v-blue-deep);
+}
+.v7admin .atabs-acts button.atabs-armed-reject {
+  background: var(--v-amber-wash);
+  border-color: var(--v-amber-text);
+  color: var(--v-amber-text);
+}
+.v7admin .atabs-acts button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.v7admin .atabs-acterr {
+  font: 500 11px/1.5 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-amber-text);
+}
+
+/* ---------- the kebab + popover (accounts; no inline-row actions) ---------- */
+
+.v7admin .atabs-kebab-cell {
+  justify-self: end;
+  position: relative;
+}
+.v7admin .atabs-kebab {
+  border: 1px solid var(--v-border);
+  background: var(--v-surface);
+  color: var(--v-ink2);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font: 500 14px/1.4 Roboto, system-ui, sans-serif;
+  cursor: pointer;
+}
+.v7admin .atabs-kebab:hover:not(:disabled) {
+  background: var(--v-grey-wash);
+  color: var(--v-ink);
+}
+.v7admin .atabs-kebab:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.v7admin .atabs-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+  padding: 6px;
+  gap: 2px;
+  background: var(--v-surface);
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(60, 64, 67, 0.25);
+}
+.v7admin .atabs-menu button {
+  font: 400 13px/1.4 Roboto, system-ui, sans-serif;
+  text-align: left;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--v-ink);
+  padding: 7px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.v7admin .atabs-menu button:hover:not(:disabled) {
+  background: var(--v-grey-wash);
+}
+.v7admin .atabs-menu button:disabled {
+  color: var(--v-meta);
+  cursor: default;
+}
+
+/* ---------- empty / failed lines (values only) ---------- */
+
+.v7admin .atabs-empty {
+  margin: 0;
+  padding: 14px 18px;
+  font: 500 11px/1.6 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+
+/* ============================================================
+   RESPONSIVE — re-grid, never squish
+   ============================================================ */
+
+@media (max-width: 1020px) {
+  .v7admin .atabs-heads {
+    display: none;
+  }
+  .v7admin .atabs-appr-grid,
+  .v7admin .atabs-acc-grid {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  }
+  .v7admin .atabs-row > .atabs-cellname {
+    grid-column: 1;
+  }
+  .v7admin .atabs-row > .atabs-kebab-cell,
+  .v7admin .atabs-row > .atabs-acts {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 720px) {
+  /* the sidebar becomes a horizontal strip under the band */
+  .v7admin .atabs-veil {
+    grid-template-columns: 1fr;
+    grid-template-rows: 56px auto 1fr;
+  }
+  .v7admin .atabs-side {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    position: sticky;
+    top: 56px;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-right: 0;
+    border-bottom: 1px solid var(--v-border);
+    padding: 8px 10px;
+  }
+  .v7admin .atabs-sidenav {
+    flex-direction: row;
+    flex: none;
+  }
+  .v7admin .atabs-tail {
+    margin-top: 0;
+    margin-left: auto;
+    padding-top: 0;
+    border-top: 0;
+    flex-direction: row;
+    flex: none;
+  }
+  .v7admin .atabs-main {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    width: 100%;
+  }
+}
