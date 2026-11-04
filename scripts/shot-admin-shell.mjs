@@ -1,14 +1,13 @@
 import { chromium } from "@playwright/test";
-// Round-3 (role-matrix law, ruled 2026-11-04) review captures at 1440.
-//   sysadmin   → /admin lands on APPROVALS (+ Accounts tab), NO Cohort/Audit
-//   counselor  → /admin lands on COHORT (+ Audit queue tab), NO Approvals/Accounts
-// Viewport shots (NOT fullPage — the fixed-rail stitch artifact rides fullPage).
+// Two-role /admin captures (role-tab law, 2026-11-04):
+//  - sysadmin: landing (Approvals, honest empty) + Accounts, 1440
+//  - counselor (ana.villanueva@SEED_COHORT_DOMAIN): Cohort roster at the
+//    five sweep widths + Audit queue at 1440
+// Viewport shots (NOT fullPage — fixed-rail stitch artifact). All state is
+// computed from real data; the scripts only drive, never fake.
 const base = "http://localhost:3111";
-const domain = process.env.SEED_COHORT_DOMAIN ?? "campus.test";
-
 const browser = await chromium.launch();
 
-/** Sign in on its own context; returns { ctx, page } with the console loaded. */
 async function signIn(email) {
   const ctx = await browser.newContext({
     viewport: { width: 1440, height: 900 },
@@ -25,42 +24,49 @@ async function signIn(email) {
   return { ctx, page };
 }
 
-function navLabels(page) {
-  return page.locator(".atabs-sidenav button span:last-child");
+const click = async (page, label) => {
+  const btn = page.locator(`button:has-text("${label}")`).first();
+  if ((await btn.count()) > 0) {
+    await btn.click();
+    await page.waitForTimeout(900);
+    return true;
+  }
+  return false;
+};
+
+// --- sysadmin: approvals landing + accounts ---
+const sys = await signIn(process.env.SEED_SYSADMIN_EMAIL ?? "");
+const sysTabs = await sys.page
+  .locator(".atabs-sidenav button")
+  .allTextContents();
+console.log("sysadmin tabs:", sysTabs.map((t) => t.trim()).join(" · "));
+await sys.page.screenshot({ path: ".impeccable/review/admin-r3-sysadmin-1440.png" });
+if (await click(sys.page, "Accounts")) {
+  await sys.page.screenshot({ path: ".impeccable/review/admin-r3-accounts-1440.png" });
+  console.log("✓ sysadmin accounts");
 }
+await sys.ctx.close();
 
-// (a) sysadmin — lands on Approvals, sees ONLY Approvals + Accounts
-{
-  const { ctx, page } = await signIn(process.env.SEED_SYSADMIN_EMAIL ?? "");
-  const labels = await navLabels(page).allTextContents();
-  console.log(`sysadmin tabs: ${labels.join(" · ")}`);
-  await page.screenshot({ path: ".impeccable/review/admin-r3-sysadmin-1440.png" });
-  console.log("✓ sysadmin landing 1440");
-
-  const acctBtn = page.locator('button:has-text("Accounts")').first();
-  if ((await acctBtn.count()) === 0) throw new Error("sysadmin has no Accounts tab");
-  await acctBtn.click();
-  await page.waitForTimeout(900);
-  await page.screenshot({ path: ".impeccable/review/admin-r3-accounts-1440.png" });
-  console.log("✓ accounts 1440");
-  await ctx.close();
+// --- counselor: cohort at five widths + audit ---
+const counselorEmail = `ana.villanueva@${
+  process.env.SEED_COHORT_DOMAIN || "campus.test"
+}`;
+const cou = await signIn(counselorEmail);
+const couTabs = await cou.page
+  .locator(".atabs-sidenav button")
+  .allTextContents();
+console.log("counselor tabs:", couTabs.map((t) => t.trim()).join(" · "));
+for (const w of [1440, 1200, 1024, 720, 390]) {
+  await cou.page.setViewportSize({ width: w, height: 900 });
+  await cou.page.waitForTimeout(700);
+  await cou.page.screenshot({
+    path: `.impeccable/review/admin-r4-cohort-${w}.png`,
+  });
+  console.log(`✓ cohort ${w}`);
 }
-
-// (b) counselor — lands on Cohort, sees ONLY Cohort + Audit queue
-{
-  const { ctx, page } = await signIn(`ana.villanueva@${domain}`);
-  const labels = await navLabels(page).allTextContents();
-  console.log(`counselor tabs: ${labels.join(" · ")}`);
-  await page.screenshot({ path: ".impeccable/review/admin-r3-cohort-1440.png" });
-  console.log("✓ counselor landing 1440");
-
-  const auditBtn = page.locator('button:has-text("Audit queue")').first();
-  if ((await auditBtn.count()) === 0) throw new Error("counselor has no Audit queue tab");
-  await auditBtn.click();
-  await page.waitForTimeout(900);
-  await page.screenshot({ path: ".impeccable/review/admin-r3-audit-1440.png" });
-  console.log("✓ audit 1440");
-  await ctx.close();
+if (await click(cou.page, "Audit queue")) {
+  await cou.page.screenshot({ path: ".impeccable/review/admin-r3-audit-1440.png" });
+  console.log("✓ counselor audit");
 }
-
+await cou.ctx.close();
 await browser.close();

@@ -2,20 +2,14 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { CSSProperties, MouseEvent } from "react";
-
-export interface RowSeg {
-  /** rubric weight → flex ("pct") */
-  weight: number;
-  /** earned fraction of this part, 0–1 ("--earn") */
-  earn: number;
-}
+import type { MouseEvent } from "react";
 
 /**
  * One cohort row (Round-8 lock: plain roster + obvious row marks, not
- * reordering). Client component because the whole row is the click target
- * (the name and VIEW links are the accessible paths), and the row mounts
- * the stacked-bar fill.
+ * reordering). Client component because the whole row is the click target —
+ * the name link is the accessible path. 2026-11-04 user ruling: NO progress
+ * strip and NO open column — both were redundant with the row affordance;
+ * progression detail lives on the per-student surface.
  *
  * Row marks (visible entities the counselor reads, zero triage logic —
  * derived only from computed state + the audit queue, page.tsx): pending
@@ -32,9 +26,7 @@ export default function StudentRow({
   pending,
   belowAvg,
   noActivity,
-  segs,
   active,
-  ariaLabel,
   isDemo = false,
 }: {
   id: string;
@@ -51,16 +43,14 @@ export default function StudentRow({
   belowAvg: boolean;
   /** the state's event log is empty — nothing done since seeding */
   noActivity: boolean;
-  segs: RowSeg[];
   active: string;
-  ariaLabel: string;
   isDemo?: boolean;
 }) {
   const router = useRouter();
 
   const href = `/admin/student?student=${id}`;
 
-  function onRowClick(e: MouseEvent<HTMLDivElement>) {
+  function onRowClick(e: MouseEvent<HTMLTableRowElement>) {
     if ((e.target as HTMLElement).closest("a")) return; // real links handle themselves
     router.push(href);
   }
@@ -71,11 +61,11 @@ export default function StudentRow({
   if (noActivity) marks.push({ label: "NO ACTIVITY YET", tone: "grey" });
 
   return (
-    <div
+    <tr
       className={`s-row${isDemo ? " row-demo" : ""}`}
       onClick={onRowClick}
     >
-      <span className="s-name">
+      <td className="s-name">
         <span className="s-name-line">
           <Link className="s-name-link" href={href}>
             {name}
@@ -92,31 +82,10 @@ export default function StudentRow({
             ))}
           </span>
         )}
-      </span>
-      <span className="s-career">{career ?? "Still deciding"}</span>
-      <span className="s-score num">{score}</span>
-      <span className="cbar-cell">
-        <span className="cbar" role="img" aria-label={ariaLabel}>
-          {segs.map((s, i) => (
-            <span className="cseg" key={i} style={{ flex: s.weight }}>
-              <i
-                style={
-                  {
-                    "--earn": `${s.earn}`,
-                    "--d": `${i * 80}ms`,
-                  } as CSSProperties
-                }
-              />
-            </span>
-          ))}
-        </span>
-      </span>
-      <span className="s-active">{active}</span>
-      <span>
-        <Link className="s-view" href={href}>
-          VIEW →
-        </Link>
-      </span>
-    </div>
+      </td>
+      <td className="s-career">{career ?? "Still deciding"}</td>
+      <td className="s-score num">{score}</td>
+      <td className="s-active">{active}</td>
+    </tr>
   );
 }

@@ -29,7 +29,7 @@ import BrandMark from "../../components/BrandMark";
 import type { Role } from "@/lib/session";
 import type { LiveRow } from "./page";
 import type { QueueRow } from "./AuditQueue";
-import StudentRow, { type RowSeg } from "./StudentRow";
+import StudentRow from "./StudentRow";
 import AuditQueue from "./AuditQueue";
 import { AdminApprovalsSlot, AdminAccountsSlot } from "./slots";
 import { RUBRIC_MAX, type RubricValues } from "./defaults";
@@ -65,22 +65,6 @@ function tabsFor(role: Role): ShellTab[] {
 }
 function landingFor(role: Role): TabId {
   return role === "sysadmin" ? "approvals" : "cohort";
-}
-
-/* ---------- roster helpers (pure; ride with the table into the shell) ---------- */
-
-function segments(p: RubricValues): RowSeg[] {
-  return [
-    { weight: RUBRIC_MAX.sp, earn: p.sp[0] / p.sp[1] },
-    { weight: RUBRIC_MAX.es, earn: p.es[0] / p.es[1] },
-    { weight: RUBRIC_MAX.tp, earn: p.tp[0] / p.tp[1] },
-    { weight: RUBRIC_MAX.ar, earn: p.ar[0] / p.ar[1] },
-    { weight: RUBRIC_MAX.cc, earn: p.cc[0] / p.cc[1] },
-  ];
-}
-
-function barAria(name: string, p: RubricValues): string {
-  return `${name}'s progress: skill ${p.sp[0]} of ${p.sp[1]}, employability ${p.es[0]} of ${p.es[1]}, training ${p.tp[0]} of ${p.tp[1]}, application readiness ${p.ar[0]} of ${p.ar[1]}, career clarity ${p.cc[0]} of ${p.cc[1]}`;
 }
 
 /* ---------- panes ---------- */
@@ -123,32 +107,38 @@ function CohortTable({ rows }: { rows: LiveRow[] }) {
         </div>
         <CohortArt />
       </div>
-      <div className="ct-colheads ct-label">
-        <span>NAME</span>
-        <span>CAREER</span>
-        <span>SCORE</span>
-        <span>PROGRESS</span>
-        <span>LAST ACTIVE</span>
-        <span></span>
-      </div>
-
-      {rows.map((r) => (
-        <StudentRow
-          key={r.id}
-          id={r.id}
-          isDemo={r.id === "neil"}
-          name={r.name}
-          sub={r.sub}
-          career={r.career}
-          score={r.score}
-          pending={r.pending}
-          belowAvg={r.belowAvg}
-          noActivity={r.events === 0}
-          segs={segments(r.parts)}
-          active={r.active}
-          ariaLabel={barAria(r.name, r.parts)}
-        />
-      ))}
+      {/* the family ledger register (Ledger-Table Rule): a real table —
+          tracked heads, #E8EAED row rules, tabular numerals, hover wash.
+          The whole row navigates — no Open column, no progress strip
+          (user ruling 2026-11-04: redundant with the row affordance;
+          progression detail lives on the per-student surface). */}
+      <table className="ct-table">
+        <thead>
+          <tr>
+            <th className="col-name" scope="col">Name</th>
+            <th className="col-career" scope="col">Career</th>
+            <th className="col-score" scope="col">Score</th>
+            <th className="col-active" scope="col">Last active</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <StudentRow
+              key={r.id}
+              id={r.id}
+              isDemo={r.id === "neil"}
+              name={r.name}
+              sub={r.sub}
+              career={r.career}
+              score={r.score}
+              pending={r.pending}
+              belowAvg={r.belowAvg}
+              noActivity={r.events === 0}
+              active={r.active}
+            />
+          ))}
+        </tbody>
+      </table>
     </section>
   );
 }
@@ -243,11 +233,6 @@ export default function AdminShell({
         <div className="atabs-tabpage" key={active}>
           <Pane tab={active} rows={rows} queue={queue} ruledByLabel={ruledByLabel} />
         </div>
-        {/* colophon — the honest footer survives the wave hook-and-all */}
-        <p className="admin-colophon">
-          <span>READ-ONLY COHORT VIEW · EVERY NUMBER COMPUTED FROM REAL STATE, NOTHING PAINTED</span>
-          <span>BASELINE · THESIS PROTOTYPE</span>
-        </p>
       </main>
     </div>
   );
