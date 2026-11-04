@@ -22,7 +22,7 @@ const jsClassScript = `document.documentElement.classList.add("js")`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
         <Script id="js-bootstrap" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: jsClassScript }} />
         {/* The two faces every surface paints with first — preloaded so the
