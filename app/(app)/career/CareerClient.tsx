@@ -447,8 +447,11 @@ export default function CareerClient({
               {/* the C3 band illustration (user ruling 2026-11-04): the career
                   fork — you are the ringed node, the chosen direction green,
                   the catalog open. Fixed-aspect block; hides ≤720 so it can
-                  never reflow the band's text. */}
-              <svg className="band-fork" width="200" height="140" viewBox="0 0 200 140" aria-hidden="true">
+                  never reflow the band's text. (Sized down 200→160/112 in
+                  the v9.1 whitespace round: at 140px tall the illustration
+                  outweighed the three-line description and banked dead
+                  space under it before the band's skills divider.) */}
+              <svg className="band-fork" width="160" height="112" viewBox="0 0 200 140" aria-hidden="true">
                 <path d="M48 122 L48 88" fill="none" stroke="var(--v-blue)" strokeWidth="3.5" strokeLinecap="round" />
                 <path d="M48 88 C 76 80, 92 60, 128 38" fill="none" stroke="var(--v-blue)" strokeWidth="3.5" strokeLinecap="round" />
                 <path d="M48 88 C 68 90, 102 100, 140 100" fill="none" stroke="#A8C7FA" strokeWidth="3" strokeLinecap="round" />
@@ -587,9 +590,7 @@ export default function CareerClient({
                   <span className="m-name">Nothing confirmed yet</span>
                 </div>
                 <p className="m-sub num">
-                  Matching starts once a skill is confirmed — pass a check on one and this list builds
-                  from it. Skills you rate yourself feed your baseline, but they never count toward
-                  matching.
+                  Matching starts once a skill is confirmed by a check.
                 </p>
               </div>
             </div>
@@ -976,9 +977,6 @@ export default function CareerClient({
                 <span><b>Training</b> {recovered.score.tp}/{WEIGHTS.tp}</span>
                 <span><b>Application readiness</b> {recovered.score.ar === null ? "—" : `${recovered.score.ar}/${WEIGHTS.ar}`}</span>
                 <span><b>Career direction</b> {recovered.score.cc}/{WEIGHTS.cc}</span>
-              </div>
-              <div className="readout-fit">
-                The reset measured the right things, then rebuilt on what you reported.
               </div>
             </div>
 

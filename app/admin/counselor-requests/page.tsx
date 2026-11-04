@@ -62,9 +62,8 @@ export default async function CounselorRequestsPage() {
               <div className="who">
                 <h1>Counselor requests ({pending.length})</h1>
                 <p className="band-id">
-                  First-time Google identities that declared counselor. Approving writes the
-                  profiles row and the JWT role in one action — the applicant signs in again and
-                  opens the Admin console.
+                  First-time Google identities that declared counselor. Approving lets them in on
+                  their next sign-in.
                 </p>
               </div>
             </div>

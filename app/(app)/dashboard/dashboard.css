@@ -365,17 +365,22 @@
 /* the hero: text column + the gauge as a fixed-aspect block */
 .v7dash .hero-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
+  grid-template-columns: minmax(0, 1fr) 220px;
   gap: 30px;
   align-items: center;
 }
 .v7dash .hero-row .who { min-width: 0; }
 .v7dash .hero-row .who .composite-wrap { margin-top: 14px; }
 .v7dash .hero-row .who .cta { margin-top: 16px; }
+/* the gauge sized down (user ruling 2026-11-04): at 320px wide the
+   3:2 viewBox made the band ≈245px tall and vertically centered the
+   short text column in dead whitespace; the whitespace round took it
+   to 260px and the user's follow-up pinned it at 220px — the card
+   hugs the figure and the dead space collapses with it */
 .v7dash .scoregauge {
   display: block;
   width: 100%;
-  max-width: 320px;
+  max-width: 220px;
   height: auto;
   justify-self: end;
 }
@@ -394,11 +399,11 @@
   white-space: nowrap;
 }
 @media (max-width: 1020px) {
-  .v7dash .hero-row { grid-template-columns: minmax(0, 1fr) 260px; gap: 20px; }
+  .v7dash .hero-row { grid-template-columns: minmax(0, 1fr) 190px; gap: 20px; }
 }
 @media (max-width: 720px) {
   .v7dash .hero-row { grid-template-columns: 1fr; }
-  .v7dash .scoregauge { max-width: 280px; }
+  .v7dash .scoregauge { max-width: 190px; }
 }
 
 /* the KPI icon discs — the imagery */

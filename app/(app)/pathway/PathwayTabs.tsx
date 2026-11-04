@@ -138,39 +138,45 @@ export default function PathwayTabs({
           (option 1 — label + link, nothing boxed). The `.lead-mono` e2e
           guard counter rides the ring mid ("keep a .lead-mono counter
           on the head" — cutover plan §338). The .vd2-standing paragraph
-          folded into the meta line. */}
+          folded into the meta line.
+          v9.1 label round (user feedback 2026-11-04): the word rides
+          BELOW the ring in the shared .ratemsg register — the Prep
+          .readring-slot pattern (the old inner small hugged the ring's
+          edges); the whole slot is one AT unit (role="img", inner
+          ring presentation). */}
       {showWalk ? (
         <section className="planhead" aria-label="My Plan">
           <div
-            className="plan-ring"
+            className="plan-ring-slot"
             role="img"
             aria-label={`${walk!.closed} of ${walk!.total} required skills checked`}
           >
-            <svg viewBox="0 0 130 130" aria-hidden="true">
-              <circle className="plan-ring-track" cx="65" cy="65" r="56" strokeWidth="9" />
-              {closedFr > 0 && (
-                <circle
-                  className="plan-ring-arc"
-                  cx="65"
-                  cy="65"
-                  r="56"
-                  strokeWidth="9"
-                  strokeDasharray={`${Math.round(closedFr * 3519) / 10} 351.9`}
-                />
-              )}
-            </svg>
-            <span className="plan-ring-mid num lead-mono">
-              <b>
-                {walk!.closed}/{walk!.total}
-              </b>
-              <small>checked</small>
-            </span>
+            <div className="plan-ring" aria-hidden="true">
+              <svg viewBox="0 0 130 130" aria-hidden="true">
+                <circle className="plan-ring-track" cx="65" cy="65" r="56" strokeWidth="9" />
+                {closedFr > 0 && (
+                  <circle
+                    className="plan-ring-arc"
+                    cx="65"
+                    cy="65"
+                    r="56"
+                    strokeWidth="9"
+                    strokeDasharray={`${Math.round(closedFr * 3519) / 10} 351.9`}
+                  />
+                )}
+              </svg>
+              <span className="plan-ring-mid num lead-mono">
+                <b>
+                  {walk!.closed}/{walk!.total}
+                </b>
+              </span>
+            </div>
+            <div className="ratemsg">checked</div>
           </div>
           <div className="plan-head">
             <h1 className="t">My Plan</h1>
             <p className="m">
-              Your path to <b>{careerName}</b> — the walk never re-sorts; your
-              state is the overlay.
+              Your path to <b>{careerName}</b>.
             </p>
             {upNext && (
               <p className="plan-upnext">
@@ -296,8 +302,8 @@ export default function PathwayTabs({
                             material exists yet (audit pending line) */}
                         {!node.material && node.unvetted > 0 ? (
                           <span className="vd2-nores">
-                            Resources exist for this skill but aren&apos;t vetted
-                            yet (audit pending).
+                            Resources exist for this skill but aren&apos;t
+                            vetted yet.
                           </span>
                         ) : null}
                         {!node.material && node.unvetted === 0 ? (

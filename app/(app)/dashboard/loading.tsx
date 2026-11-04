@@ -19,12 +19,13 @@ export default function Loading() {
           <div className="band">
             <div className="bandrow hero-row">
               <div className="who">
-                <span className="skel" style={{ width: 74, height: 15 }} />
-                <div className="score-readout num">
-                  <span className="skel" style={{ width: "2.4ch", height: 46 }} />
-                  <span className="skel" style={{ width: 30, height: 12, verticalAlign: 6 }} />
-                </div>
-                <span className="skel" style={{ width: 220, height: 19, marginTop: 10 }} />
+                {/* mirrors the REAL hero column (v9.1: the big numeral died —
+                    the gauge carries the number once): h1 · meta · readout
+                    line · the CTA pill */}
+                <span className="skel" style={{ width: 132, height: 22 }} />
+                <span className="skel" style={{ width: 200, height: 16, marginTop: 6, display: "block" }} />
+                <span className="skel" style={{ width: 250, height: 15, marginTop: 14, display: "block" }} />
+                <span className="skel" style={{ width: 142, height: 34, marginTop: 16, borderRadius: 999, display: "block" }} />
               </div>
               {/* the D1 gauge skeleton — track + pivot only: the loader
                   paints no arc or needle for a fraction the engine has

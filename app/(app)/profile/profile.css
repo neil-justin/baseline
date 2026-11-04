@@ -22,6 +22,14 @@
   font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
   padding: 12px 16px 24px;
+  /* the page-width cap rides the ROOT (v9.1 ruling, user feedback
+     2026-11-04 — the Prep .prep-surface precedent): the whole column
+     (band · strip · cards · legend) centers at 860px, and the bare tab
+     strip left-aligns to the cards' left edge like every other page.
+     (Per-section caps + auto margins were the first cut; they left the
+     tab strip unmoored from the column.) */
+  max-width: 860px;
+  margin: 0 auto;
 }
 .v7profile ::selection { background: var(--v-blue-wash); }
 .v7profile :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
@@ -195,14 +203,22 @@
 /* the row's LAST card carries no bottom margin */
 .v7profile .plancards .card:last-child { margin-bottom: 0; }
 
-/* tab strip — Material segmented on the grey-wash track */
+/* tab strip — Material segmented on the grey-wash track. Block-level flex
+   with fit-content width (v9.1 centering fix, user feedback 2026-11-04):
+   inline-flex ignored the capped group's auto margins, so the strip ran
+   out of bounds to the column's left edge while band + cards centered —
+   loader mirrors the same class, so both ride the fix. (Block layout
+   also dropped the old line-box's implicit bottom gap — the family's
+   12px rhythm now owns the strip→card spacing explicitly.) */
 .v7profile .ptabs {
-  display: inline-flex;
+  display: flex;
+  width: fit-content;
   gap: 4px;
   background: var(--v-grey-wash);
   border: 1px solid var(--v-border);
   border-radius: 8px;
   padding: 3px;
+  margin-bottom: 12px;
 }
 .v7profile .ptabs [role="tab"] {
   padding: 7px 16px;
@@ -231,16 +247,8 @@
   color: var(--v-ink2, #5f6368);
 }
 
-/* the page-width cap (2026-11-03 revamp ruling): the shell's 1240px exists
-   for Dashboard's dense five-channel tables — Profile has none, so the
-   whole column (band · strip · cards · legend) reads at 860px, the Prep
-   reading-column precedent */
-.v7profile .scoreband,
-.v7profile .ptabs,
-.v7profile .plancards,
-.v7profile .tab-legend {
-  max-width: 860px;
-}
+/* (the page-width cap block is DEAD — the cap moved to the `.v7profile`
+   root, the Prep precedent; the per-section caps died with it) */
 
 /* ---------- panel body — the married-card section register (`.stack`,
    `.psblock`, `.lead-mono`, `.b-head`, `.src-line`) was swept when the

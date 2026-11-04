@@ -136,7 +136,7 @@ export default function LetterUpload({
     const form = new FormData();
     form.append("letter", files[0]);
     const anchor = employer.trim();
-    if (anchor.length > 0) form.append("employer", anchor); // absent = the optional check skips honestly — nothing invented
+    if (anchor.length > 0) form.append("employer", anchor); // absent = the optional check is skipped — nothing invented
     setBusy(true);
     setErr(null);
     // round 2b (§6.3): the busy state REPLACES the tab content — the active
@@ -193,7 +193,7 @@ export default function LetterUpload({
             onChange={(e) => setEmployer(e.target.value)}
           />
           <p className="cl-employer-hint">
-            Leave empty if you&rsquo;re applying generally — the employer check then skips honestly.
+            Leave empty if you&rsquo;re applying generally.
           </p>
         </div>
       ) : null}

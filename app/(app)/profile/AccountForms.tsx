@@ -101,7 +101,7 @@ export function AccountIdentity({ initial, programs }: { initial: Identity; prog
       });
       const json = (await res.json().catch(() => null)) as { note?: string; detail?: string } | null;
       if (res.ok) {
-        setNote(json?.note ?? "Saved — your roster row reads the new values.");
+        setNote(json?.note ?? "Saved.");
         router.refresh(); // server truth re-renders everywhere the name reads
       } else {
         const detail = json?.detail ?? "The save didn't complete — nothing changed; try again.";
@@ -250,7 +250,7 @@ export function AccountIdentity({ initial, programs }: { initial: Identity; prog
           </button>
         </div>
       </form>
-      <p className="acct-campus num">Campus — {initial.campus}, the tenant key is fixed; it identifies your school&apos;s roster.</p>
+      <p className="acct-campus num">Campus — {initial.campus} (fixed by your school).</p>
       {/* the status slot renders ONLY when it has a message — no phantom line */}
       {statusMsg && (
         <p className={genErr ? "presence-err" : "presence-ok"} role="status" aria-live="polite">

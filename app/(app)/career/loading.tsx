@@ -8,6 +8,8 @@ import "./career.css";
  * row → the lens chips rail → the ONE rolecard as the RANK / CAREER /
  * ENTRY PATH index table, NOT the zero-confirmed compressed row.
  * TEXT-FREE still: the h1, head labels and cell values are shape bars;
+ * the index table mirrors the page's REAL page size (10 rows — the
+ * CareerClient PAGE_SIZE) so the swap-in doesn't add rows after load (CLS contract);
  * one polite status region announces. Static-chrome rule kept: the band
  * renders pure track-grey shapes. Pulse gated by prefers-reduced-motion
  * (../v7.css .skel).
@@ -24,8 +26,9 @@ export default function Loading() {
             </div>
             <div className="bandside">
               {/* the fork skeleton lives on its real slot (side-by-side with
-                  the CTA column) so the reserve matches the committed band */}
-              <svg className="band-fork" width="200" height="140" viewBox="0 0 200 140" aria-hidden="true">
+                  the CTA column) so the reserve matches the committed band;
+                  sized down to the page fork's 160×112 render */}
+              <svg className="band-fork" width="160" height="112" viewBox="0 0 200 140" aria-hidden="true">
                 <path d="M48 122 L48 88" fill="none" stroke="var(--v-rows)" strokeWidth="3.5" strokeLinecap="round" />
                 <path d="M48 88 C 76 80, 92 60, 128 38" fill="none" stroke="var(--v-rows)" strokeWidth="3.5" strokeLinecap="round" />
                 <path d="M48 88 C 68 90, 102 100, 140 100" fill="none" stroke="var(--v-rows)" strokeWidth="3" strokeLinecap="round" />
@@ -73,7 +76,7 @@ export default function Loading() {
               <span className="skel" style={{ width: 74, height: 11 }} />
               <span aria-hidden="true" />
             </div>
-            {Array.from({ length: 4 }, (_, r) => (
+            {Array.from({ length: 10 }, (_, r) => (
               <div className="index-row" key={r}>
                 <span className="skel" style={{ width: 27, height: 27, borderRadius: 999 }} />
                 <span className="cell-career">

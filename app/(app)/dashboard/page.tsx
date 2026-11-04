@@ -122,7 +122,6 @@ export default async function DashboardPage() {
               the number once — the score stays announced for AT */}
               <span className="sr-only">Readiness {score.total} of 100</span>
               <div className="composite-wrap">
-                <div className="ratemsg">Computed from your own records, NACE-aligned</div>
                 <div className="ratemsg num">
                   You&apos;re <b className="num">{score.total}%</b> ready for {career.name}; {v.closed} bars
                   already counted.
@@ -181,15 +180,6 @@ export default async function DashboardPage() {
           </span>
           <div className="sub-row">
             <span className="s-name">Skill progress</span>
-            <p className="s-note">
-              <b className="num">
-                {score.sp} of {WEIGHTS.sp}
-              </b>{" "}
-             , {v.closed} of {mapSize} bars closed, {verifiedBars} verified{" "}
-              <span className="vbadge ok">
-                <Check size={11} aria-hidden="true" />
-              </span>
-            </p>
           </div>
           <div className="score num">
             {score.sp} <small>/{WEIGHTS.sp}</small>
@@ -218,15 +208,6 @@ export default async function DashboardPage() {
           </span>
           <div className="sub-row">
             <span className="s-name">Employability skills</span>
-            <p className="s-note">
-              <b className="num">
-                {score.es} of {WEIGHTS.es}
-              </b>{" "}
-             , {v.esVerified} of 7 NACE competencies verified{" "}
-              <span className="vbadge ok">
-                <Check size={11} aria-hidden="true" />
-              </span>
-            </p>
           </div>
           <div className="score num">
             {score.es} <small>/{WEIGHTS.es}</small>
@@ -250,15 +231,6 @@ export default async function DashboardPage() {
           </span>
           <div className="sub-row">
             <span className="s-name">Training progress</span>
-            <p className="s-note">
-              <b className="num">
-                {score.tp} of {WEIGHTS.tp}
-              </b>{" "}
-              ,{" "}
-              {v.stageOne.done === 0
-                ? "pathway just started"
-                : `First 30 days: ${v.stageOne.done} of 3 done`}
-            </p>
           </div>
           <div className="score num">
             {score.tp} <small>/{WEIGHTS.tp}</small>
@@ -288,16 +260,7 @@ export default async function DashboardPage() {
           </span>
           <div className="sub-row">
             <span className="s-name">Application readiness</span>
-            {v.arMeasured ? (
-              <p className="s-note">
-                <b className="num">
-                  {score.ar} of {WEIGHTS.ar}
-                </b>{" "}
-                , resume {v.arFactors.resume.earned}/{v.arFactors.resume.max}, letter{" "}
-                {v.arFactors.letter.measured ? `${v.arFactors.letter.earned}/${v.arFactors.letter.max}` : "not run"}, presence{" "}
-                {v.arFactors.presence.measured ? `${v.arFactors.presence.earned}/${v.arFactors.presence.max}` : "not declared"}
-              </p>
-            ) : (
+            {!v.arMeasured && (
               <p className="s-note not-yet">
                 Not yet measured — opens with the resume diagnostic in Prep.
               </p>
@@ -338,15 +301,6 @@ export default async function DashboardPage() {
           </span>
           <div className="sub-row">
             <span className="s-name">Career clarity</span>
-            <p className="s-note">
-              <b className="num">
-                {score.cc} of {WEIGHTS.cc}
-              </b>{" "}
-              , Career picked{" "}
-              <span className="vbadge ok">{v.ccPicked ? <Check size={11} aria-hidden="true" /> : "—"}</span>, Plan started{" "}
-              <span className="vbadge ok">{v.ccStarted ? <Check size={11} aria-hidden="true" /> : "—"}</span>, First item done:{" "}
-              {v.ccFirstDone ? "yes" : "not yet"}
-            </p>
           </div>
           <div className="score num">
             {score.cc} <small>/{WEIGHTS.cc}</small>
@@ -369,7 +323,6 @@ export default async function DashboardPage() {
         <Reveal className="card">
           <div className="head">
             <b>My Plan — next items</b>
-            <span>ranked, first item is your next step</span>
           </div>
           <table className="plan-table">
             <thead>
@@ -481,7 +434,7 @@ export default async function DashboardPage() {
             <div className="row">
               <div>
                 <b>Close a First-30-days bar</b>
-                <div className="sub">check pass closes the bar, SP re-fractions</div>
+                <div className="sub">closes the bar, your score updates</div>
               </div>
               <span className="badge num">+{spDelta}</span>
             </div>
@@ -541,11 +494,6 @@ export default async function DashboardPage() {
               </span>
             </div>
           ))}
-        </div>
-        <div className="lcap">
-          Verified by the step 3 assessment&apos;s verification battery; self-report never closes bars — it carries a
-          hatch until evidence lands. {ASSESSED_COMPETENCIES} of 8 NACE competencies carried — Equity &amp; Inclusion
-          excluded by recorded choice.
         </div>
       </Reveal>
     </div>

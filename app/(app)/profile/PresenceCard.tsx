@@ -25,7 +25,7 @@ import { useRouter } from "next/navigation";
 /* the private-account note rides ONE line — the stamp's honest sub-result
    is the fact; nothing else carries it */
 const PRIVATE_NOTE =
-  "The stamp still verifies the link's format and your professional email; the record reads “resolves, content not machine-verifiable”.";
+  "Your link and email stay checked; the stamp just notes the account is private.";
 
 /* the required-field marker — red asterisk on required labels */
 function Req() {

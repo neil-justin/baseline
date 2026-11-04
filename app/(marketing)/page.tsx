@@ -208,7 +208,6 @@ export default async function LandingPage() {
           <Reveal>
           <div className="m-head">
             <h2>What you get, screen by screen.</h2>
-            <p>Every image below is the product itself — no mockups, no promises.</p>
           </div>
 
           <div className="m-feat">
@@ -218,8 +217,7 @@ export default async function LandingPage() {
                 The Career Readiness Index covers five channels, written out
                 in plain words: skill progress, employability skills,
                 training progress, application readiness, and career
-                clarity. Every point traces to a check you passed — and what
-                isn’t measured yet says so, honestly.
+                clarity.
               </p>
             </div>
             <figure className="m-shot">
@@ -260,9 +258,7 @@ export default async function LandingPage() {
               <h3>A plan that ranks itself.</h3>
               <p>
                 Your gaps become ranked steps — courses, certificates, and
-                assessments with prices and hours shown up front. Passing
-                the check closes the bar; a claim stays hatched until it’s
-                checked.
+                assessments with prices and hours shown up front.
               </p>
             </div>
             <figure className="m-shot">
@@ -308,7 +304,6 @@ export default async function LandingPage() {
           <Reveal>
           <div className="m-head">
             <h2>How it works.</h2>
-            <p>Three steps, in this order.</p>
           </div>
           <div className="m-loop">
             <div className="m-step">
@@ -337,8 +332,6 @@ export default async function LandingPage() {
               <div>
                 <h3>Close your gaps</h3>
                 <p className="m-mech">
-                  Your score covers five things, written out in plain words:
-                  skill progress, employability, training, application
                   readiness, and career direction. The Plan ranks what to
                   close next — free and paid courses, with prices shown.
                 </p>
@@ -361,8 +354,7 @@ export default async function LandingPage() {
                 <p className="m-mech">
                   The resume and cover-letter checkers read your actual
                   files, and declared credentials get verified against your
-                  record. Checks you actually pass count; what you claim
-                  alone never does.
+                  record.
                 </p>
                 <p className="m-viz" aria-hidden="true">
                   <span className="m-chip m-cg">
@@ -396,8 +388,7 @@ export default async function LandingPage() {
                 to keep — what the student does is what you see.
               </li>
               <li>
-                <b>Only checks close a gap.</b> A claim stays visible but
-                hatched until the student passes the check against it.
+                <b>Only checks close a gap.</b>
               </li>
               <li>
                 <b>Data handled cleanly.</b> Students can export or erase
@@ -415,7 +406,6 @@ export default async function LandingPage() {
           <Reveal>
           <div className="m-head">
             <h2>Questions, answered plainly.</h2>
-            <p>No fine print — the same rules the product runs by.</p>
           </div>
           <div className="m-faq">
             {FAQS.map((f) => (

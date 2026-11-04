@@ -207,7 +207,7 @@ export default async function ProgressPage() {
         check = { resourceId: resource.id, skillShort: skillShort(resource.skillsAddressed[0] ?? "skill") };
       }
     } else {
-      statusLine = "Not yet done. Milestones are marked done by you, when it happens.";
+      statusLine = "Marked done by you, when it happens.";
     }
     return {
       id: g.id,

@@ -1,3 +1,4 @@
+import "./walk.css";
 import "./pathway.css";
 
 /**
@@ -12,16 +13,20 @@ export default function Loading() {
   return (
     <div className="v7plan" role="status" aria-busy="true" aria-label="Loading My Plan">
       <div aria-hidden="true">
-        {/* the header card: ring (track only — no arc paints a fraction
-            the engine never computed) + title/meta/up-next bars */}
+        {/* the header card: ring-slot (track only — no arc paints a fraction
+            the engine never computed; `checked`'s label bar beneath, the
+            page's .plan-ring-slot mirror) + title/meta/up-next bars */}
         <section className="planhead">
-          <div className="plan-ring">
-            <svg viewBox="0 0 130 130" aria-hidden="true">
-              <circle className="plan-ring-track" cx="65" cy="65" r="56" strokeWidth="9" />
-            </svg>
-            <span className="plan-ring-mid">
-              <span className="skel" style={{ width: 56, height: 24 }} />
-            </span>
+          <div className="plan-ring-slot">
+            <div className="plan-ring">
+              <svg viewBox="0 0 130 130" aria-hidden="true">
+                <circle className="plan-ring-track" cx="65" cy="65" r="56" strokeWidth="9" />
+              </svg>
+              <span className="plan-ring-mid">
+                <span className="skel" style={{ width: 56, height: 24 }} />
+              </span>
+            </div>
+            <span className="skel" style={{ width: 54, height: 11 }} />
           </div>
           <div className="plan-head">
             <span className="skel" style={{ width: 110, height: 24 }} />
@@ -31,10 +36,14 @@ export default function Loading() {
           </div>
         </section>
 
-        {/* the spine walk: node disc + card bars per row */}
-        <ol className="vd2-map" style={{ listStyle: "none", margin: "18px 0 0", padding: 0 }}>
+        {/* the spine walk: node disc + card bars per row — NO inline geometry
+            here: walk.css owns list-style/margins and the .vd2-map centering
+            (the old inline margin: 18px 0 0 zeroed the auto margins and
+            slid the column off the 820px cap; position/padding are class
+            styles too) */}
+        <ol className="vd2-map">
           {Array.from({ length: 4 }, (_, r) => (
-            <li className="vd2-row" key={r} style={{ position: "relative" }}>
+            <li className="vd2-row" key={r}>
               <span
                 className="skel"
                 style={{

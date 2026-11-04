@@ -813,10 +813,12 @@
    ============================================================ */
 
 /* the band ledger — full-width second row of the band (no framed cells;
-   the track rides the meta line), chips filling the row at any width */
+   the track rides the meta line), chips filling the row at any width.
+   (v9.1 whitespace round, user feedback 2026-11-04: 14/14 → 10/10 —
+   the divider hugged the illustration's dead space too loosely.) */
 .v7career .band-ledger {
-  margin-top: 14px;
-  padding-top: 14px;
+  margin-top: 10px;
+  padding-top: 10px;
   border-top: 1px solid var(--v-rows);
 }
 .v7career .ledger-chips { margin: 4px 0 0; }

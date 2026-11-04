@@ -601,15 +601,8 @@ body:has(.v7) { background: #f8f9fa; }
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-.v7 .plan-ring-mid small,
-.v7 .readring-mid small {
-  display: block;
-  margin-top: 3px;
-  font: 500 10px/1.4 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--v-meta);
-}
+/* (the inner `small` label died with the 2026-11-04 label round — both
+    ring captions now ride BELOW their rings in the .ratemsg register) */
 
 .v7 .segs { flex: 1; max-width: 520px; }
 .v7 .segbar { height: 8px; gap: 3px; }
