@@ -606,6 +606,10 @@ input::placeholder { color: #6F746F; }
 .arrow { display: inline-flex; align-items: center; opacity: 0.9; }
 .g { display: inline-flex; align-items: center; vertical-align: -0.08em; }
 
+/* lucide icons flow WITH the text — Tailwind preflight sets svg { display: block },
+   which pushes mid-sentence icons onto their own line */
+svg.lucide { display: inline-block; vertical-align: -0.15em; }
+
 
 /* ============================================================
    APP-SHELL SYSTEM (post-login surfaces)

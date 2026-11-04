@@ -2,7 +2,6 @@
 
 import { useState, type ReactNode } from "react";
 import CountUp from "@/components/CountUp";
-import { SegRubricBar } from "@/components/instrument";
 
 /**
  * The measurement sequence (prototype `data-sequence` semantics): the score
@@ -10,21 +9,24 @@ import { SegRubricBar } from "@/components/instrument";
  * v7 places it in the header band — the composite is the headline, the
  * segs + channel labels sit beside it (Material state language only, no
  * entrance motion; the count-up IS the measurement).
+ *
+ * 2026-11-04 (profile round): the five label slots carry the CHANNEL'S
+ * FULL NAME over its value — "SP 19/25"-style acronyms were
+ * Dashboard-bundled vocabulary; a profile reader must not cross pages to
+ * decode their own band. Each label rides --w (the channel's rubric
+ * weight) so names center under their weighted segment.
  */
 export default function ScoreSequence({
   score,
-  parts,
-  labels,
+  channels,
   suffix,
   ratemsg,
   fine,
 }: {
   score: number;
-  parts: { pct: number; earnedFrac: number }[];
-  /** per-channel label row under the bar, computed ("SP 19/25", "AR —") —
-   * v7.1: plain strings keyed by text; JSX arrays across the RSC boundary
-   * are the documented "unique key prop" warning source */
-  labels: string[];
+  /** per-channel stacked row: the channel's full name, its earned fill
+   *  (null = unmeasured — bare track + "—", never a painted zero), value */
+  channels: { name: string; value: string; fill?: number | null }[];
   /** honest subtext after "/ 100" — empty string once the plan has moved */
   suffix: string;
   /** "Computed from your own records · NACE-aligned" */
@@ -50,19 +52,27 @@ export default function ScoreSequence({
         <div className="ratemsg">{ratemsg}</div>
         {fine && <div className="ratemsg num">{fine}</div>}
       </div>
-      <div className="segs">
-        <SegRubricBar
-          parts={parts}
-          armed={armed}
-          height={8}
-          ariaLabel={`Score ${score} of 100 — the five channels`}
-        />
-        <div className="seglabels num">
-          {labels.map((l) => (
-            <span key={l}>{l}</span>
-          ))}
-        </div>
-      </div>
+      {/* the five-channel read — the STACKED register (user ruled
+          2026-11-04 after the weighted ribbon buckled on narrow bands:
+          rows hold their shape at any width, one row per channel — name ·
+          earned track · numeral). Fills arm with the count-up; an
+          unmeasured channel never paints a zero fill. */}
+      <ul
+        className="chanlist"
+        aria-label={`Readiness breakdown — ${channels.map((c) => `${c.name} ${c.value}`).join(", ")}`}
+      >
+        {channels.map((c, i) => (
+          <li className="chan-row" key={c.name}>
+            <span className="chan-name">{c.name}</span>
+            <span className={`chan-track${c.fill == null ? " none" : ""}`}>
+              <i
+                style={{ width: armed && c.fill != null ? `${Math.min(100, c.fill * 100).toFixed(1)}%` : "0%" }}
+              />
+            </span>
+            <span className="chan-val num">{c.value}</span>
+          </li>
+        ))}
+      </ul>
     </>
   );
 }

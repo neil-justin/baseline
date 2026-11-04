@@ -1,5 +1,7 @@
 /** Instrument components — The Index shared vocabulary. Server-safe (no hooks). */
 
+import { CornerDownLeft } from "lucide-react";
+
 export function Label({ children }: { children: React.ReactNode }) {
   return <span className="label">{children}</span>;
 }
@@ -38,7 +40,10 @@ export function NextCard({
       <p className="n-target num">{target}</p>
       <div className="n-cta">
         <a className="btn btn-primary" href={ctaHref}>
-          {cta} <span className="arrow">↵</span>
+          {cta}{" "}
+          <span className="arrow">
+            <CornerDownLeft size={14} aria-hidden="true" />
+          </span>
         </a>
       </div>
     </div>
