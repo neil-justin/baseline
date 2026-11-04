@@ -134,6 +134,22 @@
   color: var(--v-ink2);
 }
 
+/* the kicon discs — Dashboard's imagery register (F4, 2026-11-04) */
+.v7prep .prep-kpi .kicon {
+  order: -3;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 10px;
+  color: var(--v-ink);
+}
+.v7prep .prep-kpi .kicon svg { width: 18px; height: 18px; }
+.v7prep .prep-kpi.k-blue .kicon { background: var(--v-blue-wash); }
+.v7prep .prep-kpi.k-green .kicon { background: var(--v-green-wash); }
+.v7prep .prep-kpi.k-amber .kicon { background: var(--v-amber-wash); }
+
 /* wash chips (card state + verdict chips) */
 
 .v7prep .chip {
