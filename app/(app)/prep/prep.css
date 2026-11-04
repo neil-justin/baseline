@@ -48,7 +48,19 @@
 /* ---------- named band — Tier 2b: the card/row/who register lives
    ONCE in ../v7.css (.v7 .band / .bandrow / .who .t+.m); the right slot
    is the shared readiness ring (R2 ruling 2026-11-03; ring register,
-   2026-11-04 F1) — no page-specific band rules remain here ---------- */
+   2026-11-04 F1) — the caption now lives UNDER the ring in the .ratemsg
+   register (user feedback 2026-11-04), so the slot is this page's column ---------- */
+
+/* the ring slot: figures in the ring, `application readiness` right-aligned
+   beneath it (the shared .ratemsg type/colour; 8px gap is the page-local top
+   gap the ruled 2px feels too tight under a 130px instrument) */
+.v7prep .readring-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
 
 .v7prep .who { min-width: 220px; }
 .v7prep .who .m { max-width: 74ch; }
@@ -849,8 +861,12 @@
   .v7prep { padding: 12px 12px 80px; } /* clears the ≤720px bottom nav */
   .v7prep .who { min-width: 0; }
   /* the ≤720px fold: the band row wraps the ring under the title —
-     keep its right edge (the old .prep-readiness rule's job) */
-  .v7prep .readring { margin-left: auto; }
+     keep its right edge (the old .prep-readiness rule's job). The slot
+     (ring + caption) is the bandrow flex child now, so the push is the
+     slot's; the caption CENTRES under the 130px instrument here — a
+     right-aligned 11.5px line under a centred-digits circle reads lopsided
+     at 390px (prep-feedback-probe-4 fold shot). */
+  .v7prep .readring-slot { margin-left: auto; align-items: center; }
   /* channel cards fold 3 → 2 → 1 */
   .v7prep .prep-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .v7prep .panel-sec { padding: 12px 12px 14px; }
@@ -1010,6 +1026,10 @@
       transform 0.12s cubic-bezier(0.2, 0, 0, 1);
   }
   .v7prep .btn:active { transform: scale(0.97); }
+  /* the growth + fade-in of the recast hero — the jump from the slim zone's
+     height to the 320px recast read as a pop (user feedback 2026-11-04);
+     the removal side stays instant by design */
+  .v7prep .tabpanel.prep-analyzing .dz-zone { animation: hero-grow 0.24s cubic-bezier(0.2, 0, 0, 1); }
   /* tab panels: fade-through on switch (panels remount per user switch) */
   .v7prep .tabpanel:not([hidden]) { animation: prep-panel-in 0.2s cubic-bezier(0.2, 0, 0, 1); }
   /* the findings disclosure: content mounts from -4px (drawer register) */
@@ -1042,3 +1062,4 @@
 @keyframes dz-rot { to { transform: rotate(360deg); } }
 @keyframes prep-card-in { from { opacity: 0; transform: translateY(5px); } }
 @keyframes prep-fade-in { from { opacity: 0; } }
+@keyframes hero-grow { from { min-height: 0; opacity: 0.4; transform: translateY(-6px); } }

@@ -595,9 +595,12 @@ export default async function PrepPage() {
           {/* F1 (2026-11-04): the band's visual — the readiness ring, My
               Plan's plan-ring register. Same figure the composite read:
               ar / WEIGHTS.ar; no career or nothing measured (ar null) still
-              paints "—" and NO arc — never a faked fraction. */}
+              paints "—" and NO arc — never a faked fraction. The label lives
+              BELOW the ring in the .ratemsg register (user feedback
+              2026-11-04: the inner small hugged the ring's edges); the whole
+              slot is one AT unit (role="img" here, inner ring presentation). */}
           <div
-            className="readring"
+            className="readring-slot"
             role="img"
             aria-label={
               readinessAr !== null
@@ -605,23 +608,25 @@ export default async function PrepPage() {
                 : "Application readiness — not yet measured"
             }
           >
-            <svg viewBox="0 0 130 130" aria-hidden="true">
-              <circle className="readring-track" cx="65" cy="65" r="56" strokeWidth="9" />
-              {readinessFr > 0 && (
-                <circle
-                  className="readring-arc"
-                  cx="65"
-                  cy="65"
-                  r="56"
-                  strokeWidth="9"
-                  strokeDasharray={`${Math.round(readinessFr * 3519) / 10} 351.9`}
-                />
-              )}
-            </svg>
-            <span className="readring-mid">
-              <b className="num">{readinessAr !== null ? `${readinessAr}/${WEIGHTS.ar}` : "—"}</b>
-              <small>application readiness</small>
-            </span>
+            <div className="readring" aria-hidden="true">
+              <svg viewBox="0 0 130 130" aria-hidden="true">
+                <circle className="readring-track" cx="65" cy="65" r="56" strokeWidth="9" />
+                {readinessFr > 0 && (
+                  <circle
+                    className="readring-arc"
+                    cx="65"
+                    cy="65"
+                    r="56"
+                    strokeWidth="9"
+                    strokeDasharray={`${Math.round(readinessFr * 3519) / 10} 351.9`}
+                  />
+                )}
+              </svg>
+              <span className="readring-mid">
+                <b className="num">{readinessAr !== null ? `${readinessAr}/${WEIGHTS.ar}` : "—"}</b>
+              </span>
+            </div>
+            <div className="ratemsg">application readiness</div>
           </div>
         </div>
       </header>
