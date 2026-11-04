@@ -1,5 +1,7 @@
 import type { Role } from "@/lib/session";
 
+import BrandMark from "../../components/BrandMark";
+
 /**
  * Admin app bar — the v7 56px top bar (brand mark + wordmark), no student
  * tabs (this surface is the counselor's console, not a student surface) and
@@ -13,9 +15,7 @@ export default function AdminBar({ role }: { role?: Role }) {
     <header className="adminbar">
       <div className="bar-in">
         <div className="brand">
-          <span className="brandmark" aria-hidden="true">
-            <i />
-          </span>
+          <BrandMark size={24} />
           <span className="brandname">Baseline</span>
         </div>
         <div className="bar-user">

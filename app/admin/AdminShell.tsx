@@ -21,6 +21,8 @@
  * form (never a GET link — the prefetched sign-out footgun).
  */
 import { useState } from "react";
+
+import BrandMark from "../../components/BrandMark";
 import type { Role } from "@/lib/session";
 import type { LiveRow } from "./page";
 import type { QueueRow } from "./AuditQueue";
@@ -162,9 +164,7 @@ export default function AdminShell({
       {/* brand-only header band (spans both columns) */}
       <header className="atabs-head" role="banner">
         <div className="atabs-brand">
-          <span className="brandmark" aria-hidden="true">
-            <i />
-          </span>
+          <BrandMark size={24} />
           <span className="atabs-word">Baseline</span>
         </div>
       </header>
