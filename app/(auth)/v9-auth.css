@@ -37,7 +37,13 @@
   font: 400 14.5px/1.55 var(--sans);
 }
 .v9auth ::selection { background: #d3e3fd; }
-.v9auth :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
+
+/* the anchor-button fix: `.v7auth a { color: inherit }` (0,1,1) outranks
+   globals' `.btn-primary { color: #fff }` (0,1,0) — so every <a> styled
+   as a primary button (reset's "Request a fresh link") rendered black.
+   Primary is the affected register; scope the repair to it so ghost and
+   outline variants keep their own colors. */
+.v9auth .btn-primary { color: #fff; }.v9auth :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
 
 /* ---------- top bar: borderless white, the family brand mark ---------- */
 
