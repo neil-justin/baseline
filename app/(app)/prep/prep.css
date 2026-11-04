@@ -840,3 +840,129 @@
   /* the channel cards fold to a single column */
   .v7prep .prep-kpis { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   DNA v9 sweep — prep (2026-11-04, rides the shell's v9 token
+   block). Cards + channel KPI cards borderless at the 16px
+   rung; chips at the 8px rung; buttons pill (ghost → the M3
+   tonal pill); the suite tabs go M3 pills; the dropzone keeps
+   its dashed affordance at the 12px tray rung. Type rides the
+   v9 scale; v9.1 motion (card lift, panel fade-through on tab
+   switch, disclosure mount, press scale) gated by
+   prefers-reduced-motion. Hooks byte-untouched.
+   ============================================================ */
+
+/* cards: borderless at the 16px rung */
+.v7prep .card,
+.v7prep .prep-kpi {
+  border: 0;
+  border-radius: 16px;
+}
+/* the dropzone is an intake tray, not a card — 12px rung, dashed affordance stays */
+.v7prep .dz-zone { border-radius: 12px; }
+/* the stale-target feedback band at the 12px rung */
+.v7prep .rs-stale { border-radius: 12px; }
+
+/* hierarchy: card heads go Google Sans */
+.v7prep .b-head h2 {
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* buttons: the pill register, state tints not baked shadows */
+.v7prep .btn {
+  border-radius: 999px;
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+  padding: 9px 22px;
+  font-size: 14px;
+}
+.v7prep .btn-primary { box-shadow: none; }
+.v7prep .btn-primary:hover { box-shadow: none; }
+.v7prep .btn-ghost {
+  background: var(--v-blue-wash);
+  border: 0;
+  color: #041e49;
+}
+.v7prep .btn-ghost:hover { border-color: transparent; background: #c5d9f8; }
+
+/* segmented register → M3 pills */
+.v7prep .ptabs { border: 0; border-radius: 999px; }
+.v7prep .ptabs button { border-radius: 999px; font-size: 13px; }
+.v7prep .ptabs button[aria-selected="true"] { border-color: transparent; }
+
+/* chips at the 8px rung */
+.v7prep .chip { border-radius: 8px; font-size: 12px; }
+.v7prep .rs-level { border-radius: 8px; font-size: 12px; }
+
+/* ---------- v9 type scale bump (see ../v7.css #7) ---------- */
+.v7prep { font: 400 15px/1.55 Roboto, system-ui, sans-serif; }
+.v7prep .label { font-size: 11.5px; }
+.v7prep .prep-kpi .k-name { font-size: 15px; }
+.v7prep .prep-kpi .k-score { font-size: 24px; }
+.v7prep .prep-kpi .k-score small { font-size: 13px; }
+.v7prep .prep-kpi .k-note { font-size: 12.5px; }
+.v7prep .b-head h2 { font-size: 16px; }
+.v7prep .b-head .helper { font-size: 13px; }
+.v7prep .prep-sublabel { font-size: 13.5px; }
+.v7prep .checks-table th { font-size: 11.5px; }
+.v7prep .checks-table td { font-size: 14px; }
+.v7prep .rs-fg-score { font-size: 24px; }
+.v7prep .rs-fn { font-size: 12.5px; }
+.v7prep .rs-f-skill { font-size: 12px; }
+.v7prep .rs-f-head { font-size: 14.5px; }
+.v7prep .rs-f-detail { font-size: 13px; }
+.v7prep .rs-move,
+.v7prep .rs-example { font-size: 13.5px; }
+.v7prep .rs-ex-label,
+.v7prep .rs-ex-src { font-size: 12px; }
+.v7prep .rs-verdict .score-big { font-size: 52px; }
+.v7prep .rs-verdict .c-of { font-size: 14px; }
+.v7prep .rs-readout-sub,
+.v7prep .cl-readout-sub { font-size: 13px; }
+.v7prep .rs-readout-score,
+.v7prep .cl-readout-score { font-size: 24px; }
+.v7prep .rs-readout-score small,
+.v7prep .cl-readout-score small { font-size: 13px; }
+.v7prep .rs-air-note,
+.v7prep .cl-air-note { font-size: 13px; }
+.v7prep .rs-stale { font-size: 13.5px; }
+.v7prep .src-line { font-size: 12.5px; }
+.v7prep .rs-notyet,
+.v7prep .cl-notyet { font-size: 12.5px; }
+.v7prep .rs-check-note { font-size: 12.5px; }
+.v7prep .link-quiet { font-size: 13.5px; }
+.v7prep .dz-head { font-size: 15px; }
+.v7prep .dz-sub { font-size: 13px; }
+.v7prep .dz-busy { font-size: 14.5px; }
+.v7prep .guide-table th { font-size: 11.5px; }
+.v7prep .guide-table td { font-size: 14px; }
+.v7prep .guide-table .ct-rule b { font-size: 14.5px; }
+.v7prep .rs-guide-order { font-size: 13.5px; }
+.v7prep .rs-guide-why { font-size: 12.5px; }
+.v7prep .rs-checks .rs-check { font-size: 14px; }
+.v7prep .rs-plain { font-size: 13.5px; }
+
+/* ---------- v9.1 motion (subtle, M3, reduced-motion safe) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .v7prep .card,
+  .v7prep .prep-kpi {
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .v7prep .card:hover,
+  .v7prep .prep-kpi:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  }
+  .v7prep .btn {
+    transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease,
+      transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .v7prep .btn:active { transform: scale(0.97); }
+  /* tab panels: fade-through on switch (panels remount per user switch) */
+  .v7prep .tabpanel:not([hidden]) { animation: prep-panel-in 0.2s cubic-bezier(0.2, 0, 0, 1); }
+  /* the findings disclosure: content mounts from -4px (drawer register) */
+  .v7prep .rs-disc[open] .checks-table,
+  .v7prep .rs-disc[open] .rs-findings { animation: prep-drawer-in 0.18s cubic-bezier(0.16, 1, 0.3, 1); }
+}
+@keyframes prep-panel-in { from { opacity: 0; transform: translateY(6px); } }
+@keyframes prep-drawer-in { from { opacity: 0; transform: translateY(-4px); } }
