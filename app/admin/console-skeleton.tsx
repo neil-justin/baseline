@@ -114,11 +114,15 @@ function SlotSkeleton() {
   );
 }
 
+import SkeletonReveal from "./skeleton-reveal";
+
 export default function ConsoleSkeleton({ role }: { role: Role }) {
   const landsCohort = role !== "sysadmin";
   return (
-    <AdminVeil role={role} mode="detail" active={landsCohort ? "cohort" : "approvals"}>
-      {landsCohort ? <CohortSkeleton /> : <SlotSkeleton />}
-    </AdminVeil>
+    <SkeletonReveal>
+      <AdminVeil role={role} mode="detail" active={landsCohort ? "cohort" : "approvals"}>
+        {landsCohort ? <CohortSkeleton /> : <SlotSkeleton />}
+      </AdminVeil>
+    </SkeletonReveal>
   );
 }

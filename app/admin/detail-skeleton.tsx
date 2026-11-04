@@ -1,3 +1,4 @@
+import SkeletonReveal from "./skeleton-reveal";
 /**
  * DetailSkeleton — the drill-in's loading panel, the single clone shared
  * by every entrance (Skeleton-Contract): the route-level loading.tsx
@@ -11,9 +12,10 @@
  * the swap-in lands with zero shift; text-free, no painted values; the
  * pulse is reduced-motion honored through .skel (admin.css).
  */
+
 export default function DetailSkeleton() {
   return (
-    <>
+    <SkeletonReveal>
       <span
         className="skel"
         style={{ width: 138, height: 18, display: "inline-flex", margin: "2px 0 10px" }}
@@ -57,6 +59,6 @@ export default function DetailSkeleton() {
           </div>
         </div>
       </div>
-    </>
+    </SkeletonReveal>
   );
 }
