@@ -71,7 +71,7 @@ export const RESOURCES: Resource[] = [
   // reference · hub/index/search pages → landing). res-swd-linux-journey
   // stays UNVETTED on purpose: its 403 bot-wall verdict means the URL could
   // not be graded live this pass (unclassified = the picker guards it).
-  // Learn lines are drafts (learn draft — user review pending). Coverage:
+  // Learn lines are drafts (learn line — authored 2026-11-03, user-delegated). Coverage:
   // 8/8 vetted.
   {
     id: "res-python-basics",
@@ -95,7 +95,7 @@ export const RESOURCES: Resource[] = [
       "Applications Development":
         "Michigan's Python-for-everybody course runs the write-run-check loop from your first function — the maintain-code-to-spec work the FSC cell prints, with the PYTHON_CHECK riding this exact resource.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   // canon demo row (kept; Khan CDN blocks CLI re-checks — prior-round verified)
   {
@@ -177,7 +177,7 @@ export const RESOURCES: Resource[] = [
       "Linux + web deployment basics":
         "Runs the command line from zero — files, users, permissions, packages — then deploys a real app to a Ubuntu server: the printed CWF list practiced inside a live shell.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-swd-bna-course",
@@ -215,7 +215,7 @@ export const RESOURCES: Resource[] = [
       "Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling Skills, Basic/Intermediate)":
         "Free Atlassian Plays you can actually run with a team — health monitors, working agreements, and meeting practices — the enabling row's behaviors as activities.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   // swd spec-pool additions (swd.md §Resources — all fetched 200, 2026-10-29)
   // Wave B audit (2026-11-03): genre classifications + winner learn lines.
@@ -241,7 +241,7 @@ export const RESOURCES: Resource[] = [
       "Applications Development":
         "Microsoft's project-based C# curriculum runs the build-compile-debug loop hands-on — the develop-basic-apps work the FSC cell prints, ending in a verifiable certificate.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-swd-odin-foundations",
@@ -264,7 +264,7 @@ export const RESOURCES: Resource[] = [
       "Applications Support and Enhancement":
         "The foundations path puts you inside real web projects — reading, running and extending a live codebase and debugging what breaks, the app-understanding this skill's day job runs on.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-swd-fcc-python-sci",
@@ -317,7 +317,7 @@ export const RESOURCES: Resource[] = [
       "Agile Software Development":
         "The course teaches the sprint disciplines themselves — backlog planning, ceremonies and incremental delivery — so each ceremony the row prints is something you've actually run.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-swd-sqlbolt",
@@ -355,7 +355,7 @@ export const RESOURCES: Resource[] = [
       "Data Design / SQL + data modeling":
         "A step-by-step SQL text course: queries, joins, and the schema/DDL work this skill's printed row names — normalized modeling through practiced statements.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-swd-ibm-ba",
@@ -378,7 +378,7 @@ export const RESOURCES: Resource[] = [
       "Business Needs Analysis":
         "Structured elicitation: turning stakeholder conversations into testable requirement sets — the L3 cell's 'elicit and analyze' in course form.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-swd-ms-ba-fundamentals",
@@ -414,7 +414,7 @@ export const RESOURCES: Resource[] = [
       "Secure-coding practices":
         "Hands-on projects on authentication, and XSS/CSRF defenses teach you to spot and avoid the vulnerability classes the row prints — code you write yourself and fix.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-swd-tlcl-doc",
@@ -504,7 +504,7 @@ export const RESOURCES: Resource[] = [
   // canon money-shot row (locked) + TAU learning-paths scaffold (kept)
   // Wave B audit (2026-11-03): access/form copied verbatim from the D2
   // mockup access draft (user-ruled 2026-11-03); learn lines drafted from
-  // each resource's actual content (learn draft — user review pending).
+  // each resource's actual content (learn line — authored 2026-11-03, user-delegated).
   // Wave B batch 2 (2026-11-03, user-ruled re-points): the two census pins
   // are RESOLVED —
   //  · "Quality Assurance / Quality Standards" — res-qa-sre-books re-pointed
@@ -585,7 +585,7 @@ export const RESOURCES: Resource[] = [
       "Test Planning":
         "You'll structure test scenarios into a plan — levels, techniques, and what to execute first — from a live curriculum.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-qa-owasp-wstg",
@@ -655,7 +655,7 @@ export const RESOURCES: Resource[] = [
       "Defect management":
         "Hands-on QA projects: find, reproduce and file bugs with the exact report fields an employer ticket queue runs on.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-qa-sre-books",
@@ -682,7 +682,7 @@ export const RESOURCES: Resource[] = [
       "Quality Assurance / Quality Standards":
         "The SRE book's quality chapter teaches standards as measured objectives — define SLIs and SLO targets, budget the misses, and let the error budget gate what ships — quality criteria you can write and track rather than hope for.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-qa-ibm-ba",
@@ -703,7 +703,7 @@ export const RESOURCES: Resource[] = [
       "Business Needs Analysis":
         "Walks elicitation and requirement structuring — turning a stakeholder conversation into a testable requirement set.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-qa-google-bi",
@@ -733,7 +733,7 @@ export const RESOURCES: Resource[] = [
       "Applications Support and Enhancement":
         "Google's support course walks the IT-support day job hands-on: installing, updating and removing software across systems, then troubleshooting real help-desk tickets with the user's context in hand — the application-problem loop this row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-qa-openlearn-comms",
@@ -769,7 +769,7 @@ export const RESOURCES: Resource[] = [
       "Customer Orientation · Digital Fluency · Learning Agility · Sense Making · Problem Solving (Enabling)":
         "Builds the learning-through-practice loop the enabling row prints: spaced practice, focus, and self-testing.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
 
   // == ── IT Support Engineer (roster 2.4 · id its) — kept TOP row + spec additions
@@ -783,7 +783,7 @@ export const RESOURCES: Resource[] = [
   // ids/ADDR untouched). res-its-mitre-attack's reference claim was
   // re-pointed to the taught incident-response course the coverage bar
   // demands (the MITRE KB stays as reference claims in the cybersec/soc
-  // pools). Learn lines are drafts (learn draft — user review pending).
+  // pools). Learn lines are drafts (learn line — authored 2026-11-03, user-delegated).
   // Coverage: 7/7 vetted.
   {
     id: "res-its-css-nc",
@@ -830,7 +830,7 @@ export const RESOURCES: Resource[] = [
       "Infrastructure Support":
         "Google's support fundamentals teaches the machines you'll keep alive — hardware, OS installs, software install/update/remove and troubleshooting — the monitor-maintain-patch day job in course form.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-its-windows-server-docs",
@@ -856,7 +856,7 @@ export const RESOURCES: Resource[] = [
       "Infrastructure Deployment":
         "The sysadmin course walks provisioning, server setup and service rollout on Linux and Windows — plus the change-management discipline a supervised rollout runs on.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-its-ubuntu-server-docs",
@@ -911,7 +911,7 @@ export const RESOURCES: Resource[] = [
       "Network Administration and Maintenance":
         "The same labs carry the daily upkeep half — plan, verify and troubleshoot the LAN so keep-it-running work is something you've practiced.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-its-mitre-attack",
@@ -939,7 +939,7 @@ export const RESOURCES: Resource[] = [
       "Cyber and Data Breach Incident Management":
         "The stages course walks the incident-response phases — detect, categorize, escalate, hand off — so the escalation path when incidents hit security is something you've rehearsed.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-its-atlassian-incident",
@@ -966,7 +966,7 @@ export const RESOURCES: Resource[] = [
       "Service Level Management":
         "The ITIL practices course teaches setting service levels and running service desks against them — respond/closure inside target windows, with the metrics logged.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-its-openlearn-comms",
@@ -988,7 +988,7 @@ export const RESOURCES: Resource[] = [
       "Customer Orientation · Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)":
         "The free OU communication course rehearses user-facing service talk — receiving requests plainly, keeping collaboration and self-management under pressure (the service-desk behavior layer).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
 
   // == ── Business Analyst, IT (roster 2.3 · id ba) — ba.md §Resources ───────
@@ -999,8 +999,8 @@ export const RESOURCES: Resource[] = [
   // UNGRADED: the project venue rides Coursera Plus (BA-V4 ruled
   // needs-user-at-enroll — no verified self-serve access fact this pass, so
   // the picker guards it; the taught course rows carry the cells instead).
-  // Learn lines drafted from each resource's actual content (learn draft —
-  // user review pending). Coverage: 7/7 vetted.
+  // Learn lines drafted from each resource's actual content (learn line —
+  // authored 2026-11-03, user-delegated). Coverage: 7/7 vetted.
   {
     id: "res-ba-ibm-intro-ba",
     title: "Introduction to Business Analysis",
@@ -1025,7 +1025,7 @@ export const RESOURCES: Resource[] = [
       "Business Needs Analysis":
         "Scopes the business problem before any solution: stakeholder needs, priorities and the information gathering the printed cell runs.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-ba-coursera-guided-project",
@@ -1073,7 +1073,7 @@ export const RESOURCES: Resource[] = [
       "Collaboration · Communication · Digital Fluency · Learning Agility (Enabling)":
         "The free course's practical communication activities train the collaboration/communication halves of the bundle and model learning-from-feedback — the enabling behaviors the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-ba-ms-ba-fundamentals",
@@ -1096,7 +1096,7 @@ export const RESOURCES: Resource[] = [
       "Requirements Specification":
         "Teaches turning elicited needs into written requirement documents and communicating them downstream — the specify-and-document flow this catalog row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-ba-ms-testing-fund",
@@ -1124,7 +1124,7 @@ export const RESOURCES: Resource[] = [
       "Solution Support (UAT & hand-over)":
         "You write acceptance criteria, run acceptance tests on a live app, then demo passing (and failing) tests to business stakeholders in the sprint review — running UAT and handing the software over to its users, which this skill prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-ba-visio",
@@ -1148,7 +1148,7 @@ export const RESOURCES: Resource[] = [
       "Process modeling (flow diagrams, use cases)":
         "Draws the organization's processes as Visio flow diagrams and data-flow models hands-on — how work flows between actors, broken into steps a diagram reader can trace.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-ba-atlassian-bugs",
@@ -1253,7 +1253,7 @@ export const RESOURCES: Resource[] = [
       "Systems administration (user groups, upgrades, backups)":
         "The book walks the sysadmin day job at the command line — managing users and groups, installing and upgrading packages, handling permissions, processes and backups from the shell.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sysadmin-linux-journey",
@@ -1306,7 +1306,7 @@ export const RESOURCES: Resource[] = [
       "Network Administration and Maintenance":
         "You plan IP addressing schemes, configure hosts on a LAN, and run the connectivity checks and fixes an administrator maintains on a live network.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sysadmin-google-it-support",
@@ -1345,7 +1345,7 @@ export const RESOURCES: Resource[] = [
       "↳ CWF sub-row: Design and develop new systems":
         "The final project has you assess three organizations' infrastructure and design the systems recommendations that make services available to users — new-systems support work.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sysadmin-ms-learn-wsperf",
@@ -1408,7 +1408,7 @@ export const RESOURCES: Resource[] = [
       "Security Administration":
         "A guided path on administering access controls — users, groups and group policy in Active Directory, and the certificate-services permissions around them — the authorization/access-control craft this skill prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sysadmin-sre-slo",
@@ -1434,7 +1434,7 @@ export const RESOURCES: Resource[] = [
       "↳ CWF sub-row: Oversee service level agreements and service improvements":
         "Teaches writing SLO targets, selecting the metrics that measure them, and using the error budget as the control loop for recurring-incident reviews and service improvements.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sysadmin-owasp-cheatsheets",
@@ -1500,7 +1500,7 @@ export const RESOURCES: Resource[] = [
       "Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)":
         "Practical team-communication activities — running conversations, briefing colleagues, working around the group's rhythm — the enabling behaviors the bundle prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   // sysadmin Wave E hunt (2026-11-03, user-delegated): 
   //  · "↳ CWF sub-row: Optimize systems performance" — FILLED with the MS
@@ -1550,7 +1550,7 @@ export const RESOURCES: Resource[] = [
   // Meta DB structures · the per-role SRE postmortem chapter · the per-role
   // Google systems course), and the ETL leg of the FCC relational program
   // carries Data Migration. Learn lines drafted from the resources' actual
-  // content (learn draft — user review pending). Coverage: 11/11 vetted.
+  // content (learn line — authored 2026-11-03, user-delegated). Coverage: 11/11 vetted.
   {
     id: "res-dba-ibm-db-admin",
     title: "Relational Database Administration (DBA) (IBM)",
@@ -1588,7 +1588,7 @@ export const RESOURCES: Resource[] = [
       "↳ CWF sub-row: Resolve database incidents":
         "A troubleshooting module for connectivity, login and configuration failures — diagnose, fix, and automate the alerting around them.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-dba-sqlserver-docs",
@@ -1628,7 +1628,7 @@ export const RESOURCES: Resource[] = [
       "↳ CWF sub-row: Design and develop new database":
         "Builds a new database in MySQL from the ground up — schemas and tables, primary/foreign-key relationships, constraints, views and stored procedures, ending in a normalization project — the design-and-develop CWF work, hands-on.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-dba-postgresql-docs",
@@ -1670,7 +1670,7 @@ export const RESOURCES: Resource[] = [
       "Data Migration":
         "The program's extract-transform-load drills move real records between systems and formats — writing the import/export scripts that get data across cleanly, the migration craft this row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-dba-ibm-db-vuln",
@@ -1697,7 +1697,7 @@ export const RESOURCES: Resource[] = [
       "Database security controls":
         "Teaches the controls directly: user profiles and password policies, privilege/role setup, injection vulnerability testing, encryption-heavy protection techniques, and the security/auditing models built in hands-on labs.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-dba-ubuntu-server-docs",
@@ -1738,7 +1738,7 @@ export const RESOURCES: Resource[] = [
       "Infrastructure Support":
         "Holds the host machinery steady around the database's home: server setup, directory and backup services, and the disaster-recovery plan the instances depend on.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-dba-sre-postmortem",
@@ -1764,7 +1764,7 @@ export const RESOURCES: Resource[] = [
       "Problem Management":
         "Teaches how problems get solved for good: gather the incident timeline, run the blameless RCA over the failure sequence, then ship and track the corrective actions that keep the problem class from recurring.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-dba-openlearn-comms",
@@ -1786,7 +1786,7 @@ export const RESOURCES: Resource[] = [
       "Collaboration · Communication · Digital Fluency · Problem Solving · Self Management (Enabling, Basic)":
         "Workplace communication practice — briefing across the on-call rotation, explaining technical state to non-technical colleagues — the enabling behaviors the bundle prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
 
   // == ── Security Analyst (2.7 · id cybersec) ───────────────────────────────
@@ -1796,7 +1796,7 @@ export const RESOURCES: Resource[] = [
   // the per-role Infosec incident-response course (verified LIVE in the da
   // pool) carries the Cyber-and-Data-Breach-Incident-Management cell, whose
   // only prior claim was reference-grade MITRE. Learn lines drafted from
-  // each resource's actual content (learn draft — user review pending).
+  // each resource's actual content (learn line — authored 2026-11-03, user-delegated).
   // Coverage: 5/5 vetted.
   {
     id: "res-cybersec-netacad-intro-cyber",
@@ -1819,7 +1819,7 @@ export const RESOURCES: Resource[] = [
       "Threat analysis / monitoring":
         "Walks how attacks happen and get detected: threat types, the CIA triad, attack vectors and the monitoring mindset a junior security analyst watches for.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-cybersec-infosec-ir",
@@ -1845,7 +1845,7 @@ export const RESOURCES: Resource[] = [
       "Cyber and Data Breach Incident Management":
         "Incident-response fundamentals taught hands-on-light: when an event becomes an incident, who drives containment, and how status and escalation travel through the IR process — the breach-response loop the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-cybersec-fortinet",
@@ -1883,7 +1883,7 @@ export const RESOURCES: Resource[] = [
       "Network administration & maintenance":
         "Teaches the networks being defended — addresses, hosts, routers and the build-and-check flow of running a small network, the maintenance base the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-cybersec-tryhackme",
@@ -1923,7 +1923,7 @@ export const RESOURCES: Resource[] = [
       "Vulnerability assessment support (VAPT analyst track)":
         "A full scan-and-report curriculum: reconnaissance, the scanning and enumeration drills, vulnerability identification and the safety rules for testing — the VAPT support craft, hands-on.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-cybersec-openlearn-comms",
@@ -1945,7 +1945,7 @@ export const RESOURCES: Resource[] = [
       "Collaboration · Communication · Problem Solving · Digital Fluency (Enabling)":
         "Practice writing and briefing for the workplace — escalation notes and cross-team explanation — the communication/problem-solving bundle behaviors.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
 
   // == ── Web Developer (2.8 · id webdev) ────────────────────────────────────
@@ -1960,7 +1960,7 @@ export const RESOURCES: Resource[] = [
   // one free taught page verified this pass). The FCC responsive row picks
   // up the accessibility cell's taught leg (its curriculum includes the
   // accessibility projects). Learn lines drafted from the resources'
-  // actual content (learn draft — user review pending).
+  // actual content (learn line — authored 2026-11-03, user-delegated).
   // Wave E recap (2026-11-03): the site life-operations cell re-hunted
   // (edX/Alison/GCF sweep) — every maintenance-course hit is a service
   // brochure or a senior/career-marketing snippet; no taught self-serve page
@@ -1990,7 +1990,7 @@ export const RESOURCES: Resource[] = [
       "Responsive/UI basics + accessibility":
         "The responsive-design curriculum builds pages that reflow across devices and runs accessibility-minded markup and contrast work in its projects — the cross-device + accessible rendering this row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-webdev-odin",
@@ -2027,7 +2027,7 @@ export const RESOURCES: Resource[] = [
       "Client-side coding (HTML/CSS/JS)":
         "You write and debug real JavaScript in the browser through the whole curriculum — functions, DOM work and the structured problem-solving a web site's front end runs on.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-webdev-wordpress-docs",
@@ -2068,7 +2068,7 @@ export const RESOURCES: Resource[] = [
       "CMS administration (WordPress etc.)":
         "The CMS teaches itself officially: dashboard navigation, settings, themes and plugins, users, and day-to-day content publishing — administering the WordPress stack, lesson by lesson.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-webdev-webdev-learn",
@@ -2106,7 +2106,7 @@ export const RESOURCES: Resource[] = [
       "Version control (git)":
         "The full Git workflow from commit to remote: branching models for teams, resolving conflicts, and reviewing history — team-safe code management.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-webdev-scrum-guide",
@@ -2146,7 +2146,7 @@ export const RESOURCES: Resource[] = [
       "Agile Software Development (when agency-run)":
         "The course teaches the sprint disciplines themselves — backlog planning, ceremonies and incremental delivery — so each ceremony this skill prints is something you've actually run.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   // == ── Digital / Multimedia Artist (2.9 · id digart) ──────────────────────
   // Wave B audit (2026-11-03, batch 2): access/form per-row. The TESDA
@@ -2160,7 +2160,7 @@ export const RESOURCES: Resource[] = [
   // pass — Packaging, Booth/Display, the tools row and the 2D-Animator
   // counterpart have no free taught page verified; Adobe tutorials stay
   // 403 per DIG-V2). Learn lines drafted from the resources' actual
-  // content (learn draft — user review pending).
+  // content (learn line — authored 2026-11-03, user-delegated).
   // Wave E recap (2026-11-03, user-delegated hunt): all four adviser-only
   // reds FILLED with verified taught rows — Coursera's packaging-design
   // course (HTTP 200, "Enroll for free", 4 modules), Alison Visual
@@ -2334,7 +2334,7 @@ export const RESOURCES: Resource[] = [
       "Follow creative brief + brand guideline development":
         "Every module's assignment runs brief-to-submittable-design: read the given brief constraints, iterate options, and produce the finished design for review — the brief-discipline loop the TR units print.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-digart-canva-design-school",
@@ -2375,7 +2375,7 @@ export const RESOURCES: Resource[] = [
       "DEVELOP DESIGNS FOR USER EXPERIENCE (ICT216315)":
         "Teaches UX end to end in course 1 of Google's certificate: what a UX designer produces, user-centered design thinking, and the problem-space exploration the unit's design work builds on.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-digart-google-wireframes",
@@ -2399,7 +2399,7 @@ export const RESOURCES: Resource[] = [
       "DEVELOP DESIGNS FOR USER INTERFACE (ICT216316)":
         "You draw screen layouts and interface flows hands-on — storyboards, wireframes and low-fidelity prototypes for a product's screens — the interface-design development the unit prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-digart-openlearn-comms",
@@ -2421,7 +2421,7 @@ export const RESOURCES: Resource[] = [
       "Client communication & revision handling":
         "Workplace communication practice — presenting work, taking feedback and negotiating changes with colleagues/clients, the liaise-and-revise loop the client behaviors row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   // DIG-V2: Adobe official tutorials 403 — flagged, NOT cited here.
 
@@ -2490,7 +2490,7 @@ export const RESOURCES: Resource[] = [
       "Threat Analysis and Defence · Threat Intelligence and Detection (family FSC cross-cite)":
         "The threat-hunting module connects indicator intelligence to detection — hunting for adversary behavior and turning findings into defence adjustments.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-soc-fortinet",
@@ -2544,7 +2544,7 @@ export const RESOURCES: Resource[] = [
       "Vulnerability scanning (VAPT-adjacent, TESDA-printed)":
         "The scan-and-report curriculum: reconnaissance and scanning drills against test targets, vulnerability identification, and writing findings with the safety rules observed.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-soc-netacad-networking-basics",
@@ -2584,7 +2584,7 @@ export const RESOURCES: Resource[] = [
       "Network security understanding (network administration family)":
         "Teaches the defence side of the network: access controls, firewall rules, monitoring and the hardening choices that keep a LAN protected — the understanding the SOC expects you to carry.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-soc-google-cybersecurity",
@@ -2621,7 +2621,7 @@ export const RESOURCES: Resource[] = [
       "Collaboration · Communication · Problem Solving · Digital Fluency (Enabling)":
         "Workplace communication practice — briefing the handover, explaining technical state plainly — the bundle's communication/problem-solving behaviors.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
 
   // == ── Data Analyst, junior (E1 · id da) — COMPLETE pool, one row per skill
@@ -2632,8 +2632,8 @@ export const RESOURCES: Resource[] = [
   // reference pages · search listing) were RE-POINTED to the live-verified
   // taught course page of the same skill (fresh "fetched LIVE 2026-11-03"
   // note in-row; ids/ADDR/pool-size all unchanged) — the pool stays one row
-  // per skill. Learn lines: mockup drafts verbatim + new drafts (learn
-  // draft — user review pending). Every da skill now resolves to a vetted
+  // per skill. Learn lines: mockup drafts verbatim + new drafts (learn line
+  // — authored 2026-11-03, user-delegated). Every da skill now resolves to a vetted
   // taught suggestion (coverage gate: 13/13).
   {
     id: "res-da-cert",
@@ -2660,7 +2660,7 @@ export const RESOURCES: Resource[] = [
       "Data Analytics":
         "Google's taught introduction runs the analyst day job end to end — data cycle, spreadsheet/SQL comprehension, and the analytical-thinking drills this row prints (PSF-AAI FSC Level 2).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-da-viz",
@@ -2682,7 +2682,7 @@ export const RESOURCES: Resource[] = [
       "Data Visualization and Storytelling":
         "You'll build dashboards end to end — charts, story structure, and the visual arguments behind findings (Tableau).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-da-bna",
@@ -2704,7 +2704,7 @@ export const RESOURCES: Resource[] = [
       "Business Needs Analysis":
         "Structured thinking with a module on balancing stakeholder asks, then turning an ambiguous ask into a question plan.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-da-etl",
@@ -2725,7 +2725,7 @@ export const RESOURCES: Resource[] = [
       "ETL (extract-transform-load workflows)":
         "Hands-on cleaning: missing values, formats, scaling — the workbook runs the skill's own prepare-validate-record loop.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-da-engineering-doc",
@@ -2746,7 +2746,7 @@ export const RESOURCES: Resource[] = [
       "Data Engineering":
         "Relational thinking from scratch: schemas, SQL, views, transactions — the substratum the analyst reads and writes against.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-da-esc-doc",
@@ -2769,7 +2769,7 @@ export const RESOURCES: Resource[] = [
       "Enabling Skills & Competencies (ESC) — Collaboration, Communication, Digital Fluency, Learning Agility":
         "Team Playbook plays you can actually run with a team — shared decisions, communication cadence, working agreement.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-da-appdev",
@@ -2790,7 +2790,7 @@ export const RESOURCES: Resource[] = [
       "Applications Development":
         "Python querying/analysis basics — the light scripting muscle the FSC row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-da-aiethics",
@@ -2811,7 +2811,7 @@ export const RESOURCES: Resource[] = [
       "Artificial Intelligence Ethics and Governance":
         "AI society-impact chapters — bias, transparency, accountability — the governance vocabulary the row mandates.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-da-ethics-doc",
@@ -2839,7 +2839,7 @@ export const RESOURCES: Resource[] = [
       "Data Ethics":
         "Michigan's data-science ethics course walks privacy, data ownership, and real societal-consequence cases — the legal/ethical lifecycle treatment the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-da-breach-doc",
@@ -2865,7 +2865,7 @@ export const RESOURCES: Resource[] = [
       "Cyber and Data Breach Incident Management":
         "Incident-response fundamentals: how an event becomes an incident, who drives containment, and how status and escalation travel through the IR process.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-da-testing-doc",
@@ -2891,7 +2891,7 @@ export const RESOURCES: Resource[] = [
       "Software Testing":
         "UMinn's introduction teaches the testing discipline itself — what to test, when, and how a test case proves behavior — exactly the before-it-ships sanity layer the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-da-config-doc",
@@ -2912,7 +2912,7 @@ export const RESOURCES: Resource[] = [
       "Configuration Tracking":
         "Git mechanics: commits, branches, history — the change log keeping analysis files reproducible.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-da-stakeholder",
@@ -2938,7 +2938,7 @@ export const RESOURCES: Resource[] = [
       "Stakeholder Management":
         "Four lessons: identify who needs to know, map expectations, plan the reporting and collaboration cadence — the report-to / stay-in-the-loop shape this skill prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
 
   // == ── Track 2 · Business & Management (hra · training · mkt · sales · csr ·
@@ -2957,7 +2957,7 @@ export const RESOURCES: Resource[] = [
   // and DE&IB (declared gaps stand), Employee Mobility / HR-Practices
   // Implementation / Skills-Framework Adoption (no taught claim verified —
   // adviser ruling pending). Learn lines drafted from the resources'
-  // actual content (learn draft — user review pending).
+  // actual content (learn line — authored 2026-11-03, user-delegated).
   // Wave E recap (2026-11-03, user-delegated hunt): the DEIB cell fills with
   // Coursera's Fundamentals of DEI&B (HTTP 200, printed 4 h), the Talent
   // Capability Assessment cell fills with Coursera's SAGE Talent Management
@@ -3008,7 +3008,7 @@ export const RESOURCES: Resource[] = [
       "Human Resources Systems Management":
         "Maintaining employee records and the HR information the department runs on — the systems-management habit this cell prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-hra-minnesota-hrm",
@@ -3055,7 +3055,7 @@ export const RESOURCES: Resource[] = [
       "Performance Management":
         "Teaches the review cycle hands-on: goal setting, the appraisal conversation, and constructive feedback that changes behavior — managing employee performance in the room.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-hra-wharton-people-analytics",
@@ -3080,7 +3080,7 @@ export const RESOURCES: Resource[] = [
       "Human Resources Analytics and Insights":
         "Wharton's people-analytics course teaches managing people by data — staffing, evaluation and performance read through data, and what analytics legitimately can and cannot claim about people.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-hra-stakeholder",
@@ -3104,7 +3104,7 @@ export const RESOURCES: Resource[] = [
       "Stakeholder Engagement and Management":
         "Four lessons: identify who needs to know, map expectations, plan the collaboration and reporting cadence — the engagement loop this cell prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-hra-cipd-factsheets",
@@ -3143,7 +3143,7 @@ export const RESOURCES: Resource[] = [
       "Data Collection and Preparation":
         "The series shows collecting entries into a structured sheet: tables, sorting and cleanup before anyone reports on the data.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-hra-ra10173",
@@ -3183,7 +3183,7 @@ export const RESOURCES: Resource[] = [
       "Digital Marketing and Communication":
         "The inbound framework taught as craft: how content attracts the right people, the buyer's journey, and the messaging spins that carry it — employer-brand marketing for HR teams.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-hra-public-speaking",
@@ -3222,7 +3222,7 @@ export const RESOURCES: Resource[] = [
       "Communication · Adaptability · Customer Orientation · Digital Fluency · Learning Agility · Self-Management (Enabling, Basic)":
         "The Job-Ready professionalism module drills the workplace basics the bundle names — presenting well, adapting to the office's norms, managing one's own work.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-hra-top-writing",
@@ -3249,7 +3249,7 @@ export const RESOURCES: Resource[] = [
       "Employee Communication Management":
         "The writing module drills the workplace-communication pieces — memos, announcements and reports written for internal audiences — the employee-communication flow this cell prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-hra-coursera-deib",
@@ -3432,7 +3432,7 @@ export const RESOURCES: Resource[] = [
       "Learning and Development Programs Management":
         "Runs the L&D program layer: building and running training programs, evaluating them, and closing the loop with employee training that sticks.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-training-starweaver-perf",
@@ -3456,7 +3456,7 @@ export const RESOURCES: Resource[] = [
       "Performance Management":
         "Goal setting, the appraisal conversation and constructive feedback — the cycle a training coordinator supports, taught hands-on.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-training-stakeholder",
@@ -3481,7 +3481,7 @@ export const RESOURCES: Resource[] = [
       "Stakeholder Engagement and Management":
         "Identify the actors who must be kept in the loop, map their expectations, and plan the engagement cadence — the coordination shape the venue/vendor work runs inside.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-training-lhtl",
@@ -3519,7 +3519,7 @@ export const RESOURCES: Resource[] = [
       "Data Collection and Preparation":
         "Collecting entries into structured, sortable sheets — the gathering-and-cleanup step before any training report.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-training-moodle-academy",
@@ -3571,7 +3571,7 @@ export const RESOURCES: Resource[] = [
       "Employee Communication":
         "The writing module drills memos, announcements and reports written for internal audiences — the employee-communication flow this cell prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-training-top-professionalism",
@@ -3594,7 +3594,7 @@ export const RESOURCES: Resource[] = [
       "Communication · Customer Orientation · Learning Agility · Self-Management · Problem Solving (Enabling, Basic)":
         "The Job-Ready professionalism module drills the workplace basics the bundle names — presenting well, adapting to norms, managing one's own work.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-training-top-bizops",
@@ -3764,7 +3764,7 @@ export const RESOURCES: Resource[] = [
   // Communication+CSC collaboration ESC cells; customer orientation
   // attaches to the TOP centricity module. Declared-thin gap rows stay
   // declared — adviser-only. Learn lines drafted from the resources'
-  // actual content (learn draft — user review pending).
+  // actual content (learn line — authored 2026-11-03, user-delegated).
   // Coverage: 19/25 vetted → 24/25 after Wave E (user-delegated batch,
   // 2026-11-03): two Coursera + one Coursera + two Alison taught rows fill
   // the Business-Environment, Consumer-Intelligence, Demand-Analysis-family
@@ -3798,7 +3798,7 @@ export const RESOURCES: Resource[] = [
       "Media Strategy Development":
         "Teaches picking among channels and tactics for a market goal — where to spend, on what audiences, and how the funnel stages map to media choices.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-mkt-hubspot-social",
@@ -3836,7 +3836,7 @@ export const RESOURCES: Resource[] = [
       "Category Marketing · Collateral Production · Visual Collaterals Production · Content Management":
         "The content-marketing curriculum plans and produces the pieces — the story framework, the collateral an asset pack needs, and the content calendar that manages it all.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-mkt-wharton-customer-analytics",
@@ -3869,7 +3869,7 @@ export const RESOURCES: Resource[] = [
       "Data-mining and Modelling · Research and Information Synthesis":
         "The modelling module digs patterns out of large datasets and pairs them with research synthesis — the mining-discipline the bundle prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-mkt-google-analytics-academy",
@@ -3918,7 +3918,7 @@ export const RESOURCES: Resource[] = [
       "Digital Fluency (ESC, Basic)":
         "Working a real content pipeline end to end in digital tools — brief to posted concept — the digital-fluency basics the ESC layer prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-mkt-top-social-propagating",
@@ -3961,7 +3961,7 @@ export const RESOURCES: Resource[] = [
       "E-Commerce Campaign Management":
         "The funnel module carries the e-commerce campaign layer: driving buyers through the stages to a conversion, the campaign management this cell prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-mkt-top-dmx-content",
@@ -3984,7 +3984,7 @@ export const RESOURCES: Resource[] = [
     learnNotes: {
       "Content Development and Strategy":
         "Creating the campaign's content in line with the funnel strategy: what to make, for which stage and audience — the develop-plan loop this cell prints.",
-      // learn draft — user review pending (cutover loose fill 2026-11-03):
+      // learn line — authored 2026-11-03, user-delegated (cutover loose fill 2026-11-03):
       // the batch-3 roster missed its learn line — this row is the
       // Digital Marketing WINNER (credited TOP module + countsTowardEntryPath,
       // id A–Z over the funnel/optimizing dups) with no entry for the cell
@@ -3994,7 +3994,7 @@ export const RESOURCES: Resource[] = [
       "Digital Marketing":
         "Creates the digital campaign's content piece — what to make, on which channel, for which audience — digital marketing practiced on the TESDA competency.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-mkt-top-dmx-optimizing",
@@ -4033,7 +4033,7 @@ export const RESOURCES: Resource[] = [
       "Customer Orientation (ESC, Basic)":
         "The Job-Ready customer-centricity module puts the customer at the center of every work decision — the orientation behavior the ESC cell prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-mkt-ie-marketing-mix",
@@ -4070,7 +4070,7 @@ export const RESOURCES: Resource[] = [
       "Brand Campaign Management · Brand Guideline Development · Brand Marketing · Brand Portfolio Management":
         "Brand-strategy and brand-management modules cover building the brand's identity, setting its rules, and running campaigns under it — the brand-family bundle taught.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-mkt-top-interpersonal",
@@ -4100,7 +4100,7 @@ export const RESOURCES: Resource[] = [
       "Collaboration (ESC, Basic)":
         "Working with others in the module's team exercises — the collaboration basics the ESC cell prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-mkt-gap-proposal",
@@ -4254,8 +4254,8 @@ export const RESOURCES: Resource[] = [
   // (searched, no taught page verified): Product Advisory + Product Demonstration,
   // Order Fulfilment Administration (the paperwork chain), the co-marketing
   // Design-concept bundle, the Supplier Performance/Buying bundle. Coverage:
-  // 13/17 vetted. Learn lines drafted from the course pages — learn draft, user
-  // review pending.
+  // 13/17 vetted. Learn lines drafted from the course pages — learn line,
+  // authored 2026-11-03, user-delegated.
   // Wave E (user-delegated batch, 2026-11-03): two taught fills land — the
   // Microsoft Learn sales-orders module carries Order Fulfilment Administration
   // and the Rutgers Supply Chain Sourcing course carries the Supplier
@@ -4310,7 +4310,7 @@ export const RESOURCES: Resource[] = [
       "Account Management":
         "The Account Management mapped cell rides the exploring stage: reading account signals and keeping the relationship moving after hand-off.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sales-hubspot-sales-mgmt",
@@ -4372,7 +4372,7 @@ export const RESOURCES: Resource[] = [
       "Customer Behavior Analysis":
         "Wharton's customer-analytics course runs descriptive, predictive and prescriptive analytics over real buying data — the tools-and-approaches reading of buyer signals the FSC cell prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sales-top-customer-centricity",
@@ -4398,7 +4398,7 @@ export const RESOURCES: Resource[] = [
       "Communication · Collaboration · Customer Orientation · Global Perspective · Problem Solving (Enabling)":
         "The Job-Ready customer-centricity module drills rapport-building, serving diverse customer types and handling concerns with professionalism — the client-facing behavior bundle as printed.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sales-rutgers-scm",
@@ -4439,7 +4439,7 @@ export const RESOURCES: Resource[] = [
       "Sales Delivery + Delivery Management":
         "Rutgers' logistics course runs the delivery half of a won deal: choosing transport modes, reading tracking statements, and designing a logistics network that delivers on customer service.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sales-top-interpersonal",
@@ -4497,7 +4497,7 @@ export const RESOURCES: Resource[] = [
       "Stakeholder Management":
         "STARWEAVER's stakeholder course teaches identification, mapping and structured collaboration — plus managing people through change — the multi-party coordination across the selling team.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sales-alison-retail-merch",
@@ -4519,7 +4519,7 @@ export const RESOURCES: Resource[] = [
       "Retail Space Utilization":
         "Alison's retail-management module teaches merchandising and how to create an ideal retail environment — the store-based selling seat's craft.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sales-alison-cx",
@@ -4541,7 +4541,7 @@ export const RESOURCES: Resource[] = [
       "Customer Experience Management":
         "The CX-design course teaches journey mapping and touchpoint optimization across digital and physical channels — the experience quality the secondary FSC prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sales-alison-cs-skills",
@@ -4563,7 +4563,7 @@ export const RESOURCES: Resource[] = [
       "After-sales Service":
         "The customer-service-skills course drills complaint resolution and staying focused on customer needs after the transaction — keeping the account healthy post-sale.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sales-alison-negotiation",
@@ -4587,7 +4587,7 @@ export const RESOURCES: Resource[] = [
       "Contract and Vendor Management":
         "The negotiation module teaches preparation, information exchange, bargaining and closing — the price-and-terms side of partner paperwork; the administration leg stays an honest gap (see the thin row).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-sales-gap-negotiation",
@@ -4733,7 +4733,7 @@ export const RESOURCES: Resource[] = [
       "Technology and Systems Application":
         "ServiceNow/ITSM practice in module 5 — CRM, telephony and case tools fluency as the PSF cell prints; the hands-on dialer leg stays a gap (see the thin row).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-csr-top-customer-centricity",
@@ -4761,7 +4761,7 @@ export const RESOURCES: Resource[] = [
       "Collaboration · Communication · Customer Orientation · Digital Fluency · Problem Solving · Global Perspective (Enabling, Basic/Intermediate)":
         "Serving diverse customer types with a customer-focused mindset carries the printed service-behavior stages.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-csr-british-council",
@@ -4806,7 +4806,7 @@ export const RESOURCES: Resource[] = [
       "Communicate effectively in English for customer service":
         "TESDA's business-English module develops practical English for presenting ideas and engaging stakeholders — hold the customer transactions the CCS unit prints in English.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-csr-ra10173",
@@ -4975,7 +4975,7 @@ export const RESOURCES: Resource[] = [
       "Information gathering & organizing":
         "The descriptive-analytics module teaches survey design and systematic data collection — gathering and structuring the evidence.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-ops-ibm-design-thinking",
@@ -5083,7 +5083,7 @@ export const RESOURCES: Resource[] = [
       "Findings documentation & recommendation write-ups":
         "The writing module drills workplace reports and memos — the putting-findings-on-paper leg of the task; SOP design itself has no taught page yet.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-ops-alison-lss",
@@ -5106,7 +5106,7 @@ export const RESOURCES: Resource[] = [
       "Process study planning (scoping the study of work problems)":
         "The White Belt module teaches scoping an improvement effort — waste classification and the DMAIC Define step is scope-the-problem-first work.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-ops-qual-research",
@@ -5313,7 +5313,7 @@ export const RESOURCES: Resource[] = [
       "Best-value purchasing (quality/price/amount)":
         "The supplier-evaluation module weighs quality against price and relationship across single/multiple sourcing — the best-value judgment at course granularity.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-purch-rutgers-logistics",
@@ -5335,7 +5335,7 @@ export const RESOURCES: Resource[] = [
       "Records & shipment monitoring":
         "Recognizing transport modes from tracking statements plus warehousing and when-to-order inventory — the purchase-records/delivery-monitoring loop; the ERP leg stays thin (see the gap row).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-purch-gcf-excel",
@@ -5446,7 +5446,7 @@ export const RESOURCES: Resource[] = [
       "Communication · Critical Thinking · Ethics/Professionalism (Enabling)":
         "The Job-Ready professionalism module runs quality standards, ethics and error management — the vendor-relationship conduct the bundle names.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-purch-top-writing",
@@ -5677,7 +5677,7 @@ export const RESOURCES: Resource[] = [
       "Systems Thinking":
         "Reading waste and defects as system-wide patterns (value delivery vs. process health) — the quality-issue-as-system read the flagged row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-ccqa-wharton-customer-analytics",
@@ -5701,7 +5701,7 @@ export const RESOURCES: Resource[] = [
       "Customer Behavior Analysis":
         "The dedicated course on customer data (NPS, survey design, predictive models) reads customer behaviors at university depth.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-ccqa-gcf-excel",
@@ -5725,7 +5725,7 @@ export const RESOURCES: Resource[] = [
       "Data Visualization":
         "The Excel Foundations series teaches building charts from scored data — the KPI-graph leg of the QA dashboard; BI dashboards proper stay with the analytics course in the pool.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-ccqa-top-writing",
@@ -5748,7 +5748,7 @@ export const RESOURCES: Resource[] = [
       "Technical Report Writing":
         "The Job-Ready writing module drills memos and reports written to be acted on — the QA reports and coaching-feedback write-ups the cell prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-ccqa-ms-learn",
@@ -5837,7 +5837,7 @@ export const RESOURCES: Resource[] = [
       "Customer Management":
         "The stakeholder course teaches structured collaboration, conflict management and relationship building — the stakeholder-side coordination the flagged paraphrase prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-ccqa-edm",
@@ -5943,7 +5943,7 @@ export const RESOURCES: Resource[] = [
       "Administrative details & inquiries":
         "Budget/vendor/on-site coordination plus the event report covers the financial-admin and promo-dissemination admin legs; inquiry-handling itself has no dedicated lesson.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-events-alison-diploma",
@@ -5968,7 +5968,7 @@ export const RESOURCES: Resource[] = [
       "Marketing & publicizing support":
         "The printed outcome 'outline the different stages of event promotion' — promoting the event and structuring its media push.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-events-alison-fundamentals",
@@ -5991,7 +5991,7 @@ export const RESOURCES: Resource[] = [
       "Participant registration":
         "The printed 'describe how to organise an event' outcome carries the registration logistics leg; a dedicated registration-systems lesson has no taught page yet (see the software gap row).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-events-gcf-excel",
@@ -6082,7 +6082,7 @@ export const RESOURCES: Resource[] = [
       "Communication · Professionalism · Teamwork (Enabling)":
         "The Job-Ready self-presentation module drills presenting well and teamwork with vendors and venue staff — the client/hotel coordination behavior.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-events-invoice-approval",
@@ -6153,7 +6153,7 @@ export const RESOURCES: Resource[] = [
       "Journalize transactions":
         "TESDA's own NC III entry module — the journal cycle, source documents, and the 100%-accuracy discipline the unit prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-book-top-journalizing",
@@ -6192,7 +6192,7 @@ export const RESOURCES: Resource[] = [
       "Post transactions":
         "The official module: journal-to-ledger transfer with cross-checks — exactly the posting accuracy the unit prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-book-top-trial-balance",
@@ -6214,7 +6214,7 @@ export const RESOURCES: Resource[] = [
       "Prepare trial balance":
         "Balancing the ledger into a trial balance the TESDA way — extraction, footing, and error chasing.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-book-top-financial-reports",
@@ -6236,7 +6236,7 @@ export const RESOURCES: Resource[] = [
       "Prepare financial reports (manual)":
         "Hand-built financial statements from the ledger — the statement set and the accounting-equation checks that hold them together.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-book-top-internal-control",
@@ -6258,7 +6258,7 @@ export const RESOURCES: Resource[] = [
       "Review internal control system":
         "Walks the basic control checks — segregation of duties, verification steps, and the weak spots an NC III bookkeeper watches.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-book-acca-intro",
@@ -6281,7 +6281,7 @@ export const RESOURCES: Resource[] = [
       "Verify and record financial documents & records":
         "ACCA's accredited intro drills double-entry against source documents — verifying figures and records before anything is journaled, the checking loop the O*NET row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-book-acca-intermediate",
@@ -6323,7 +6323,7 @@ export const RESOURCES: Resource[] = [
       "Operate accounting software":
         "QuickBooks-authored basics: recording transactions and reconciling inside real accounting software — the ERP/data-entry fluency the O*NET row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-book-openstax-financial",
@@ -6345,7 +6345,7 @@ export const RESOURCES: Resource[] = [
       "PSOC 3313 record-to-report envelope":
         "The free textbook walks the full record-to-report arc — journals to ledgers to the statement set, with end-of-chapter exercises — the PSOC envelope in book form.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-book-psf-gih-doc",
@@ -6413,7 +6413,7 @@ export const RESOURCES: Resource[] = [
       "Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Self Management (Enabling)":
         "TESDA's workplace-communication module: receive, respond, relay — the enabling row's daily practice.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   // ── acctclerk (4.2) — source-verbatim row names per V-acctclerk-3 ──
   // Wave B audit (2026-11-03, batch 3): access/form per-row, the taught
@@ -6488,7 +6488,7 @@ export const RESOURCES: Resource[] = [
       "PSOC 4311 record-keeping envelope":
         "Intuit's basics course walks the whole compute/record/verify envelope — the six-step accounting cycle from journal to the four statements.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-acct-acca-intro",
@@ -6525,7 +6525,7 @@ export const RESOURCES: Resource[] = [
       "Receive, record, and bank cash, checks, and vouchers (petty cash / collections recording)":
         "Cash, cheque and voucher recording is taught inside ACCA's banking chapter — the petty-cash/collections accounting leg.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-acct-acca-intermediate",
@@ -6549,7 +6549,7 @@ export const RESOURCES: Resource[] = [
       "Prepare and issue account statements / bills / invoices":
         "ACCA's intermediate level teaches control accounts and the statement/invoice cycle the AP-AR seat runs.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-acct-cfi-basic-excel",
@@ -6573,7 +6573,7 @@ export const RESOURCES: Resource[] = [
       "Operate computers programmed with accounting software":
         "CFI's beginner formulas lesson drills the spreadsheet workhorse — SUM/AVERAGE/IF operators and cell reference discipline — the compute-accurate-records leg; QuickBooks itself rides the Intuit row.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-acct-openstax-financial",
@@ -6623,7 +6623,7 @@ export const RESOURCES: Resource[] = [
       "Classify, record, and summarize numerical and financial data to compile and keep financial records, using journals and ledgers or computers":
         "Journalizing IS the classify-and-record loop for the clerk seat — source documents sorted into journal entries per TESDA's NC III unit.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-acct-top-posting",
@@ -6717,7 +6717,7 @@ export const RESOURCES: Resource[] = [
       "Communication · Professionalism · Critical Thinking (Enabling)":
         "TESDA's workplace-communication module: receive, respond, relay — the original-document discipline's daily practice.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-acct-us-tax-filing",
@@ -6832,7 +6832,7 @@ export const RESOURCES: Resource[] = [
       "Records hygiene & confidentiality (RA 10173 context)":
         "The payroll-data-security lesson teaches the PII discipline the RA 10173 context row asks for.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-pay-sss",
@@ -6993,7 +6993,7 @@ export const RESOURCES: Resource[] = [
       "Provide information to employees and managers on payroll matters, tax issues, benefit plans, and collective agreement provisions":
         "Receiving/answering workplace communication inquiries is the employee-facing-service craft the row names.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-pay-top-workplace-comms",
@@ -7019,7 +7019,7 @@ export const RESOURCES: Resource[] = [
       "Communication · Professionalism (Enabling)":
         "TESDA's workplace-communication module is the employee-facing behavior layer: participating, responding, relaying.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-pay-adp-us-payroll-fundamentals",
@@ -7118,7 +7118,7 @@ export const RESOURCES: Resource[] = [
       "Perform financial accounting and corporate reporting activities":
         "Bushee's course runs recording-to-closing to the three statements with worked cases — month-end support and double-entry processing as the printed CWF lists.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fas-gcf-excel",
@@ -7146,7 +7146,7 @@ export const RESOURCES: Resource[] = [
       "Data Collection and Analysis":
         "Collecting entries into sortable, analyzable sheets is taught hands-on in the series.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fas-acca-intro",
@@ -7187,7 +7187,7 @@ export const RESOURCES: Resource[] = [
       "Accounting and Tax Systems":
         "Inputting and operating the ledger systems at ACCA standards — the systems-side FSC taught through ACCA's bookkeeping core.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fas-cfi-basic-excel",
@@ -7209,7 +7209,7 @@ export const RESOURCES: Resource[] = [
       "Data Collection and Analysis":
         "Structured data entry with SUM/AVERAGE/IF operators and reference discipline — collecting into analysis-ready sheets at analyst standards.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fas-cfi-ratios",
@@ -7250,7 +7250,7 @@ export const RESOURCES: Resource[] = [
       "Financial Analysis":
         "The financial-statement-analysis chapters teach ratio analysis on statements for insights — the printed L3 verb at entry rung, in a free textbook with exercises.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fas-finance-fundamentals",
@@ -7311,7 +7311,7 @@ export const RESOURCES: Resource[] = [
       "Internal Controls":
         "The COSO framework modules teach evaluating control effectiveness and surfacing control weaknesses — exactly the FSC's evaluate/spot-gaps pair.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fas-cambridge-finance",
@@ -7337,7 +7337,7 @@ export const RESOURCES: Resource[] = [
       "Support strategic planning":
         "The budgets-and-proposals module runs NPV/IRR/payback decision frameworks and the variance-reporting module runs reforecasting — the budgeting/forecasting-assistance leg; the P&L-analysis leg rides the Wharton accounting course.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fas-top-workplace-comms",
@@ -7378,7 +7378,7 @@ export const RESOURCES: Resource[] = [
       "Collaboration · Communication · Digital Fluency · Learning Agility · Problem Solving · Sense Making · Transdisciplinary Thinking (Enabling, B/I)":
         "TESDA's workplace-communication module: receive, respond, relay — the enabling strip's daily practice at the shared-service seat.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fas-intuit-basics",
@@ -7401,7 +7401,7 @@ export const RESOURCES: Resource[] = [
       "O*NET corroboration block (operating-the-GL-engine tasks)":
         "Intuit's cycle modules — collect, record, post, balance and report — are the operating-the-GL tasks the O*NET block quotes.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   // Fas taught fills note — the rows above (UIUC internal-auditing, Cambridge
   // finance) carry the Strategic-planning and Internal-Controls cells.
@@ -7489,7 +7489,7 @@ export const RESOURCES: Resource[] = [
       "Interpret data on price, yield, stability, future investment-risk trends, economic influences":
         "Bond-pricing and risk-return chapters teach reading price/yield/stability data — the market-data read the desk runs on.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fin-mit-ocw-finance-theory",
@@ -7515,7 +7515,7 @@ export const RESOURCES: Resource[] = [
       "Advise clients on aspects of capitalization, such as amounts, sources, or timing":
         "Finance Theory I teaches valuation and capital-budgeting foundations — the capital-budgeting fluency the O*NET row prints (normally senior-received work).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fin-finance-fundamentals",
@@ -7536,7 +7536,7 @@ export const RESOURCES: Resource[] = [
       "Analyze financial information to forecast business, industry, or economic conditions for investment decisions":
         "The NPV framework + investments rules teach the discount-cash-flow story an analyst builds and defends — the base DCF-driven analysis.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fin-cambridge-finance",
@@ -7560,7 +7560,7 @@ export const RESOURCES: Resource[] = [
       "Employ financial models to develop solutions to financial problems or to assess the financial or capital impact of transactions":
         "The Modelling-essentials module teaches model design — purpose, workbook structure, workflow, visualization and commentary — plus the sensitivity scenario craft.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fin-cfi-ratios",
@@ -7600,7 +7600,7 @@ export const RESOURCES: Resource[] = [
       "Communication · Critical Thinking · Professionalism (Enabling)":
         "The same module runs the participation/respond/relay craft — the analyst's communication backbone.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fin-wharton-more-accounting",
@@ -7639,7 +7639,7 @@ export const RESOURCES: Resource[] = [
       "Draw charts and graphs, using computer spreadsheets, to illustrate technical reports":
         "The Excel Foundations series teaches building charts and graphs in a workbook — the reporting-visuals leg of the analyst craft (the CFI lesson's formula-only claim was cut).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-fin-cfi-basic-excel",
@@ -7879,7 +7879,7 @@ export const RESOURCES: Resource[] = [
       "Reconcile records of financial transactions":
         "ACCA's credited intro reconciles records against the banking system and flags discrepancies — the spreadsheet-reconcile discipline the O*NET verb prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-treasury-openstax-finance",
@@ -7925,7 +7925,7 @@ export const RESOURCES: Resource[] = [
       "Maintain records of bonds, shares and other securities bought or sold on behalf of clients or employer":
         "The fixed-income and equity-valuation modules teach what bond/share records represent and how they price — the record-upkeep context; a records-registry lesson itself has no taught page (honest leg-gap).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-treasury-cfi-careers",
@@ -7963,7 +7963,7 @@ export const RESOURCES: Resource[] = [
       "Accuracy/Professionalism (Enabling)":
         "TESDA's workplace-communication module runs precise transfer of information — the zero-surprise cash-desk behavior the enabling row names.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-treasury-alison-bank-telling",
@@ -8086,7 +8086,7 @@ export const RESOURCES: Resource[] = [
       "Communication · Professionalism (Enabling)":
         "TESDA's workplace-communication module: participating, responding, relaying — the daily behavior layer of the collections desk (original-document discipline included).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-coll-khan-banking",
@@ -8130,7 +8130,7 @@ export const RESOURCES: Resource[] = [
       "Record information about financial status of customers and status of collection efforts":
         "The Excel Foundations series drills the worksheet side — building the status-of-account tracker the row names, entries updated per collection effort.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-coll-finance-fundamentals",
@@ -8170,7 +8170,7 @@ export const RESOURCES: Resource[] = [
       "Receive payments and post amounts paid to customer accounts":
         "ACCA's banking chapter teaches receiving cash/cheque/voucher amounts and posting them onto customer accounts — the payment-posting loop the row names.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-coll-ra10173",
@@ -8256,7 +8256,7 @@ export const RESOURCES: Resource[] = [
       "Administrative upkeep of assigned accounts":
         "The AR process-flow modules (billing → cash application → reconciliation) are the day-to-day accounts-upkeep machinery.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-coll-pdcflow-skip-trace",
@@ -8390,7 +8390,7 @@ export const RESOURCES: Resource[] = [
       "Researching and evaluating loan applicant's financial status, references, credit and ability to repay the loan":
         "Wharton's accounts-receivable and bad-debt modules teach reading a firm's statements — receivables quality and debt position are the receivable-recovery/repaycraft legs the cell prints (note: the interview/limits craft is the §6.1 adviser line).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-credit-top-receiving-comms",
@@ -8433,7 +8433,7 @@ export const RESOURCES: Resource[] = [
       "Integrity/Professionalism (Enabling)":
         "TESDA's workplace-communication module is the professionalism layer — participating, integrity and courtesy in every workplace exchange.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-credit-ra8791",
@@ -8774,7 +8774,7 @@ export const RESOURCES: Resource[] = [
       "Professionalism · Teamwork (Enabling)":
         "The participating-in-workplace-communication unit is the professionalism/teamwork practice (obtaining and providing information cooperatively).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-teller-alison-cs",
@@ -8799,7 +8799,7 @@ export const RESOURCES: Resource[] = [
       "Customer service & special services (cards, checks ordering)":
         "Alison's service-skills modules cover the counter exchange — greeting, listening, handling requests — the service leg of the card/check-ordering row; the order-processing specifics themselves are bank-internal craft.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-teller-alison-bank-telling",
@@ -8959,7 +8959,7 @@ export const RESOURCES: Resource[] = [
       "Review accounts for discrepancies and reconcile differences":
         "The banking-system and control modules reconcile records and surface discrepancies — month-end readiness as the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-audit-psf-gih-doc",
@@ -9065,7 +9065,7 @@ export const RESOURCES: Resource[] = [
       "Prepare detailed reports on audit findings":
         "Participating-in-workplace-communication drills gathering, structuring and relaying workplace information — the complete, written reporting form the audit-findings row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-audit-gcf-excel",
@@ -9088,7 +9088,7 @@ export const RESOURCES: Resource[] = [
       "Audit technology fluency (accounting software / Excel family)":
         "The Excel Foundations series is the spreadsheet leg of the O*NET 30-pinned technology set (Excel is a printed category) — formulas, tables and workpaper discipline; the QuickBooks/Sage instances ride paid vendor trials.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-audit-top-journalizing",
@@ -9114,7 +9114,7 @@ export const RESOURCES: Resource[] = [
       "Prepare adjusting journal entries / establish tables of accounts and assign entries to proper accounts":
         "The NC III module teaches logging business transactions in the accounting journal and assigning entries to accounts — the structure adjusting entries edit.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-audit-top-posting",
@@ -9233,7 +9233,7 @@ export const RESOURCES: Resource[] = [
       "Professional Skepticism (attitude) · Communication (Enabling)":
         "The receiving-and-responding module is the ask-clarify-confirm exchange discipline — the communication half of the skepticism compound row.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-audit-top-digital-literacy-cat",
@@ -9397,7 +9397,7 @@ export const RESOURCES: Resource[] = [
       "Database entry & maintenance":
         "The Sheets-for-Beginners lesson walks spreadsheet entry, formatting and tidying — the structured-records upkeep the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-adminassoc-workspace",
@@ -9438,7 +9438,7 @@ export const RESOURCES: Resource[] = [
       "Multi-channel reception & call routing":
         "The receiving-and-responding module runs taking telephone/calls-and-messages, recording the exchange and relaying to the right person — the reception/routing loop.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-adminassoc-ms-365",
@@ -9497,7 +9497,7 @@ export const RESOURCES: Resource[] = [
       "Communication · Professionalism · Critical Thinking (Enabling)":
         "The ILO human-skills module drills professionalism, communication and judgment for entry jobs — the whole Enabling bundle in one taught track.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-adminassoc-alison-admin",
@@ -9535,7 +9535,7 @@ export const RESOURCES: Resource[] = [
       "Multi-channel reception & call routing":
         "The telephone/voicemail-etiquette outcome covers the reception leg (routing craft rides the TOP module's credited claim — the taught fallback).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   // ── clerk (5.2) — split rows; row 6 declared resourceless-thin ──
   // Wave B audit (2026-11-03, batch 4): access/form per-row. The UK National
@@ -9621,7 +9621,7 @@ export const RESOURCES: Resource[] = [
       "Sorting, opening and sending mail":
         "The Gmail series teaches labels, archiving, filters and composing/sending — the electronic-mail side of the sort-open-send loop.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-clerk-ms-365",
@@ -9695,7 +9695,7 @@ export const RESOURCES: Resource[] = [
       "Responding to enquiries (telephone/electronic) or forwarding":
         "Receiving/answering telephone and electronic exchange then forwarding to the right responder — the enquiries loop itself.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-clerk-top-intro-bookkeeping",
@@ -9720,7 +9720,7 @@ export const RESOURCES: Resource[] = [
       "Checking figures, preparing invoices and recording details of financial transactions made":
         "The NC III intro-bookkeeping module teaches documenting financial transactions and the record-keeping envelope — figures/invoices for the general clerk.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-clerk-ratatype",
@@ -9744,7 +9744,7 @@ export const RESOURCES: Resource[] = [
       "Transcribing information into computers, and proof-reading and correcting copy":
         "Ratatype's typing exercises + accuracy metrics are the touch-typing/transcription throughput craft; retyping-and-correcting practice is the loop.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-clerk-top-ilo-humanskills",
@@ -9766,7 +9766,7 @@ export const RESOURCES: Resource[] = [
       "Communication · Professionalism (Enabling)":
         "The ILO human-skills module is the taught professionalism/communication layer for first-job roles.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-clerk-alison-secretarial",
@@ -9789,7 +9789,7 @@ export const RESOURCES: Resource[] = [
       "Recording, preparing, sorting, classifying and filing information":
         "The file-management module contrasts digital and physical filing methods — the sort/classify/file rules the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-clerk-gap-equipment",
@@ -9849,7 +9849,7 @@ export const RESOURCES: Resource[] = [
       "Source-document reading & field mapping (entering from source material)":
         "Entering data from source material into the sheet's fields is the lesson's core craft — the field-mapping leg.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-encode-ms-365",
@@ -9875,7 +9875,7 @@ export const RESOURCES: Resource[] = [
       "Importing and exporting data between different database systems and softwares":
         "The Get&Transform walkthrough teaches moving CSV/text/HTML source data into Excel's data model — the software-boundary import leg; engine-to-engine export stays the craft scope note.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-encode-typing-com",
@@ -9917,7 +9917,7 @@ export const RESOURCES: Resource[] = [
       "Accuracy/error detection & correction":
         "Ratatype scores errors live and re-drills — the detect-and-correct loop the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-encode-sheets-organize",
@@ -9942,7 +9942,7 @@ export const RESOURCES: Resource[] = [
       "Compilation, sorting, verification before entry":
         "The Sheets data-organization lesson runs sorting, formatting and data validation — the compile/verify-before-entry craft verbatim.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-encode-top-digitallit",
@@ -9983,7 +9983,7 @@ export const RESOURCES: Resource[] = [
       "Confidentiality (Etiquette/Professionalism — Enabling)":
         "The TOP data-privacy module teaches practicing workplace confidentiality with Filipino-context examples — the handling discipline the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-encode-ra10173",
@@ -10025,7 +10025,7 @@ export const RESOURCES: Resource[] = [
       "Storing completed documents & logs (records + throughput discipline)":
         "The EDM course walks the document lifecycle through its storage stage with versioning and access control — the completed-document/log upkeep discipline.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-encode-typing-10key",
@@ -10111,7 +10111,7 @@ export const RESOURCES: Resource[] = [
       "Communication & professionalism at the corporate front-desk (Enabling)":
         "The NC II's communication/professional conduct lessons are the taught front-desk etiquette core.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-desk-top-front-office-intro",
@@ -10293,7 +10293,7 @@ export const RESOURCES: Resource[] = [
       "Executive schedule & calendar management":
         "Irvine's time-management modules plan around the calendar — the disciplined scheduling/estimating line the executive seat runs.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-execsec-gcal",
@@ -10353,7 +10353,7 @@ export const RESOURCES: Resource[] = [
       "Correspondence & document production":
         "The OWL memos section teaches the memo format, audience and organization — the routine structural correspondence the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-execsec-top-receiving-comms",
@@ -10395,7 +10395,7 @@ export const RESOURCES: Resource[] = [
       "Information gatekeeping: calls & visitors":
         "The front-office reception lessons manage incoming calls and visitor flow — screening, logging and routing the executive's traffic (tourism framing scoped).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-execsec-google-ai-admin",
@@ -10441,7 +10441,7 @@ export const RESOURCES: Resource[] = [
       "Incoming-material triage & distribution":
         "The Gmail series teaches filters, labels and archiving — the sort-route-file triage loop for incoming material (the electronic leg; physical mail stays the desk craft).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-execsec-top-intro-bookkeeping",
@@ -10466,7 +10466,7 @@ export const RESOURCES: Resource[] = [
       "Office services coordination":
         "The intro-bookkeeping module teaches documenting and servicing the office's financial transactions — the coordination paperwork the budget-prep clause backs.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-execsec-accountingcoach",
@@ -10491,7 +10491,7 @@ export const RESOURCES: Resource[] = [
       "Payroll-information processing":
         "The payroll lesson walks gross-to-net computation, payroll registers and the journal entries — processing the payroll information the row prints (the run-the-actual-payroll leg rides the ADP fill in the pool).",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-execsec-top-journalizing",
@@ -10534,7 +10534,7 @@ export const RESOURCES: Resource[] = [
       "Clerical support across departments":
         "Participating-in-communication across workplace contexts trains the cross-department relay/correspondence a clerical support seat runs.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-execsec-top-ilo-humanskills",
@@ -10609,7 +10609,7 @@ export const RESOURCES: Resource[] = [
       "Meeting administration & minutes":
         "The meetings course teaches structuring the meeting and taking recorded notes that drive follow-through — the minutes/administration craft.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-execsec-adp-payroll-cycle",
@@ -10631,7 +10631,7 @@ export const RESOURCES: Resource[] = [
       "Employee time-tracking":
         "The ADP timekeeping module records and manages employee work minutes into the payroll system — the time-record upkeep the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-execsec-alison-diploma",
@@ -10658,7 +10658,7 @@ export const RESOURCES: Resource[] = [
       "Records & document filing/retrieval":
         "The document-organisation outcome (arranging binder/file contents accessibly) is the filing/retrieval discipline the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-execsec-coursera-report",
@@ -10831,7 +10831,7 @@ export const RESOURCES: Resource[] = [
       "Filing log / records of materials filed & removed":
         "The Sheets-for-Beginners lesson builds the logged-entry sheet pattern — the filed/removed log the row prints.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-records-workspace",
@@ -10894,7 +10894,7 @@ export const RESOURCES: Resource[] = [
       "Visitor greeting & routing":
         "The reception/visitor-service lessons teach greeting and routing guests — the front-desk greeting craft.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-records-top-front-office-intro",
@@ -10955,7 +10955,7 @@ export const RESOURCES: Resource[] = [
       "Mail & document handling":
         "The Gmail series teaches labels, filters and archiving — the electronic mail-and-documents handling loop.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-records-top-workplace-comms",
@@ -10997,7 +10997,7 @@ export const RESOURCES: Resource[] = [
       "Info & customer-service communication":
         "The ILO human-skills module drills the communication/service conduct for service seats — information sharing plus courtesy in one taught track.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-records-alison-secretarial",
@@ -11033,7 +11033,7 @@ export const RESOURCES: Resource[] = [
       "Appointment & calendar scheduling":
         "The meetings/calendars module walks planning and organizing meetings and calendar entries — the scheduling craft.",
     },
-    // learn draft — user review pending
+    // learn line — authored 2026-11-03, user-delegated
   },
   {
     id: "res-records-ms-scanner",
