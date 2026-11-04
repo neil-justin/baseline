@@ -205,10 +205,12 @@
   margin: -1px;
 }
 
-/* dense grid rows — one template; tabs only filter, never change columns */
+/* dense grid rows — one template; tabs only filter, never change columns.
+   The SKILLS IN COMMON column retired 2026-11-04 (the ranked ORDER is the
+   fit signal) — three content columns + the expander. */
 .v7career .index-table { font-variant-numeric: tabular-nums; margin-top: 0; }
 .v7career .index-table.cols-ranked {
-  --cols: 44px minmax(0, 1.15fr) 168px minmax(0, 1fr) 30px;
+  --cols: 52px minmax(0, 1fr) minmax(0, 1fr) 30px;
 }
 .v7career .index-colheads {
   display: grid;
@@ -277,27 +279,6 @@
 .v7career .c-sub .vbadge { font-family: Roboto, system-ui, sans-serif; }
 
 .v7career .cell-career .chip { margin-left: 6px; } /* CURRENT never touches the name */
-.v7career .cell-fit { min-width: 0; }
-.v7career .fit-line { font: 500 12px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink); white-space: nowrap; }
-.v7career .fit-zero { color: var(--v-grey-text); font-weight: 400; }
-.v7career .mbar {
-  position: relative;
-  display: block;
-  overflow: hidden;
-  width: 100%;
-  max-width: 132px;
-  height: 4px;
-  border-radius: 2px;
-  background: var(--v-track);
-  margin-top: 6px;
-}
-.v7career .mbar i {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  background: var(--v-blue);
-}
 
 .v7career .cell-entry {
   font: 400 12px/1.5 Roboto, system-ui, sans-serif;
@@ -598,12 +579,12 @@
 
 @media (max-width: 1020px) {
   .v7career .d-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .v7career .index-table.cols-ranked { --cols: 34px minmax(0, 1.1fr) 140px minmax(0, 1fr) 24px; }
+  .v7career .index-table.cols-ranked { --cols: 44px minmax(0, 1fr) minmax(0, 1fr) 24px; }
   .v7career .index-detail { padding-left: 50px; }
 }
 
 @media (max-width: 860px) {
-  .v7career .index-table.cols-ranked { --cols: 30px minmax(0, 1.2fr) 120px 24px; }
+  .v7career .index-table.cols-ranked { --cols: 34px minmax(0, 1fr) 24px; }
   /* Wave-3 C3 (2026-11-03): the ENTRY PATH column does NOT disappear at the
      fold — the column head folds away and the entry cell re-slots as a
      full-width lower row under the detail (the skill-row mobile fold),
@@ -612,7 +593,7 @@
   .v7career .index-table.cols-ranked .cell-entry {
     grid-column: 1 / -1;
     grid-row: 2;
-    padding-left: 42px; /* aligned under the career cell (30px rank + 12px gap) */
+    padding-left: 46px; /* aligned under the career cell (34px rank + 12px gap) */
   }
   .v7career .index-colheads { gap: 12px; }
   .v7career .index-row { gap: 4px 12px; } /* the fold row stacks the entry under it */
@@ -623,8 +604,7 @@
   .v7career .bandrow { flex-direction: column; align-items: flex-start; }
   .v7career .band .who { min-width: 0; }
   .v7career .bandside { align-items: flex-start; }
-  .v7career .bandcells { width: 100%; flex-direction: column; gap: 12px; }
-  .v7career .bcell { border-left: 0; padding: 0; }
+  .v7career .band-ledger { margin-top: 12px; padding-top: 12px; }
   .v7career .bval { font-size: 12px; }
   .v7career .sw-head { padding: 15px 16px 0; }
   .v7career .sw-panel { padding: 0 16px 16px; }
@@ -642,10 +622,9 @@
 }
 
 @media (max-width: 560px) {
-  .v7career .index-table.cols-ranked { --cols: 26px minmax(0, 1fr) 96px 22px; }
-  .v7career .index-table.cols-ranked .cell-entry { padding-left: 38px; } /* fold re-aligns to the tighter rank column */
+  .v7career .index-table.cols-ranked { --cols: 30px minmax(0, 1fr) 22px; }
+  .v7career .index-table.cols-ranked .cell-entry { padding-left: 42px; } /* fold re-aligns to the tighter rank column */
   .v7career .rank { width: 24px; height: 24px; font-size: 11px; }
-  .v7career .mbar { max-width: 84px; }
   .v7career .choice button { padding: 4px 9px; font-size: 11.5px; }
 }
 
@@ -792,12 +771,24 @@
    shrink fix; detail spacing + tonal ground (pop).
    ============================================================ */
 
-/* the band ledger cell — the account skill list rides the tray as tonal
-   chips; flexes wide so the strip fills the band at any width (the dead
-   whitespace the KPI-bar removal would have left) */
-.v7career .bcell-ledger { flex: 1 1 460px; }
+/* the band ledger — full-width second row of the band (no framed cells;
+   the track rides the meta line), chips filling the row at any width */
+.v7career .band-ledger {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--v-rows);
+}
 .v7career .ledger-chips { margin: 4px 0 0; }
 .v7career .ledger-empty { margin: 4px 0 0; font-size: 13px; color: var(--v-ink2); }
+
+/* the detail legend — one quiet line carries the chip states (the fit
+   framing retired: most roles have no overlap, so the section reads as
+   the role's own spec sheet with overlap as a quiet state signal) */
+.v7career .skill-legend {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--v-meta);
+}
 
 /* the no-bar remainder of a role's map — quiet outline chip so the
    state-colored (overlapping) chips read as the highlight */

@@ -106,23 +106,6 @@ export default async function CareerPage() {
 
   const roles: RoleRowData[] = CAREERS.map((c) => {
     const m = skillsMatch(c, state.bars);
-    const confirmed =
-      m.x > 0
-        ? c.skills
-            .filter(
-              (s) =>
-                s.name in state.bars &&
-                (state.bars[s.name].source === "verified" ||
-                  state.bars[s.name].source === "checked")
-            )
-            .map((s) => ({
-              name: shortSkill(s.name),
-              src: shortSrc(state.bars[s.name].source),
-            }))
-        : [];
-    const selfReported = c.skills
-      .filter((s) => state.bars[s.name]?.source === "claimed")
-      .map((s) => s.name);
     return {
       id: c.id,
       name: c.name,
@@ -133,8 +116,6 @@ export default async function CareerPage() {
       why: careerWhyLine(c),
       entry: entryDisplay(c),
       current: c.id === career?.id,
-      confirmed,
-      selfReported,
       psoc: `${c.psocTitle} — PSOC ${c.psocCode}`,
       majors: c.degreeMap.join(" · "),
       demand: demandLine(c),

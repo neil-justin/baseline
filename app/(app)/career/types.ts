@@ -31,10 +31,6 @@ export interface RoleRowData {
   entry: string;
   /** the declared target row */
   current: boolean;
-  /** provenance of the fit number — empty unless x > 0 */
-  confirmed: VerifiedBarData[];
-  /** claimed skills that sit on this map (never counted toward matching) */
-  selfReported: string[];
   /** role-detail blocks — catalog truth, cited */
   psoc: string;
   majors: string;

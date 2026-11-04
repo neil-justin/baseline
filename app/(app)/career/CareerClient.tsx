@@ -203,7 +203,8 @@ export default function CareerClient({
         ? roles
         : roles.filter((r) => r.trackLabel === lens);
   /* tabs only filter rows — the table always keeps the ranked layout
-     (RANK / CAREER / SKILLS IN COMMON / ENTRY PATH) */
+     (RANK / CAREER / ENTRY PATH — the fit column retired 2026-11-04:
+     the ranked ORDER is the fit signal) */
   const colsClass = "cols-ranked";
 
   /* page slice — the lens-row kicker and the pager bar both print the
@@ -407,20 +408,11 @@ export default function CareerClient({
   }
 
   // ---------- markup ----------
-  const bandcell = (label: string, value: string, num?: boolean) => (
-    <div className="bcell" key={label}>
-      <span className="label">{label}</span>
-      <span className={`bval${num ? " num" : ""}`}>{value}</span>
-    </div>
-  );
 
-  /** Careers band — the bandcells tray raised onto the Dashboard/Prep KPI
-      register. The two KPI bar cells (Skill map / First 30 days) RETIRED —
-      user ruling 2026-11-04: the tray's second cell is the student's
-      ACCOUNT SKILL LEDGER, every bar on the profile as a tonal chip
-      (green = verified ·✓, blue = checked ·✓✓, hatch = self-reported),
-      the provenance counts riding the label line. The Wave-3 C1 split-bar
-      machinery dies with them (superseded ruling). */
+  /** Careers band — the rethink (user ruling 2026-11-04, take 2): the
+      track folds into the meta line and the ACCOUNT SKILL LEDGER owns
+      the second row full-width — no framed cells (the two KPI bar cells
+      died the same day; the Wave-3 C1 split-bar machinery with them). */
   const ledger = Object.entries(barsSources)
     .map(([name, src]) => ({ name, display: shortSkill(name), src }))
     .sort((a, b) => {
@@ -445,7 +437,7 @@ export default function CareerClient({
               <h1 className="t">Your career</h1>
               {card ? (
                 <p className="m">
-                  <b>{card.name}</b> · {card.what}
+                  <b>{card.name}</b> · {card.trackLabel} · {card.what}
                 </p>
               ) : (
                 <p className="m">No career picked yet.</p>
@@ -501,32 +493,29 @@ export default function CareerClient({
             </div>
           </div>
           {card && (
-            <div className="bandcells">
-              {bandcell("Track", card.trackLabel)}
-              <div className="bcell bcell-ledger">
-                <span className="label">
-                  Your skills · {ledgerCount("verified")} verified · {ledgerCount("checked")}{" "}
-                  checked · {ledgerCount("claimed")} self-reported
-                </span>
-                {ledger.length > 0 ? (
-                  <p className="skill-chips ledger-chips">
-                    {ledger.map((s) => (
-                      <span
-                        className={`chip ${
-                          s.src === "verified" ? "c-green" : s.src === "checked" ? "c-blue" : "c-grey hatch-chip"
-                        }`}
-                        key={s.name}
-                      >
-                        {s.display}
-                      </span>
-                    ))}
-                  </p>
-                ) : (
-                  <p className="ledger-empty num">
-                    No skills on file yet — a passed check starts your ledger.
-                  </p>
-                )}
-              </div>
+            <div className="band-ledger">
+              <span className="label">
+                Your skills · {ledgerCount("verified")} verified · {ledgerCount("checked")}{" "}
+                checked · {ledgerCount("claimed")} self-reported
+              </span>
+              {ledger.length > 0 ? (
+                <p className="skill-chips ledger-chips">
+                  {ledger.map((s) => (
+                    <span
+                      className={`chip ${
+                        s.src === "verified" ? "c-green" : s.src === "checked" ? "c-blue" : "c-grey hatch-chip"
+                      }`}
+                      key={s.name}
+                    >
+                      {s.display}
+                    </span>
+                  ))}
+                </p>
+              ) : (
+                <p className="ledger-empty num">
+                  No skills on file yet — a passed check starts your ledger.
+                </p>
+              )}
             </div>
           )}
         </header>
@@ -592,7 +581,6 @@ export default function CareerClient({
               <div className="index-colheads" aria-hidden="true">
                 <span className="ch-rank">RANK</span>
                 <span className="ch-career">CAREER</span>
-                <span className="ch-fit">SKILLS IN COMMON</span>
                 <span className="ch-entry">ENTRY PATH</span>
                 <span className="ch-exp" aria-hidden="true" />
               </div>
@@ -625,19 +613,6 @@ export default function CareerClient({
                         {r.current && <span className="chip c-blue">CURRENT</span>}
                         <span className="c-sub">
                           {r.current ? r.why : r.what}
-                        </span>
-                      </span>
-                      <span className="cell-fit" aria-label={`${r.x} of ${r.y} skills in common`}>
-                        <span className={`fit-line num ${r.x === 0 ? "fit-zero" : ""}`}>
-                          {/* Wave-3 canon: the zero-demonstrated cell reads the
-                              honest "—" (no demonstrated skill gives this career
-                              any matching signal) — the same quiet-dash
-                              convention Prep's unmeasured band cells ride; the
-                              count itself stays the aria truth. */}
-                          {r.x === 0 ? "—" : `${r.x} of ${r.y}`}
-                        </span>
-                        <span className="mbar" aria-hidden="true">
-                          <i style={{ width: `${(r.x / r.y) * 100}%` }} />
                         </span>
                       </span>
                       <span className="cell-entry num">{r.entry}</span>
@@ -688,6 +663,10 @@ export default function CareerClient({
                                   </span>
                                 );
                               })}
+                            </p>
+                            <p className="skill-legend num">
+                              Green = verified · blue = checked · hatch = self-reported ·
+                              outline = not on your file yet
                             </p>
                             <p className="skill-map-note num">{r.skillsSummary}</p>
                           </div>
