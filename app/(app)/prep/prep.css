@@ -227,13 +227,21 @@
   color: var(--v-ink);
 }
 .v7prep .rs-disc > summary::-webkit-details-marker { display: none; }
+/* CSS border triangles (drawn, no glyphs): closed = right-pointing,
+   open = down-pointing; ~5px core like the retired text glyph */
 .v7prep .rs-disc > summary::before {
-  content: "▸";
-  color: var(--v-ink2);
-  font-size: 11px;
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 4.5px solid transparent;
+  border-bottom: 4.5px solid transparent;
+  border-left: 6px solid var(--v-ink2);
 }
 .v7prep .rs-disc[open] > summary { color: var(--v-blue-deep); }
-.v7prep .rs-disc[open] > summary::before { content: "▾"; }
+.v7prep .rs-disc[open] > summary::before {
+  border-left: none;
+  border-top: 6px solid var(--v-ink2);
+}
 .v7prep .rs-disc .checks-table { margin-top: 0; }
 .v7prep .rs-disc .rs-findings { padding-bottom: 2px; }
 
@@ -657,6 +665,8 @@
   min-height: 320px;
   justify-content: center;
   gap: 10px;
+  pointer-events: none; /* the wait is read-only — hover wash + pointer cursor don't lie */
+  cursor: default;
 }
 .v7prep .tabpanel.prep-analyzing .dz-busy {
   flex-direction: column;

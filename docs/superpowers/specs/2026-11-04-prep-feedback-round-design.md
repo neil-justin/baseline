@@ -165,6 +165,17 @@ navigation (perf entries 1→1), scroll preserved then animated to
 `verdictTop = 0`, cascade replay recorded post-commit, zone idle after.
 `tsc` clean + vitest 144/144 at both landings.
 
+Round 2b landed as `7029b10` (probe `scripts/prep-feedback-probe-3.mjs`):
+while the check runs the active panel's non-uploader cards are hidden and
+the zone reads as a tall centered analyzing hero (the ruling's CSS kept,
+except `pointer-events: none` was dropped by the executor then RESTORED in
+review). The reviewer's independent evidence: class survives the RSC
+commit (dataset-tag probe), exactly one visible card during the wait,
+order-swap restore-first choreography, reduced-motion renders the hero
+static. One noted flake: in an artificially throttled 14 s run the smooth
+verdict scroll aborted at 501 — the choreography itself behaved per ruling
+(cards restored, no dead-end); unthrottled runs land at 0 every time.
+
 ### 6.3 Round 2b — full content swap on busy (user-ruled 2026-11-04, live
 screenshot review)
 
