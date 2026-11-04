@@ -589,9 +589,3 @@
 .v7ob .chip { border-radius: 8px; }
 .v7ob .q-band,
 .v7ob .okband { border-radius: 12px; }
-
-/* the 64px Material bottom nav owns the bottom edge — page content
-   needs clearance or the CTA clips under it (bird's-eye catch) */
-@media (max-width: 720px) {
-  .v7ob { padding-bottom: 96px; }
-}

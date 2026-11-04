@@ -658,3 +658,9 @@ body:has(.v7) { background: #f8f9fa; }
 @media (max-width: 720px) {
   .v7 .rail { box-shadow: var(--v-shadow); }
 }
+
+/* the focused first-run chrome (user ruling 2026-11-04): onboarding
+   carries NO console nav — the (onboarding) group's layout folds the
+   240px column away; the header band + capped main span full width */
+.v7.v7-focus { grid-template-columns: 1fr; }
+.v7.v7-focus .v7-main { grid-column: 1; grid-row: 2; }
