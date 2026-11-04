@@ -23,7 +23,23 @@ export default function Loading() {
               <span className="skel" style={{ width: 280, height: 19, marginTop: 6 }} />
             </div>
             <div className="bandside">
-              <span className="skel" style={{ width: 150, height: 40, borderRadius: 999 }} />
+              {/* the fork skeleton lives on its real slot (side-by-side with
+                  the CTA column) so the reserve matches the committed band */}
+              <svg className="band-fork" width="200" height="140" viewBox="0 0 200 140" aria-hidden="true">
+                <path d="M48 122 L48 88" fill="none" stroke="var(--v-rows)" strokeWidth="3.5" strokeLinecap="round" />
+                <path d="M48 88 C 76 80, 92 60, 128 38" fill="none" stroke="var(--v-rows)" strokeWidth="3.5" strokeLinecap="round" />
+                <path d="M48 88 C 68 90, 102 100, 140 100" fill="none" stroke="var(--v-rows)" strokeWidth="3" strokeLinecap="round" />
+                <path d="M48 88 C 64 102, 78 116, 92 128" fill="none" stroke="var(--v-rows)" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="1 7" />
+                <circle cx="48" cy="88" r="8" fill="var(--v-grey-wash)" />
+                <circle cx="48" cy="88" r="14" fill="none" stroke="var(--v-rows)" strokeWidth="1.8" opacity=".3" />
+                <circle cx="128" cy="38" r="7" fill="var(--v-grey-wash)" />
+                <circle cx="140" cy="100" r="6" fill="#fff" stroke="var(--v-rows)" strokeWidth="2.2" />
+                <circle cx="92" cy="128" r="5.5" fill="#fff" stroke="var(--v-rows)" strokeWidth="2.2" />
+                <circle cx="164" cy="26" r="10" fill="var(--v-grey-wash)" />
+              </svg>
+              <div className="bandside-col">
+                <span className="skel" style={{ width: 150, height: 40, borderRadius: 999 }} />
+              </div>
             </div>
           </div>
           <div className="band-ledger">

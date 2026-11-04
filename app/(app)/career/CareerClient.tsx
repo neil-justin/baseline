@@ -459,6 +459,7 @@ export default function CareerClient({
                 <circle cx="92" cy="128" r="5.5" fill="#fff" stroke="#dadce0" strokeWidth="2.2" />
                 <circle cx="164" cy="26" r="10" fill="var(--v-blue-wash)" />
               </svg>
+              <div className="bandside-col">
               {card ? (
                 <>
                   <a className="cta" href="/pathway">
@@ -505,6 +506,7 @@ export default function CareerClient({
                   Explore by track
                 </button>
               )}
+              </div>
             </div>
           </div>
           {card && (

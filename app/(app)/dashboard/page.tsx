@@ -8,7 +8,6 @@ import {
   ASSESSED_COMPETENCIES,
   roundHalfDown,
 } from "@/lib/engines/score";
-import CountUp from "@/components/CountUp";
 import Reveal from "@/components/Reveal";
 import "./dashboard.css";
 
@@ -110,17 +109,10 @@ export default async function DashboardPage() {
                 {state.name} · {state.yearLevel}
               </h1>
               <div className="m">{career.name}</div>
+          {/* the big numeral died (user ruling 2026-11-04): the gauge carries
+              the number once — the score stays announced for AT */}
+              <span className="sr-only">Readiness {score.total} of 100</span>
               <div className="composite-wrap">
-                <div className="composite">
-                  <CountUp
-                    to={score.total}
-                    dec={0}
-                    dur={900}
-                    className="score-big"
-                    ariaLabel={`Readiness ${score.total} of 100`}
-                  />
-                  <span className="c-of num">/ 100</span>
-                </div>
                 <div className="ratemsg">Computed from your own records · NACE-aligned</div>
                 <div className="ratemsg num">
                   You&apos;re <b className="num">{score.total}%</b> ready for {career.name}; {v.closed} bars
@@ -505,19 +497,20 @@ export default async function DashboardPage() {
         <div className="lgrid">
           {Object.entries(state.competencies ?? {}).map(([name, st]) => (
             <div className="lrow" key={name}>
-              {/* the ONE icon register (user ruling 2026-11-04): a filled green
-                  seal with a white check = verified; a quiet grey disc = the
-                  claim — identical size and alignment, no mixed weights */}
+              {/* the ONE icon register, take 2 (user ruling 2026-11-04): the
+                  white check was scribbly at 20px and the ring-in-ring disc
+                  read as a radio control — the claim marker is now a quiet
+                  dash on a grey disc, materially "not yet", not "click me" */}
               <span className={`ms ${st === "verified" ? "done" : ""}`} aria-hidden="true">
                 {st === "verified" ? (
                   <svg viewBox="0 0 24 24" className="ms-ic">
                     <circle cx="12" cy="12" r="11" fill="var(--v-green)" />
-                    <path d="M20 6L9 17l-5-5" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M7.2 12.4l3.1 3.1 6.5-6.9" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 ) : (
                   <svg viewBox="0 0 24 24" className="ms-ic">
                     <circle cx="12" cy="12" r="11" fill="var(--v-grey-wash)" />
-                    <circle cx="12" cy="12" r="6.5" fill="none" stroke="var(--v-ink2)" strokeWidth="2" />
+                    <path d="M8.5 12h7" fill="none" stroke="var(--v-ink2)" strokeWidth="2.2" strokeLinecap="round" />
                   </svg>
                 )}
               </span>

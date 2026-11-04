@@ -131,15 +131,15 @@ export default function PathwayTabs({
             role="img"
             aria-label={`${walk!.closed} of ${walk!.total} required skills checked`}
           >
-            <svg viewBox="0 0 118 118" aria-hidden="true">
-              <circle className="plan-ring-track" cx="59" cy="59" r="51" strokeWidth="10" />
+            <svg viewBox="0 0 130 130" aria-hidden="true">
+              <circle className="plan-ring-track" cx="65" cy="65" r="56" strokeWidth="9" />
               <circle
                 className="plan-ring-arc"
-                cx="59"
-                cy="59"
-                r="51"
-                strokeWidth="10"
-                strokeDasharray={`${Math.round((walk!.closed / walk!.total) * 3204) / 10} 320.4`}
+                cx="65"
+                cy="65"
+                r="56"
+                strokeWidth="9"
+                strokeDasharray={`${Math.round((walk!.closed / walk!.total) * 3519) / 10} 351.9`}
               />
             </svg>
             <span className="plan-ring-mid num lead-mono">

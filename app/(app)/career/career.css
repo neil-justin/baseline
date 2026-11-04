@@ -779,7 +779,22 @@
    align on 20px; at ≤720 the illustration hides so the band's text
    keeps its flow (the structural guarantee — never reflows). */
 
-.v7career .bandside .band-fork { margin-bottom: 6px; }
+.v7career .bandside .band-fork { margin-bottom: 0; }
+/* side-by-side: the fork takes the illustration slot, the CTA column
+   rides beside it — the stacked layout left dead space under the band
+   text (user screenshot, 2026-11-04). Hides ≤1020. */
+.v7career .bandside { flex-direction: row; align-items: center; gap: 16px; }
+.v7career .bandside .bandside-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+@media (max-width: 1020px) {
+  .v7career .bandside .band-fork { display: none; }
+  .v7career .bandside { flex-direction: column; align-items: flex-start; }
+  .v7career .bandside .bandside-col { align-items: flex-start; }
+}
 @media (max-width: 720px) {
   .v7career .bandside .band-fork { display: none; }
   .v7career .index-row { padding: 11px 16px; }

@@ -383,6 +383,16 @@
   font: 500 14px/1 Roboto, system-ui, sans-serif;
   fill: var(--v-ink2);
 }
+/* screen-reader-only (dashboard-local) — the score's AT announcement
+   rides the hero copy since the gauge svg is aria-hidden */
+.v7dash .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 @media (max-width: 1020px) {
   .v7dash .hero-row { grid-template-columns: minmax(0, 1fr) 260px; gap: 20px; }
 }

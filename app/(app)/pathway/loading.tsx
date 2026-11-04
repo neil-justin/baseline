@@ -16,11 +16,11 @@ export default function Loading() {
             the engine never computed) + title/meta/up-next bars */}
         <section className="planhead">
           <div className="plan-ring">
-            <svg viewBox="0 0 118 118" aria-hidden="true">
-              <circle className="plan-ring-track" cx="59" cy="59" r="51" strokeWidth="10" />
+            <svg viewBox="0 0 130 130" aria-hidden="true">
+              <circle className="plan-ring-track" cx="65" cy="65" r="56" strokeWidth="9" />
             </svg>
             <span className="plan-ring-mid">
-              <span className="skel" style={{ width: 52, height: 26 }} />
+              <span className="skel" style={{ width: 56, height: 24 }} />
             </span>
           </div>
           <div className="plan-head">
