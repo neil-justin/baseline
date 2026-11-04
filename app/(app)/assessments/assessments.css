@@ -1,0 +1,298 @@
+/* ============================================================
+   DNA v7/v9 — Assessments hub (/assessments), the 2026-11-04 build.
+   The hub + context round (user ruling 2026-11-04, ruling 6): a NAMED
+   band (h1 + m-line only — no composite, no ScoreSequence) and EXACTLY
+   TWO instrument cards. The NACE card reads career-agnostically; the
+   role card carries the whole-battery primary (coverage-gated) and the
+   per-skill rows below it. Cards copy the profile/prep v9 register —
+   borderless at the 16px rung, M3 level-1 shadow, Google Sans heads,
+   Roboto numerals, wash chips at 8px, pills for controls. Scoped under
+   `.v7ass` (the page root); shell chrome lives in ../v7.css. The
+   reading column caps at 860px (the Prep/Profile precedent).
+   ============================================================ */
+
+.v7ass {
+  font: 400 15px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  padding: 12px 16px 24px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.v7ass ::selection { background: var(--v-blue-wash); }
+.v7ass :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
+.v7ass a { color: inherit; }
+.v7ass .num { font-variant-numeric: tabular-nums; }
+
+/* the m-line carries the locked sentence — hold it to a reading measure */
+.v7ass .who .m { max-width: 74ch; }
+
+/* ---------- the two instrument cards ---------- */
+
+.v7ass .asscards {
+  display: grid;
+  gap: 12px;
+}
+.v7ass .card {
+  background: var(--v-surface);
+  border: 0;
+  border-radius: 16px;
+  box-shadow: var(--v-shadow);
+  overflow: hidden;
+}
+
+/* card heads: title (b) + computed subhead (span) — the family register */
+.v7ass .head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 14px 16px 10px;
+  flex-wrap: wrap;
+}
+.v7ass .head b {
+  font: 500 16px/1.3 "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+.v7ass .head span {
+  font: 400 12.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+
+/* provenance captions — the per-card honest receipts (dashboard `.lcap`) */
+.v7ass .lcap {
+  padding: 12px 16px 14px;
+  font: 400 12.5px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7ass .lcap p { margin: 0; }
+.v7ass .lcap p + p { margin-top: 3px; }
+
+/* card foots — the legend / receipt slot */
+.v7ass .foot {
+  padding: 12px 16px 14px;
+  font: 400 12.5px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+
+/* ---------- NACE card — the two-fact readout ---------- */
+
+.v7ass .nace-facts {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2px 16px 0;
+}
+.v7ass .nfact {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 2px 28px 2px 0;
+  margin-right: 28px;
+  border-right: 1px solid var(--v-rows);
+}
+.v7ass .nfact:last-child {
+  border-right: 0;
+  margin-right: 0;
+  padding-right: 0;
+}
+.v7ass .nlabel {
+  font: 500 11.5px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7ass .nval {
+  font: 500 26px/1.15 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+.v7ass .nval small {
+  font: 400 13px/1.2 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+
+/* the primary slot — right-aligned, the profile declare-dialog footer law */
+.v7ass .cta-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 16px 16px;
+}
+
+/* ---------- the one CTA register (inert this build round) ---------- */
+
+.v7ass .ass-cta {
+  border: 0;
+  cursor: default;
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+}
+.v7ass .ass-cta[aria-disabled="true"]:hover { background: var(--v-blue); }
+.v7ass .ass-cta[aria-disabled="true"]:active { transform: none; }
+
+/* ---------- the whole-battery tray (role card primary) ---------- */
+
+.v7ass .battery {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 2px 16px 14px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #eef3fc; /* v9 secondary-container — the quiet tonal tray */
+}
+.v7ass .battery-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.v7ass .battery-t {
+  font: 500 14.5px/1.35 "Google Sans", Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7ass .battery-sub {
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 58ch;
+}
+/* the honest gate: no button at all when no bank covers a claim */
+.v7ass .battery.gated { background: var(--v-grey-wash); }
+
+/* ---------- per-skill rows ---------- */
+
+.v7ass .rows-label {
+  padding: 2px 16px 8px;
+  font: 500 11.5px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7ass .skillrows { border-top: 1px solid var(--v-rows); }
+.v7ass .skillrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--v-rows);
+  flex-wrap: wrap;
+  transition: background-color 0.12s ease;
+}
+.v7ass .skillrow:last-child { border-bottom: 0; }
+.v7ass .skillrow:hover { background: #f5f8fc; }
+.v7ass .s-main {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.v7ass .s-name {
+  font: 400 14.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  overflow-wrap: anywhere;
+}
+.v7ass .s-sub {
+  font: 400 12px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 62ch;
+}
+.v7ass .s-side {
+  flex: none;
+  margin-left: auto;
+}
+
+/* the honest idle row — a dashed tray, no action (ruling 9) */
+.v7ass .skillrow.idle {
+  margin: 8px 12px;
+  padding: 10px 12px;
+  border: 1px dashed var(--v-border);
+  border-radius: 12px;
+}
+.v7ass .skillrow.idle:hover { background: transparent; }
+/* open rows read quieter — the walk, not this hub, is their route */
+.v7ass .skillrow.open .s-name { color: var(--v-ink2); }
+
+/* ---------- wash chips (the family register, 8px rung) ---------- */
+
+.v7ass .chip {
+  display: inline-block;
+  font: 500 12px/1.2 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  border-radius: 8px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.v7ass .chip.c-green { background: var(--v-green-wash); color: var(--v-green-text); }
+.v7ass .chip.c-grey { background: var(--v-grey-wash); color: var(--v-grey-text); }
+.v7ass .chip.c-blue { background: var(--v-blue-wash); color: var(--v-blue-deep); }
+.v7ass .chip .lucide,
+.v7ass .foot .lucide {
+  display: inline-block; /* Tailwind preflight makes svg block-level — keep it in the line */
+  vertical-align: -0.15em;
+}
+
+/* the targeted re-check control — the quiet tonal pill */
+.v7ass .ass-quiz {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--v-blue-wash);
+  color: #041e49;
+  font: 500 12.5px/1.2 "Google Sans", Roboto, system-ui, sans-serif;
+  cursor: default;
+  white-space: nowrap;
+}
+.v7ass .ass-quiz[aria-disabled="true"]:hover { background: var(--v-blue-wash); }
+
+/* ---------- responsive folds ---------- */
+
+@media (max-width: 720px) {
+  .v7ass { padding: 12px 12px 80px; } /* clears the ≤720px bottom nav */
+}
+
+@media (max-width: 560px) {
+  .v7ass .nace-facts { gap: 12px; }
+  .v7ass .nfact {
+    border-right: 0;
+    margin-right: 0;
+    padding-right: 0;
+  }
+  .v7ass .nval { font-size: 22px; }
+  .v7ass .battery { align-items: flex-start; }
+  .v7ass .cta-row .cta {
+    width: 100%;
+    justify-content: center;
+    padding: 0 16px;
+    font-size: 14px;
+  }
+  .v7ass .battery .cta {
+    width: 100%;
+    justify-content: center;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+  .v7ass .skillrow { gap: 8px; }
+  .v7ass .s-side { margin-left: 0; }
+}
+
+/* ---------- v9.1 motion (subtle, M3, reduced-motion safe) ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .v7ass .card {
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1);
+    animation: ass-card-in 0.25s cubic-bezier(0.2, 0, 0, 1) backwards;
+  }
+  .v7ass .card:nth-child(2) { animation-delay: 40ms; }
+  .v7ass .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  }
+  .v7ass .ass-quiz { transition: background-color 0.14s ease; }
+}
+@keyframes ass-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}

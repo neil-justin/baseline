@@ -20,14 +20,19 @@ import BrandMark from "./BrandMark";
  * entirely — it duplicated the Profile tab (both linked /profile) against
  * the element-budget rule; no invented affordances.
  *
+ * The 2026-11-04 hub round adds the SIXTH tab — Assessments (`fact_check`),
+ * sitting with My Plan/Prep (Profile keeps the bottom edge) — the
+ * 2026-11-02 element-budget ruling amended by user sign-off.
+ *
  * The ≤720px Material bottom nav is untouched: the .rail element stays a
  * sibling OUTSIDE the sidebar <aside> — desktop nav lives in the aside,
- * mobile nav in the rail (with the same Sign out control as its sixth item).
+ * mobile nav in the rail (with the same Sign out control as its final item).
  */
 const NAV = [
   { href: "/dashboard", icon: "space_dashboard", label: "Dashboard" },
   { href: "/career", icon: "work", label: "Careers" },
   { href: "/pathway", icon: "checklist", label: "My Plan" },
+  { href: "/assessments", icon: "fact_check", label: "Assessments" },
   { href: "/prep", icon: "description", label: "Prep" },
   { href: "/profile", icon: "account_circle", label: "Profile" },
 ];
