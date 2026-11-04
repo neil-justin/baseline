@@ -573,7 +573,6 @@
   border-radius: 16px;
   box-shadow: var(--v-shadow);
   padding: 24px 28px;
-  margin-bottom: 10px;
 }
 /* the ring — the ONE progress visual */
 .v7plan .plan-ring {
@@ -646,13 +645,18 @@
 }
 .v7plan .plan-upnext a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-/* the walk column: capped to reading length, centered in the cap */
-.v7plan .vd2-map {
-  max-width: 880px;
+/* the content column: the header card and the walk share ONE width
+   (user ruling 2026-11-04 — the header no longer runs full width;
+   no card-color change: the calm white register stands) */
+.v7plan .planhead,
+.v7plan .vd2-map,
+.v7plan .planband {
+  max-width: 820px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 18px;
 }
+.v7plan .planhead { margin-bottom: 10px; }
+.v7plan .vd2-map { margin-top: 18px; }
 
 /* walk cards: white, roomier — state = numerals + one chip + ONE rail */
 .v7plan .vd2-ncard { padding: 20px 24px; }
