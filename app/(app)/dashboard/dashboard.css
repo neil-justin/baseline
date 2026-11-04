@@ -348,6 +348,71 @@
   .v7dash .actions .row { padding: 10px 16px; }
   .v7dash .journey-row { padding: 10px 16px 4px; }
 }
+
+/* ============================================================
+   v9.1 visual round (2026-11-04 user ruling): the D1 readiness
+   GAUGE replaces the segs strip in the score hero (imagery +
+   honesty: arc + needle both derive from the computed score);
+   KPI cells each get an icon on a tonal disc; the competency
+   ledger rides ONE icon register. The 1200px column cap was
+   reverted same-day (user ruling) — the surface stays full width.
+   ============================================================ */
+
+/* the hero: text column + the gauge as a fixed-aspect block */
+.v7dash .hero-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 30px;
+  align-items: center;
+}
+.v7dash .hero-row .who { min-width: 0; }
+.v7dash .hero-row .who .composite-wrap { margin-top: 14px; }
+.v7dash .hero-row .who .cta { margin-top: 16px; }
+.v7dash .scoregauge {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  justify-self: end;
+}
+.v7dash .gauge-cap {
+  font: 500 14px/1 Roboto, system-ui, sans-serif;
+  fill: var(--v-ink2);
+}
+@media (max-width: 1020px) {
+  .v7dash .hero-row { grid-template-columns: minmax(0, 1fr) 260px; gap: 20px; }
+}
+@media (max-width: 720px) {
+  .v7dash .hero-row { grid-template-columns: 1fr; }
+  .v7dash .scoregauge { max-width: 280px; }
+}
+
+/* the KPI icon discs — the imagery */
+.v7dash .kicon {
+  order: -3;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 10px;
+}
+.v7dash .kicon svg { width: 18px; height: 18px; }
+.v7dash .k-sp .kicon { background: var(--v-blue-wash); }
+.v7dash .k-es .kicon { background: var(--v-green-wash); }
+.v7dash .k-tp .kicon { background: var(--v-amber-wash); }
+.v7dash .k-ar .kicon { background: var(--v-blue-wash); }
+.v7dash .k-cc .kicon { background: var(--v-blue-wash); }
+
+/* the ledger's ONE icon register */
+.v7dash .lrow .ms {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  color: transparent; /* the glyph ligature text dies; the svg carries it */
+}
+.v7dash .lrow .ms .ms-ic { width: 20px; height: 20px; }
 .v7dash .label { font-size: 11.5px; }
 .v7dash .score-readout .score-big { font-size: 52px; }
 .v7dash .score-readout small { font-size: 14px; }

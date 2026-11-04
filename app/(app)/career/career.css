@@ -769,6 +769,22 @@
    (reverted same day: the user wants imagery/color/spacing passes,
    not column caps — the surface returns to full width) */
 
+/* ---------- visual round (2026-11-04) ----------
+   The C3 band illustration (career fork) rides the bandside; gutters
+   align on 20px; at ≤720 the illustration hides so the band's text
+   keeps its flow (the structural guarantee — never reflows). */
+
+.v7career .bandside .band-fork { margin-bottom: 6px; }
+@media (max-width: 720px) {
+  .v7career .bandside .band-fork { display: none; }
+  .v7career .index-row { padding: 11px 16px; }
+  .v7career .index-colheads { padding: 8px 16px; }
+}
+.v7career .index-row { padding: 12px 20px; gap: 14px; }
+.v7career .index-colheads { padding: 10px 20px; }
+.v7career .sw-banner { padding: 12px 20px; }
+.v7career .index-detail { padding-right: 20px; }
+
 /* ============================================================
    v9.1 fix round — careers (user feedback, 2026-11-04):
    band skill ledger replaces the two KPI bars; detail expands

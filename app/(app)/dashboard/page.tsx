@@ -8,7 +8,7 @@ import {
   ASSESSED_COMPETENCIES,
   roundHalfDown,
 } from "@/lib/engines/score";
-import ScoreSequence from "@/components/ScoreSequence";
+import CountUp from "@/components/CountUp";
 import Reveal from "@/components/Reveal";
 import "./dashboard.css";
 
@@ -84,6 +84,19 @@ export default async function DashboardPage() {
   /* ---------- five channel cells (SP · ES · TP · AR · CC) ---------- */
   const pct = (n: number, d: number) => `${((n / d) * 100).toFixed(3)}%`;
 
+  /* D1 gauge geometry (user ruling 2026-11-04): the sweep runs from the
+     gauge's LEFT arm to its RIGHT arm through the top — 180° total, 1.8°
+     per readiness point. 46% ≈ nearly straight-up needle. Derived from
+     the engine truth, never painted. */
+  const gaugeAngle = 180 - (score.total / 100) * 180;
+  const gaugeRad = (gaugeAngle * Math.PI) / 180;
+  const gaugeArc = {
+    ex: 150 + 95 * Math.cos(gaugeRad),
+    ey: 150 - 95 * Math.sin(gaugeRad),
+    nex: 150 + 60 * Math.cos(gaugeRad),
+    ney: 150 - 60 * Math.sin(gaugeRad),
+  };
+
   return (
     <div className="v7dash">
       {/* ── header band: who · composite · five-channel bar · the one CTA ── */}
@@ -97,47 +110,74 @@ export default async function DashboardPage() {
                 {state.name} · {state.yearLevel}
               </h1>
               <div className="m">{career.name}</div>
+              <div className="composite-wrap">
+                <div className="composite">
+                  <CountUp
+                    to={score.total}
+                    dec={0}
+                    dur={900}
+                    className="score-big"
+                    ariaLabel={`Readiness ${score.total} of 100`}
+                  />
+                  <span className="c-of num">/ 100</span>
+                </div>
+                <div className="ratemsg">Computed from your own records · NACE-aligned</div>
+                <div className="ratemsg num">
+                  You&apos;re <b className="num">{score.total}%</b> ready for {career.name}; {v.closed} bars
+                  already counted.
+                </div>
+              </div>
+              {head && (
+                <a className="cta" href={head.kind === "ar" ? head.href : "/pathway"}>
+                  Your next step →
+                </a>
+              )}
             </div>
-            <ScoreSequence
-            score={score.total}
-            parts={v.parts}
-            labels={[
-              /* v7.1 key-prop fix: string labels — keyless fragment ARRAYS crossing
-                 the server→client boundary are the "unique key prop" warning source */
-              `SP ${score.sp}/${WEIGHTS.sp}`,
-              `ES ${score.es}/${WEIGHTS.es}`,
-              `TP ${score.tp}/${WEIGHTS.tp}`,
-              v.arMeasured ? `AR ${score.ar}/${WEIGHTS.ar}` : "AR —",
-              `CC ${score.cc}/${WEIGHTS.cc}`,
-            ]}
-            suffix={
-              v.ccFirstDone || v.arMeasured || v.stageOne.done > 0
-                ? ""
-                : " · your starting line"
-            }
-            ratemsg="Computed from your own records · NACE-aligned"
-            fine={
-              <>
-                You&apos;re <b className="num">{score.total}%</b> ready for {career.name}; {v.closed} bars already
-                counted.
-              </>
-            }
-          />
-          {head && (
-            <a
-              className="cta"
-              href={head.kind === "ar" ? head.href : "/pathway"}
-            >
-              Your next step →
-            </a>
-          )}
+            {/* D1 readiness gauge (user ruling 2026-11-04): the arc sweeps to the
+                COMPUTED score and the needle rides the same angle — derived from
+                the engine truth, never painted. The five-channel factor labels
+                live in the KPI cells below (the segs strip retired). */}
+            <svg className="scoregauge" viewBox="0 0 300 200" aria-hidden="true">
+              <path d="M55 150 A 95 95 0 0 1 245 150" fill="none" stroke="var(--v-rows)" strokeWidth="22" strokeLinecap="round" />
+              <path
+                d={`M55 150 A 95 95 0 0 1 ${gaugeArc.ex.toFixed(1)} ${gaugeArc.ey.toFixed(1)}`}
+                fill="none"
+                stroke="var(--v-blue)"
+                strokeWidth="22"
+                strokeLinecap="round"
+              />
+              <g stroke="var(--v-line, #dadce0)" strokeWidth="2.5" strokeLinecap="round">
+                <line x1="110" y1="62" x2="114" y2="70" />
+                <line x1="190" y1="62" x2="186" y2="70" />
+                <line x1="230" y1="150" x2="230" y2="141" />
+              </g>
+              <line
+                x1="150"
+                y1="150"
+                x2={gaugeArc.nex.toFixed(1)}
+                y2={gaugeArc.ney.toFixed(1)}
+                stroke="var(--v-green)"
+                strokeWidth="5"
+                strokeLinecap="round"
+              />
+              <circle cx="150" cy="150" r="9" fill="var(--v-ink)" />
+              <circle cx="150" cy="150" r="3.5" fill="#fff" />
+              <text x="150" y="188" textAnchor="middle" className="gauge-cap num">
+                {score.total} of 100
+              </text>
+            </svg>
           </div>
         </div>
       </section>
 
       {/* ── five channel KPI cells (the Classroom grid) ── */}
       <section className="kpis" aria-label="The five channels">
-        <div className="kpi">
+        <div className="kpi k-sp">
+          <span className="kicon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--v-blue)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 17l5-5 4 4 8-8" />
+            </svg>
+          </span>
           <div className="sub-row">
             <span className="s-name">Skill progress</span>
             <p className="s-note">
@@ -167,7 +207,12 @@ export default async function DashboardPage() {
           </span>
         </div>
 
-        <div className="kpi">
+        <div className="kpi k-es">
+          <span className="kicon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--v-green)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </span>
           <div className="sub-row">
             <span className="s-name">Employability skills</span>
             <p className="s-note">
@@ -191,7 +236,13 @@ export default async function DashboardPage() {
           <span className="chip c-green">{v.esVerified} verified</span>
         </div>
 
-        <div className="kpi">
+        <div className="kpi k-tp">
+          <span className="kicon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--v-amber)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 7v5l3 3" />
+            </svg>
+          </span>
           <div className="sub-row">
             <span className="s-name">Training progress</span>
             <p className="s-note">
@@ -223,7 +274,13 @@ export default async function DashboardPage() {
           </span>
         </div>
 
-        <div className="kpi kpi-ar">
+        <div className="kpi kpi-ar k-ar">
+          <span className="kicon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--v-blue)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <path d="M14 2v6h6" />
+            </svg>
+          </span>
           <div className="sub-row">
             <span className="s-name">Application readiness</span>
             {v.arMeasured ? (
@@ -267,7 +324,13 @@ export default async function DashboardPage() {
           </span>
         </div>
 
-        <div className="kpi">
+        <div className="kpi k-cc">
+          <span className="kicon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--v-blue)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="9" />
+              <circle cx="12" cy="12" r="4" />
+            </svg>
+          </span>
           <div className="sub-row">
             <span className="s-name">Career clarity</span>
             <p className="s-note">
@@ -442,11 +505,21 @@ export default async function DashboardPage() {
         <div className="lgrid">
           {Object.entries(state.competencies ?? {}).map(([name, st]) => (
             <div className="lrow" key={name}>
-              <span
-                className={`ms ${st === "verified" ? "fill done" : ""}`}
-                aria-hidden="true"
-              >
-                {st === "verified" ? "verified" : "task_alt"}
+              {/* the ONE icon register (user ruling 2026-11-04): a filled green
+                  seal with a white check = verified; a quiet grey disc = the
+                  claim — identical size and alignment, no mixed weights */}
+              <span className={`ms ${st === "verified" ? "done" : ""}`} aria-hidden="true">
+                {st === "verified" ? (
+                  <svg viewBox="0 0 24 24" className="ms-ic">
+                    <circle cx="12" cy="12" r="11" fill="var(--v-green)" />
+                    <path d="M20 6L9 17l-5-5" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" className="ms-ic">
+                    <circle cx="12" cy="12" r="11" fill="var(--v-grey-wash)" />
+                    <circle cx="12" cy="12" r="6.5" fill="none" stroke="var(--v-ink2)" strokeWidth="2" />
+                  </svg>
+                )}
               </span>
               <b>{name}</b>
               <span className={`chip ${st === "verified" ? "c-green" : "c-grey hatch-chip"}`}>

@@ -443,6 +443,22 @@ export default function CareerClient({
               )}
             </div>
             <div className="bandside">
+              {/* the C3 band illustration (user ruling 2026-11-04): the career
+                  fork — you are the ringed node, the chosen direction green,
+                  the catalog open. Fixed-aspect block; hides ≤720 so it can
+                  never reflow the band's text. */}
+              <svg className="band-fork" width="200" height="140" viewBox="0 0 200 140" aria-hidden="true">
+                <path d="M48 122 L48 88" fill="none" stroke="var(--v-blue)" strokeWidth="3.5" strokeLinecap="round" />
+                <path d="M48 88 C 76 80, 92 60, 128 38" fill="none" stroke="var(--v-blue)" strokeWidth="3.5" strokeLinecap="round" />
+                <path d="M48 88 C 68 90, 102 100, 140 100" fill="none" stroke="#A8C7FA" strokeWidth="3" strokeLinecap="round" />
+                <path d="M48 88 C 64 102, 78 116, 92 128" fill="none" stroke="var(--v-line, #dadce0)" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="1 7" />
+                <circle cx="48" cy="88" r="8" fill="var(--v-blue)" />
+                <circle cx="48" cy="88" r="14" fill="none" stroke="var(--v-blue)" strokeWidth="1.8" opacity=".3" />
+                <circle cx="128" cy="38" r="7" fill="var(--v-green)" />
+                <circle cx="140" cy="100" r="6" fill="#fff" stroke="#dadce0" strokeWidth="2.2" />
+                <circle cx="92" cy="128" r="5.5" fill="#fff" stroke="#dadce0" strokeWidth="2.2" />
+                <circle cx="164" cy="26" r="10" fill="var(--v-blue-wash)" />
+              </svg>
               {card ? (
                 <>
                   <a className="cta" href="/pathway">
