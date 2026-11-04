@@ -952,3 +952,103 @@
     min-width: 0;
   }
 }
+
+/* ============================================================
+   DNA v9 amendments — the admin shell sweep (2026-11-04)
+   Appended per DESIGN.md v9 (Round 1: chrome only — tabs get
+   their own v9 blocks sweep-by-sweep). Reuses the student
+   shell's v9 recipe: token recolor, chrome hairlines retire,
+   Google Sans hierarchy carriers, guarded 264px column, M3
+   press motion, 20px gutters. Every numeral stays Roboto
+   tabular. Per the Tail-Block Cascade Rule, any override of
+   a shell-responsive rule carries its own media guard.
+   ============================================================ */
+
+@font-face {
+  font-family: "Google Sans";
+  src: url("/fonts/google-sans/google-sans-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Google Sans Text";
+  src: url("/fonts/google-sans/google-sans-text-400-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Google Sans Text";
+  src: url("/fonts/google-sans/google-sans-text-500-latin.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: block;
+}
+
+/* the v9 token deltas — recolor the realm at once (Stage Rule:
+   #1A73E8/#E8F0FE are the legacy v7 aliases being migrated) */
+.v7admin {
+  --v-blue: #0b57d0;
+  --v-blue-deep: #0842a0;
+  --v-blue-wash: #d3e3fd;
+  --v-ink: #202124;
+  --v-ink2: #5f6368;
+  --v-border: #dadce0;
+  --v-rows: #e8eaed;
+  --v-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+}
+
+/* chrome: hairline borders retire (Surface-Tone Rule) — the
+   header band + sidebar read as tone, not stroke */
+.v7admin .atabs-head { border-bottom: 0; }
+.v7admin .atabs-side { border-right: 0; }
+.v7admin .atabs-tail { border-top: 0; }
+@media (max-width: 720px) {
+  .v7admin .atabs-side { border-bottom: 0; }
+}
+
+/* hierarchy carriers: the sidebar tabs mirror the student shell's
+   FINAL v9 sidenav register (v7.css sidebar-bump block — 15px
+   Roboto labels, 11px/16px, 21px glyphs); the wordmark rides
+   Google Sans at the student brand size */
+.v7admin .atabs-word {
+  font: 500 17px/1.2 "Google Sans", Roboto, system-ui, sans-serif;
+}
+.v7admin .atabs-sidenav button,
+.v7admin .atabs-tail .admin-signout {
+  font: 500 15px/1.2 Roboto, system-ui, sans-serif;
+  padding: 11px 16px;
+  gap: 10px;
+}
+.v7admin .atabs-sidenav .ms,
+.v7admin .atabs-tail .ms {
+  font-size: 21px;
+}
+
+/* desktop sidebar bump — guarded (Tail-Block Cascade Rule) */
+@media (min-width: 721px) {
+  .v7admin .atabs-veil { grid-template-columns: 264px 1fr; }
+}
+
+/* content column: the 20px gutter rhythm (16px ≤720) */
+.v7admin .atabs-main { padding: 20px 20px 28px; }
+@media (max-width: 720px) {
+  .v7admin .atabs-main { padding: 16px 16px 24px; }
+}
+
+/* ---------- v9.1 M3 press motion (reduced-motion honored) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .v7admin .atabs-sidenav button,
+  .v7admin .atabs-tail .admin-signout {
+    transition: background-color 0.14s ease, color 0.14s ease,
+      transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .v7admin .atabs-sidenav button:active,
+  .v7admin .atabs-tail .admin-signout:active {
+    transform: scale(0.97);
+  }
+  .v7admin .atabs-tabpage {
+    animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+}

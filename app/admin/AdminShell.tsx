@@ -38,7 +38,6 @@ interface ShellTab {
   id: TabId;
   label: string;
   icon: string;
-  isNew?: boolean;
 }
 
 const COUNSELOR_TABS: ShellTab[] = [
@@ -48,8 +47,8 @@ const COUNSELOR_TABS: ShellTab[] = [
 
 const SYSADMIN_TABS: ShellTab[] = [
   ...COUNSELOR_TABS,
-  { id: "approvals", label: "Approvals", icon: "how_to_reg", isNew: true },
-  { id: "accounts", label: "Accounts", icon: "manage_accounts", isNew: true },
+  { id: "approvals", label: "Approvals", icon: "how_to_reg" },
+  { id: "accounts", label: "Accounts", icon: "manage_accounts" },
 ];
 
 const NAV_LABEL = {
@@ -185,7 +184,7 @@ export default function AdminShell({
                 {t.icon}
               </span>
               <span>{t.label}</span>
-              {t.isNew ? <i className="atabs-new">NEW</i> : null}
+
             </button>
           ))}
         </nav>

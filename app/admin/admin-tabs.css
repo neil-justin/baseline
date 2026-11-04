@@ -147,20 +147,6 @@
 .v7admin .atabs-sidenav button.on .ms {
   opacity: 1;
 }
-.v7admin .atabs-new {
-  font: 500 9px/1.4 Roboto, system-ui, sans-serif;
-  font-style: normal;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--v-amber-text);
-  background: var(--v-amber-wash);
-  border-radius: 3px;
-  padding: 1px 5px;
-}
-.v7admin .atabs-sidenav button.on .atabs-new {
-  color: var(--v-amber-text);
-  background: #fff;
-}
 
 /* console controls — pinned where Student pins Sign out. The
    .admin-signout hook rides along; its styling re-homes from the
