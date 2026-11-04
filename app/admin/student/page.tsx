@@ -3,7 +3,6 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import CountUp from "@/components/CountUp";
-import Reveal from "@/components/Reveal";
 import { db, getStudentView } from "@/lib/db";
 import { requireStaff } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
@@ -200,7 +199,7 @@ export default async function AdminStudentPage({
 
 /** Everything data-dependent: cohort walk, full build, the panel, and the
  *  prev/next rail that needs the walk. The key lives on the component (set
- *  by the page); its Reveal children mount fresh on every arrival. */
+ *  by the page); its panel children mount fresh on every arrival. */
 async function StudentDetail({ raw }: { raw?: string }) {
   const { ids, id } = await resolveId(raw);
   const s = await buildLive(id);
@@ -221,7 +220,7 @@ async function StudentDetail({ raw }: { raw?: string }) {
       <Link className="dt-back" href="/admin">
         <ArrowLeft size={14} aria-hidden="true" /> Back to cohort
       </Link>
-          <Reveal className="panel detail-panel">
+          <div className="panel detail-panel">
             <div className="dt-head">
               <div className="dt-id">
                 <span className="label">STUDENT · VIEW ONLY</span>
@@ -248,7 +247,7 @@ async function StudentDetail({ raw }: { raw?: string }) {
             </div>
 
             {/* sub-score breakdown */}
-            <Reveal className="dt-block">
+            <div className="dt-block">
               <h3>Where their score comes from</h3>
               <div
                 className="rubric"
@@ -305,7 +304,7 @@ async function StudentDetail({ raw }: { raw?: string }) {
                 </div>
               </div>
               <p className="dt-context">{s.context}</p>
-            </Reveal>
+            </div>
 
             {/* prev / next within the cohort — plain block: the reveal
                 machinery un-reveals below its 6% viewport margin, which
@@ -321,7 +320,7 @@ async function StudentDetail({ raw }: { raw?: string }) {
                 </Link>
               </div>
             </div>
-          </Reveal>
+          </div>
         </>
       );
 }

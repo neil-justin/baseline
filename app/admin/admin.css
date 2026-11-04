@@ -1156,9 +1156,40 @@
 }
 @keyframes dt-move {
   from {
-    opacity: 0;
     transform: translateX(var(--dx, 0px));
   }
+}
+
+/* ---------- the move's own loading shell (StudentMoveShell) ----------
+   The skeleton overlays the panel's exact box while the flight runs,
+   and on arrival UNDERLAYS the committed panel as it slides in — the
+   overlay fades out, never unmounts into bare ground (every frame
+   carries pixels; the blink reported 2026-11-04 on production was the
+   unmount-then-fade-from-zero gap). The arriving panel keeps its slide
+   but loses the opacity-from-zero key: the pixels behind it belong to
+   the overlay, not the ground. Reduced motion: no fade, straight swap. */
+
+.v7admin .stmov {
+  position: relative;
+}
+.v7admin .stmov-body {
+  position: relative;
+  z-index: 1;
+}
+.v7admin .stmov-skel {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .v7admin .stmov.arriving .stmov-skel {
+    animation: stmov-fade-out 0.22s cubic-bezier(0.2, 0, 0, 1) forwards;
+  }
+}
+@keyframes stmov-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 /* the loading state arrives as a unit (user ruling 2026-11-04): the back
