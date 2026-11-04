@@ -10,6 +10,7 @@
  *   #mockups-sys  → the SYSTEM ADMIN console pages
  */
 import { useState } from "react";
+import { ACCOUNT_ITEM, AccountPane } from "./account";
 import { COUNSELOR_TABS, CounselorPane } from "./counselor";
 import { SYSADMIN_TABS, SysadminPane } from "./sysadmin";
 
@@ -35,7 +36,10 @@ const LANDING = {
 export default function AdminMockupMount({ role }: { role: MockRole }) {
   const tabs = TABS[role];
   const [tab, setTab] = useState<string>(LANDING[role]);
-  const active = tabs.some((t) => t.id === tab) ? tab : LANDING[role];
+  /* "account" portals outside the role's page tabs (it rides the tail);
+     anything else unknown snaps back to the role's landing */
+  const isAccount = tab === ACCOUNT_ITEM.id;
+  const active = tabs.some((t) => t.id === tab) || isAccount ? tab : LANDING[role];
 
   return (
     <div className="mk-veil" role="dialog" aria-label="Admin roles design mockup">
@@ -69,6 +73,20 @@ export default function AdminMockupMount({ role }: { role: MockRole }) {
           ))}
         </nav>
         <nav className="mk-tail" aria-label="Mockup realm controls">
+          {/* the ruled tail slot: Account above the realm controls, the
+              same position the real ruling pins it above Sign out */}
+          <button
+            type="button"
+            className={isAccount ? "on" : ""}
+            title={ACCOUNT_ITEM.label}
+            aria-current={isAccount ? "page" : undefined}
+            onClick={() => setTab(ACCOUNT_ITEM.id)}
+          >
+            <span className="ms" aria-hidden="true">
+              {ACCOUNT_ITEM.icon}
+            </span>
+            <span>{ACCOUNT_ITEM.label}</span>
+          </button>
           {role === "counselor" ? (
             <a href="#mockups-sys">
               <span className="ms" aria-hidden="true">
@@ -94,7 +112,13 @@ export default function AdminMockupMount({ role }: { role: MockRole }) {
       </aside>
 
       <main id="main" className="mk-main">
-        {role === "counselor" ? <CounselorPane tab={active} /> : <SysadminPane tab={active} />}
+        {isAccount ? (
+          <AccountPane role={role} />
+        ) : role === "counselor" ? (
+          <CounselorPane tab={active} />
+        ) : (
+          <SysadminPane tab={active} />
+        )}
       </main>
 
       <p className="mk-colophon">
