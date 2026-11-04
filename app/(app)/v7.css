@@ -572,7 +572,9 @@ body:has(.v7) { background: #f8f9fa; }
 
 /* ---------- the band readiness ring (2026-11-04 Prep round) — the
    plan-ring geometry lifted from pathway.css so My Plan and Prep ride ONE
-   ring register; the .lead-mono e2e counter is markup, not CSS ---------- */
+   ring register; the .lead-mono e2e counter is markup, not CSS.
+   The `b`'s white-space: nowrap is this round's one additive (both figures
+   are short tabular numerals; the old block never carried it). ---------- */
 .v7 .plan-ring,
 .v7 .readring { position: relative; width: 130px; height: 130px; flex: none; }
 .v7 .plan-ring svg,

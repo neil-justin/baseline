@@ -571,8 +571,12 @@ export default async function PrepPage() {
   );
 
   /* the band ring figure — earned AR points (null when nothing measured;
-     "—" and a 0-length arc are the honest unmeasured states) */
+     "—" is the honest unmeasured figure) */
   const readinessAr = score?.ar ?? null;
+  /* the ring's arc: null/0 readiness renders NO arc at all — a zero-length
+     dash reads as a round-cap dot with the register's linecap; never a
+     painted zero (2026-11-04 review finding) */
+  const readinessFr = readinessAr && readinessAr > 0 ? readinessAr / WEIGHTS.ar : 0;
 
   return (
     <div className="v7prep prep-surface">
@@ -591,7 +595,7 @@ export default async function PrepPage() {
           {/* F1 (2026-11-04): the band's visual — the readiness ring, My
               Plan's plan-ring register. Same figure the composite read:
               ar / WEIGHTS.ar; no career or nothing measured (ar null) still
-              paints "—" and the arc stays at 0 — never a faked fraction. */}
+              paints "—" and NO arc — never a faked fraction. */}
           <div
             className="readring"
             role="img"
@@ -603,14 +607,16 @@ export default async function PrepPage() {
           >
             <svg viewBox="0 0 130 130" aria-hidden="true">
               <circle className="readring-track" cx="65" cy="65" r="56" strokeWidth="9" />
-              <circle
-                className="readring-arc"
-                cx="65"
-                cy="65"
-                r="56"
-                strokeWidth="9"
-                strokeDasharray={`${readinessAr !== null ? Math.round((readinessAr / WEIGHTS.ar) * 351.9 * 10) / 10 : 0} 351.9`}
-              />
+              {readinessFr > 0 && (
+                <circle
+                  className="readring-arc"
+                  cx="65"
+                  cy="65"
+                  r="56"
+                  strokeWidth="9"
+                  strokeDasharray={`${Math.round(readinessFr * 3519) / 10} 351.9`}
+                />
+              )}
             </svg>
             <span className="readring-mid">
               <b className="num">{readinessAr !== null ? `${readinessAr}/${WEIGHTS.ar}` : "—"}</b>

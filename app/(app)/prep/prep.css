@@ -800,8 +800,9 @@
 @media (max-width: 720px) {
   .v7prep { padding: 12px 12px 80px; } /* clears the ≤720px bottom nav */
   .v7prep .who { min-width: 0; }
-  /* the readiness ring flexes none — it wraps under the title on the fold
-     (bandrow's flex-wrap carries it; no page rule needed) */
+  /* the ≤720px fold: the band row wraps the ring under the title —
+     keep its right edge (the old .prep-readiness rule's job) */
+  .v7prep .readring { margin-left: auto; }
   /* channel cards fold 3 → 2 → 1 */
   .v7prep .prep-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .v7prep .panel-sec { padding: 12px 12px 14px; }
