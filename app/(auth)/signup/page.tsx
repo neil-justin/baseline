@@ -4,6 +4,7 @@ import GoogleAuth from "../GoogleAuth";
 import SignupForm from "./SignupForm";
 import "./auth.css";
 import "../v7-auth.css";
+import "../v9-auth.css";
 
 export const metadata: Metadata = {
   title: "Baseline — start the readiness check",
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 /** Sign-up surface — markup ported 1:1 from prototype/signup.html, links adapted (signin.html → /signin). */
 export default function SignUpPage() {
   return (
-    <div className="auth-body v7auth">
+    <div className="auth-body v7auth v9auth">
       <header className="bar">
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
