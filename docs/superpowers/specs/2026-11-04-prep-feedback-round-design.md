@@ -164,3 +164,20 @@ script's contract matches what it measures. Evidence: no document
 navigation (perf entries 1→1), scroll preserved then animated to
 `verdictTop = 0`, cascade replay recorded post-commit, zone idle after.
 `tsc` clean + vitest 144/144 at both landings.
+
+### 6.3 Round 2b — full content swap on busy (user-ruled 2026-11-04, live
+screenshot review)
+
+The measured complaint: same-file re-runs produce byte-identical results,
+and the cascade (250–500 ms) finished before the ~600 ms scroll to the
+verdict arrived — "all it does is the analyzing text". Ruling: **the busy
+state REPLACES the tab's content**: while a file is being checked, the
+active tabpanel hides its result cards (CSS, class-scoped — nothing is
+deleted) so the panel shows ONE analyzing card — the running zone recast as
+a tall hero: spinner, `Analyzing…`, a sub line ("your file is being
+checked — the result lands here when it's ready") — no staged/fake progress
+claims, no bar (honesty contract). On the landing signal: panel class
+removed, the fresh stack arrives, the cascade replays, and the page scrolls
+to the verdict card (the Resume checker readout = the section top). Same
+reduced-motion gates. The busy zone keeps every e2e hook; the panel-class
+swap is client-imperative and cleaned in `finally`.

@@ -745,6 +745,77 @@ git commit -m "prep: in-place result swap (router.refresh + cascade replay + ver
 
 Rules for the executor: no API/store/engine changes; both uploaders keep their e2e hooks byte-kept; the landing helper may be one shared inline shape in each file (they mirror by design — no shared util); any deviation is a USER RULING — stop and report.
 
+---
+
+### Task 8: the busy state replaces the tab content (round 2b, user-ruled)
+
+**Files:**
+- Modify: `app/(app)/prep/ResumeUpload.tsx` (panel-analyzing class wiring + hero waiting copy)
+- Modify: `app/(app)/prep/LetterUpload.tsx` (mirror)
+- Modify: `app/(app)/prep/prep.css` (the analyzing-hero + panel-swap CSS)
+
+**Mechanics (spec §6.3):**
+
+1. On `setBusy(true)`, the uploader adds a class to the ACTIVE tab panel and removes it on every exit path (`finally` + unmount cleanup effect). Imperative class swap on the server-rendered panel node:
+
+```ts
+  document.querySelector(".tabpanel:not([hidden])")?.classList.add("prep-analyzing");
+```
+
+2. CSS in `prep.css` (adapt selectors to the real DOM — read the panel/stack/card/uploader section structure first; the intent below is the contract):
+
+```css
+/* the busy state REPLACES the tab's content (§6.3): while a check runs the
+   panel hides its result cards and the running zone reads as the ONE card */
+.v7prep .tabpanel.prep-analyzing .prep-stack > .card:not(:has(.rs-upload), :has(.cl-upload)) { display: none; }
+.v7prep .tabpanel.prep-analyzing .dz-zone {
+  min-height: 320px;
+  justify-content: center;
+  gap: 10px;
+  pointer-events: none;
+}
+.v7prep .tabpanel.prep-analyzing .dz-busy {
+  flex-direction: column;
+  gap: 10px;
+  font: 500 15px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7prep .tabpanel.prep-analyzing .dz-an-sub {
+  display: block;
+  margin-top: 6px;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7prep .tabpanel.prep-analyzing .dz-spin { width: 28px; height: 28px; }
+```
+
+(if `:has()` support is a concern in this Next/CSS pipeline, fall back to explicit class hooks: give the two uploader cards their own marker class from the markup side — but prefer zero JSX changes; adjudicate.)
+
+3. Busy-branch copy: keep the spinner + "Analyzing…" head, add the sub line under it (BOTH files; identical copy):
+
+```tsx
+          <span className="dz-busy dz-analyzing" role="status" aria-live="polite">
+            <svg className="dz-spin" aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+              <circle cx="12" cy="12" r="9" opacity="0.25" />
+              <path d="M21 12a9 9 0 0 0-9-9" />
+            </svg>
+            Analyzing…
+            <span className="dz-an-sub">Your file is being checked — the result lands here when it's ready.</span>
+          </span>
+```
+
+(No staged claims, no bar — honesty contract. The hero treatment comes entirely from the CSS class; the never-run hero gets the same busy markup natively.)
+
+4. Landing order in the success path: remove the panel class FIRST (restore cards), then `replayAndScroll()` (restart trick + verdict scroll) — the existing `landed` signal drives it. Cleanup guard: `panel?.classList.remove("prep-analyzing")` in `finally` (covers the watchdog dead-end: cards return, NO choreography) AND in the existing unmount cleanup effect.
+5. Class-strip risk: the refresher's React commit may re-render the panel section — the server markup's className is unchanged, so React should leave the client-added class alone, but VERIFY in the probe (if React strips it mid-wait, the busy card degrades mid-beat; report and adapt — e.g., re-apply the class right after the commit, inside the landing signal handler, before replay).
+6. Timers/honesty unchanged (same beat, same watchdog dead-end rules).
+
+**Verification:**
+- tsc + vitest (144/144); live probe (`scripts/prep-feedback-probe-2.mjs` extended, dev server :3111 — resume + letter re-runs): DURING the wait assert via evaluate that every non-uploader card in the active panel has zero height (hidden) and the analyzing hero is centered/tall; AFTER the swap the full stack returns, cascade replays, verdict scrolls to `verdictTop ≈ 0`; the never-run first-upload path shows the same hero treatment natively; reduced motion: no pulse, `behavior: "auto"` scroll, instant cards; zone idle after.
+- e2e hooks materialize as before; `role="status"` carries "Analyzing…" + the sub line.
+
+**Commit**: `prep: busy state replaces the tab content (analyzing hero)` — the two uploaders + prep.css.
+
 - **e2e specs live OUT of this tree** (`.worktrees/google-signin/e2e/`) — this round changes no hooks they assert: `.dz-zone`, `.rs-upload`, `.cl-upload`, `.rs-readout`, `.cl-readout`, `.rs-check` rows, `.lead-mono` all stay byte-kept. Do NOT touch the worktree.
 - The band slot keeps `role="img"` with an aria label so the ring reads for AT; the figures are real text (screen-reader friendly), the svg is `aria-hidden`.
 - If the ring's `application readiness` small label wraps ugly at the 130px box, the allowed fix is `max-width: 9ch; margin: 0 auto;` on `.readring-mid small` — report the choice.
