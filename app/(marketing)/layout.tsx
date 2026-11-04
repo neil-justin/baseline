@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import BrandMark from "../../components/BrandMark";
 import "./v9.css";
 
 /**
@@ -17,9 +18,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
       <header className="m-mast">
         <div className="m-mast-in">
           <span className="m-brand">
-            <span className="m-mark" aria-hidden="true">
-              <i></i>
-            </span>
+            <BrandMark size={24} />
             <span className="m-word">Baseline</span>
           </span>
           <nav className="m-nav" aria-label="Primary">

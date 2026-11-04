@@ -117,15 +117,6 @@
   gap: 16px;
 }
 .v9 .m-brand { display: inline-flex; align-items: center; gap: 10px; }
-.v9 .m-mark {
-  width: 24px;
-  height: 24px;
-  border-radius: 7px;
-  background: var(--m-ink);
-  display: grid;
-  place-items: center;
-}
-.v9 .m-mark i { width: 8px; height: 8px; border-radius: 3px; background: var(--m-primary); }
 .v9 .m-word {
   font: 500 20px/1 var(--m-ui);
   letter-spacing: -0.01em;
