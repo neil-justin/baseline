@@ -23,7 +23,7 @@ export interface Channel {
 export interface Persona {
   id: string;
   name: string;
-  /** "4th Year · Computer & IT" — personaMeta convention. */
+  /** "4th Year, Computer & IT" — personaMeta convention. */
   sub: string;
   career: string;
   segs: [number, number, number, number, number];
@@ -42,7 +42,7 @@ export const ROSTER: Persona[] = [
   {
     id: "neil",
     name: "Neil Mallari",
-    sub: "4th Year · Computer & IT",
+    sub: "4th Year, Computer & IT",
     career: "Systems Administrator",
     segs: [0.72, 0.8, 0.7, 0.6, 0.9],
     channels: [
@@ -60,7 +60,7 @@ export const ROSTER: Persona[] = [
   {
     id: "karla",
     name: "Karla Reyes",
-    sub: "4th Year · Business & Management",
+    sub: "4th Year, Business & Management",
     career: "Marketing Assistant",
     segs: [0.6, 0.77, 0.55, 0.6, 0.7],
     channels: [
@@ -77,7 +77,7 @@ export const ROSTER: Persona[] = [
   {
     id: "marco",
     name: "Marco Domingo",
-    sub: "4th Year · Accounting & Finance",
+    sub: "4th Year, Accounting & Finance",
     career: "Bookkeeper",
     segs: [0.8, 0.6, 0.65, 0.33, 0.6],
     channels: [
@@ -94,7 +94,7 @@ export const ROSTER: Persona[] = [
   {
     id: "liza",
     name: "Liza Cruz",
-    sub: "4th Year · Computer & IT",
+    sub: "4th Year, Computer & IT",
     career: "Data Analyst",
     segs: [0.64, 0.57, 0.5, 0.47, 0.8],
     channels: [
@@ -111,7 +111,7 @@ export const ROSTER: Persona[] = [
   {
     id: "bea",
     name: "Bea Santos",
-    sub: "4th Year · Office & Administration",
+    sub: "4th Year, Office & Administration",
     career: "Administrative Officer",
     segs: [0.48, 0.7, 0.5, 0.4, 0.6],
     channels: [
@@ -128,7 +128,7 @@ export const ROSTER: Persona[] = [
   {
     id: "jomar",
     name: "Jomar Villa",
-    sub: "4th Year · Computer & IT",
+    sub: "4th Year, Computer & IT",
     career: "IT Support Staff",
     segs: [0.56, 0.5, 0.45, 0.2, 0.7],
     channels: [
@@ -145,7 +145,7 @@ export const ROSTER: Persona[] = [
   {
     id: "rafael",
     name: "Rafael Lim",
-    sub: "4th Year · Business & Management",
+    sub: "4th Year, Business & Management",
     career: "Sales Coordinator",
     segs: [0.8, 0.67, 0.75, 0.67, 0.9],
     channels: [
@@ -171,7 +171,7 @@ export interface AuditItem {
   id: string;
   studentId: string;
   title: string;
-  kind: "CERT · TESDA" | "CERT · provider" | "LINK";
+  kind: "CERT — TESDA" | "CERT — provider" | "LINK";
   status: "DECLARED" | "VERIFIED" | "REJECTED";
   declared: string;
   link: string;
@@ -183,18 +183,18 @@ export const AUDIT_QUEUE: AuditItem[] = [
     id: "q-karla",
     studentId: "karla",
     title: "Google Data Analytics Certificate",
-    kind: "CERT · provider",
+    kind: "CERT — provider",
     status: "DECLARED",
-    declared: "2026-11-02 · 14:05",
+    declared: "2026-11-02, 14:05",
     link: "coursera.org/verify/DAT-KR-88214",
   },
   {
     id: "q-neil",
     studentId: "neil",
     title: "TESDA Bookkeeping NC II",
-    kind: "CERT · TESDA",
+    kind: "CERT — TESDA",
     status: "DECLARED",
-    declared: "2026-11-01 · 09:41",
+    declared: "2026-11-01, 09:41",
     link: "e-tesda.gov.ph/cert/BT-2026-1183",
   },
   {
@@ -203,21 +203,21 @@ export const AUDIT_QUEUE: AuditItem[] = [
     title: "LinkedIn Profile",
     kind: "LINK",
     status: "VERIFIED",
-    declared: "2026-10-29 · 16:22",
+    declared: "2026-10-29, 16:22",
     link: "linkedin.com/in/lizacruz",
-    ruled: { by: "ana.villanueva@aisat.test", at: "2026-10-30 · 08:12", note: "Link-verified stamp, automatic." },
+    ruled: { by: "ana.villanueva@aisat.test", at: "2026-10-30, 08:12", note: "Link-verified stamp, automatic." },
   },
   {
     id: "q-jomar",
     studentId: "jomar",
     title: "Coursera Project Management Basics",
-    kind: "CERT · provider",
+    kind: "CERT — provider",
     status: "REJECTED",
-    declared: "2026-10-30 · 11:03",
+    declared: "2026-10-30, 11:03",
     link: "coursera.org/learn/pm-basics",
     ruled: {
       by: "ana.villanueva@aisat.test",
-      at: "2026-10-31 · 10:47",
+      at: "2026-10-31, 10:47",
       note: "Course completion — not a credential; re-declare as training instead.",
     },
   },

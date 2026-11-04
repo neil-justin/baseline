@@ -38,7 +38,7 @@ export const COHORT_ORDER = ["neil", "karla", "marco", "liza", "bea", "jomar", "
  *  parts drop out, all-empty → "—". The SHS-era gradeLabel()/`grade` state
  *  field are gone with the 2026-10-30 sweep. */
 export function personaMeta(yearLevel: string, track: string): string {
-  const line = [yearLevel, trackLabelOf(track)].filter(Boolean).join(" · ");
+  const line = [yearLevel, trackLabelOf(track)].filter(Boolean).join(", ");
   return line || "—";
 }
 /** The live cohort, ordered: COHORT_ORDER ids that have real state first,

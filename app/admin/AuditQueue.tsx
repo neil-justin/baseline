@@ -53,7 +53,7 @@ function stamp(iso: string | null): string {
   if (!iso) return "";
   const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
   if (!m) return iso;
-  return `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]} ${Number(m[1])} · ${m[4]}:${m[5]}`;
+  return `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]} ${Number(m[1])}, ${m[4]}:${m[5]}`;
 }
 
 export default function AuditQueue({ rows, ruledByLabel }: { rows: QueueRow[]; ruledByLabel: string }) {
@@ -122,13 +122,13 @@ export default function AuditQueue({ rows, ruledByLabel }: { rows: QueueRow[]; r
           </p>
         </div>
         <p className="ct-legend aq-legend">
-          AUDIT SPINE — READY AUDIT · REVIEWED BY · <b>{ruledByLabel.toUpperCase()}</b>
+          AUDIT SPINE — READY AUDIT — REVIEWED BY <b>{ruledByLabel.toUpperCase()}</b>
         </p>
       </div>
       <div className="ct-colheads ct-label aq-heads" aria-hidden="true">
         <span>STATUS</span>
         <span>ENTRY</span>
-        <span>EVIDENCE · DECLARED SKILLS</span>
+        <span>EVIDENCE — DECLARED SKILLS</span>
         <span>RULING</span>
       </div>
 
@@ -170,7 +170,7 @@ export default function AuditQueue({ rows, ruledByLabel }: { rows: QueueRow[]; r
             )}
             {r.declaredSkills.length > 0 && (
               <span className="aq-line num">
-                declared skills: {r.declaredSkills.join(" · ")}
+                declared skills: {r.declaredSkills.join(", ")}
               </span>
             )}
           </span>
@@ -224,13 +224,13 @@ export default function AuditQueue({ rows, ruledByLabel }: { rows: QueueRow[]; r
             {r.status === "verified" && (
               <span className="aq-ruled num">
                 verified by {r.ruledBy ?? "—"}
-                {r.ruledAt ? ` · ${stamp(r.ruledAt)}` : ""}
+                {r.ruledAt ? `, ${stamp(r.ruledAt)}` : ""}
               </span>
             )}
             {r.status === "rejected" && (
               <span className="aq-ruled num">
                 rejected by {r.ruledBy ?? "—"}
-                {r.ruledAt ? ` · ${stamp(r.ruledAt)}` : ""}
+                {r.ruledAt ? `, ${stamp(r.ruledAt)}` : ""}
                 {r.auditNote ? ` — “${r.auditNote}”` : ""}
               </span>
             )}

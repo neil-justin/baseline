@@ -79,7 +79,7 @@ export default function ApproveRow({ row }: { row: RequestRow }) {
     <div className="crq-row" data-testid={`counselor-request-${row.email}`}>
       <div className="crq-id">
         <span className="crq-meta">
-          <strong className="crq-name">{row.fullName}</strong> · {row.email} · requested {stamp}
+          <strong className="crq-name">{row.fullName}</strong>, {row.email}, requested {stamp}
         </span>
         <p className="crq-note">{row.note}</p>
         {mailNote && (

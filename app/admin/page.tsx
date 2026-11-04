@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { db, getStudentView } from "@/lib/db";
 import { requireStaff } from "@/lib/session";
 import { credentialStore, type CohortCredentialRow } from "@/lib/db/credential-store";
@@ -9,6 +10,10 @@ import { RUBRIC_MAX, orderCohort, personaMeta, type RubricValues } from "./defau
 import "./admin.css";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Admin — Baseline",
+};
 
 type ScoreLike = { sp: number; es: number; tp: number; ar: number | null; cc: number; total: number };
 

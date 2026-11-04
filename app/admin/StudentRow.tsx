@@ -56,7 +56,7 @@ export default function StudentRow({
   }
 
   const marks: { label: string; tone: "amber" | "grey" }[] = [];
-  if (pending > 0) marks.push({ label: `NEEDS AUDIT · ${pending}`, tone: "amber" });
+  if (pending > 0) marks.push({ label: `NEEDS AUDIT — ${pending}`, tone: "amber" });
   if (belowAvg) marks.push({ label: "BELOW AVG", tone: "grey" });
   if (noActivity) marks.push({ label: "NO ACTIVITY YET", tone: "grey" });
 

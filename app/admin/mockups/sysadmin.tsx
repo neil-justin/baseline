@@ -9,6 +9,7 @@
  * All painted — see pieces.tsx for the honesty law.
  */
 import { useState } from "react";
+import { X, Ellipsis } from "lucide-react";
 import { Initials } from "./pieces";
 import { Pager } from "./console-tabs";
 
@@ -36,30 +37,30 @@ const APPROVALS: Approval[] = [
   {
     name: "Carla Reyes",
     gmail: "carla.reyes.999@gmail.com",
-    declared: "2026-11-02 · 10:12",
+    declared: "2026-11-02, 10:12",
     state: "PENDING",
     trail: "—",
   },
   {
     name: "Dan Ocampo",
     gmail: "dan.ocampo@gmail.com",
-    declared: "2026-11-03 · 08:30",
+    declared: "2026-11-03, 08:30",
     state: "PENDING",
     trail: "—",
   },
   {
     name: "Ana Villanueva",
     gmail: "ana.villanueva@aisat.test",
-    declared: "2026-10-29 · 09:05",
+    declared: "2026-10-29, 09:05",
     state: "APPROVED",
-    trail: "by sys-admin · 2026-10-30",
+    trail: "by sys-admin, 2026-10-30",
   },
   {
     name: "Ruth Garcia",
     gmail: "ruth.garcia.ab@gmail.com",
-    declared: "2026-10-28 · 17:40",
+    declared: "2026-10-28, 17:40",
     state: "DENIED",
-    trail: "by sys-admin · 2026-10-29",
+    trail: "by sys-admin, 2026-10-29",
   },
 ];
 
@@ -105,7 +106,7 @@ function ApprovalsTab() {
                   title="Mockup — client-side only"
                   onClick={() => setArmed(null)}
                 >
-                  ✕ CANCEL
+                  <X size={14} aria-hidden="true" /> CANCEL
                 </button>
               ) : (
                 <button
@@ -118,7 +119,7 @@ function ApprovalsTab() {
                           const g = a.gmail;
                           setRows((rs) =>
                             rs.map((r) =>
-                              r.gmail === g ? { ...r, state: "APPROVED", trail: "by you · just now" } : r,
+                              r.gmail === g ? { ...r, state: "APPROVED", trail: "by you, just now" } : r,
                             ),
                           );
                           setArmed(null);
@@ -126,7 +127,7 @@ function ApprovalsTab() {
                       : () => setArmed(`${a.gmail}:approve`)
                   }
                 >
-                  {armed === `${a.gmail}:approve` ? "CONFIRM · APPROVE" : "APPROVE"}
+                  {armed === `${a.gmail}:approve` ? "CONFIRM — APPROVE" : "APPROVE"}
                 </button>
               )}
               {armed === `${a.gmail}:approve` ? (
@@ -135,7 +136,7 @@ function ApprovalsTab() {
                   title="Mockup — client-side only"
                   onClick={() => setArmed(null)}
                 >
-                  ✕ CANCEL
+                  <X size={14} aria-hidden="true" /> CANCEL
                 </button>
               ) : (
                 <button
@@ -148,7 +149,7 @@ function ApprovalsTab() {
                           const g = a.gmail;
                           setRows((rs) =>
                             rs.map((r) =>
-                              r.gmail === g ? { ...r, state: "DENIED", trail: "by you · just now" } : r,
+                              r.gmail === g ? { ...r, state: "DENIED", trail: "by you, just now" } : r,
                             ),
                           );
                           setArmed(null);
@@ -156,7 +157,7 @@ function ApprovalsTab() {
                       : () => setArmed(`${a.gmail}:deny`)
                   }
                 >
-                  {armed === `${a.gmail}:deny` ? "CONFIRM · DENY" : "DENY"}
+                  {armed === `${a.gmail}:deny` ? "CONFIRM — DENY" : "DENY"}
                 </button>
               )}
             </span>
@@ -266,7 +267,7 @@ function AccountsTab() {
             <span className="mk-meta">—</span>
           ) : (
             <button type="button" className="mk-kebab" aria-label={`Account actions: ${a.name}`} disabled>
-              ⋯
+              <Ellipsis size={14} aria-hidden="true" />
             </button>
           )}
         </div>

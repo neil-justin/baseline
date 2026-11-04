@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { requireStaff } from "@/lib/session";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import AdminBar from "../AdminBar";
@@ -5,6 +6,10 @@ import ApproveRow from "./ApproveRow";
 import "../admin.css";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Counselor requests — Baseline",
+};
 
 /**
  * Counselor requests queue (Google round, ADR 0006). SYSADMIN ONLY —

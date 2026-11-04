@@ -98,8 +98,8 @@ export default function AdminMockupMount({ role }: { role: MockRole }) {
       </main>
 
       <p className="mk-colophon">
-        <span>MOCKUP · PAINTED VALUES · NOTHING PERSISTED</span>
-        <span>/admin#mockups · /admin#mockups-sys</span>
+        <span>MOCKUP — PAINTED VALUES — NOTHING PERSISTED</span>
+        <span>/admin#mockups, /admin#mockups-sys</span>
       </p>
     </div>
   );

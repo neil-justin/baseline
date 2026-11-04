@@ -25,6 +25,7 @@
  * hook class (.s-row, .aq-*, .dt-score, .rubric, .cohort*).
  */
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Ellipsis, X } from "lucide-react";
 import type { CounselorRequestRow } from "@/app/api/admin/counselor-requests/route";
 
 interface AccountRow {
@@ -148,7 +149,7 @@ export function AdminApprovalsSlot() {
               </span>
               <span className="atabs-meta">{fmtStamp(r.requestedAt)}</span>
               <span className="atabs-meta">
-                {decided ? `by ${r.decidedBy ?? "—"} · ${fmtDate(r.decidedAt as string)}` : "—"}
+                {decided ? `by ${r.decidedBy ?? "—"}, ${fmtDate(r.decidedAt as string)}` : "—"}
               </span>
               <span>
                 <span
@@ -163,7 +164,7 @@ export function AdminApprovalsSlot() {
                 <span className="atabs-acts">
                   {armedAction === "reject" ? (
                     <button type="button" disabled={acting !== null} onClick={() => setArmed(null)}>
-                      ✕ CANCEL
+                      <X size={14} aria-hidden="true" /> CANCEL
                     </button>
                   ) : (
                     <button
@@ -176,12 +177,12 @@ export function AdminApprovalsSlot() {
                           : setArmed({ id: r.userId, action: "approve" })
                       }
                     >
-                      {armedAction === "approve" ? (acting === r.userId ? "COMMITTING…" : "CONFIRM · APPROVE") : "APPROVE"}
+                      {armedAction === "approve" ? (acting === r.userId ? "COMMITTING…" : "CONFIRM — APPROVE") : "APPROVE"}
                     </button>
                   )}
                   {armedAction === "approve" ? (
                     <button type="button" disabled={acting !== null} onClick={() => setArmed(null)}>
-                      ✕ CANCEL
+                      <X size={14} aria-hidden="true" /> CANCEL
                     </button>
                   ) : armedAction === "reject" ? (
                     <button
@@ -190,7 +191,7 @@ export function AdminApprovalsSlot() {
                       disabled={acting !== null}
                       onClick={() => commit(r.userId, "reject")}
                     >
-                      {acting === r.userId ? "COMMITTING…" : "CONFIRM · DENY"}
+                      {acting === r.userId ? "COMMITTING…" : "CONFIRM — DENY"}
                     </button>
                   ) : (
                     <button type="button" disabled={acting !== null} onClick={() => setArmed({ id: r.userId, action: "reject" })}>
@@ -344,7 +345,7 @@ export function AdminAccountsSlot() {
                     disabled={acting !== null}
                     onClick={() => setOpenFor(openFor === a.userId ? null : a.userId)}
                   >
-                    ⋯
+                    <Ellipsis size={14} aria-hidden="true" />
                   </button>
                   {openFor === a.userId && (
                     <span className="atabs-menu" role="menu">

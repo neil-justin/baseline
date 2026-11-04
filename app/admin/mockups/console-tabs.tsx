@@ -8,6 +8,7 @@
  * detail dialog without the machine-checks field).
  */
 import { useState } from "react";
+import { ArrowRight, ChevronLeft, ChevronRight, X } from "lucide-react";
 import {
   AUDIT_QUEUE,
   Marks,
@@ -33,7 +34,7 @@ export function Pager({
   return (
     <nav className="mk-pager" aria-label="Table pagination">
       <button type="button" disabled={page <= 1} onClick={() => setPage(page - 1)}>
-        ‹
+        <ChevronLeft size={14} aria-hidden="true" />
       </button>
       {Array.from({ length: pages }, (_, i) => i + 1).map((n) => (
         <button
@@ -47,7 +48,7 @@ export function Pager({
         </button>
       ))}
       <button type="button" disabled={page >= pages} onClick={() => setPage(page + 1)}>
-        ›
+        <ChevronRight size={14} aria-hidden="true" />
       </button>
       <span className="mk-label">
         PAGE {page} OF {pages}
@@ -82,7 +83,7 @@ function MockModal({
         <div className="mk-modalhead">
           <h3>{title}</h3>
           <button type="button" className="mk-modalx" onClick={onClose} aria-label="Close dialog">
-            ✕
+            <X size={14} aria-hidden="true" />
           </button>
         </div>
         <div className="mk-modalbody">{children}</div>
@@ -139,7 +140,9 @@ export function CohortTab() {
             )}
           </span>
           <span className="mk-active">{p.active}</span>
-          <span className="mk-view">VIEW →</span>
+          <span className="mk-view">
+            VIEW <ArrowRight size={12} aria-hidden="true" />
+          </span>
         </div>
       ))}
       <Pager page={page} pages={pagesOf(ROSTER, COHORT_PER)} setPage={setPage} />
@@ -206,7 +209,9 @@ function QueueRow({ item, onOpen }: { item: AuditItem; onOpen: () => void }) {
       </div>
       <span className="mk-meta">{item.declared}</span>
       <span className="mk-career">{item.link}</span>
-      <span className="mk-view">DETAIL →</span>
+      <span className="mk-view">
+            DETAIL <ArrowRight size={12} aria-hidden="true" />
+          </span>
     </div>
   );
 }
@@ -228,7 +233,7 @@ function AuditDetail({ item }: { item: AuditItem }) {
       <div className="mk-field">
         <span className="mk-label">STUDENT</span>
         <span className="mk-line">
-          {student.name} · {student.sub}
+          {student.name}, {student.sub}
         </span>
       </div>
       <div className="mk-field">
@@ -240,7 +245,7 @@ function AuditDetail({ item }: { item: AuditItem }) {
         <div className="mk-field">
           <span className="mk-label">RULING</span>
           <span className="mk-line">
-            {item.ruled.by} · {item.ruled.at}
+            {item.ruled.by}, {item.ruled.at}
           </span>
           <span className="mk-meta">{item.ruled.note}</span>
         </div>
