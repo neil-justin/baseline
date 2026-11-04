@@ -124,23 +124,6 @@ body:has(.v7) { background: #f8f9fa; }
   padding: 16px 10px;
   z-index: 40;
 }
-.brandmark {
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--v-ink);
-  border-radius: 6px;
-  position: relative;
-  flex: none;
-}
-.brandmark i {
-  position: absolute;
-  left: 7px;
-  top: 7px;
-  width: 6px;
-  height: 6px;
-  background: var(--v-blue);
-  border-radius: 1px;
-}
 .brand {
   font: 500 15px/1.2 Roboto, system-ui, sans-serif;
   padding: 0 6px;

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import BrandMark from "./BrandMark";
+
 /**
  * (app) shell chrome — v7.3 sidebar round (user-ruled 2026-11-02): the
  * 56px top bar RETIRES as nav but survives as the horizontal HEADER band
@@ -39,9 +41,7 @@ export default function Sidebar() {
     <>
       <header className="v7-head" role="banner">
         <div className="side-brand">
-          <span className="brandmark" aria-hidden="true">
-            <i />
-          </span>
+          <BrandMark size={24} />
           <span className="brand">Baseline</span>
         </div>
       </header>
