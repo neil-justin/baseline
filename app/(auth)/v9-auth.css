@@ -1,0 +1,125 @@
+/* ============================================================
+   DNA v9 — AUTH LAYER (round 2, 2026-11-04)
+
+   The (auth) surfaces skin to the v9 amendment ON TOP of the
+   v7auth foundation: every page keeps `v7auth` (its var bridge,
+   amber-error law, and globals re-spec all still apply) and ADDS
+   `v9auth` — this file carries only the deltas the amendment
+   orders. Markup is untouched (hooks + inline var() refs live).
+
+   What changes vs v7auth:
+   · command blue #1A73E8 → #0B57D0 (Google's current primary),
+     hover #0842A0, wash/selection #D3E3FD
+   · type: Google Sans for hierarchy + UI chrome, Google Sans
+     Text for body; the --mono bridge reads Google Sans Text
+     (auth carries no data-mono — the amendment's Roboto Mono
+     rule targets console data, not small UI labels)
+   · the M3 shadow register on the card; hairline card border
+     retired (borderless tonal surfaces — Surface-Tone Rule)
+   · buttons go full PILL (The Pill Rule), no baked shadows
+     (state tints only); the Google button keeps its 1px
+     control outline (that's an outline, not a card border)
+   · card radius 16 · inputs 10 (The Radius Ladder)
+   Errors still read AMBER, never red (unchanged v7 law).
+   ============================================================ */
+
+.v9auth {
+  /* the v9 token deltas (everything else inherits v7auth's bridge) */
+  --v-blue: #0b57d0;
+  --v-blue-deep: #0842a0;
+  --v-blue-wash: #d3e3fd;
+  --v-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  --selection: #d3e3fd;
+  --mono: "Google Sans Text", Roboto, system-ui, sans-serif;
+  --sans: "Google Sans Text", Roboto, system-ui, sans-serif;
+  --radius: 10px;
+
+  font: 400 14.5px/1.55 var(--sans);
+}
+.v9auth ::selection { background: #d3e3fd; }
+.v9auth :focus-visible { outline: 2px solid var(--v-blue); outline-offset: 2px; }
+
+/* ---------- top bar: borderless white, the family brand mark ---------- */
+
+.v9auth .bar { border-bottom: 0; }
+.v9auth .brand-mark {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--v-ink);
+}
+.v9auth .brand-mark::after {
+  width: 8px;
+  height: 8px;
+  border-radius: 3px;
+}
+.v9auth .brand-name {
+  font: 500 16px/1.2 "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- the frame: headline in Google Sans, card at 16px ---------- */
+
+.v9auth .auth-head h1 {
+  font: 400 24px/1.3 "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+.v9auth .auth-alt { font: 400 13.5px/1.5 var(--sans); }
+.v9auth .auth-alt a { font-weight: 500; }
+
+.v9auth .auth-panel form {
+  border: 0;
+  border-radius: 16px;
+  box-shadow: var(--v-shadow);
+  padding: 28px 28px 24px;
+}
+.v9auth .field-label label {
+  font: 500 13.5px/1.4 var(--sans);
+  color: var(--v-ink2);
+}
+
+/* ---------- fields: 10px rounded, primary focus ring ---------- */
+
+.v9auth input[type="text"],
+.v9auth input[type="email"],
+.v9auth input[type="password"] {
+  border-radius: 10px;
+  padding: 11px 14px;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.v9auth input[type="text"]:hover,
+.v9auth input[type="email"]:hover,
+.v9auth input[type="password"]:hover { border-color: #b3b6bd; }
+
+/* ---------- buttons: the pill register, tinted states ---------- */
+
+.v9auth .btn {
+  font: 500 14px/1 "Google Sans", Roboto, system-ui, sans-serif;
+  padding: 12px 24px;
+  border-radius: 999px;
+}
+.v9auth .btn-primary { box-shadow: none; }
+.v9auth .btn-block {
+  margin-top: 20px;
+  font-size: 14.5px;
+  padding: 14px 24px;
+}
+
+/* the branded OAuth outline — pill, control outline intact */
+.v9auth .btn-google {
+  border: 1px solid #dadce0;
+  color: #3c4043;
+}
+.v9auth .btn-google:not([disabled]):hover { border-color: #bdc1c6; }
+.v9auth .btn-google[disabled] { color: #80868b; border-color: #e8eaed; }
+.v9auth .btn-google:focus-visible { outline: 2px solid var(--v-blue); outline-offset: 1px; }
+
+/* ---------- the honest info tray + the or-divider ---------- */
+
+.v9auth .proto-note {
+  border: 0;
+  border-radius: 12px;
+  background: var(--v-grey-wash);
+}
+.v9auth .auth-or { font-family: var(--mono); }
