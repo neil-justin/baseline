@@ -176,6 +176,16 @@ static. One noted flake: in an artificially throttled 14 s run the smooth
 verdict scroll aborted at 501 — the choreography itself behaved per ruling
 (cards restored, no dead-end); unthrottled runs land at 0 every time.
 
+Round 2c: user feedback — (1) the ring label `APPLICATION READINESS` hugged
+the ring's inner edges, so the figures stay inside and the caption moved
+BELOW the ring (`.readring-slot` column; desktop caption right-aligned
+under the ring, ≤720px fold centred — 390px screenshot-checked); My Plan's
+ring untouched (its `checked` label is short). (`2f8aff8`) (2) the analyzing
+hero grew abruptly — `hero-grow` now animates min-height 0→320px with a
+fade/drift entry (reduced motion: static). Landed with the controller's
+one unifying follow-up: `hero-grow` and the `dz-pulse` breathe are CHAINED
+on the busy zone (grow 0.24s, then pulse), so the wait keeps both motions.
+
 ### 6.3 Round 2b — full content swap on busy (user-ruled 2026-11-04, live
 screenshot review)
 

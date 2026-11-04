@@ -1029,7 +1029,7 @@
   /* the growth + fade-in of the recast hero — the jump from the slim zone's
      height to the 320px recast read as a pop (user feedback 2026-11-04);
      the removal side stays instant by design */
-  .v7prep .tabpanel.prep-analyzing .dz-zone { animation: hero-grow 0.24s cubic-bezier(0.2, 0, 0, 1); }
+  .v7prep .tabpanel.prep-analyzing .dz-zone { animation: hero-grow 0.24s cubic-bezier(0.2, 0, 0, 1), dz-pulse 1.4s ease-in-out 0.24s infinite; }
   /* tab panels: fade-through on switch (panels remount per user switch) */
   .v7prep .tabpanel:not([hidden]) { animation: prep-panel-in 0.2s cubic-bezier(0.2, 0, 0, 1); }
   /* the findings disclosure: content mounts from -4px (drawer register) */
