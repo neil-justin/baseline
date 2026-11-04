@@ -52,10 +52,18 @@ function CohortSkeleton() {
       <table className="ct-table">
         <thead>
           <tr>
-            <th className="col-name" scope="col">Name</th>
-            <th className="col-career" scope="col">Career</th>
-            <th className="col-score" scope="col">Score</th>
-            <th className="col-active" scope="col">Last active</th>
+            {/* heads as pills too: the skeleton contract is text-free —
+                real labels would read as painted data (user ruling
+                2026-11-04); the th boxes still pin the column widths */}
+            {(["Name", "Career", "Score", "Last active"] as const).map((c, k) => (
+              <th key={c} scope="col" className={["col-name", "col-career", "col-score", "col-active"][k]}>
+                <span
+                  className="skel"
+                  style={{ width: k === 2 ? 20 : 44, height: 10, display: "inline-block" }}
+                  aria-hidden="true"
+                />
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>

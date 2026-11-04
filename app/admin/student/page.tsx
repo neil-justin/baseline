@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import CountUp from "@/components/CountUp";
 import Reveal from "@/components/Reveal";
 import { db, getStudentView } from "@/lib/db";
@@ -8,6 +9,8 @@ import { requireStaff } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
 import type { StudentState } from "@/lib/types";
 import AdminVeil from "../AdminVeil";
+import DetailSkeleton from "../detail-skeleton";
+import StudentMoveShell from "../StudentMoveShell";
 import { RUBRIC_MAX, orderCohort, personaMeta, type RubricValues } from "../defaults";
 import "../admin.css";
 
@@ -152,7 +155,16 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
  *  veil (AdminVeil, `detail` mode): the sidebar surfaces here and the
  *  chrome persists through the load — a row click must never swallow the
  *  console (user ruling 2026-11-04). Role law: student-handling is
- *  counselor-only — another staff role is turned back to /admin. */
+ *  counselor-only — another staff role is turned back to /admin.
+ *
+ * The page STREAMS (Suspense): everything student-specific — the cohort
+ * walk + the full build — sits inside a suspense boundary whose fallback
+ * is the same DetailSkeleton the route-level loading.tsx clones. A router
+ * can't mount a loading.tsx fallback on a same-route param change (the
+ * move holds the old screen for the whole fetch), but the streamed shell
+ * fixes exactly that: chrome + back link ship at once, the skeleton is
+ * on screen while the panel is in flight, and the real panel mounts into
+ * it (keyed per student, so the move slide + count-up replay). */
 export default async function AdminStudentPage({
   searchParams,
 }: {
@@ -163,11 +175,40 @@ export default async function AdminStudentPage({
     redirect("/admin");
   }
   const sp = await searchParams;
-  const { ids, id } = await resolveId(sp.student);
   /** direction of travel — the prev/next links declare it in the href
    *  (`&dir=`); row/back entries arrive without it and get the plain
    *  reveal rise instead of the slide */
   const dir = sp.dir === "prev" || sp.dir === "next" ? sp.dir : undefined;
+
+  return (
+    <div className="v7admin">
+      <AdminVeil role={profile.role} mode="detail" active="cohort">
+        {/* the way home (user ruling 2026-11-04): the sidebar is chrome,
+            not a back affordance — the drill-in carries its own quiet link
+            on the student surfaces' register */}
+        <Link className="dt-back" href="/admin">
+          <ArrowLeft size={14} aria-hidden="true" /> Back to cohort
+        </Link>
+        <section className="detail" data-dir={dir} aria-labelledby="dt-h">
+          <StudentMoveShell student={sp.student ?? "_first"}>
+            <Suspense fallback={<div aria-busy="true" aria-label="Loading student detail"><DetailSkeleton /></div>}>
+              {/* keyed remount per student: the prev/next move re-runs the
+                  panel's mount animation in the direction of travel
+                  (user ruling 2026-11-04) and re-counts honestly each time */}
+              <StudentDetail key={sp.student ?? ""} raw={sp.student} />
+            </Suspense>
+          </StudentMoveShell>
+        </section>
+      </AdminVeil>
+    </div>
+  );
+}
+
+/** Everything data-dependent: cohort walk, full build, the panel, and the
+ *  prev/next rail that needs the walk. The key lives on the component (set
+ *  by the page); its Reveal children mount fresh on every arrival. */
+async function StudentDetail({ raw }: { raw?: string }) {
+  const { ids, id } = await resolveId(raw);
   const s = await buildLive(id);
 
   // prev / next within the live cohort walk
@@ -179,19 +220,8 @@ export default async function AdminStudentPage({
   const ccFull = s.parts.cc[0] === s.parts.cc[1];
 
   return (
-    <div className="v7admin">
-      <AdminVeil role={profile.role} mode="detail" active="cohort">
-        {/* the way home (user ruling 2026-11-04): the sidebar is chrome,
-            not a back affordance — the drill-in carries its own quiet link
-            on the student surfaces' register */}
-        <Link className="dt-back" href="/admin">
-          <ArrowLeft size={14} aria-hidden="true" /> Back to cohort
-        </Link>
-        {/* keyed remount per student: the prev/next move re-runs the panel's
-            mount animation in the direction of travel (user ruling
-            2026-11-04) and re-counts the score honestly each time */}
-        <section className="detail" data-dir={dir} aria-labelledby="dt-h">
-          <Reveal key={s.id} className="panel detail-panel">
+    <>
+          <Reveal className="panel detail-panel">
             <div className="dt-head">
               <div className="dt-id">
                 <span className="label">STUDENT · VIEW ONLY</span>
@@ -293,8 +323,6 @@ export default async function AdminStudentPage({
               </div>
             </div>
           </Reveal>
-        </section>
-      </AdminVeil>
-    </div>
-  );
+        </>
+      );
 }
