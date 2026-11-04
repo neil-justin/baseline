@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { readFileSync } from "node:fs";
 import { PER_PAGE, pagesOf, slicePage } from "@/app/admin/pager-math";
 import Pager from "@/app/admin/Pager";
 
@@ -80,5 +81,29 @@ describe("pager render law (mockup register, atabs- hooks)", () => {
       createElement(Pager, { page: 2, pages: 3, setPage: noop }),
     );
     expect(middle.includes("disabled")).toBe(false);
+  });
+});
+
+describe("hook-class registry (e2e-hook rule: atabs-, never mk-)", () => {
+  const liveFiles = [
+    "app/admin/Pager.tsx",
+    "app/admin/AdminShell.tsx",
+    "app/admin/console-skeleton.tsx",
+  ];
+
+  for (const f of liveFiles) {
+    it(`${f}: no mockup hook (mk-) in any className`, () => {
+      const src = readFileSync(f, "utf8");
+      expect(src).not.toMatch(/className=['"`][^'"`]*\bmk-/);
+    });
+  }
+
+  it("admin-tabs.css carries the pager register, mk-free", () => {
+    const css = readFileSync("app/admin/admin-tabs.css", "utf8");
+    expect(css).toContain(".v7admin .atabs-pager {");
+    expect(css).toContain(".v7admin .atabs-pager-btn {");
+    expect(css).toContain(".v7admin .atabs-pager-btn.on {");
+    expect(css).toContain(".v7admin .atabs-pager-label {");
+    expect(css).not.toMatch(/^\.v7admin \.mk-/m);
   });
 });
