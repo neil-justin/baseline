@@ -80,6 +80,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="font/woff2"
           crossOrigin="anonymous"
         />
+        {/* The admin realm's own 15-glyph Material Symbols subset — preloaded
+            so the console sidebar never paints label-only and swaps to
+            glyphs after the font lands (the MPA reload blink, reported
+            2026-11-04: full dev reloads re-request the woff2 per jump).
+            Same file admin-tabs.css @font-face declares. */}
+        <link
+          rel="preload"
+          href="/fonts/material-symbols-outlined-admin.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
       </head>
       <body>
         <a className="skip" href="#main">
