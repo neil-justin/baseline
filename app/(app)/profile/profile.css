@@ -615,3 +615,118 @@
   --accent: var(--v-green);
   --ink-3: var(--v-ink2);
 }
+
+/* ============================================================
+   DNA v9 sweep — profile (2026-11-04, rides the shell's v9
+   token block). Cards + the declaration dialog borderless at
+   the 16px rung; chips 8px; small controls pill; the tab strip
+   goes M3 pills; buttons pill (ghost → tonal). Type rides the
+   v9 scale; v9.1 motion (card lift, tab fade-through, DPA gate
+   mounts, press scale) gated by prefers-reduced-motion — the
+   declaration dialog's existing 0.18s emphasized mount stands.
+   Hooks byte-untouched.
+   ============================================================ */
+
+/* cards + dialog: borderless at the 16px rung */
+.v7profile .card,
+.v7profile .dec-dialog {
+  border: 0;
+  border-radius: 16px;
+}
+
+/* hierarchy: card heads go Google Sans */
+.v7profile .head b {
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* buttons: the pill register, state tints not baked shadows */
+.v7profile .btn {
+  border-radius: 999px;
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+  padding: 9px 22px;
+  font-size: 14px;
+}
+.v7profile .btn-primary { box-shadow: none; }
+.v7profile .btn-primary:hover { box-shadow: none; }
+.v7profile .btn-ghost {
+  background: var(--v-blue-wash);
+  border: 0;
+  color: #041e49;
+}
+.v7profile .btn-ghost:hover { border-color: transparent; background: #c5d9f8; }
+
+/* small controls: the pill register */
+.v7profile .rowbtn,
+.v7profile .dec-kindbtn,
+.v7profile .dpa-erase-btn { border-radius: 999px; }
+
+/* tab strip → M3 pills */
+.v7profile .ptabs { border: 0; border-radius: 999px; }
+.v7profile .ptabs [role="tab"] { border-radius: 999px; font-size: 13px; }
+.v7profile .ptabs [role="tab"][aria-selected="true"] { border-color: transparent; }
+
+/* chips at the 8px rung */
+.v7profile .chip { border-radius: 8px; font-size: 12px; }
+.v7profile .dec-skill { border-radius: 8px; font-size: 12.5px; }
+
+/* ---------- v9 type scale bump (see ../v7.css #7) ---------- */
+.v7profile { font: 400 15px/1.55 Roboto, system-ui, sans-serif; }
+.v7profile .head b { font-size: 16px; }
+.v7profile .head span { font-size: 12.5px; }
+.v7profile .foot { font-size: 12.5px; }
+.v7profile .plan-table th { font-size: 11.5px; }
+.v7profile .plan-table td { font-size: 14px; }
+.v7profile .plan-table td .item { font-size: 14.5px; }
+.v7profile .plan-table td .sub { font-size: 12px; }
+.v7profile .lrow b { font-size: 14px; }
+.v7profile .lrow .lsub { font-size: 12px; }
+.v7profile .lcap { font-size: 12.5px; }
+.v7profile .tab-legend { font-size: 13px; }
+.v7profile .cl-label { font-size: 11.5px; }
+.v7profile .dec-field .cl-label { font-size: 11.5px; }
+.v7profile .dec-field .field-err { font-size: 12px; }
+.v7profile .rowbtn { font-size: 12.5px; }
+.v7profile .dec-kindbtn { font-size: 13px; }
+.v7profile .dec-skillnote { font-size: 12px; }
+.v7profile .presence-current { font-size: 13px; }
+.v7profile .profile-input { font-size: 14px; }
+.v7profile .presence-priv { font-size: 12.5px; }
+.v7profile .presence-ok,
+.v7profile .presence-err { font-size: 13.5px; }
+.v7profile .presence-earn { font-size: 12px; }
+.v7profile .acct-campus { font-size: 12px; }
+.v7profile .dpa-src { font-size: 12px; }
+.v7profile .dpa-warn { font-size: 14px; }
+.v7profile .dpa-details summary { font-size: 12px; }
+.v7profile .quiet-toggle { font-size: 13px; }
+/* the ≤720/560 tab folds keep their tighter labels (fit law) */
+@media (max-width: 720px) {
+  .v7profile .ptabs [role="tab"] { font-size: 12px; }
+}
+@media (max-width: 560px) {
+  .v7profile .ptabs [role="tab"] { font-size: 11.5px; letter-spacing: 0; }
+}
+
+/* ---------- v9.1 motion (subtle, M3, reduced-motion safe) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .v7profile .card {
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .v7profile .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  }
+  .v7profile .btn {
+    transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease,
+      transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .v7profile .btn:active { transform: scale(0.97); }
+  /* tab panels: fade-through on switch */
+  .v7profile .tabpanel:not([hidden]) { animation: profile-panel-in 0.2s cubic-bezier(0.2, 0, 0, 1); }
+  /* the DPA disclosure gates: content mounts from -4px (drawer register) */
+  .v7profile .dpa-details[open] .dpa-src,
+  .v7profile .dpa-details[open] .dpa-erase { animation: profile-drawer-in 0.18s cubic-bezier(0.16, 1, 0.3, 1); }
+}
+@keyframes profile-panel-in { from { opacity: 0; transform: translateY(6px); } }
+@keyframes profile-drawer-in { from { opacity: 0; transform: translateY(-4px); } }
