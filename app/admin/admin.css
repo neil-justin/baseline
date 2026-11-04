@@ -669,17 +669,16 @@
   transform-origin: left center;
   transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: var(--d, 0ms);
-}
-.v7admin .js .rubric .rseg i {
-  transform: scaleX(0);
-}
-.v7admin .js .in .rubric .rseg i {
+  /* honest at rest: the fill IS the earned fraction (the old .v7admin .js
+     gate sat below html.js in the tree and never matched); the entrance is
+     the @starting-style mount fill, reduced-motion honored */
   transform: scaleX(var(--earn, 0));
 }
-@media (prefers-reduced-motion: reduce) {
-  .v7admin .js .rubric .rseg i {
-    transform: scaleX(var(--earn, 0));
-    transition: none;
+@media (prefers-reduced-motion: no-preference) {
+  @starting-style {
+    .v7admin .rubric .rseg i {
+      transform: scaleX(0);
+    }
   }
 }
 
@@ -734,15 +733,24 @@
 }
 .v7admin .pn-row .link-quiet {
   color: var(--v-ink2);
+  /* the arrow is an inline SVG — white-space can't suppress the break
+     after a replaced box, so the link row is flex (never wraps) */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.v7admin .pn-row .link-quiet svg {
+  flex: none;
 }
 
 .v7admin .undecided-banner {
   margin: 14px 18px 0;
   padding: 12px 14px;
-  border: 1px solid var(--v-border);
-  border-radius: 4px;
+  border: 0;
+  border-radius: 8px;
   background: var(--v-grey-wash);
-  font: 400 11px/1.7 Roboto, system-ui, sans-serif;
+  font: 400 12px/1.7 Roboto, system-ui, sans-serif;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--v-ink2);
@@ -750,22 +758,6 @@
 .v7admin .undecided-banner b {
   color: var(--v-ink);
   font-weight: 500;
-}
-
-/* ---------- colophon ---------- */
-
-.v7admin .admin-colophon {
-  margin: 36px auto 34px;
-  max-width: 1240px;
-  padding: 14px 8px 0;
-  border-top: 1px solid var(--v-border);
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  font: 400 11px/1.5 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.05em;
-  color: var(--v-ink2);
 }
 
 /* ============================================================
@@ -937,6 +929,7 @@
   font: 500 17px/1.2 "Google Sans", Roboto, system-ui, sans-serif;
 }
 .v7admin .atabs-sidenav button,
+.v7admin .atabs-sidenav a,
 .v7admin .atabs-tail .admin-signout {
   font: 500 15px/1.2 Roboto, system-ui, sans-serif;
   padding: 11px 16px;
@@ -962,11 +955,13 @@
 /* ---------- v9.1 M3 press motion (reduced-motion honored) ---------- */
 @media (prefers-reduced-motion: no-preference) {
   .v7admin .atabs-sidenav button,
+  .v7admin .atabs-sidenav a,
   .v7admin .atabs-tail .admin-signout {
     transition: background-color 0.14s ease, color 0.14s ease,
       transform 0.12s cubic-bezier(0.2, 0, 0, 1);
   }
   .v7admin .atabs-sidenav button:active,
+  .v7admin .atabs-sidenav a:active,
   .v7admin .atabs-tail .admin-signout:active {
     transform: scale(0.97);
   }
@@ -1038,3 +1033,116 @@
   background: var(--v-blue-wash);
   padding: 1px 8px;
 }
+
+/* ============================================================
+   DNA v9 — Round 5: the student drill-in screen (2026-11-04)
+   Root-cause fix first: this page shipped a bare fragment —
+   .v7admin never wrapped it, so EVERY var(--v-*) token resolved
+   to nothing and the whole register fell over. Now wrapped.
+   Then the v9 registration: borderless 16px card, v9 type scale
+   (26 head / 52 readout, Google Sans hierarchy, Roboto numerals
+   always), PILLED header sign-out, honest rubric fills (base
+   scaleX(--earn) + @starting-style entrance), heavier bottom
+   clear, and the .skel recipe so the surface can clone its DOM.
+   ============================================================ */
+
+/* the header band: hairline retires, Google Sans wordmark 17 */
+.v7admin .adminbar { border-bottom: 0; }
+.v7admin .brandname {
+  font-family: "Google Sans", Roboto, system-ui, sans-serif;
+  font-size: 17px;
+}
+
+/* the header sign-out: the quiet pill (no baked shadow, hover tint) */
+.v7admin .adminbar .admin-signout {
+  border-radius: 999px;
+  padding: 8px 16px;
+  font: 500 14px/1.2 "Google Sans Text", Roboto, system-ui, sans-serif;
+  transition: background-color 0.14s ease;
+}
+.v7admin .adminbar .admin-signout:hover { background: var(--v-grey-wash); }
+@media (prefers-reduced-motion: no-preference) {
+  .v7admin .adminbar .admin-signout {
+    transition: background-color 0.14s ease, transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .v7admin .adminbar .admin-signout:active { transform: scale(0.97); }
+}
+
+/* content column */
+.v7admin .ashell { padding: 0 20px 64px; }
+@media (max-width: 720px) {
+  .v7admin .ashell { padding: 0 16px 48px; }
+}
+
+/* the way home: a quiet link on the student surfaces' register (blue text,
+   14px arrow), sitting on the ground above the card — the sidebar is
+   chrome, not a back affordance (user ruling 2026-11-04) */
+.v7admin .dt-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0 10px;
+  padding: 2px 0;
+  font: 500 13.5px/1.2 "Google Sans Text", Roboto, system-ui, sans-serif;
+  color: var(--v-blue-deep);
+  text-decoration: none;
+}
+.v7admin .dt-back svg { flex: none; }
+.v7admin .dt-back:hover {
+  color: var(--v-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.v7admin .dt-back:focus-visible {
+  outline: 2px solid var(--v-blue);
+  outline-offset: 2px;
+}
+
+/* the detail card: 16px rung, borderless, 20px rhythm */
+.v7admin .detail-panel { border: 0; border-radius: 16px; margin-top: 20px; }
+.v7admin .dt-head { padding: 20px; }
+.v7admin .dt-block { padding: 24px 20px; }
+
+/* v9 type scale (numerals stay Roboto tabular) */
+.v7admin .dt-id h2 {
+  font: 500 26px/1.25 "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+.v7admin .dt-id .dt-meta { font-size: 13.5px; }
+.v7admin .dt-id .dt-meta .ro { font-size: 12px; }
+.v7admin .dt-score .readout-score {
+  font-size: 52px; /* v9 readout rung */
+}
+.v7admin .dt-score .readout-score small { font-size: 14px; }
+.v7admin .dt-score .dt-samesub { font-size: 12px; }
+.v7admin .dt-block h3 {
+  font: 500 16px/1.3 "Google Sans", Roboto, system-ui, sans-serif;
+}
+.v7admin .ss-row .ss-name { font-size: 15px; }
+.v7admin .ss-row .ss-val { font-size: 14px; }
+.v7admin .ss-row .ss-note { font-size: 12.5px; }
+.v7admin .dt-context { font-size: 13.5px; }
+.v7admin .crumb { font-size: 12.5px; }
+.v7admin .crumb a { font-size: 12.5px; }
+.v7admin .crumb .here { font-size: 12.5px; }
+
+/* ---------- the .skel recipe (copied from v7.css; the admin realm
+   does not load v7.css) — opacity pulse, reduced-motion honored */
+.v7admin .skel {
+  display: block;
+  height: 12px;
+  border-radius: 4px;
+  background: var(--v-rows);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .v7admin .skel { animation: admin-skel-pulse 1.4s ease-in-out infinite; }
+}
+@keyframes admin-skel-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+/* the drill-in inside the veil: the main column owns the gutters, so the
+   detail panel loses its old standalone spacing (R5 chrome unification) */
+.v7admin .atabs-main .detail { padding-bottom: 8px; }
+.v7admin .atabs-main .detail-panel { margin-top: 0; }

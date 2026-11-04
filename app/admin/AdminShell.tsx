@@ -2,11 +2,11 @@
 
 /**
  * AdminShell — the multi-tab roles console (2026-11-03 admin-replacement
- * Wave 1). The approved mockup realm becomes the real /admin chrome:
- * a brand-only 56px header band, a left sidebar of icon+name tab buttons,
- * and a capped content column — bound to the REAL rows + queue the server
- * page builds. The single-page band (proband) and its counters fold away
- * with the wave (approved round 2: the surface is the tables).
+ * Wave 1). The chrome (brand band + sidebar + capped main) lives in
+ * AdminVeil — one shared register with the per-student drill-in so the
+ * console never unloads between surfaces (user ruling 2026-11-04: the
+ * sidebar must surface on the detail, and the header must not disappear
+ * behind a skeleton). AdminShell owns only the client tab state + panes.
  *
  * Tabs per role (role law, ruled 2026-11-04 — Round 3 of the admin v9
  * sweep): each role sees ONLY its own surfaces, no spread, no supersets.
@@ -20,52 +20,20 @@
  *
  * e2e-hook rule (pending round): no hook classes leak into new chrome —
  * everything new is `atabs-` (admin-tabs.css). The sign-out keeps the
- * `.admin-signout` hook, re-homed to the sidebar tail as the same POST
- * form (never a GET link — the prefetched sign-out footgun).
+ * `.admin-signout` hook in the veil (never a GET link — the prefetched
+ * sign-out footgun).
  */
 import { useState } from "react";
 
-import BrandMark from "../../components/BrandMark";
 import type { Role } from "@/lib/session";
 import type { LiveRow } from "./page";
 import type { QueueRow } from "./AuditQueue";
 import StudentRow from "./StudentRow";
 import AuditQueue from "./AuditQueue";
 import { AdminApprovalsSlot, AdminAccountsSlot } from "./slots";
-import { RUBRIC_MAX, type RubricValues } from "./defaults";
+import AdminVeil from "./AdminVeil";
+import { adminLandingFor, adminTabsFor, type AdminTabId } from "./tabs";
 import "./admin-tabs.css";
-
-type TabId = "cohort" | "audit" | "approvals" | "accounts";
-
-interface ShellTab {
-  id: TabId;
-  label: string;
-  icon: string;
-}
-
-const COUNSELOR_TABS: ShellTab[] = [
-  { id: "cohort", label: "Cohort", icon: "group" },
-  { id: "audit", label: "Audit queue", icon: "fact_check" },
-];
-
-const SYSADMIN_TABS: ShellTab[] = [
-  { id: "approvals", label: "Approvals", icon: "how_to_reg" },
-  { id: "accounts", label: "Accounts", icon: "manage_accounts" },
-];
-
-const NAV_LABEL = {
-  counselor: "Counselor console pages",
-  sysadmin: "System Admin console pages",
-} as const;
-
-/** Landing page per role: the counselor lands home; the sysadmin lands on
- *  the first sysadmin-only page (the mockup mount's law). */
-function tabsFor(role: Role): ShellTab[] {
-  return role === "sysadmin" ? SYSADMIN_TABS : COUNSELOR_TABS;
-}
-function landingFor(role: Role): TabId {
-  return role === "sysadmin" ? "approvals" : "cohort";
-}
 
 /* ---------- panes ---------- */
 
@@ -149,7 +117,7 @@ function Pane({
   queue,
   ruledByLabel,
 }: {
-  tab: TabId;
+  tab: AdminTabId;
   rows: LiveRow[] | null;
   queue: QueueRow[] | null;
   ruledByLabel: string;
@@ -181,59 +149,16 @@ export default function AdminShell({
   queue: QueueRow[] | null;
   ruledByLabel: string;
 }) {
-  const tabs = tabsFor(role);
-  const [tab, setTab] = useState<TabId>(() => landingFor(role));
-  const active = tabs.some((t) => t.id === tab) ? tab : landingFor(role);
+  const [tab, setTab] = useState<AdminTabId>(() => adminLandingFor(role));
+  const active = adminTabsFor(role).some((t) => t.id === tab)
+    ? tab
+    : adminLandingFor(role);
 
   return (
-    <div className="atabs-veil">
-      {/* brand-only header band (spans both columns) */}
-      <header className="atabs-head" role="banner">
-        <div className="atabs-brand">
-          <BrandMark size={24} />
-          <span className="atabs-word">Baseline</span>
-        </div>
-      </header>
-
-      {/* the role's pages as sidebar tabs; console controls pinned at the bottom */}
-      <aside className="atabs-side">
-        <nav className="atabs-sidenav" aria-label={NAV_LABEL[role === "sysadmin" ? "sysadmin" : "counselor"]}>
-          {tabs.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              className={active === t.id ? "on" : ""}
-              title={t.label}
-              aria-current={active === t.id ? "page" : undefined}
-              onClick={() => setTab(t.id)}
-            >
-              <span className="ms" aria-hidden="true">
-                {t.icon}
-              </span>
-              <span>{t.label}</span>
-
-            </button>
-          ))}
-        </nav>
-        <nav className="atabs-tail" aria-label="Console controls">
-          {/* POST, not a GET <Link> — a prefetched GET sign-out would wipe
-              the session on visit (e2e-caught footgun; hook stays). */}
-          <form action="/api/auth/signout" method="post">
-            <button type="submit" className="admin-signout">
-              <span className="ms" aria-hidden="true">
-                logout
-              </span>
-              <span>Sign out</span>
-            </button>
-          </form>
-        </nav>
-      </aside>
-
-      <main id="main" className="atabs-main">
-        <div className="atabs-tabpage" key={active}>
-          <Pane tab={active} rows={rows} queue={queue} ruledByLabel={ruledByLabel} />
-        </div>
-      </main>
-    </div>
+    <AdminVeil role={role} mode="state" active={active} onNavigate={setTab}>
+      <div className="atabs-tabpage" key={active}>
+        <Pane tab={active} rows={rows} queue={queue} ruledByLabel={ruledByLabel} />
+      </div>
+    </AdminVeil>
   );
 }

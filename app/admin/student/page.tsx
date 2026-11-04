@@ -1,11 +1,13 @@
 import Link from "next/link";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { redirect } from "next/navigation";
 import CountUp from "@/components/CountUp";
 import Reveal from "@/components/Reveal";
 import { db, getStudentView } from "@/lib/db";
 import { requireStaff } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
 import type { StudentState } from "@/lib/types";
-import AdminBar from "../AdminBar";
+import AdminVeil from "../AdminVeil";
 import { RUBRIC_MAX, orderCohort, personaMeta, type RubricValues } from "../defaults";
 import "../admin.css";
 
@@ -146,13 +148,20 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   };
 }
 
-/** Screen B — read-only per-student detail. Markup ported from prototype/admin-student.html. */
+/** Screen B — read-only per-student detail. It rides the SHARED console
+ *  veil (AdminVeil, `detail` mode): the sidebar surfaces here and the
+ *  chrome persists through the load — a row click must never swallow the
+ *  console (user ruling 2026-11-04). Role law: student-handling is
+ *  counselor-only — another staff role is turned back to /admin. */
 export default async function AdminStudentPage({
   searchParams,
 }: {
   searchParams: Promise<{ student?: string }>;
 }) {
-  await requireStaff();
+  const profile = await requireStaff();
+  if (profile.role !== "counselor") {
+    redirect("/admin");
+  }
   const { ids, id } = await resolveId((await searchParams).student);
   const s = await buildLive(id);
 
@@ -165,19 +174,14 @@ export default async function AdminStudentPage({
   const ccFull = s.parts.cc[0] === s.parts.cc[1];
 
   return (
-    <>
-      <AdminBar />
-      <main id="main" className="ashell">
-        {/* breadcrumb */}
-        <nav className="crumb" aria-label="Breadcrumb">
-          <Link href="/admin">COHORT</Link>
-          <span className="sep" aria-hidden="true">
-            /
-          </span>
-          <span className="here">STUDENT · {s.name.toUpperCase()}</span>
-        </nav>
-
-        {/* read-only per-student detail */}
+    <div className="v7admin">
+      <AdminVeil role={profile.role} mode="detail" active="cohort">
+        {/* the way home (user ruling 2026-11-04): the sidebar is chrome,
+            not a back affordance — the drill-in carries its own quiet link
+            on the student surfaces' register */}
+        <Link className="dt-back" href="/admin">
+          <ArrowLeft size={14} aria-hidden="true" /> Back to cohort
+        </Link>
         <section className="detail" aria-labelledby="dt-h">
           <Reveal className="panel detail-panel">
             <div className="dt-head">
@@ -270,21 +274,16 @@ export default async function AdminStudentPage({
             <Reveal className="dt-block" delay={60}>
               <div className="pn-row">
                 <Link className="link-quiet" href={`/admin/student?student=${prev}`}>
-                  ← Previous student
+                  <ArrowLeft size={14} aria-hidden="true" /> Previous student
                 </Link>
                 <Link className="link-quiet" href={`/admin/student?student=${next}`}>
-                  Next student →
+                  Next student <ArrowRight size={14} aria-hidden="true" />
                 </Link>
               </div>
             </Reveal>
           </Reveal>
         </section>
-      </main>
-
-      <p className="admin-colophon">
-        <span>READ-ONLY ADMIN VIEW · EVERY NUMBER COMPUTED FROM THE STUDENT&apos;S LIVE STATE</span>
-        <span>BASELINE · THESIS PROTOTYPE</span>
-      </p>
-    </>
+      </AdminVeil>
+    </div>
   );
 }

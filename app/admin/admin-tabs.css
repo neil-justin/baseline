@@ -105,14 +105,18 @@
   flex: 1;
 }
 .v7admin .atabs-sidenav button,
+.v7admin .atabs-sidenav a,
 .v7admin .atabs-tail .admin-signout {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
   color: var(--v-ink2);
   text-decoration: none;
-  font: 500 13.5px/1.2 Roboto, system-ui, sans-serif;
-  padding: 7px 14px;
+  /* the final v9 student-shells sidenav register (R1 of the v9 sweep;
+     scoped here because per-route chunk order flips between the console
+     and the drill-in — overrides must not depend on file order) */
+  font: 500 15px/1.2 Roboto, system-ui, sans-serif;
+  padding: 11px 16px;
   border-radius: 12px;
   white-space: nowrap;
   background: none;
@@ -122,29 +126,34 @@
   width: 100%;
   transition: background-color 0.14s ease, color 0.14s ease;
 }
-.v7admin .atabs-sidenav button:hover {
+.v7admin .atabs-sidenav button:hover,
+.v7admin .atabs-sidenav a:hover {
   background: transparent;
   color: var(--v-ink);
 }
-.v7admin .atabs-sidenav button.on {
+.v7admin .atabs-sidenav button.on,
+.v7admin .atabs-sidenav a.on {
   background: var(--v-blue-wash);
   color: var(--v-blue-deep);
 }
-.v7admin .atabs-sidenav button.on:hover {
+.v7admin .atabs-sidenav button.on:hover,
+.v7admin .atabs-sidenav a.on:hover {
   background: var(--v-blue-wash);
   color: var(--v-blue-deep);
 }
 .v7admin .atabs-sidenav button:focus-visible,
+.v7admin .atabs-sidenav a:focus-visible,
 .v7admin .atabs-tail .admin-signout:focus-visible {
   outline: 2px solid var(--v-blue);
   outline-offset: 2px;
 }
 .v7admin .atabs-sidenav .ms,
 .v7admin .atabs-tail .ms {
-  font-size: 18px;
+  font-size: 21px;
   opacity: 0.85;
 }
-.v7admin .atabs-sidenav button.on .ms {
+.v7admin .atabs-sidenav button.on .ms,
+.v7admin .atabs-sidenav a.on .ms {
   opacity: 1;
 }
 
@@ -503,7 +512,11 @@
     flex-direction: row;
     align-items: center;
     overflow-x: auto;
-    overflow-y: hidden;
+    /* clip, not hidden: `overflow-y: hidden` makes Chrome treat this strip
+       as a scroll container and collapse its grid-track contribution to
+       padding (17px) — main then slides its first 43px UNDER the strip
+       (the mobile back-link vanishing bug, 2026-11-04) */
+    overflow-y: clip;
     border-right: 0;
     border-bottom: 1px solid var(--v-border);
     padding: 8px 10px;
@@ -525,4 +538,10 @@
     grid-row: 3;
     width: 100%;
   }
+}
+
+/* desktop sidebar bump — guarded (Tail-Block Cascade Rule); lives in THIS
+   file (the chrome base) so no cross-file order decides the column */
+@media (min-width: 721px) {
+  .v7admin .atabs-veil { grid-template-columns: 264px 1fr; }
 }
