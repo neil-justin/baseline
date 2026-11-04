@@ -15,8 +15,21 @@ The app currently ships **no icon at all** (no `favicon.ico`, no `icon.*`, nothi
 | `app/apple-icon.png` | 180×180 PNG export for iOS home-screen icons. |
 | `app/favicon.ico` | 32×32 ICO fallback for legacy browsers/crawlers. |
 | `scripts/generate-icons.mjs` | One-off script that renders `app/icon.svg` to the PNG and ICO via `sharp`. Re-runnable if the mark changes. |
+| `components/BrandMark.tsx` | The same mark as an inline-SVG React component (aria-hidden, `size` prop, default 20px) for in-page headers. |
 
-No changes to `app/layout.tsx` or any existing file — Next.js file conventions auto-generate the `<link>` tags. (Coordination note: another session (`ses_e5b0cd1a7ffehsc8H2NGbFnQc4`) is revamping the app in parallel; this work adds only new files and touches no shared surface.)
+No changes to `app/layout.tsx` — Next.js file conventions auto-generate the favicon `<link>` tags.
+
+## Header brandmark replacement (in scope)
+
+The current in-page brand mark is a bland CSS-drawn square (rounded span + blue inlay) hand-rolled in three places. All three are replaced by `<BrandMark />` next to the existing wordmark:
+
+| Surface | Today | Change |
+|---|---|---|
+| Marketing header | `.v7land .mark` + `<i>` (`app/(marketing)/landing.css:183`, markup in `(marketing)/layout.tsx:16`) | Swap span for `<BrandMark />`; delete dead CSS rules |
+| Admin chrome | `.v7admin .brandmark` + `<i>` (`app/admin/admin.css:95`), used in `AdminBar.tsx:16` and `AdminShell.tsx:165` | Swap span for `<BrandMark />`; delete dead CSS rules |
+| Auth pages | `.brand-mark` with CSS `::after` (`app/globals.css:187`), used in `(auth)/signin`, `(auth)/signup`, `(auth)/forgot`, `(auth)/welcome` | Swap span for `<BrandMark />`; delete dead CSS rules |
+
+Explicitly out: `app/(marketing)/mockup/` and `app/admin/mockups/` (historical prototype mounts stay untouched). (Coordination note: another session (`ses_e5b0cd1a7ffehsc8H2NGbFnQc4`) is revamping the app in parallel; per user decision 2026-11-04 we accept the conflict risk on the header files above rather than defer.)
 
 ## Design spec
 
@@ -41,5 +54,5 @@ No changes to `app/layout.tsx` or any existing file — Next.js file conventions
 
 ## Out of scope
 
-- In-page logo / wordmark treatment in the marketing header or sidebar (separate concern; the parallel session owns the visual revamp).
+- `app/(marketing)/mockup/` and `app/admin/mockups/` prototype mounts.
 - Dark-mode variant, PWA manifest icons, and og-image — none requested.
