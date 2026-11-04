@@ -419,7 +419,6 @@ export default function CareerClient({
       const rank = (s: string) => (s === "verified" ? 0 : s === "checked" ? 1 : 2);
       return rank(a.src) - rank(b.src);
     });
-  const ledgerCount = (src: string) => ledger.filter((s) => s.src === src).length;
 
   return (
     <div className="v7career">
@@ -494,10 +493,7 @@ export default function CareerClient({
           </div>
           {card && (
             <div className="band-ledger">
-              <span className="label">
-                Your skills · {ledgerCount("verified")} verified · {ledgerCount("checked")}{" "}
-                checked · {ledgerCount("claimed")} self-reported
-              </span>
+              <span className="label">Your skills</span>
               {ledger.length > 0 ? (
                 <p className="skill-chips ledger-chips">
                   {ledger.map((s) => (
@@ -663,10 +659,6 @@ export default function CareerClient({
                                   </span>
                                 );
                               })}
-                            </p>
-                            <p className="skill-legend num">
-                              Green = verified · blue = checked · hatch = self-reported ·
-                              outline = not on your file yet
                             </p>
                             <p className="skill-map-note num">{r.skillsSummary}</p>
                           </div>

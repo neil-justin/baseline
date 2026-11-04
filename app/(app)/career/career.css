@@ -781,15 +781,6 @@
 .v7career .ledger-chips { margin: 4px 0 0; }
 .v7career .ledger-empty { margin: 4px 0 0; font-size: 13px; color: var(--v-ink2); }
 
-/* the detail legend — one quiet line carries the chip states (the fit
-   framing retired: most roles have no overlap, so the section reads as
-   the role's own spec sheet with overlap as a quiet state signal) */
-.v7career .skill-legend {
-  margin: 10px 0 0;
-  font-size: 12px;
-  color: var(--v-meta);
-}
-
 /* the no-bar remainder of a role's map — quiet outline chip so the
    state-colored (overlapping) chips read as the highlight */
 .v7career .chip.c-outline {
