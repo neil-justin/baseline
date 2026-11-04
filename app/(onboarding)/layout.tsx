@@ -21,6 +21,14 @@ export default function OnboardingLayout({ children }: { children: ReactNode }) 
           <BrandMark size={24} />
           <span className="brand">Baseline</span>
         </div>
+        {/* session exit for the focused flow (user ruling 2026-11-04: the
+            sidebar carried the sign-out; the focused chrome must not strand
+            a signed-in student). Same POST contract as the sidebar's. */}
+        <form action="/api/auth/signout" method="post" className="focus-signout">
+          <button type="submit" title="Sign out">
+            Sign out
+          </button>
+        </form>
       </header>
       <main id="main" className="v7-main">
         {children}
