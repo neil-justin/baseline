@@ -34,9 +34,10 @@ export const metadata: Metadata = {
  *   2. CHANNEL CARDS — Resume · Letter · Presence as one KPI card each
  *      (Dashboard `.kpis` geometry): name → fraction → 4px honest bar →
  *      wash chip → one-line receipt → the reference door at the card foot
- *      (user ruling 2026-11-04: the format guide moves OFF the buried
- *      RE-RUN links line onto its channel card; the Letter card's peer
- *      door waits for a letter guide — never a dead link).
+ *      (user ruling 2026-11-04: the format guides move OFF the buried
+ *      RE-RUN links line onto their channel cards — Resume → /prep/guide,
+ *      Letter → /prep/letter-guide (same-day cutover, no mockup);
+ *      Presence has no guide — no door).
  *   3. TOOLBAR — `.prep-lens` segmented tabs (Resume checker /
  *      Cover-letter checker), outside any card.
  *   4. READOUT CARD — run label + file line, the big /100 score, the
@@ -88,9 +89,10 @@ function ChannelCard({
   /** the wash family — Dashboard's three-tone kicon register (2026-11-04) */
   tone: "blue" | "green" | "amber";
   icon: ReactNode;
-  /** the card-foot reference door (Resume: the format guide). Pinned to
-   *  the card's foot so the three cards' feet stay aligned; a sibling
-   *  without a door just ends at its note. */
+  /** the card-foot reference door (Resume: the format guide · Letter:
+   *  the cover-letter format guide — 2026-11-04). Pinned to the card's
+   *  foot so the three cards' feet stay aligned; a sibling without a
+   *  door just ends at its note. */
   door?: { label: string; href: string };
 }) {
   const full = part.measured && part.earned === part.max;
@@ -682,6 +684,7 @@ export default async function PrepPage() {
               notRun="NOT YET CHECKED"
               note={letterNote}
               tone="green"
+              door={{ label: "Letter guide", href: "/prep/letter-guide" }}
               icon={
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3" y="5" width="18" height="14" rx="2" />

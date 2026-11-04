@@ -1139,6 +1139,13 @@
 /* the amber chip — prep carried c-green/c-blue/c-grey only */
 .v7prep .chip.c-amber { background: var(--v-amber-wash); color: var(--v-amber-text); }
 
+/* the letter-guide round (same-day cutover, 2026-11-04; no mockup —
+   user ruling "build it directly on site"): /prep/letter-guide rides
+   THIS register wholesale (g-surface · g-back/g-who/g-art · g-cards ·
+   g-num wash discs · rs-warn; BandArt.tsx is its own envelope figure
+   under the hero-law). One new class: the quiet checker pointer. */
+.v7prep .g-quietlink { margin: 14px 0 0; }
+
 /* the art folds with the band */
 @media (max-width: 560px) {
   .v7prep .g-who { gap: 12px; }
