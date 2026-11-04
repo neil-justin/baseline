@@ -41,7 +41,7 @@ for (const [w, h, tag] of [
     // the realm into the document and hide everything else underneath.
     await page.addStyleTag({
       content: `
-        body > .v9mock { position: absolute; inset: auto; height: auto; min-height: 100vh; }
+        body > .v9mock { position: absolute; inset: 0 0 auto 0; height: auto; min-height: 100vh; width: 100%; }
         body > *:not(.v9mock) { display: none !important; }
       `,
     });

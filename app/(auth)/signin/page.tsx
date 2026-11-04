@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { BackArrow } from "../glyphs";
+import BrandMark from "../../../components/BrandMark";
 import GoogleAuth from "../GoogleAuth";
 import SignInForm from "./SignInForm";
+import SigninMockupGate from "../_mockup/SigninMockupGate";
 import "./auth.css";
 import "../v7-auth.css";
 import "../v9-auth.css";
@@ -26,10 +28,12 @@ export default async function SignInPage({
   const { state } = await searchParams;
   return (
     <div className="auth-body v7auth v9auth">
+      {/* option-(a) comp: the #mockup realm (client-only, hash-gated) */}
+      <SigninMockupGate />
       <header className="bar">
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
-            <span className="brand-mark" aria-hidden="true"></span>
+            <BrandMark size={24} />
             <span className="brand-name">Baseline</span>
           </a>
         </div>
