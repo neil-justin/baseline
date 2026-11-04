@@ -1127,19 +1127,43 @@
 .v7admin .crumb .here { font-size: 12.5px; }
 
 /* ---------- the .skel recipe (copied from v7.css; the admin realm
-   does not load v7.css) — opacity pulse, reduced-motion honored */
+   does not load v7.css) — v9 shimmer instead of the v7 opacity pulse
+   (user ruling 2026-11-04: the pulse read as the skeleton blinking —
+   the pills stay steady; a light band sweeps them, reduced-motion
+   honored: no sweep under reduce). NOTE: the student shells still
+   run v7.css's pulse; mirroring the shimmer there is its own round
+   (v7.css is shared and mid-flight in parallel sessions). */
+
 .v7admin .skel {
   display: block;
   height: 12px;
   border-radius: 4px;
   background: var(--v-rows);
+  position: relative;
+  overflow: hidden;
+}
+.v7admin .skel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* the sweep band sits on the pill's own tone — steady, no opacity dip */
+  background: linear-gradient(
+    100deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 75%
+  );
+  transform: translateX(-100%);
 }
 @media (prefers-reduced-motion: no-preference) {
-  .v7admin .skel { animation: admin-skel-pulse 1.4s ease-in-out infinite; }
+  .v7admin .skel::after {
+    animation: admin-skel-sweep 1.6s cubic-bezier(0.2, 0, 0, 1) infinite;
+  }
 }
-@keyframes admin-skel-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.55; }
+@keyframes admin-skel-sweep {
+  to {
+    transform: translateX(100%);
+  }
 }
 
 /* the drill-in inside the veil: the main column owns the gutters, so the
