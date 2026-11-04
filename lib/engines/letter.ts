@@ -344,7 +344,7 @@ export function runLetterCheck(ctx: LetterRunContext): LetterCheckRun {
     .map((spec) => ({
       label: `${spec.name}${matched.includes(spec.name) ? "" : " — not found"}`,
       ok: matched.includes(spec.name),
-      note: `role anchor · ${career.name} core map (${coreCount} core skills)`,
+      note: `role anchor, ${career.name} core map (${coreCount} core skills)`,
     }));
 
   const checks: LetterCheckRow[] = [

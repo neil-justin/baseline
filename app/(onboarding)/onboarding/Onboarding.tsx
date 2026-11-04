@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { ArrowLeft, Check } from "lucide-react";
 import { SegRubricBar } from "@/components/instrument";
 import { CAREERS, DEMO_SUGGESTION_ORDER, TRACKS, TRACK_LABELS, trackLabelOf } from "@/lib/fixtures/catalog";
 import { RESOURCES } from "@/lib/fixtures/resources";
@@ -405,7 +406,7 @@ export default function Onboarding() {
               return (
                 <span key={l} className={`ob-step ${cls}`}>
                   <span className="ob-step-num" aria-hidden="true">
-                    {idx < step ? "✓" : idx}
+                    {idx < step ? <Check size={12} aria-hidden="true" /> : idx}
                   </span>
                   <span className="ob-step-label">{l}</span>
                 </span>
@@ -458,7 +459,7 @@ export default function Onboarding() {
         {screen === "branch" && (
           <section className="ob-screen">
             <button className="ob-back" onClick={() => back("strand")}>
-              ← Back
+              <ArrowLeft size={14} aria-hidden="true" /> Back
             </button>
             <div className="screen-head" style={{ marginTop: 12 }}>
               <h1>Do you have a career in mind?</h1>
@@ -491,7 +492,7 @@ export default function Onboarding() {
                 else go("branch");
               }}
             >
-              ← Back
+              <ArrowLeft size={14} aria-hidden="true" /> Back
             </button>
             <div className="screen-head" style={{ marginTop: 12 }}>
               <h1>Time to figure out what fits.</h1>
@@ -534,7 +535,7 @@ export default function Onboarding() {
         {screen === "cards" && (
           <section className="ob-screen">
             <button className="ob-back" onClick={() => back("branch")}>
-              ← Back
+              <ArrowLeft size={14} aria-hidden="true" /> Back
             </button>
             <div className="screen-head" style={{ marginTop: 12 }}>
               <h1>Careers that fit how you answered</h1>
@@ -606,7 +607,7 @@ export default function Onboarding() {
         {screen === "selfreport" && career && (
           <section className="ob-screen">
             <button className="ob-back" onClick={() => back("cards")}>
-              ← Back
+              <ArrowLeft size={14} aria-hidden="true" /> Back
             </button>
             <div className="screen-head" style={{ marginTop: 12 }}>
               <h1>Now — where are you today?</h1>
@@ -618,7 +619,7 @@ export default function Onboarding() {
             <div className="panel">
               <div className="panel-bar">
                 <span className="label">
-                  {career.name} · {career.skills.length} core skills
+                  {career.name}, {career.skills.length} core skills
                 </span>
                 <span className="label num">
                   {Object.keys(sr).length} of {career.skills.length} answered
@@ -664,7 +665,7 @@ export default function Onboarding() {
         {screen === "framing" && (
           <section className="ob-screen">
             <button className="ob-back" onClick={() => back("selfreport")}>
-              ← Back
+              <ArrowLeft size={14} aria-hidden="true" /> Back
             </button>
             <div className="screen-head" style={{ marginTop: 12 }}>
               <h1>One more thing — the people side.</h1>
@@ -713,7 +714,7 @@ export default function Onboarding() {
         {screen === "assessIntro" && (
           <section className="ob-screen">
             <button className="ob-back" onClick={() => back("framing")}>
-              ← Back
+              <ArrowLeft size={14} aria-hidden="true" /> Back
             </button>
             <div className="screen-head" style={{ marginTop: 12 }}>
               <h1>The competency check — the real one.</h1>
@@ -724,7 +725,7 @@ export default function Onboarding() {
             </div>
             <div className="ob-parts">
               <div className="panel nextcard">
-                <span className="label">PART A · SELF-RATINGS</span>
+                <span className="label">PART A — SELF-RATINGS</span>
                 <h3>{STATEMENT_TOTAL} statements — how you work</h3>
                 <p className="n-why">
                   About 6 minutes. Every rating is self-report: it marks a competency as{" "}
@@ -732,10 +733,10 @@ export default function Onboarding() {
                 </p>
               </div>
               <div className="panel nextcard">
-                <span className="label">PART B · THE CHECKS</span>
+                <span className="label">PART B — THE CHECKS</span>
                 <h3>{MCQ_TOTAL} one-answer situations</h3>
                 <p className="n-why">
-                  About 10 minutes. A competency is <b>verified ·✓</b> when BOTH of its checks are answered
+                  About 10 minutes. A competency is <b>verified</b> when BOTH of its checks are answered
                   correctly in this sitting — that&apos;s what earns into your index.
                 </p>
               </div>
@@ -761,7 +762,7 @@ export default function Onboarding() {
         {screen === "likert" && (
           <section className="ob-screen">
             <button className="ob-back" onClick={() => back("assessIntro")}>
-              ← Back
+              <ArrowLeft size={14} aria-hidden="true" /> Back
             </button>
             <div className="screen-head" style={{ marginTop: 12 }}>
               <h1>Part A — how you work, honestly.</h1>
@@ -772,13 +773,13 @@ export default function Onboarding() {
             </div>
             <div className="panel">
               <div className="panel-bar">
-                <span className="label">PART A · SELF-RATING</span>
+                <span className="label">PART A — SELF-RATING</span>
                 <span className="label num">
                   {likertAnswered} of {STATEMENT_TOTAL} answered
                 </span>
               </div>
               <p className="ob-scale-legend num">
-                1 = never · 2 = rarely · 3 = sometimes · 4 = often · 5 = consistently — &ldquo;consistently&rdquo;
+                1 = never, 2 = rarely, 3 = sometimes, 4 = often, 5 = consistently — &ldquo;consistently&rdquo;
                 means the behavior is your settled habit, not occasional.
               </p>
               {INSTRUMENT.map((c) => (
@@ -840,7 +841,7 @@ export default function Onboarding() {
             {sitView === "intro" && (
               <div>
                 <button className="ob-back" onClick={() => back("likert")}>
-                  ← Back
+                  <ArrowLeft size={14} aria-hidden="true" /> Back
                 </button>
                 <div className="screen-head" style={{ marginTop: 12 }}>
                   <h1>Part B — the checks.</h1>
@@ -876,10 +877,10 @@ export default function Onboarding() {
                 <div>
                   <div className="ob-qbar">
                     <span className="q-skill-tag num">
-                      Question {sitIdx + 1} of {MCQ_RUN.length} · {thisCompIdx} of 7 · {comp.title}
+                      Question {sitIdx + 1} of {MCQ_RUN.length}, {thisCompIdx} of 7, {comp.title}
                     </span>
                     <button className="ob-back" onClick={() => back("likert")}>
-                      ← Back
+                      <ArrowLeft size={14} aria-hidden="true" /> Back
                     </button>
                   </div>
                   <div className="panel ob-mcqcard" style={{ maxWidth: 640 }} data-mcq={mcq.id}>
@@ -935,13 +936,13 @@ export default function Onboarding() {
               </div>
               {verifiedTitles.length > 0 && (
                 <div className="okband" style={{ maxWidth: 560 }}>
-                  Verified on your profile: <b>{verifiedTitles.join(" · ")}</b>{" "}
-                  <span className="vbadge ok">·✓</span>
+                  Verified on your profile: <b>{verifiedTitles.join(", ")}</b>{" "}
+                  <span className="vbadge ok"><Check size={11} aria-hidden="true" /></span>
                 </div>
               )}
               {claimedTitles.length > 0 && (
                 <p className="ob-note" style={{ maxWidth: 560 }}>
-                  Claimed (self-report only): {claimedTitles.join(" · ")}. A rating alone never earns points
+                  Claimed (self-report only): {claimedTitles.join(", ")}. A rating alone never earns points
                   and never closes a bar — the pair of checks is what verifies. Retakes: your latest full
                   sitting always counts, so building the skills and re-sitting honestly moves this.
                 </p>
@@ -961,7 +962,7 @@ export default function Onboarding() {
             {vView === "intro" && (
               <div>
                 <button className="ob-back" onClick={() => back("assessResult")}>
-                  ← Back
+                  <ArrowLeft size={14} aria-hidden="true" /> Back
                 </button>
                 <div className="screen-head" style={{ marginTop: 12 }}>
                   <h1>Make it official — quick skill check</h1>
@@ -996,7 +997,7 @@ export default function Onboarding() {
                         setAnswered(false);
                       }}
                     >
-                      ← Back
+                      <ArrowLeft size={14} aria-hidden="true" /> Back
                     </button>
                   </div>
                   <div className="panel ob-mcqcard" style={{ maxWidth: 640, marginTop: 12 }}>
@@ -1057,8 +1058,8 @@ export default function Onboarding() {
                   </div>
                   {passedNames.length > 0 && (
                     <div className="okband" style={{ maxWidth: 560 }}>
-                      Confirmed on your profile: <b>{passedNames.join(" · ")}</b>{" "}
-                      <span className="vbadge ok">·✓</span>
+                      Confirmed on your profile: <b>{passedNames.join(", ")}</b>{" "}
+                      <span className="vbadge ok"><Check size={11} aria-hidden="true" /></span>
                     </div>
                   )}
                   <div className="ob-ctas">
@@ -1076,7 +1077,7 @@ export default function Onboarding() {
         {screen === "goal" && career && sug && (
           <section className="ob-screen">
             <button className="ob-back" onClick={() => { setVView("intro"); back("verify"); }}>
-              ← Back
+              <ArrowLeft size={14} aria-hidden="true" /> Back
             </button>
             <div className="screen-head" style={{ marginTop: 12 }}>
               <h1>Set your first goal</h1>
@@ -1152,7 +1153,7 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
   const activeGoal = state.goals.some((g) => g.type === "training" && g.status === "active");
   // persona line: "NEIL · 4th Year · Computer & IT" — the state's vocabulary
   // prints verbatim (yearLevel + the track's TRACK_LABELS label); no G-regex.
-  const whoLine = [state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(" · ");
+  const whoLine = [state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(", ");
 
   const parts = [
     { pct: WEIGHTS.sp, earnedFrac: score.sp / WEIGHTS.sp },
@@ -1171,7 +1172,7 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
       <div className="panel readout" style={{ maxWidth: 640 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
           <span className="label">
-            READINESS · <b className="ob-who">NEIL · {whoLine}</b>
+            READINESS — <b className="ob-who">NEIL, {whoLine}</b>
           </span>
           <div className="readout-score num">
             <span aria-label={`Readiness ${score.total} of 100`}>{score.total}</span>
@@ -1187,24 +1188,24 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
         </div>
         <div className="stack" style={{ marginTop: 14 }}>
           <div className="tickline num">
-            <b>Skills</b> — {score.sp} of {WEIGHTS.sp} · {closed} of {mapSize} skills on your baseline ({verifiedCount}{" "}
-            confirmed <span className="vbadge ok">·✓</span>)
+            <b>Skills</b> — {score.sp} of {WEIGHTS.sp}, {closed} of {mapSize} skills on your baseline ({verifiedCount}{" "}
+            confirmed <span className="vbadge ok"><Check size={11} aria-hidden="true" /></span>)
           </div>
           <div className="tickline num">
-            <b>Employability</b> — {score.es} of {WEIGHTS.es} ·{" "}
-            {esVerified} of 7 NACE competencies verified <span className="vbadge ok">·✓</span>
-            {esClaimed > 0 && <span> · {esClaimed} claimed (self-report — no points painted)</span>}
+            <b>Employability</b> — {score.es} of {WEIGHTS.es},{" "}
+            {esVerified} of 7 NACE competencies verified <span className="vbadge ok"><Check size={11} aria-hidden="true" /></span>
+            {esClaimed > 0 && <span>, {esClaimed} claimed (self-report — no points painted)</span>}
           </div>
           <div className="tickline num">
-            <b>Training</b> — {score.tp} of {WEIGHTS.tp} ·{" "}
+            <b>Training</b> — {score.tp} of {WEIGHTS.tp},{" "}
             {state.stageOneDone === 0 ? "First 3 steps ready, none finished yet" : `${state.stageOneDone} of 3 done`}
           </div>
           <div className="tickline num">
-            <b>Application readiness</b> — {score.ar === null ? "Not yet measured" : `${score.ar} of ${WEIGHTS.ar}`} ·{" "}
+            <b>Application readiness</b> — {score.ar === null ? "Not yet measured" : `${score.ar} of ${WEIGHTS.ar}`},{" "}
             {score.ar === null ? "the resume diagnostic (Prep) opens this channel" : "unlimited re-runs — your latest run counts"}
           </div>
           <div className="tickline num">
-            <b>Direction</b> — {score.cc} of {WEIGHTS.cc} · Career picked ·{" "}
+            <b>Direction</b> — {score.cc} of {WEIGHTS.cc}, career picked,{" "}
             {activeGoal ? "plan started" : "no commitment yet — set your first step next"}
           </div>
         </div>
@@ -1224,8 +1225,8 @@ function Reveal({ view, armed, quizItems }: { view: StateView; armed: boolean; q
               );
               return (
                 <div key={skill} className="tickline num">
-                  <b>{i + 1}</b> · {skill}
-                  {res ? ` — ${res.title} · free · ~${res.durationHours} hrs` : ""}
+                  <b>{i + 1}.</b> {skill}
+                  {res ? ` — ${res.title}, free, ~${res.durationHours} hrs` : ""}
                 </div>
               );
             })}
@@ -1262,5 +1263,5 @@ function goalTargetLine(resourceId: string): string {
   const res = RESOURCES.find((r) => r.id === resourceId);
   if (!res) return "";
   const cost = res.cost === "free" ? "Free" : `₱${res.cost.peso}`;
-  return `${cost} · ~${res.durationHours} hours · ${res.provider} — ${res.title}`;
+  return `${cost}, ~${res.durationHours} hours, ${res.provider} — ${res.title}`;
 }

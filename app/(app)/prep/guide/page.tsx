@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import "../prep.css";
 
 export const metadata: Metadata = {
@@ -71,7 +72,7 @@ export default function GuidePage() {
         <div className="bandrow">
           <div className="who">
             <h1 className="t">Resume format guide</h1>
-            <p className="m">reference · curated, sourced · not a builder</p>
+            <p className="m">reference — curated and sourced, not a builder</p>
           </div>
         </div>
       </header>
@@ -79,7 +80,7 @@ export default function GuidePage() {
       <section className="card guide-card">
         <section className="panel-sec">
           <p className="prep-sublabel num">
-            Write your resume yourself (Docs/Word, outside this system) → the format &amp; evidence check reads it back
+            Write your resume yourself (Docs/Word, outside this system), and the format &amp; evidence check reads it back
           </p>
           <div className="b-head">
             <h2>The standard sections, in order</h2>
@@ -123,9 +124,9 @@ export default function GuidePage() {
             ))}
           </div>
           <p className="src-line num">
-            Sourced · NACE Job Outlook 2025 (survey) · WVU Eberly “NACE Resume Guidelines” · HBS/Accenture
-            Hidden Workers 2021 · SHRM 2024 · JobStreet Philippines (vendor) · parsing literature (Yu et al.
-            2005; RecSys in HR&apos;23) · Harvard MCS bullet-point resume template. No CHED/DOLE format
+            Sourced: NACE Job Outlook 2025 (survey); WVU Eberly “NACE Resume Guidelines”; HBS/Accenture
+            Hidden Workers 2021; SHRM 2024; JobStreet Philippines (vendor); parsing literature (Yu et al.
+            2005; RecSys in HR&apos;23); Harvard MCS bullet-point resume template. No CHED/DOLE format
             standard exists — deliberately not cited.
           </p>
         </section>
@@ -161,7 +162,10 @@ export default function GuidePage() {
               target="_blank"
               rel="noreferrer"
             >
-              Harvard bullet-point resume template <span className="arrow num">↗</span>
+              Harvard bullet-point resume template{" "}
+              <span className="arrow num">
+                <ArrowUpRight size={12} aria-hidden="true" />
+              </span>
             </a>
             <a
               className="link-quiet"
@@ -169,12 +173,12 @@ export default function GuidePage() {
               target="_blank"
               rel="noreferrer"
             >
-              Google Docs copy ↗
+              Google Docs copy <ArrowUpRight size={12} aria-hidden="true" />
             </a>
           </div>
           <p className="g-back">
             <Link className="btn btn-ghost" href="/prep">
-              Back to the Resume checker →
+              Back to the Resume checker <ArrowRight size={14} aria-hidden="true" />{" "}
             </Link>
           </p>
         </section>

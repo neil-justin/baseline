@@ -91,7 +91,7 @@ function arReason(resume: boolean, letter: boolean, presence: boolean): string {
     !letter && "a cover-letter check",
     !presence && "the presence declaration (Profile → Credentials)",
   ].filter(Boolean) as string[];
-  return `Application readiness ${done} of 3 measured — still open: ${open.join(" · ")}.`;
+  return `Application readiness ${done} of 3 measured — still open: ${open.join(", ")}.`;
 }
 
 /** the ranked plan for the student's target role (queue-head first). */

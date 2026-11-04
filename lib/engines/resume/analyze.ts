@@ -232,7 +232,7 @@ function formatFactor(p: ParsedResume, d: Detection): { result: FactorResult; fl
   const words = onepageEstimated ? p.text.split(/\s+/).length : p.pages!;
   const onepage = onepageEstimated ? words <= 700 : words === 1;
   const onepageDetail = onepageEstimated
-    ? `read from length (~${words} words ≈ ${words <= 700 ? "one" : "more than one"} page · Word files don't carry page counts)`
+    ? `read from length (~${words} words ≈ ${words <= 700 ? "one" : "more than one"} page, Word files don't carry page counts)`
     : `${p.pages} ${p.pages === 1 ? "page" : "pages"} in the PDF`;
 
   const flags: FormatFlags = {

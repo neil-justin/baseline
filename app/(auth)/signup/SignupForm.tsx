@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { PasswordFeedback, passwordChecklist } from "../PasswordFeedback";
+import { ArrowRight } from "lucide-react";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -186,7 +187,8 @@ export default function SignupForm() {
             <>
               That email already has an account.{" "}
               <a href="/signin" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>
-                Sign in instead →
+                Sign in instead{" "}
+                <ArrowRight size={14} aria-hidden="true" />
               </a>
             </>
           ) : topErr === "password_breached" ? (

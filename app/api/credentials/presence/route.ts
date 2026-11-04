@@ -118,8 +118,8 @@ export async function POST(req: Request) {
     declaration: saved,
     measured: presenceMeasured(saved),
     note: privateAccount
-      ? `stamped ${stamp.verifiedAt} · private account: content not machine-verifiable — noted, not scored differently`
-      : `stamped ${stamp.verifiedAt} · machine-verified offline — the stamp is what's presented, no network look-up ran`,
+      ? `stamped ${stamp.verifiedAt}, private account: content not machine-verifiable — noted, not scored differently`
+      : `stamped ${stamp.verifiedAt}, machine-verified offline — the stamp is what's presented, no network look-up ran`,
   });
 }
 

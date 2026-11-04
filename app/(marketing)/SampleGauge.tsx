@@ -69,7 +69,7 @@ export default function SampleGauge({
         <div className="mini-head">
           <span className="kicker">CAREER INDEX</span>
           <span className="kicker dim">
-            {rows.length} of {total} · sample rows
+            {rows.length} of {total}, sample rows
           </span>
         </div>
         {rows.map((r, i) => (
@@ -92,10 +92,10 @@ export default function SampleGauge({
         <div className="readout-head">
           <div>
             <span className="kicker">
-              READINESS · <span className="chip c-grey">SAMPLE STUDENT</span>
+              READINESS — <span className="chip c-grey">SAMPLE STUDENT</span>
             </span>
             <div className="readout-sub" style={{ marginTop: 6 }}>
-              out of 100 · {yearLevel} · {track}
+              out of 100, {yearLevel}, {track}
             </div>
           </div>
           <div className="readout-score num">
@@ -129,7 +129,7 @@ export default function SampleGauge({
             <b>
               {row.x} of {row.y}
             </b>{" "}
-            skills shown · {row.name}
+            skills shown, {row.name}
           </span>
         </div>
       </div>

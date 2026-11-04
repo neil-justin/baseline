@@ -40,7 +40,7 @@ const REJECT_COPY: Record<string, string> = {
   oversize: "Over the 5 MB limit — exports with embedded photos or graphics easily grow past it. Remove images and export the resume again.",
   empty: "The file carries no readable content — almost nothing on its pages.",
   encrypted: "This file is password-protected or encrypted — save an unlocked copy as a PDF or DOCX and upload that.",
-  scanned: "This PDF carries essentially no readable text — it reads as a scan or an image-only export. Re-export a text-based PDF from Word or Google Docs (File → Export → PDF); the text has to be real text, not a picture of it.",
+  scanned: "This PDF carries essentially no readable text — it reads as a scan or an image-only export. Re-export a text-based PDF from Word or Google Docs (File, then export as PDF); the text has to be real text, not a picture of it.",
   not_resume: "This doesn't read as a resume.",
   wrong_type: "This file's content is neither a PDF nor a Word document — the extension alone isn't trusted.",
   parse_error: "This file's structure couldn't be read — try exporting the resume again.",
@@ -68,7 +68,7 @@ export default function ResumeUpload({ slim = false }: { slim?: boolean }) {
   const [err, setErr] = useState<string | null>(null);
   const [drag, setDrag] = useState(false);
   const head = slim ? "Check another version" : "Drop your resume here";
-  const sub = slim ? "PDF or DOCX · drop or browse" : "PDF or DOCX · the format & evidence check runs the moment the file lands";
+  const sub = slim ? "PDF or DOCX, drop or browse" : "PDF or DOCX, the format & evidence check runs the moment the file lands";
 
   /* the landing signal: startTransition(() => router.refresh()) flips
    * isPending true, then false when the swapped server tree commits —

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowLeft, Check, X } from "lucide-react";
 import type { CheckQuestionLite, CheckResourceLite } from "./types";
 
 const PASS_MARK = 4; // LOCKED: pass ≥ 4 of 5
@@ -110,7 +111,7 @@ export default function CheckOverlay({
         <div className="check-top">
           <span className="q-skill-tag">Quick check</span>
           <button className="ob-back" type="button" onClick={onClose}>
-            ← Back to Progress
+            <ArrowLeft size={14} aria-hidden="true" /> Back to Progress
           </button>
         </div>
 
@@ -118,7 +119,7 @@ export default function CheckOverlay({
           <div className="check-panel">
             <h2 className="r-head">Quick check — {resource.title}</h2>
             <p className="r-note">
-              {total} questions · about 1 minute · pass {PASS_MARK} of {total} or better to close your{" "}
+              {total} questions, about 1 minute, pass {PASS_MARK} of {total} or better to close your{" "}
               {resource.skillShort} gap and count this skill as yours.
             </p>
             <p className="r-note">{resource.target}</p>
@@ -179,12 +180,12 @@ export default function CheckOverlay({
             </h2>
             <div className="okband r-band">
               {[
-                result.gapClosed ? `Your ${resource.skillShort} gap is closed ·✓✓` : null,
+                result.gapClosed ? `Your ${resource.skillShort} gap is closed` : null,
                 result.goalDone ? "The goal you set is done" : null,
                 "Your readiness score updates.",
               ]
                 .filter(Boolean)
-                .join(" · ")}
+                .join(", ")}
             </div>
             <div className="check-results">
               {questions.map((q, i) => {
@@ -198,7 +199,7 @@ export default function CheckOverlay({
                       className={`r-mark num chip ${ok ? "c-green" : "c-grey"}`}
                       title={ok ? "Correct" : "Missed"}
                     >
-                      {ok ? "·✓" : "·✗"}
+                      {ok ? <Check size={11} aria-hidden="true" /> : <X size={11} aria-hidden="true" />}
                     </span>
                     <span className="r-stem">{q.stem}</span>
                   </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BackArrow } from "../glyphs";
+import { ArrowRight } from "lucide-react";
 
 /** Sign-in form — ported from prototype/signin.html, with the live credential POST
  * in place of the static prototype's always-failing submit. Posts to
@@ -137,14 +137,15 @@ export default function SignInForm() {
             <>
               No account for that email yet.{" "}
               <a href="/signup" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>
-                Create one in 30 seconds →
+                Create one in 30 seconds{" "}
+                <ArrowRight size={14} aria-hidden="true" />
               </a>
             </>
           ) : (
             <>
-              That email and password don&apos;t match. Check both, or →{" "}
+              That email and password don&apos;t match. Check both, or{" "}
               <a href="/signup" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>
-                Start check <BackArrow />
+                Create one in 30 seconds
               </a>
             </>
           )}

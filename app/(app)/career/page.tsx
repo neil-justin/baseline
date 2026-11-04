@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
 import { CAREERS, getCareer } from "@/lib/fixtures/catalog";
@@ -19,6 +20,10 @@ import type { CareerProps, RoleRowData } from "./types";
 import "./career.css";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Careers — Baseline",
+};
 
 /**
  * v7.2 Careers surface — server-computed one-list (ruled page architecture,
@@ -48,7 +53,7 @@ function skillsSummary(c: (typeof CAREERS)[number]): string {
   const tags = [...new Set(c.skills.map((s) => s.sourceTag))].map(
     (t) => SOURCE_TAG_NAMES[t] ?? t
   );
-  return `${c.skills.length} skills on the map — ${core} core · ${c.skills.length - core} supporting · ${tags.join(" · ")}`;
+  return `${c.skills.length} skills on the map — ${core} core, ${c.skills.length - core} supporting, ${tags.join(", ")}`;
 }
 
 /** human-first names for the provenance tags (codes stay receipts-only) */
@@ -117,7 +122,7 @@ export default async function CareerPage() {
       entry: entryDisplay(c),
       current: c.id === career?.id,
       psoc: `${c.psocTitle} — PSOC ${c.psocCode}`,
-      majors: c.degreeMap.join(" · "),
+      majors: c.degreeMap.join(", "),
       demand: demandLine(c),
       skillsSummary: skillsSummary(c),
       mapSkills: c.skills.map((s) => ({ name: s.name, display: shortSkill(s.name) })),

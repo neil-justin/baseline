@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { ArrowRight, Check } from "lucide-react";
 import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
@@ -12,6 +14,12 @@ import Reveal from "@/components/Reveal";
 import "./dashboard.css";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Dashboard — Baseline",
+  description:
+    "Your readiness score, the five channels behind it, and the ranked plan that moves it.",
+};
 
 function UndecidedDefault() {
   return (
@@ -39,7 +47,8 @@ function UndecidedDefault() {
               <p className="score-line">
                 Pick a career to open your pathway:{" "}
                 <a className="link-sub" href="/career">
-                  browse the career index →
+                  browse the career index{" "}
+                  <ArrowRight size={14} aria-hidden="true" />
                 </a>
               </p>
             </div>
@@ -106,14 +115,14 @@ export default async function DashboardPage() {
               <h1 className="t">
                 {/* persona line: "Neil · 4th Year" — the state's yearLevel IS the
                     print (the G-regex gradeLabel helper died with the SHS scope) */}
-                {state.name} · {state.yearLevel}
+                {state.name}, {state.yearLevel}
               </h1>
               <div className="m">{career.name}</div>
           {/* the big numeral died (user ruling 2026-11-04): the gauge carries
               the number once — the score stays announced for AT */}
               <span className="sr-only">Readiness {score.total} of 100</span>
               <div className="composite-wrap">
-                <div className="ratemsg">Computed from your own records · NACE-aligned</div>
+                <div className="ratemsg">Computed from your own records, NACE-aligned</div>
                 <div className="ratemsg num">
                   You&apos;re <b className="num">{score.total}%</b> ready for {career.name}; {v.closed} bars
                   already counted.
@@ -121,7 +130,7 @@ export default async function DashboardPage() {
               </div>
               {head && (
                 <a className="cta" href={head.kind === "ar" ? head.href : "/pathway"}>
-                  Your next step →
+                  Your next step <ArrowRight size={14} aria-hidden="true" />
                 </a>
               )}
             </div>
@@ -176,8 +185,10 @@ export default async function DashboardPage() {
               <b className="num">
                 {score.sp} of {WEIGHTS.sp}
               </b>{" "}
-              · {v.closed} of {mapSize} bars closed · {verifiedBars} verified{" "}
-              <span className="vbadge ok">·✓</span>
+             , {v.closed} of {mapSize} bars closed, {verifiedBars} verified{" "}
+              <span className="vbadge ok">
+                <Check size={11} aria-hidden="true" />
+              </span>
             </p>
           </div>
           <div className="score num">
@@ -211,8 +222,10 @@ export default async function DashboardPage() {
               <b className="num">
                 {score.es} of {WEIGHTS.es}
               </b>{" "}
-              · {v.esVerified} of 7 NACE competencies verified{" "}
-              <span className="vbadge ok">·✓</span>
+             , {v.esVerified} of 7 NACE competencies verified{" "}
+              <span className="vbadge ok">
+                <Check size={11} aria-hidden="true" />
+              </span>
             </p>
           </div>
           <div className="score num">
@@ -241,7 +254,7 @@ export default async function DashboardPage() {
               <b className="num">
                 {score.tp} of {WEIGHTS.tp}
               </b>{" "}
-              ·{" "}
+              ,{" "}
               {v.stageOne.done === 0
                 ? "pathway just started"
                 : `First 30 days: ${v.stageOne.done} of 3 done`}
@@ -280,8 +293,8 @@ export default async function DashboardPage() {
                 <b className="num">
                   {score.ar} of {WEIGHTS.ar}
                 </b>{" "}
-                · resume {v.arFactors.resume.earned}/{v.arFactors.resume.max} · letter{" "}
-                {v.arFactors.letter.measured ? `${v.arFactors.letter.earned}/${v.arFactors.letter.max}` : "not run"} · presence{" "}
+                , resume {v.arFactors.resume.earned}/{v.arFactors.resume.max}, letter{" "}
+                {v.arFactors.letter.measured ? `${v.arFactors.letter.earned}/${v.arFactors.letter.max}` : "not run"}, presence{" "}
                 {v.arFactors.presence.measured ? `${v.arFactors.presence.earned}/${v.arFactors.presence.max}` : "not declared"}
               </p>
             ) : (
@@ -329,9 +342,9 @@ export default async function DashboardPage() {
               <b className="num">
                 {score.cc} of {WEIGHTS.cc}
               </b>{" "}
-              · Career picked{" "}
-              <span className="vbadge ok">{v.ccPicked ? "✓" : "—"}</span> · Plan started{" "}
-              <span className="vbadge ok">{v.ccStarted ? "✓" : "—"}</span> · First item done:{" "}
+              , Career picked{" "}
+              <span className="vbadge ok">{v.ccPicked ? <Check size={11} aria-hidden="true" /> : "—"}</span>, Plan started{" "}
+              <span className="vbadge ok">{v.ccStarted ? <Check size={11} aria-hidden="true" /> : "—"}</span>, First item done:{" "}
               {v.ccFirstDone ? "yes" : "not yet"}
             </p>
           </div>
@@ -356,7 +369,7 @@ export default async function DashboardPage() {
         <Reveal className="card">
           <div className="head">
             <b>My Plan — next items</b>
-            <span>ranked · first item is your next step</span>
+            <span>ranked, first item is your next step</span>
           </div>
           <table className="plan-table">
             <thead>
@@ -371,14 +384,15 @@ export default async function DashboardPage() {
               {plan.map((item, i) => {
                 if (item.kind === "ar") {
                   const measured = [item.checklist.resume, item.checklist.letter, item.checklist.presence].filter(Boolean).length;
-                  const tick = (b: boolean) => (b ? "·✓" : "open");
+                  const tick = (b: boolean) => (b ? <Check size={11} aria-hidden="true" /> : "open");
                   const arOutstanding = WEIGHTS.ar - (score.ar ?? 0);
                   return (
                     <tr key="ar">
                       <td>
                         <div className="item">{item.title}</div>
                         <div className="sub">
-                          {item.reason} — resume {tick(item.checklist.resume)} · letter {tick(item.checklist.letter)} · presence {tick(item.checklist.presence)}
+                          {item.reason} — resume {tick(item.checklist.resume)}, letter {tick(item.checklist.letter)}, presence{" "}
+                          {tick(item.checklist.presence)}
                         </div>
                       </td>
                       <td>
@@ -389,7 +403,7 @@ export default async function DashboardPage() {
                           {measured > 0 ? `${measured} of 3 measured` : "Not started"}
                         </span>
                       </td>
-                      <td className="eff num">opens AR · up to +{arOutstanding}</td>
+                      <td className="eff num">opens AR, up to +{arOutstanding}</td>
                     </tr>
                   );
                 }
@@ -404,7 +418,7 @@ export default async function DashboardPage() {
                       <div className="item">Close {item.skill}</div>
                       <div className="sub">
                         {item.reason}
-                        {item.hasFreeResource ? " · comprehension check on its guide" : ""}
+                        {item.hasFreeResource ? ", comprehension check on its guide" : ""}
                       </div>
                     </td>
                     <td>
@@ -417,7 +431,8 @@ export default async function DashboardPage() {
                     </td>
                     <td className="eff num">
                       SP{" "}
-                      {roundHalfDown((WEIGHTS.sp * (v.closed + priorSkillCount)) / mapSize)} →{" "}
+                      {roundHalfDown((WEIGHTS.sp * (v.closed + priorSkillCount)) / mapSize)}{" "}
+                      <ArrowRight size={10} aria-hidden="true" />{" "}
                       {roundHalfDown((WEIGHTS.sp * (v.closed + priorSkillCount + 1)) / mapSize)}
                     </td>
                   </tr>
@@ -443,7 +458,7 @@ export default async function DashboardPage() {
             <div className="row">
               <div>
                 <b>Run the resume checker</b>
-                <div className="sub">first AR factor · opens the channel</div>
+                <div className="sub">first AR factor, opens the channel</div>
               </div>
               <span className="badge num">up to +{WEIGHTS.ar}</span>
             </div>
@@ -455,7 +470,7 @@ export default async function DashboardPage() {
                 <div className="sub">
                   {[!v.arFactors.letter.measured && "cover-letter checker", !v.arFactors.presence.measured && "presence declaration"]
                     .filter(Boolean)
-                    .join(" · ")}{" "}
+                    .join(", ")}{" "}
                   still open
                 </div>
               </div>
@@ -466,7 +481,7 @@ export default async function DashboardPage() {
             <div className="row">
               <div>
                 <b>Close a First-30-days bar</b>
-                <div className="sub">check pass closes the bar · SP re-fractions</div>
+                <div className="sub">check pass closes the bar, SP re-fractions</div>
               </div>
               <span className="badge num">+{spDelta}</span>
             </div>
@@ -491,7 +506,7 @@ export default async function DashboardPage() {
         <div className="head">
           <b>Competency ledger — Employability Skills</b>
           <span className="num">
-            {v.esVerified} of {ASSESSED_COMPETENCIES} verified · {claimedCompetencies} self-report
+            {v.esVerified} of {ASSESSED_COMPETENCIES} verified, {claimedCompetencies} self-report
           </span>
         </div>
         <div className="lgrid">
@@ -516,13 +531,19 @@ export default async function DashboardPage() {
               </span>
               <b>{name}</b>
               <span className={`chip ${st === "verified" ? "c-green" : "c-grey hatch-chip"}`}>
-                {st === "verified" ? "Verified ·✓" : "Self-reported"}
+                {st === "verified" ? (
+                  <>
+                    Verified <Check size={11} aria-hidden="true" />
+                  </>
+                ) : (
+                  "Self-reported"
+                )}
               </span>
             </div>
           ))}
         </div>
         <div className="lcap">
-          Verified by the step-③ assessment&apos;s verification battery; self-report never closes bars — it carries a
+          Verified by the step 3 assessment&apos;s verification battery; self-report never closes bars — it carries a
           hatch until evidence lands. {ASSESSED_COMPETENCIES} of 8 NACE competencies carried — Equity &amp; Inclusion
           excluded by recorded choice.
         </div>

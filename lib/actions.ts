@@ -131,7 +131,7 @@ export function markVerified(state: StudentState, skill: string): ActionResult {
   // archive the proven fact — career-agnostic, survives a later switch
   const provenArchive = { ...state.provenArchive, [skill]: { source: "verified" as const } };
   // re-rank DOES NOT fire on verification at cold start (beat ordering locked)
-  return { state: { ...state, bars, provenArchive }, note: `${skill} confirmed ·✓` };
+  return { state: { ...state, bars, provenArchive }, note: `${skill} confirmed` };
 }
 
 /**
@@ -198,7 +198,7 @@ export function applyVerifiedCredential(
     ...closed.map((skill) => ({
       date: nowStamp(),
       kind: "bar-closed" as const,
-      detail: `${skill} closed ·✓ — verified credential: ${credential.title}`,
+      detail: `${skill} closed — verified credential: ${credential.title}`,
       source: "verified" as const,
     })),
   ];
@@ -315,7 +315,7 @@ export function submitCheck(state: StudentState, resourceId: string, answers: nu
   next.events = [
     ...next.events,
     { date: nowStamp(), kind: "check-passed", detail: `Check passed (${correct} of 5) — ${checkResource?.title ?? resourceId}`, source: "checked" },
-    ...closedNow.map((skill) => ({ date: nowStamp(), kind: "bar-closed" as const, detail: `${skill} closed ·✓✓`, source: "checked" as const })),
+    ...closedNow.map((skill) => ({ date: nowStamp(), kind: "bar-closed" as const, detail: `${skill} closed — its comprehension check passed`, source: "checked" as const })),
     ...completedTitles.map((t) => ({ date: nowStamp(), kind: "goal-completed" as const, detail: `Training goal auto-completed — ${t}` })),
   ];
   return { state: next, note: "passed" };
@@ -358,12 +358,12 @@ export function submitAssessment(
       {
         date: nowStamp(),
         kind: "scored" as const,
-        detail: `Competency assessment sat — ${Object.values(competencies).filter((v) => v === "verified").length} of 7 verified ·✓`,
+        detail: `Competency assessment sat — ${Object.values(competencies).filter((v) => v === "verified").length} of 7 verified`,
       },
     ],
   };
   const verified = Object.values(competencies).filter((v) => v === "verified").length;
-  return { state: attempted, note: `${verified} of 7 competencies verified ·✓` };
+  return { state: attempted, note: `${verified} of 7 competencies verified` };
 }
 
 /** A full attempt: every bank item answered within its value range. */

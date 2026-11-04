@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { getStudentView } from "@/lib/db";
+import { ArrowRight } from "lucide-react";
 import { requireStudent } from "@/lib/session";
 import { scoreView } from "@/lib/engines/rubric";
 import { WEIGHTS } from "@/lib/engines/score";
@@ -11,6 +13,10 @@ import "./progress.css";
 import ProgressView from "./ProgressView";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Progress — Baseline",
+};
 
 const TYPE_WORDS: Record<Resource["type"], string> = {
   course: "course",
@@ -28,11 +34,11 @@ function fmtDate(raw: string) {
   const [d, t] = raw.split(" ");
   const dt = new Date(`${d}T00:00:00`);
   const base = `${dt.toLocaleString("en-US", { month: "short" })} ${dt.getDate()}`;
-  return t ? `${base} · ${t}` : base;
+  return t ? `${base}, ${t}` : base;
 }
 
 function resourceMeta(r: Resource) {
-  return `${TYPE_WORDS[r.type]} · ${r.provider} · ${costLabel(r)}`;
+  return `${TYPE_WORDS[r.type]}, ${r.provider}, ${costLabel(r)}`;
 }
 
 /** Short spoken form of a skill for the check copy ("Dashboards (Power BI)" → "dashboards"). */
@@ -48,7 +54,7 @@ function UndecidedDefault({ name }: { name: string }) {
           <div className="bandrow">
             <div className="who">
               <h1 className="t">Progress</h1>
-              <p className="band-id">{name} · no career picked yet</p>
+              <p className="band-id">{name}, no career picked yet</p>
             </div>
           </div>
         </div>
@@ -57,7 +63,7 @@ function UndecidedDefault({ name }: { name: string }) {
         <p className="prog-sub pad">
           No career picked yet —{" "}
           <a className="link-sub" href="/career">
-            Browse the career index →
+            Browse the career index <ArrowRight size={14} aria-hidden="true" />{" "}
           </a>
         </p>
       </section>
@@ -134,14 +140,14 @@ export default async function ProgressPage() {
           (r) => r.skillsAddressed.includes(spec.name) && r.careerId === career.id
         ) ?? null;
       note = bc
-        ? `closed ${fmtDate(bc.date)} · via “${resource?.title ?? spec.name}” · ${resource?.provider ?? ""}${resource ? (resource.cost === "free" ? " · free" : "") : ""}`
+        ? `closed ${fmtDate(bc.date)}, via “${resource?.title ?? spec.name}” from ${resource?.provider ?? ""}${resource ? (resource.cost === "free" ? ", free" : "") : ""}`
         : "closed via passed comprehension check";
     } else if (bar.source === "verified") {
       note = state.decisions.verifiedTransferred.includes(spec.name)
-        ? "confirmed · transferred from your previous career match"
+        ? "confirmed, transferred from your previous career match"
         : "confirmed by the check-in quiz at set-up";
     } else {
-      note = "on your baseline · marked as self-reported";
+      note = "on your baseline, marked as self-reported";
     }
     closedRows.push({ name: spec.name, source: bar.source, note, checked: bar.source !== "claimed" });
   }
@@ -174,7 +180,7 @@ export default async function ProgressPage() {
         const n = m ? m[1] : "4";
         const skill = resource?.skillsAddressed[0];
         const closedGap = skill ? closedGapEvent(skill) : false;
-        doneLine = `Auto-completed ${fmtDate(checkEv.date)} · ${n} of 5 passed${
+        doneLine = `Auto-completed ${fmtDate(checkEv.date)}, ${n} of 5 passed${
           closedGap ? `, closed your ${skillShort(skill ?? "skill")} gap` : ""
         }`;
       }
@@ -184,7 +190,7 @@ export default async function ProgressPage() {
         type: g.type,
         status: g.status,
         meta: null,
-        doneLine: g.type === "milestone" ? `Done ${date} · marked by you` : doneLine,
+        doneLine: g.type === "milestone" ? `Done ${date}, marked by you` : doneLine,
         autoLine: null,
         statusLine: "",
         check: null,
@@ -195,7 +201,7 @@ export default async function ProgressPage() {
     let check: { resourceId: string; skillShort: string } | null = null;
     if (g.type === "training") {
       statusLine = resource
-        ? `In progress — ${resource.title} · finishes when you pass its 5-question check.`
+        ? `In progress — ${resource.title}, finishes when you pass its 5-question check.`
         : "In progress — finishes when you pass its 5-question check.";
       if (resource && CHECKS[resource.id]) {
         check = { resourceId: resource.id, skillShort: skillShort(resource.skillsAddressed[0] ?? "skill") };
@@ -239,7 +245,7 @@ export default async function ProgressPage() {
   const lastEvent = state.events[state.events.length - 1];
   const count = (n: number, noun: string) => `${n} ${noun}${n === 1 ? "" : "s"}`;
   const goalsDone = state.goals.filter((g) => g.status === "completed").length;
-  const fitLine = `${lastEvent ? fmtDate(lastEvent.date) : "set-up"} · ${count(checkEvents.length, "check")} passed, ${count(byKind("bar-closed").length, "bar")} closed, ${count(goalsDone, "goal")} done.`;
+  const fitLine = `${lastEvent ? fmtDate(lastEvent.date) : "set-up"}, ${count(checkEvents.length, "check")} passed, ${count(byKind("bar-closed").length, "bar")} closed, ${count(goalsDone, "goal")} done.`;
 
   const nextSkill =
     // the ranked-first-30-days head — the same engine view the pathway shows:
@@ -281,7 +287,7 @@ export default async function ProgressPage() {
     }
   }
 
-  const persona = [state.name, [state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(", ")].join(" · ");
+  const persona = [state.name, [state.yearLevel, trackLabelOf(state.track)].filter(Boolean).join(", ")].join(", ");
 
   return (
     <ProgressView

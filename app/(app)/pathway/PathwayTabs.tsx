@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowRight, ArrowUpRight, Check, CheckCheck } from "lucide-react";
 import type { WalkNode, WalkView } from "@/lib/engines/walk";
 import "./walk.css";
 
@@ -53,7 +54,15 @@ const closedChip = (state: ClosedState) => {
   }
   return (
     <span className="vd2-chip vd2-chip-green">
-      {state === "verified" ? "Verified ·✓" : "Checked ·✓✓"}
+      {state === "verified" ? (
+        <>
+          Verified <Check size={11} aria-hidden="true" />
+        </>
+      ) : (
+        <>
+          Checked <CheckCheck size={11} aria-hidden="true" />
+        </>
+      )}
     </span>
   );
 };
@@ -166,12 +175,14 @@ export default function PathwayTabs({
             {upNext && (
               <p className="plan-upnext">
                 <span className="plan-uplab">
-                  Up next · skill {upNext.i + 1} of {walk!.total}
+                  Up next — skill {upNext.i + 1} of {walk!.total}
                 </span>
                 {upNext.n.material?.url ? (
                   <a href={upNext.n.material.url} target="_blank" rel="noopener noreferrer">
                     {upNext.n.skill} — {upNext.n.material.title}{" "}
-                    <span aria-hidden="true">→</span>
+                    <span aria-hidden="true">
+                      <ArrowRight size={12} aria-hidden="true" />
+                    </span>
                   </a>
                 ) : (
                   <span className="plan-upskill">{upNext.n.skill}</span>
@@ -258,7 +269,7 @@ export default function PathwayTabs({
                               >
                                 {node.material.title}
                                 <span className="vd2-ext" aria-hidden="true">
-                                  ↗
+                                  <ArrowUpRight size={12} aria-hidden="true" />
                                 </span>
                               </a>
                             ) : (
@@ -267,10 +278,10 @@ export default function PathwayTabs({
                               </span>
                             )}
                             <span className="vd2-resmeta">
-                              {" "}
-                              · {node.material.cost} · {node.material.hrs}
+                              {", "}
+                              {node.material.cost}, {node.material.hrs}
                               {node.material.access
-                                ? ` · ${ACCESS_WORD[node.material.access]}`
+                                ? `, ${ACCESS_WORD[node.material.access]}`
                                 : ""}
                             </span>
                           </span>
@@ -303,7 +314,14 @@ export default function PathwayTabs({
                           (blue never paints them) */}
                       <span className="vd2-eff num">
                         {node.effect
-                          ? `SP ${node.effect.from} → ${node.effect.to} · +${node.effect.to - node.effect.from}`
+                          ? (
+                            <>
+                              SP {node.effect.from}{" "}
+                              <ArrowRight size={10} aria-hidden="true" />{" "}
+                              {node.effect.to}, +
+                              {node.effect.to - node.effect.from}
+                            </>
+                          )
                           : "—"}
                       </span>
                     </div>

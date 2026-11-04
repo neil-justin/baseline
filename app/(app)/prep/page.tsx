@@ -14,10 +14,12 @@ import "./prep.css";
 
 export const dynamic = "force-dynamic";
 
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+
 export const metadata: Metadata = {
-  title: "Prep — Application Materials · Baseline",
+  title: "Prep — Application Materials Baseline",
   description:
-    "A format & evidence screen for your application materials: the resume checker (7 of the 15-point AR channel) and the cover-letter checker (5 of 15) each surface the format checks and the role's evidence names; the presence declaration lives in Profile → Credentials (3 of 15). Feedback-only — it never claims an ATS pass.",
+    "A format & evidence screen for your application materials: the resume checker (7 of the 15-point AR channel) and the cover-letter checker (5 of 15) each surface the format checks and the role's evidence names; the presence declaration lives in the profile's Credentials tab (3 of 15). Feedback-only — it never claims an ATS pass.",
 };
 
 /**
@@ -58,7 +60,7 @@ export const metadata: Metadata = {
 
 const fmtDT = (iso: string) => {
   const d = new Date(iso);
-  return `${d.toLocaleString("en-US", { month: "short" })} ${d.getDate()} · ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  return `${d.toLocaleString("en-US", { month: "short" })} ${d.getDate()}, ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 };
 
 /* ── the channel cards — the Dashboard KPI register, one card per channel
@@ -255,7 +257,7 @@ function FindingCard({ f }: { f: ResumeFinding }) {
       {f.suggestion && (
         <div className="rs-suggest">
           <p className="rs-move">
-            <b>The move</b> · {f.suggestion.move}
+            <b>The move</b> — {f.suggestion.move}
           </p>
           {f.suggestion.example && (
             <p className="rs-example">
@@ -277,9 +279,9 @@ function FindingCard({ f }: { f: ResumeFinding }) {
 function ResumeLinks() {
   return (
     <p className="rs-links num">
-      First resume? <a href="/prep/guide">Format guide</a> ·{" "}
+      First resume? <a href="/prep/guide">Format guide</a>,{" "}
       <a href="https://careerservices.fas.harvard.edu/resources/bullet-point-resume-template/" target="_blank" rel="noreferrer">
-        Harvard template ↗
+        Harvard template <ArrowUpRight size={12} aria-hidden="true" />
       </a>
     </p>
   );
@@ -324,9 +326,9 @@ function RunResult({
       <section className="panel-sec rs-readout card">
         <div className="rs-readout-top">
           <div>
-            <span className="label num">Resume checker · {fmtDT(run.at)}</span>
+            <span className="label num">Resume checker, {fmtDT(run.at)}</span>
             <div className="rs-readout-sub">
-              {run.fileName} · {run.kind === "pdf" ? "PDF" : "Word"} · target <b>{run.careerName}</b>
+              {run.fileName}, {run.kind === "pdf" ? "PDF" : "Word"}, target <b>{run.careerName}</b>
             </div>
           </div>
           {/* rs-readout-score stays as the e2e byte-contract hook (demo-arc +
@@ -342,7 +344,7 @@ function RunResult({
           <b className="num">
             parse {Math.round(RESUME_AIR_WEIGHTS.parse * 100)}% + format {Math.round(RESUME_AIR_WEIGHTS.format * 100)}% + evidence {Math.round(RESUME_AIR_WEIGHTS.keywords * 100)}%
           </b>{" "}
-          · your latest run counts{resumePersistenceNotice() ? (
+          , your latest run counts{resumePersistenceNotice() ? (
             <span className="rs-notyet"> {resumePersistenceNotice()}</span>
           ) : null}
         </p>
@@ -409,9 +411,9 @@ function LetterResult({ run, staleFor, children }: {
       <section className="panel-sec cl-readout card">
         <div className="cl-readout-top">
           <div>
-            <span className="label num">Cover-letter checker · {fmtDT(run.at)}</span>
+            <span className="label num">Cover-letter checker, {fmtDT(run.at)}</span>
             <div className="cl-readout-sub">
-              {run.fileName} · {LETTER_KINDS[run.kind] ?? run.kind.toUpperCase()} ·{run.employerDeclared ? ` employer anchor ${run.employerName}` : " no employer declared"} · target <b>{run.careerName}</b>
+              {run.fileName}, {LETTER_KINDS[run.kind] ?? run.kind.toUpperCase()},{run.employerDeclared ? ` employer anchor ${run.employerName}` : " no employer declared"}, target <b>{run.careerName}</b>
             </div>
           </div>
           {/* cl-readout-score: the letter side of the same e2e contract */}
@@ -425,7 +427,7 @@ function LetterResult({ run, staleFor, children }: {
           <b className="num">
             parse {Math.round(LETTER_AIR_WEIGHTS.parse * 100)}% + evidence {Math.round(LETTER_AIR_WEIGHTS.keywords * 100)}% + structure {Math.round(LETTER_AIR_WEIGHTS.structural * 100)}%
           </b>{" "}
-          · your latest check counts{letterPersistenceNotice() ? (
+          , your latest check counts{letterPersistenceNotice() ? (
             <span className="cl-notyet"> {letterPersistenceNotice()}</span>
           ) : null}
         </p>
@@ -443,7 +445,7 @@ function LetterResult({ run, staleFor, children }: {
 
       <FactorGroup
         name="Evidence"
-        meaning={`core skills of ${run.careerName} found in the letter · the role anchor is always the declared Target Role`}
+        meaning={`core skills of ${run.careerName} found in the letter, and the role anchor is always the declared Target Role`}
         checks={evidence}
         missLabel="Not found"
       />
@@ -465,7 +467,7 @@ function LetterResult({ run, staleFor, children }: {
                 {f.suggestion && (
                   <div className="rs-suggest">
                     <p className="rs-move">
-                      <b>The move</b> · {f.suggestion.move}
+                      <b>The move</b> — {f.suggestion.move}
                     </p>
                   </div>
                 )}
@@ -538,13 +540,13 @@ export default async function PrepPage() {
   const tally = (checks: { ok: boolean }[]) =>
     `${checks.filter((c) => c.ok).length}/${checks.length}`;
   const resumeNote = parts.resume.measured && latestResume
-    ? `parse ${tally(latestResume.run.parseability.checks)} · format ${tally(latestResume.run.format.checks)} · evidence ${tally(latestResume.run.keywords.checks)}`
+    ? `parse ${tally(latestResume.run.parseability.checks)}, format ${tally(latestResume.run.format.checks)}, evidence ${tally(latestResume.run.keywords.checks)}`
     : latestResume
       ? "re-run for this target to count"
       : "resume checker still open";
   const letterEvaluated = latestLetter?.run.checks.filter((c) => c.ok !== null) ?? [];
   const letterNote = parts.letter.measured && latestLetter
-    ? `evidence ${latestLetter.run.keywords.filter((k) => k.ok).length}/${latestLetter.run.keywords.length} · structure ${letterEvaluated.filter((c) => c.ok).length}/${letterEvaluated.length}`
+    ? `evidence ${latestLetter.run.keywords.filter((k) => k.ok).length}/${latestLetter.run.keywords.length}, structure ${letterEvaluated.filter((c) => c.ok).length}/${letterEvaluated.length}`
     : latestLetter
       ? "re-check for this target to count"
       : "cover-letter checker still open";
@@ -639,7 +641,10 @@ export default async function PrepPage() {
           </div>
           <p className="nc-cta">
             <a className="btn btn-primary" href="/career">
-              Browse the career index <span className="arrow num">→</span>
+              Browse the career index{" "}
+            <span className="arrow num">
+              <ArrowRight size={14} aria-hidden="true" />
+            </span>
             </a>
           </p>
         </section>

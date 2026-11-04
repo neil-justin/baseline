@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowRight, Check, CheckCheck } from "lucide-react";
 import CountUp from "@/components/CountUp";
 import Reveal from "@/components/Reveal";
 import CheckOverlay from "./CheckOverlay";
@@ -82,8 +83,8 @@ interface Props {
 /** Wave-2 (Q3/Q6): compact provenance canon on data rows — the long legends
  *  stay in the explanatory captions below their tables. */
 const BADGES: Record<ClosedRow["source"], { text: string; cls: string }> = {
-  verified: { text: "Verified ·✓", cls: "chip c-green" },
-  checked: { text: "Checked ·✓✓", cls: "chip c-green" },
+  verified: { text: "Verified", cls: "chip c-green" },
+  checked: { text: "Checked", cls: "chip c-green" },
   claimed: { text: "Self-reported", cls: "chip c-grey hatch-chip" },
 };
 
@@ -192,12 +193,12 @@ export default function ProgressView(props: Props) {
   /* the AR tickline's receipts — per-factor honest views (never "15" alone) */
   const arReceipts = props.score.ar === null ? null : (
     <>
-      {" · resume "}
-      {props.arFactors.resume.earned}/{props.arFactors.resume.max} · letter{" "}
+      {", resume "}
+      {props.arFactors.resume.earned}/{props.arFactors.resume.max}, letter{" "}
       {props.arFactors.letter.measured
         ? `${props.arFactors.letter.earned}/${props.arFactors.letter.max}`
-        : "not run"}{" "}
-      · presence{" "}
+        : "not run"}
+      {", presence "}
       {props.arFactors.presence.measured
         ? `${props.arFactors.presence.earned}/${props.arFactors.presence.max}`
         : "not declared"}
@@ -213,7 +214,7 @@ export default function ProgressView(props: Props) {
             <div className="who">
               <h1 className="t">Progress</h1>
               <p className="band-id">
-                {props.persona} · Target: <b>{props.careerName}</b>
+                {props.persona} — Target: <b>{props.careerName}</b>
               </p>
               <p className="prog-ctx num">
                 You&apos;re <b>{props.score.total}%</b> ready for {props.careerName}
@@ -226,7 +227,10 @@ export default function ProgressView(props: Props) {
               </p>
               <div className="prog-ctas">
                 <a className="cta" href="/pathway">
-                  Open your plan <span className="arrow num">→</span>
+                  Open your plan{" "}
+                  <span className="arrow num">
+                    <ArrowRight size={14} aria-hidden="true" />
+                  </span>
                 </a>
                 <a className="link-quiet" href="#goals">
                   Jump to your goals
@@ -237,7 +241,7 @@ export default function ProgressView(props: Props) {
             <div className="prog-scale">
               <div className="readout-head">
                 <div>
-                  <span className="label num">Readiness · {props.careerName}</span>
+                  <span className="label num">Readiness — {props.careerName}</span>
                   <div className="readout-sub num">{props.updated ? `updated ${props.updated}` : "recorded at set-up"}</div>
                 </div>
                 <div className="readout-score num">
@@ -263,16 +267,16 @@ export default function ProgressView(props: Props) {
                   <b>Skills</b> — {props.score.sp} of {WEIGHTS.sp}
                 </div>
                 <div className="tickline">
-                  <b>Employability</b> — {props.score.es} of {WEIGHTS.es} ·{" "}
-                  <span className="tick-note">{props.esVerified} of 7 NACE competencies verified ·✓</span>
+                  <b>Employability</b> — {props.score.es} of {WEIGHTS.es},{" "}
+                  <span className="tick-note">{props.esVerified} of 7 NACE competencies verified <Check size={11} aria-hidden="true" /></span>
                 </div>
                 <div className="tickline">
-                  <b>Training</b> — {props.score.tp} of {WEIGHTS.tp} · {props.stageOneDone} of 3 first steps done
+                  <b>Training</b> — {props.score.tp} of {WEIGHTS.tp}, {props.stageOneDone} of 3 first steps done
                 </div>
                 <div className="tickline">
                   <b>Application readiness</b> —{" "}
                   {props.score.ar === null ? (
-                    <span className="tick-note">not yet measured — the resume diagnostic in Prep opens this channel (resume 7 · letter 5 · presence 3)</span>
+                    <span className="tick-note">not yet measured — the resume diagnostic in Prep opens this channel (resume 7, letter 5, presence 3)</span>
                   ) : (
                     <>
                       {props.score.ar} of {WEIGHTS.ar}
@@ -321,9 +325,9 @@ export default function ProgressView(props: Props) {
             </div>
             <div className="f-result">
               <span className="f-pass">
-                Check passed · {row.correct} of {row.total}
+                Check passed, {row.correct} of {row.total}
               </span>
-              <span className="chip c-green">Checked ·✓✓</span>
+              <span className="chip c-green">Checked <CheckCheck size={11} aria-hidden="true" /></span>
               {/* Pr1 (Wave-3): the "pass at 4 of 5" restatement survives ONLY
                   the 5-of-5 margin case — the pass mark line otherwise just
                   repeats what the score already says */}
@@ -376,7 +380,7 @@ export default function ProgressView(props: Props) {
         </div>
         {props.openSkills.length > 0 && (
           <p className="open-foot num">
-            {props.openSkillCount} of {props.mapSize} still open: {props.openSkills.join(" · ")}. Next steps ranked in{" "}
+            {props.openSkillCount} of {props.mapSize} still open: {props.openSkills.join(", ")}. Next steps ranked in{" "}
             <a href="/pathway">Pathway</a>.
           </p>
         )}
@@ -418,7 +422,7 @@ export default function ProgressView(props: Props) {
                 <div className="goal-row done" key={g.id}>
                   <div className="g-top">
                     <span className="g-title">{title}</span>
-                    {g.type === "training" && <span className="chip c-green">Checked ·✓✓</span>}
+                    {g.type === "training" && <span className="chip c-green">Checked <CheckCheck size={11} aria-hidden="true" /></span>}
                   </div>
                   {/* Pr3 (Wave-3): the completed receipt is ONE line — the
                       auto-note carries the date + score; no doneLine/autoLine

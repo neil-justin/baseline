@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import TablePager from "@/components/TablePager";
+import { ArrowRight, Check, CheckCheck } from "lucide-react";
 import { SegRubricBar, VBadge } from "@/components/instrument";
 import { rubricParts } from "@/lib/engines/rubric";
 import { roundHalfDown, WEIGHTS, type Score } from "@/lib/engines/score";
@@ -240,7 +241,7 @@ export default function CareerClient({
       if (!degreeGateAllows(program, t.degreeMap)) {
         setLock({
           name: t.name,
-          majors: t.degreeMap.join(" · "),
+          majors: t.degreeMap.join(", "),
           // degreeGateAllows is false here ⇒ a program string exists
           program: program ?? "",
           fromName: card?.name ?? "your current role",
@@ -436,7 +437,7 @@ export default function CareerClient({
               <h1 className="t">Your career</h1>
               {card ? (
                 <p className="m">
-                  <b>{card.name}</b> · {card.trackLabel} · {card.what}
+                  <b>{card.name}</b>, {card.trackLabel}, {card.what}
                 </p>
               ) : (
                 <p className="m">No career picked yet.</p>
@@ -463,7 +464,8 @@ export default function CareerClient({
               {card ? (
                 <>
                   <a className="cta" href="/pathway">
-                    Open your plan →
+                    Open your plan{" "}
+                    <ArrowRight size={14} aria-hidden="true" />
                   </a>
                   <div className="cc-switch">
                     <button
@@ -482,13 +484,15 @@ export default function CareerClient({
                           <span key={b.name}>
                             {i > 0 && " "}
                             <VBadge ok>
-                              {b.name} ·{b.src === "verified" ? "✓" : "✓✓"}
+                              {b.name}{" "}
+                              {b.src === "verified" ? <Check size={11} aria-hidden="true" /> : <CheckCheck size={11} aria-hidden="true" />}
                             </VBadge>
                           </span>
                         ))}
                         ) and goals stay.{" "}
                         <button className="quiet-toggle disc-go" type="button" onClick={enterSwitch}>
-                          Browse careers to switch →
+                          Browse careers to switch{" "}
+                          <ArrowRight size={14} aria-hidden="true" />
                         </button>
                       </p>
                     </div>
@@ -790,7 +794,8 @@ export default function CareerClient({
                         <span key={b.name}>
                           {i > 0 && " "}
                           <VBadge ok>
-                            {b.name} ·{b.src === "verified" ? "✓" : "✓✓"}
+                            {b.name}{" "}
+                            {b.src === "verified" ? <Check size={11} aria-hidden="true" /> : <CheckCheck size={11} aria-hidden="true" />}
                           </VBadge>
                         </span>
                       ))}
@@ -838,9 +843,9 @@ export default function CareerClient({
               <div className="readout-head">
                 <div>
                   <span className="label">
-                    READINESS · <b className="sample-tag">{flowTarget.name.toUpperCase()}</b>
+                    READINESS — <b className="sample-tag">{flowTarget.name.toUpperCase()}</b>
                   </span>
-                  <div className="readout-sub">out of 100 · right after the switch</div>
+                  <div className="readout-sub">out of 100, right after the switch</div>
                 </div>
                 <div className="readout-score num">
                   {reset.dip.score.total}
@@ -863,7 +868,7 @@ export default function CareerClient({
                 <span><b>Career direction</b> {reset.dip.score.cc}/{WEIGHTS.cc}</span>
               </div>
               <div className="readout-fit">
-                What stays is competencies and career direction: verified skills ·✓ and an active
+                What stays is competencies and career direction: verified skills and an active
                 goal survive career-specific resets.
               </div>
             </div>
@@ -883,7 +888,15 @@ export default function CareerClient({
                       <span className="s-what">
                         {locked ? (
                           <VBadge ok>
-                            Confirmed ·{locked === "verified" ? "✓ transferred" : "✓✓"}
+                            Confirmed{" "}
+                            {locked === "verified" ? (
+                              <>
+                                transferred{" "}
+                                <Check size={11} aria-hidden="true" />
+                              </>
+                            ) : (
+                              <CheckCheck size={11} aria-hidden="true" />
+                            )}
                           </VBadge>
                         ) : (
                           r.what
@@ -936,13 +949,15 @@ export default function CareerClient({
               <div className="readout-head">
                 <div>
                   <span className="label">
-                    READINESS · <b className="sample-tag">{flowTarget.name.toUpperCase()}</b>
+                    READINESS — <b className="sample-tag">{flowTarget.name.toUpperCase()}</b>
                   </span>
-                  <div className="readout-sub">out of 100 · reset, then rebuilt from your re-assessment</div>
+                  <div className="readout-sub">out of 100, reset, then rebuilt from your re-assessment</div>
                 </div>
                 <div className="readout-score num">
                   <span className="score-from">{recovered.from}</span>
-                  <span className="score-arrow" aria-hidden="true">→</span>
+                  <span className="score-arrow" aria-hidden="true">
+                    <ArrowRight size={22} aria-hidden="true" />
+                  </span>
                   <span className="score-to">{recovered.score.total}</span>
                   <small>/100</small>
                 </div>
@@ -978,7 +993,8 @@ export default function CareerClient({
                       <span key={t}>
                         {i > 0 && " "}
                         <VBadge ok>
-                          {t} ·✓
+                          {t}
+                          <Check size={11} aria-hidden="true" />
                         </VBadge>
                       </span>
                     ))}
@@ -1003,7 +1019,7 @@ export default function CareerClient({
                 <div className="card nextcard">
                   <h3>Set your next goal</h3>
                   <p className="n-target num">
-                    free · ~4 hours · Test Automation University
+                    free, ~4 hours, Test Automation University
                   </p>
                   <p className="n-why">
                     Closes your first open gap in Software Testing — one of the skills QA analysts use every day.
@@ -1030,7 +1046,10 @@ export default function CareerClient({
                     canon "Open your plan →" replaces the retired "See your
                     gaps" naming */}
                 <a className="btn btn-ghost" href="/pathway">
-                  Open your plan <span className="arrow">→</span>
+                  Open your plan{" "}
+                  <span className="arrow">
+                    <ArrowRight size={14} aria-hidden="true" />
+                  </span>
                 </a>
                 <button className="btn btn-ghost" type="button" onClick={() => backToCareer()}>
                   Back to Career

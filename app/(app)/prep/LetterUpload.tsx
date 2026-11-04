@@ -84,7 +84,7 @@ export default function LetterUpload({
   const [err, setErr] = useState<string | null>(null);
   const [drag, setDrag] = useState(false);
   const head = slim ? "Check another version" : "Drop your cover letter here";
-  const sub = slim ? "TXT, PDF, or DOCX · drop or browse" : "TXT, PDF, or DOCX · the check runs the moment the file lands";
+  const sub = slim ? "TXT, PDF, or DOCX, drop or browse" : "TXT, PDF, or DOCX, the check runs the moment the file lands";
 
   /* the landing signal — mirrored from the resume intake: startTransition(
    * () => router.refresh()) flips isPending true, then false when the

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getStudentView } from "@/lib/db";
 import { requireStudent } from "@/lib/session";
 import type { Career, Resource } from "@/lib/types";
@@ -7,6 +8,10 @@ import PathwayTabs from "./PathwayTabs";
 import "./pathway.css";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "My Plan — Baseline",
+};
 
 /**
  * M7 Pathway — MY PLAN is the WALK (cutover, user-ruled 2026-11-03):

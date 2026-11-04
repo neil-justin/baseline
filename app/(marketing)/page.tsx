@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { ArrowRight, Check, CheckCheck } from "lucide-react";
 import { CATALOG_TOTAL, getCareer } from "@/lib/fixtures/catalog";
 import type { Career } from "@/lib/types";
 import { destFor, getCurrentProfile, getSignedInUser } from "@/lib/session";
@@ -125,14 +126,17 @@ export default async function LandingPage() {
             </p>
             <div className="m-ctas">
               <a className="m-pill m-fill m-lg" href="/signup">
-                Start the check <span className="m-arr">→</span>
+                Start the check{" "}
+                <span className="m-arr">
+                  <ArrowRight size={14} aria-hidden="true" />
+                </span>
               </a>
               <a className="m-textbtn m-textbtn-lg" href="/signin">
                 Already have an account? Sign in
               </a>
             </div>
             <p className="m-note">
-              {CATALOG_TOTAL} careers · four tracks · five channels, scored
+              {CATALOG_TOTAL} careers, four tracks, five channels, scored
               honestly
             </p>
           </Reveal>
@@ -361,8 +365,13 @@ export default async function LandingPage() {
                   alone never does.
                 </p>
                 <p className="m-viz" aria-hidden="true">
-                  <span className="m-chip m-cg">✓ verified — closes the gap</span>
-                  <span className="m-chip m-cb">✓✓ checked resource</span>
+                  <span className="m-chip m-cg">
+                    <Check size={11} aria-hidden="true" /> verified — closes the
+                    gap
+                  </span>
+                  <span className="m-chip m-cb">
+                    <CheckCheck size={11} aria-hidden="true" /> checked resource
+                  </span>
                   <span className="m-chip">claimed — never closes alone</span>
                 </p>
               </div>

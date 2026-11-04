@@ -2,6 +2,8 @@
 
 import "./password-feedback.css";
 
+import { Check } from "lucide-react";
+
 /**
  * Shared password feedback (auth round 2 — NIST SP 800-63B style, locked brief):
  * a live strength meter (weak/fair/strong) + a plain-language checklist that
@@ -91,7 +93,7 @@ export function PasswordFeedback({ password }: { password: string }) {
       <ul className="pw-checklist" id="pw-checklist">
         {ITEMS.map(({ key, label }) => (
           <li key={key} className={checks[key] ? "pw-ok" : undefined}>
-            <span aria-hidden="true">{checks[key] ? "✓" : "·"}</span> {label}
+            <span aria-hidden="true">{checks[key] ? <Check size={12} /> : "—"}</span> {label}
           </li>
         ))}
       </ul>
