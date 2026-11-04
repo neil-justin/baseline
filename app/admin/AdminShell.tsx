@@ -8,12 +8,15 @@
  * page builds. The single-page band (proband) and its counters fold away
  * with the wave (approved round 2: the surface is the tables).
  *
- * Tabs per role (mockup law):
- *   counselor → COHORT · AUDIT QUEUE
- *   sysadmin  → COHORT · AUDIT QUEUE · APPROVALS · ACCOUNTS
- * The sysadmin lands on APPROVALS (the first sysadmin-only page, like the
- * mockup mount); APPROVALS + ACCOUNTS are wiring slots for Waves 2–3 —
- * see slots.tsx, one file later waves swap without shell surgery.
+ * Tabs per role (role law, ruled 2026-11-04 — Round 3 of the admin v9
+ * sweep): each role sees ONLY its own surfaces, no spread, no supersets.
+ *   counselor → COHORT · AUDIT QUEUE (lands on COHORT)
+ *   sysadmin  → APPROVALS · ACCOUNTS (lands on APPROVALS) — no
+ *               student-handling surfaces at all.
+ * The server page gates the data builds by role: the sysadmin receives
+ * rows=null / queue=null (its roster/queue panes are never reachable, and
+ * the props stay honestly null rather than being built and shipped for a
+ * role that cannot render them).
  *
  * e2e-hook rule (pending round): no hook classes leak into new chrome —
  * everything new is `atabs-` (admin-tabs.css). The sign-out keeps the
@@ -46,7 +49,6 @@ const COUNSELOR_TABS: ShellTab[] = [
 ];
 
 const SYSADMIN_TABS: ShellTab[] = [
-  ...COUNSELOR_TABS,
   { id: "approvals", label: "Approvals", icon: "how_to_reg" },
   { id: "accounts", label: "Accounts", icon: "manage_accounts" },
 ];
@@ -83,16 +85,43 @@ function barAria(name: string, p: RubricValues): string {
 
 /* ---------- panes ---------- */
 
+/** C1 "the roster watch" — the Cohort tab's own header imagery
+ *  (per-tab metaphor law: three overlapping avatar tiles, the front
+ *  one in the blue-wash moment = the counselor attending to the
+ *  cohort). Deliberately NOT seat-counted — a metaphor, not data. */
+function CohortArt() {
+  return (
+    <svg className="ct-art" width="96" height="48" viewBox="0 0 96 48" aria-hidden="true">
+      <g transform="translate(6 12) rotate(-4 13 12)">
+        <rect width="26" height="24" rx="7" fill="#F1F3F4" />
+        <circle cx="13" cy="9.5" r="3.4" fill="#5F6368" opacity="0.45" />
+        <path d="M6.2 19.5a6.8 6.8 0 0 1 13.6 0z" fill="#5F6368" opacity="0.45" />
+      </g>
+      <g transform="translate(30 8) rotate(3 13 12)">
+        <rect width="26" height="24" rx="7" fill="#F1F3F4" stroke="#FFFFFF" strokeWidth="2" />
+        <circle cx="13" cy="9.5" r="3.4" fill="#5F6368" opacity="0.6" />
+        <path d="M6.2 19.5a6.8 6.8 0 0 1 13.6 0z" fill="#5F6368" opacity="0.6" />
+      </g>
+      <g transform="translate(56 4)">
+        <rect width="34" height="30" rx="9" fill="var(--v-blue-wash)" />
+        <circle cx="17" cy="11.5" r="4" fill="#0842A0" />
+        <path d="M8.2 23.5a8.8 8.8 0 0 1 17.6 0z" fill="#0842A0" />
+      </g>
+    </svg>
+  );
+}
+
 /** COHORT — the existing roster table, moved in whole (same grid classes,
  *  same row markup; the hooks stay verbatim). */
 function CohortTable({ rows }: { rows: LiveRow[] }) {
   return (
     <section className="panel cohort-table" aria-label="Cohort roster">
       <div className="ct-head">
-        <h2 className="ct-title">Cohort roster</h2>
-        <p className="ct-legend">
-          BAR SEGMENTS SHOW EACH PART&apos;S WEIGHT: <b>SKILL · EMPLOYABILITY · TRAINING · APPLICATION READINESS · CAREER CLARITY</b>
-        </p>
+        <div className="ct-headline">
+          <h2 className="ct-title">Cohort roster</h2>
+          <p className="ct-meta">{rows.length} students</p>
+        </div>
+        <CohortArt />
       </div>
       <div className="ct-colheads ct-label">
         <span>NAME</span>
@@ -131,13 +160,18 @@ function Pane({
   ruledByLabel,
 }: {
   tab: TabId;
-  rows: LiveRow[];
-  queue: QueueRow[];
+  rows: LiveRow[] | null;
+  queue: QueueRow[] | null;
   ruledByLabel: string;
 }) {
-  if (tab === "audit") return <AuditQueue rows={queue} ruledByLabel={ruledByLabel} />;
+  if (tab === "audit") {
+    // Honest guard: a role without the queue build gets nothing faked.
+    if (queue === null) return null;
+    return <AuditQueue rows={queue} ruledByLabel={ruledByLabel} />;
+  }
   if (tab === "approvals") return <AdminApprovalsSlot />;
   if (tab === "accounts") return <AdminAccountsSlot />;
+  if (rows === null) return null;
   return <CohortTable rows={rows} />;
 }
 
@@ -150,8 +184,11 @@ export default function AdminShell({
   ruledByLabel,
 }: {
   role: Role;
-  rows: LiveRow[];
-  queue: QueueRow[];
+  /** null = the server skipped the roster build for this role (sysadmin);
+   *  the student-handling tabs aren't rendered for that role anyway. */
+  rows: LiveRow[] | null;
+  /** null = the server skipped the audit-queue build for this role. */
+  queue: QueueRow[] | null;
   ruledByLabel: string;
 }) {
   const tabs = tabsFor(role);

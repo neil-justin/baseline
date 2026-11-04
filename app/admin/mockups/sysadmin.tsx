@@ -2,30 +2,24 @@
 
 /**
  * mockups/sysadmin.tsx — the System Admin's console as a multi-page realm
- * (2026-11-03 roles round; feedback round 2: demo data page removed, the
- * approvals become a proper table, the accounts table loses its inline
- * text actions for a single kebab affordance. Sidebar pages:
- *   COHORT · AUDIT QUEUE      (shared with the counselor)
+ * (2026-11-03 roles round; round 3 role-tab law, 2026-11-04: sysadmins do
+ * not handle students, so the cohort and the audit queue leave this realm.
+ * Sidebar pages:
  *   APPROVALS · ACCOUNTS      (sysadmin-only)
  * All painted — see pieces.tsx for the honesty law.
  */
 import { useState } from "react";
 import { Initials } from "./pieces";
-import { AuditTab, CohortTab, Pager } from "./console-tabs";
+import { Pager } from "./console-tabs";
 
 export const SYSADMIN_TABS = [
-  { id: "cohort", label: "Cohort", icon: "group" },
-  { id: "audit", label: "Audit queue", icon: "fact_check" },
-  { id: "approvals", label: "Approvals", icon: "how_to_reg", new: true },
-  { id: "accounts", label: "Accounts", icon: "manage_accounts", new: true },
+  { id: "approvals", label: "Approvals", icon: "how_to_reg" },
+  { id: "accounts", label: "Accounts", icon: "manage_accounts" },
 ] as const;
 
 export function SysadminPane({ tab }: { tab: string }) {
-  if (tab === "audit") return <AuditTab />;
-  if (tab === "approvals") return <ApprovalsTab />;
   if (tab === "accounts") return <AccountsTab />;
-  // cohort is shared, read-only.
-  return <CohortTab />;
+  return <ApprovalsTab />;
 }
 
 /* ---------- APPROVALS — one table: applications + their decision trail ---------- */

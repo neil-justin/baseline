@@ -65,7 +65,6 @@ export default function AdminMockupMount({ role }: { role: MockRole }) {
                 {t.icon}
               </span>
               <span>{t.label}</span>
-              {"new" in t && t.new ? <i className="mk-new">NEW</i> : null}
             </button>
           ))}
         </nav>

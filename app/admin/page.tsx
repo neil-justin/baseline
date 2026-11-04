@@ -128,18 +128,24 @@ export async function buildQueue(creds: CohortCredentialRow[]): Promise<QueueRow
 }
 
 /**
- * Screen A — the counselor's console, now the multi-tab roles console
+ * Screen A — the staff console, now the multi-tab roles console
  * (2026-11-03 admin-replacement Wave 1): this page stays the server
- * component — requireStaff() gate + the full real-data build — and hands
+ * component — requireStaff() gate + the real-data build (counselor only;
+ * the sysadmin's student-handling builds are skipped by role) — and hands
  * rows/queue/profile to AdminShell (the approved v7 realm chrome). The
  * single-page band and its counters fold away with the wave; sections
  * became the COHORT + AUDIT QUEUE tabs.
  */
 export default async function AdminCohortPage() {
   const profile = await requireStaff();
-  const creds = await credentialStore.listAll();
-  const queue = await buildQueue(creds);
-  const rows = await buildRows(creds);
+  // Role law (2026-11-04, Round 3): the sysadmin never handles students —
+  // skip both the roster and audit-queue builds entirely instead of
+  // shipping student data in the payload for a role that cannot render a
+  // single student surface.
+  const isSysadmin = profile.role === "sysadmin";
+  const creds = isSysadmin ? null : await credentialStore.listAll();
+  const queue = creds ? await buildQueue(creds) : null;
+  const rows = creds ? await buildRows(creds) : null;
 
   return (
     <div className="v7admin">
