@@ -1,0 +1,505 @@
+/* ============================================================
+   DNA v9 — MARKETING REGISTER (the landing's live surface).
+   Graduated from the round-0 approved comp (the /#mockup realm,
+   user-approved 2026-11-04, "this is the way") by the landing
+   cutover. Scope: `.v9` on the (marketing) group root — every
+   class m-prefixed, isolated from globals.css.
+
+   Register per DESIGN.md v9 amendment (2026-11-04): Google Sans
+   hierarchy, tonal surfaces + M3 level-1 shadows (hairline card
+   borders retired), pill controls, radius ladder 16/24,
+   #0B57D0 command blue, marketing four-color accents
+   (decorative only — §4). Self-hosted faces (Offline Font Rule).
+   ============================================================ */
+/* ============================================================
+   v9 MOCKUP REALM — the M3 fidelity upgrade, on the landing's
+   copy (verbatim), summoned only by /#mockup (the real landing +
+   `.v7land` chrome stay untouched; the gate portals this realm
+   to <body>). Every class is m-prefixed: full isolation from
+   landing.css's `.v7land …` descendants and globals.css.
+   Register per DESIGN.md v9 amendment (2026-11-04):
+   Google Sans/Text hierarchy, tonal surfaces + M3 level-1
+   shadows (hairline card borders retired), pill controls,
+   radius ladder 16/24, #0B57D0 command blue, marketing
+   four-color accents (decorative only).
+   NOT the shipped surface — the user's round-0 comp.
+   ============================================================ */
+
+/* self-hosted (offline rule): Google Sans (display, variable 400–700)
+   + Google Sans Text (UI/body) fell to public/fonts/google-sans/  */
+@font-face {
+  font-family: "Google Sans";
+  src: url("/fonts/google-sans/google-sans-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Google Sans Text";
+  src: url("/fonts/google-sans/google-sans-text-400-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Google Sans Text";
+  src: url("/fonts/google-sans/google-sans-text-500-latin.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Google Sans Text";
+  src: url("/fonts/google-sans/google-sans-text-700-latin.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+
+/* ---------- tokens (v9 payload) ---------- */
+
+.v9 {
+  --m-ground: #f8f9fa;
+  --m-surface: #ffffff;
+  --m-ink: #202124;
+  --m-ink2: #5f6368;
+  --m-meta: #80868b;
+  --m-primary: #0b57d0;
+  --m-primary-hover: #0842a0;
+  --m-container: #d3e3fd;
+  --m-on-container: #041e49;
+  --m-sec-container: #eef3fc;
+  --m-blue-wash: #e8f0fe;
+  --m-green-text: #137333;
+  --m-green-wash: #e6f4ea;
+  --m-amber-text: #96590a;
+  --m-amber-wash: #fef7e0;
+  --m-grey-wash: #f1f3f4;
+  --m-rule: #e8eaed;
+  --m-l1: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  --m-ui: "Google Sans", "Google Sans Text", Roboto, system-ui, sans-serif;
+  --m-text: "Google Sans Text", Roboto, system-ui, sans-serif;
+  /* the marketing four-color moment (decorative register — §4) */
+  --m-gblue: #4285f4;
+  --m-ggreen: #34a853;
+  --m-gyellow: #fbbc04;
+  --m-gred: #ea4335;
+
+  font: 400 16px/1.55 var(--m-text);
+  color: var(--m-ink);
+  background: var(--m-ground);
+  -webkit-font-smoothing: antialiased;
+}
+.v9 ::selection { background: var(--m-blue-wash); }
+.v9 :focus-visible { outline: 2px solid var(--m-primary); outline-offset: 2px; }
+.v9 a { color: inherit; text-decoration: none; }
+.v9 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+/* the content cap */
+.v9 .m-cap { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+.v9 .m-sec { padding: 76px 0; }
+
+
+/* ---------- top bar ---------- */
+.v9 .m-mast {
+  background: var(--m-surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.v9 .m-mast-in {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.v9 .m-brand { display: inline-flex; align-items: center; gap: 10px; }
+.v9 .m-mark {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: var(--m-ink);
+  display: grid;
+  place-items: center;
+}
+.v9 .m-mark i { width: 8px; height: 8px; border-radius: 3px; background: var(--m-primary); }
+.v9 .m-word {
+  font: 500 20px/1 var(--m-ui);
+  letter-spacing: -0.01em;
+}
+.v9 .m-nav { display: flex; align-items: center; gap: 10px; }
+
+/* ---------- pill + text buttons (the v9 control register) ---------- */
+.v9 .m-pill {
+  font: 500 14.5px/1 var(--m-ui);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 11px 24px;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+.v9 .m-fill { background: var(--m-primary); color: #fff; }
+.v9 .m-fill:hover { background: var(--m-primary-hover); }
+.v9 .m-lg { font-size: 15.5px; padding: 14px 28px; }
+.v9 .m-arr { font-weight: 400; }
+.v9 .m-textbtn {
+  font: 500 14.5px/1 var(--m-ui);
+  color: var(--m-primary);
+  border-radius: 999px;
+  padding: 10px 16px;
+  transition: background-color 0.15s ease;
+}
+.v9 .m-textbtn:hover { background: var(--m-blue-wash); }
+.v9 .m-textbtn-lg { font-size: 15.5px; }
+
+/* ---------- hero ---------- */
+.v9 .m-hero { padding: 88px 0 84px; }
+.v9 .m-hero-grid {
+  display: grid;
+  grid-template-columns: 1.04fr 0.96fr;
+  gap: 56px;
+  align-items: center;
+}
+.v9 .m-dots { display: flex; gap: 8px; margin: 0 0 22px; }
+.v9 .m-d { width: 12px; height: 12px; border-radius: 50%; }
+.v9 .m-db { background: var(--m-gblue); }
+.v9 .m-dr { background: var(--m-gred); }
+.v9 .m-dy { background: var(--m-gyellow); }
+.v9 .m-dg { background: var(--m-ggreen); }
+.v9 .m-hero h1 {
+  font: 400 clamp(38px, 4.6vw, 62px)/1.08 var(--m-ui);
+  letter-spacing: -0.015em;
+  margin: 0 0 24px;
+  text-wrap: balance;
+  color: var(--m-ink);
+}
+.v9 .m-hero h1 em { font-style: normal; color: var(--m-primary); }
+.v9 .m-lede {
+  font: 400 19px/1.55 var(--m-text);
+  color: var(--m-ink2);
+  max-width: 46ch;
+  margin: 0 0 30px;
+}
+.v9 .m-ctas {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.v9 .m-note {
+  margin: 26px 0 0;
+  font: 500 13px/1.4 var(--m-text);
+  color: var(--m-meta);
+  letter-spacing: 0.01em;
+}
+.v9 .m-photo {
+  margin: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--m-l1);
+}
+.v9 .m-photo img { display: block; width: 100%; height: auto; }
+
+/* ---------- section head ---------- */
+.v9 .m-head { max-width: 720px; margin-bottom: 40px; }
+.v9 .m-head h2 {
+  font: 400 clamp(26px, 3vw, 34px)/1.15 var(--m-ui);
+  letter-spacing: -0.01em;
+  margin: 0 0 14px;
+  color: var(--m-ink);
+}
+.v9 .m-head p {
+  font: 400 17px/1.5 var(--m-text);
+  color: var(--m-ink2);
+  margin: 0;
+}
+
+/* ---------- facts (three cards) ---------- */
+.v9 .m-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.v9 .m-fact {
+  background: var(--m-surface);
+  border-radius: 16px;
+  box-shadow: var(--m-l1);
+  padding: 26px 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.v9 .m-fact b {
+  display: block;
+  font: 500 16px/1.3 var(--m-ui);
+  margin: 0 0 6px;
+}
+.v9 .m-fact p { margin: 0; font-size: 14.5px; color: var(--m-ink2); }
+.v9 .m-tile {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+}
+.v9 .m-tile .m-mic {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.v9 .m-tb { background: var(--m-blue-wash); color: #1967d2; }
+.v9 .m-tg { background: var(--m-green-wash); color: #188038; }
+.v9 .m-ty { background: var(--m-amber-wash); color: #b45309; }
+
+/* ---------- features (real screenshots) ---------- */
+.v9 .m-feat {
+  display: grid;
+  grid-template-columns: 0.92fr 1.08fr;
+  gap: 52px;
+  align-items: center;
+  margin-top: 64px;
+}
+.v9 .m-flip .m-feat-copy { order: 2; }
+.v9 .m-feat-copy h3 {
+  font: 400 24px/1.25 var(--m-ui);
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+  color: var(--m-ink);
+}
+.v9 .m-feat-copy p {
+  font: 400 15.5px/1.6 var(--m-text);
+  color: var(--m-ink2);
+  margin: 0;
+}
+.v9 .m-shot {
+  margin: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--m-l1);
+  outline: 1px solid rgba(60, 64, 67, 0.06);
+  outline-offset: -1px;
+}
+.v9 .m-shot img { display: block; width: 100%; height: auto; }
+
+/* ---------- how-it-works (the tonal band) ---------- */
+.v9 .m-band {
+  background: var(--m-sec-container);
+  border-radius: 32px;
+  padding: 64px 0;
+  margin: 8px 0 0;
+}
+.v9 .m-loop {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.v9 .m-step {
+  background: var(--m-surface);
+  border-radius: 16px;
+  box-shadow: var(--m-l1);
+  padding: 26px 24px 28px;
+}
+.v9 .m-num {
+  font: 500 42px/1 var(--m-ui);
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+}
+.v9 .m-num.m-n1 { color: #1967d2; }
+.v9 .m-num.m-n2 { color: var(--m-gred); }
+.v9 .m-num.m-n3 { color: #b06000; }
+.v9 .m-step h3 {
+  font: 500 18px/1.3 var(--m-ui);
+  margin: 0 0 8px;
+  color: var(--m-ink);
+}
+.v9 .m-mech { margin: 0 0 16px; font-size: 14.5px; color: var(--m-ink2); }
+.v9 .m-viz { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+
+/* chips (8px radius — the v9 chip register) */
+.v9 .m-chip {
+  font: 500 12.5px/1 var(--m-text);
+  color: var(--m-ink2);
+  background: var(--m-grey-wash);
+  border-radius: 8px;
+  padding: 6px 12px;
+  white-space: nowrap;
+}
+.v9 .m-chip.m-cg { background: var(--m-green-wash); color: var(--m-green-text); }
+.v9 .m-chip.m-cb { background: var(--m-blue-wash); color: var(--m-primary); }
+
+/* mini honest bars */
+.v9 .m-viz.m-bars { display: grid; gap: 7px; }
+.v9 .m-vbar { display: grid; gap: 3px; }
+.v9 .m-vbar .m-vlab { font: 500 11px/1.3 var(--m-text); color: var(--m-meta); }
+.v9 .m-vbar .m-vtrack {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--m-rule);
+  overflow: hidden;
+  display: block;
+}
+.v9 .m-vbar .m-vtrack em {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--m-primary);
+}
+
+/* ---------- counselors ---------- */
+.v9 .m-rub {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 48px;
+  align-items: center;
+}
+.v9 .m-rub .m-head { margin-bottom: 0; }
+.v9 .m-rubcard {
+  background: var(--m-surface);
+  border-radius: 16px;
+  box-shadow: var(--m-l1);
+  padding: 30px 32px;
+}
+.v9 .m-counsel { margin: 0; padding: 0 0 0 20px; list-style: outside; }
+.v9 .m-counsel li {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--m-rule);
+  color: var(--m-ink2);
+  font-size: 15px;
+}
+.v9 .m-counsel li:last-child { border-bottom: 0; padding-bottom: 0; }
+.v9 .m-counsel li::marker { color: var(--m-meta); }
+.v9 .m-counsel b { color: var(--m-ink); font-weight: 600; font-family: var(--m-ui); }
+
+/* ---------- FAQ ---------- */
+.v9 .m-faq {
+  background: var(--m-surface);
+  border-radius: 16px;
+  box-shadow: var(--m-l1);
+  overflow: hidden;
+}
+.v9 .m-faqi { border-bottom: 1px solid var(--m-rule); }
+.v9 .m-faqi:last-child { border-bottom: 0; }
+.v9 .m-faqi summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 26px;
+  font: 500 16px/1.35 var(--m-ui);
+  color: var(--m-ink);
+}
+.v9 .m-faqi summary::-webkit-details-marker { display: none; }
+.v9 .m-faqi summary::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--m-ink2);
+  border-bottom: 2px solid var(--m-ink2);
+  transform: rotate(45deg) translateY(-3px);
+  transition: transform 0.15s ease;
+  flex: none;
+  margin-right: 4px;
+}
+.v9 .m-faqi[open] summary::after { transform: rotate(225deg) translateY(-3px); }
+.v9 .m-faqi summary:hover { background: var(--m-grey-wash); }
+.v9 .m-faqi p {
+  margin: 0;
+  padding: 0 26px 22px;
+  max-width: 70ch;
+  color: var(--m-ink2);
+  font-size: 15px;
+}
+
+/* ---------- trust + footer ---------- */
+.v9 .m-trust { padding: 8px 0 40px; }
+.v9 .m-trustrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+  justify-content: center;
+  text-align: center;
+  max-width: 980px;
+}
+.v9 .m-trustrow span {
+  font: 500 12.5px/1.4 var(--m-text);
+  color: var(--m-meta);
+}
+.v9 .m-evidence {
+  background: var(--m-surface);
+  border-top: 1px solid var(--m-rule);
+}
+.v9 .m-foot {
+  padding: 26px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.v9 .m-legal {
+  margin: 0;
+  font: 400 12.5px/1.5 var(--m-text);
+  color: var(--m-meta);
+}
+.v9 .m-flinks { display: flex; gap: 4px; }
+.v9 .m-flinks .m-textbtn { font-size: 13.5px; color: var(--m-ink2); }
+.v9 .m-flinks .m-textbtn:hover { color: var(--m-primary); background: transparent; }
+
+/* ---------- responsive folds ---------- */
+@media (max-width: 1080px) {
+  .v9 .m-hero-grid { gap: 36px; }
+}
+@media (max-width: 940px) {
+  .v9 .m-hero { padding: 56px 0 60px; }
+  .v9 .m-hero-grid { grid-template-columns: 1fr; }
+  .v9 .m-photo { max-width: 560px; }
+  .v9 .m-facts { grid-template-columns: 1fr; }
+  .v9 .m-loop { grid-template-columns: 1fr; }
+  .v9 .m-feat { grid-template-columns: 1fr; gap: 24px; margin-top: 48px; }
+  .v9 .m-flip .m-feat-copy { order: 0; }
+  .v9 .m-rub { grid-template-columns: 1fr; gap: 24px; }
+  .v9 .m-rub .m-head { margin-bottom: 0; }
+  .v9 .m-sec { padding: 52px 0; }
+  .v9 .m-band { padding: 44px 0; }
+}
+@media (max-width: 560px) {
+  .v9 .m-cap { padding: 0 20px; }
+  .v9 .m-mast-in { padding: 12px 16px; gap: 8px; }
+  .v9 .m-brand { gap: 8px; }
+  .v9 .m-word { font-size: 17px; }
+  .v9 .m-textbtn { font-size: 13px; padding: 9px 10px; }
+  .v9 .m-pill { padding: 10px 16px; font-size: 13px; }
+  .v9 .m-hero h1 { font-size: clamp(30px, 8.6vw, 38px); }
+  .v9 .m-lede { font-size: 16.5px; }
+  .v9 .m-ctas { align-items: flex-start; flex-direction: column; }
+  .v9 .m-textbtn-lg { padding-left: 0; }
+  .v9 .m-head { margin-bottom: 28px; }
+  .v9 .m-foot { justify-content: center; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v9 * { transition: none !important; }
+}
+
+/* fallback safety: the body face the v7 app shell already ships
+   (self-hosted, offline venue) — covers any gap while Google Sans
+   resolves and any future mono/data use on marketing surfaces */
+@font-face {
+  font-family: "Roboto";
+  src: url("/fonts/roboto-var-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: block;
+}

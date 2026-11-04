@@ -57,6 +57,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="font/woff2"
           crossOrigin="anonymous"
         />
+        {/* DNA v9 (Google-school M3) faces — self-hosted woff2 (see DESIGN.md
+            v9 amendment + The Offline Font Rule); preloaded for first paint. */}
+        <link
+          rel="preload"
+          href="/fonts/google-sans/google-sans-latin.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/google-sans/google-sans-text-400-latin.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/google-sans/google-sans-text-500-latin.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
       </head>
       <body>
         <a className="skip" href="#main">

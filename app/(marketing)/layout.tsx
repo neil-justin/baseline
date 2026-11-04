@@ -1,29 +1,33 @@
 import type { ReactNode } from "react";
+import "./v9.css";
 
 /**
- * Marketing shell — the landing's own chrome (v7.2 wave-3): a white top bar
- * (brand mark with 6px blue inlay + wordmark, Sign in + Start the check right)
- * over the `.v7land` ground, no sidebar, no rail. The honest footer lives in
- * the page (evidence close). Scoped under `.v7land` in ./landing.css — the
- * Index system in globals.css is untouched by this file.
+ * Marketing shell — the landing's own chrome, DNA v9 (the M3 fidelity
+ * upgrade, user-approved round-0 comp 2026-11-04 → cutover round 1):
+ * a white top bar (brand mark + Google Sans wordmark, Sign in text
+ * button + Start-the-check pill) over the `.v9` ground, no sidebar,
+ * no rail. The honest footer lives in the page (evidence close).
+ * Scoped under `.v9` in ./v9.css — m-prefixed classes, isolated from
+ * globals.css (the Index system is untouched by this file and retired
+ * from this surface).
  */
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="v7land">
-      <header className="mast">
-        <div className="mast-in">
-          <span className="brandline">
-            <span className="mark" aria-hidden="true">
+    <div className="v9">
+      <header className="m-mast">
+        <div className="m-mast-in">
+          <span className="m-brand">
+            <span className="m-mark" aria-hidden="true">
               <i></i>
             </span>
-            <span className="word">Baseline</span>
+            <span className="m-word">Baseline</span>
           </span>
-          <nav className="mast-nav" aria-label="Primary">
-            <a className="mast-signin" href="/signin">
+          <nav className="m-nav" aria-label="Primary">
+            <a className="m-textbtn" href="/signin">
               Sign in
             </a>
-            <a className="cta" href="/signup">
-              Start the check <span className="arr">→</span>
+            <a className="m-pill m-fill" href="/signup">
+              Start the check
             </a>
           </nav>
         </div>

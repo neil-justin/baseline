@@ -280,3 +280,50 @@ Born from the live review + variant mocks (`.impeccable/mocks/decision/rail-marg
 4. **Panel sizing (built truth).** The v7.1 equalize-panels reservation is dead: the married card sizes per tab. Any future surface reviving stacked panels must equalize panels, not reserve white voids.
 5. **The Ledger-Table Rule (user-ruled 2026-11-02 browse round).** Any rows × fixed-columns data renders as a REAL `<table>` — tracked 11px/500 heads, `#E8EAED` row rules, row hover, wash chips in the State cell, tabular numerals, honest "—" for unmeasured cells. Prose (findings, rationales, notes) is never force-tabled; the family register (pathway plan/gap tables) is the pattern each surface clones into its own CSS. Long ledgers (the 36-career one-list, pathway gaps/resources) paginate at 10/page through the shared stepper (`components/TablePager.tsx`, `.vpager` in v7.css): absolute ranks/indices, the true SHOWING range in the kicker, hidden when `pageCount ≤ 1`, no scroll behavior.
 6. **The Route-Stable Viewport Rule (user-ruled 2026-11-02 browse round).** Document height varies per route, so classic scrollbars toggled viewport width and re-centered the capped frame while layout chrome shifted between navigations. The root reserves the gutter: `html { scrollbar-gutter: stable; }` (+ `overflow-y: scroll` fallback behind `@supports`). Probe receipt: zero shell shift + `clsSum 0` across Dashboard→Careers→My Plan→Prep→Profile at 1440 and 390.
+
+## v9 amendments — the M3 fidelity upgrade (user-ruled 2026-11-04)
+
+Born from the user ruling that the shipped app "follows the Google design DNA but looks underwhelming": v7's vocabulary is 2019-URL Material (hairline-bordered white cards, 8px radii, flat quiet surfaces) while **current** Google products (Gmail/Drive 2025-26) render Material 3. This amendment upgrades the DNA to today's Google look. It supersedes the v7 law **only on the points listed here**; everything unamended (honesty laws, element budget, content-verbatim, detector floors) stays binding. The frontmatter payload above remains the v7 record and is superseded point-wise by the tokens below.
+
+```yaml
+v9:
+  colors:
+    ground: "#F8F9FA"          # unchanged
+    surface: "#FFFFFF"         # unchanged
+    primary: "#0B57D0"         # Google's current primary — supplants #1A73E8 as command blue
+    primary-hover: "#0842A0"
+    primary-container: "#D3E3FD"   # tonal moments / tonal buttons
+    on-primary-container: "#041E49"
+    secondary-container: "#EEF3FC" # quiet tonal card tint on the ground
+    # semantic family (green/amber/grey washes) unchanged from v7
+    # #1A73E8/#E8F0FE survive as legacy aliases during the migration surfaces
+  typography:
+    headings-ui: '"Google Sans", "Roboto", system-ui, sans-serif'  # NEW — page heads, section heads, buttons, chips, nav labels, marketing display
+    body-data: '"Roboto", system-ui, sans-serif'                    # unchanged carrier of prose AND every numeral
+    mono: '"Roboto Mono", ui-monospace, monospace'                  # supplants Fragment Mono on visible surfaces
+    # The Tabular Rule keeps numerals in Roboto (tabular) — Google Sans carries
+    # hierarchy only, never the instrument's numbers. Marketing display sizes:
+    # hero clamp(40–64px) 400, section heads 28px 400, card heads 22–24px 400.
+  rounded: { panel: 16px, frame: 24px, control: 999px, chip: 8px, thumb: 6px, bar: 2px }
+  elevation:
+    card: "0 1px 2px 0 rgba(60,64,67,.30), 0 1px 3px 1px rgba(60,64,67,.15)"  # M3 level-1 replaces the whisper register on structural cards
+    cta: "none → state layers"   # pills get hover/press state tints, not baked shadows
+  buttons:
+    primary: "filled pill — #0B57D0 bg, white Google Sans 500 14px, hover #0842A0 + state layer 8%"
+    tonal: "#D3E3FD bg / #041E49 text pill — the new 'ghost' register"
+    text: "no fill, #0B57D0 text, pill hover wash"
+  loading:
+    skeleton: "state language, permitted: #E8EAED blocks pulsing to #F1F3F4 (1.4s ease, respects prefers-reduced-motion). Skeleton = the M3 shape of the block it stands in, never a spinner."
+```
+
+**Rule changes (each names the v7 rule it amends):**
+
+1. **The Surface-Tone Rule** (amends hairline+whisper card law). Structural surfaces are drawn by *tone + M3 level-1 shadow*, borderless; the 1px `#DADCE0` border retires from cards, panels, tables, and the shell (tables keep their `#E8EAED` *inner row rules*). A quiet `secondary-container` tint (`#EEF3FC`) is legal card ground where a card must separate from white siblings.
+2. **The Pill Rule** (amends the 8px-control register). Every interactive control — buttons, chips-as-controls, CTA — is a full pill; text wounds heal with padding, not radius. Non-interactive wash chips sit at 8px.
+3. **The Radius Ladder** (amends the 8px ceiling). Cards 16px · large frames/hero media 24px · controls pill · chips 8px · thumbs 6px · bars 2px. Children never exceed their container's rung (v7 law stands).
+4. **The Marketing-Four-Color Exception** (extends the Blue Command Rule). The single-blue command economy holds for **every signed-in surface**. The *marketing* landing and footers may use Google's four-color accents (dots, icon tiles `#4285F4/#EA4335/#FBBC04/#34A853`) as decorative moments — never as verdicts, on any interior page. Auth pages stay single-blue.
+5. **The Skeleton Rule** (new; amends the strict no-motion reading). Loading is state language: an M3-shaped skeleton that pulses `#E8EAED → #F1F3F4` is permitted wherever a fetch resolves late — per-route `loading.tsx` and in-page tab loads. No entrance animations, no scroll theatrics (those bans stand).
+6. **The Stage Rule** (transition contract for the migration): the landing + auth pages migrate first (off the Index register), then each console surface sweeps token-by-token onto v9 in the user-gated screen order. During migration, old registers stay untouched on un-migrated surfaces — mid-tree mixed registers are inspected surface-by-surface, not file-by-file.
+7. **The Offline Font Rule holds**: "Google Sans" must be a **self-hosted** woff2 or it does not ship — the fallback stack (`Roboto`) is the enforced floor, so the offline demo venue never loads a hosted sheet. Phases that cannot reach self-hosted Google Sans ship Roboto-only without treating it as a breach of this amendment.
+
+Ruling record: session 2026-11-04 (`/#mockup` realm = the approved comp target for the marketing register). The mockup realm does not touch the server page; the landing cutover is a later, user-gated round. *(Round 1, 2026-11-04: the comp was user-approved ("this is the way") and CUT OVER — the live landing now runs this register under `.v9` in `app/(marketing)/v9.css`; the `#mockup` realm files retired with it. Next in queue: auth pages.)*

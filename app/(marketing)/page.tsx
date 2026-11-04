@@ -1,9 +1,7 @@
 import { redirect } from "next/navigation";
-import { CATALOG_TOTAL, getCareer, trackLabelOf } from "@/lib/fixtures/catalog";
+import { CATALOG_TOTAL, getCareer } from "@/lib/fixtures/catalog";
 import type { Career } from "@/lib/types";
-import Reveal from "@/components/Reveal";
 import { destFor, getCurrentProfile, getSignedInUser } from "@/lib/session";
-import "./landing.css";
 
 export const dynamic = "force-dynamic";
 
@@ -33,22 +31,17 @@ async function authedRedirect(): Promise<void> {
 }
 
 /**
- * M0 Landing — the public measurement. Product-first revamp (2026-11-03,
- * user-ruled): no stats band — the page tells the product and its features,
- * illustrated richly. The four feature blocks carry REAL screenshots of the
- * app (public/shots/*.png, captured from the canon demo seed — honest
- * product truth, self-hosted for the offline demo); the intro strip and
- * blocks use inline SVG line icons; the how-it-works bars fill on reveal
- * (the page's one gif-like motion, disabled under reduced motion).
- * COPY is reported DRAFT for the user's in-browser blessing: plain and
- * concrete, no brochure-speak, channels written out as words, the
- * never-claims-ATS-pass fence kept, RA 10173 in the footer footnote only.
+ * M0 Landing — DNA v9 (the M3 fidelity upgrade): the round-0 approved
+ * comp (user-approved 2026-11-04, "this is the way") cut over onto the
+ * live page by the landing cutover (round 1). The approved register:
+ * Google Sans/Text hierarchy, tonal surfaces with M3 level-1 shadows
+ * (no hairline card borders), pill controls, 16/24px radius ladder,
+ * #0B57D0 command blue, and the marketing four-color moments
+ * (decorative only — DESIGN.md v9 §4). COPY unchanged from the
+ * product-first revamp: plain and concrete, no brochure-speak,
+ * channels written out as words, the never-claims-ATS-pass fence kept,
+ * RA 10173 in the footer footnote only. No entrance machinery.
  */
-
-/** Track label rendered the way the index table says it. */
-function trackLabel(c: Career): string {
-  return trackLabelOf(c.track);
-}
 
 /** How-it-works step visuals: real catalog names, no invented careers. */
 const STEP_CAREER_IDS = ["swd", "book", "csr"] as const;
@@ -86,10 +79,10 @@ const FAQS = [
   },
 ] as const;
 
-/** Inline SVG line icons (24px, stroke = currentColor) — the landing's clipart register. */
+/** Inline SVG line icons (24px, stroke = currentColor). */
 function Icon({ d, extra }: { d: string; extra?: string }) {
   return (
-    <svg className="ic" viewBox="0 0 24 24" aria-hidden="true">
+    <svg className="m-mic" viewBox="0 0 24 24" aria-hidden="true">
       <path d={d} />
       {extra ? <path d={extra} /> : null}
     </svg>
@@ -111,68 +104,93 @@ export default async function LandingPage() {
 
   return (
     <>
-      {/* ── first viewport: the honest-process promise + the graduates photo ── */}
-      <section className="hero">
-        <div className="cap hero-grid">
+      {/* ── hero: the Google-marketing voice ── */}
+      <section className="m-hero">
+        <div className="m-cap m-hero-grid">
           <div>
-            <h1>Walk into your first career ready — not just qualified.</h1>
-            <p className="lede">
-              One 15-minute check turns what you can actually do into an honest
-              score out of 100 — and hands you the ranked plan that closes the
-              gap.
+            <p className="m-dots" aria-hidden="true">
+              <i className="m-d m-db"></i>
+              <i className="m-d m-dr"></i>
+              <i className="m-d m-dy"></i>
+              <i className="m-d m-dg"></i>
             </p>
-            <div className="hero-ctas">
-              <a className="cta" href="/signup">
-                Start the check <span className="arr">→</span>
+            <h1>
+              Walk into your first career <em>ready</em> — not just qualified.
+            </h1>
+            <p className="m-lede">
+              One 15-minute check turns what you can actually do into an
+              honest score out of 100 — and hands you the ranked plan that
+              closes the gap.
+            </p>
+            <div className="m-ctas">
+              <a className="m-pill m-fill m-lg" href="/signup">
+                Start the check <span className="m-arr">→</span>
               </a>
-              <a className="sublink" href="/signin">
+              <a className="m-textbtn m-textbtn-lg" href="/signin">
                 Already have an account? Sign in
               </a>
             </div>
+            <p className="m-note">
+              {CATALOG_TOTAL} careers · four tracks · five channels, scored
+              honestly
+            </p>
           </div>
-          {/* self-hosted (offline demo); free license (Pexels, graduates throwing caps) */}
-          {/* eslint-disable-next-line @next/next/no-img-element -- static local asset */}
-          <img
-            className="hero-photo"
-            src="/landing-graduates.jpg"
-            alt="Graduates in gowns throwing their caps into a clear blue sky"
-            width={1600}
-            height={1067}
-          />
+          <figure className="m-photo">
+            {/* self-hosted (offline demo); free license (Pexels, graduates throwing caps) */}
+            {/* eslint-disable-next-line @next/next/no-img-element -- static local asset */}
+            <img
+              src="/landing-graduates.jpg"
+              alt="Graduates in gowns throwing their caps into a clear blue sky"
+              width={1600}
+              height={1067}
+            />
+          </figure>
         </div>
       </section>
 
-      {/* ── what Baseline is — the platform statement + three icon facts ── */}
-      <section className="section band" aria-label="What Baseline is">
-        <div className="cap">
-          <div className="section-head">
+      {/* ── what Baseline is — the platform statement + three cards ── */}
+      <section className="m-sec" aria-label="What Baseline is">
+        <div className="m-cap">
+          <div className="m-head">
             <h2>What Baseline does.</h2>
             <p>
-              Pick the career you’re aiming at. Take the check. Get your score,
-              your gaps, and a ranked plan to close them — with your counselor
-              reading the same record.
+              Pick the career you’re aiming at. Take the check. Get your
+              score, your gaps, and a ranked plan to close them — with your
+              counselor reading the same record.
             </p>
           </div>
-          <div className="facts">
-            <div className="fact">
-              <Icon {...ICON_GAUGE} />
+          <div className="m-facts">
+            <div className="m-fact">
+              <span className="m-tile m-tb" aria-hidden="true">
+                <Icon {...ICON_GAUGE} />
+              </span>
               <div>
                 <b>One score out of 100</b>
                 <p>computed from your own records — never self-report alone.</p>
               </div>
             </div>
-            <div className="fact">
-              <Icon {...ICON_COMPASS} />
+            <div className="m-fact">
+              <span className="m-tile m-tg" aria-hidden="true">
+                <Icon {...ICON_COMPASS} />
+              </span>
               <div>
                 <b>{CATALOG_TOTAL} careers, four tracks</b>
-                <p>IT, business, accounting, and office — mapped from Philippine labor-demand reports.</p>
+                <p>
+                  IT, business, accounting, and office — mapped from
+                  Philippine labor-demand reports.
+                </p>
               </div>
             </div>
-            <div className="fact">
-              <Icon {...ICON_STEPS} />
+            <div className="m-fact">
+              <span className="m-tile m-ty" aria-hidden="true">
+                <Icon {...ICON_STEPS} />
+              </span>
               <div>
                 <b>A plan that ranks itself</b>
-                <p>every gap becomes a next step, prices and hours shown up front.</p>
+                <p>
+                  every gap becomes a next step, prices and hours shown up
+                  front.
+                </p>
               </div>
             </div>
           </div>
@@ -180,25 +198,25 @@ export default async function LandingPage() {
       </section>
 
       {/* ── the features — real screenshots of the actual product ── */}
-      <section className="section feat-section" aria-label="What the platform does">
-        <div className="cap">
-          <div className="section-head">
+      <section className="m-sec" aria-label="What the platform does">
+        <div className="m-cap">
+          <div className="m-head">
             <h2>What you get, screen by screen.</h2>
             <p>Every image below is the product itself — no mockups, no promises.</p>
           </div>
 
-          <div className="feat">
-            <div className="feat-copy">
+          <div className="m-feat">
+            <div className="m-feat-copy">
               <h3>See your readiness as one number.</h3>
               <p>
-                The Career Readiness Index covers five channels, written out in
-                plain words: skill progress, employability skills, training
-                progress, application readiness, and career clarity. Every
-                point traces to a check you passed — and what isn’t measured
-                yet says so, honestly.
+                The Career Readiness Index covers five channels, written out
+                in plain words: skill progress, employability skills,
+                training progress, application readiness, and career
+                clarity. Every point traces to a check you passed — and what
+                isn’t measured yet says so, honestly.
               </p>
             </div>
-            <figure className="shot-frame">
+            <figure className="m-shot">
               {/* eslint-disable-next-line @next/next/no-img-element -- static local asset */}
               <img
                 src="/shots/dashboard.png"
@@ -210,16 +228,16 @@ export default async function LandingPage() {
             </figure>
           </div>
 
-          <div className="feat flip">
-            <div className="feat-copy">
+          <div className="m-feat m-flip">
+            <div className="m-feat-copy">
               <h3>Find the career that fits what you can already do.</h3>
               <p>
-                Careers are ranked by the skills you share with each role, with
-                the full skill map and entry path on the same page. Switching
-                direction later? Verified skills travel with you.
+                Careers are ranked by the skills you share with each role,
+                with the full skill map and entry path on the same page.
+                Switching direction later? Verified skills travel with you.
               </p>
             </div>
-            <figure className="shot-frame">
+            <figure className="m-shot">
               {/* eslint-disable-next-line @next/next/no-img-element -- static local asset */}
               <img
                 src="/shots/career.png"
@@ -231,16 +249,17 @@ export default async function LandingPage() {
             </figure>
           </div>
 
-          <div className="feat">
-            <div className="feat-copy">
+          <div className="m-feat">
+            <div className="m-feat-copy">
               <h3>A plan that ranks itself.</h3>
               <p>
                 Your gaps become ranked steps — courses, certificates, and
-                assessments with prices and hours shown up front. Passing the
-                check closes the bar; a claim stays hatched until it’s checked.
+                assessments with prices and hours shown up front. Passing
+                the check closes the bar; a claim stays hatched until it’s
+                checked.
               </p>
             </div>
-            <figure className="shot-frame">
+            <figure className="m-shot">
               {/* eslint-disable-next-line @next/next/no-img-element -- static local asset */}
               <img
                 src="/shots/plan.png"
@@ -252,17 +271,17 @@ export default async function LandingPage() {
             </figure>
           </div>
 
-          <div className="feat flip">
-            <div className="feat-copy">
+          <div className="m-feat m-flip">
+            <div className="m-feat-copy">
               <h3>Application materials, checked against the role.</h3>
               <p>
                 Upload your resume and cover letter — the checkers read the
-                actual file: parse, format, evidence — and show what’s there,
-                line by line. Your materials stay yours: nothing is
+                actual file: parse, format, evidence — and show what’s
+                there, line by line. Your materials stay yours: nothing is
                 auto-written, and nothing promises an ATS pass.
               </p>
             </div>
-            <figure className="shot-frame">
+            <figure className="m-shot">
               {/* eslint-disable-next-line @next/next/no-img-element -- static local asset */}
               <img
                 src="/shots/prep.png"
@@ -276,29 +295,28 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* ── numbered how-it-works: 1-2-3, each with its mini instrument ── */}
-      <section className="section band" id="how-it-works">
-        <div className="cap">
-          <div className="section-head">
+      {/* ── how-it-works: the tonal band ── */}
+      <section className="m-band" id="how-it-works">
+        <div className="m-cap">
+          <div className="m-head">
             <h2>How it works.</h2>
             <p>Three steps, in this order.</p>
           </div>
-
-          <Reveal className="card loop-grid">
-            <div className="loop-step">
-              <div className="loop-num num">01</div>
+          <div className="m-loop">
+            <div className="m-step">
+              <div className="m-num m-n1">01</div>
               <div>
                 <h3>Pick your career</h3>
-                <p className="mech">
+                <p className="m-mech">
                   Choose from {CATALOG_TOTAL} careers mapped from Philippine
                   labor-demand reports. Each one lists its skills and entry
                   paths.
                 </p>
-                <p className="loop-viz" aria-hidden="true">
+                <p className="m-viz" aria-hidden="true">
                   {STEP_CAREER_IDS.map((id) => {
                     const c = getCareer(id) as Career;
                     return (
-                      <span className="chip c-grey" key={id}>
+                      <span className="m-chip" key={id}>
                         {c.name}
                       </span>
                     );
@@ -306,21 +324,21 @@ export default async function LandingPage() {
                 </p>
               </div>
             </div>
-            <div className="loop-step">
-              <div className="loop-num num">02</div>
+            <div className="m-step">
+              <div className="m-num m-n2">02</div>
               <div>
                 <h3>Close your gaps</h3>
-                <p className="mech">
+                <p className="m-mech">
                   Your score covers five things, written out in plain words:
                   skill progress, employability, training, application
                   readiness, and career direction. The Plan ranks what to
                   close next — free and paid courses, with prices shown.
                 </p>
-                <div className="loop-viz bars" aria-hidden="true">
+                <div className="m-viz m-bars" aria-hidden="true">
                   {CHANNEL_BARS.map((b) => (
-                    <span className="vbar" key={b.n}>
-                      <span className="vlab">{b.n}</span>
-                      <span className="vtrack">
+                    <span className="m-vbar" key={b.n}>
+                      <span className="m-vlab">{b.n}</span>
+                      <span className="m-vtrack">
                         <em style={{ width: `${b.pct}%` }} />
                       </span>
                     </span>
@@ -328,47 +346,47 @@ export default async function LandingPage() {
                 </div>
               </div>
             </div>
-            <div className="loop-step">
-              <div className="loop-num num">03</div>
+            <div className="m-step">
+              <div className="m-num m-n3">03</div>
               <div>
                 <h3>Walk in ready</h3>
-                <p className="mech">
-                  The resume and cover-letter checkers read your actual files,
-                  and declared credentials get verified against your record.
-                  Checks you actually pass count; what you claim alone never
-                  does.
+                <p className="m-mech">
+                  The resume and cover-letter checkers read your actual
+                  files, and declared credentials get verified against your
+                  record. Checks you actually pass count; what you claim
+                  alone never does.
                 </p>
-                <p className="loop-viz" aria-hidden="true">
-                  <span className="chip v-ok">✓ verified — closes the gap</span>
-                  <span className="chip v-check">✓✓ checked resource</span>
-                  <span className="chip v-claim">claimed — never closes alone</span>
+                <p className="m-viz" aria-hidden="true">
+                  <span className="m-chip m-cg">✓ verified — closes the gap</span>
+                  <span className="m-chip m-cb">✓✓ checked resource</span>
+                  <span className="m-chip">claimed — never closes alone</span>
                 </p>
               </div>
             </div>
-          </Reveal>
+          </div>
         </div>
       </section>
 
-      {/* ── for counselors: the shared-record band ── */}
-      <section className="rub-section" aria-label="For counselors">
-        <div className="cap rub-grid">
-          <div className="section-head">
+      {/* ── for counselors: the shared-record card ── */}
+      <section className="m-sec" aria-label="For counselors">
+        <div className="m-cap m-rub">
+          <div className="m-head">
             <h2>For counselors.</h2>
             <p>The same record your students see, on your side of the desk.</p>
           </div>
-          <div>
-            <ul className="counsel-list">
+          <div className="m-rubcard">
+            <ul className="m-counsel">
               <li>
-                <b>Your roster reads the same record.</b> No separate report to
-                keep — what the student does is what you see.
+                <b>Your roster reads the same record.</b> No separate report
+                to keep — what the student does is what you see.
               </li>
               <li>
                 <b>Only checks close a gap.</b> A claim stays visible but
                 hatched until the student passes the check against it.
               </li>
               <li>
-                <b>Data handled cleanly.</b> Students can export or erase their
-                own records anytime.
+                <b>Data handled cleanly.</b> Students can export or erase
+                their own records anytime.
               </li>
             </ul>
           </div>
@@ -376,15 +394,15 @@ export default async function LandingPage() {
       </section>
 
       {/* ── FAQ — the objections, answered plainly ── */}
-      <section className="section band" id="faq">
-        <div className="cap">
-          <div className="section-head">
+      <section className="m-sec" id="faq">
+        <div className="m-cap">
+          <div className="m-head">
             <h2>Questions, answered plainly.</h2>
             <p>No fine print — the same rules the product runs by.</p>
           </div>
-          <div className="faq-list">
+          <div className="m-faq">
             {FAQS.map((f) => (
-              <details className="faq-item" key={f.q}>
+              <details className="m-faqi" key={f.q}>
                 <summary>{f.q}</summary>
                 <p>{f.a}</p>
               </details>
@@ -394,27 +412,27 @@ export default async function LandingPage() {
       </section>
 
       {/* ── trust ribbon ── */}
-      <section className="trust" aria-label="Where the facts come from">
-        <div className="cap trust-row">
-          <span className="trust-item">Careers mapped from Philippine labor-demand reports</span>
-          <span className="trust-item">Skills anchored to national career-framework standards</span>
-          <span className="trust-item">Checks verify — claims never count alone</span>
-          <span className="trust-item">Your data stays yours — export or erase anytime</span>
+      <section className="m-trust" aria-label="Where the facts come from">
+        <div className="m-cap m-trustrow">
+          <span>Careers mapped from Philippine labor-demand reports</span>
+          <span>Skills anchored to national career-framework standards</span>
+          <span>Checks verify — claims never count alone</span>
+          <span>Your data stays yours — export or erase anytime</span>
         </div>
       </section>
 
       {/* ── slim footer (+ the one legal footnote the brief allows) ── */}
-      <footer className="evidence band">
-        <div className="cap foot-main">
-          <p className="foot-legal">
+      <footer className="m-evidence">
+        <div className="m-cap m-foot">
+          <p className="m-legal">
             Records are handled under the Philippine Data Privacy Act
             (RA&nbsp;10173).
           </p>
-          <nav className="foot-links" aria-label="Footer">
-            <a className="sublink" href="/signin">
+          <nav className="m-flinks" aria-label="Footer">
+            <a className="m-textbtn" href="/signin">
               Sign in
             </a>
-            <a className="sublink" href="/signup">
+            <a className="m-textbtn" href="/signup">
               Sign up
             </a>
           </nav>
