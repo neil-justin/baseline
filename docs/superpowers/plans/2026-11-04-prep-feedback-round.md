@@ -663,7 +663,87 @@ git commit -m "docs: prep feedback round implemented"
 
 ---
 
-## Notes for the executor
+### Task 7: in-place result swap (round 2, user-ruled 2026-11-04)
+
+**Files:**
+- Modify: `app/(app)/prep/ResumeUpload.tsx` (replace `window.location.reload()`)
+- Modify: `app/(app)/prep/LetterUpload.tsx` (same replacement)
+- Modify: `app/(app)/prep/prep.css` — likely none (the restart trick reuses the existing stylesheet animation + its nth-child delays)
+
+**Mechanics (user ruling: Option A — `router.refresh()` in-place swap; after landing, replay the cascade and always auto-scroll the verdict card to the viewport top):**
+
+1. In both uploaders, replace the success branch:
+
+```ts
+      if (res.ok) {
+        window.location.reload(); // the server page re-renders the stored run
+      } else {
+```
+
+with a transition + landing choreography helper (SHARED shape in each file; local constant `LANDING_SETTLE_MS = 8000` watchdog):
+
+- `useRouter` from `next/navigation` + `useTransition` from `react` are added to imports.
+- On success:
+
+```ts
+      if (res.ok) {
+        startTransition(() => {
+          router.refresh(); // re-renders the server tree IN PLACE (no reload)
+        });
+        await awaitLanding(() => document.querySelector(".rs-readout"));
+        replayAndScroll();
+      } else {
+```
+
+- `useTransition()`'s `isPending` is the preferred landing signal: flips false when the new RSC tree commits. But verify in the probe that `startTransition` actually tracks `router.refresh()` in this Next version (`refresh(): void` — the built-in returns nothing). If `isPending` DOES flip true and false around the refresh, use it: await `isPending === true` then `false` (poll inside rAF). If it does NOT flip (stays false throughout), fall back to the DOM-settling observer:
+
+```ts
+      // fallback landing signal: watch the active panel for the swap churn,
+      // resolve when mutations settle (120ms quiet) or the watchdog fires
+      function awaitLanding(hasNew: () => boolean) { ... }
+```
+
+  The observer watches `document.querySelector(".tabpanel:not([hidden]) .prep-stack")` (falls back to the whole tabpanel for the never-run → results swap) with `childList/subtree`; resolves when 120 ms pass with no mutation batch, or at the 8 s watchdog (then skip replay/scroll silently — honest dead-end, the zone is already idle).
+
+- `replayAndScroll()`:
+
+```ts
+  // the restart trick: stylesheet animation replays WITH its nth-child
+  // stagger; fresh-mounted cards replay too (harmless, no double-op)
+  function replayAndScroll() {
+    const panel = document.querySelector(".tabpanel:not([hidden])");
+    const cards = panel?.querySelectorAll(".prep-kpi, .prep-stack > .card") ?? [];
+    requestAnimationFrame(() => {
+      cards.forEach((el) => {
+        el.style.animation = "none";
+        void el.getBoundingClientRect(); // reflow — records the restart
+        el.style.animation = "";
+      });
+    });
+    const verdict = panel?.querySelector(".rs-readout, .cl-readout");
+    verdict?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+```
+
+  (scroll starts with the cascade — they run simultaneously; smooth scroll + 0.25s stagger reads as one handoff.)
+
+2. `setBusy(false)` stays in `finally` (unchanged position — it now clears AFTER the choreography helper resolves; keep the zone's Analyzing… state through the whole landing; the zone returns to idle as the cascade replays).
+
+**Verification steps:**
+- `npx tsc --noEmit` + full `npx vitest run` (144/144).
+- Live probe (`/tmp/opencode/prep-feedback-probe.mjs` pattern, dev server :3111, seed sign-in): drop `scripts/fixtures/resume-qa.pdf` into the re-run zone and record via the same init-script instrumentation — Expect: NO navigation event (URL unchanged, no `framenavigated`, `performance.getEntriesByType('navigation')` unchanged → no new document), scroll Y PRESERVED through the wait and then animated toward the verdict card's top, cascading `prep-card-in` animationstart records AFTER the RSC swap, band figures updating (AR climbs) without a full paint, and the zone returning to idle.
+- Also verify the never-run path: a fresh student (or a store-wiped target) uploads via the hero — the panel swaps from intake to the results stack, cascade plays natively (fresh mounts), verdict scroll still runs.
+- **e2e impact (record, don't fix — worktrees are out of bounds):** `.worktrees/google-signin/e2e` specs assert AFTER `waitForLoadState("load")` (resolves immediately now) with 45s visibility budgets on `.rs-readout`/`.cl-readout` — assertions survive refresh; the "RELOADED document" comments need a follow-up on that branch ONLY.
+- Reduced motion: `scrollIntoView({ behavior: "smooth" })` must respect it — gate to `matchMedia("(prefers-reduced-motion: reduce)")`: `"auto"` scroll when reduced (instant, still aligned to the verdict).
+
+**Commit**
+
+```bash
+git add "app/(app)/prep/ResumeUpload.tsx" "app/(app)/prep/LetterUpload.tsx"
+git commit -m "prep: in-place result swap (router.refresh + cascade replay + verdict scroll)"
+```
+
+Rules for the executor: no API/store/engine changes; both uploaders keep their e2e hooks byte-kept; the landing helper may be one shared inline shape in each file (they mirror by design — no shared util); any deviation is a USER RULING — stop and report.
 
 - **e2e specs live OUT of this tree** (`.worktrees/google-signin/e2e/`) — this round changes no hooks they assert: `.dz-zone`, `.rs-upload`, `.cl-upload`, `.rs-readout`, `.cl-readout`, `.rs-check` rows, `.lead-mono` all stay byte-kept. Do NOT touch the worktree.
 - The band slot keeps `role="img"` with an aria label so the ring reads for AT; the figures are real text (screen-reader friendly), the svg is `aria-hidden`.
