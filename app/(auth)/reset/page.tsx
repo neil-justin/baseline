@@ -4,6 +4,7 @@ import { supabaseServer } from "@/lib/supabase/server";
 import ResetForm from "./ResetForm";
 import "./auth.css";
 import "../v7-auth.css";
+import "../v9-auth.css";
 
 export const metadata: Metadata = {
   title: "Baseline — set a new password",
@@ -27,7 +28,7 @@ export default async function ResetPage() {
   const hasSession = Boolean(user);
 
   return (
-    <div className="auth-body v7auth">
+    <div className="auth-body v7auth v9auth">
       <header className="bar">
         <div className="bar-in" style={{ justifyContent: "center" }}>
           <a href="/" className="brand">
