@@ -640,6 +640,38 @@
 
 .v7prep .rs-upload .dz-err, .v7prep .cl-upload .dz-err { color: var(--v-amber-text); font-weight: 500; }
 
+/* ---------- round 2b: the busy state REPLACES the tab content ---------- */
+
+/* While a check runs (§6.3, user-ruled 2026-11-04), the ACTIVE panel hides
+   its result cards (class-scoped CSS — nothing is deleted) and the running
+   zone reads as the ONE card: a tall centred hero. On the landing signal
+   the panel class is removed FIRST, the fresh stack returns, then the
+   cascade replays and the verdict scrolls. The uploader cards stay visible
+   so the zone they carry becomes the hero — they are exactly the cards
+   marked .prep-rerun (re-run state) and .prep-intake (first-run state):
+   existing marker classes, no :has() and no JSX change. */
+.v7prep .tabpanel.prep-analyzing > .card { display: none; }
+.v7prep .tabpanel.prep-analyzing > .card.prep-rerun,
+.v7prep .tabpanel.prep-analyzing > .card.prep-intake { display: block; }
+.v7prep .tabpanel.prep-analyzing .dz-zone {
+  min-height: 320px;
+  justify-content: center;
+  gap: 10px;
+}
+.v7prep .tabpanel.prep-analyzing .dz-busy {
+  flex-direction: column;
+  gap: 10px;
+  font: 500 15px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+.v7prep .tabpanel.prep-analyzing .dz-an-sub {
+  display: block;
+  margin-top: 6px;
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7prep .tabpanel.prep-analyzing .dz-spin { width: 28px; height: 28px; }
+
 /* the hidden-but-real file input (setInputFiles-driven e2e + native browse) */
 .v7prep .dz-input {
   position: absolute;

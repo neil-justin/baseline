@@ -18,7 +18,10 @@ import { useEffect, useRef, useState, useTransition } from "react";
  * resume intake): router.refresh() re-renders the server tree inside the
  * transition — no browser reload — then the entrance cascade replays
  * deliberately and the readout (verdict card) auto-scrolls to the top of the
- * viewport. Rejections show the locked reason inline
+ * viewport. ROUND 2B (§6.3, user ruling 2026-11-04): while the check runs
+ * the ACTIVE panel carries `prep-analyzing` — its result cards hide and the
+ * zone reads as a tall analyzing hero; the class is stripped on every exit
+ * path (landing first, then the choreography). Rejections show the locked reason inline
  * (aria-live, .cl-err — e2e contract) and persist nothing. `slim` = the Q15
  * demoted "Check another version" footer affordance on a results-first
  * card (hooks/classes byte-kept). NO authoring surface exists — no paste
@@ -73,6 +76,7 @@ export default function LetterUpload({
     unmountedRef.current = false;
     return () => {
       unmountedRef.current = true;
+      document.querySelector(".tabpanel:not([hidden])")?.classList.remove("prep-analyzing"); // mid-check navigation strips the analyzing state
     };
   }, []);
   const [employer, setEmployer] = useState("");
@@ -135,6 +139,10 @@ export default function LetterUpload({
     if (anchor.length > 0) form.append("employer", anchor); // absent = the optional check skips honestly — nothing invented
     setBusy(true);
     setErr(null);
+    // round 2b (§6.3): the busy state REPLACES the tab content — the active
+    // panel hides its result cards while the check runs; stripped on every
+    // exit path (landing first, then the choreography) + the unmount effect
+    document.querySelector(".tabpanel:not([hidden])")?.classList.add("prep-analyzing");
     try {
       const [res] = await Promise.all([
         fetch("/api/cover-letter/check", { method: "POST", body: form }),
@@ -145,6 +153,9 @@ export default function LetterUpload({
           router.refresh(); // re-renders the server tree IN PLACE (no reload)
         });
         const landed = await awaitLanding();
+        // landing: restore the stack FIRST (cards return), then the
+        // choreography — the class strip lives here, not only in finally
+        document.querySelector(".tabpanel:not([hidden])")?.classList.remove("prep-analyzing");
         if (landed) replayAndScroll(); // watchdog = the ruled dead-end: no replay, no scroll
       } else {
         const json = (await res.json().catch(() => null)) as { error?: string; detail?: string; missing?: string[] } | null;
@@ -155,6 +166,7 @@ export default function LetterUpload({
     } catch {
       setErr("The upload failed — check the connection and try again.");
     } finally {
+      document.querySelector(".tabpanel:not([hidden])")?.classList.remove("prep-analyzing"); // every exit path restores the stack
       setBusy(false);
     }
   }
@@ -210,11 +222,12 @@ export default function LetterUpload({
       >
         {busy ? (
           <span className="dz-busy dz-analyzing" role="status" aria-live="polite">
-            <svg className="dz-spin" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
+            <svg className="dz-spin" aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
               <circle cx="12" cy="12" r="9" opacity="0.25" />
               <path d="M21 12a9 9 0 0 0-9-9" />
             </svg>
             Analyzing…
+            <span className="dz-an-sub">Your file is being checked — the result lands here when it&rsquo;s ready.</span>
           </span>
         ) : err ? (
           <span className="cl-err dz-err" role="status" aria-live="polite">
