@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { BackArrow } from "../glyphs";
 import BrandMark from "../../../components/BrandMark";
+import Reveal from "@/components/Reveal";
 import { supabaseServer } from "@/lib/supabase/server";
 import ResetForm from "./ResetForm";
 import "./auth.css";
@@ -46,19 +47,23 @@ export default async function ResetPage() {
           </div>
 
           {hasSession ? (
-            <ResetForm />
+            <Reveal delay={90}>
+              <ResetForm />
+            </Reveal>
           ) : (
-            <form noValidate>
-              <div className="field" style={{ marginTop: 0 }}>
-                <p className="reset-lead">
-                  Reset links work once and only in the browser that requested them. Request a
-                  fresh link and open it here.
-                </p>
-              </div>
-              <a href="/forgot" className="btn btn-primary btn-block">
-                Request a fresh link
-              </a>
-            </form>
+            <Reveal delay={90}>
+              <form noValidate>
+                <div className="field" style={{ marginTop: 0 }}>
+                  <p className="reset-lead">
+                    Reset links work once and only in the browser that requested them. Request a
+                    fresh link and open it here.
+                  </p>
+                </div>
+                <a href="/forgot" className="btn btn-primary btn-block">
+                  Request a fresh link
+                </a>
+              </form>
+            </Reveal>
           )}
 
           <p className="auth-alt">

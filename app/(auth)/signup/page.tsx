@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ForwardArrow } from "../glyphs";
 import BrandMark from "../../../components/BrandMark";
 import GoogleAuth from "../GoogleAuth";
+import Reveal from "@/components/Reveal";
 import SignupForm from "./SignupForm";
 import "./auth.css";
 import "../v7-auth.css";
@@ -27,9 +28,9 @@ export default function SignUpPage() {
 
       <main className="auth-main" id="main">
         <div className="auth-split">
-          <div className="auth-head">
+          <Reveal className="auth-head" delay={0}>
             <h1>Start the check.</h1>
-          </div>
+          </Reveal>
 
           <div className="split-card">
             <div className="split-shapes" aria-hidden="true">

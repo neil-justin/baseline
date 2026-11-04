@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { BackArrow } from "../glyphs";
 import BrandMark from "../../../components/BrandMark";
+import Reveal from "@/components/Reveal";
 import ForgotForm from "./ForgotForm";
 import "./auth.css";
 import "../v7-auth.css";
@@ -38,7 +39,9 @@ export default async function ForgotPage({
             <h1>Reset your password.</h1>
           </div>
 
-          <ForgotForm expired={state === "expired"} />
+          <Reveal delay={90}>
+            <ForgotForm expired={state === "expired"} />
+          </Reveal>
 
           <p className="auth-alt">
             Remembered it after all?{" "}

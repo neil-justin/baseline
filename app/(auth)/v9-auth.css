@@ -241,3 +241,78 @@
   .v9auth .sh-mark i { width: 24px; height: 24px; border-radius: 8px; }
   .v9auth .split-form { padding: 24px 20px 22px; }
 }
+
+/* ============================================================
+   v9.1 M3 MOTION REGISTER — AUTH (2026-11-04)
+   Per DESIGN.md amendment #8 (the M3 Motion Rule), tuned to the
+   auth register: subtle entrances, press scale ≤0.97. The split
+   card panes mount via CSS animation (they exist at page load —
+   Reveal is only for the auth-head). Transform/opacity only;
+   reduced-motion renders final state. Easings: standard
+   cubic-bezier(0.2,0,0,1) · emphasized cubic-bezier(0.16,1,0.3,1).
+   ============================================================ */
+
+/* the reveal primitive, M3-tuned for auth — globals' blur must
+   not apply inside the auth scope (same retirement as .v9) */
+.js .v9auth .rv {
+  filter: none;
+  transform: translateY(12px);
+  transition:
+    opacity 0.35s cubic-bezier(0.2, 0, 0, 1),
+    transform 0.35s cubic-bezier(0.2, 0, 0, 1);
+  transition-delay: var(--d, 0ms);
+}
+.js .v9auth .rv.in {
+  transform: none;
+  transition:
+    opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--d, 0ms);
+}
+
+/* press: the pill scale + the button state transitions */
+.v9auth .btn {
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+}
+.v9auth .btn:active { transform: scale(0.97); }
+
+/* the split card panes: mount entrance (in the DOM on page load
+   — a CSS animation, not Reveal; form trails shapes by 80ms) */
+@media (prefers-reduced-motion: no-preference) {
+  .v9auth .split-shapes {
+    animation: auth-pane-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .v9auth .split-form {
+    animation: auth-pane-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+  }
+}
+@keyframes auth-pane-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+/* the Google-consent error notice (state=google) fades in when shown */
+@media (prefers-reduced-motion: no-preference) {
+  .v9auth .field-err {
+    animation: auth-err-in 0.3s cubic-bezier(0.2, 0, 0, 1) both;
+  }
+}
+@keyframes auth-err-in {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+}
+
+/* reduced motion: animations null — final state renders */
+@media (prefers-reduced-motion: reduce) {
+  .v9auth .split-shapes,
+  .v9auth .split-form,
+  .v9auth .field-err { animation: none; }
+  .v9auth .btn:active { transform: none; }
+}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { BackArrow } from "../glyphs";
 import BrandMark from "../../../components/BrandMark";
 import GoogleAuth from "../GoogleAuth";
+import Reveal from "@/components/Reveal";
 import SignInForm from "./SignInForm";
 import "./auth.css";
 import "../v7-auth.css";
@@ -38,9 +39,9 @@ export default async function SignInPage({
 
       <main className="auth-main" id="main">
         <div className="auth-split">
-          <div className="auth-head">
+          <Reveal className="auth-head" delay={0}>
             <h1>Sign in.</h1>
-          </div>
+          </Reveal>
 
           <div className="split-card">
             <div className="split-shapes" aria-hidden="true">
