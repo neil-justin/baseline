@@ -254,6 +254,13 @@ git commit -m "admin: Pager — mockup register on atabs- hooks, a11y per mock"
 
 ### Task 3: The CSS register + the hook-class registry law
 
+**UPDATE (2026-11-05, post-WAVES-4 landing, commit 902c8b5):** the `.atabs-pager`
+register now EXISTS in `app/admin/admin-tabs.css` (landed with the audit queue's
+pager: 16px padding, tabular numerals on label, queue-scoped padding rule).
+Implement this task as **registry-test-only** — write the checks below, expect
+them to pass immediately (the failing-first provision was consumed by the
+parallel landing; note that in the commit), wire nothing. Delete no CSS.
+
 **Files:**
 - Modify: `app/admin/admin-tabs.css` (append at end)
 - Modify: `scripts/verify-pager.test.ts` (append the registry describe)
