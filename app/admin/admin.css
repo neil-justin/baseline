@@ -15,6 +15,21 @@
    .band* .aq-* .chip).
    ============================================================ */
 
+/* Cross-document view transitions (user ruling 2026-11-04): in dev the
+   student↔student moves and roster↔detail transitions complete as full
+   document reloads (Next withholdsthe prefetch in development), and the
+   teardown painted a white frame between the old and the streamed
+   document — the reported blink. Opting the admin realm's navigations
+   into the browser's MPA cross-fade erases the white gap: the old
+   frame dissolves into the new document's first paint (veil chrome on
+   both sides → reads as one continuous surface). Chromium-only; other
+   browsers ignore the rule and keep the raw swap. Production navigations
+   don't reload the document at all (soft nav + prefetch), so this rule
+   is simply idle there. */
+@view-transition {
+  navigation: auto;
+}
+
 @font-face {
   font-family: "Roboto";
   src: url("/fonts/roboto-var-latin.woff2") format("woff2");
