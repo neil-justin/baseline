@@ -769,6 +769,11 @@
    (reverted same day: the user wants imagery/color/spacing passes,
    not column caps — the surface returns to full width) */
 
+/* the band's text top-aligns with its illustration column — with the
+   fork's height in play, the old vertical-center left the title block
+   floating mid-air over dead space (caught in the 3-page sweep) */
+.v7career .band .bandrow { align-items: flex-start; }
+
 /* ---------- visual round (2026-11-04) ----------
    The C3 band illustration (career fork) rides the bandside; gutters
    align on 20px; at ≤720 the illustration hides so the band's text

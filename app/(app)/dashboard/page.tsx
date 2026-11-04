@@ -102,7 +102,7 @@ export default async function DashboardPage() {
       {/* ── header band: who · composite · five-channel bar · the one CTA ── */}
       <section className="scoreband" aria-label="Your readiness score">
         <div className="band">
-          <div className="bandrow">
+          <div className="bandrow hero-row">
             <div className="who">
               <h1 className="t">
                 {/* persona line: "Neil · 4th Year" — the state's yearLevel IS the
