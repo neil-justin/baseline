@@ -14,7 +14,7 @@
 export default function DetailSkeleton() {
   return (
     <>
-      <div className="panel detail-panel">
+      <div className="panel detail-panel dt-panel-skel">
         <div className="dt-head">
           <div className="dt-id">
             <span className="skel" style={{ width: 132, height: 14 }} />

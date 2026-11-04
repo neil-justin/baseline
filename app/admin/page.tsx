@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { db, getStudentView } from "@/lib/db";
 import { requireStaff } from "@/lib/session";
 import { credentialStore, type CohortCredentialRow } from "@/lib/db/credential-store";
 import type { StudentState } from "@/lib/types";
 import AdminMockupGate from "./mockups/AdminMockupGate";
 import AdminShell from "./AdminShell";
+import ConsoleSkeleton from "./console-skeleton";
 import type { QueueRow } from "./AuditQueue";
 import { RUBRIC_MAX, orderCohort, personaMeta, type RubricValues } from "./defaults";
 import "./admin.css";
@@ -148,14 +150,38 @@ export default async function AdminCohortPage() {
   // shipping student data in the payload for a role that cannot render a
   // single student surface.
   const isSysadmin = profile.role === "sysadmin";
+
+  return (
+    <div className="v7admin">
+      {/* the pane data streams inside the page (Suspense) — this is the
+          console's loading; there is deliberately NO loading.tsx at the
+          app/admin level: a layout-level boundary renders for BOTH /
+          admin and /admin/student transitions and hijacked the drill-in's
+          own fallback on the row→detail direction (recorded 2026-11-04:
+          a row click painted the console skeleton for seconds, then
+          bounced through the roster again). With the boundary removed, a
+          row click streams the drill-in's loading directly, and this
+          fallback covers the console side via the streamed document. */}
+      <Suspense fallback={<ConsoleSkeleton role={profile.role} />}>
+        <ConsoleReady isSysadmin={isSysadmin} ruledByLabel={profile.fullName} />
+      </Suspense>
+      <AdminMockupGate />
+    </div>
+  );
+}
+
+/** The pane build: the only slow part of the console (auth + role are
+ *  known ahead; the roster/queue builds stream under the fallback). */
+async function ConsoleReady({
+  isSysadmin,
+  ruledByLabel,
+}: {
+  isSysadmin: boolean;
+  ruledByLabel: string;
+}) {
   const creds = isSysadmin ? null : await credentialStore.listAll();
   const queue = creds ? await buildQueue(creds) : null;
   const rows = creds ? await buildRows(creds) : null;
 
-  return (
-    <div className="v7admin">
-      <AdminShell role={profile.role} rows={rows} queue={queue} ruledByLabel={profile.fullName} />
-      <AdminMockupGate />
-    </div>
-  );
+  return <AdminShell role={isSysadmin ? "sysadmin" : "counselor"} rows={rows} queue={queue} ruledByLabel={ruledByLabel} />;
 }

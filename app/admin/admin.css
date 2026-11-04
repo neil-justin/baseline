@@ -1164,3 +1164,20 @@
     transform: translateX(var(--dx, 0px));
   }
 }
+
+/* the loading state arrives as a unit (user ruling 2026-11-04): the back
+   link and the panel skeleton soften in together — chrome never pops in
+   ahead of the skeleton it belongs to. The commit afterwards slides the
+   real panel in (the dt-move key below). Reduced motion: no entrance. */
+@media (prefers-reduced-motion: no-preference) {
+  .v7admin .dt-back,
+  .v7admin .dt-panel-skel {
+    animation: dt-load-in 0.18s cubic-bezier(0.2, 0, 0, 1);
+  }
+}
+@keyframes dt-load-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}

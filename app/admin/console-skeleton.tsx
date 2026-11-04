@@ -1,25 +1,22 @@
 import AdminVeil from "./AdminVeil";
-import { getCurrentProfile } from "@/lib/session";
 import type { Role } from "@/lib/session";
 
 /**
- * /admin route skeleton — the console's loading twin of the drill-in's
- * (admin/student/loading.tsx): the veil is the REAL chrome and the main
- * clones the committed landing pane, so navigating between the console
- * and the drill-in never shows a dead click or a chrome flash (user
- * ruling 2026-11-04: the pane must not sit on a bare delay). The pane
- * mirrors the ROLE'S landing (role law — clerk→cohort, sysadmin→
- * approvals): text-free, no painted numbers; column-head furniture is
- * cloned verbatim so the swap reserves the exact same boxes. The pulse
- * is reduced-motion honored via .skel.
- *
- * Note: this landing-page mirror is valid because the console's tab
- * state resets to the role landing on every /admin navigation — the
- * AdminShell's initial state IS adminLandingFor(role).
+ * ConsoleSkeleton — the /admin console's loading DOM (Skeleton-Contract):
+ * the veil is the REAL chrome (same classes, same sign-out contract), the
+ * pane clones the role's landing (cohort roster / approvals slot) with
+ * text-free pills — column-head furniture is pinned blind so the
+ * skeleton contract is text-free (user ruling 2026-11-04). Rendered as
+ * the streamed shell's Suspense fallback on the /admin page itself —
+ * NOT as a layout-level loading.tsx: a parent boundary would hijack the
+ * drill-in's own fallback on the student→ transition (recorded
+ * 2026-11-04: a row click painted the console skeleton for seconds).
+ * The mirror is role-scoped (adminLandingFor) because the console's tab
+ * state resets to the role landing on every /admin navigation.
  */
 
 /** Grey clone of CohortArt (AdminShell) — same footprint, neutral wash,
- *  since the skeleton must not have painted values. The two forms must
+ *  since the skeleton must not carry painted values. The two forms must
  *  stay footprint-identical (96×48). */
 function CohortArtSkel() {
   return (
@@ -38,6 +35,7 @@ function CohortArtSkel() {
 }
 
 const ROSTER_ROWS = [0, 1, 2, 3, 4, 5];
+const ROSTER_COL_WIDTHS = [44, 44, 20, 44];
 
 function CohortSkeleton() {
   return (
@@ -52,14 +50,11 @@ function CohortSkeleton() {
       <table className="ct-table">
         <thead>
           <tr>
-            {/* heads as pills too: the skeleton contract is text-free —
-                real labels would read as painted data (user ruling
-                2026-11-04); the th boxes still pin the column widths */}
-            {(["Name", "Career", "Score", "Last active"] as const).map((c, k) => (
-              <th key={c} scope="col" className={["col-name", "col-career", "col-score", "col-active"][k]}>
+            {(["col-name", "col-career", "col-score", "col-active"] as const).map((c, k) => (
+              <th key={c} scope="col" className={c}>
                 <span
                   className="skel"
-                  style={{ width: k === 2 ? 20 : 44, height: 10, display: "inline-block" }}
+                  style={{ width: ROSTER_COL_WIDTHS[k], height: 10, display: "inline-block" }}
                   aria-hidden="true"
                 />
               </th>
@@ -86,15 +81,19 @@ function CohortSkeleton() {
   );
 }
 
-const SLOT_COLS = ["APPLICANT", "REQUEST", "DECLARED", "TRAIL", "STATUS", ""];
+const SLOT_COLS = 6;
 const SLOT_ROWS = [0, 1, 2];
 
 function SlotSkeleton() {
   return (
     <section className="atabs-panel" aria-hidden="true">
       <div className="atabs-heads atabs-appr-grid atabs-label">
-        {SLOT_COLS.map((c, k) => (
-          <span key={k}>{c ? <span className="skel" style={{ width: 84, height: 10, display: "inline-block" }} /> : ""}</span>
+        {Array.from({ length: SLOT_COLS }, (_, k) => (
+          <span key={k}>
+            {k === SLOT_COLS - 1
+              ? ""
+              : <span className="skel" style={{ width: 84, height: 10, display: "inline-block" }} />}
+          </span>
         ))}
       </div>
       {SLOT_ROWS.map((r) => (
@@ -115,17 +114,11 @@ function SlotSkeleton() {
   );
 }
 
-export default async function Loading() {
-  const profile = await getCurrentProfile();
-  /** staff-only surface behind a redirect: unauthenticated visitors are
-   *  leaving this route anyway, so the fallback viz is a placeholder. */
-  const role: Role = profile?.role ?? "counselor";
+export default function ConsoleSkeleton({ role }: { role: Role }) {
   const landsCohort = role !== "sysadmin";
   return (
-    <div className="v7admin" aria-busy="true" aria-label="Loading console">
-      <AdminVeil role={role} mode="detail" active={landsCohort ? "cohort" : "approvals"}>
-        {landsCohort ? <CohortSkeleton /> : <SlotSkeleton />}
-      </AdminVeil>
-    </div>
+    <AdminVeil role={role} mode="detail" active={landsCohort ? "cohort" : "approvals"}>
+      {landsCohort ? <CohortSkeleton /> : <SlotSkeleton />}
+    </AdminVeil>
   );
 }
