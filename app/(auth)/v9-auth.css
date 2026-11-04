@@ -132,9 +132,11 @@
 
 /* ---------- the split auth card (option a, cut over 2026-11-04) ---------- */
 /* Google's two-pane auth card: the M3 expressive-shape panel + the form
-   pane, one card. The four-color shapes are the user-approved exception
-   to §4's single-blue auth rule (recorded in DESIGN.md, v9 §4 note).
-   Decorative only — never a verdict; hooks stay in the form pane.      */
+   pane, one card. SHAPES ARE TONAL-BLUE ONLY (user ruling 2026-11-04:
+   the four-color composition read "obviously Google" — the logo palette
+   is the clone tell; the single-blue command economy is the product's
+   own voice). Decorative only — never a verdict; hooks stay in the form
+   pane.      */
 .v9auth .auth-split { width: 100%; max-width: 920px; }
 .v9auth .split-card {
   display: grid;
@@ -167,7 +169,7 @@
   width: 86px;
   height: 86px;
   border-radius: 50%;
-  background: #34a853;
+  background: #fff;
 }
 .v9auth .sh-clover i:nth-child(1) { left: 32px; top: 0; }
 .v9auth .sh-clover i:nth-child(2) { left: 64px; top: 32px; }
@@ -177,7 +179,7 @@
   width: 150px;
   height: 68px;
   border-radius: 999px;
-  background: #fbbc04;
+  background: #a8c7fa;
   transform: rotate(-24deg);
   left: 34px;
   bottom: 120px;
@@ -185,7 +187,7 @@
 .v9auth .sh-quarter {
   width: 150px;
   height: 150px;
-  background: #ea4335;
+  background: #0842a0;
   border-radius: 0 100% 0 0;
   right: 0;
   bottom: 0;
