@@ -51,17 +51,9 @@
   padding-top: 10px;
   border-top: 1px solid var(--v-rows);
 }
-/* Wave-3 C1 (2026-11-03) — the split map bar: the hatch segment speaks a
-   self-reported share, per the Dashboard `.kbar i.hatch` recipe (45° blue
-   stripes — fine at the 4px band register). `.v7 .bcell .kbar` in ../v7.css
-   carries the shared geometry; only the hatch segment needed a local rule. */
-.v7career .bcell .kbar i.hatch {
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(26, 115, 232, 0.16) 0 2px,
-    transparent 2px 5px
-  );
-}
+/* (the Wave-3 C1 split-map-bar hatch rule died 2026-11-04 — the KPI bar
+   cells retired for the band skill ledger; the shared .bcell .kbar recipe
+   in ../v7.css still serves Prep's factor cells) */
 
 .v7career .label {
   font: 500 11px/1.4 Roboto, system-ui, sans-serif; /* v7.1 floor: labels ≥11px */
@@ -631,9 +623,8 @@
   .v7career .bandrow { flex-direction: column; align-items: flex-start; }
   .v7career .band .who { min-width: 0; }
   .v7career .bandside { align-items: flex-start; }
-  .v7career .bandcells { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .v7career .bcell { border-left: 1px solid var(--v-rows); padding: 2px 0 2px 14px; }
-  .v7career .bcell:first-child { border-left: 0; padding-left: 0; }
+  .v7career .bandcells { width: 100%; flex-direction: column; gap: 12px; }
+  .v7career .bcell { border-left: 0; padding: 0; }
   .v7career .bval { font-size: 12px; }
   .v7career .sw-head { padding: 15px 16px 0; }
   .v7career .sw-panel { padding: 0 16px 16px; }
@@ -775,9 +766,15 @@
   padding: 5px 12px;
   border-radius: 999px;
 }
-.v7career .skill-zero {
-  font-size: 14.5px;
-  color: var(--v-ink2);
+/* the self-report hatch — quiet 45° stripes over the grey wash (the
+   family recipe, ported: career's hatch-chip class previously had no
+   local rule, so its self-reported chips rendered plain grey) */
+.v7career .chip.hatch-chip {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(60, 64, 67, 0.09) 0 2px,
+    transparent 2px 5px
+  );
 }
 .v7career .skill-map-note {
   margin-top: 12px;
@@ -787,3 +784,43 @@
   color: var(--v-ink2);
   max-width: 70ch;
 }
+
+/* ============================================================
+   v9.1 fix round — careers (user feedback, 2026-11-04):
+   band skill ledger replaces the two KPI bars; detail expands
+   to the role's FULL map with state-highlighted overlap; chip
+   shrink fix; detail spacing + tonal ground (pop).
+   ============================================================ */
+
+/* the band ledger cell — the account skill list rides the tray as tonal
+   chips; flexes wide so the strip fills the band at any width (the dead
+   whitespace the KPI-bar removal would have left) */
+.v7career .bcell-ledger { flex: 1 1 460px; }
+.v7career .ledger-chips { margin: 4px 0 0; }
+.v7career .ledger-empty { margin: 4px 0 0; font-size: 13px; color: var(--v-ink2); }
+
+/* the no-bar remainder of a role's map — quiet outline chip so the
+   state-colored (overlapping) chips read as the highlight */
+.v7career .chip.c-outline {
+  background: var(--v-surface);
+  box-shadow: inset 0 0 0 1px var(--v-border);
+  color: var(--v-grey-text);
+  font-weight: 400;
+}
+
+/* the shrink fix (user bug report, 2026-11-04): a chip may no longer
+   force its column wide — pill text wraps instead of bleeding past the
+   card edge. Applies to the ledger + every detail chip strip. */
+.v7career .skill-chips .chip {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* detail panel: roomier rhythm + faint tonal ground (the pop round) —
+   the fact strip breathes, the skills block separates on its own rule */
+.v7career .index-detail {
+  padding: 16px 20px 18px 60px;
+  background: #f6f8fc;
+}
+.v7career .d-grid { gap: 14px 32px; }
+.v7career .d-block.d-wide { margin-top: 8px; padding-top: 16px; }

@@ -40,6 +40,10 @@ export interface RoleRowData {
   majors: string;
   demand: string;
   skillsSummary: string;
+  /** the role's FULL skill map (catalog order, core-first) — the detail
+   *  block renders every skill; overlap with the student's bars highlights
+   *  by state (user ruling 2026-11-04: never a "skills in common" dead end) */
+  mapSkills: { name: string; display: string }[];
   /** degree-gate truth — the ranked lens lists only roles where this is true;
    *  the gate itself lives in lib/degree-gate.ts */
   degreeAllowed: boolean;

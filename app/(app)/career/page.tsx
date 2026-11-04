@@ -139,6 +139,7 @@ export default async function CareerPage() {
       majors: c.degreeMap.join(" · "),
       demand: demandLine(c),
       skillsSummary: skillsSummary(c),
+      mapSkills: c.skills.map((s) => ({ name: s.name, display: shortSkill(s.name) })),
       /** degree-gate truth (user ruling 2026-11-02): the ranked "Best matches"
        *  lens lists only roles that map to the student's program */
       degreeAllowed: degreeGateAllows(profile.program, c.degreeMap),

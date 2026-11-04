@@ -6,7 +6,7 @@ import TablePager from "@/components/TablePager";
 import { SegRubricBar, VBadge } from "@/components/instrument";
 import { rubricParts } from "@/lib/engines/rubric";
 import { roundHalfDown, WEIGHTS, type Score } from "@/lib/engines/score";
-import { reassessDisplay, reassessWhat } from "./career-copy";
+import { reassessDisplay, reassessWhat, shortSkill } from "./career-copy";
 import type { CareerProps, RoleRowData, VerifiedBarData } from "./types";
 import { degreeGateAllows } from "@/lib/degree-gate";
 
@@ -415,55 +415,19 @@ export default function CareerClient({
   );
 
   /** Careers band — the bandcells tray raised onto the Dashboard/Prep KPI
-      register (2026-11-03 user ruling): a slash fraction + the ONE 4px
-      honest bar (blue fill = earned share, green only when FULLY earned).
-      No chips — prep's notRun/·✓ semantics are factor-specific; bare text
-      cells stay bare (the track cell never carries a fake fraction).
-      Wave-3 C1 (2026-11-03 ruling): the Skill map bar SPLITS provenance the
-      way Dashboard's SP cell does — solid = verified·✓ + checked·✓✓ share,
-      the following hatch segment = the self-reported share (45° stripes,
-      fine at the 4px register); the split rides the SAME cellBar hook so
-      the First 30 days cell keeps its single honest fill. */
-  const cellBar = (
-    label: string,
-    earned: number,
-    max: number,
-    ariaNote: string,
-    provenance?: { verified: number; claimed: number }
-  ) => {
-    const pct = (n: number) => (max > 0 ? Math.min(100, Math.round((n / max) * 100)) : 0);
-    const aria =
-      provenance == null
-        ? `${label}: ${earned} of ${max} ${ariaNote}`
-        : `${label}: ${earned} of ${max} ${ariaNote} — ${provenance.verified} verified ·✓ or checked ·✓✓, ${provenance.claimed} self-reported`;
-    return (
-      <div className="bcell" key={label}>
-        <span className="label">{label}</span>
-        <span className="bval num">
-          {earned}/{max}
-        </span>
-        <div className="kbar" role="img" aria-label={aria}>
-          {provenance ? (
-            <>
-              <i
-                className={provenance.verified >= max && max > 0 ? "solid green" : "solid"}
-                style={{ width: `${pct(provenance.verified)}%` }}
-              />
-              <i
-                className="hatch"
-                style={{ left: `${pct(provenance.verified)}%`, width: `${pct(provenance.claimed)}%` }}
-              />
-            </>
-          ) : (
-            <i
-              className={earned >= max && max > 0 ? "solid green" : "solid"}
-              style={{ width: max > 0 ? `${Math.round((earned / max) * 100)}%` : "0" }}
-            />
-          )}
-        </div>
-      </div>
-    );
-  };
+      register. The two KPI bar cells (Skill map / First 30 days) RETIRED —
+      user ruling 2026-11-04: the tray's second cell is the student's
+      ACCOUNT SKILL LEDGER, every bar on the profile as a tonal chip
+      (green = verified ·✓, blue = checked ·✓✓, hatch = self-reported),
+      the provenance counts riding the label line. The Wave-3 C1 split-bar
+      machinery dies with them (superseded ruling). */
+  const ledger = Object.entries(barsSources)
+    .map(([name, src]) => ({ name, display: shortSkill(name), src }))
+    .sort((a, b) => {
+      const rank = (s: string) => (s === "verified" ? 0 : s === "checked" ? 1 : 2);
+      return rank(a.src) - rank(b.src);
+    });
+  const ledgerCount = (src: string) => ledger.filter((s) => s.src === src).length;
 
   return (
     <div className="v7career">
@@ -539,11 +503,30 @@ export default function CareerClient({
           {card && (
             <div className="bandcells">
               {bandcell("Track", card.trackLabel)}
-              {cellBar("Skill map", card.closed, card.mapSize, "closed bars", {
-                verified: card.verified,
-                claimed: card.claimed,
-              })}
-              {cellBar("First 30 days", card.stageOneDone, 3, "done")}
+              <div className="bcell bcell-ledger">
+                <span className="label">
+                  Your skills · {ledgerCount("verified")} verified · {ledgerCount("checked")}{" "}
+                  checked · {ledgerCount("claimed")} self-reported
+                </span>
+                {ledger.length > 0 ? (
+                  <p className="skill-chips ledger-chips">
+                    {ledger.map((s) => (
+                      <span
+                        className={`chip ${
+                          s.src === "verified" ? "c-green" : s.src === "checked" ? "c-blue" : "c-grey hatch-chip"
+                        }`}
+                        key={s.name}
+                      >
+                        {s.display}
+                      </span>
+                    ))}
+                  </p>
+                ) : (
+                  <p className="ledger-empty num">
+                    No skills on file yet — a passed check starts your ledger.
+                  </p>
+                )}
+              </div>
             </div>
           )}
         </header>
@@ -664,10 +647,13 @@ export default function CareerClient({
                     </div>
 
                     {/* role detail — the registry-fact strip (v7.3 ruling) plus
-                        the skills-in-common block (user ruling 2026-11-04):
-                        matched skills chip green, self-reported ride the
-                        hatch, and the full map summary states the rest —
-                        the fit column's count stays the headline truth */}
+                        the skills block (user ruling 2026-11-04, take 2): the
+                        role's FULL map renders every time — a chip's STATE
+                        highlights the overlap with the student's account bars
+                        (green = verified, blue = checked, hatch = claimed,
+                        quiet outline = not on file); no "skills in common"
+                        dead end, the fit column's count stays the headline
+                        truth */}
                     {openId === r.id && (
                       <div className="index-detail" id={`detail-${r.id}`}>
                         <div className="d-grid">
@@ -684,27 +670,24 @@ export default function CareerClient({
                             <p>{r.demand}</p>
                           </div>
                           <div className="d-block d-wide">
-                            <span className="label">
-                              {r.current ? "YOUR SKILLS ON THIS MAP" : "SKILLS IN COMMON"}
-                            </span>
+                            <span className="label">SKILLS ON THIS MAP</span>
                             <p className="skill-chips">
-                              {r.x === 0 ? (
-                                <span className="skill-zero">
-                                  No demonstrated skills overlap yet — claims never
-                                  count alone.
-                                </span>
-                              ) : (
-                                r.confirmed.map((s) => (
-                                  <span className={`chip ${s.src === "checked" ? "c-blue" : "c-green"}`} key={s.name}>
-                                    {s.name}
+                              {r.mapSkills.map((s) => {
+                                const src = barsSources[s.name];
+                                const cls =
+                                  src === "verified"
+                                    ? "c-green"
+                                    : src === "checked"
+                                      ? "c-blue"
+                                      : src === "claimed"
+                                        ? "c-grey hatch-chip"
+                                        : "c-outline";
+                                return (
+                                  <span className={`chip ${cls}`} key={s.name}>
+                                    {s.display}
                                   </span>
-                                ))
-                              )}
-                              {r.selfReported.map((n) => (
-                                <span className="chip c-grey hatch-chip" key={n}>
-                                  {n}
-                                </span>
-                              ))}
+                                );
+                              })}
                             </p>
                             <p className="skill-map-note num">{r.skillsSummary}</p>
                           </div>
