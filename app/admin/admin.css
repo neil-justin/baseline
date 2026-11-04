@@ -1146,3 +1146,21 @@
    detail panel loses its old standalone spacing (R5 chrome unification) */
 .v7admin .atabs-main .detail { padding-bottom: 8px; }
 .v7admin .atabs-main .detail-panel { margin-top: 0; }
+
+/* the student-to-student move (user ruling 2026-11-04): prev/next carries
+   &dir= in the href; the keyed remount re-runs this mount slide from the
+   direction of travel — transform/opacity only (CLS contract), reduced-
+   motion honored. Row/back entries (no dir) keep the plain reveal rise. */
+@media (prefers-reduced-motion: no-preference) {
+  .v7admin .detail[data-dir] .detail-panel {
+    animation: dt-move 0.22s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .v7admin .detail[data-dir="next"] .detail-panel { --dx: 16px; }
+  .v7admin .detail[data-dir="prev"] .detail-panel { --dx: -16px; }
+}
+@keyframes dt-move {
+  from {
+    opacity: 0;
+    transform: translateX(var(--dx, 0px));
+  }
+}

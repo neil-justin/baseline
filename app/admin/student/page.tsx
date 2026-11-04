@@ -156,13 +156,18 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
 export default async function AdminStudentPage({
   searchParams,
 }: {
-  searchParams: Promise<{ student?: string }>;
+  searchParams: Promise<{ student?: string; dir?: string }>;
 }) {
   const profile = await requireStaff();
   if (profile.role !== "counselor") {
     redirect("/admin");
   }
-  const { ids, id } = await resolveId((await searchParams).student);
+  const sp = await searchParams;
+  const { ids, id } = await resolveId(sp.student);
+  /** direction of travel — the prev/next links declare it in the href
+   *  (`&dir=`); row/back entries arrive without it and get the plain
+   *  reveal rise instead of the slide */
+  const dir = sp.dir === "prev" || sp.dir === "next" ? sp.dir : undefined;
   const s = await buildLive(id);
 
   // prev / next within the live cohort walk
@@ -182,8 +187,11 @@ export default async function AdminStudentPage({
         <Link className="dt-back" href="/admin">
           <ArrowLeft size={14} aria-hidden="true" /> Back to cohort
         </Link>
-        <section className="detail" aria-labelledby="dt-h">
-          <Reveal className="panel detail-panel">
+        {/* keyed remount per student: the prev/next move re-runs the panel's
+            mount animation in the direction of travel (user ruling
+            2026-11-04) and re-counts the score honestly each time */}
+        <section className="detail" data-dir={dir} aria-labelledby="dt-h">
+          <Reveal key={s.id} className="panel detail-panel">
             <div className="dt-head">
               <div className="dt-id">
                 <span className="label">STUDENT · VIEW ONLY</span>
@@ -270,17 +278,20 @@ export default async function AdminStudentPage({
               <p className="dt-context">{s.context}</p>
             </Reveal>
 
-            {/* prev / next within the cohort */}
-            <Reveal className="dt-block" delay={60}>
+            {/* prev / next within the cohort — plain block: the reveal
+                machinery un-reveals below its 6% viewport margin, which
+                painted this row invisible while still clickable
+                (user ruling 2026-11-04); furniture stays static */}
+            <div className="dt-block dt-pn">
               <div className="pn-row">
-                <Link className="link-quiet" href={`/admin/student?student=${prev}`}>
+                <Link className="link-quiet" href={`/admin/student?student=${prev}&dir=prev`}>
                   <ArrowLeft size={14} aria-hidden="true" /> Previous student
                 </Link>
-                <Link className="link-quiet" href={`/admin/student?student=${next}`}>
+                <Link className="link-quiet" href={`/admin/student?student=${next}&dir=next`}>
                   Next student <ArrowRight size={14} aria-hidden="true" />
                 </Link>
               </div>
-            </Reveal>
+            </div>
           </Reveal>
         </section>
       </AdminVeil>
