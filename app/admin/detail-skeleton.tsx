@@ -1,21 +1,19 @@
 /**
- * DetailSkeleton — the drill-in's loading DOM, the single clone shared by
- * both entrances (Skeleton-Contract): the route-level loading.tsx renders
- * it, and the streamed shell's <Suspense fallback> renders the same node —
- * so a param change (student → student) whose fallback the router can't
- * mount on its own still paints the identical panel the instant the
- * shell arrives. Mirrors the committed column (back row → headline →
- * rubric → ledger → prev/next) so the swap-in lands with zero shift;
- * text-free, no painted values; the pulse is reduced-motion honored
- * through .skel (admin.css).
+ * DetailSkeleton — the drill-in's loading panel, the single clone shared
+ * by every entrance (Skeleton-Contract): the route-level loading.tsx
+ * renders it, and the streamed shell's <Suspense fallback> renders the
+ * same node — so a param change (student → student) whose fallback the
+ * router can't mount on its own still paints the identical panel the
+ * instant the shell arrives. It carries NO back-row clone: the back link
+ * is chrome, not data — every state that shows a skeleton renders the
+ * real `.dt-back` above it (user ruling 2026-11-04 — the skeleton's pill
+ * doubled with the real link mid-load). Mirrors the committed panel so
+ * the swap-in lands with zero shift; text-free, no painted values; the
+ * pulse is reduced-motion honored through .skel (admin.css).
  */
 export default function DetailSkeleton() {
   return (
     <>
-      <span
-        className="skel"
-        style={{ width: 138, height: 18, display: "inline-flex", margin: "2px 0 10px" }}
-      />
       <div className="panel detail-panel">
         <div className="dt-head">
           <div className="dt-id">
