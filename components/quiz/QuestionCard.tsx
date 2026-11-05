@@ -16,6 +16,7 @@
  */
 import { ArrowLeft } from "lucide-react";
 import "./quiz.css";
+import { skillDisplay } from "@/lib/skill-display";
 
 export interface QuizQuestion {
   skill: string;
@@ -48,6 +49,8 @@ export default function QuestionCard({
 }) {
   const answered = picked !== null;
   const passed = answered && picked === question.answer;
+  /** display-only — `question.skill` stays canonical for scoring/POST bodies */
+  const skill = skillDisplay(question.skill);
 
   return (
     <>
@@ -62,7 +65,7 @@ export default function QuestionCard({
         )}
       </div>
       <div className="vq-card">
-        <span className="vq-tag">About: {question.skill}</span>
+        <span className="vq-tag">About: {skill}</span>
         <p className="vq-stem" style={{ marginTop: 10 }}>{question.stem}</p>
         <div className="vq-opts">
           {question.options.map((o, i) => (
@@ -79,8 +82,8 @@ export default function QuestionCard({
         {answered && (
           <div className={`vq-band show ${passed ? "pass" : "fail"}`}>
             {passed
-              ? `Correct. ${question.skill}: confirmed.`
-              : `Not quite — that's what it does: ${question.options[question.answer]}. ${question.skill} stays as your own rating for now.`}
+              ? `Correct. ${skill}: confirmed.`
+              : `Not quite — that's what it does: ${question.options[question.answer]}. ${skill} stays as your own rating for now.`}
           </div>
         )}
         <div className="vq-foot">

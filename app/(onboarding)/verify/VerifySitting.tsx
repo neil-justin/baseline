@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import QuestionCard, { type QuizQuestion } from "@/components/quiz/QuestionCard";
 import type { VMCQ } from "@/app/(onboarding)/onboarding/banks";
+import { skillDisplay } from "@/lib/skill-display";
 
 type SittingItem = VMCQ & QuizQuestion;
 
@@ -69,11 +70,11 @@ export default function VerifySitting({ items }: { items: SittingItem[] }) {
             ? "A real head start — the hub shows it from day one."
             : missed.length === items.length
               ? "None yet — that's honest. Your self-ratings still shape the plan; the checks confirm them as you learn."
-              : `${missed.map((q) => q.skill).join(", ")} — still your own rating. Check again any time.`}
+              : `${missed.map((q) => skillDisplay(q.skill)).join(", ")} — still your own rating. Check again any time.`}
         </p>
         {confirmed.length > 0 && (
           <div className="vq-okband">
-            Verified on your profile: <b>{confirmed.map((q) => q.skill).join(", ")}</b>
+            Verified on your profile: <b>{confirmed.map((q) => skillDisplay(q.skill)).join(", ")}</b>
           </div>
         )}
         {missed.length > 0 && (

@@ -5,6 +5,7 @@ import { scoreView } from "@/lib/engines/rubric";
 import { ASSESSED_COMPETENCIES, WEIGHTS, roundHalfDown } from "@/lib/engines/score";
 import { SKILL_BANKS } from "@/lib/fixtures/skill-banks";
 import { fmtEventDate } from "@/lib/fmt";
+import { skillDisplay } from "@/lib/skill-display";
 import type { DemoEventKind } from "@/lib/types";
 import { ArrowRight, Check, CheckCheck } from "lucide-react";
 import AssBandArt from "./BandArt";
@@ -229,7 +230,7 @@ export default async function AssessmentsPage() {
                     return (
                       <div className="skillrow closed" key={spec.name}>
                         <div className="s-main">
-                          <span className="s-name">{spec.name}</span>
+                          <span className="s-name">{skillDisplay(spec.name)}</span>
                         </div>
                         <div className="s-side">
                           <span className="chip c-green">
@@ -252,7 +253,7 @@ export default async function AssessmentsPage() {
                     return (
                       <div className="skillrow" key={spec.name}>
                         <div className="s-main">
-                          <span className="s-name">{spec.name}</span>
+                          <span className="s-name">{skillDisplay(spec.name)}</span>
                         </div>
                         <div className="s-side">
                           <a className="ass-quiz" href={`/verify?skill=${encodeURIComponent(spec.name)}`}>
@@ -267,7 +268,7 @@ export default async function AssessmentsPage() {
                     return (
                       <div className="skillrow idle" key={spec.name}>
                         <div className="s-main">
-                          <span className="s-name">{spec.name}</span>
+                          <span className="s-name">{skillDisplay(spec.name)}</span>
                         </div>
                         <div className="s-side">
                           <span className="chip c-grey">No check yet</span>
@@ -279,7 +280,7 @@ export default async function AssessmentsPage() {
                   return (
                     <div className="skillrow open" key={spec.name}>
                       <div className="s-main">
-                        <span className="s-name">{spec.name}</span>
+                        <span className="s-name">{skillDisplay(spec.name)}</span>
                       </div>
                       <div className="s-side">
                         <span className="chip c-grey">OPEN</span>

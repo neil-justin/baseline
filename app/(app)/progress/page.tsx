@@ -8,6 +8,7 @@ import { rankOpenSkills, openSkills as openSkillNames, stageOne } from "@/lib/en
 import { getResourcesForCareer, RESOURCES } from "@/lib/fixtures/resources";
 import { CHECKS } from "@/lib/fixtures/checks";
 import { trackLabelOf } from "@/lib/fixtures/catalog";
+import { skillDisplay } from "@/lib/skill-display";
 import type { BarSource, Resource } from "@/lib/types";
 import "./progress.css";
 import ProgressView from "./ProgressView";
@@ -41,9 +42,10 @@ function resourceMeta(r: Resource) {
   return `${TYPE_WORDS[r.type]}, ${r.provider}, ${costLabel(r)}`;
 }
 
-/** Short spoken form of a skill for the check copy ("Dashboards (Power BI)" → "dashboards"). */
+/** Short spoken form of a skill for the check copy ("Dashboards (Power BI)" → "dashboards");
+ *  sub-row markers never render (display ruling 2026-11-05). */
 function skillShort(skill: string) {
-  return skill.split("(")[0].trim().toLowerCase();
+  return skillDisplay(skill).split("(")[0].trim().toLowerCase();
 }
 
 function UndecidedDefault({ name }: { name: string }) {
@@ -140,7 +142,7 @@ export default async function ProgressPage() {
           (r) => r.skillsAddressed.includes(spec.name) && r.careerId === career.id
         ) ?? null;
       note = bc
-        ? `closed ${fmtDate(bc.date)}, via “${resource?.title ?? spec.name}” from ${resource?.provider ?? ""}${resource ? (resource.cost === "free" ? ", free" : "") : ""}`
+        ? `closed ${fmtDate(bc.date)}, via “${resource?.title ?? skillDisplay(spec.name)}” from ${resource?.provider ?? ""}${resource ? (resource.cost === "free" ? ", free" : "") : ""}`
         : "closed via passed comprehension check";
     } else if (bar.source === "verified") {
       note = state.decisions.verifiedTransferred.includes(spec.name)

@@ -15,6 +15,7 @@ import {
 } from "@/lib/fixtures/instrument";
 import { openSkills, stageOne } from "@/lib/engines/gaps";
 import { WEIGHTS } from "@/lib/engines/score";
+import { skillDisplay } from "@/lib/skill-display";
 import type { Career, CompetencyStatus, Goal } from "@/lib/types";
 import {
   GOAL_SUGGESTION,
@@ -632,7 +633,7 @@ export default function Onboarding({ retake = false }: { retake?: boolean }) {
               {career.skills.map((s) => (
                 <div key={s.name} className="skill-row">
                   <div>
-                    <div className="s-name">{s.name}</div>
+                    <div className="s-name">{skillDisplay(s.name)}</div>
                     <div className="s-what">{s.what}</div>
                   </div>
                   <div className="choice choice-sm">
@@ -1014,8 +1015,8 @@ export default function Onboarding({ retake = false }: { retake?: boolean }) {
             })()}
 
             {vView === "result" && (() => {
-              const passedNames = quizItems.filter((_, i) => vResults[i]).map((q) => q.skill);
-              const failedNames = quizItems.filter((_, i) => !vResults[i]).map((q) => q.skill);
+              const passedNames = quizItems.filter((_, i) => vResults[i]).map((q) => skillDisplay(q.skill));
+              const failedNames = quizItems.filter((_, i) => !vResults[i]).map((q) => skillDisplay(q.skill));
               const n = passedNames.length;
               let copy: string;
               if (n === quizItems.length) {

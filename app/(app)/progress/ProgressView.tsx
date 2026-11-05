@@ -8,6 +8,7 @@ import Reveal from "@/components/Reveal";
 import CheckOverlay from "./CheckOverlay";
 import type { CheckResourceLite } from "./types";
 import { WEIGHTS } from "@/lib/engines/score";
+import { skillDisplay } from "@/lib/skill-display";
 
 export interface FeedRow {
   key: string;
@@ -89,7 +90,7 @@ const BADGES: Record<ClosedRow["source"], { text: string; cls: string }> = {
 };
 
 function skillShortLabel(skill: string) {
-  return skill.split("(")[0].trim().toLowerCase();
+  return skillDisplay(skill).split("(")[0].trim().toLowerCase();
 }
 
 /**

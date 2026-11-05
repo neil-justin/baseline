@@ -1,5 +1,6 @@
 import type { Career } from "@/lib/types";
 import { TRACK_LABELS } from "@/lib/fixtures/catalog";
+import { skillDisplay } from "@/lib/skill-display";
 
 /**
  * Surface copy fixture — hand-authored [GUESS-F3] why-lines + prototype display
@@ -42,9 +43,11 @@ export function trackLabel(c: Career): string {
   return TRACK_LABELS[c.track];
 }
 
-/** strip dev-notation parentheticals for compact badges: "Git (version control)" → "Git" */
+/** strip dev-notation parentheticals for compact badges: "Git (version control)" → "Git",
+ *  and route through skillDisplay so artifact markers ("↳ CWF sub-row: …")
+ *  never render (display ruling 2026-11-05). */
 export function shortSkill(name: string): string {
-  return name.replace(/\s*\(.*\)$/, "");
+  return skillDisplay(name).replace(/\s*\(.*\)$/, "");
 }
 
 /** prototype re-assessment screen wording (catalog-canonical names as keys) */
@@ -57,10 +60,11 @@ const REASSESS_WHAT: Record<string, string> = {
   "Business Needs Analysis": "Translating user requirements into specs",
 };
 
-/** strip source-bundle rows to their headline skill for the re-assessment display */
+/** strip source-bundle rows to their headline skill for the re-assessment display;
+ *  sub-row markers never render (display ruling 2026-11-05) */
 export function reassessDisplay(name: string): string {
   if (name.includes("Enabling")) return "Enabling skills";
-  return name;
+  return skillDisplay(name);
 }
 
 export function reassessWhat(skill: string, fallback: string): string {
