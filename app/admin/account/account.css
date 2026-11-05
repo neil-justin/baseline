@@ -1,0 +1,138 @@
+/* ============================================================
+   /admin/account — the staff self-account page (2026-11-04/05 rulings,
+   built from the user-approved mockup round). Values MEASURED off the
+   revamped console (the one-register round + the admin v9 sweep):
+   ONE atabs-panel on the 8px/1px-hairline + M3 shadow, the
+   atabs-panel-head shape, the drill-in's form-block register (GS 16px
+   h3s), tracked 11px labels, chips at the console's 4px/11px rung, the
+   student Account tab's input wells, and the v9 filled pill as the one
+   command action. Layout law: single column at the 560 rung, centered
+   in the console column, every field spanning end to end. All names at
+   — no hook classes (the new-chrome rule: atabs- only).
+   ============================================================ */
+
+/* the page column: 560 rung, centered in .atabs-main's flex column */
+.v7admin .atabs-accpage {
+  width: min(560px, 100%);
+  align-self: center;
+  animation: atabs-in 0.18s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .v7admin .atabs-accpage {
+    animation: none;
+  }
+}
+
+/* the panel rides .atabs-panel's chrome; the sections breathe the */
+/* console's 16/18px panel rhythm, one shared row rule between     */
+.v7admin .atabs-accsec { padding: 18px 18px 20px; }
+.v7admin .atabs-accsec-rule { border-top: 1px solid var(--v-rows); }
+.v7admin .atabs-accsec-title {
+  margin: 0 0 14px;
+  font: 500 16px/1.3 "Google Sans", Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+
+/* the head's meta line + the tab's own art lead (per-tab metaphor law) */
+.v7admin .atabs-acc-headline { min-width: 0; }
+.v7admin .atabs-acc-meta {
+  margin: 2px 0 0;
+  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-ink2);
+}
+.v7admin .atabs-acc-art { flex: none; }
+
+/* fields: the single-column law — every field spans the panel end */
+/* to end; wells are the student Account tab's input register      */
+.v7admin .atabs-acc-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+.v7admin .atabs-acc-field {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  align-content: start;
+}
+.v7admin .atabs-acc-input {
+  font: 400 14px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  padding: 7px 10px;
+  border: 1px solid var(--v-border);
+  border-radius: 8px;
+  background: var(--v-surface);
+  width: 100%;
+  box-sizing: border-box;
+}
+.v7admin .atabs-acc-input:disabled { background: var(--v-grey-wash); color: var(--v-ink2); }
+.v7admin .atabs-acc-input:focus-visible {
+  outline: 2px solid var(--v-blue);
+  outline-offset: 2px;
+}
+
+/* the security body: fields, the NIST meter, and the action all ride
+   the same column; status lines in the never-red register (amber =
+   the honest mismatch), the v9 filled pill = THE page action */
+.v7admin .atabs-acc-pw {
+  display: grid;
+  gap: 10px;
+}
+.v7admin .atabs-acc-req { color: #d93025; font-weight: 600; margin-left: 2px; }
+.v7admin .atabs-acc-ok,
+.v7admin .atabs-acc-err {
+  margin: 0;
+  font: 400 13px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .atabs-acc-err { font-weight: 500; color: var(--v-amber-text); }
+.v7admin .atabs-acc-ctas {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.v7admin .atabs-acc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 18px;
+  font: 500 13px/1.2 "Google Sans", Roboto, system-ui, sans-serif;
+  border: 0;
+  border-radius: 999px;
+  background: var(--v-blue);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.14s ease, transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+}
+.v7admin .atabs-acc-btn:hover:not(:disabled) { background: var(--v-blue-deep); }
+.v7admin .atabs-acc-btn:active:not(:disabled) { transform: scale(0.97); }
+.v7admin .atabs-acc-btn:disabled { opacity: 0.45; cursor: default; }
+.v7admin .atabs-acc-btn:focus-visible {
+  outline: 2px solid var(--v-blue);
+  outline-offset: 2px;
+}
+
+/* the shared password meter's token remap — the family's law, on this
+   realm's scope */
+.v7admin .pw-feedback {
+  --accent: var(--v-green);
+  --ink-3: var(--v-ink2);
+}
+
+/* the skeleton's meter segs ride the honest register (shape only) */
+.v7admin .atabs-acc-skel-meter {
+  display: flex;
+  height: 6px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.v7admin .atabs-acc-skel-meter span {
+  flex: 1;
+  margin-right: 4px;
+}
+.v7admin .atabs-acc-skel-meter span:last-child { margin-right: 0; }

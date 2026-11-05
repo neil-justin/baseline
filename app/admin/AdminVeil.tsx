@@ -39,8 +39,9 @@ export default function AdminVeil({
 }: {
   role: Role;
   mode?: "state" | "detail";
-  /** the current tab (state mode) or the tab you came from (detail mode) */
-  active?: AdminTabId;
+  /** the current tab (state mode) or the tab you came from (detail mode);
+   *  "account" marks the self-account page — no console tab carries it */
+  active?: AdminTabId | "account";
   /** state mode: the tab-switching handler (onClick) */
   onNavigate?: (id: AdminTabId) => void;
   children: ReactNode;
@@ -93,6 +94,21 @@ export default function AdminVeil({
           )}
         </nav>
         <nav className="atabs-tail" aria-label="Console controls">
+          {/* the self-account page (2026-11-04 ruling: "Account" pinned in
+              the console controls, above Sign out) — a ROUTE, not client
+              tab state, so it renders as a Link in both veil modes; the
+              glyph rides the real shell's subset (Accounts' own face). */}
+          <Link
+            href="/admin/account"
+            className={activeId === "account" ? "atabs-account-link on" : "atabs-account-link"}
+            title="Account"
+            aria-current={activeId === "account" ? "page" : undefined}
+          >
+            <span className="ms" aria-hidden="true">
+              manage_accounts
+            </span>
+            <span>Account</span>
+          </Link>
           {/* POST, not a GET <Link> — a prefetched GET sign-out would wipe
               the session on visit (e2e-caught footgun; hook stays). */}
           <form action="/api/auth/signout" method="post">

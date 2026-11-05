@@ -2,29 +2,30 @@
 
 /**
  * mockups/account.tsx — the staff ACCOUNT page mockup (2026-11-04 round:
- * the Student tab has a Profile page; counselor + sysadmin have none. The
+ * counselor + sysadmin have no Profile page unlike the Student tab; the
  * user ruled a THIN-MVP own-account page — Identity read-only + Security
- * — and asked to see it as a mockup before anything builds).
+ * — and asked to see it before anything builds).
  *
- *   IDENTITY — read-only: name · email (the auth identity) · role chip ·
- *   campus (the tenant key). No staff self-service edit (user ruling:
- *   name stays read-only; no API change).
- *   SECURITY — the change-password card: the CURRENT-password first
- *   field, new + confirm, the shared NIST meter, one primary pill.
- *   The Submit NEVER fetches — the change is painted client-side under
+ * RE-ASSESS 2026-11-05: the console's real pages were revamped (the
+ * one-register round + the admin v9 sweep), so this pane now rides the
+ * CONSOLE register, not the student-profile branch it was first cloned
+ * from — every value measured off the LIVE pages (revamp-probe round):
+ *
+ *   ONE 8px/1px-hairline panel with the M3 level-1 shadow, the
+ *   atabs-panel-head shape (600 15px Roboto title + tracked meta + the
+ *   tab's own art right), tracked 11px labels, chips at the console's
+ *   4px rung, and the realm chrome at the console's bump (264px column,
+ *   15px/21px sidenav). The page's own sections read as the drill-in's
+ *   form blocks (Identity · Security — the console's only form page
+ *   relative), the shared NIST meter rides unchanged, and the single
+ *   filled pill stays THE Blue-Command action of the page.
+ *
+ *   SECURITY NEVER FETCHES — the change is painted client-side under
  *   the realm's mock law (the colophon carries the honesty line once).
  *
- * Design alignment: every value is CLONED from the Student Profile
- * account register (app/(app)/profile + profile.css) — the user-pinned
- * reference — as it reads AFTER its v9 sweep: borderless 16px cards,
- * Google Sans heads, pill primary at the 36px one-size register, 12px
- * chips, and the `.pw-feedback` token remap. Classes are mk-acc*
- * (mock-realm prefix law — the student's own classes are never imported),
- * drawn in mockups.css under .v7admin.
- *
- * Painted personas ride the realm's existing roster names (the Accounts
- * tab's own rows); the password meter is the REAL shared PasswordFeedback
- * — presentational only, fed from local state, so its copy stays honest.
+ * Painted personas ride the realm's existing roster names; the password
+ * meter is the REAL shared PasswordFeedback — presentational only, fed
+ * from local state, so its copy stays honest.
  */
 import { useEffect, useRef, useState } from "react";
 
@@ -57,6 +58,28 @@ const PERSONAS = {
 
 const PAINTED_NOTE = "Password changed — your next sign-in uses it.";
 const MISMATCH = "Passwords don't match — retype the new password to confirm.";
+
+/** the Account tab's head art (the per-tab metaphor law: ONE self-drawn
+ *  SVG metaphor, never shared). Account's metaphor: IDENTITY — a drawn
+ *  initials disc (the identity slot) beside an access badge in the
+ *  blue-wash moment. Deliberately a metaphor, not data. */
+function AccountArt() {
+  return (
+    <svg className="mk-art" width="84" height="42" viewBox="0 0 84 42" aria-hidden="true">
+      <g transform="translate(2 9)">
+        <rect width="30" height="24" rx="7" fill="#F1F3F4" stroke="#FFFFFF" strokeWidth="2" />
+        <circle cx="15" cy="9.5" r="3.6" fill="#5F6368" opacity="0.55" />
+        <path d="M7.2 19.5a7.8 7.8 0 0 1 15.6 0z" fill="#5F6368" opacity="0.55" />
+      </g>
+      <g transform="translate(40 4)">
+        <rect width="34" height="30" rx="9" fill="var(--v-blue-wash)" />
+        <circle cx="17" cy="12" r="4.2" fill="var(--v-blue-deep)" />
+        <rect x="10.5" y="19.5" width="13" height="2.6" rx="1.3" fill="var(--v-blue-deep)" opacity="0.75" />
+        <rect x="12.5" y="23.5" width="9" height="2.6" rx="1.3" fill="var(--v-blue-deep)" opacity="0.5" />
+      </g>
+    </svg>
+  );
+}
 
 export function AccountPane({ role }: { role: "counselor" | "sysadmin" }) {
   const p = PERSONAS[role];
@@ -94,21 +117,22 @@ export function AccountPane({ role }: { role: "counselor" | "sysadmin" }) {
 
   return (
     <div className="mk-accpage">
-      {/* the page head names the surface (Named-Surface Rule) — the console
-          head register, not the tracked counter register */}
-      <div className="mk-accpage-head">
-        <h2>Account</h2>
-        <p className="mk-accpage-sub">Your console identity and the sign-in that carries it.</p>
-      </div>
-
-      {/* CARD 1 — Identity (read-only: the thin-MVP ruling). Same field
-          register as the student card: name + email row, then role + campus. */}
-      <section className="mk-card" aria-label="Identity">
-        <div className="mk-cardhead">
-          <b>Identity</b>
-          <span>read-only — the account the console signs you in with</span>
+      {/* the console's one panel: atabs-panel-head shape — title + tracked
+          meta left, the tab's own art right (the one-register ruling) */}
+      <section className="mk-accpanel" aria-label="Account">
+        <div className="mk-accpanel-head">
+          <div className="mk-accpanel-headline">
+            <h2 className="mk-accpanel-title">Account</h2>
+            <p className="mk-accpanel-meta">{p.role} · {p.campus}</p>
+          </div>
+          <AccountArt />
         </div>
-        <div className="mk-acct-id">
+
+        {/* section 1 — Identity (read-only: the thin-MVP ruling). Same
+            tracked-label + well register the student card set, inside the
+            panel's 16px gutter rhythm */}
+        <div className="mk-accsec">
+          <h3 className="mk-accsec-title">Identity</h3>
           <div className="mk-accgrid">
             <div className="mk-accfield">
               <span className="mk-clabel">Full name</span>
@@ -118,8 +142,6 @@ export function AccountPane({ role }: { role: "counselor" | "sysadmin" }) {
               <span className="mk-clabel">Email</span>
               <input className="mk-accinput" type="email" value={p.email} readOnly disabled />
             </div>
-          </div>
-          <div className="mk-accgrid">
             <div className="mk-accfield">
               <span className="mk-clabel">Role</span>
               <span>
@@ -132,76 +154,74 @@ export function AccountPane({ role }: { role: "counselor" | "sysadmin" }) {
             </div>
           </div>
         </div>
-      </section>
 
-      {/* CARD 2 — Security — the real form's register, painted (never a
-          fetch; the note is the client-side illusion the colophon covers) */}
-      <section className="mk-card" aria-label="Security">
-        <div className="mk-cardhead">
-          <b>Security</b>
-          <span>current password required, same policy sign-up enforced</span>
-        </div>
-        <div className="mk-acct-pw">
-          <div className="mk-accfield">
-            <label className="mk-clabel" htmlFor="mk-pw-current">
-              Current password <span className="mk-req" aria-hidden="true">*</span>
-            </label>
-            <input
-              id="mk-pw-current"
-              type="password"
-              className="mk-accinput"
-              autoComplete="current-password"
-              value={current}
-              onChange={(e) => setCurrent(e.target.value)}
-            />
-          </div>
-          <div className="mk-accfield">
-            <label className="mk-clabel" htmlFor="mk-pw">
-              New password <span className="mk-req" aria-hidden="true">*</span>
-            </label>
-            <input
-              id="mk-pw"
-              type="password"
-              className="mk-accinput"
-              autoComplete="new-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="mk-accfield">
-            <label className="mk-clabel" htmlFor="mk-pw-confirm">
-              Confirm new password <span className="mk-req" aria-hidden="true">*</span>
-            </label>
-            <input
-              id="mk-pw-confirm"
-              type="password"
-              className="mk-accinput"
-              autoComplete="new-password"
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
-            />
-          </div>
-          <PasswordFeedback password={password} />
-          {mismatch && (
-            <p className="mk-acc-err" role="status" aria-live="polite">
-              {MISMATCH}
-            </p>
-          )}
-          {note && (
-            <p className="mk-acc-ok" role="status" aria-live="polite">
-              {note}
-            </p>
-          )}
-          <div className="mk-accctas">
-            <button
-              type="button"
-              className="mk-accbtn"
-              title="Mockup — client-side only"
-              onClick={paint}
-              disabled={busy || !ready}
-            >
-              {busy ? "Changing…" : "Change password"}
-            </button>
+        {/* section 2 — Security — the real form's register, painted
+            (never a fetch; the note is the client-side illusion the
+            colophon covers) */}
+        <div className="mk-accsec mk-accsec-rule">
+          <h3 className="mk-accsec-title">Security</h3>
+          <div className="mk-acct-pw">
+            <div className="mk-accfield">
+              <label className="mk-clabel" htmlFor="mk-pw-current">
+                Current password <span className="mk-req" aria-hidden="true">*</span>
+              </label>
+              <input
+                id="mk-pw-current"
+                type="password"
+                className="mk-accinput"
+                autoComplete="current-password"
+                value={current}
+                onChange={(e) => setCurrent(e.target.value)}
+              />
+            </div>
+            <div className="mk-accfield">
+              <label className="mk-clabel" htmlFor="mk-pw">
+                New password <span className="mk-req" aria-hidden="true">*</span>
+              </label>
+              <input
+                id="mk-pw"
+                type="password"
+                className="mk-accinput"
+                autoComplete="new-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="mk-accfield">
+              <label className="mk-clabel" htmlFor="mk-pw-confirm">
+                Confirm new password <span className="mk-req" aria-hidden="true">*</span>
+              </label>
+              <input
+                id="mk-pw-confirm"
+                type="password"
+                className="mk-accinput"
+                autoComplete="new-password"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+              />
+            </div>
+            <PasswordFeedback password={password} />
+            {mismatch && (
+              <p className="mk-acc-err" role="status" aria-live="polite">
+                {MISMATCH}
+              </p>
+            )}
+            {note && (
+              <p className="mk-acc-ok" role="status" aria-live="polite">
+                {note}
+              </p>
+            )}
+            <div className="mk-accctas">
+              <button
+                type="button"
+                className="mk-accbtn"
+                title="Mockup — client-side only"
+                onClick={paint}
+                disabled={busy || !ready}
+              >
+                {busy ? "Changing…" : "Change password"}
+              </button>
+            </div>
           </div>
         </div>
       </section>

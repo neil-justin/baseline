@@ -928,13 +928,15 @@
 @media (prefers-reduced-motion: no-preference) {
   .v7admin .atabs-sidenav button,
   .v7admin .atabs-sidenav a,
-  .v7admin .atabs-tail .admin-signout {
+  .v7admin .atabs-tail .admin-signout,
+  .v7admin .atabs-tail .atabs-account-link {
     transition: background-color 0.14s ease, color 0.14s ease,
       transform 0.12s cubic-bezier(0.2, 0, 0, 1);
   }
   .v7admin .atabs-sidenav button:active,
   .v7admin .atabs-sidenav a:active,
-  .v7admin .atabs-tail .admin-signout:active {
+  .v7admin .atabs-tail .admin-signout:active,
+  .v7admin .atabs-tail .atabs-account-link:active {
     transform: scale(0.97);
   }
   .v7admin .atabs-tabpage {
