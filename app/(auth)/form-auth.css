@@ -21,6 +21,7 @@
   --mk-line: #dadce0;
   --mk-surface: #fff;
   --mk-bg: #f8f9fa;
+  --mk-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
 
   min-height: 100dvh;
   display: flex;
@@ -42,13 +43,18 @@
   font: 500 16px/1.2 "Google Sans", Roboto, system-ui, sans-serif;
 }
 
-/* the column: one centered form lane, vertically balanced */
+/* the column: one centered card lane, vertically balanced.
+   The card is the lane itself — the form sits ON a Surface card,
+   M3 shadow register, 16 radius. */
 .fauth-main {
-  flex: 1;
+  flex: none;
   width: 100%;
-  max-width: 380px;
-  margin: 0 auto;
-  padding: 24px 0 48px;
+  max-width: 420px;
+  margin: auto; /* auto top+bottom margins center the card vertically */
+  padding: 40px 40px 36px;
+  background: var(--mk-surface);
+  border-radius: 16px;
+  box-shadow: var(--mk-shadow);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -209,5 +215,5 @@
 
 /* narrow: the column keeps its width, minus the page-gutter */
 @media (max-width: 440px) {
-  .fauth-main { padding: 24px 24px 40px; }
+  .fauth-main { padding: 32px 24px 28px; }
 }
