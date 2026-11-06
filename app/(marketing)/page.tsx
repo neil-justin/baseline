@@ -110,12 +110,6 @@ export default async function LandingPage() {
       <section className="m-hero">
         <div className="m-cap m-hero-grid">
           <Reveal>
-            <p className="m-dots" aria-hidden="true">
-              <i className="m-d m-db"></i>
-              <i className="m-d m-dr"></i>
-              <i className="m-d m-dy"></i>
-              <i className="m-d m-dg"></i>
-            </p>
             <h1>
               Walk into your first career <em>ready</em> — not just qualified.
             </h1>

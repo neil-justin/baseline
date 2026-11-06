@@ -156,12 +156,6 @@
   gap: 56px;
   align-items: center;
 }
-.v9 .m-dots { display: flex; gap: 8px; margin: 0 0 22px; }
-.v9 .m-d { width: 12px; height: 12px; border-radius: 50%; }
-.v9 .m-db { background: var(--m-gblue); }
-.v9 .m-dr { background: var(--m-gred); }
-.v9 .m-dy { background: var(--m-gyellow); }
-.v9 .m-dg { background: var(--m-ggreen); }
 .v9 .m-hero h1 {
   font: 400 clamp(38px, 4.6vw, 62px)/1.08 var(--m-ui);
   letter-spacing: -0.015em;
