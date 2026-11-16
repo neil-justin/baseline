@@ -78,11 +78,15 @@
 .v7ob .ob-steps-strip {
   display: flex;
   align-items: flex-start;
-  gap: 18px;
+  gap: 40px; /* fixed pitch between step cells (walk-fix 2026-11-06) */
   flex: 1;
   min-width: 0;
+  justify-content: center; /* the center zone dead-centers between the two edge zones */
   overflow-x: auto;
   padding-bottom: 2px;
+}
+@media (max-width: 980px) {
+  .v7ob .ob-steps-strip { gap: 20px; }
 }
 .v7ob .ob-step {
   display: inline-flex;
@@ -185,18 +189,19 @@
   padding: 9px 20px;
   border-radius: 8px;
   text-decoration: none;
-  transition: background-color 0.13s ease, border-color 0.13s ease;
+  transition: background-color var(--ob-dur-fast) var(--ob-ease-standard), border-color var(--ob-dur-fast) var(--ob-ease-standard), transform var(--ob-dur-fast) var(--ob-ease-standard);
 }
 .v7ob .btn-primary { background: var(--v-blue); color: #fff; box-shadow: 0 1px 3px rgba(26, 115, 232, 0.3); }
 .v7ob .btn-primary:hover { background: var(--v-blue-deep); }
-.v7ob .btn:disabled { opacity: 0.45; cursor: default; box-shadow: none; }
+.v7ob .btn:active:not(:disabled) { transform: scale(0.97); } /* M3 press ≤0.97 */
+.v7ob .btn:disabled { background: var(--v-grey-wash); color: var(--v-ink2); opacity: 1; cursor: default; box-shadow: none; }
 .v7ob .btn:disabled:active { transform: none; }
 .v7ob .btn-ghost {
   background: var(--v-surface);
   border: 1px solid var(--v-border);
   color: var(--v-blue-deep);
 }
-.v7ob .btn-ghost:hover:not(:disabled) { background: var(--v-blue-wash); border-color: var(--v-blue); }
+.v7ob .btn-ghost:hover:not(:disabled) { background: var(--v-blue-hover); border-color: transparent; }
 .v7ob .btn-hero { font-size: 14px; padding: 12px 22px; }
 .v7ob .btn-hero:hover:not(:disabled) { background: var(--v-blue-deep); }
 .v7ob .ob-quiet {
@@ -271,7 +276,7 @@
   text-align: left;
   padding: 16px;
   cursor: pointer;
-  transition: border-color 0.12s ease;
+  transition: background-color var(--ob-dur-fast) var(--ob-ease-standard), border-color var(--ob-dur-fast) var(--ob-ease-standard), box-shadow var(--ob-dur-fast) var(--ob-ease-standard);
 }
 .v7ob .strand-card:hover { border-color: var(--v-ink2); }
 .v7ob .strand-card.sel { border-color: var(--v-blue); box-shadow: inset 0 0 0 1px var(--v-blue), var(--v-shadow); }
@@ -323,7 +328,7 @@
   border-radius: 8px;
   font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
-  transition: border-color 0.12s ease, background-color 0.12s ease;
+  transition: border-color var(--ob-dur-fast) var(--ob-ease-standard), background-color var(--ob-dur-fast) var(--ob-ease-standard);
 }
 .v7ob .q-opts .opt:hover { border-color: var(--v-ink2); }
 /* feedback bands: chips-language at band scale — green tells, warm amber
@@ -336,6 +341,14 @@
   display: none;
 }
 .v7ob .q-band.show { display: block; }
+@media (prefers-reduced-motion: no-preference) {
+  /* the verdict band fades in over the answer (one-card cadence, 2026-11-06) */
+  .v7ob .q-band.show { animation: ob-band-in var(--ob-dur-base) var(--ob-ease-standard); }
+}
+@keyframes ob-band-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 .v7ob .q-band.pass { background: var(--v-green-wash); color: var(--v-green-text); }
 .v7ob .q-band.fail { background: var(--v-amber-wash); color: var(--v-amber-text); }
 
@@ -382,7 +395,7 @@
   font: 500 11.5px/1.2 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   white-space: nowrap;
-  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  transition: background-color var(--ob-dur-fast) var(--ob-ease-standard), color var(--ob-dur-fast) var(--ob-ease-standard), border-color var(--ob-dur-fast) var(--ob-ease-standard);
 }
 .v7ob .choice button:hover { color: var(--v-ink); }
 .v7ob .choice button[aria-pressed="true"] {
@@ -398,13 +411,10 @@
 .v7ob .ob-parts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 760px; }
 .v7ob .ob-parts h3 { margin-top: 8px; }
 
-.v7ob .ob-scale-legend {
-  padding: 10px 16px;
-  font: 400 11px/1.55 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2); /* the anchors are the instrument's calibration read */
-  border-bottom: 1px solid var(--v-rows);
-  max-width: none;
-}
+/* (.ob-scale-legend RETIRED 2026-11-06, user ruling: the instrument must
+ * be self-explanatory — the scale's 5 chips say it; no trailing helper
+ * legend on the statement cards.) */
+
 .v7ob .inst-group { padding: 0 16px 6px; }
 .v7ob .inst-head { padding: 14px 0 6px; border-bottom: 1px solid var(--v-rows); }
 .v7ob .inst-head-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -448,7 +458,7 @@
   flex-direction: column;
   align-items: center;
   gap: 1px;
-  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  transition: background-color var(--ob-dur-fast) var(--ob-ease-standard), color var(--ob-dur-fast) var(--ob-ease-standard), border-color var(--ob-dur-fast) var(--ob-ease-standard);
 }
 .v7ob .scale button:hover { border-color: var(--v-ink2); color: var(--v-ink); }
 .v7ob .scale button[aria-pressed="true"] {
@@ -484,6 +494,62 @@
 .v7ob .tickline b { color: var(--v-ink); font-weight: 500; }
 .v7ob .tickline span { color: var(--v-ink2); }
 .v7ob .stack { display: grid; gap: 0; }
+
+/* ---------- funnel rework additions (2026-11-06) ---------- */
+
+/* re-entry banner under the stepper */
+.v7ob .ob-restore {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 0 auto 14px;
+  padding: 12px 16px;
+  background: var(--v-blue-wash);
+  border-radius: 12px;
+}
+.v7ob .ob-restore .ob-restore-line {
+  font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-on-primary-container);
+}
+.v7ob .ob-restore .ob-restore-line b { font-weight: 500; }
+.v7ob .ob-restore .ob-restore-ctas { display: flex; align-items: center; gap: 16px; }
+.v7ob .ob-restore .btn-primary { padding: 7px 16px; font-size: 13px; }
+
+/* the RIASEC quiz progress bar */
+.v7ob .ob-progbar {
+  height: 6px;
+  max-width: 640px;
+  border-radius: 999px;
+  background: var(--v-grey-wash);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.v7ob .ob-progbar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--v-blue);
+  transition: width var(--ob-dur-base) var(--ob-ease-standard);
+}
+
+/* the Background step's program dropdown */
+.v7ob .ob-select {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--v-grey-wash);
+  font: 400 14px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+
+/* the compact program-gated picker: single-column card list at every width */
+.v7ob .ob-compact { grid-template-columns: 1fr; max-width: 640px; }
 
 /* ---------- responsive: band folds, cards stack, scales wrap ---------- */
 
@@ -541,21 +607,21 @@
 .v7ob .btn-ghost {
   background: var(--v-blue-wash);
   border: 0;
-  color: #041e49;
+  color: var(--v-on-primary-container);
 }
 .v7ob .btn-ghost:hover:not(:disabled) {
-  background: #c5d9f8;
+  background: var(--v-blue-hover);
   border-color: transparent;
 }
 
 /* selectable cards: hover = tonal tint, selected = 2px primary ring */
 .v7ob .strand-card:hover,
-.v7ob .card:hover { border-color: transparent; background: #eef3fc; }
+.v7ob .card:hover { border-color: transparent; background: var(--v-secondary-container); }
 .v7ob .strand-card.sel,
 .v7ob .card.sel {
   border-color: transparent;
   box-shadow: inset 0 0 0 2px var(--v-blue), var(--v-shadow);
-  background: #eef3fc;
+  background: var(--v-secondary-container);
 }
 
 /* option rows: tonal rounded rects (transparent border preserves size) */
@@ -564,7 +630,7 @@
   border-radius: 12px;
   background: var(--v-grey-wash);
 }
-.v7ob .q-opts .opt:hover { border-color: transparent; background: #e8eaed; }
+.v7ob .q-opts .opt:hover { border-color: transparent; background: var(--v-rows); }
 
 /* the self-report choice + the instrument scale: M3 segmented pills */
 .v7ob .choice {
@@ -578,7 +644,7 @@
   border-radius: 999px;
   background: var(--v-grey-wash);
 }
-.v7ob .scale button:hover { border-color: transparent; background: #e8eaed; color: var(--v-ink); }
+.v7ob .scale button:hover { border-color: transparent; background: var(--v-rows); color: var(--v-ink); }
 .v7ob .scale button[aria-pressed="true"] {
   border-color: transparent;
   background: var(--v-blue-wash);
@@ -628,3 +694,425 @@
 .v7ob .tickline { font-size: 13.5px; }
 .v7ob .readout-score { font-size: 52px; }
 .v7ob .readout-score small { font-size: 14px; }
+
+/* ============================================================
+   Shared skeleton primitives (agent E, user deferral 2026-11-06:
+   skeletons after rework). New classes only — the legacy
+   `.ob-loading`/`.ob-skel` block above stays byte-untouched (no
+   legacy loading screen exists in the current TSX to consolidate
+   against). Recipe mirrors v7.css's `.skel` (DESIGN.md Skeleton
+   Rule): plain #E8EAED bars pulsing to #F1F3F4, 1.4s ease, armed
+   only under prefers-reduced-motion: no-preference — no spinners,
+   no painted text. Consumed by components/skeleton.tsx.
+   ============================================================ */
+
+.v7ob .skel {
+  display: block;
+  height: 13px;
+  border-radius: 8px;
+  background: var(--v-rows);
+}
+.v7ob .skel-title { height: 18px; width: 55%; }
+
+/* the panel-shaped block: surface + ink-light border, mirrors `panel` */
+.v7ob .skel-block {
+  padding: 20px;
+  background: var(--v-surface);
+  border: 1px solid var(--v-rows);
+  border-radius: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+/* page-head register: h1 bar + a lead-paragraph bar */
+.v7ob .skel-head { display: grid; gap: 10px; max-width: 640px; margin-bottom: 18px; }
+.v7ob .skel-head .skel:first-child { height: 22px; width: 60%; }
+.v7ob .skel-head .skel:last-child { width: 86%; }
+
+/* card-row register (career cards): 3-across, stacks at ≤900px like .ob-cards */
+.v7ob .skel-grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 980px;
+}
+@media (max-width: 900px) { .v7ob .skel-grid3 { grid-template-columns: 1fr; } }
+
+/* single wide panel register (verify/NACE results, reveal readout) */
+.v7ob .skel-single { max-width: 640px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .v7ob .skel { animation: ob-skel-pulse 1.4s ease-in-out infinite; }
+}
+@keyframes ob-skel-pulse {
+  0%, 100% { background: var(--v-rows); }        /* #E8EAED — DESIGN.md Skeleton Rule */
+  50% { background: var(--v-grey-wash); }        /* #F1F3F4 */
+}
+
+/* ============================================================
+   Re-work round (2026-11-06 fixes 1–11): screen transitions,
+   info-panel register, rung tally, skeleton shimmer, spacing.
+   ============================================================ */
+
+/* ---------- screen-entrance transition (fix 3) — 140ms fade + 6px
+   rise, keyed on the screen; skipped under reduced motion ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .v7ob .ob-anim { animation: ob-anim-in var(--ob-dur-base) var(--ob-ease-emphasized); }
+}
+@keyframes ob-anim-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- info-only panels (fix 10): panels, not picks — muted
+   hairline, no shadow, no hover/CTA affordance ---------- */
+.v7ob .ob-static {
+  border: 1px solid var(--v-rows);
+  box-shadow: none;
+}
+.v7ob .ob-static:hover { border-color: var(--v-rows); background: var(--v-surface); }
+
+/* ---------- the per-skill rung tally (fix 9) ---------- */
+.v7ob .ob-tally {
+  border: 1px solid var(--v-rows);
+  box-shadow: none;
+  padding: 8px 16px;
+  margin-top: 16px;
+  max-width: 640px;
+}
+
+/* ---------- the ①b program pick keeps the card grammar ---------- */
+.v7ob .ob-program { max-width: 640px; }
+
+/* ---------- overflow discipline (fix 11): never wider than the
+   container; NACE intro panels stack single-column ---------- */
+.v7ob .ob-screen { min-width: 0; }
+.v7ob .strand-grid > *,
+.v7ob .ob-branch > *,
+.v7ob .ob-cards > *,
+.v7ob .ob-parts > * { min-width: 0; }
+
+/* the NACE intro panels stack, single column, page scroll only vertical */
+.v7ob .ob-parts { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.v7ob .inst-row { grid-template-columns: minmax(0, 1fr) auto; }
+.v7ob .q-stem-md { overflow-wrap: break-word; }
+.v7ob .q-stem { overflow-wrap: break-word; }
+
+/* ---------- skeleton shimmer (fix 8): a subtle sheen over the pulse ---------- */
+.v7ob .skel { position: relative; overflow: hidden; }
+.v7ob .skel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .v7ob .skel::after { animation: ob-skel-sheen 1.4s ease-in-out infinite; }
+}
+@keyframes ob-skel-sheen {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+/* ---------- the loading skeleton mirrors the Background step (fix 1):
+   the 4 track cards + the program pick row ---------- */
+.v7ob .skel-grid4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  max-width: 980px;
+}
+@media (max-width: 900px) { .v7ob .skel-grid4 { grid-template-columns: 1fr; } }
+
+.v7ob .skel-track {
+  padding: 16px;
+  background: var(--v-surface);
+  border-radius: 16px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+.v7ob .skel-track .skel-count { height: 12px; width: 50%; }
+
+/* the program pick row mirror (loading.tsx) */
+.v7ob .skel-program {
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+  max-width: 640px;
+  border-radius: 16px;
+}
+.v7ob .skel-select { height: 40px; border-radius: 12px; background: var(--v-grey-wash); }
+
+/* ---------- skeleton shapes that mirror their screens (fix 1, 2026-
+   11-06). Shape-only: the pulse lives on .skel above. ---------- */
+
+/* career card grid — same grid as .ob-cards, stacks at ≤900px */
+.v7ob .skel-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 980px;
+}
+@media (max-width: 900px) { .v7ob .skel-card-grid { grid-template-columns: 1fr; } }
+
+.v7ob .skel-card {
+  padding: 16px;
+  background: var(--v-surface);
+  border-radius: 16px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+.v7ob .skel-fit { height: 12px; width: 70%; }       /* the fit line */
+.v7ob .skel-name { height: 16px; width: 55%; }      /* the bold name bar */
+.v7ob .skel-skills { height: 12px; width: 45%; }    /* "N core skills" bar */
+/* the Choose pill bar — shared by card + question card skeletons */
+.v7ob .skel-pill { height: 34px; width: 45%; border-radius: 999px; margin-top: 4px; }
+
+/* question card register — mirrors the quiz/NACE card (tag row, stem(s),
+ * option bars / chip scale row, CTA pill) */
+.v7ob .skel-qcard {
+  padding: 24px;
+  background: var(--v-surface);
+  border-radius: 16px;
+  display: grid;
+  gap: 12px;
+  max-width: 760px;
+}
+.v7ob .skel-tag { height: 12px; width: 40%; }
+.v7ob .skel-stem { height: 15px; width: 88%; }
+.v7ob .skel-stem-short { width: 62%; }
+.v7ob .skel-opts { display: grid; gap: 8px; max-width: 560px; }
+.v7ob .skel-opt { height: 40px; border-radius: 12px; }
+.v7ob .skel-chiprow {
+  display: flex;
+  justify-content: flex-end;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+.v7ob .skel-chip { height: 40px; width: 62px; border-radius: 999px; flex: none; }
+
+/* ---------- spacing pass (fix 4): the 8/12/16/24 rhythm ---------- */
+.v7ob .ob-ctas { margin-top: 24px; }
+.v7ob .ob-branch { gap: 16px; }
+.v7ob .ob-cards { gap: 16px; }
+.v7ob .card .c-cta { margin-top: 16px; }
+
+/* ---------- headroom under the stepper/banner (2026-11-06 fix 4):
+   every screen gets the same breathing room below the band ---------- */
+.v7ob .ob-screen { padding-top: 8px; }
+
+/* ============================================================
+   Walk-fix round (2026-11-06, user批 walk @1920): centered column,
+   banner toast pill, reserved verdict slots, stepper pitch, token
+   sweep. Later rules here override the register above only where
+   named; hooks and locked fixes untouched.
+   ============================================================ */
+
+/* ---------- fix 1 · the ONE centered content column ---------- */
+
+.v7ob .ob-shell { max-width: 1020px; margin-inline: auto; }
+.v7ob .ob-screen {
+  max-width: 720px;
+  margin-inline: auto;
+}
+/* TWO-SHAPE SYSTEM (walk-fix 2026-11-06, fix 2): wide screens mark
+   themselves and take the full 1020 column — headings, back links and
+   foot lines span the grid's own left/right edge, no break-out hacks. */
+.v7ob .ob-screen.wide { max-width: 1020px; }
+@media (max-width: 1079px) {
+  .v7ob .strand-grid,
+  .v7ob .ob-cards,
+  .v7ob .ob-branch,
+  .v7ob .skel-grid4,
+  .v7ob .skel-card-grid { max-width: 100%; }
+}
+@media (min-width: 1080px) {
+  /* the wide grids sit flat inside the .wide column — width 100%, no
+     negative margins — so every left/right edge aligns with the column */
+  .v7ob .strand-grid,
+  .v7ob .ob-cards,
+  .v7ob .ob-branch,
+  .v7ob .skel-grid4,
+  .v7ob .skel-card-grid,
+  .v7ob .skel-grid3,
+  .v7ob .ob-compact {
+    max-width: none;
+    width: 100%;
+    margin-left: 0;
+  }
+}
+/* the over-column legacy caps fold under the column */
+.v7ob .ob-parts,
+.v7ob .skel-qcard,
+.v7ob .skel-single { max-width: 100%; }
+.v7ob .vq-qbar,
+.v7ob .vq-card { max-width: 100%; }
+
+/* ---------- fix 2 · the restore banner = a floating toast pill
+   (in flow between the header band and the page content, centered;
+   mobile: full-width below) ---------- */
+
+.v7ob { position: relative; }
+.v7ob .ob-restore {
+  /* walk-fix 2026-11-06: in-flow pill (no fixed pinning) — it sits between
+     the header band and the page content, so it can never overlap the
+     stepper or any other text on any viewport width */
+  position: static;
+  display: flex;
+  margin: 14px auto 14px;
+  padding: 10px 12px;
+  max-width: 620px;
+  flex-wrap: nowrap;
+  border-radius: 999px;      /* the Pill Rule */
+  box-shadow: var(--v-shadow); /* M3 level-1 toast lift */
+}
+.v7ob .ob-restore .ob-restore-line { font-size: 13px; }
+.v7ob .ob-restore .ob-restore-ctas { gap: 12px; }
+.v7ob .ob-restore .btn-primary { padding: 6px 14px; font-size: 12.5px; }
+.v7ob .ob-restore .ob-quiet { font-size: 12px; }
+.v7ob .ob-restore .ob-restore-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 999px; /* the Pill Rule */
+  background: transparent;
+  color: var(--v-on-primary-container, var(--v-ink2));
+  cursor: pointer;
+}
+.v7ob .ob-restore .ob-restore-close:hover {
+  background: var(--v-blue-hover);
+}
+@media (max-width: 1100px) {
+  .v7ob .ob-restore {
+    margin: 0 auto 14px;
+    max-width: none;
+    width: 100%;
+    flex-wrap: wrap;
+    border-radius: 16px;
+  }
+}
+
+/* the mirror mirrors the INCOMING verify question card — keep its
+ * reserved-band bottom padding so the load swap keeps the same pitch
+ * (skeleton-contract rule, 2026-11-06) */
+@media (min-width: 721px) {
+  .v7ob .skel-qcard { padding-bottom: 104px; }
+}
+
+/* ---------- fix (2026-11-06) · verdict bands leave the flow ---------- */
+/* The reserved 66px slot read as an empty void at the card's foot. The
+ * band now anchors OUT of flow: the card carries the spot as its own
+ * bottom padding (reads as normal card air — nothing unoccupied but the
+ * designed padding), and BOTH band states — pending and lit `.show` —
+ * occupy the SAME absolute spot, so the reveal fades in in place: zero
+ * layout shift, zero void. Reserve = the measured worst band + the
+ * 16px inset (NACE fail measures 66px @720; ladder default fail 87.25px
+ * @640). min-height guards the shortest cards (the 4-option checks).
+ * ≤720px the narrow column wraps bands taller than any fixed reserve —
+ * there the band keeps the in-flow reserved slot it had before. */
+.v7ob .q-band {
+  display: block;
+  min-height: 66px; /* two lines at 14.5px/1.5 + the 11px/14px padding */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: transparent;
+}
+.v7ob .q-band.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+@media (min-width: 721px) {
+  .v7ob .ob-mcqcard {
+    position: relative;
+    padding-bottom: 86px; /* the NACE band's spot: 16px inset + its 66px worst */
+    min-height: 320px;    /* options + stem + tags + the band's reserve */
+  }
+  .v7ob .q-band {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    margin-top: 0;
+    min-height: 0;
+  }
+}
+/* the ladder check screens' band (`.vq-band`) lives in quiz.css — same
+   pattern, scoped to the shared `.vq` register so /verify gets it too */
+
+/* ---------- fix 6 · the stepper's even pitch ---------- */
+
+/* each cell is a fixed-width inline-flex column — the check circle sits
+   centered over the label at the same pitch in every state */
+.v7ob .ob-step { width: 78px; }
+.v7ob .ob-steps-strip { justify-content: flex-start; }
+
+/* audit round 2026-11-06: the strip scrolls on narrow screens — hide the
+   default scrollbar (it already auto-centers the current step via the
+   component's effect) and hint the overflow with a soft ground-fade at
+   the right edge, never over the live step's label */
+.v7ob .ob-steps-strip { scrollbar-width: none; scroll-behavior: smooth; }
+.v7ob .ob-steps-strip::-webkit-scrollbar { display: none; }
+
+/* ---------- fix 7 · the design-DNA sweep ---------- */
+
+/* interactive control → the pill register (Pill Rule) */
+.v7ob .ob-select { border-radius: 999px; }
+
+/* v9 type-floor alignment (the 11.5px label floor + hierarchy bumps
+   the v9 block missed) */
+.v7ob .q-skill-tag { font-size: 11.5px; }
+.v7ob .card h3 { font-size: 16px; }
+.v7ob .strand-card .t-name { font-size: 15px; }
+.v7ob .strand-card .t-tag { font-size: 13.5px; }
+.v7ob .strand-card .t-count { font-size: 11.5px; }
+.v7ob .card .fit-line { font-size: 12.5px; }
+.v7ob .card .c-line { font-size: 13.5px; }
+
+/* ============================================================
+   Walk-fix round (2026-11-06) — fix 1 companion: the loading route's
+   stepper mirror (loading.tsx `.ob-head`) rides the SAME 3-zone pitch
+   as the live `.ob-band` — left title block natural width, the chip
+   row flex:1 dead-centered with the fixed 40px gap, fixed-width cells.
+   ============================================================ */
+
+.v7ob .ob-head {
+  background: var(--v-surface);
+  border-radius: 16px;
+  box-shadow: var(--v-shadow);
+  padding: 14px 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.v7ob .ob-head-left { display: grid; gap: 8px; min-width: 200px; }
+.v7ob .ob-head-steps {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+}
+.v7ob .skel-chipset {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 78px;
+  flex: none;
+}
+.v7ob .skel-num { width: 24px; height: 24px; border-radius: 50%; flex: none; }
+.v7ob .skel-label { height: 11px; width: 100%; }
+@media (max-width: 720px) {
+  .v7ob .ob-head { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .v7ob .ob-head-steps { width: 100%; }
+}

@@ -66,6 +66,13 @@ export const SUGGESTION_CARDS: Record<string, { fitLine: string; entryLine: stri
  * agile, SQL-design, business needs, enabling); SQL-design + business needs
  * pass ("2 of 5 confirmed"). `catalogSkill` must match the frozen
  * /api/verify + /api/claim keys exactly.
+ *
+ * Relation to the swd ladders (wave-1 pilot, 2026-11-05): all 5 skills this
+ * bank draws are swd-owned catalog rows, and each ALSO holds its swd 3-item
+ * ladder identity in `lib/fixtures/skill-banks/it.ts` — the wiring handles
+ * both shapes (a claimed ladder-wired skill sits the ladder at /verify, a
+ * legacy-only skill keeps this single item). No `// wave-2: pending ladder`
+ * rows exist: no demo-path skill belongs to another career.
  */
 export interface VMCQ {
   skill: string; // student-facing display name
@@ -73,6 +80,30 @@ export interface VMCQ {
   stem: string;
   options: string[];
   answer: number;
+  /** Ladder items only (optional so the legacy banks stay untouched):
+   *  the item's on-disk official statement anchor, e.g.
+   *  "O*NET 15-1252.00 · task 21661" · "PSOC 2512 · b" · "PSF-SDS · <desc>". */
+  ref?: string;
+  /** Ladder items only: one why-wrong line per WRONG option, in option
+   *  order EXCLUDING the key (length 3 for a 4-option item). Verbatim
+   *  source quotes live here, never in the key (stem-discipline rule 4). */
+  distractorNotes?: string[];
+}
+
+/**
+ * One skill's 3-rung verification ladder — the wave-1 pilot shape
+ * (docs/assessment-blueprint-swd.md, user-approved 2026-11-05 "go"):
+ * Q1 recognition → Q2 application → Q3 judgment, ALL THREE correct →
+ * markVerified (independent items; guess rate per skill ≈ (1/4)³ ≈ 1.6%).
+ * `catalogSkill` byte-matches the catalog row name. The bank file that owns
+ * the ladders is `lib/fixtures/skill-banks/it.ts` (swd rides the IT track);
+ * byte-lock: the shipped singles above stay, the ladders live alongside.
+ */
+export interface SkillLadder {
+  skill: string; // student-facing display name (the ladder's shared identity)
+  catalogSkill: string; // canonical catalog row name (API key, byte-match)
+  /** tier order fixed: [recognition, application, judgment] */
+  items: [VMCQ, VMCQ, VMCQ];
 }
 
 export const VERIFY_BANK: VMCQ[] = [

@@ -110,6 +110,7 @@ export function newStudentState(id: string, fullName: string) {
     softSkills: {},
     decisions: { verifiedTransferred: [] },
     events: [],
+    onboarded: false,
   };
 }
 
@@ -117,7 +118,11 @@ export function newStudentState(id: string, fullName: string) {
 
 /** The one destination rule, extracted from signin/route.ts and the landing
  *  page (they duplicated it verbatim — this is now the citation): staff →
- *  /admin; student with a picked career → /dashboard; else → /onboarding. */
+ *  /admin; a student whose onboarding is COMPLETE (picked career AND a
+ *  recorded NACE attempt — goal is skippable) → /dashboard; anything
+ *  mid-funnel → /onboarding so the draft-restore banner offers resume.
+ *  2026-11-06 bug fix: a career pick alone no longer counts as done
+ *  (sign-out mid-funnel used to land on /dashboard). */
 export async function destFor(profile: {
   role: Role;
   studentId: string | null;
@@ -125,7 +130,8 @@ export async function destFor(profile: {
   if (profile.role === "counselor" || profile.role === "sysadmin") return "/admin";
   if (profile.studentId) {
     const state = await db.getStudentState(profile.studentId);
-    return state.careerId ? "/dashboard" : "/onboarding";
+    const onboardingDone = Boolean(state.careerId && state.onboarded === true);
+    return onboardingDone ? "/dashboard" : "/onboarding";
   }
   return "/onboarding";
 }

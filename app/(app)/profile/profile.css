@@ -65,6 +65,10 @@
 .v7profile .foot-link {
   color: var(--v-blue-deep);
   text-decoration: none;
+  /* audit round 2026-11-06: grow the tap area on touch — re-centered
+     by the negative margin so the row rhythm never moves */
+  padding: 10px 6px;
+  margin: -10px -6px;
 }
 .v7profile .foot-link:hover { text-decoration: underline; text-underline-offset: 3px; }
 

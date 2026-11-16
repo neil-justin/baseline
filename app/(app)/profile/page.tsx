@@ -10,6 +10,7 @@ import { RESOURCES } from "@/lib/fixtures/resources";
 import { INSTRUMENT } from "@/lib/fixtures/instrument";
 import { CAREERS } from "@/lib/fixtures/catalog";
 import { credentialStore, credentialsPersistenceNotice } from "@/lib/db/credential-store";
+import { canonProgramsOf } from "@/lib/fixtures/programs";
 import ProfileTabs from "./ProfileTabs";
 import ScoreSequence from "@/components/ScoreSequence";
 import PresenceCard from "./PresenceCard";
@@ -35,19 +36,10 @@ function skillBadge(source: BarSource) {
 }
 
 /* the Program dropdown's vocabulary — the SAME tokens /career's degree gate
-   matches against (the raw degreeMap codes, annotations stripped). Tier
-   lines ("any CHED canon program") are not programs and drop out. */
-const canonPrograms = (() => {
-  const set = new Set<string>();
-  for (const c of CAREERS) {
-    for (const d of c.degreeMap ?? []) {
-      if (/canon|open-door/i.test(d) || /^any /.test(d.trim())) continue;
-      const name = d.replace(/\(.*?\)/g, "").trim();
-      if (name) set.add(name);
-    }
-  }
-  return [...set].sort();
-})();
+   matches against: the canon list now lives in lib/fixtures/programs.ts
+   (canonProgramsOf) so the onboarding Background step reads the same
+   source; no-track call keeps the profile page's exact vocabulary. */
+const canonPrograms = canonProgramsOf();
 
 /* ── page ───────────────────────────────────────────────────────────────── */
 

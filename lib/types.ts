@@ -139,6 +139,10 @@ export interface StudentState {
   };
   /** AR's presence factor (3 of 15): the declared entry; absent = not declared yet */
   presence?: PresenceDeclaration;
+  /** the funnel-complete marker (2026-11-06): true once the onboarding goal
+   *  step is SET or SKIPPED — signin routing's dashboard gate keys on this
+   *  flag, never on the career pick or an assessment attempt alone. */
+  onboarded?: boolean;
   events: DemoEvent[];
 }
 

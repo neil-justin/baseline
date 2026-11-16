@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { StudentState } from "@/lib/types";
-import { NEIL_SEED } from "@/lib/fixtures/neil";
 import { getCareer } from "@/lib/fixtures/catalog";
 import { resumeRunStore } from "@/lib/db/resume-run-store";
 import { letterRunStore } from "@/lib/db/letter-run-store";
@@ -14,9 +13,29 @@ import { supabaseEnv } from "@/lib/supabase/server";
  *    the .env.local Supabase env is present.
  *  - JsonStore: dev/test fallback (offline-safe, deterministic) — same
  *    interface, so engines and routes never know the difference.
- * Canon: Neil falls back to the code seed (lib/fixtures/neil.ts) whenever no
- * state row exists — every consumer (pages, e2e) relies on that guarantee.
+ *  * canon was REMOVED (2026-11-06 user-ruled wipe round): a missing state row
+ * resolves to a FRESH EMPTY state (same shape as lib/session.ts
+ * newStudentState; inlined here to keep the db/seam import cycle-free). A
+ * new student starts empty, never painted with demo data.
  */
+
+/** Fresh empty state — mirrored from lib/session.ts newStudentState. */
+function freshState(id: string): StudentState {
+  return {
+    id,
+    name: id,
+    yearLevel: "4th Year",
+    track: "",
+    careerId: null,
+    bars: {},
+    softSkills: {},
+    goals: [],
+    stageOneDone: 0,
+    stageOneQueue: [],
+    decisions: { verifiedTransferred: [] },
+    events: [],
+  } as StudentState;
+}
 
 export interface StudentStore {
   /** The student's live mutable state (falls back to the canon seed). */
@@ -51,7 +70,7 @@ async function writeAll(all: Record<string, StudentState>): Promise<void> {
 class JsonStore implements StudentStore {
   async getStudentState(id: string): Promise<StudentState> {
     const all = await readAll();
-    return all[id] ?? structuredClone(NEIL_SEED);
+    return all[id] ?? freshState(id);
   }
   async saveStudentState(id: string, state: StudentState): Promise<void> {
     const all = await readAll();
@@ -65,11 +84,11 @@ class JsonStore implements StudentStore {
 
 class SeededStore implements StudentStore {
   constructor(private inner: RawStudentStore) {}
-  /** Missing rows resolve to the canon Neil seed — the store's oldest guarantee. */
+  /** Missing rows resolve to a FRESH EMPTY state (no demo fallback). */
   async getStudentState(id: string): Promise<StudentState> {
     const s = await this.inner.getStudentState(id);
     if (s) return s;
-    const seed = structuredClone(NEIL_SEED);
+    const seed = freshState(id);
     await this.inner.saveStudentState(id, seed);
     return seed;
   }
