@@ -14,6 +14,7 @@ The APPROVALS and ACCOUNTS tables render every row at once — no pagination —
 3. **Remove the "Profile" menu item** entirely. It is a dead placeholder (disabled menuitem, no handler) — dead code out rather than "someday."
 4. **On refetch after a commit: keep the current page, clamped** to the last valid page if the list shrank (concurrent-change edge only; own actions never remove rows — decided requests keep their status chip, deactivated accounts stay struck-through).
 5. **Skeleton mirror keeps its row count verbatim + gains the `PagerGhost` strip** (same blind-mirror ruling as the cohort round).
+6. **Kebab retired** (user ruling 2026-11-05, option A): the ⋯ popover dies; the last cell carries VISIBLE row actions on the approvals register — REACTIVATE is one click (restoring access is safe), DEACTIVATE arms into the approvals-style two-step (`CONFIRM — DEACTIVATE` + CANCEL; access-loss echoes the armed irreversibility pattern). The popover's dead `Profile` line and the outside-click closer die with it.
 
 ## Design
 
@@ -28,7 +29,7 @@ The APPROVALS and ACCOUNTS tables render every row at once — no pagination —
 ### ACCOUNTS specifics
 
 - Filter out the self row (`selfUserId` already exists in the slot): `rows.filter((a) => a.userId !== selfUserId)` before slicing. The `isSelf` kebab-special-case branch ("—" dash cell) becomes dead and is deleted with it.
-- Kebab menu keeps only **Deactivate / Reactivate** — the `Profile` line and nothing else is removed.
+- Kebab/popover retired (see decision 6): `openFor` state, the outside-click `useEffect`, and the menu markup go away. The last cell becomes `atabs-acts` — REACTIVATE single click when `!active`; when `active`, DEACTIVATE arms (`CONFIRM — DEACTIVATE`) with a CANCEL, reusing the approvals armed register (`atabs-armed`, `atabs-armed-reject`).
 
 ### Skeleton (`SlotSkeleton`)
 

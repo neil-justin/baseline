@@ -23,7 +23,7 @@
  * `.admin-signout` hook in the veil (never a GET link — the prefetched
  * sign-out footgun).
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { Role } from "@/lib/session";
 import type { LiveRow } from "./page";
@@ -65,53 +65,42 @@ function CohortArt() {
   );
 }
 
-/** COHORT — the existing roster table, paginated client-side per the
- *  2026-11-04 spec: the full rows array is already shipped, so the
- *  slice is local state only (10/page, Pager hidden while it fits).
- *  Same grid classes, same row markup; the hooks stay verbatim. */
+/** COHORT — the roster on the console's one register (2026-11-05 one-
+ *  register ruling, superseding the Ledger-Table Rule): atabs- grid
+ *  rows, its own per-tab art kept, columns per the split ruling
+ *  (YEAR/PROGRAM out of the merged sub-line), 10/page pager kept. */
 function CohortTable({ rows }: { rows: LiveRow[] }) {
   const [page, setPage] = useState(1);
   return (
-    <section className="panel cohort-table" aria-label="Cohort roster">
-      <div className="ct-head">
-        <div className="ct-headline">
-          <h2 className="ct-title">Cohort roster</h2>
-          <p className="ct-meta">{rows.length} students</p>
-        </div>
+    <section className="atabs-panel" aria-label="Cohort roster">
+      <div className="atabs-panel-head">
+        <h2 className="atabs-panel-title">Cohort roster</h2>
         <CohortArt />
       </div>
-      {/* the family ledger register (Ledger-Table Rule): a real table —
-          tracked heads, #E8EAED row rules, tabular numerals, hover wash.
-          The whole row navigates — no Open column, no progress strip
-          (user ruling 2026-11-04: redundant with the row affordance;
-          progression detail lives on the per-student surface). */}
-      <table className="ct-table">
-        <thead>
-          <tr>
-            <th className="col-name" scope="col">Name</th>
-            <th className="col-career" scope="col">Career</th>
-            <th className="col-score" scope="col">Score</th>
-            <th className="col-active" scope="col">Last active</th>
-          </tr>
-        </thead>
-        <tbody>
-          {slicePage(rows, page).map((r) => (
-            <StudentRow
-              key={r.id}
-              id={r.id}
-              isDemo={r.id === "neil"}
-              name={r.name}
-              sub={r.sub}
-              career={r.career}
-              score={r.score}
-              pending={r.pending}
-              belowAvg={r.belowAvg}
-              noActivity={r.events === 0}
-              active={r.active}
-            />
-          ))}
-        </tbody>
-      </table>
+      <div className="atabs-heads atabs-cohort-grid atabs-label">
+        <span>NAME</span>
+        <span className="atabs-col-collapsible">YEAR</span>
+        <span className="atabs-col-collapsible">PROGRAM</span>
+        <span>TARGET ROLE</span>
+        <span>SCORE</span>
+        <span>LAST ACTIVE</span>
+      </div>
+      {slicePage(rows, page).map((r) => (
+        <StudentRow
+          key={r.id}
+          id={r.id}
+          isDemo={r.id === "neil"}
+          name={r.name}
+          year={r.year}
+          program={r.program}
+          career={r.career}
+          score={r.score}
+          pending={r.pending}
+          belowAvg={r.belowAvg}
+          noActivity={r.events === 0}
+          active={r.active}
+        />
+      ))}
       <Pager page={page} pages={pagesOf(rows.length)} setPage={setPage} />
     </section>
   );
@@ -151,13 +140,40 @@ export default function AdminShell({
   /** null = the server skipped the audit-queue build for this role. */
   queue: QueueRow[] | null;
 }) {
+  // Audit round 2026-11-06: the tab rides the URL (?tab=…). A refresh or a
+  // shared link used to land back on the role's landing tab — the exact
+  // "landing-tab bounce" the 2026-11-05 no-reload law bans. Soft history
+  // sync only (pushState on navigate) — never a document reload. The URL
+  // is read in an effect, NOT the initial state: a window-reading
+  // initializer desyncs the server render from hydration whenever the
+  // URL carries a tab (hydration-failure round-trip caught by the
+  // 2026-11-06 re-audit). One client tick lands on the requested tab.
   const [tab, setTab] = useState<AdminTabId>(() => adminLandingFor(role));
+  useEffect(() => {
+    const v = new URLSearchParams(window.location.search).get("tab") as AdminTabId | null;
+    if (adminTabsFor(role).some((t) => t.id === v)) setTab(v as AdminTabId);
+    // co-op with back/forward: keep the pane honest after popstate
+    const onPop = () => {
+      const pv = new URLSearchParams(window.location.search).get("tab") as AdminTabId | null;
+      if (adminTabsFor(role).some((x) => x.id === pv)) setTab(pv as AdminTabId);
+      else setTab(adminLandingFor(role));
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, [role]);
+  const navigate = (t: AdminTabId) => {
+    setTab(t);
+    const u = new URL(window.location.href);
+    if (t === adminLandingFor(role)) u.searchParams.delete("tab");
+    else u.searchParams.set("tab", t);
+    window.history.pushState({}, "", u);
+  };
   const active = adminTabsFor(role).some((t) => t.id === tab)
     ? tab
     : adminLandingFor(role);
 
   return (
-    <AdminVeil role={role} mode="state" active={active} onNavigate={setTab}>
+    <AdminVeil role={role} mode="state" active={active} onNavigate={navigate}>
       <div className="atabs-tabpage" key={active}>
         <Pane tab={active} rows={rows} queue={queue} />
       </div>

@@ -35,7 +35,6 @@ function CohortArtSkel() {
 }
 
 const ROSTER_ROWS = [0, 1, 2, 3, 4, 5];
-const ROSTER_COL_WIDTHS = [44, 44, 20, 44];
 
 /** The pager ghost (user-ruled 2026-11-05, both blind mirrors paint the
  *  paginated furniture) — chevron pill · 4 page pills · chevron pill,
@@ -56,46 +55,39 @@ function PagerGhost() {
   );
 }
 
+/** The cohort heads' blind labels — six label pills at the tracked
+ *  column widths (text-free, Skeleton-Contract), the YEAR/PROGRAM pair
+ *  carrying the roster's own collapsible class so the mirror folds in
+ *  lockstep with the real grid's media query. */
+const ROSTER_COL_WIDTHS = [68, 48, 96, 116, 60, 104];
+
 function CohortSkeleton() {
   return (
-    <section className="panel cohort-table" aria-hidden="true">
-      <div className="ct-head">
-        <div className="ct-headline">
-          <span className="skel" style={{ width: 132, height: 18 }} />
-          <span className="skel" style={{ width: 88, height: 12, marginTop: 6 }} />
-        </div>
+    <section className="atabs-panel" aria-hidden="true">
+      <div className="atabs-panel-head">
+        <span className="skel" style={{ width: 132, height: 18 }} />
         <CohortArtSkel />
       </div>
-      <table className="ct-table">
-        <thead>
-          <tr>
-            {(["col-name", "col-career", "col-score", "col-active"] as const).map((c, k) => (
-              <th key={c} scope="col" className={c}>
-                <span
-                  className="skel"
-                  style={{ width: ROSTER_COL_WIDTHS[k], height: 10, display: "inline-block" }}
-                  aria-hidden="true"
-                />
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {ROSTER_ROWS.map((r) => (
-            <tr className="s-row" key={r}>
-              <td className="s-name">
-                <span className="s-name-line">
-                  <span className="skel" style={{ width: 128, height: 15 }} />
-                </span>
-                <span className="skel" style={{ width: 168, height: 12, marginTop: 5 }} />
-              </td>
-              <td className="s-career"><span className="skel" style={{ width: 128, height: 13 }} /></td>
-              <td className="s-score"><span className="skel" style={{ width: 16, height: 14 }} /></td>
-              <td className="s-active"><span className="skel" style={{ width: 72, height: 12 }} /></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="atabs-heads atabs-cohort-grid atabs-label">
+        {ROSTER_COL_WIDTHS.map((w, k) => (
+          <span key={k} className={k === 1 || k === 2 ? "atabs-col-collapsible" : undefined}>
+            <span className="skel" style={{ width: w, height: 10, display: "inline-block" }} />
+          </span>
+        ))}
+      </div>
+      {ROSTER_ROWS.map((r) => (
+        <div className="atabs-row atabs-cohort-grid" key={r}>
+          <div className="atabs-cellname">
+            <span className="skel" style={{ width: 148, height: 15 }} />
+            <span className="skel" style={{ width: 96, height: 18, marginTop: 5 }} />
+          </div>
+          <span className="atabs-meta atabs-col-collapsible"><span className="skel" style={{ width: 64, height: 12 }} /></span>
+          <span className="atabs-copy atabs-col-collapsible"><span className="skel" style={{ width: 118, height: 12 }} /></span>
+          <span className="atabs-copy"><span className="skel" style={{ width: 132, height: 12 }} /></span>
+          <span className="atabs-num"><span className="skel" style={{ width: 24, height: 14 }} /></span>
+          <span className="atabs-meta"><span className="skel" style={{ width: 72, height: 12 }} /></span>
+        </div>
+      ))}
       <PagerGhost />
     </section>
   );

@@ -36,10 +36,13 @@ describe("sysadmin slots pagination + self-omit (user-ruled 2026-11-05)", () => 
     expect(src).not.toContain("isSelf");
   });
 
-  it("the dead Profile item is gone (one menuitem left: deactivate)", () => {
+  it("the popover and kebab die; actions go visible on the approvals register", () => {
     const src = readFileSync("app/admin/slots.tsx", "utf8");
-    expect((src.match(/role="menuitem"/g) ?? []).length).toBe(1);
-    expect(src).not.toMatch(/Profile<\/button>/);
+    expect((src.match(/role="menuitem"/g) ?? []).length).toBe(0);
+    expect(src).not.toContain("atabs-kebab");
+    expect(src).not.toContain("data-atabs-kebab");
+    expect(src).toContain("CONFIRM — DEACTIVATE");
+    expect(src).toContain("REACTIVATE");
   });
 
   it("loading paints blind rows, not a growing empty line", () => {
@@ -52,12 +55,7 @@ describe("sysadmin slots pagination + self-omit (user-ruled 2026-11-05)", () => 
 - [ ] **Step 2: Run** `npx vitest run scripts/verify-pager.test.ts`
   Expected: 4 new pins FAIL (slots.tsx untouched); the 15 prior pins hold.
 
-- [ ] **Step 3: Commit** the pins so the red state is on record:
-
-```bash
-git add scripts/verify-pager.test.ts
-git commit -m "admin: pin the sysadmin slots round (pagination, self-omit, blind loading)"
-```
+- [ ] **Step 3: COMMIT NOTHING (user ruling 2026-11-05: overnight build, morning review before commit).** Leave the pins uncommitted; report the red run only.
 
 ---
 
@@ -258,48 +256,62 @@ with:
 
 (i.e. the `isSelf` line is deleted; the map body below it stays verbatim EXCEPT the self-kebab branch.)
 
-(f) REPLACE the kebab cell's conditional open:
+(f REPLACE the kebab cell region in full — the popover, the `openFor` state, the outside-click `useEffect`, and the menu die; actions go VISIBLE on the approvals armed register (user ruling 2026-11-05, option A). State changes first:
+
+- REPLACE `const [openFor, setOpenFor] = useState<string | null>(null);` with:
 
 ```tsx
-              {isSelf ? (
-                <span className="atabs-meta atabs-kebab-cell">—</span>
-              ) : (
-                <span className="atabs-kebab-cell" data-atabs-kebab>
+  const [armed, setArmed] = useState<string | null>(null);
 ```
 
-...through the closing... end of the ternary — FULL REPLACEMENT of the kebab cell region: delete the `isSelf ? (...) : (` wrapper lines and their matching `)}` close, updating indentation so the kebab cell spans unconditionally:
+- DELETE the whole outside-click `useEffect` block (the popover-close effect) and remove `setOpenFor(null);` inside `toggleActive`.
+
+Then REPLACE the entire `{isSelf ? (... dash ...) : (... kebab cell ...)} ternary with:
 
 ```tsx
-              <span className="atabs-kebab-cell" data-atabs-kebab>
-                <button
-                  type="button"
-                  className="atabs-kebab"
-                  aria-label={`Account actions: ${a.fullName || a.email}`}
-                  aria-expanded={openFor === a.userId}
-                  aria-haspopup="menu"
-                  disabled={acting !== null}
-                  onClick={() => setOpenFor(openFor === a.userId ? null : a.userId)}
-                >
-                  <Ellipsis size={14} aria-hidden="true" />
-                </button>
-                {openFor === a.userId && (
-                  <span className="atabs-menu" role="menu">
-                    <button
-                      type="button"
-                      role="menuitem"
-                      disabled={acting !== null}
-                      onClick={() => toggleActive(a.userId, !a.active)}
-                    >
-                      {a.active ? "Deactivate" : "Reactivate"}
-                    </button>
+              <span className="atabs-acts">
+                {!a.active ? (
+                  <button
+                    type="button"
+                    disabled={acting !== null}
+                    onClick={() => toggleActive(a.userId, true)}
+                  >
+                    REACTIVATE
+                  </button>
+                ) : armed === a.userId ? (
+                  <button
+                    type="button"
+                    className="atabs-armed atabs-armed-reject"
+                    disabled={acting !== null}
+                    onClick={() => toggleActive(a.userId, false)}
+                  >
+                    {acting === a.userId ? "COMMITTING…" : "CONFIRM — DEACTIVATE"}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={acting !== null}
+                    onClick={() => setArmed(a.userId)}
+                  >
+                    DEACTIVATE
+                  </button>
+                )}
+                {armed === a.userId && (
+                  <button type="button" disabled={acting !== null} onClick={() => setArmed(null)}>
+                    <X size={14} aria-hidden="true" /> CANCEL
+                  </button>
+                )}
+                {rowErr !== null && rowErr.id === a.userId && (
+                  <span className="atabs-acterr" role="alert">
+                    NOT RECORDED
                   </span>
                 )}
               </span>
 ```
 
-(That is also the Profile removal: the menu holds ONLY Deactivate/Reactivate.)
+(The existing standalone `rowErr` block further below in the row — placed after the kebab cell — merges into this `atabs-acts` span exactly as shown and its old location is deleted with the ternary.)
 
-(g) just before the closing `</section>`, add the pager:
+(g just before the closing `</section>`, add the pager:
 
 ```tsx
       {visibleRows !== null && (
@@ -315,12 +327,7 @@ with:
 
 - [ ] **Step 6: Run** `npx tsc --noEmit` — expect exit 0 (watch: `React.ReactNode` usage needs no new import — `React` type namespace is ambient in this repo; if tsc disagrees, change the `cells` prop type to `() => import("react").ReactNode` equivalent by importing `{ type ReactNode }` from "react" in slots.tsx — import line already has `useCallback...` so extend it).
 
-- [ ] **Step 7: Commit**
-
-```bash
-git add app/admin/slots.tsx
-git commit -m "admin: approvals+accounts page at 10/page, omit the viewer's row, blind loading, Profile out"
-```
+- [ ] **Step 7: COMMIT NOTHING (morning-review gate).** `git status --short` will show `scripts/verify-pager.test.ts` + `app/admin/slots.tsx` modified — that is the deliverable. Report the tree listing exactly so.
 
 ---
 

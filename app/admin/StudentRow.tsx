@@ -20,7 +20,8 @@ import type { MouseEvent } from "react";
 export default function StudentRow({
   id,
   name,
-  sub,
+  year="—",
+  program="—",
   career,
   score,
   pending,
@@ -31,8 +32,10 @@ export default function StudentRow({
 }: {
   id: string;
   name: string;
-  /** compact sub-line that wraps under the name cell ("4th Year · Computer & IT") */
-  sub: string;
+  /** the year column ("4th Year"), split from the old merged sub-line */
+  year: string;
+  /** the program column ("Computer & IT"), its sibling split */
+  program: string;
   /** declared career, or null for "Still deciding" */
   career: string | null;
   /** computed integer, sub-scores already summed upstream */
@@ -50,42 +53,43 @@ export default function StudentRow({
 
   const href = `/admin/student?student=${id}`;
 
-  function onRowClick(e: MouseEvent<HTMLTableRowElement>) {
+  function onRowClick(e: MouseEvent<HTMLDivElement>) {
     if ((e.target as HTMLElement).closest("a")) return; // real links handle themselves
     router.push(href);
   }
 
-  const marks: { label: string; tone: "amber" | "grey" }[] = [];
-  if (pending > 0) marks.push({ label: `NEEDS AUDIT — ${pending}`, tone: "amber" });
-  if (belowAvg) marks.push({ label: "BELOW AVG", tone: "grey" });
-  if (noActivity) marks.push({ label: "NO ACTIVITY YET", tone: "grey" });
+  const marks: { label: string; tone: "warn" | "blue" }[] = [];
+  if (pending > 0) marks.push({ label: `NEEDS AUDIT — ${pending}`, tone: "warn" });
+  if (belowAvg) marks.push({ label: "BELOW AVG", tone: "blue" });
+  if (noActivity) marks.push({ label: "NO ACTIVITY YET", tone: "blue" });
 
   return (
-    <tr
-      className={`s-row${isDemo ? " row-demo" : ""}`}
+    <div
+      className={`atabs-row atabs-cohort-grid${isDemo ? " atabs-row-demo" : ""}`}
       onClick={onRowClick}
     >
-      <td className="s-name">
-        <span className="s-name-line">
-          <Link className="s-name-link" href={href}>
+      <div className="atabs-cellname">
+        <span className="atabs-name">
+          <Link className="atabs-name-link" href={href}>
             {name}
           </Link>
-          {isDemo && <span className="demo-tag">DEMO</span>}
+          {isDemo && <span className="atabs-chip atabs-chip-warn">DEMO</span>}
         </span>
-        <span className="s-sub">{sub}</span>
         {marks.length > 0 && (
-          <span className="s-marks">
+          <span className="atabs-marks">
             {marks.map((m) => (
-              <span className={`chip mark-${m.tone}`} key={m.label}>
+              <span className={`atabs-chip atabs-chip-${m.tone}`} key={m.label}>
                 {m.label}
               </span>
             ))}
           </span>
         )}
-      </td>
-      <td className="s-career">{career ?? "Still deciding"}</td>
-      <td className="s-score num">{score}</td>
-      <td className="s-active">{active}</td>
-    </tr>
+      </div>
+      <span className="atabs-meta atabs-col-collapsible">{year}</span>
+      <span className="atabs-copy atabs-col-collapsible">{program}</span>
+      <span className="atabs-copy">{career ?? "Still deciding"}</span>
+      <span className="atabs-num">{score}</span>
+      <span className="atabs-meta">{active}</span>
+    </div>
   );
 }

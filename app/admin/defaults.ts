@@ -13,6 +13,8 @@
 
 import { trackLabelOf } from "@/lib/fixtures/catalog";
 
+export { trackLabelOf };
+
 export type RubricPart = [earned: number, max: number];
 
 export interface RubricValues {

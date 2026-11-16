@@ -127,3 +127,85 @@ describe("skeleton mirror + page margin (user-ruled 2026-11-05)", () => {
     expect(css).toMatch(/\.v7admin \.atabs-tabpage\s*\{[^}]*margin-bottom:[^}]*\}/s);
   });
 });
+
+describe("sysadmin slots pagination + self-omit (user-ruled 2026-11-05)", () => {
+  it("both slots page through the shared pager machinery", () => {
+    const src = readFileSync("app/admin/slots.tsx", "utf8");
+    expect(src).toContain('import Pager from "./Pager"');
+    expect(src).toContain("{ pagesOf, slicePage } from \"./pager-math\"");
+    // each slot clamps its page against its own (filtered) count on
+    // refetch — approvals AND accounts each clamp once
+    expect((src.match(/Math\.min\(p, pagesOf/g) ?? []).length).toBe(2);
+  });
+
+  it("accounts omits the viewer's own row (the dash-kebab case dies with it)", () => {
+    const src = readFileSync("app/admin/slots.tsx", "utf8");
+    expect(src).toContain("a.userId !== selfUserId");
+    expect(src).not.toContain("isSelf");
+  });
+
+  it("the popover and kebab die; actions go visible on the approvals register", () => {
+    const src = readFileSync("app/admin/slots.tsx", "utf8");
+    expect((src.match(/role="menuitem"/g) ?? []).length).toBe(0);
+    expect(src).not.toContain("atabs-kebab");
+    expect(src).not.toContain("data-atabs-kebab");
+    expect(src).toContain("CONFIRM — DEACTIVATE");
+    expect(src).toContain("REACTIVATE");
+  });
+
+  it("loading paints blind rows, not a growing empty line", () => {
+    const src = readFileSync("app/admin/slots.tsx", "utf8");
+    expect(src).toContain("function BlindRows(");
+  });
+});
+
+describe("one console register (cohort cutover + column splits + art, 2026-11-05)", () => {
+  const shell = () => readFileSync("app/admin/AdminShell.tsx", "utf8");
+  const studentRow = () => readFileSync("app/admin/StudentRow.tsx", "utf8");
+
+  it("the cohort roster cut over to the console furniture", () => {
+    const row = studentRow();
+    // the atabs-row-demo hook joins a template literal (plan Task 3 hunk),
+    // so the base row face is pinned via regex
+    expect(row).toMatch(/className=\{`atabs-row atabs-cohort-grid\$\{isDemo/);
+    expect(row).not.toContain("<tr");
+    expect(row).not.toMatch(/className=["'][^"']*\bs-row\b/);
+    const s = shell();
+    expect(s).not.toContain("<table");
+    expect(s).toContain("atabs-cohort-grid");
+  });
+
+  it("the cohort's merged sub-line broke into YEAR and PROGRAM columns", () => {
+    const s = shell();
+    // YEAR/PROGRAM (and their heads) carry the collapsible class per the
+    // plan's own Task 3 correction — pinned via regex
+    expect(s).toMatch(/<span className="atabs-col-collapsible">YEAR<\/span>/);
+    expect(s).toMatch(/<span className="atabs-col-collapsible">PROGRAM<\/span>/);
+    expect(s).toContain("<span>TARGET ROLE</span>");
+    expect(studentRow()).toContain("year=");
+    expect(studentRow()).toContain("program=");
+  });
+
+  it("merged name cells split their sub-lines where ruled", () => {
+    const slots = readFileSync("app/admin/slots.tsx", "utf8");
+    // approvals + accounts: email leaves the name cell for its own column
+    expect(slots).toContain("<span>EMAIL</span>");
+  });
+
+  it("every table header carries its panel art", () => {
+    const slots = readFileSync("app/admin/slots.tsx", "utf8");
+    expect(slots).toContain("function ApprovalsArt()");
+    expect(slots).toContain("function AccountsArt()");
+  });
+
+  it("the retired ct-table CSS is gone from the realm", () => {
+    const admin = readFileSync("app/admin/admin.css", "utf8");
+    expect(admin).not.toContain(".v7admin .ct-table");
+    expect(admin).not.toContain(".v7admin .ct-head");
+    expect(admin).not.toContain(".v7admin .cohort-table");
+  });
+
+  it("the cohort skeleton mirrors the new furniture", () => {
+    expect(readFileSync("app/admin/console-skeleton.tsx", "utf8")).not.toContain("ct-table");
+  });
+});

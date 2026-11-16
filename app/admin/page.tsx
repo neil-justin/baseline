@@ -8,7 +8,7 @@ import AdminMockupGate from "./mockups/AdminMockupGate";
 import AdminShell from "./AdminShell";
 import ConsoleSkeleton from "./console-skeleton";
 import type { QueueRow } from "./AuditQueue";
-import { RUBRIC_MAX, orderCohort, personaMeta, type RubricValues } from "./defaults";
+import { RUBRIC_MAX, orderCohort, personaMeta, trackLabelOf, type RubricValues } from "./defaults";
 import "./admin.css";
 
 export const dynamic = "force-dynamic";
@@ -23,6 +23,9 @@ export interface LiveRow {
   id: string;
   name: string;
   sub: string;
+  /** split of the old sub-line (user ruling 2026-11-05: columns, not merges) */
+  year: string;
+  program: string;
   career: string | null;
   score: number;
   decided: boolean;
@@ -89,6 +92,8 @@ async function buildRows(creds: CohortCredentialRow[]): Promise<LiveRow[]> {
         id,
         name: state.name,
         sub: personaMeta(state.yearLevel, state.track),
+        year: state.yearLevel || "—",
+        program: trackLabelOf(state.track) || "—",
         career: career?.name ?? null,
         decided: career !== null && score !== null,
         score: score?.total ?? 0,
@@ -132,6 +137,8 @@ export async function buildQueue(creds: CohortCredentialRow[]): Promise<QueueRow
         studentId: c.studentId,
         studentName: state?.name ?? "(unknown cohort member)",
         sub: state ? personaMeta(state.yearLevel, state.track) : "",
+        year: state ? state.yearLevel || "—" : "—",
+        program: state ? trackLabelOf(state.track) || "—" : "—",
         kind: c.kind,
         title: c.title,
         organization: c.organization,

@@ -278,12 +278,16 @@
   padding: 9px 18px;
   border-bottom: 1px solid var(--v-rows);
 }
-/* the defined table laws (mockup grids, verbatim values) */
+/* the defined table laws (mockup grids, verbatim values). Every fr is
+   put under minmax(0, Nfr): an unbanded fr keeps an auto minimum, so
+   wide cells (the armed buttons, unbreakable emails) grow their track
+   per-ROW — heads and rows are separate grid containers, so the value
+   columns drift off their labels (2026-11-05 review round). */
 .v7admin .atabs-appr-grid {
-  grid-template-columns: minmax(0, 1.5fr) 0.9fr minmax(0, 0.9fr) minmax(0, 1.15fr) 0.9fr 1fr;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 1.15fr) minmax(0, 0.9fr) minmax(0, 1fr);
 }
 .v7admin .atabs-acc-grid {
-  grid-template-columns: minmax(0, 2fr) 0.9fr 1fr minmax(0, 0.9fr) auto;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr) minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 0.9fr) minmax(0, 1fr);
 }
 .v7admin .atabs-row {
   display: grid;
@@ -550,6 +554,13 @@
     flex-direction: row;
     flex: none;
   }
+  /* audit round 2026-11-06: the strip scrolls past 390px — hide the
+     chunky default scrollbar (the strip still scrolls) and lift the tab
+     buttons to a 40px-tall touch target while at it */
+  .v7admin .atabs-side { scrollbar-width: none; }
+  .v7admin .atabs-side::-webkit-scrollbar { display: none; }
+  .v7admin .atabs-sidenav button,
+  .v7admin .atabs-sidenav a { padding: 12px 14px; }
   .v7admin .atabs-main {
     grid-column: 1 / -1;
     grid-row: 3;
@@ -615,4 +626,60 @@
   text-transform: uppercase;
   color: var(--v-ink2);
   font-variant-numeric: tabular-nums;
+}
+
+/* ---------- the cohort joins the register (one-register round,
+   2026-11-05; the real <table> retired, the grid-row faces shared):
+   column proportions carried over from the ct-table widths, the
+   name-chips wrap under the name, the whole row navigates. */
+.v7admin .atabs-cohort-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 26fr) minmax(72px, 8fr) minmax(150px, 18fr) minmax(180px, 22fr) minmax(64px, 8fr) minmax(110px, 14fr);
+  gap: 8px 14px;
+  align-items: center;
+}
+.v7admin .atabs-cohort-grid.atabs-row {
+  cursor: pointer;
+}
+.v7admin .atabs-name-link,
+.v7admin .atabs-marks {
+  display: block;
+}
+.v7admin .atabs-marks {
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.v7admin .atabs-copy {
+  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.v7admin .atabs-num {
+  font: 500 13px/1.4 Roboto, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: var(--v-ink);
+}
+.v7admin .atabs-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px 10px;
+}
+.v7admin .atabs-panel-title {
+  margin: 0;
+  font: 600 15px/1.3 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+/* the demo row's only mark is the DEMO chip in the name cell (2026-11-05
+   review round): the painted left rail retired — a row mark belongs to
+   the content, not the edge */
+
+@media (max-width: 720px) {
+  .v7admin .atabs-cohort-grid .atabs-col-collapsible {
+    display: none;
+  }
+  .v7admin .atabs-cohort-grid {
+    grid-template-columns: minmax(200px, 1fr) minmax(150px, 1fr) 64px 110px;
+  }
 }
