@@ -251,7 +251,7 @@ Quietly lifted, still official: the whisper shadow (`0 1px 2px rgba(60,64,67,.10
 - Run the finish pipeline: detector → desktop+mobile captures → finish review → documenter (DESIGN.md + design.json + surface doc from built truth) → clean build.
 
 **Don't**
-- Don't add search, bells, sign-out, or invented affordances on the student chrome (element-budget rule); sign-out stays pruned.
+- Don't add search, bells, or invented affordances on the student chrome (element-budget rule). *(Sign-out was re-ratified 2026-11-06: it ships in the student sidebar tail and the ≤720px bottom nav — the DPA export/erase era needs an honest exit; this Don't now governs search/bells only, not sign-out.)*
 - Don't paint a number or confirm a claim the engine didn't compute; no red anywhere.
 - Don't fill regions with wash colors — state language only. (Motion is governed by the **v9.1 M3 Motion Rule**, below — subtle M3-conformant motion is sanctioned; theatrics are not.)
 - Don't use hosted font sheets; don't expand glyphs beyond the subset.

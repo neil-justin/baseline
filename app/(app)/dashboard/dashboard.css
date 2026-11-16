@@ -134,7 +134,13 @@
 .v7dash .card .head b { font: 500 14px/1.3 Roboto, system-ui, sans-serif; color: var(--v-ink); }
 .v7dash .card .head span { font: 400 11.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); } /* v7.1: state-bearing → ink-2 */
 .v7dash .foot { padding: 10px 16px 14px; font: 400 11px/1.55 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
-.v7dash .foot-link { color: var(--v-blue-deep); text-decoration: none; }
+.v7dash .foot-link {
+  color: var(--v-blue-deep);
+  text-decoration: none;
+  /* audit round 2026-11-06: grow the tap area on touch (profile twin) */
+  padding: 10px 6px;
+  margin: -10px -6px;
+}
 .v7dash .foot-link:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 .v7dash .low {
@@ -438,3 +444,29 @@
 .v7dash .score-line { font-size: 14.5px; }
 .v7dash .chip { font-size: 12px; }
 .v7dash .vbadge.ok { font-size: 12px; }
+
+/* ============================================================
+   Audit round (2026-11-06) — the 390px next-items table: the v9
+   type bump (13px .eff, unscoped) unshrank the ≤720 mobile fold
+   and the nowrap channel chips overflowed their 26% cell wide
+   enough to overlap the effect column. The fold sizes re-apply
+   with their own trailing guard, and the channel chips learn to
+   wrap within their cell (the admin pill law: chips wrap within
+   their column, never riding the neighbor).
+   ============================================================ */
+@media (max-width: 720px) {
+  .v7dash .plan-table .eff { font-size: 11.5px; }
+  .v7dash .plan-table td .chip { font-size: 11px; padding: 3px 7px; }
+}
+@media (max-width: 560px) {
+  .v7dash .plan-table { table-layout: fixed; }
+  .v7dash .plan-table .col-item { width: 42%; }
+  .v7dash .plan-table th:nth-child(2),
+  .v7dash .plan-table td:nth-child(2) { width: 30%; padding-inline: 10px; }
+  .v7dash .plan-table th:nth-child(4),
+  .v7dash .plan-table td:nth-child(4) { width: 28%; }
+  .v7dash .plan-table td:nth-child(2) .chip {
+    white-space: normal;
+    line-height: 1.25;
+  }
+}

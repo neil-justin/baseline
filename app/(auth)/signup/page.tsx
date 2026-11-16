@@ -28,7 +28,7 @@ export default function SignUpPage() {
       <main className="fauth-main" id="main">
         <h1>Start the check</h1>
         <p className="fauth-sub">
-          Create an account — 15 minutes to an honest score.
+          Create an account — the check moves at your pace.
         </p>
 
         <SignupForm />

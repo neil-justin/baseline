@@ -663,6 +663,20 @@ body:has(.v7) { background: #f8f9fa; }
   --v-blue-deep: #0842a0;
   --v-blue-wash: #d3e3fd;
   --v-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  /* v9 frontmatter tokens (DESIGN.md colors.v9): container ink + the quiet
+     secondary tonal card tint — surfaces alias these, never re-hex them */
+  --v-on-primary-container: #041e49;
+  --v-secondary-container: #eef3fc;
+  /* tonal-pill hover state layer: ~12% primary pressed into the container
+     (M3 state-layer register; supplants ad-hoc #c5d9f8-magnitude hexes) */
+  --v-blue-hover: color-mix(in srgb, var(--v-blue) 12%, var(--v-blue-wash));
+
+  /* v9.1 M3 motion vocabulary — the single console home; surfaces consume
+     the tokens, they never re-derive durations or easings */
+  --ob-dur-fast: 150ms;  /* hover / press / chip + pill state */
+  --ob-dur-base: 200ms;  /* entrances, verdict bands, bar fills */
+  --ob-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ob-ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* chrome: hairline borders retire (Surface-Tone Rule); the white

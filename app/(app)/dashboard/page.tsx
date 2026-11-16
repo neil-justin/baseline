@@ -260,11 +260,6 @@ export default async function DashboardPage() {
           </span>
           <div className="sub-row">
             <span className="s-name">Application readiness</span>
-            {!v.arMeasured && (
-              <p className="s-note not-yet">
-                Not yet measured — opens with the resume diagnostic in Prep.
-              </p>
-            )}
           </div>
           <div className="score num">
             {v.arMeasured ? score.ar : "—"} <small>/{WEIGHTS.ar}</small>
@@ -334,19 +329,16 @@ export default async function DashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {plan.map((item, i) => {
+              {/* user cap 2026-11-06: the dashboard shows at most 3 next
+                  items — the full ranked list lives on My Plan */}
+              {plan.slice(0, 3).map((item, i) => {
                 if (item.kind === "ar") {
                   const measured = [item.checklist.resume, item.checklist.letter, item.checklist.presence].filter(Boolean).length;
-                  const tick = (b: boolean) => (b ? <Check size={11} aria-hidden="true" /> : "open");
                   const arOutstanding = WEIGHTS.ar - (score.ar ?? 0);
                   return (
                     <tr key="ar">
                       <td>
                         <div className="item">{item.title}</div>
-                        <div className="sub">
-                          {item.reason} — resume {tick(item.checklist.resume)}, letter {tick(item.checklist.letter)}, presence{" "}
-                          {tick(item.checklist.presence)}
-                        </div>
                       </td>
                       <td>
                         <span className="chip c-grey">Application</span>
@@ -369,10 +361,6 @@ export default async function DashboardPage() {
                   <tr key={item.skill}>
                     <td>
                       <div className="item">Close {item.skill}</div>
-                      <div className="sub">
-                        {item.reason}
-                        {item.hasFreeResource ? ", comprehension check on its guide" : ""}
-                      </div>
                     </td>
                     <td>
                       <span className="chip c-blue">Skill progress</span>
@@ -395,7 +383,6 @@ export default async function DashboardPage() {
           </table>
           {plan.length > 3 && (
             <div className="foot">
-              The full ranked list lives in{" "}
               <a className="foot-link" href="/pathway">
                 My Plan
               </a>

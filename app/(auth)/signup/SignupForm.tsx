@@ -153,7 +153,8 @@ export default function SignupForm() {
               fontSize: 11,
               letterSpacing: "0.04em",
               color: "var(--ink-2)",
-              padding: "6px 8px",
+              padding: "10px 8px",
+              margin: "-10px -8px",
             }}
             onClick={() => setShowPw((v) => !v)}
           >

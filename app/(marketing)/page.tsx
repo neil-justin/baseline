@@ -73,7 +73,7 @@ const FAQS = [
   },
   {
     q: "How long does the first check take?",
-    a: "About 15 minutes for the first read. You can stop and come back — your plan keeps everything ranked where you left it.",
+    a: "One sitting, self-paced — you can stop and come back anytime, and your plan keeps everything ranked where you left it.",
   },
   {
     q: "What happens to my data?",
@@ -114,7 +114,7 @@ export default async function LandingPage() {
               Walk into your first career <em>ready</em> — not just qualified.
             </h1>
             <p className="m-lede">
-              One 15-minute check turns what you can actually do into an
+              One self-paced check turns what you can actually do into an
               honest score out of 100 — and hands you the ranked plan that
               closes the gap.
             </p>
@@ -218,7 +218,7 @@ export default async function LandingPage() {
               {/* eslint-disable-next-line @next/next/no-img-element -- static local asset */}
               <img
                 src="/shots/dashboard.png"
-                alt="The Baseline dashboard: a 64 out of 100 Career Readiness Index with five channel scores and the next plan items"
+                alt="The Baseline dashboard: a 61 out of 100 Career Readiness Index with five channel scores and the next plan items"
                 width={1440}
                 height={900}
                 loading="lazy"
@@ -258,8 +258,8 @@ export default async function LandingPage() {
             <figure className="m-shot">
               {/* eslint-disable-next-line @next/next/no-img-element -- static local asset */}
               <img
-                src="/shots/plan.png"
-                alt="My Plan in Baseline: ranked next steps with resources, prices, and verified or self-reported states"
+                src="/shots/pathway.png"
+                alt="My Plan — the pathway walk in Baseline: ranked skill steps with resources, prices, and hours shown up front"
                 width={1440}
                 height={900}
                 loading="lazy"
@@ -268,6 +268,27 @@ export default async function LandingPage() {
           </div>
 
           <div className="m-feat m-flip">
+            <div className="m-feat-copy">
+              <h3>Prove it again — latest attempt counts.</h3>
+              <p>
+                The employability check and the role-based skill checks live
+                in one place. A re-take replaces your result — the score
+                reads your latest sitting, never a best-ever.
+              </p>
+            </div>
+            <figure className="m-shot">
+              {/* eslint-disable-next-line @next/next/no-img-element -- static local asset */}
+              <img
+                src="/shots/assessments.png"
+                alt="Assessments in Baseline: the NACE competency card reading 7 of 7 verified and the per-skill verification list"
+                width={1440}
+                height={900}
+                loading="lazy"
+              />
+            </figure>
+          </div>
+
+          <div className="m-feat">
             <div className="m-feat-copy">
               <h3>Application materials, checked against the role.</h3>
               <p>
@@ -282,6 +303,28 @@ export default async function LandingPage() {
               <img
                 src="/shots/prep.png"
                 alt="The Prep surface: resume and cover-letter check results with per-check pass marks"
+                width={1440}
+                height={900}
+                loading="lazy"
+              />
+            </figure>
+          </div>
+
+          <div className="m-feat m-flip">
+            <div className="m-feat-copy">
+              <h3>Your whole record, in one place.</h3>
+              <p>
+                Your score's five channels, every skill with its actual
+                source — verified, checked, or still open — and your account
+                controls. The same record your counselor reads: nothing to
+                keep in sync.
+              </p>
+            </div>
+            <figure className="m-shot">
+              {/* eslint-disable-next-line @next/next/no-img-element -- static local asset */}
+              <img
+                src="/shots/profile.png"
+                alt="Profile in Baseline: the 61 out of 100 score with its five channel bars and the per-skill source list"
                 width={1440}
                 height={900}
                 loading="lazy"

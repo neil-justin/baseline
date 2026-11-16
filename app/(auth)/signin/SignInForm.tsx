@@ -19,8 +19,18 @@ export default function SignInForm() {
 
   // Caps-lock hint (auth round 2 polish): a small status line under the
   // password field while the modifier is engaged — never an error.
-  function trackCaps(e: React.KeyboardEvent<HTMLInputElement>) {
-    setCapsOn(e.getModifierState?.("CapsLock") ?? false);
+  // Detection covers the real toggling paths: keydown/keyup while the field
+  // is focused, the state already engaged when the field GAINS focus
+  // (UIEvent.getModifierState works on focus too), and a 120ms-debounced
+  // blur reset so tabbing away doesn't flash the hint off/on.
+  function trackCaps(e: React.FocusEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>) {
+    setCapsOn(
+      "getModifierState" in e.nativeEvent ? e.nativeEvent.getModifierState("CapsLock") : false,
+    );
+  }
+
+  function onPassBlur() {
+    window.setTimeout(() => setCapsOn(false), 120);
   }
 
   async function onSubmit(e: React.FormEvent) {
@@ -93,7 +103,8 @@ export default function SignInForm() {
             aria-invalid={passErr}
             onKeyDown={trackCaps}
             onKeyUp={trackCaps}
-            onBlur={() => setCapsOn(false)}
+            onFocus={trackCaps}
+            onBlur={onPassBlur}
           />
           <button
             type="button"
@@ -108,16 +119,25 @@ export default function SignInForm() {
               fontSize: 11,
               letterSpacing: "0.04em",
               color: "var(--ink-2)",
-              padding: "6px 8px",
+              padding: "10px 8px",
+              margin: "-10px -8px",
             }}
             onClick={() => setShowPw((v) => !v)}
           >
             {showPw ? "HIDE" : "SHOW"}
           </button>
         </div>
-        <p className="caps-hint" role="status" style={{ display: capsOn ? "block" : undefined }}>
-          Caps Lock is on.
-        </p>
+        {/* Caps hint (auth round 2 polish): rendered only while the modifier
+            is engaged — never an error. The wrapper permanently reserves the
+            hint's rendered height (12.5px font, ~1.5 line-height * 6px margin) so
+            the layout never jumps in either direction. */}
+        <div style={{ height: 25, overflow: "hidden" }} aria-hidden={!capsOn}>
+          {capsOn && (
+            <p className="caps-hint" role="status" style={{ margin: 0 }}>
+              Caps Lock is on.
+            </p>
+          )}
+        </div>
         <p className="field-err" id="err-pass" role="alert" style={{ display: passErr ? "block" : undefined }}>
           Password goes here.
         </p>

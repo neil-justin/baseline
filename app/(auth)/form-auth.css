@@ -47,6 +47,9 @@
   text-decoration: none;
   color: var(--mk-ink);
   font: 500 16px/1.2 "Google Sans", Roboto, system-ui, sans-serif;
+  /* audit round 2026-11-06: the header brand's tap area on touch */
+  padding: 10px 0;
+  margin: -10px 0;
 }
 
 /* the column: one centered card lane, vertically balanced.
@@ -130,6 +133,10 @@
   font: 500 11px/1 "Google Sans Text", Roboto, system-ui, sans-serif;
   letter-spacing: 0.05em;
   color: var(--mk-ink2);
+  /* audit round 2026-11-06: the tap target was 23px tall on touch —
+     grow the hit area with padding, re-centered by the negative margin */
+  padding: 10px 8px;
+  margin: -10px -8px;
 }
 
 /* the signup note tray (revealed once the form validates client-side) */
@@ -205,8 +212,19 @@
   font-weight: 500;
   color: var(--mk-blue);
   text-decoration: none;
+  /* audit round 2026-11-06: tap area on touch — re-centered */
+  padding: 10px 6px;
+  margin: -10px -6px;
+}
+.fauth .forgot-link a {
+  color: var(--mk-blue);
+  text-decoration: none;
+  padding: 10px 6px;
+  margin: -10px -6px;
+  display: inline-block;
 }
 .fauth .fauth-alt a:hover { text-decoration: underline; }
+.fauth .forgot-link a:hover { text-decoration: underline; }
 
 /* entrance: subtle, transform/opacity only */
 @media (prefers-reduced-motion: no-preference) {
