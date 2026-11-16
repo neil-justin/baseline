@@ -40,11 +40,27 @@
   padding: 24px;
   max-width: 640px;
   margin-top: 12px;
-}
-.vq-tag {
+}.vq-tag {
   font: 500 11px/1.4 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
 }
+/* the rung indicator: three dots on their own line, 8px gap (fix 2026-11-06) */
+.vq-rung {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.vq-rung i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--v-ink2);
+  background: transparent;
+  flex: none;
+}
+.vq-rung i[data-state="now"] { border-color: var(--v-blue); }
+.vq-rung i[data-state="done"] { border-color: transparent; background: var(--v-blue); }
 .vq-stem {
   font: 500 17px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
@@ -65,9 +81,9 @@
   font: 400 15px/1.5 Roboto, system-ui, sans-serif;
   color: var(--v-ink);
   cursor: pointer;
-  transition: background-color 0.12s ease;
+  transition: background-color var(--ob-dur-fast) var(--ob-ease-standard);
 }
-.vq-opt:hover { background: #e8eaed; }
+.vq-opt:hover { background: var(--v-rows); }
 
 /* feedback: chips-language at band scale — green tells, warm amber
    corrects, never red (12px radius, v9 band scale at 14.5px) */
@@ -76,9 +92,48 @@
   padding: 11px 14px;
   border-radius: 12px;
   font: 400 14.5px/1.5 Roboto, system-ui, sans-serif;
-  display: none;
+  /* 2026-11-06: one band element in BOTH states — pending it is the
+   * transparent reserved slot, answered it fades in with the verdict */
+  display: block;
+  min-height: 66px; /* two lines at 14.5px/1.5 + the 11px/14px padding */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: transparent;
 }
-.vq-band.show { display: block; }
+.vq-band.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+/* the narrow column (<720) wraps bands taller than any fixed reserve —
+   down there the in-flow reserved slot above stays. The shared column
+   read reserves the spot as the card's own bottom padding and anchors
+   the band absolute: pending or lit it occupies the SAME spot inside
+   the card, so the reveal shifts nothing and nothing but the designed
+   padding sits pre-answer. Reserve = the measured worst default fail
+   band (87.25px @640) + the 16px inset; min-height guard 320px. */
+@media (min-width: 721px) {
+  .vq-card {
+    position: relative;
+    padding-bottom: 104px;
+    min-height: 320px;
+  }
+  .vq-band {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    margin-top: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .vq-band.show { animation: vq-band-in var(--ob-dur-base) var(--ob-ease-standard); }
+}
+@keyframes vq-band-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 .vq-band.pass { background: var(--v-green-wash); color: var(--v-green-text); }
 .vq-band.fail { background: var(--v-amber-wash); color: var(--v-amber-text); }
 
@@ -89,16 +144,26 @@
   align-items: center;
   border: 0;
   background: var(--v-blue-wash);
-  color: #041e49;
+  color: var(--v-on-primary-container);
   border-radius: 999px;
   padding: 10px 22px;
   font: 500 14px "Google Sans", Roboto, system-ui, sans-serif;
   cursor: pointer;
-  transition: background-color 0.14s ease, transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+  transition: background-color var(--ob-dur-fast) var(--ob-ease-standard), transform var(--ob-dur-fast) var(--ob-ease-standard);
 }
-.vq-next:hover:not(:disabled) { background: #c5d9f8; }
+.vq-next:hover:not(:disabled) { background: var(--v-blue-hover); }
 .vq-next:active:not(:disabled) { transform: scale(0.97); }
-.vq-next:disabled { opacity: 0.45; cursor: default; }
+.vq-next:disabled { background: var(--v-grey-wash); color: var(--v-ink2); cursor: default; }
+
+/* rung dots: answered-forward state reads as the fill on the cursor-back frame */
+.vq-rung i {
+  transition: background-color var(--ob-dur-fast) var(--ob-ease-standard), border-color var(--ob-dur-fast) var(--ob-ease-standard);
+}
+
+/* fix 7 (2026-11-06): the v9 label floor — tracked tags at 11.5px, and
+   the card sits inside the onboarding column fine at full width */
+.vq-qtag { font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+.vq-tag { font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; }
 
 /* the retake sitting's result — the verdict on the focused screen */
 .vq-screen {
@@ -128,4 +193,39 @@
   font: 400 14.5px/1.55 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
 }
+/* the per-skill rung tally on the result screen (walk-fix 2026-11-06,
+   fix 4: panel padding + row list — name | rung dots | state chip —
+   hairline dividers, 8/12/16 rhythm; shared by onboarding + /verify) */
+.vq-tally {
+  margin-top: 16px;
+  border: 1px solid var(--v-rows);
+  border-radius: 12px;
+  padding: 8px 16px;
+  max-width: 560px;
+}
+.vq-tally-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--v-rows);
+  font: 400 14px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+}
+.vq-tally-row:last-child { border-bottom: 0; }
+.vq-tally-row b { color: var(--v-ink); font-weight: 500; font-size: 15px; }
+.vq-rung.inrow { margin-top: 0; }
+.vq-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: 500 12px/1.2 Roboto, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  border-radius: 8px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.vq-chip.ok { background: var(--v-green-wash); color: var(--v-green-text); }
+.vq-chip.pending { background: var(--v-grey-wash); color: var(--v-grey-text); }
 .vq-ctas { margin-top: 20px; display: flex; gap: 12px; }
