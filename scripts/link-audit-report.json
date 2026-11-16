@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-04T13:41:13.924Z",
+  "generatedAt": "2026-11-06T11:09:32.151Z",
   "total": 244,
   "dead": [],
   "moved": [
@@ -66,10 +66,6 @@
     {
       "url": "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/",
       "finalUrl": "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures"
-    },
-    {
-      "url": "https://web.dev/learn/",
-      "finalUrl": "https://web.dev/learn?hl=es-419"
     },
     {
       "url": "https://docs.github.com/en/get-started/quickstart",
