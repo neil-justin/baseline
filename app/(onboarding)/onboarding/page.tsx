@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import Onboarding from "./Onboarding";
 import { requireStudent } from "@/lib/session";
 import { getStudentView } from "@/lib/db";
@@ -30,5 +31,9 @@ export default async function OnboardingPage({
   const { step } = await searchParams;
   const { state } = await getStudentView(profile.studentId);
   const retake = step === "assessIntro" && state.careerId !== null;
-  return <Onboarding retake={retake} studentId={profile.studentId} program={profile.program} />;
+  /* deprecated 2026-11-18: the retake sits on its own focused route now
+     (the /verify pattern) — the URL redirects so no stale link or
+     bookmark can serve the in-funnel retake */
+  if (retake) redirect("/assessment");
+  return <Onboarding retake={false} studentId={profile.studentId} program={profile.program} />;
 }

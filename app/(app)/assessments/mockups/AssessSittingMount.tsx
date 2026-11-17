@@ -242,8 +242,8 @@ export default function AssessSittingMount({ lite }: { lite: SittingLite }) {
                   </div>
                   <div className="cta-row" style={{ justifyContent: "space-between", alignItems: "center" }}>
                     <span className="amsk-deep">
-                      Re-take → <b>/onboarding?step=assessIntro</b> — the built instrument screens,
-                      no onboarding replay
+                      Re-take → <b>/assessment</b> — the focused instrument screen (the
+                      /verify pattern)
                     </span>
                     <button className="cta amsk-arm" aria-disabled="true">
                       Re-take the assessment

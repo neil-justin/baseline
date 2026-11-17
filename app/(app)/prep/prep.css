@@ -672,48 +672,39 @@
 .v7prep .dz-sub { font: 400 12.5px/1.45 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
 .v7prep .dz-busy {
   display: inline-flex;
+  flex-direction: column; /* the same centred stack as the idle content */
   align-items: center;
-  gap: 8px;
-  font: 400 13.5px/1.5 Roboto, system-ui, sans-serif;
+  gap: 6px;
+  font: 500 15px/1.35 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+}
+/* the spinner sits in the dz-icon's slot — same box, so the busy state
+ * occupies the exact idle footprint (user ruling 2026-11-18: no height
+ * change; the pulse below is the only activity signal) */
+.v7prep .dz-spin { width: 30px; height: 30px; }
+.v7prep .dz-zone.dz-slim .dz-spin { width: 16px; height: 16px; }
+.v7prep .dz-zone.dz-slim .dz-busy { font: 500 14px/1.3 Roboto, system-ui, sans-serif; }
+.v7prep .dz-an-sub {
+  display: block;
+  font: 400 12.5px/1.45 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
 }
+.v7prep .dz-zone.dz-slim .dz-an-sub { font: 400 12px/1.45 Roboto, system-ui, sans-serif; }
 .v7prep .dz-err { font: 400 12.5px/1.5 Roboto, system-ui, sans-serif; max-width: 64ch; }
 
 .v7prep .rs-upload .dz-err, .v7prep .cl-upload .dz-err { color: var(--v-amber-text); font-weight: 500; }
 
-/* ---------- round 2b: the busy state REPLACES the tab content ---------- */
+/* ---------- the busy state: the zone keeps its footprint ---------- */
 
-/* While a check runs (§6.3, user-ruled 2026-11-04), the ACTIVE panel hides
-   its result cards (class-scoped CSS — nothing is deleted) and the running
-   zone reads as the ONE card: a tall centred hero. On the landing signal
-   the panel class is removed FIRST, the fresh stack returns, then the
-   cascade replays and the verdict scrolls. The uploader cards stay visible
-   so the zone they carry becomes the hero — they are exactly the cards
-   marked .prep-rerun (re-run state) and .prep-intake (first-run state):
-   existing marker classes, no :has() and no JSX change. */
-.v7prep .tabpanel.prep-analyzing > .card { display: none; }
-.v7prep .tabpanel.prep-analyzing > .card.prep-rerun,
-.v7prep .tabpanel.prep-analyzing > .card.prep-intake { display: block; }
-.v7prep .tabpanel.prep-analyzing .dz-zone {
-  min-height: 320px;
-  justify-content: center;
-  gap: 10px;
+/* While a check runs the result stack STAYS IN PLACE (user ruling
+   2026-11-18: the round-2b hero — hidden cards + a 320px zone — read as
+   the element suddenly growing). The zone swaps its content at its
+   natural height; it is read-only while busy, and the dz-pulse border
+   breathing is the activity signal. */
+.v7prep .dz-zone.dz-analyzing {
   pointer-events: none; /* the wait is read-only — hover wash + pointer cursor don't lie */
   cursor: default;
 }
-.v7prep .tabpanel.prep-analyzing .dz-busy {
-  flex-direction: column;
-  gap: 10px;
-  font: 500 15px/1.4 Roboto, system-ui, sans-serif;
-  color: var(--v-ink);
-}
-.v7prep .tabpanel.prep-analyzing .dz-an-sub {
-  display: block;
-  margin-top: 6px;
-  font: 400 12.5px/1.5 Roboto, system-ui, sans-serif;
-  color: var(--v-ink2);
-}
-.v7prep .tabpanel.prep-analyzing .dz-spin { width: 28px; height: 28px; }
 
 /* the hidden-but-real file input (setInputFiles-driven e2e + native browse) */
 .v7prep .dz-input {
@@ -1051,10 +1042,6 @@
       transform 0.12s cubic-bezier(0.2, 0, 0, 1);
   }
   .v7prep .btn:active { transform: scale(0.97); }
-  /* the growth + fade-in of the recast hero — the jump from the slim zone's
-     height to the 320px recast read as a pop (user feedback 2026-11-04);
-     the removal side stays instant by design */
-  .v7prep .tabpanel.prep-analyzing .dz-zone { animation: hero-grow 0.24s cubic-bezier(0.2, 0, 0, 1), dz-pulse 1.4s ease-in-out 0.24s infinite; }
   /* tab panels: fade-through on switch (panels remount per user switch) */
   .v7prep .tabpanel:not([hidden]) { animation: prep-panel-in 0.2s cubic-bezier(0.2, 0, 0, 1); }
   /* the findings disclosure: content mounts from -4px (drawer register) */
@@ -1087,7 +1074,6 @@
 @keyframes dz-rot { to { transform: rotate(360deg); } }
 @keyframes prep-card-in { from { opacity: 0; transform: translateY(5px); } }
 @keyframes prep-fade-in { from { opacity: 0; } }
-@keyframes hero-grow { from { min-height: 0; opacity: 0.4; transform: translateY(-6px); } }
 
 /* ============================================================
    v9.1 structure round — the guide page (2026-11-04 cutover;

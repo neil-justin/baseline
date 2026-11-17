@@ -173,7 +173,7 @@ export default async function AssessmentsPage() {
           </div>
 
           <div className="cta-row">
-            <a className="cta" href="/onboarding?step=assessIntro">
+            <a className="cta" href="/assessment">
               {takenAt ? "Re-take the assessment" : "Take the assessment"}{" "}
               <ArrowRight size={15} aria-hidden="true" />
             </a>
