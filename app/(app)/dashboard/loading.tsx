@@ -23,8 +23,8 @@ export default function Loading() {
                     the gauge carries the number once): h1 · meta · readout
                     line · the CTA pill */}
                 <span className="skel" style={{ width: 132, height: 22 }} />
-                <span className="skel" style={{ width: 200, height: 16, marginTop: 6, display: "block" }} />
-                <span className="skel" style={{ width: 250, height: 15, marginTop: 14, display: "block" }} />
+                <span className="skel" style={{ width: "min(200px, 100%)", height: 16, marginTop: 6, display: "block" }} />
+                <span className="skel" style={{ width: "min(250px, 100%)", height: 15, marginTop: 14, display: "block" }} />
                 <span className="skel" style={{ width: 142, height: 34, marginTop: 16, borderRadius: 999, display: "block" }} />
               </div>
               {/* the D1 gauge skeleton — track + pivot only: the loader
@@ -59,7 +59,7 @@ export default function Loading() {
           <div className="card">
             <div className="head">
               <span className="skel" style={{ width: 158, height: 19 }} />
-              <span className="skel" style={{ width: 200, height: 16 }} />
+              <span className="skel" style={{ width: "min(200px, 100%)", height: 16 }} />
             </div>
             <table className="plan-table">
               <thead>
@@ -111,7 +111,7 @@ export default function Loading() {
 
         <section className="card ledger">
           <div className="head">
-            <span className="skel" style={{ width: 250, height: 19 }} />
+            <span className="skel" style={{ width: "min(250px, 100%)", height: 19 }} />
           </div>
           <div className="lgrid">
             {Array.from({ length: 6 }, (_, r) => (

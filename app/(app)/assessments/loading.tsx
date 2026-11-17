@@ -23,7 +23,7 @@ export default function Loading() {
               <span className="skel" style={{ width: 88, height: 88, borderRadius: 12, flex: "none" }} />
               <div>
                 <span className="skel" style={{ width: 160, height: 22 }} />
-                <span className="skel" style={{ width: 430, height: 16, marginTop: 8, display: "block" }} />
+                <span className="skel" style={{ width: "min(430px, 100%)", height: 16, marginTop: 8, display: "block" }} />
               </div>
             </div>
           </div>
@@ -33,7 +33,7 @@ export default function Loading() {
           {/* NACE card */}
           <section className="card">
             <div className="head">
-              <span className="skel" style={{ width: 210, height: 19 }} />
+              <span className="skel" style={{ width: "min(210px, 100%)", height: 19 }} />
               <span className="skel" style={{ width: 180, height: 16 }} />
             </div>
             <div className="nace-facts">
@@ -47,7 +47,7 @@ export default function Loading() {
               </div>
             </div>
             <div className="lcap">
-              <span className="skel" style={{ width: 250, height: 15 }} />
+              <span className="skel" style={{ width: "min(250px, 100%)", height: 15 }} />
             </div>
             <div className="cta-row">
               <span className="skel" style={{ width: 186, height: 40, borderRadius: 999 }} />
@@ -57,15 +57,15 @@ export default function Loading() {
           {/* role card */}
           <section className="card">
             <div className="head">
-              <span className="skel" style={{ width: 240, height: 19 }} />
-              <span className="skel" style={{ width: 220, height: 16 }} />
+              <span className="skel" style={{ width: "min(240px, 100%)", height: 19 }} />
+              <span className="skel" style={{ width: "min(220px, 100%)", height: 16 }} />
             </div>
             <div className="battery">
               <div className="battery-copy">
                 <span className="skel" style={{ width: 168, height: 17 }} />
-                <span className="skel" style={{ width: 330, height: 14, marginTop: 4 }} />
+                <span className="skel" style={{ width: "min(330px, 100%)", height: 14, marginTop: 4 }} />
               </div>
-              <span className="skel" style={{ width: 226, height: 40, borderRadius: 999 }} />
+              <span className="skel" style={{ width: "min(226px, 100%)", height: 40, borderRadius: 999 }} />
             </div>
             <div className="rows-label">
               <span className="skel" style={{ width: 112, height: 13 }} />
@@ -74,9 +74,9 @@ export default function Loading() {
               {Array.from({ length: 6 }, (_, i) => (
                 <div className="skillrow" key={i}>
                   <div className="s-main">
-                    <span className="skel" style={{ width: i % 2 === 0 ? 420 : 320, height: 18 }} />
+                    <span className="skel" style={{ width: `min(${i % 2 === 0 ? 420 : 320}px, 100%)`, height: 18 }} />
                     {i % 3 === 0 && (
-                      <span className="skel" style={{ width: 280, height: 13, marginTop: 3 }} />
+                      <span className="skel" style={{ width: "min(280px, 100%)", height: 13, marginTop: 3 }} />
                     )}
                   </div>
                   <div className="s-side">

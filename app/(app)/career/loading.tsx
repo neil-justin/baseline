@@ -22,7 +22,7 @@ export default function Loading() {
           <div className="bandrow">
             <div className="who">
               <span className="skel" style={{ width: 110, height: 20 }} />
-              <span className="skel" style={{ width: 280, height: 19, marginTop: 6 }} />
+              <span className="skel" style={{ width: "min(280px, 100%)", height: 19, marginTop: 6 }} />
             </div>
             <div className="bandside">
               {/* the fork skeleton lives on its real slot (side-by-side with
@@ -62,7 +62,7 @@ export default function Loading() {
             ))}
           </div>
           <span className="kicker num">
-            <span className="skel" style={{ width: 204, height: 15 }} />
+            <span className="skel" style={{ width: "min(204px, 100%)", height: 15 }} />
           </span>
         </div>
 

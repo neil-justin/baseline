@@ -17,8 +17,8 @@ export default function Loading() {
             <div className="bandrow">
               <div className="who">
                 <span className="skel" style={{ width: 96, height: 20 }} />
-                <span className="skel" style={{ width: 260, height: 17, marginTop: 6 }} />
-                <span className="skel" style={{ width: 310, height: 19, marginTop: 6 }} />
+                <span className="skel" style={{ width: "min(260px, 100%)", height: 17, marginTop: 6 }} />
+                <span className="skel" style={{ width: "min(310px, 100%)", height: 19, marginTop: 6 }} />
                 <div className="prog-ctas">
                   <span className="skel" style={{ width: 150, height: 40, borderRadius: 8 }} />
                   <span className="skel" style={{ width: 124, height: 19 }} />
@@ -62,7 +62,7 @@ export default function Loading() {
         <section className="card feed">
           <div className="head">
             <span className="skel" style={{ width: 182, height: 20 }} />
-            <span className="skel" style={{ width: 228, height: 19 }} />
+            <span className="skel" style={{ width: "min(228px, 100%)", height: 19 }} />
           </div>
           <div className="feed-cols">
             <span className="skel" style={{ width: 60, height: 15 }} />

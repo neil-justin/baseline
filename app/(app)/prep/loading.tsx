@@ -17,7 +17,7 @@ export default function Loading() {
           <div className="bandrow">
             <div className="who">
               <span className="skel" style={{ width: 62, height: 20 }} />
-              <span className="skel" style={{ width: 300, height: 19, marginTop: 6 }} />
+              <span className="skel" style={{ width: "min(300px, 100%)", height: 19, marginTop: 6 }} />
             </div>
             <div className="readring" aria-hidden="true">
               <svg viewBox="0 0 130 130" aria-hidden="true">
@@ -54,14 +54,14 @@ export default function Loading() {
         <div className="prep-stack">
           <section className="card panel-sec">
             <span className="skel" style={{ width: 190, height: 12 }} />
-            <span className="skel" style={{ width: 330, height: 16, marginTop: 8, display: "block" }} />
-            <span className="skel" style={{ width: 250, height: 12, marginTop: 12, display: "block" }} />
+            <span className="skel" style={{ width: "min(330px, 100%)", height: 16, marginTop: 8, display: "block" }} />
+            <span className="skel" style={{ width: "min(250px, 100%)", height: 12, marginTop: 12, display: "block" }} />
           </section>
           {Array.from({ length: 3 }, (_, i) => (
             <section className="card rs-fgroup" key={i}>
               <span className="skel" style={{ width: 84, height: 15 }} />
               <div className="skel" style={{ width: "100%", height: 4, marginTop: 10 }} />
-              <span className="skel" style={{ width: 220, height: 12, marginTop: 10, display: "block" }} />
+              <span className="skel" style={{ width: "min(220px, 100%)", height: 12, marginTop: 10, display: "block" }} />
               <span className="skel" style={{ width: "100%", height: 12, marginTop: 16, display: "block" }} />
             </section>
           ))}

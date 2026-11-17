@@ -25,7 +25,7 @@ export default function Loading() {
                 <span className="skel" style={{ width: 88, height: 88, borderRadius: "50%", flex: "none" }} />
                 <div>
                   <span className="skel" style={{ width: 84, height: 20 }} />
-                  <span className="skel" style={{ width: 310, height: 17, marginTop: 6, display: "block" }} />
+                  <span className="skel" style={{ width: "min(310px, 100%)", height: 17, marginTop: 6, display: "block" }} />
                 </div>
               </div>
               {/* the shared ScoreSequence's stage shape: the composite
@@ -37,8 +37,8 @@ export default function Loading() {
                   <span className="skel" style={{ width: 52, height: 46 }} />
                   <span className="skel" style={{ width: 34, height: 17 }} />
                 </div>
-                <span className="skel" style={{ width: 236, height: 13, marginTop: 8, display: "block" }} />
-                <span className="skel" style={{ width: 250, height: 13, marginTop: 5, display: "block" }} />
+                <span className="skel" style={{ width: "min(236px, 100%)", height: 13, marginTop: 8, display: "block" }} />
+                <span className="skel" style={{ width: "min(250px, 100%)", height: 13, marginTop: 5, display: "block" }} />
               </div>
               {/* the stacked five-channel read's stage shape: five rows —
                   name · earned track · numeral, weighted fills armed by
@@ -72,7 +72,7 @@ export default function Loading() {
           <div className="card">
             <div className="head">
               <span className="skel" style={{ width: 150, height: 19 }} />
-              <span className="skel" style={{ width: 210, height: 16 }} />
+              <span className="skel" style={{ width: "min(210px, 100%)", height: 16 }} />
             </div>
             <table className="plan-table skills-table">
               <thead>
@@ -137,7 +137,7 @@ export default function Loading() {
             </table>
             {/* the re-take foot (the live card's .foot + link) */}
             <div className="foot num">
-              <span className="skel" style={{ width: 220, height: 15 }} />
+              <span className="skel" style={{ width: "min(220px, 100%)", height: 15 }} />
               <br />
               <span className="skel" style={{ width: 150, height: 15 }} />
             </div>

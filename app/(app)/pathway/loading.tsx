@@ -30,9 +30,9 @@ export default function Loading() {
           </div>
           <div className="plan-head">
             <span className="skel" style={{ width: 110, height: 24 }} />
-            <span className="skel" style={{ width: 330, height: 16, marginTop: 8, display: "block" }} />
+            <span className="skel" style={{ width: "min(330px, 100%)", height: 16, marginTop: 8, display: "block" }} />
             <span className="skel" style={{ width: 74, height: 11, marginTop: 18, display: "block" }} />
-            <span className="skel" style={{ width: 280, height: 15, marginTop: 7, display: "block" }} />
+            <span className="skel" style={{ width: "min(280px, 100%)", height: 15, marginTop: 7, display: "block" }} />
           </div>
         </section>
 
@@ -62,7 +62,7 @@ export default function Loading() {
                   style={{ width: `${58 - (r % 3) * 7}%`, height: 13, marginTop: 8, display: "block" }}
                 />
                 {r % 2 === 0 ? (
-                  <span className="skel" style={{ width: 210, height: 13, marginTop: 12, display: "block" }} />
+                  <span className="skel" style={{ width: "min(210px, 100%)", height: 13, marginTop: 12, display: "block" }} />
                 ) : null}
               </div>
             </li>
