@@ -26,6 +26,10 @@
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  /* the card uses margin:auto to center; gap guarantees a minimum
+     margin between the header, the card, and the page bottom even
+     when the card is taller than the viewport */
+  gap: 28px;
   background: var(--mk-bg);
   color: var(--mk-ink);
   font: 400 14.5px/1.55 "Google Sans Text", Roboto, system-ui, sans-serif;
@@ -57,9 +61,16 @@
    M3 shadow register, 16 radius. */
 .fauth-main {
   flex: none;
-  width: 100%;
+  /* width: 100% + side margins overflowed the viewport and left-stuck
+     the card — center on the flex cross axis instead, with a 16px
+     gutter via the margin only where the container is narrow */
+  align-self: center;
+  width: calc(100% - 32px);
   max-width: 420px;
-  margin: auto; /* auto top+bottom margins center the card vertically */
+  /* auto top margin centers the card vertically; a FIXED 28px bottom
+     margin guarantees space below the card even when it's taller than
+     the viewport (auto collapses to 0 on overflow) */
+  margin: auto 0 28px;
   padding: 40px 40px 36px;
   background: var(--mk-surface);
   border-radius: 16px;
@@ -239,5 +250,5 @@
 
 /* narrow: the column keeps its width, minus the page-gutter */
 @media (max-width: 440px) {
-  .fauth-main { padding: 32px 24px 28px; }
+  .fauth-main { padding: 32px 24px 28px; margin: auto 0 28px; }
 }

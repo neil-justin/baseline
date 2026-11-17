@@ -345,7 +345,7 @@ export default async function DashboardPage() {
                       </td>
                       <td>
                         <span className={`chip ${measured > 0 ? "c-blue" : "c-grey"}`}>
-                          {measured > 0 ? `${measured} of 3 measured` : "Not started"}
+                          {measured > 0 ? `${measured} of 3` : "Not started"}
                         </span>
                       </td>
                       <td className="eff num">opens AR, up to +{arOutstanding}</td>
