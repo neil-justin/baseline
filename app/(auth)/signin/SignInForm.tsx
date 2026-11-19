@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
 
 /** Sign-in form — ported from prototype/signin.html, with the live credential POST
  * in place of the static prototype's always-failing submit. Posts to
@@ -110,21 +110,27 @@ export default function SignInForm() {
             type="button"
             id="pass-toggle"
             aria-pressed={showPw}
+            aria-label={showPw ? "Hide password" : "Show password"}
             style={{
               position: "absolute",
               right: 8,
               top: "50%",
               transform: "translateY(-50%)",
-              fontFamily: "var(--mono)",
-              fontSize: 11,
-              letterSpacing: "0.04em",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               color: "var(--ink-2)",
-              padding: "10px 8px",
-              margin: "-10px -8px",
+              padding: 10,
+              margin: "0 -10px 0 0",
+              borderRadius: 6,
             }}
             onClick={() => setShowPw((v) => !v)}
           >
-            {showPw ? "HIDE" : "SHOW"}
+            {showPw ? (
+              <EyeOff size={16} strokeWidth={1.8} aria-hidden="true" />
+            ) : (
+              <Eye size={16} strokeWidth={1.8} aria-hidden="true" />
+            )}
           </button>
         </div>
         {/* Caps hint (auth round 2 polish): rendered only while the modifier

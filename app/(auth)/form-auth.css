@@ -26,10 +26,11 @@
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  /* the card uses margin:auto to center; gap guarantees a minimum
-     margin between the header, the card, and the page bottom even
-     when the card is taller than the viewport */
+  /* the card's auto margins center it; gap guarantees a minimum margin
+     between the header and the card, and the bottom padding guarantees
+     space below the card even when it's taller than the viewport */
   gap: 28px;
+  padding-bottom: 28px;
   background: var(--mk-bg);
   color: var(--mk-ink);
   font: 400 14.5px/1.55 "Google Sans Text", Roboto, system-ui, sans-serif;
@@ -67,10 +68,10 @@
   align-self: center;
   width: calc(100% - 32px);
   max-width: 420px;
-  /* auto top margin centers the card vertically; a FIXED 28px bottom
-     margin guarantees space below the card even when it's taller than
-     the viewport (auto collapses to 0 on overflow) */
-  margin: auto 0 28px;
+  /* both auto margins split the free space evenly → the card is truly
+     centered in the lane below the header; the container's bottom padding
+     takes over the below-card guarantee when there's no free space */
+  margin: auto 0;
   padding: 40px 40px 36px;
   background: var(--mk-surface);
   border-radius: 16px;
@@ -250,5 +251,5 @@
 
 /* narrow: the column keeps its width, minus the page-gutter */
 @media (max-width: 440px) {
-  .fauth-main { padding: 32px 24px 28px; margin: auto 0 28px; }
+  .fauth-main { padding: 32px 24px 28px; margin: auto 0; }
 }

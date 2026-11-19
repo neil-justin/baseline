@@ -139,6 +139,18 @@ html { scrollbar-gutter: stable; }
 @supports not (scrollbar-gutter: stable) {
   html { overflow-y: scroll; }
 }
+/* 2026-11-20: exception for the auth surfaces (.fauth — signin/signup/
+   forgot/reset). Their content never overflows at desktop sizes, so the
+   reserved gutter was dead weight: the centered card landed half a gutter
+   left of the window's true center. Drop the reservation there; the gutter
+   (and a real scrollbar) returns only when the content actually overflows.
+   The v7.2 throb concern doesn't apply — the auth→app hand-off is a full
+   shell change, so the gutter appearing at that boundary reads as part of
+   the navigation, not a re-center of an unchanged layout. */
+html:has(.fauth) { scrollbar-gutter: auto; }
+@supports not (scrollbar-gutter: stable) {
+  html:has(.fauth) { overflow-y: auto; }
+}
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
