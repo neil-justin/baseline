@@ -51,7 +51,7 @@ export function TallyRow({
       <span
         className="vq-rung inrow"
         role="img"
-        aria-label={`${correct} of ${total} rungs cleared`}
+        aria-label={`${correct} of ${total} parts passed`}
       >
         {Array.from({ length: total }, (_, i) => (
           <i key={i} data-state={i < correct ? "done" : "todo"} />
@@ -82,6 +82,7 @@ export default function QuestionCard({
   bandPass,
   bandFail,
   rung,
+  pendingHint,
 }: {
   question: QuizQuestion;
   index: number;
@@ -104,6 +105,11 @@ export default function QuestionCard({
    *  text rung tag (fix 2026-11-06: the tag ran together with the skill
    *  tag; dots carry the per-skill sequence). */
   rung?: { index: number; answered: number };
+  /** Void fix (2026-11-20): the pending band's quiet single line ("Your
+   *  verdict appears here — answer to see it."). Both sittings pass it —
+   *  /verify adopted it in the phase-2 round (2026-11-20), so no surface
+   *  keeps a dead reserved slot. */
+  pendingHint?: string;
 }) {
   const answered = picked !== null;
   const passed = answered && picked === question.answer;
@@ -132,7 +138,7 @@ export default function QuestionCard({
           <span
             className="vq-rung"
             style={{ display: "flex" }}
-            aria-label={`Rung ${rung.index + 1} of 3 — ${rung.answered} of 3 answered`}
+            aria-label={`Part ${rung.index + 1} of 3 — ${rung.answered} of 3 answered`}
             role="img"
           >
             {[0, 1, 2].map((i) => (
@@ -156,20 +162,24 @@ export default function QuestionCard({
             </button>
           ))}
         </div>
-        {/* verdict band (2026-11-06): ONE element in both states — pending
-         * it's the transparent reserved slot; answered it grows the verdict.
-         * >=721px both states anchor to the same absolute spot inside the
-         * card (quiz.css), so the reveal shifts nothing; <720px both are the
-         * in-flow reserved slot. */}
+        {/* verdict band (2026-11-06, void fix 2026-11-20): ONE element in both
+         * states — pending it holds the quiet `pendingHint` line (when the
+         * consumer passes one) over the transparent reserved slot; answered
+         * it grows the verdict. >=721px both states anchor to the same
+         * absolute spot inside the card (quiz.css), so the reveal shifts
+         * nothing; <720px both are the in-flow reserved slot. The hint only
+         * becomes VISIBLE on the surface that opts in (its own scoped CSS);
+         * consumers without it keep the byte-identical hidden register. */}
         <div
           className={`vq-band ${answered ? `show ${passed ? "pass" : "fail"}` : ""}`}
           aria-live="polite"
           aria-hidden={!answered || undefined}
         >
-          {answered &&
-            (passed
-              ? bandPass ?? `Correct. ${skill}: confirmed.`
-              : bandFail ?? `Not quite — that's what it does: ${question.options[question.answer]}. ${skill} stays as your own rating for now.`)}
+          {answered
+            ? (passed
+                ? bandPass ?? `Correct. ${skill}: confirmed.`
+                : bandFail ?? `Not quite — that's what it does: ${question.options[question.answer]}. ${skill} stays as your own rating for now.`)
+            : pendingHint}
         </div>
         <div className="vq-foot">
           <button type="button" className="vq-next" disabled={!answered} onClick={onNext}>

@@ -35,5 +35,5 @@ export default async function OnboardingPage({
      (the /verify pattern) — the URL redirects so no stale link or
      bookmark can serve the in-funnel retake */
   if (retake) redirect("/assessment");
-  return <Onboarding retake={false} studentId={profile.studentId} program={profile.program} />;
+  return <Onboarding studentId={profile.studentId} program={profile.program} />;
 }

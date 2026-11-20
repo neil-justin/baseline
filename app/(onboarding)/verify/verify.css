@@ -1,0 +1,60 @@
+/* ============================================================
+   /verify retake register (phase 2, 2026-11-20) — scoped under
+   `.vq-rt` (rendered ONLY by VerifySitting.tsx, so nothing here
+   can reach the first-run funnel's QuestionCard). The card itself
+   is the shared QuestionCard register (quiz.css, phase 1);
+   this file carries only the retake surface's own additions:
+   the pending-hint reveal, the standing block, the honest-finish
+   subline, and the retake link register.
+   ============================================================ */
+
+/* ---------- the pending verdict band: the quiet hint line ----------
+   The register spec's no-dead-void option: the pending band renders the
+   QuestionCard's `pendingHint` ("Your verdict appears here — answer to
+   see it.") instead of a transparent reserve. Scoped to this surface;
+   quiz.css's hidden pending state stays untouched for the funnel. */
+.vq-rt .vq-band:not(.show) {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: none;
+  background: transparent;
+  color: var(--v-ink2);
+}
+
+/* ---------- the confirm-guard's standing block (first question) ----------
+   The current recorded standing + the one plain replace line — plain text
+   on the ground, no card, no wash (the wash rule: no region fills). */
+.vq-rt .vq-standing {
+  margin-bottom: 14px;
+}
+.vq-rt .vq-standing-line {
+  margin: 0;
+  font: 500 14.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+.vq-rt .vq-standing-sub {
+  margin: 2px 0 0;
+  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 60ch;
+}
+
+/* ---------- the honest-finish subline (under the last card) ---------- */
+.vq-rt .vq-fine {
+  margin: 12px 0 0;
+  font: 400 12.5px/1.55 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 60ch;
+}
+
+/* ---------- the retake link (the register's single link) ---------- */
+.vq-rt .vq-link {
+  display: inline-flex;
+  align-items: center;
+  font: 500 14px/1.2 "Google Sans", Roboto, system-ui, sans-serif;
+  color: var(--v-blue-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.vq-rt .vq-link:hover { color: var(--v-ink); }

@@ -1,0 +1,40 @@
+/* ============================================================
+   /assessment retake register (phase 2, 2026-11-20) — scoped
+   under `.ass-rt` (rendered ONLY by AssessSitting.tsx, so nothing
+   here can reach the first-run funnel). The funnel's copy of this
+   card register lives in onboarding.css + quiz.css (phase 1);
+   Reconciled 2026-11-20: the ▲ stand-in blocks are GONE — AssessSitting
+   renders the funnel-owned register (same root class .v7ob, same class
+   names: .ob-nacecard/.ob-cardbody/.ob-cardfoot, the full-width likert
+   row register, and .ob-live on the check card), so onboarding.css's
+   shared definitions win. What remains here is /assessment's OWN
+   furniture only: the confirm-guard standing block, the result skeleton
+   mirror, and the finish-label block. */
+
+/* ---------- the confirm-guard's standing block (first card) ----------
+   The current recorded result + the one plain replace line — plain text on
+   the ground, no card, no wash (the wash rule: no region fills). */
+.ass-rt .ass-standing {
+  margin-bottom: 14px;
+  max-width: 640px;
+}
+.ass-rt .ass-standing-line {
+  margin: 0;
+  font: 500 14.5px/1.4 Roboto, system-ui, sans-serif;
+  color: var(--v-ink);
+  font-variant-numeric: tabular-nums;
+}
+.ass-rt .ass-standing-sub {
+  margin: 2px 0 0;
+  font: 400 13px/1.5 Roboto, system-ui, sans-serif;
+  color: var(--v-ink2);
+  max-width: 60ch;
+}
+
+/* ---------- the result skeleton's tally mirror (Skeleton-Contract Rule) ---------- */
+.ass-rt .ob-tally .skel {
+  display: block;
+  margin: 14px 0;
+}
+.ass-rt .ob-tally .skel:first-child { margin-top: 6px; }
+.ass-rt .ob-tally .skel:last-child { margin-bottom: 6px; }

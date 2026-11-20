@@ -5,17 +5,20 @@ import { requireStudent } from "@/lib/session";
 import { getStudentView } from "@/lib/db";
 import type { VMCQ } from "@/app/(onboarding)/onboarding/banks";
 import { SKILL_BANKS, getSkillLadder } from "@/lib/fixtures/skill-banks";
+import { fmtEventDate } from "@/lib/fmt";
+import { skillDisplay } from "@/lib/skill-display";
+import "./verify.css";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Skill verification — Baseline",
   description:
-    "The verification sitting: prove a skill one short ladder at a time. A pass makes it verified; a miss leaves it unverified — the plan still points at it.",
+    "The skill checks: prove a skill a few questions at a time. A pass makes it verified; a miss leaves it unverified — the plan still points at it.",
 };
 
 /**
- * /verify — the retake sitting (2026-11-04 ruling: a FOCUSED SCREEN —
+ * /verify — the retake instrument (2026-11-04 ruling: a FOCUSED SCREEN —
  * the (onboarding) group's chrome gives it the bare header; the page adds
  * the back control to Assessments). The focused view shows the instrument
  * and nothing else.
@@ -30,6 +33,12 @@ export const metadata: Metadata = {
  * mode draws the first ≤5 unverified rows, ladder-first, the OB-3b way.
  * Writes: none here — POST /api/verify per skill under the session student
  * (a fail write is a no-op; the row stays unverified).
+ *
+ * The confirm-guard (phase 2, 2026-11-20): the page hands the sitting the
+ * student's CURRENT recorded standing (engine truth — the bar sources and
+ * the latest check event), so the first question shows "Your latest: …"
+ * with the replace line, and the final Finish control names the
+ * replacement when a standing exists. No modal — honest labels.
  */
 export default async function VerifyPage({
   searchParams,
@@ -45,7 +54,7 @@ export default async function VerifyPage({
 
   let items: VMCQ[];
   /* ladder channel (user-approved 2026-11-05): an unverified ladder skill's
-   * sitting runs its 3-rung ladder; the single-banked item rides only for
+   * check runs its 3-part ladder; the single-banked item rides only for
    * skills without a ladder (legacy — vestigial now, kept honest). */
   const isUnverified = (name: string) => {
     const src = state.bars[name]?.source;
@@ -86,5 +95,39 @@ export default async function VerifyPage({
     items = slots.map((s) => s.q);
   }
 
-  return <VerifySitting items={items} slots={slots} />;
+  /* the confirm-guard's standing — engine truth only: per-skill mode reads
+     the row's own recorded source; whole-battery mode reads the map's
+     proven count plus the latest check event's stamp (the recorded date a
+     verification last landed). No attempt stamp → the honest zero. */
+  const checkEvents = state.events.filter(
+    (e) => e.kind === "check-passed" || e.kind === "check-failed"
+  );
+  const lastCheckAt = checkEvents.reduce<string | undefined>(
+    (max, e) => (!max || e.date > max ? e.date : max),
+    undefined
+  );
+  const standing = skill
+    ? state.bars[skill]?.source
+      ? { text: `Your latest: ${skillDisplay(skill)} — unverified.`, hadPrevious: true }
+      : { text: `No check recorded for ${skillDisplay(skill)} yet.`, hadPrevious: false }
+    : lastCheckAt
+      ? {
+          text: `Your latest: ${provenCount(state, career.skills.map((s) => s.name))} of ${career.skills.length} skills proven · ${fmtEventDate(lastCheckAt)}.`,
+          hadPrevious: true,
+        }
+      : { text: "No check recorded yet — this check sets your first standings.", hadPrevious: false };
+
+  return <VerifySitting items={items} slots={slots} standing={standing} />;
+}
+
+/** the map's proven count (verified ·✓ or checked ✓✓) — the same read the
+ *  hub's role card makes; computed here because the state is at hand. */
+function provenCount(
+  state: Awaited<ReturnType<typeof getStudentView>>["state"],
+  names: string[]
+): number {
+  return names.filter((name) => {
+    const src = state.bars[name]?.source;
+    return src === "verified" || src === "checked";
+  }).length;
 }

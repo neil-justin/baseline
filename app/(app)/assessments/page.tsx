@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Assessments — Baseline",
   description:
-    "Two instruments, one place: the career-agnostic NACE competency check and the role-based skill verification. Latest attempt counts — a re-take replaces it, never best-ever.",
+    "Two instruments, one place: the career-agnostic NACE competency check and the role-based skill verification. Your latest attempt always counts — a re-take replaces it, never best-ever.",
 };
 
 /* The events that mean "new evidence landed" — the NACE card's caption
@@ -129,8 +129,8 @@ export default async function AssessmentsPage() {
             <div>
               <h1 className="t">Assessments</h1>
               <p className="m">
-                Prove something again — latest attempt counts, a re-take replaces it, never
-                best-ever.
+                Prove something again — your latest attempt always counts; a re-take replaces it,
+                never best-ever.
               </p>
             </div>
           </div>
@@ -224,7 +224,7 @@ export default async function AssessmentsPage() {
               <div className="battery-copy">
                 <div className="battery-t">Whole-battery check</div>
                 <div className="battery-sub num">
-                  {proven} of {career.skills.length} skills proven — one sitting covers the rest,
+                  {proven} of {career.skills.length} skills proven — one attempt covers the rest,
                   up to five skills per round.
                 </div>
               </div>

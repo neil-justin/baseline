@@ -145,7 +145,7 @@ for (let k = 0; k < NACE_CARDS; k++) {
     await page.getByRole("button", { name: /^5 — /, exact: true }).click();
   }
   const last = k === NACE_CARDS - 1;
-  await page.locator(".ob-ctas button", { hasText: last ? "Finish" : "Next" }).click();
+  await page.locator(".ob-cardfoot button", { hasText: last ? "Finish" : "Next" }).click();
   if (!last) {
     // the band shows before Next re-arms; wait for the next card's counter
     await page.locator(`text=QUESTION ${k + 2} OF ${NACE_CARDS}`).waitFor({ timeout: 10_000 });

@@ -52,83 +52,93 @@
 
 /* ---------- header band (Named-Surface Rule) ---------- */
 
+/* ---------- the family band (2026-11-20 header revamp) ----------
+ * The app surfaces' band anatomy: borderless 16px card at the M3 level-1
+ * shadow; left = the surface name + its one-line meta, right = the five
+ * steps as compact state segments (done = ink check · current =
+ * primary-container fill · future = dimmed numeral). The old floating
+ * 8px card with the fixed-pitch stacked cells and the redundant
+ * "STEP n OF 5" tag are retired — the strip IS the status. */
 .v7ob .ob-band {
   background: var(--v-surface);
-  border: 1px solid var(--v-border);
-  border-radius: 8px;
-  box-shadow: var(--v-shadow);
+  border: 0;
+  border-radius: 16px;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
   padding: 14px 20px;
   margin-bottom: 16px;
 }
 .v7ob .ob-band-in {
   display: flex;
   align-items: center;
-  gap: 24px;
+  justify-content: space-between;
+  gap: 20px;
   flex-wrap: wrap;
 }
 .v7ob .ob-band-who {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  min-width: 200px;
+  min-width: 0;
 }
-.v7ob .ob-band-name { font: 500 15px/1.35 Roboto, system-ui, sans-serif; color: var(--v-ink); }
-.v7ob .ob-band-meta { font: 400 11.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
+.v7ob .ob-band-name {
+  font: 500 17px/1.3 "Google Sans", Roboto, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+  color: var(--v-ink);
+}
+.v7ob .ob-band-meta { font: 400 12.5px/1.4 Roboto, system-ui, sans-serif; color: var(--v-ink2); }
 
 .v7ob .ob-steps-strip {
   display: flex;
-  align-items: flex-start;
-  gap: 40px; /* fixed pitch between step cells (walk-fix 2026-11-06) */
-  flex: 1;
+  align-items: center;
+  gap: 4px;
+  flex: none;
   min-width: 0;
-  justify-content: center; /* the center zone dead-centers between the two edge zones */
   overflow-x: auto;
-  padding-bottom: 2px;
-}
-@media (max-width: 980px) {
-  .v7ob .ob-steps-strip { gap: 20px; }
 }
 .v7ob .ob-step {
   display: inline-flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
+  padding: 5px 12px 5px 6px;
+  border-radius: 8px;
   flex: none;
 }
-/* the drawn-circle numeral: ink circle, CSS-drawn — the family's only
-   numeral carrier in the band; the current step is blue-ink emphasis */
+/* the drawn-circle numeral: CSS-drawn — the family's only numeral carrier
+   in the band; the current step carries the primary-container segment */
 .v7ob .ob-step-num {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font: 500 11px/1 Roboto, system-ui, sans-serif;
+  font: 500 12px/1 Roboto, system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
   border: 1px solid var(--v-rows);
   color: var(--v-ink2);
   background: var(--v-surface);
 }
 .v7ob .ob-step-label {
-  font: 400 11px/1.2 Roboto, system-ui, sans-serif;
+  font: 400 12px/1.2 Roboto, system-ui, sans-serif;
   color: var(--v-ink2);
   letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.v7ob .ob-step.now {
+  background: var(--v-blue-wash); /* v9 primary-container */
 }
 .v7ob .ob-step.now .ob-step-num {
-  border: 1.5px solid var(--v-blue);
-  color: var(--v-blue-deep);
-  background: var(--v-surface);
+  border-color: transparent;
+  color: var(--v-on-primary-container);
+  background: transparent;
 }
-.v7ob .ob-step.now .ob-step-label { color: var(--v-ink); font-weight: 500; }
+.v7ob .ob-step.now .ob-step-label {
+  color: var(--v-on-primary-container);
+  font-weight: 500;
+}
 .v7ob .ob-step.done .ob-step-num { border-color: var(--v-ink2); color: var(--v-ink); }
-.v7ob .ob-strip-label {
-  flex: none;
-  font: 500 11px/1.4 Roboto, system-ui, sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--v-ink2);
-}
+.v7ob .ob-step.done .ob-step-label { color: var(--v-ink); }
 
 /* ---------- page scaffolding ---------- */
 
@@ -679,8 +689,7 @@
 .v7ob .inst-head blockquote { font-size: 13.5px; }
 .v7ob .scale button { font-size: 12px; }
 .v7ob .ob-step-num { font-size: 12px; }
-.v7ob .ob-step-label { font-size: 11.5px; }
-.v7ob .ob-strip-label { font-size: 11.5px; }
+.v7ob .ob-step-label { font-size: 12px; }
 .v7ob .ob-hint { font-size: 11.5px; }
 .v7ob .ob-fine { font-size: 12.5px; }
 .v7ob .ob-note { font-size: 14.5px; }
@@ -1005,37 +1014,38 @@
   .v7ob .skel-qcard { padding-bottom: 104px; }
 }
 
-/* ---------- fix (2026-11-06) · verdict bands leave the flow ---------- */
-/* The reserved 66px slot read as an empty void at the card's foot. The
- * band now anchors OUT of flow: the card carries the spot as its own
- * bottom padding (reads as normal card air — nothing unoccupied but the
- * designed padding), and BOTH band states — pending and lit `.show` —
- * occupy the SAME absolute spot, so the reveal fades in in place: zero
- * layout shift, zero void. Reserve = the measured worst band + the
- * 16px inset (NACE fail measures 66px @720; ladder default fail 87.25px
- * @640). min-height guards the shortest cards (the 4-option checks).
- * ≤720px the narrow column wraps bands taller than any fixed reserve —
- * there the band keeps the in-flow reserved slot it had before. */
+/* ---------- fix (2026-11-20) · the verdict band's quiet pending line ---------- */
+/* The 86px dead void at the check card's foot is replaced by a quiet single
+ * line rendered IN the band's own spot ("Your verdict appears here — answer
+ * to see it."): the reserve is occupied, the answered verdict fades in over
+ * the same spot, zero layout shift. The live funnel's check card
+ * (`.ob-live`) keeps the band IN FLOW at every width — its 66px two-line
+ * slot is filled by the pending line; the retake surface's own copy of this
+ * card (AssessSitting.tsx, outside this round's file scope) keeps the
+ * absolute anchor unchanged. */
 .v7ob .q-band {
   display: block;
-  min-height: 66px; /* two lines at 14.5px/1.5 + the 11px/14px padding */
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+  border-radius: 12px;
+  font: 400 14.5px/1.5 Roboto, system-ui, sans-serif;
+}
+.v7ob .q-band.show { margin-top: 16px; padding: 11px 14px; }
+.v7ob .q-band:not(.show) {
+  min-height: 66px; /* the answered verdict's two-line slot, reserved in place */
+  display: flex;
+  align-items: center;
+  padding: 0;
+  color: var(--v-ink2);
   background: transparent;
 }
-.v7ob .q-band.show {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
+.v7ob .q-band.pass { background: var(--v-green-wash); color: var(--v-green-text); }
+.v7ob .q-band.fail { background: var(--v-amber-wash); color: var(--v-amber-text); }
 @media (min-width: 721px) {
   .v7ob .ob-mcqcard {
     position: relative;
     padding-bottom: 86px; /* the NACE band's spot: 16px inset + its 66px worst */
     min-height: 320px;    /* options + stem + tags + the band's reserve */
   }
-  .v7ob .q-band {
+  .v7ob .ob-mcqcard:not(.ob-live) .q-band {
     position: absolute;
     left: 16px;
     right: 16px;
@@ -1044,15 +1054,35 @@
     min-height: 0;
   }
 }
+/* the live funnel's check card: band in flow at EVERY width — the pending
+ * line occupies the 66px slot, the foot follows inside the card */
+.v7ob .ob-mcqcard.ob-live { padding: 24px 24px 0; min-height: 0; }
+.v7ob .ob-mcqcard.ob-live .q-band {
+  position: static;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  min-height: 66px; /* stable slot: the verdict never shifts the foot */
+}
+.v7ob .ob-mcqcard.ob-live .ob-cardfoot { padding: 6px 0 24px; }
+
+/* the shared QuestionCard's pending band — onboarding's verify sitting
+ * only (the /verify retake renders without this root and keeps its
+ * hidden empty slot byte-identical) */
+.v7ob .vq-band:not(.show) {
+  opacity: 1;
+  visibility: visible;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  color: var(--v-ink2);
+  background: transparent;
+}
 /* the ladder check screens' band (`.vq-band`) lives in quiz.css — same
    pattern, scoped to the shared `.vq` register so /verify gets it too */
 
-/* ---------- fix 6 · the stepper's even pitch ---------- */
-
-/* each cell is a fixed-width inline-flex column — the check circle sits
-   centered over the label at the same pitch in every state */
-.v7ob .ob-step { width: 78px; }
-.v7ob .ob-steps-strip { justify-content: flex-start; }
+/* ---------- fix 6 · the stepper's even pitch (superseded 2026-11-20:
+   the family-band segments size to their own label — no fixed pitch) --- */
 
 /* audit round 2026-11-06: the strip scrolls on narrow screens — hide the
    default scrollbar (it already auto-centers the current step via the
@@ -1115,4 +1145,90 @@
 @media (max-width: 720px) {
   .v7ob .ob-head { flex-direction: column; align-items: flex-start; gap: 10px; }
   .v7ob .ob-head-steps { width: 100%; }
+}
+
+/* ============================================================
+   Layout round (2026-11-20, critique B1–B4): the NACE likert
+   register, the in-card CTA foot, the ≤2-result career column,
+   the sr-only heading utility.
+   ============================================================ */
+
+/* ---------- B4 · sr-only heading utility ---------- */
+
+.v7ob .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- B1 · the NACE likert register ---------- */
+
+/* The statement card's 5-point scale: full-width tonal rows in the quiz
+ * screen's register — ≥44px tall, Google Sans 15px labels, selection =
+ * the v9 primary-container fill (--v-blue-wash carries #d3e3fd under the
+ * v9 token block) with the on-primary-container ink. The rows fill the
+ * card, ending the ~450px dead space under the old 62px chips; the stem
+ * stays the dominant element. */
+.v7ob .scale {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+  /* one full-width column — the old flex register's justify-content:flex-end
+   * must not pin the grid's max-content column to the card's right edge */
+  grid-template-columns: minmax(0, 1fr);
+  justify-content: stretch;
+}
+.v7ob .scale button {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  flex-direction: row;
+  justify-content: center;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--v-grey-wash);
+  color: var(--v-ink);
+  font: 500 15px/1.3 "Google Sans", Roboto, system-ui, sans-serif;
+  transition: background-color var(--ob-dur-fast) var(--ob-ease-standard), color var(--ob-dur-fast) var(--ob-ease-standard), box-shadow var(--ob-dur-fast) var(--ob-ease-standard);
+}
+.v7ob .scale button:hover {
+  border-color: transparent;
+  background: var(--v-rows);
+  color: var(--v-ink);
+}
+.v7ob .scale button[aria-pressed="true"] {
+  border-color: transparent;
+  background: var(--v-blue-wash); /* v9 primary-container */
+  color: var(--v-on-primary-container);
+  box-shadow: inset 0 0 0 2px var(--v-blue);
+}
+
+/* ---------- B1 · the CTA lives in the card foot ---------- */
+
+.v7ob .ob-cardbody { padding: 24px 24px 0; min-width: 0; }
+.v7ob .ob-cardfoot { display: flex; }
+.v7ob .ob-nacecard .ob-cardfoot { padding: 20px 24px 24px; }
+/* the statement stem stays the card's dominant element (q-stem's register) */
+.v7ob .ob-cardbody .q-stem-md { font: 500 17px/1.5 Roboto, system-ui, sans-serif; }
+
+/* ---------- B3 · ≤2 career results: one centered column ---------- */
+
+.v7ob .ob-cards.ob-cards-solo {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* the solo screen: the WHOLE composition (head cluster, note, cards, links)
+ * shares one centered column, left-aligned inside it — centering only the
+ * card left the heading at the wide rail's edge (user defect report
+ * 2026-11-20) */
+.v7ob .ob-screen.ob-solo {
+  max-width: 600px;
+  margin-inline: auto;
 }

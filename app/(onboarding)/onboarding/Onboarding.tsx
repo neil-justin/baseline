@@ -22,7 +22,6 @@ import {
   rankCareers,
   rankLetters,
   lowConfidence,
-  fitLine,
   type InterestAnswers,
 } from "@/lib/engines/interest";
 import { openSkills, stageOne } from "@/lib/engines/gaps";
@@ -182,18 +181,16 @@ interface StateView {
 }
 
 export default function Onboarding({
-  retake = false,
   studentId,
   program: initialProgram,
 }: {
-  retake?: boolean;
   studentId: string;
   program: string | null;
 }) {
-  /* the retake NACE mode (2026-11-04 hub round): `?step=assessIntro` starts
-     the already-onboarded student straight at the instrument — no onboarding
-     replay — and its result returns to the hub instead of the goal flow. */
-  const [screen, setScreen] = useState<Screen>(retake ? "assessIntro" : "strand");
+  /* retake mode retired 2026-11-18: the in-funnel retake redirect moved to
+     the focused /assessment route (page.tsx), so the funnel is first-run
+     only — the dead `retake` prop and its branches were removed 2026-11-20. */
+  const [screen, setScreen] = useState<Screen>("strand");
 
   /* step ① Background: the track, then the program dropdown (it appears once
      the track is picked, filtered to that track's canon programs) */
@@ -266,15 +263,13 @@ export default function Onboarding({
 
   /* ---- re-entry: the draft banner ---- */
   useEffect(() => {
-    if (retake) return;
     const draft = loadDraft(studentId) ?? null;
     setRestored(draft);
     setDraftResolved(true); // held hidden until this resolves — no reload flash
-  }, [retake, studentId]);
+  }, [studentId]);
 
   /* ---- autosave: every step patches the draft (per student) ---- */
   useEffect(() => {
-    if (retake) return;
     if (!strand && !careerId) return; // nothing worth restoring yet
     saveDraft(studentId, {
       step: screen,
@@ -289,7 +284,6 @@ export default function Onboarding({
       naceMcq: Object.keys(mcqChoices).length ? mcqChoices : undefined,
     });
   }, [
-    retake,
     studentId,
     screen,
     strand,
@@ -701,7 +695,7 @@ export default function Onboarding({
           <div className="ob-band-who">
             <span className="ob-band-name">Getting started</span>
             <span className="ob-band-meta">
-              One sitting, five steps — ending on your computed starting line.
+              Five short steps — about 15 minutes.
             </span>
           </div>
           <nav className="ob-steps-strip" aria-label="Onboarding steps" data-now={step}>
@@ -718,9 +712,6 @@ export default function Onboarding({
               );
             })}
           </nav>
-          <span className="ob-strip-label num" aria-live="polite">
-            STEP {step} OF 5
-          </span>
         </div>
       </header>
 
@@ -840,10 +831,6 @@ export default function Onboarding({
                 <h3>No — help me figure it out</h3>
               </button>
             </div>
-            <p className="ob-fine" style={{ marginTop: 18 }}>
-              Whichever you pick, you can change your career anytime — switching resets your plan and takes
-              two minutes.
-            </p>
           </section>
         )}
 
@@ -864,7 +851,7 @@ export default function Onboarding({
             );
           }
           return (
-          <section className="ob-screen wide">
+          <section className={`ob-screen${gated.length <= 2 ? " ob-solo" : " wide"}`}>
             <button className="ob-back" onClick={() => back("branch")}>
               <ArrowLeft size={14} aria-hidden="true" /> Back
             </button>
@@ -876,12 +863,10 @@ export default function Onboarding({
                 core-skill count → Choose pill). The fit line is the
                 program-fit pattern — no quiz answers exist here, so no
                 fake interest copy. */}
-            <div className="ob-cards">
+            <div className={`ob-cards${gated.length <= 2 ? " ob-cards-solo" : ""}`}>
               {gated.map((c) => (
                 <div key={c.id} className="panel card">
-                  <p className="fit-line">
-                    Maps to {program}. A direct start from your program&apos;s core subjects.
-                  </p>
+                  <p className="fit-line">A direct start from your program&apos;s core subjects.</p>
                   <h3>{c.name}</h3>
                   <p className="c-line">{c.roleSummary}</p>
                   <p className="c-line">
@@ -903,9 +888,6 @@ export default function Onboarding({
             <div className="ob-links">
               <Link className="link-sub" href="/career">
                 See more careers for {trackLabelOf(strand)}
-              </Link>
-              <Link className="link-sub" href="/career">
-                None of these quite fit
               </Link>
             </div>
           </section>
@@ -929,20 +911,22 @@ export default function Onboarding({
             </button>
             <div className="screen-head" style={{ marginTop: 12 }}>
               <h1>Time to figure out what fits.</h1>
-              <p>
-                No right or wrong answers — what you enjoy. {INTEREST_ITEMS.length} statements, about three
-                minutes.
-              </p>
+              {qi === 0 && (
+                <p>
+                  No right or wrong answers — what you enjoy. {INTEREST_ITEMS.length} statements, about
+                  three minutes.
+                </p>
+              )}
             </div>
             <div
               className="ob-progbar num"
               role="progressbar"
-              aria-valuenow={qi}
-              aria-valuemin={0}
+              aria-valuenow={qi + 1}
+              aria-valuemin={1}
               aria-valuemax={INTEREST_ITEMS.length}
               aria-label="Quiz progress"
             >
-              <span style={{ width: `${(qi / INTEREST_ITEMS.length) * 100}%` }} />
+              <span style={{ width: `${((qi + 1) / INTEREST_ITEMS.length) * 100}%` }} />
             </div>
             <div className="panel ob-quizcard">
               <span className="q-skill-tag">Statement {qi + 1} of {INTEREST_ITEMS.length}</span>
@@ -981,8 +965,9 @@ export default function Onboarding({
             );
           }
           const { top, low, topLetters } = suggestionResults();
+          const solo = top.length <= 2;
           return (
-            <section className="ob-screen wide">
+            <section className={`ob-screen${solo ? " ob-solo" : " wide"}`}>
               <button className="ob-back" onClick={() => back("branch")}>
                 <ArrowLeft size={14} aria-hidden="true" /> Back
               </button>
@@ -992,17 +977,16 @@ export default function Onboarding({
               </div>
               {low && (
                 <p className="ob-note">
-                  Not a strong signal — here are your program&apos;s careers ranked by a light touch. No
-                  pressure.
+                  Not a strong signal — here&apos;s your program&apos;s careers, lightly ranked.
                 </p>
               )}
-              <div className="ob-cards">
+              <div className={`ob-cards${solo ? " ob-cards-solo" : ""}`}>
                 {top.map((r) => {
                   const c = getCareer(r.careerId);
                   if (!c) return null;
                   return (
                     <div key={c.id} className="panel card">
-                      <p className="fit-line">{fitLine(topLetters, c)}</p>
+                      <p className="fit-line">{plainFitLine(topLetters, r.matchedLetters)}</p>
                       <h3>{c.name}</h3>
                       <p className="c-line">{c.roleSummary}</p>
                       <p className="c-line">
@@ -1021,9 +1005,6 @@ export default function Onboarding({
                 <Link className="link-sub" href="/career">
                   See more careers for {trackLabelOf(strand)}
                 </Link>
-                <Link className="link-sub" href="/career">
-                  None of these quite fit
-                </Link>
               </div>
             </section>
           );
@@ -1041,17 +1022,31 @@ export default function Onboarding({
                   ).length
                 : 0;
               return (
-                <QuestionCard
-                  question={slot.item}
-                  index={vi}
-                  total={quizItems.length}
-                  picked={picked}
-                  onAnswer={(i) => answerVerify(slot, i)}
-                  onNext={verifyNext}
-                  rung={slot.ladderSkill ? { index: slot.rung, answered: rungAnswered } : undefined}
-                  bandPass={slot.ladderSkill ? "Rung cleared — your whole ladder grades at the end." : undefined}
-                  bandFail={slot.ladderSkill ? "Rung not cleared — the ladder only verifies whole." : undefined}
-                  back={
+                <>
+                  {/* a11y (2026-11-20): the verify sitting's screens render the
+                      qtag row only — this sr-only h1 gives the section a real
+                      heading without changing the shared QuestionCard register */}
+                  <h1 className="sr-only">Check your skills</h1>
+                  <QuestionCard
+                    question={slot.item}
+                    index={vi}
+                    total={quizItems.length}
+                    picked={picked}
+                    onAnswer={(i) => answerVerify(slot, i)}
+                    onNext={verifyNext}
+                    rung={slot.ladderSkill ? { index: slot.rung, answered: rungAnswered } : undefined}
+                    bandPass={
+                      slot.ladderSkill
+                        ? `Correct — part ${slot.rung + 1} of 3. The skill verifies when all three parts pass.`
+                        : undefined
+                    }
+                    bandFail={
+                      slot.ladderSkill
+                        ? `Not quite — part ${slot.rung + 1} of 3. The skill verifies only if all three parts pass.`
+                        : undefined
+                    }
+                    pendingHint="Your verdict appears here — answer to see it."
+                    back={
                     vi > 0
                       ? {
                           label: "Back",
@@ -1064,7 +1059,8 @@ export default function Onboarding({
                       : { label: "Back", onClick: () => back("branch") }
                   }
                   nextLabel={vi + 1 >= quizItems.length ? "See result" : "Next"}
-                />
+                  />
+                </>
               );
             })()}
 
@@ -1097,11 +1093,11 @@ export default function Onboarding({
               });
               let copy: string;
               if (n === skillsOrder.length) {
-                copy = `${n} of ${n} confirmed — a real head start. Your profile shows this from day one.`;
+                copy = "A real head start — your profile shows this from day one.";
               } else if (n > 0) {
-                copy = `${n} of ${skillsOrder.length} confirmed. ${failedNames
+                copy = `${failedNames
                   .map(skillDisplay)
-                  .join(", ")} — stay${
+                  .join(", ")} stay${
                   failedNames.length === 1 ? "s" : ""
                 } as your own rating. You can confirm ${
                   failedNames.length === 1 ? "it" : "them"
@@ -1110,7 +1106,7 @@ export default function Onboarding({
                 } up.`;
               } else {
                 copy =
-                  "None confirmed yet — that's fine and it's honest. Your starting gaps still shape your plan; ladders like this confirm them as you learn.";
+                  "None confirmed yet — that's honest. Your starting gaps still shape your plan, and these short checks confirm skills as you learn.";
               }
               return (
                 <div aria-live="polite" aria-busy={vPosting}>
@@ -1129,7 +1125,9 @@ export default function Onboarding({
                     <>
                   <div className="screen-head">
                     <h1>
-                      {n} of {skillsOrder.length} confirmed.
+                      {n > 0
+                        ? `${n} of ${skillsOrder.length} confirmed.`
+                        : "Your ratings stand as claimed."}
                     </h1>
                     <p>{copy}</p>
                   </div>
@@ -1162,40 +1160,28 @@ export default function Onboarding({
         {/* ============ ④ Assess · the competency instrument — intro ============ */}
         {screen === "assessIntro" && (
           <section className="ob-screen">
-            {retake ? (
-              <a className="ob-back" href="/assessments">
-                <ArrowLeft size={14} aria-hidden="true" /> Back to Assessments
-              </a>
-            ) : (
-              <button className="ob-back" onClick={() => { setVView("result"); back("verify"); }}>
-                <ArrowLeft size={14} aria-hidden="true" /> Back
-              </button>
-            )}
+            <button className="ob-back" onClick={() => { setVView("result"); back("verify"); }}>
+              <ArrowLeft size={14} aria-hidden="true" /> Back
+            </button>
+            {/* distill round 2026-11-20 (critique P0): the H1 + one line carry
+                the whole brief — claimed/verified is taught ONCE on the result
+                screen, never three times here; the NACE E&I fine print moved
+                to the result screen too */}
             <div className="screen-head" style={{ marginTop: 12 }}>
               <h1>The competency check — the real one.</h1>
-              <p>
-                Seven core workplace competencies employers rank highest, from the national career-readiness
-                standard (NACE). One card at a time: {STATEMENT_TOTAL / 7} statements you rate
-                honestly, then {MCQ_TOTAL / 7} short checks that verify — {STATEMENT_TOTAL + MCQ_TOTAL}{" "}
-                cards for the sitting.
+              <p className="num">
+                {INSTRUMENT.length} competencies · {STATEMENT_TOTAL} ratings + {MCQ_TOTAL} short checks ·
+                about 15 minutes.
               </p>
             </div>
             <div className="ob-parts">
               <div className="panel nextcard ob-static">
-                <span className="label">SELF-RATINGS</span>
                 <h3>{STATEMENT_TOTAL} statements — how you work</h3>
-                <p className="n-why">
-                  Every rating is self-report: it marks a competency as <b>claimed</b> — a claimed
-                  competency carries no points.
-                </p>
+                <p className="n-why">Rate each one honestly — a rating marks the competency as claimed.</p>
               </div>
               <div className="panel nextcard ob-static">
-                <span className="label">THE CHECKS</span>
-                <h3>{MCQ_TOTAL} one-answer situations</h3>
-                <p className="n-why">
-                  A competency is <b>verified</b> when BOTH of its checks are answered correctly in this
-                  sitting — that&apos;s what earns into your index.
-                </p>
+                <h3>{MCQ_TOTAL} short checks — what verifies</h3>
+                <p className="n-why">Clear both of a competency&apos;s checks and it verifies.</p>
               </div>
             </div>
             <div className="ob-ctas">
@@ -1205,13 +1191,7 @@ export default function Onboarding({
               >
                 Start the assessment
               </button>
-              <span className="ob-hint">About 15 minutes — that&apos;s an honest estimate.</span>
             </div>
-            <p className="ob-fine">
-              Retakes are allowed and your latest full sitting always counts. The standard lists 8
-              competencies; Equity &amp; Inclusion is under review by NACE and isn&apos;t rated here — 7
-              carried, stated choice.
-            </p>
           </section>
         )}
 
@@ -1241,19 +1221,16 @@ export default function Onboarding({
               : mcqChoices[comp.mcqs[card.mcqIdx].id] != null;
           return (
             <section className="ob-screen">
+              {/* a11y (2026-11-20): the 42-card run renders the qbar tag only —
+                  an sr-only h1 gives the section a real heading */}
+              <h1 className="sr-only">The competency check</h1>
               <div className="ob-qbar">
                 <span className="q-skill-tag num">
                   COMPETENCY {card.compIdx + 1} OF {INSTRUMENT.length} · {comp.title}
                 </span>
-                {retake ? (
-                  <a className="ob-back" href="/assessments">
-                    <ArrowLeft size={14} aria-hidden="true" /> Back to Assessments
-                  </a>
-                ) : (
-                  <button className="ob-back" onClick={naceBack}>
-                    <ArrowLeft size={14} aria-hidden="true" /> Back
-                  </button>
-                )}
+                <button className="ob-back" onClick={naceBack}>
+                  <ArrowLeft size={14} aria-hidden="true" /> Back
+                </button>
               </div>
               <div
                 className="ob-progbar num"
@@ -1266,9 +1243,12 @@ export default function Onboarding({
                 <span style={{ width: `${((naceCard + 1) / NACE_CARDS.length) * 100}%` }} />
               </div>
               {card.kind === "likert" ? (
-                /* the statement card — one statement + its 5-point chip row */
-                <div className="panel">
-                  <div style={{ padding: "16px 16px 18px" }}>
+                /* the statement card — the stem stays dominant; the 5-point
+                 * scale is full-width tonal rows (the quiz screen's register,
+                 * 2026-11-20 layout round) and the Next/Finish pill lives in
+                 * the card's own foot — no dead space under the chips */
+                <div className="panel ob-nacecard">
+                  <div className="ob-cardbody">
                     <span className="q-skill-tag num">
                       QUESTION {naceCard + 1} OF {NACE_CARDS.length}
                     </span>
@@ -1277,7 +1257,6 @@ export default function Onboarding({
                     </p>
                     <div
                       className="scale"
-                      style={{ marginTop: 20 }}
                       role="group"
                       aria-label={`${comp.title} — statement ${card.stmtIdx + 1}, rate 1 to 5`}
                     >
@@ -1294,15 +1273,24 @@ export default function Onboarding({
                       ))}
                     </div>
                   </div>
+                  <div className="ob-cardfoot">
+                    <button className="btn btn-primary" disabled={!answered || posting} onClick={naceNext}>
+                      {last ? (posting ? "Scoring…" : "Finish") : "Next"}
+                    </button>
+                  </div>
                 </div>
               ) : (() => {
-                /* the check card — QuestionCard grammar + its immediate verdict band */
+                /* the check card — QuestionCard grammar + its immediate verdict
+                 * band. The pending band renders a quiet single line (the old
+                 * 86px void is the band's own occupied spot now); `.ob-live`
+                 * keeps the band in flow — the retake surface's own copy of
+                 * this card (AssessSitting.tsx) keeps the absolute anchor. */
                 const mcq = comp.mcqs[card.mcqIdx];
                 const thisPick = mcqChoices[mcq.id];
                 const didAnswer = thisPick != null;
                 const passed = didAnswer && thisPick === mcq.key;
                 return (
-                  <div className="panel ob-mcqcard" style={{ marginTop: 16 }} data-mcq={mcq.id}>
+                  <div className="panel ob-mcqcard ob-live" style={{ marginTop: 16 }} data-mcq={mcq.id}>
                     <span className="q-skill-tag">
                       Check {card.mcqIdx + 1} of {comp.mcqs.length} · QUESTION {naceCard + 1} OF {NACE_CARDS.length}
                     </span>
@@ -1315,22 +1303,23 @@ export default function Onboarding({
                       ))}
                     </div>
                     <div
-                      className={`q-band ${didAnswer ? "show" : ""} ${passed ? "pass" : "fail"}`}
+                      className={`q-band ${didAnswer ? `show ${passed ? "pass" : "fail"}` : ""}`}
                       aria-live="polite"
                     >
-                      {didAnswer &&
-                        (passed
-                          ? "Correct — this is the competency's core move. Keep it up."
-                          : `Not quite. The strongest answer is: ${mcq.options[mcq.key]} Both of this competency's checks must be answered correctly to verify it.`)}
+                      {didAnswer
+                        ? (passed
+                            ? "Correct — this is the competency's core move. Keep it up."
+                            : `Not quite. The strongest answer is: ${mcq.options[mcq.key]} Both of this competency's checks must be answered correctly to verify it.`)
+                        : "Your verdict appears here — answer to see it."}
+                    </div>
+                    <div className="ob-cardfoot">
+                      <button className="btn btn-primary" disabled={!answered || posting} onClick={naceNext}>
+                        {last ? (posting ? "Scoring…" : "Finish") : "Next"}
+                      </button>
                     </div>
                   </div>
                 );
               })()}
-              <div className="ob-ctas">
-                <button className="btn btn-primary" disabled={!answered || posting} onClick={naceNext}>
-                  {last ? (posting ? "Scoring…" : "Finish") : "Next"}
-                </button>
-              </div>
             </section>
           );
         })()}
@@ -1352,47 +1341,53 @@ export default function Onboarding({
           </section>
         )}
         {screen === "assessResult" && grade && (() => {
-          const verifiedTitles = INSTRUMENT.filter((c) => grade[c.title] === "verified").map((c) => c.title);
-          const claimedTitles = INSTRUMENT.filter((c) => grade[c.title] === "claimed").map((c) => c.title);
-          const n = verifiedTitles.length;
+          /* the TallyRow register (2026-11-20 distill, critique P0): one row
+           * per competency — the SERVER's grade keys the chip (green
+           * "Verified ✓" / grey "N of 2 — not verified yet"), and the dot
+           * count mirrors THIS attempt's own check answers (the same data the
+           * server graded — nothing painted, nothing client-claimed). */
+          const tally = INSTRUMENT.map((c) => ({
+            title: c.title,
+            verified: grade[c.title] === "verified",
+            correct: c.mcqs.filter((m) => mcqChoices[m.id] === m.key).length,
+            total: c.mcqs.length,
+          }));
+          const n = tally.filter((t) => t.verified).length;
           return (
             <section className="ob-screen">
               <div className="screen-head">
                 <h1>
-                  {n} of {INSTRUMENT.length} competencies verified.
+                  {n > 0
+                    ? `${n} of ${INSTRUMENT.length} verified.`
+                    : "Your ratings stand as claimed."}
                 </h1>
-                <p>
-                  {n === INSTRUMENT.length
-                    ? "A clean sweep — every competency carried both checks."
-                    : n > 0
-                      ? "The verified ones answered both of their checks correctly in this sitting."
-                      : "None verified yet — that's fine and it's honest. Your self-ratings stand as claimed."}
-                </p>
+                <p>The checks are what verify — and your latest attempt always counts.</p>
               </div>
-              {verifiedTitles.length > 0 && (
-                <div className="okband">
-                  Verified on your profile: <b>{verifiedTitles.join(", ")}</b>{" "}
-                  <span className="vbadge ok"><Check size={11} aria-hidden="true" /></span>
-                </div>
-              )}
-              {claimedTitles.length > 0 && (
-                <p className="ob-note">
-                  Claimed (self-report only): {claimedTitles.join(", ")}. A rating alone never earns points
-                  and never closes a bar — the pair of checks is what verifies. Retakes: your latest full
-                  sitting always counts, so building the skills and re-sitting honestly moves this.
-                </p>
-              )}
+              <div className="panel ob-tally">
+                {tally.map((t) => (
+                  <TallyRow
+                    key={t.title}
+                    skill={t.title}
+                    correct={t.correct}
+                    total={t.total}
+                    verified={t.verified}
+                  />
+                ))}
+              </div>
               <div className="ob-ctas">
-                {retake ? (
-                  <a className="btn btn-primary" href="/assessments">
-                    Back to Assessments
-                  </a>
-                ) : (
-                  <button className="btn btn-primary" onClick={() => go("goal")}>
-                    Continue
-                  </button>
-                )}
+                <button className="btn btn-primary" onClick={() => go("goal")}>
+                  Continue
+                </button>
+                {/* the retake affordance (2026-11-18): the in-funnel retake
+                    redirect retired — the retake lives on the focused
+                    /assessment route now */}
+                <Link className="link-sub" href="/assessment">
+                  Retake the check
+                </Link>
               </div>
+              <p className="ob-fine">
+                NACE lists 8 competencies — Equity &amp; Inclusion is under review, so 7 are rated here.
+              </p>
             </section>
           );
         })()}
@@ -1417,12 +1412,6 @@ export default function Onboarding({
               <p className="n-why">
                 Closes your first gap in {sug.skill} — the top skill for {career.name}.
               </p>
-              {sug.resourceId && (
-                <p className="n-why" style={{ marginTop: 12 }}>
-                  When you finish the course and pass its 5-question check, this goal marks itself done —
-                  automatically, under Progress. You&apos;ll see it happen.
-                </p>
-              )}
               <div className="n-cta" style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <button className="btn btn-primary" onClick={setGoal}>
                   Set this goal
@@ -1600,6 +1589,37 @@ function Reveal({
 }
 
 /* ---------- helpers kept below the component for readability ---------- */
+
+/* ---------- the ranked-card fit line (2026-11-20 distill, critique P1):
+ * plain language derived from the SAME computed data the engine ranked on —
+ * the student's top letters (rankLetters) and each career's matched letters
+ * (rankCareers' matchedLetters). One plain phrase keys to each letter, so
+ * the line stays computed, never painted; no RIASEC letters render. */
+type InterestLetter = ReturnType<typeof rankLetters>[number];
+
+const LETTER_PLAIN: Record<InterestLetter, string> = {
+  R: "fixing and building",
+  I: "digging into how things work",
+  A: "making and designing",
+  S: "helping people",
+  E: "leading and persuading",
+  C: "organizing and keeping order",
+};
+
+function plainFitLine(topLetters: InterestLetter[], matched: InterestLetter[]): string {
+  const tops = topLetters.slice(0, 2);
+  const liked = tops.map((l) => LETTER_PLAIN[l]).join(" and ");
+  if (matched.length === 0) return `You liked ${liked}.`;
+  const core = matched.filter((l) => tops.includes(l));
+  const extra = matched.filter((l) => !tops.includes(l));
+  const runsOn =
+    extra.length === 0
+      ? matched.length > 1
+        ? "both"
+        : "that same strength"
+      : [...core, ...extra].map((l) => LETTER_PLAIN[l]).join(" and ");
+  return `You liked ${liked} — this role runs on ${runsOn}.`;
+}
 
 function GOAL_SUGG(
   direct: { title: string; resourceId: string; skill: string } | null,
